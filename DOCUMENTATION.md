@@ -19,6 +19,7 @@ All documentation is now available in both **Chinese (中文)** and **English** 
 | **Function Checklist** | [docs/FUNCTION_CHECKLIST.md](./docs/FUNCTION_CHECKLIST.md) | [docs/FUNCTION_CHECKLIST.en.md](./docs/FUNCTION_CHECKLIST.en.md) |
 | **Renderer Coverage** | [docs/RENDERER_COVERAGE.md](./docs/RENDERER_COVERAGE.md) | [docs/RENDERER_COVERAGE.en.md](./docs/RENDERER_COVERAGE.en.md) |
 | **Rendering Engine Analysis** | [docs/RENDERING_ENGINE_ANALYSIS.md](./docs/RENDERING_ENGINE_ANALYSIS.md) | [docs/RENDERING_ENGINE_ANALYSIS.en.md](./docs/RENDERING_ENGINE_ANALYSIS.en.md) |
+| **ECharts API Compatibility** | [docs/ECHARTS_API_COMPATIBILITY.md](./docs/ECHARTS_API_COMPATIBILITY.md) | [docs/ECHARTS_API_COMPATIBILITY.en.md](./docs/ECHARTS_API_COMPATIBILITY.en.md) |
 
 ## Documentation Overview
 
@@ -40,6 +41,7 @@ These documents help with implementation and customization:
 3. **CHECKLIST** - Implementation status and coverage
 4. **RENDERER_COVERAGE** - Feature parity with ZRender
 5. **RENDERING_ENGINE_ANALYSIS** - Event handling and DOM retrieval analysis
+6. **ECHARTS_API_COMPATIBILITY** - Detailed API compatibility analysis and implementation roadmap
 
 ### Reference
 
@@ -57,6 +59,7 @@ Quick reference documents:
 - [Theme Configuration](./docs/THEME_AND_I18N.en.md#theme-system)
 - [Rendering Mode Comparison](./docs/RENDERING_MODES.en.md#rendering-mode-comparison)
 - [Rendering Engine Analysis](./docs/RENDERING_ENGINE_ANALYSIS.en.md)
+- [ECharts API Compatibility](./docs/ECHARTS_API_COMPATIBILITY.en.md)
 - [Complete Examples](./docs/EXAMPLES.en.md)
 
 ## Language Support
