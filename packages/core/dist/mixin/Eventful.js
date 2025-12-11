@@ -68,4 +68,3 @@ export default class Eventful {
         return !this._handlers.has(event) || this._handlers.get(event).length === 0;
     }
 }
-//# sourceMappingURL=Eventful.js.map

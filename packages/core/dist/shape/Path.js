@@ -62,4 +62,3 @@ export default class Path extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Path.js.map

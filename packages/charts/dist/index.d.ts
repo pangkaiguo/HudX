@@ -6,4 +6,3 @@ export { default as ScatterChart } from './chart/ScatterChart';
 export { default as HudXChart } from './react/HudXChart';
 export * from './types';
 export * from './util/coordinate';
-//# sourceMappingURL=index.d.ts.map

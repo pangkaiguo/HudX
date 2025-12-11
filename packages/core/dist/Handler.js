@@ -274,4 +274,3 @@ export default class Handler {
         this._dragging = null;
     }
 }
-//# sourceMappingURL=Handler.js.map

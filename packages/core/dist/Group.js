@@ -159,4 +159,3 @@ export default class Group extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Group.js.map

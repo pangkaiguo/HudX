@@ -41,4 +41,3 @@ export default class Circle extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Circle.js.map

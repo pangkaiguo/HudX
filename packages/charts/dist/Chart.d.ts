@@ -1,10 +1,10 @@
 /**
  * Chart - Base chart class
  */
-import { HRender, Group, RenderMode, Theme, Locale } from '@hudx/core';
+import { Renderer, Group, RenderMode, Theme, Locale } from '@hudx/core';
 import { ChartOption, ChartEvent } from './types';
 export default class Chart {
-    protected _renderer: HRender;
+    protected _renderer: Renderer;
     protected _option: ChartOption;
     protected _root: Group;
     protected _width: number;
@@ -79,9 +79,9 @@ export default class Chart {
      */
     dispose(): void;
     /**
-     * Get HRender instance
+     * Get Renderer instance
      */
-    getRenderer(): HRender;
+    getRenderer(): Renderer;
     /**
      * Parse size (number or string like '10%')
      */
@@ -91,4 +91,3 @@ export default class Chart {
      */
     protected _getSeriesColor(index: number): string;
 }
-//# sourceMappingURL=Chart.d.ts.map

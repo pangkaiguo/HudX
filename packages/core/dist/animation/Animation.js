@@ -147,4 +147,3 @@ export default class Animation {
         obj[parts[parts.length - 1]] = value;
     }
 }
-//# sourceMappingURL=Animation.js.map

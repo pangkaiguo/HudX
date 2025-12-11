@@ -81,4 +81,3 @@ export default class Arc extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Arc.js.map

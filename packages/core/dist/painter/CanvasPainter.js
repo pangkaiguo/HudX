@@ -146,4 +146,3 @@ export default class CanvasPainter {
         }
     }
 }
-//# sourceMappingURL=CanvasPainter.js.map

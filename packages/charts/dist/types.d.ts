@@ -112,4 +112,3 @@ export interface ChartEvent {
     data?: any;
     [key: string]: any;
 }
-//# sourceMappingURL=types.d.ts.map

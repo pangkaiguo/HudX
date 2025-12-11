@@ -1,12 +1,12 @@
 /**
  * Chart - Base chart class
  */
-import { HRender } from '@hudx/core';
+import { Renderer } from '@hudx/core';
 export default class Chart {
     constructor(dom, option = {}, renderMode = 'canvas', theme = 'light', locale = 'en') {
         this._width = 0;
         this._height = 0;
-        this._renderer = HRender.init(dom, renderMode, theme, locale);
+        this._renderer = Renderer.init(dom, renderMode, theme, locale);
         this._option = option;
         this._root = this._renderer.getRoot();
         this._init();
@@ -128,7 +128,7 @@ export default class Chart {
         this._renderer.dispose();
     }
     /**
-     * Get HRender instance
+     * Get Renderer instance
      */
     getRenderer() {
         return this._renderer;
@@ -159,4 +159,3 @@ export default class Chart {
         return colors[index % colors.length];
     }
 }
-//# sourceMappingURL=Chart.js.map

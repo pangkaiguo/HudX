@@ -123,4 +123,3 @@ export default class PieChart extends Chart {
         return parseFloat(value) || 0;
     }
 }
-//# sourceMappingURL=PieChart.js.map

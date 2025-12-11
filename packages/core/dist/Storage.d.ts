@@ -54,4 +54,3 @@ export default class Storage {
      */
     private _removeElementFromMap;
 }
-//# sourceMappingURL=Storage.d.ts.map

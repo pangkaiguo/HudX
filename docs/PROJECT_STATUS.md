@@ -3,7 +3,7 @@
 ## ✅ 完成情况
 
 ### 核心功能
-- ✅ **HRender 渲染引擎** - 主渲染引擎类（已从 Renderer 重命名）
+- ✅ **Renderer 渲染引擎** - 主渲染引擎类（已从 Renderer 重命名）
 - ✅ **Canvas 渲染** - CanvasPainter 实现
 - ✅ **SVG 渲染** - SVGPainter 实现
 - ✅ **主题系统** - Light 和 Dark 主题支持

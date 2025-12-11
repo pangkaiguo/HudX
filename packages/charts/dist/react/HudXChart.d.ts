@@ -22,4 +22,3 @@ export interface HudXChartProps {
 }
 declare const HudXChart: React.FC<HudXChartProps>;
 export default HudXChart;
-//# sourceMappingURL=HudXChart.d.ts.map

@@ -21,4 +21,3 @@ export declare class LocaleManager {
      */
     static getLocales(): Locale[];
 }
-//# sourceMappingURL=LocaleManager.d.ts.map

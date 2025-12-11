@@ -57,4 +57,3 @@ export default class Animation {
      */
     private _setValue;
 }
-//# sourceMappingURL=Animation.d.ts.map

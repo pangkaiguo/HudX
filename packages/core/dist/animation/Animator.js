@@ -58,4 +58,3 @@ export default class Animator {
         return this._animations.length;
     }
 }
-//# sourceMappingURL=Animator.js.map

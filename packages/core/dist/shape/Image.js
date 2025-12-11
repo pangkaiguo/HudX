@@ -41,4 +41,3 @@ export default class Image extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Image.js.map

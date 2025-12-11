@@ -80,4 +80,3 @@ export default class SVGPainter implements IPainter {
      */
     dispose(): void;
 }
-//# sourceMappingURL=SVGPainter.d.ts.map

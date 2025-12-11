@@ -72,4 +72,3 @@ export default class Polygon extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Polygon.js.map

@@ -172,4 +172,3 @@ export default class LineChart extends Chart {
         }
     }
 }
-//# sourceMappingURL=LineChart.js.map

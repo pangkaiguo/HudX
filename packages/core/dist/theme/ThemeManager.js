@@ -56,4 +56,3 @@ ThemeManager._themes = new Map();
         legendTextColor: '#e0e0e0',
     });
 })();
-//# sourceMappingURL=ThemeManager.js.map

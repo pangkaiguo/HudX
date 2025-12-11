@@ -30,13 +30,13 @@ interface ThemeConfig {
 
 ### 使用方法
 
-#### 在 HRender 中使用
+#### 在 Renderer 中使用
 
 ```typescript
-import { HRender, Circle } from '@hudx/core';
+import { Renderer, Circle } from '@hudx/core';
 
 // 创建时指定主题
-const renderer = HRender.init('#container', 'canvas', 'dark');
+const renderer = Renderer.init('#container', 'canvas', 'dark');
 
 // 切换主题
 renderer.setTheme('light');
@@ -96,7 +96,7 @@ ThemeManager.registerTheme('custom', {
 });
 
 // 使用自定义主题
-const renderer = HRender.init('#container', 'canvas', 'custom');
+const renderer = Renderer.init('#container', 'canvas', 'custom');
 ```
 
 ## 多语言支持
@@ -130,13 +130,13 @@ const renderer = HRender.init('#container', 'canvas', 'custom');
 
 ### 使用方法
 
-#### 在 HRender 中使用
+#### 在 Renderer 中使用
 
 ```typescript
-import { HRender } from '@hudx/core';
+import { Renderer } from '@hudx/core';
 
 // 创建时指定语言
-const renderer = HRender.init('#container', 'canvas', 'light', 'zh-CN');
+const renderer = Renderer.init('#container', 'canvas', 'light', 'zh-CN');
 
 // 切换语言
 renderer.setLocale('en');
@@ -195,7 +195,7 @@ LocaleManager.registerLocale('custom', {
 });
 
 // 使用自定义语言
-const renderer = HRender.init('#container', 'canvas', 'light', 'custom');
+const renderer = Renderer.init('#container', 'canvas', 'light', 'custom');
 ```
 
 ### 语言回退机制
@@ -209,10 +209,10 @@ const renderer = HRender.init('#container', 'canvas', 'light', 'custom');
 ### 完整示例
 
 ```typescript
-import { HRender, Circle } from '@hudx/core';
+import { Renderer, Circle } from '@hudx/core';
 
 // 创建带主题和语言的渲染器
-const renderer = HRender.init(
+const renderer = Renderer.init(
   '#container',
   'canvas',  // 渲染模式
   'dark',    // 主题
@@ -273,7 +273,7 @@ function App() {
 
 ## API 参考
 
-### HRender
+### Renderer
 
 - `getTheme(): Theme` - 获取当前主题
 - `setTheme(theme: Theme): this` - 设置主题

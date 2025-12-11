@@ -2,18 +2,18 @@
  * Chart - Base chart class
  */
 
-import { HRender, Group, RenderMode, Theme, Locale } from '@hudx/core';
+import { Renderer, Group, RenderMode, Theme, Locale } from '@hudx/core';
 import { ChartOption, ChartEvent } from './types';
 
 export default class Chart {
-  protected _renderer: HRender;
+  protected _renderer: Renderer;
   protected _option: ChartOption;
   protected _root: Group;
   protected _width: number = 0;
   protected _height: number = 0;
 
   constructor(dom: HTMLElement, option: ChartOption = {}, renderMode: RenderMode = 'canvas', theme: Theme = 'light', locale: Locale = 'en') {
-    this._renderer = HRender.init(dom, renderMode, theme, locale);
+    this._renderer = Renderer.init(dom, renderMode, theme, locale);
     this._option = option;
     this._root = this._renderer.getRoot();
     this._init();
@@ -152,9 +152,9 @@ export default class Chart {
   }
 
   /**
-   * Get HRender instance
+   * Get Renderer instance
    */
-  getRenderer(): HRender {
+  getRenderer(): Renderer {
     return this._renderer;
   }
 

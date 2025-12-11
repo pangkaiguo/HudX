@@ -119,4 +119,3 @@ export default class Storage {
         }
     }
 }
-//# sourceMappingURL=Storage.js.map

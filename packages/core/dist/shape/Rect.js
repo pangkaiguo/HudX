@@ -60,4 +60,3 @@ export default class Rect extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Rect.js.map

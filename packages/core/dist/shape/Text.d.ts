@@ -17,4 +17,3 @@ export default class Text extends Element {
     contain(x: number, y: number): boolean;
     render(ctx: CanvasRenderingContext2D): void;
 }
-//# sourceMappingURL=Text.d.ts.map

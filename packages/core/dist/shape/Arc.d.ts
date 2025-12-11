@@ -20,4 +20,3 @@ export default class Arc extends Element {
     contain(x: number, y: number): boolean;
     render(ctx: CanvasRenderingContext2D): void;
 }
-//# sourceMappingURL=Arc.d.ts.map

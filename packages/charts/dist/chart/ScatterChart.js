@@ -105,4 +105,3 @@ export default class ScatterChart extends Chart {
         }
     }
 }
-//# sourceMappingURL=ScatterChart.js.map

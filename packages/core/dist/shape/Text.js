@@ -77,4 +77,3 @@ export default class Text extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Text.js.map

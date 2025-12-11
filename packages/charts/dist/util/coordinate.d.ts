@@ -26,4 +26,3 @@ export declare function calculateDomain(axis: AxisOption, data: ChartData[], isX
  * Convert data point to coordinate
  */
 export declare function dataToCoordinate(data: ChartData, xScale: Scale, yScale: Scale): Coordinate;
-//# sourceMappingURL=coordinate.d.ts.map

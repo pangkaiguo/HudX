@@ -9,4 +9,3 @@ export default class BarChart extends Chart {
      */
     private _renderAxes;
 }
-//# sourceMappingURL=BarChart.d.ts.map

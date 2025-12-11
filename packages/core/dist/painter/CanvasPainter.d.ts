@@ -58,4 +58,3 @@ export default class CanvasPainter implements IPainter {
      */
     dispose(): void;
 }
-//# sourceMappingURL=CanvasPainter.d.ts.map

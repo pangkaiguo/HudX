@@ -73,4 +73,3 @@ export default class Element extends Eventful {
      */
     private _generateId;
 }
-//# sourceMappingURL=Element.d.ts.map

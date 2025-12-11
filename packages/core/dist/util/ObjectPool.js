@@ -43,4 +43,3 @@ export default class ObjectPool {
         return this._pool.length;
     }
 }
-//# sourceMappingURL=ObjectPool.js.map

@@ -52,4 +52,3 @@ export default class Group extends Element {
      */
     render(ctx: CanvasRenderingContext2D): void;
 }
-//# sourceMappingURL=Group.d.ts.map

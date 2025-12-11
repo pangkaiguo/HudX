@@ -38,4 +38,3 @@ export declare function createRotateMatrix(angle: number): Matrix;
  * Invert matrix
  */
 export declare function invertMatrix(matrix: Matrix): Matrix | null;
-//# sourceMappingURL=matrix.d.ts.map

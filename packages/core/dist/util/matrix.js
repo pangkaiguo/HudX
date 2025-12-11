@@ -80,4 +80,3 @@ export function invertMatrix(matrix) {
         f: (matrix.b * matrix.e - matrix.a * matrix.f) * invDet
     };
 }
-//# sourceMappingURL=matrix.js.map

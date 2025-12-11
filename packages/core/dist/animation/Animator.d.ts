@@ -32,4 +32,3 @@ export default class Animator {
      */
     getAnimationCount(): number;
 }
-//# sourceMappingURL=Animator.d.ts.map

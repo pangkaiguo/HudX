@@ -21,4 +21,3 @@ export default class Sector extends Element {
     contain(x: number, y: number): boolean;
     render(ctx: CanvasRenderingContext2D): void;
 }
-//# sourceMappingURL=Sector.d.ts.map

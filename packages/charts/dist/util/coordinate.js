@@ -111,4 +111,3 @@ export function dataToCoordinate(data, xScale, yScale) {
     const y = typeof data.value === 'number' ? yScale(data.value) : yScale(Array.isArray(data.value) ? data.value[0] : 0);
     return { x, y };
 }
-//# sourceMappingURL=coordinate.js.map

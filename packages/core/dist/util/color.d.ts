@@ -22,4 +22,3 @@ export declare function darken(color: string, amount: number): string;
  * Adjust opacity
  */
 export declare function adjustOpacity(color: string, opacity: number): string;
-//# sourceMappingURL=color.d.ts.map

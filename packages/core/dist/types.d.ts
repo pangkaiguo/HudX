@@ -199,4 +199,3 @@ export interface CanvasRenderingContext2D {
     isPointInPath(x: number, y: number): boolean;
     isPointInStroke(x: number, y: number): boolean;
 }
-//# sourceMappingURL=types.d.ts.map

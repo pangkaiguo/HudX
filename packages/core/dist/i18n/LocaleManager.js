@@ -162,4 +162,3 @@ LocaleManager._locales = new Map();
         'data.error': 'Ошибка загрузки данных',
     });
 })();
-//# sourceMappingURL=LocaleManager.js.map

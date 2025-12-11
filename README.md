@@ -22,7 +22,7 @@ HudX/
 ├── packages/
 │   ├── core/          # 核心渲染引擎（类似 hrender）
 │   │   ├── src/
-│   │   │   ├── HRender.ts      # 主渲染引擎类
+│   │   │   ├── Renderer.ts      # 主渲染引擎类
 │   │   │   ├── Element.ts      # 图形元素基类
 │   │   │   ├── Group.ts        # 组容器
 │   │   │   ├── Storage.ts      # 元素存储管理
@@ -100,13 +100,13 @@ function App() {
 #### 直接使用核心 API
 
 ```typescript
-import { HRender, Circle, Rect } from '@hudx/core';
+import { Renderer, Circle, Rect } from '@hudx/core';
 
 // Canvas 模式（默认，高性能）
-const renderer = HRender.init('#container', 'canvas', 'light', 'en');
+const renderer = Renderer.init('#container', 'canvas', 'light', 'en');
 
 // SVG 模式（可缩放矢量图）
-const rendererSVG = HRender.init('#container', 'svg', 'dark', 'zh-CN');
+const rendererSVG = Renderer.init('#container', 'svg', 'dark', 'zh-CN');
 
 // 创建圆形
 const circle = new Circle({
@@ -152,7 +152,7 @@ renderer.add(rect);
 
 #### 主要类
 
-- **HRender**: 主渲染引擎，管理整个渲染流程，支持 Canvas 和 SVG 两种模式，支持主题和多语言
+- **Renderer**: 主渲染引擎，管理整个渲染流程，支持 Canvas 和 SVG 两种模式，支持主题和多语言
 - **Element**: 所有图形元素的基类
 - **Group**: 容器元素，可以包含子元素
 - **Storage**: 元素存储管理器，维护元素树
@@ -395,7 +395,7 @@ export default class CustomChart extends Chart {
 
 ### 渲染流程
 
-1. **初始化**: 创建 HRender 实例，初始化 Storage、Painter、Handler
+1. **初始化**: 创建 Renderer 实例，初始化 Storage、Painter、Handler
 2. **添加元素**: 通过 `add()` 方法添加图形元素到根组
 3. **存储管理**: Storage 维护元素树结构，支持快速查找
 4. **绘制**: Painter 遍历元素树，按 zlevel 和 z 排序后绘制
@@ -430,10 +430,10 @@ HudX 支持 Light 和 Dark 两种主题，以及多语言国际化。
 ### 主题
 
 ```typescript
-import { HRender } from '@hudx/core';
+import { Renderer } from '@hudx/core';
 
 // 使用深色主题
-const renderer = HRender.init('#container', 'canvas', 'dark');
+const renderer = Renderer.init('#container', 'canvas', 'dark');
 
 // 切换主题
 renderer.setTheme('light');
@@ -442,10 +442,10 @@ renderer.setTheme('light');
 ### 多语言
 
 ```typescript
-import { HRender } from '@hudx/core';
+import { Renderer } from '@hudx/core';
 
 // 使用中文
-const renderer = HRender.init('#container', 'canvas', 'light', 'zh-CN');
+const renderer = Renderer.init('#container', 'canvas', 'light', 'zh-CN');
 
 // 切换语言
 renderer.setLocale('en');

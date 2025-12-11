@@ -13,4 +13,3 @@ export default interface IPainter {
     getSVG?(): SVGSVGElement;
     getRootGroup?(): SVGGElement;
 }
-//# sourceMappingURL=IPainter.d.ts.map

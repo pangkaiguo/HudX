@@ -9,4 +9,3 @@ export default class LineChart extends Chart {
      */
     private _renderAxes;
 }
-//# sourceMappingURL=LineChart.d.ts.map

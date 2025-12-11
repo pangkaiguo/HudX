@@ -408,4 +408,3 @@ export default class SVGPainter {
         this._elementMap.clear();
     }
 }
-//# sourceMappingURL=SVGPainter.js.map

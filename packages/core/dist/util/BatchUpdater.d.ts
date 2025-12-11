@@ -33,4 +33,3 @@ export default class BatchUpdater {
     dispose(): void;
 }
 export {};
-//# sourceMappingURL=BatchUpdater.d.ts.map

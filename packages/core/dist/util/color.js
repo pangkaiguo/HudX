@@ -104,4 +104,3 @@ export function adjustOpacity(color, opacity) {
         return color;
     return rgbaToString([rgba[0], rgba[1], rgba[2], opacity]);
 }
-//# sourceMappingURL=color.js.map

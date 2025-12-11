@@ -25,4 +25,3 @@ export default class ObjectPool<T> {
      */
     size(): number;
 }
-//# sourceMappingURL=ObjectPool.d.ts.map

@@ -22,4 +22,3 @@ export default class Eventful {
      */
     isSilent(event?: string): boolean;
 }
-//# sourceMappingURL=Eventful.d.ts.map

@@ -122,4 +122,3 @@ const HudXChart = ({ option, width, height, className, style, renderMode = 'canv
         } }));
 };
 export default HudXChart;
-//# sourceMappingURL=HudXChart.js.map

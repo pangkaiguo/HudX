@@ -71,4 +71,3 @@ export default class BatchUpdater {
         this._isScheduled = false;
     }
 }
-//# sourceMappingURL=BatchUpdater.js.map

@@ -139,7 +139,7 @@ import { HudXChart } from '@hudx/charts';
 - ✅ README.md - 项目介绍和使用指南
 - ✅ docs/IMPLEMENTATION.md - 实现文档
 - ✅ docs/EXAMPLES.md - 使用示例
-- ✅ docs/ZRENDER_COVERAGE.md - 功能覆盖检查
+- ✅ docs/RENDERER_COVERAGE.md - 功能覆盖检查
 - ✅ docs/CHECKLIST.md - 实现检查清单
 - ✅ docs/FUNCTION_CHECKLIST.md - 函数检查清单
 - ✅ docs/RENDERING_MODES.md - 渲染模式说明

@@ -17,4 +17,3 @@ export declare class ThemeManager {
      */
     static getThemes(): Theme[];
 }
-//# sourceMappingURL=ThemeManager.d.ts.map

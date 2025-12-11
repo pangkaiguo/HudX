@@ -23,4 +23,3 @@ export default class Image extends Element {
     contain(x: number, y: number): boolean;
     render(ctx: CanvasRenderingContext2D): void;
 }
-//# sourceMappingURL=Image.d.ts.map

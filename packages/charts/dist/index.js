@@ -10,4 +10,3 @@ export { default as HudXChart } from './react/HudXChart';
 export * from './types';
 // Utils
 export * from './util/coordinate';
-//# sourceMappingURL=index.js.map

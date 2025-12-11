@@ -55,4 +55,3 @@ export default class Line extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Line.js.map

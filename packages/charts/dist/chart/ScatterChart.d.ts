@@ -9,4 +9,3 @@ export default class ScatterChart extends Chart {
      */
     private _renderAxes;
 }
-//# sourceMappingURL=ScatterChart.d.ts.map

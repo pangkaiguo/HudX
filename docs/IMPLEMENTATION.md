@@ -34,12 +34,12 @@ HudX 采用分层架构，分为两个主要包：
 
 ## 核心实现
 
-### 1. HRender 类
+### 1. Renderer 类
 
-HRender 是主渲染引擎，负责协调各个模块：
+Renderer 是主渲染引擎，负责协调各个模块：
 
 ```typescript
-class HRender {
+class Renderer {
   private _storage: Storage;    // 元素存储
   private _painter: IPainter;   // 绘制器（Canvas 或 SVG）
   private _handler: Handler;    // 事件处理器

@@ -17,4 +17,3 @@ export default class PieChart extends Chart {
      */
     private _parsePercent;
 }
-//# sourceMappingURL=PieChart.d.ts.map

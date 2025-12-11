@@ -95,4 +95,3 @@ export default class BezierCurve extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=BezierCurve.js.map

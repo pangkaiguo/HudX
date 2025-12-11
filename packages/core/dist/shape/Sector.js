@@ -93,4 +93,3 @@ export default class Sector extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Sector.js.map

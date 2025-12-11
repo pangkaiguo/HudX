@@ -76,4 +76,3 @@ export default class Polyline extends Element {
         ctx.restore();
     }
 }
-//# sourceMappingURL=Polyline.js.map

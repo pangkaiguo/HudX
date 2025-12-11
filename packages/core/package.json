@@ -9,13 +9,12 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build",
     "dev": "tsc --watch",
-    "clean": "rm -rf dist"
+    "clean": "tsc --build --clean && rm -rf dist"
   },
   "dependencies": {},
   "devDependencies": {
     "typescript": "^5.3.3"
   }
 }
-

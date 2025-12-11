@@ -77,4 +77,3 @@ export default class Handler {
      */
     dispose(): void;
 }
-//# sourceMappingURL=Handler.d.ts.map
