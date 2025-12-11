@@ -80,15 +80,55 @@ export default class Chart {
   }
 
   /**
-   * Set chart option
+   * Set chart option with advanced options
    */
-  setOption(option: ChartOption, notMerge: boolean = false): void {
-    if (notMerge) {
+  setOption(
+    option: ChartOption,
+    notMerge?: boolean | {
+      notMerge?: boolean;
+      lazyUpdate?: boolean;
+      silent?: boolean;
+    },
+    lazyUpdate?: boolean
+  ): this {
+    // Handle parameter overloading
+    let opts = {
+      notMerge: false,
+      lazyUpdate: false,
+      silent: false
+    };
+
+    if (typeof notMerge === 'object') {
+      opts = { ...opts, ...notMerge };
+    } else if (typeof notMerge === 'boolean') {
+      opts.notMerge = notMerge;
+    }
+
+    if (typeof lazyUpdate === 'boolean') {
+      opts.lazyUpdate = lazyUpdate;
+    }
+
+    // Merge option
+    if (opts.notMerge) {
       this._option = option;
     } else {
       this._option = { ...this._option, ...option };
     }
-    this._render();
+
+    // Emit event if not silent
+    if (!opts.silent) {
+      const event = new CustomEvent('optionchanged', {
+        detail: { option: this._option }
+      });
+      this._renderer.getDom().dispatchEvent(event);
+    }
+
+    // Render immediately if not lazy update
+    if (!opts.lazyUpdate) {
+      this._render();
+    }
+
+    return this;
   }
 
   /**
@@ -149,6 +189,29 @@ export default class Chart {
    */
   dispose(): void {
     this._renderer.dispose();
+  }
+
+  /**
+   * Clear chart (remove all elements)
+   */
+  clear(): this {
+    this._root.removeAll();
+    this._option = {};
+    return this;
+  }
+
+  /**
+   * Check if chart is disposed
+   */
+  isDisposed(): boolean {
+    return this._renderer.isDisposed();
+  }
+
+  /**
+   * Get container DOM element
+   */
+  getDom(): HTMLElement {
+    return this._renderer.getDom();
   }
 
   /**

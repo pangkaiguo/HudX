@@ -43,9 +43,13 @@ export default class Chart {
      */
     protected _init(): void;
     /**
-     * Set chart option
+     * Set chart option with advanced options
      */
-    setOption(option: ChartOption, notMerge?: boolean): void;
+    setOption(option: ChartOption, notMerge?: boolean | {
+        notMerge?: boolean;
+        lazyUpdate?: boolean;
+        silent?: boolean;
+    }, lazyUpdate?: boolean): this;
     /**
      * Get chart option
      */
@@ -78,6 +82,18 @@ export default class Chart {
      * Dispose chart
      */
     dispose(): void;
+    /**
+     * Clear chart (remove all elements)
+     */
+    clear(): this;
+    /**
+     * Check if chart is disposed
+     */
+    isDisposed(): boolean;
+    /**
+     * Get container DOM element
+     */
+    getDom(): HTMLElement;
     /**
      * Get Renderer instance
      */

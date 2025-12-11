@@ -216,3 +216,36 @@ export interface CanvasRenderingContext2D {
   isPointInPath(x: number, y: number): boolean;
   isPointInStroke(x: number, y: number): boolean;
 }
+
+/**
+ * SetOption options interface (ECharts compatible)
+ */
+export interface SetOptionOpts {
+  notMerge?: boolean;
+  replaceMerge?: string | string[];
+  lazyUpdate?: boolean;
+  silent?: boolean;
+}
+
+/**
+ * Resize options interface
+ */
+export interface ResizeOpts {
+  width?: number | string;
+  height?: number | string;
+  silent?: boolean;
+  animation?: {
+    duration?: number;
+    easing?: string;
+  };
+}
+
+/**
+ * Data URL export options
+ */
+export interface DataURLOpts {
+  type?: 'png' | 'jpg' | 'svg';
+  pixelRatio?: number;
+  backgroundColor?: string;
+  excludeComponents?: string[];
+}

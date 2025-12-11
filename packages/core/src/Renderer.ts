@@ -23,6 +23,7 @@ export default class Renderer {
   private _renderMode: RenderMode;
   private _theme: Theme;
   private _locale: Locale;
+  private _disposed: boolean = false;
 
   constructor(dom: HTMLElement, renderMode: RenderMode = 'canvas', theme: Theme = 'light', locale: Locale = 'en') {
     this._dom = dom;
@@ -228,6 +229,13 @@ export default class Renderer {
   }
 
   /**
+   * Get container DOM element
+   */
+  getDom(): HTMLElement {
+    return this._dom;
+  }
+
+  /**
    * Get canvas element (Canvas mode only)
    */
   getCanvas(): HTMLCanvasElement | undefined {
@@ -323,9 +331,20 @@ export default class Renderer {
    * Dispose Renderer instance
    */
   dispose(): void {
+    if (this._disposed) {
+      return;
+    }
     this._handler.dispose();
     this._painter.dispose();
     this._storage.clear();
     this._root.off();
+    this._disposed = true;
+  }
+
+  /**
+   * Check if Renderer instance is disposed
+   */
+  isDisposed(): boolean {
+    return this._disposed;
   }
 }
