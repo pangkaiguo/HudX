@@ -32,20 +32,20 @@ export default class Handler {
       return;
     }
 
-    // Mouse events
-    target.addEventListener('mousedown', this._onMouseDown.bind(this));
-    target.addEventListener('mousemove', this._onMouseMove.bind(this));
-    target.addEventListener('mouseup', this._onMouseUp.bind(this));
-    target.addEventListener('mouseout', this._onMouseOut.bind(this));
-    target.addEventListener('click', this._onClick.bind(this));
-    target.addEventListener('dblclick', this._onDblClick.bind(this));
-    target.addEventListener('contextmenu', this._onContextMenu.bind(this));
-    target.addEventListener('wheel', this._onWheel.bind(this));
+    // Mouse events - wrap in Event listener to fix type issues
+    target.addEventListener('mousedown', (e: Event) => this._onMouseDown(e as MouseEvent));
+    target.addEventListener('mousemove', (e: Event) => this._onMouseMove(e as MouseEvent));
+    target.addEventListener('mouseup', (e: Event) => this._onMouseUp(e as MouseEvent));
+    target.addEventListener('mouseout', (e: Event) => this._onMouseOut(e as MouseEvent));
+    target.addEventListener('click', (e: Event) => this._onClick(e as MouseEvent));
+    target.addEventListener('dblclick', (e: Event) => this._onDblClick(e as MouseEvent));
+    target.addEventListener('contextmenu', (e: Event) => this._onContextMenu(e as MouseEvent));
+    target.addEventListener('wheel', (e: Event) => this._onWheel(e as WheelEvent));
 
     // Touch events
-    target.addEventListener('touchstart', this._onTouchStart.bind(this));
-    target.addEventListener('touchmove', this._onTouchMove.bind(this));
-    target.addEventListener('touchend', this._onTouchEnd.bind(this));
+    target.addEventListener('touchstart', (e: Event) => this._onTouchStart(e as TouchEvent));
+    target.addEventListener('touchmove', (e: Event) => this._onTouchMove(e as TouchEvent));
+    target.addEventListener('touchend', (e: Event) => this._onTouchEnd(e as TouchEvent));
   }
 
   /**
@@ -98,7 +98,7 @@ export default class Handler {
   private _createEventData(
     type: string,
     point: Point,
-    target?: Element,
+    target?: Element | null,
     originalEvent?: Event
   ): EventData {
     // Find top target (root element in hierarchy)
