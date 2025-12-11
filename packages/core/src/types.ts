@@ -1,0 +1,218 @@
+/**
+ * Core type definitions for HudX rendering engine
+ */
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export interface BoundingRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface Style {
+  fill?: string;
+  stroke?: string;
+  lineWidth?: number;
+  lineDash?: number[];
+  lineDashOffset?: number;
+  opacity?: number;
+  shadowBlur?: number;
+  shadowColor?: string;
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
+  text?: string;
+  fontSize?: number;
+  fontFamily?: string;
+  fontWeight?: string | number;
+  textAlign?: 'left' | 'center' | 'right';
+  textBaseline?: 'top' | 'middle' | 'bottom' | 'alphabetic';
+}
+
+export interface Transform {
+  x?: number;
+  y?: number;
+  scaleX?: number;
+  scaleY?: number;
+  rotation?: number;
+  originX?: number;
+  originY?: number;
+}
+
+export interface ElementOption {
+  id?: string;
+  zlevel?: number;
+  z?: number;
+  silent?: boolean;
+  invisible?: boolean;
+  cursor?: string;
+  draggable?: boolean;
+  progressive?: boolean;
+  style?: Style;
+  shape?: Record<string, any>;
+  transform?: Transform;
+  clipPath?: any;
+  [key: string]: any;
+}
+
+export interface EventData {
+  type: string;
+  target?: any;
+  topTarget?: any;
+  cancelBubble?: boolean;
+  offsetX?: number;
+  offsetY?: number;
+  zrX?: number;
+  zrY?: number;
+  [key: string]: any;
+}
+
+export type EventCallback = (event: EventData) => void;
+
+export interface AnimationOption {
+  duration?: number;
+  delay?: number;
+  easing?: string | ((t: number) => number);
+  onUpdate?: (target: any, percent: number) => void;
+  onComplete?: () => void;
+}
+
+/**
+ * Rendering mode
+ */
+export type RenderMode = 'canvas' | 'svg';
+
+/**
+ * Theme mode
+ */
+export type Theme = 'light' | 'dark';
+
+/**
+ * Locale
+ */
+export type Locale = 'en' | 'zh' | 'zh-CN' | 'zh-TW' | 'ja' | 'ko' | 'fr' | 'de' | 'es' | 'pt' | 'ru';
+
+/**
+ * Theme configuration
+ */
+export interface ThemeConfig {
+  backgroundColor: string;
+  textColor: string;
+  borderColor: string;
+  gridColor: string;
+  axisLineColor: string;
+  axisLabelColor: string;
+  seriesColors: string[];
+  tooltipBackgroundColor: string;
+  tooltipTextColor: string;
+  legendTextColor: string;
+  [key: string]: string | string[];
+}
+
+/**
+ * Locale configuration
+ */
+export interface LocaleConfig {
+  [key: string]: string;
+}
+
+/**
+ * Rendering context interface (unified for Canvas and SVG)
+ */
+export interface RenderingContext {
+  // Canvas context methods
+  canvas?: HTMLCanvasElement;
+  fillStyle?: string | CanvasGradient | CanvasPattern;
+  strokeStyle?: string | CanvasGradient | CanvasPattern;
+  lineWidth?: number;
+  lineDash?: number[];
+  lineDashOffset?: number;
+  globalAlpha?: number;
+  shadowBlur?: number;
+  shadowColor?: string;
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
+  font?: string;
+  textAlign?: CanvasTextAlign;
+  textBaseline?: CanvasTextBaseline;
+  save(): void;
+  restore(): void;
+  beginPath(): void;
+  closePath(): void;
+  moveTo(x: number, y: number): void;
+  lineTo(x: number, y: number): void;
+  arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+  arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
+  bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+  quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+  rect(x: number, y: number, width: number, height: number): void;
+  fill(): void;
+  stroke(): void;
+  fillText(text: string, x: number, y: number): void;
+  strokeText(text: string, x: number, y: number): void;
+  clip(): void;
+  transform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+  setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+  translate(x: number, y: number): void;
+  rotate(angle: number): void;
+  scale(x: number, y: number): void;
+  clearRect(x: number, y: number, width: number, height: number): void;
+  fillRect(x: number, y: number, width: number, height: number): void;
+  getImageData?(sx: number, sy: number, sw: number, sh: number): ImageData;
+  putImageData?(imagedata: ImageData, dx: number, dy: number): void;
+  measureText?(text: string): TextMetrics;
+  isPointInPath?(x: number, y: number): boolean;
+  isPointInStroke?(x: number, y: number): boolean;
+  // SVG specific
+  svgElement?: SVGElement;
+  svgGroup?: SVGGElement;
+}
+
+export interface CanvasRenderingContext2D {
+  canvas: HTMLCanvasElement;
+  fillStyle: string | CanvasGradient | CanvasPattern;
+  strokeStyle: string | CanvasGradient | CanvasPattern;
+  lineWidth: number;
+  lineDash: number[];
+  lineDashOffset: number;
+  globalAlpha: number;
+  shadowBlur: number;
+  shadowColor: string;
+  shadowOffsetX: number;
+  shadowOffsetY: number;
+  font: string;
+  textAlign: CanvasTextAlign;
+  textBaseline: CanvasTextBaseline;
+  save(): void;
+  restore(): void;
+  beginPath(): void;
+  closePath(): void;
+  moveTo(x: number, y: number): void;
+  lineTo(x: number, y: number): void;
+  arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+  arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
+  bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+  quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+  rect(x: number, y: number, width: number, height: number): void;
+  fill(): void;
+  stroke(): void;
+  fillText(text: string, x: number, y: number): void;
+  strokeText(text: string, x: number, y: number): void;
+  clip(): void;
+  transform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+  setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+  translate(x: number, y: number): void;
+  rotate(angle: number): void;
+  scale(x: number, y: number): void;
+  clearRect(x: number, y: number, width: number, height: number): void;
+  fillRect(x: number, y: number, width: number, height: number): void;
+  getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
+  putImageData(imagedata: ImageData, dx: number, dy: number): void;
+  measureText(text: string): TextMetrics;
+  isPointInPath(x: number, y: number): boolean;
+  isPointInStroke(x: number, y: number): boolean;
+}
