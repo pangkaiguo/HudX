@@ -90,8 +90,8 @@ export class ECharts {
 | Method | Functionality | ECharts Signature | HudX Current | Status |
 |--------|---------------|-------------------|-------------|--------|
 | `init()` | Create instance | ✅ | `Renderer.init()` | ✅ Implemented |
-| `setOption()` | Set configuration | ✅ | `Chart.setOption()` | ⚠️ Needs refinement |
-| `getOption()` | Get configuration | ✅ | `Chart.getOption()` | ⚠️ Needs refinement |
+| `setOption()` | Set configuration | ✅ | `Chart.setOption()` | ✅ Enhanced |
+| `getOption()` | Get configuration | ✅ | `Chart.getOption()` | ✅ Enhanced |
 | `dispose()` | Dispose instance | ✅ | `Renderer.dispose()` | ✅ Implemented |
 
 #### B. Size & DOM Methods
@@ -100,7 +100,7 @@ export class ECharts {
 |--------|---------------|-------------|--------|
 | `getWidth()` | Get width | ✅ `Renderer.getWidth()` | ✅ Implemented |
 | `getHeight()` | Get height | ✅ `Renderer.getHeight()` | ✅ Implemented |
-| `getDom()` | Get container DOM | ⚠️ No direct method | Needs addition |
+| `getDom()` | Get container DOM | ✅ `Renderer.getDom()` | ✅ Implemented |
 | `resize()` | Resize | ✅ `Renderer.resize()` | ✅ Implemented |
 
 #### C. Theme & Internationalization
@@ -141,8 +141,8 @@ export class ECharts {
 |--------|---------------|-------------|----------|
 | `showLoading()` | Show loading animation | ❌ | P2 |
 | `hideLoading()` | Hide loading animation | ❌ | P2 |
-| `clear()` | Clear instance | ⚠️ `Renderer.removeAll()` | P1 |
-| `isDisposed()` | Check if disposed | ❌ | P2 |
+| `clear()` | Clear instance | ✅ `Chart.clear()` | ✅ Implemented |
+| `isDisposed()` | Check if disposed | ✅ `Renderer.isDisposed()` / `Chart.isDisposed()` | ✅ Implemented |
 
 ---
 

@@ -90,8 +90,8 @@ export class ECharts {
 | 方法 | 功能 | ECharts 签名 | HudX 当前 | 状态 |
 |------|------|-----------|---------|------|
 | `init()` | 创建实例 | ✅ | `Renderer.init()` | ✅ 已实现 |
-| `setOption()` | 设置配置项 | ✅ | `Chart.setOption()` | ⚠️ 需完善 |
-| `getOption()` | 获取配置项 | ✅ | `Chart.getOption()` | ⚠️ 需完善 |
+| `setOption()` | 设置配置项 | ✅ | `Chart.setOption()` | ✅ 已完善 |
+| `getOption()` | 获取配置项 | ✅ | `Chart.getOption()` | ✅ 已完善 |
 | `dispose()` | 销毁实例 | ✅ | `Renderer.dispose()` | ✅ 已实现 |
 
 #### B. 尺寸与DOM方法
@@ -100,7 +100,7 @@ export class ECharts {
 |------|------|---------|------|
 | `getWidth()` | 获取宽度 | ✅ `Renderer.getWidth()` | ✅ 已实现 |
 | `getHeight()` | 获取高度 | ✅ `Renderer.getHeight()` | ✅ 已实现 |
-| `getDom()` | 获取容器 DOM | ⚠️ 无直接方法 | 需添加 |
+| `getDom()` | 获取容器 DOM | ✅ `Renderer.getDom()` | ✅ 已实现 |
 | `resize()` | 调整大小 | ✅ `Renderer.resize()` | ✅ 已实现 |
 
 #### C. 主题与国际化
@@ -141,8 +141,8 @@ export class ECharts {
 |------|------|---------|--------|
 | `showLoading()` | 显示加载动画 | ❌ | P2 |
 | `hideLoading()` | 隐藏加载动画 | ❌ | P2 |
-| `clear()` | 清空实例 | ⚠️ `Renderer.removeAll()` | P1 |
-| `isDisposed()` | 检查是否已销毁 | ❌ | P2 |
+| `clear()` | 清空实例 | ✅ `Chart.clear()` | ✅ 已实现 |
+| `isDisposed()` | 检查是否已销毁 | ✅ `Renderer.isDisposed()` / `Chart.isDisposed()` | ✅ 已实现 |
 
 ---
 
