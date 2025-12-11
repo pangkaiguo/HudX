@@ -18,6 +18,7 @@ All documentation is now available in both **Chinese (中文)** and **English** 
 | **Implementation** | [docs/IMPLEMENTATION.md](./docs/IMPLEMENTATION.md) | [docs/IMPLEMENTATION.en.md](./docs/IMPLEMENTATION.en.md) |
 | **Function Checklist** | [docs/FUNCTION_CHECKLIST.md](./docs/FUNCTION_CHECKLIST.md) | [docs/FUNCTION_CHECKLIST.en.md](./docs/FUNCTION_CHECKLIST.en.md) |
 | **Renderer Coverage** | [docs/RENDERER_COVERAGE.md](./docs/RENDERER_COVERAGE.md) | [docs/RENDERER_COVERAGE.en.md](./docs/RENDERER_COVERAGE.en.md) |
+| **Rendering Engine Analysis** | [docs/RENDERING_ENGINE_ANALYSIS.md](./docs/RENDERING_ENGINE_ANALYSIS.md) | [docs/RENDERING_ENGINE_ANALYSIS.en.md](./docs/RENDERING_ENGINE_ANALYSIS.en.md) |
 
 ## Documentation Overview
 
@@ -38,6 +39,7 @@ These documents help with implementation and customization:
 2. **FUNCTION_CHECKLIST** - Complete list of implemented functions
 3. **CHECKLIST** - Implementation status and coverage
 4. **RENDERER_COVERAGE** - Feature parity with ZRender
+5. **RENDERING_ENGINE_ANALYSIS** - Event handling and DOM retrieval analysis
 
 ### Reference
 
@@ -54,6 +56,7 @@ Quick reference documents:
 - [Architecture Overview](./docs/IMPLEMENTATION.en.md#architecture-design)
 - [Theme Configuration](./docs/THEME_AND_I18N.en.md#theme-system)
 - [Rendering Mode Comparison](./docs/RENDERING_MODES.en.md#rendering-mode-comparison)
+- [Rendering Engine Analysis](./docs/RENDERING_ENGINE_ANALYSIS.en.md)
 - [Complete Examples](./docs/EXAMPLES.en.md)
 
 ## Language Support
