@@ -20,6 +20,7 @@ All documentation is now available in both **Chinese (中文)** and **English** 
 | **Renderer Coverage** | [docs/RENDERER_COVERAGE.md](./docs/RENDERER_COVERAGE.md) | [docs/RENDERER_COVERAGE.en.md](./docs/RENDERER_COVERAGE.en.md) |
 | **Rendering Engine Analysis** | [docs/RENDERING_ENGINE_ANALYSIS.md](./docs/RENDERING_ENGINE_ANALYSIS.md) | [docs/RENDERING_ENGINE_ANALYSIS.en.md](./docs/RENDERING_ENGINE_ANALYSIS.en.md) |
 | **ECharts API Compatibility** | [docs/ECHARTS_API_COMPATIBILITY.md](./docs/ECHARTS_API_COMPATIBILITY.md) | [docs/ECHARTS_API_COMPATIBILITY.en.md](./docs/ECHARTS_API_COMPATIBILITY.en.md) |
+| **P0 API Implementation** | [docs/P0_API_IMPLEMENTATION.md](./docs/P0_API_IMPLEMENTATION.md) | [docs/P0_API_IMPLEMENTATION.en.md](./docs/P0_API_IMPLEMENTATION.en.md) |
 
 ## Documentation Overview
 
@@ -42,6 +43,7 @@ These documents help with implementation and customization:
 4. **RENDERER_COVERAGE** - Feature parity with ZRender
 5. **RENDERING_ENGINE_ANALYSIS** - Event handling and DOM retrieval analysis
 6. **ECHARTS_API_COMPATIBILITY** - Detailed API compatibility analysis and implementation roadmap
+7. **P0_API_IMPLEMENTATION** - Summary of P0 level critical APIs (getDom, isDisposed, clear, enhanced setOption)
 
 ### Reference
 
