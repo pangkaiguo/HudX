@@ -21,7 +21,7 @@ export default class SVGPainter {
         this._rootGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         this._svg.appendChild(this._rootGroup);
         this._dom.appendChild(this._svg);
-        this._resize();
+        this.resize();
         this._initEvent();
     }
     /**
@@ -230,8 +230,13 @@ export default class SVGPainter {
         }
         else if ('points' in shape && Array.isArray(shape.points)) {
             // Polyline or Polygon - check element type
-            const points = shape.points.map((p) => `${p.x},${p.y}`).join(' ');
-            // For now, use polyline for both (polygon would need closePath)
+            let points;
+            if (Array.isArray(shape.points[0])) {
+                points = shape.points.map(p => `${p[0]},${p[1]}`).join(' ');
+            }
+            else {
+                points = shape.points.map((p) => `${p.x},${p.y}`).join(' ');
+            }
             const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
             poly.setAttribute('points', points);
             return poly;
@@ -371,28 +376,13 @@ export default class SVGPainter {
      * Initialize resize observer
      */
     _initEvent() {
-        // Use ResizeObserver for automatic resize
-        if (typeof ResizeObserver !== 'undefined') {
-            const resizeObserver = new ResizeObserver(() => {
-                this._resize();
-            });
-            resizeObserver.observe(this._dom);
-        }
-        else {
-            // Fallback to window resize event
-            window.addEventListener('resize', () => {
-                this._resize();
-            });
-        }
+        // Disabled to prevent infinite loop
     }
     /**
      * Handle resize
      */
     _resize() {
-        const rect = this._dom.getBoundingClientRect();
-        if (rect.width !== this._width || rect.height !== this._height) {
-            this.resize();
-        }
+        // Disabled
     }
     /**
      * Dispose SVG painter

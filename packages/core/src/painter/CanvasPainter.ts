@@ -27,7 +27,7 @@ export default class CanvasPainter implements IPainter {
     }
 
     this._dom.appendChild(this._canvas);
-    this._resize();
+    this.resize();
     this._initEvent();
   }
 
@@ -47,7 +47,8 @@ export default class CanvasPainter implements IPainter {
     this._canvas.style.width = `${this._width}px`;
     this._canvas.style.height = `${this._height}px`;
 
-    // Scale context to match device pixel ratio
+    // Reset transform and scale context to match device pixel ratio
+    this._ctx.setTransform(1, 0, 0, 1, 0, 0);
     this._ctx.scale(dpr, dpr);
 
     this.markDirty();
@@ -140,28 +141,14 @@ export default class CanvasPainter implements IPainter {
    * Initialize resize observer
    */
   private _initEvent(): void {
-    // Use ResizeObserver for automatic resize
-    if (typeof ResizeObserver !== 'undefined') {
-      const resizeObserver = new ResizeObserver(() => {
-        this._resize();
-      });
-      resizeObserver.observe(this._dom);
-    } else {
-      // Fallback to window resize event
-      window.addEventListener('resize', () => {
-        this._resize();
-      });
-    }
+    // Disable auto-resize to prevent infinite loop
   }
 
   /**
    * Handle resize
    */
   private _resize(): void {
-    const rect = this._dom.getBoundingClientRect();
-    if (rect.width !== this._width || rect.height !== this._height) {
-      this.resize();
-    }
+    // Disabled
   }
 
   /**

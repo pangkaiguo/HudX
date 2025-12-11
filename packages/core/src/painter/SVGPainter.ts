@@ -37,7 +37,7 @@ export default class SVGPainter implements IPainter {
     this._svg.appendChild(this._rootGroup);
     
     this._dom.appendChild(this._svg);
-    this._resize();
+    this.resize();
     this._initEvent();
   }
 
@@ -266,8 +266,12 @@ export default class SVGPainter implements IPainter {
       return line;
     } else if ('points' in shape && Array.isArray(shape.points)) {
       // Polyline or Polygon - check element type
-      const points = shape.points.map((p: any) => `${p.x},${p.y}`).join(' ');
-      // For now, use polyline for both (polygon would need closePath)
+      let points: string;
+      if (Array.isArray(shape.points[0])) {
+        points = (shape.points as number[][]).map(p => `${p[0]},${p[1]}`).join(' ');
+      } else {
+        points = (shape.points as any[]).map((p: any) => `${p.x},${p.y}`).join(' ');
+      }
       const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
       poly.setAttribute('points', points);
       return poly;
@@ -415,28 +419,14 @@ export default class SVGPainter implements IPainter {
    * Initialize resize observer
    */
   private _initEvent(): void {
-    // Use ResizeObserver for automatic resize
-    if (typeof ResizeObserver !== 'undefined') {
-      const resizeObserver = new ResizeObserver(() => {
-        this._resize();
-      });
-      resizeObserver.observe(this._dom);
-    } else {
-      // Fallback to window resize event
-      window.addEventListener('resize', () => {
-        this._resize();
-      });
-    }
+    // Disabled to prevent infinite loop
   }
 
   /**
    * Handle resize
    */
   private _resize(): void {
-    const rect = this._dom.getBoundingClientRect();
-    if (rect.width !== this._width || rect.height !== this._height) {
-      this.resize();
-    }
+    // Disabled
   }
 
   /**

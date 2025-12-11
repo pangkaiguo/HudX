@@ -170,14 +170,14 @@ export class LocaleManager {
   /**
    * Register custom locale
    */
-  static registerLocale(locale: Locale, config: LocaleConfig): void {
-    LocaleManager._locales.set(locale, config);
+  static registerLocale(locale: string, config: LocaleConfig): void {
+    LocaleManager._locales.set(locale as Locale, config);
   }
 
   /**
    * Get all registered locales
    */
-  static getLocales(): Locale[] {
+  static getLocales(): string[] {
     return Array.from(LocaleManager._locales.keys());
   }
 }

@@ -11,9 +11,9 @@ export declare class ThemeManager {
     /**
      * Register custom theme
      */
-    static registerTheme(theme: Theme, config: ThemeConfig): void;
+    static registerTheme(theme: string, config: ThemeConfig): void;
     /**
      * Get all registered themes
      */
-    static getThemes(): Theme[];
+    static getThemes(): string[];
 }

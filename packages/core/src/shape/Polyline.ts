@@ -6,7 +6,7 @@ import Element from '../Element';
 import { ElementOption, BoundingRect, Point } from '../types';
 
 export interface PolylineShape {
-  points: Point[];
+  points: Point[] | number[][];
 }
 
 export default class Polyline extends Element {
@@ -18,7 +18,7 @@ export default class Polyline extends Element {
   }
 
   getBoundingRect(): BoundingRect {
-    const points = this.shape.points;
+    const points = this._normalizePoints();
     if (points.length === 0) {
       return { x: 0, y: 0, width: 0, height: 0 };
     }
@@ -44,8 +44,18 @@ export default class Polyline extends Element {
     };
   }
 
-  contain(x: number, y: number): boolean {
+  private _normalizePoints(): Point[] {
     const points = this.shape.points;
+    if (!points || points.length === 0) return [];
+    
+    if (Array.isArray(points[0])) {
+      return (points as number[][]).map(p => ({ x: p[0], y: p[1] }));
+    }
+    return points as Point[];
+  }
+
+  contain(x: number, y: number): boolean {
+    const points = this._normalizePoints();
     if (points.length < 2) {
       return false;
     }
@@ -79,7 +89,8 @@ export default class Polyline extends Element {
   }
 
   render(ctx: CanvasRenderingContext2D): void {
-    if (this.invisible || this.shape.points.length < 2) {
+    const points = this._normalizePoints();
+    if (this.invisible || points.length < 2) {
       return;
     }
 
@@ -87,7 +98,6 @@ export default class Polyline extends Element {
     this.applyTransform(ctx);
     this.applyStyle(ctx);
 
-    const points = this.shape.points;
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
     for (let i = 1; i < points.length; i++) {

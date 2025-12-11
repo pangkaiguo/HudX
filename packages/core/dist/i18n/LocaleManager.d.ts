@@ -15,9 +15,9 @@ export declare class LocaleManager {
     /**
      * Register custom locale
      */
-    static registerLocale(locale: Locale, config: LocaleConfig): void;
+    static registerLocale(locale: string, config: LocaleConfig): void;
     /**
      * Get all registered locales
      */
-    static getLocales(): Locale[];
+    static getLocales(): string[];
 }

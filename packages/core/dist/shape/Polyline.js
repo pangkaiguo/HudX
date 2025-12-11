@@ -8,7 +8,7 @@ export default class Polyline extends Element {
         this.shape = opts.shape || { points: [] };
     }
     getBoundingRect() {
-        const points = this.shape.points;
+        const points = this._normalizePoints();
         if (points.length === 0) {
             return { x: 0, y: 0, width: 0, height: 0 };
         }
@@ -30,8 +30,17 @@ export default class Polyline extends Element {
             height: maxY - minY + lineWidth,
         };
     }
-    contain(x, y) {
+    _normalizePoints() {
         const points = this.shape.points;
+        if (!points || points.length === 0)
+            return [];
+        if (Array.isArray(points[0])) {
+            return points.map(p => ({ x: p[0], y: p[1] }));
+        }
+        return points;
+    }
+    contain(x, y) {
+        const points = this._normalizePoints();
         if (points.length < 2) {
             return false;
         }
@@ -58,13 +67,13 @@ export default class Polyline extends Element {
         return false;
     }
     render(ctx) {
-        if (this.invisible || this.shape.points.length < 2) {
+        const points = this._normalizePoints();
+        if (this.invisible || points.length < 2) {
             return;
         }
         ctx.save();
         this.applyTransform(ctx);
         this.applyStyle(ctx);
-        const points = this.shape.points;
         ctx.beginPath();
         ctx.moveTo(points[0].x, points[0].y);
         for (let i = 1; i < points.length; i++) {

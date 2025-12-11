@@ -4,8 +4,5 @@
 import Chart from '../Chart';
 export default class ScatterChart extends Chart {
     protected _render(): void;
-    /**
-     * Render axes
-     */
-    private _renderAxes;
+    private _drawAxes;
 }

@@ -85,20 +85,13 @@ export default class Storage {
    * Get all elements sorted by zlevel and z
    */
   getElementsList(): Element[] {
-    const elements: Element[] = [];
-    this.iterate((el) => {
-      elements.push(el);
-    }, true);
-
-    // Sort by zlevel first, then by z
-    elements.sort((a, b) => {
+    // Only return root elements, they will render their children
+    return [...this._roots].sort((a, b) => {
       if (a.zlevel !== b.zlevel) {
         return a.zlevel - b.zlevel;
       }
       return a.z - b.z;
     });
-
-    return elements;
   }
 
   /**

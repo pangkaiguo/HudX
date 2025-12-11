@@ -159,30 +159,14 @@ export default class Group extends Element {
       return;
     }
 
-    ctx.save();
-
-    // Apply transform
-    this.applyTransform(ctx);
-
-    // Apply clip path if exists
-    const clipPath = this.getClipPath();
-    if (clipPath) {
-      ctx.beginPath();
-      clipPath.render(ctx);
-      ctx.clip();
-    }
-
-    // Apply style
-    this.applyStyle(ctx);
-
     // Render children
     for (const child of this._children) {
       if (!child.invisible) {
+        ctx.save();
         child.render(ctx);
+        ctx.restore();
       }
     }
-
-    ctx.restore();
   }
 }
 

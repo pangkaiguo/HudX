@@ -1,6 +1,5 @@
 /**
  * Element - Base class for all graphical elements
- * Similar to hrender's Element class
  */
 import Eventful from './mixin/Eventful';
 export default class Element extends Eventful {
@@ -38,11 +37,7 @@ export default class Element extends Eventful {
             this._clipPath = opts.clipPath;
         }
     }
-    /**
-     * Element attribute getter/setter
-     */
     attr(key, value) {
-        // Getter: single string key
         if (typeof key === 'string' && value === undefined && arguments.length === 1) {
             if (key === 'style') {
                 return this.style;
@@ -55,7 +50,6 @@ export default class Element extends Eventful {
             }
             return this[key];
         }
-        // Setter: string key with value or object
         if (typeof key === 'string') {
             this._setAttr(key, value);
         }
@@ -77,56 +71,41 @@ export default class Element extends Eventful {
         else if (key === 'transform') {
             this.transform = { ...this.transform, ...value };
         }
+        else if (key === 'invisible') {
+            this.invisible = value;
+        }
         else {
             this[key] = value;
         }
     }
-    /**
-     * Mark element as dirty (needs redraw)
-     */
     markRedraw() {
         this._dirty = true;
         this.trigger('dirty');
     }
-    /**
-     * Check if element is dirty
-     */
     isDirty() {
         return this._dirty;
     }
-    /**
-     * Clear dirty flag
-     */
     clearDirty() {
         this._dirty = false;
     }
-    /**
-     * Get bounding rect (to be implemented by subclasses)
-     */
     getBoundingRect() {
         return { x: 0, y: 0, width: 0, height: 0 };
     }
-    /**
-     * Check if point is inside element
-     */
     contain(x, y) {
         return false;
     }
-    /**
-     * Render element (to be implemented by subclasses)
-     */
     render(ctx) {
         // To be implemented by subclasses
     }
-    /**
-     * Apply transform to context
-     */
     applyTransform(ctx) {
         const transform = this.transform;
         if (!transform)
             return;
         const originX = transform.originX ?? 0;
         const originY = transform.originY ?? 0;
+        if (transform.x !== undefined || transform.y !== undefined) {
+            ctx.translate(transform.x ?? 0, transform.y ?? 0);
+        }
         if (originX !== 0 || originY !== 0) {
             ctx.translate(originX, originY);
         }
@@ -136,16 +115,10 @@ export default class Element extends Eventful {
         if (transform.scaleX !== undefined || transform.scaleY !== undefined) {
             ctx.scale(transform.scaleX ?? 1, transform.scaleY ?? 1);
         }
-        if (transform.x !== undefined || transform.y !== undefined) {
-            ctx.translate(transform.x ?? 0, transform.y ?? 0);
-        }
         if (originX !== 0 || originY !== 0) {
             ctx.translate(-originX, -originY);
         }
     }
-    /**
-     * Apply style to context
-     */
     applyStyle(ctx) {
         const style = this.style;
         if (!style)
@@ -181,23 +154,14 @@ export default class Element extends Eventful {
             ctx.shadowOffsetY = style.shadowOffsetY;
         }
     }
-    /**
-     * Get clip path
-     */
     getClipPath() {
         return this._clipPath;
     }
-    /**
-     * Set clip path
-     */
     setClipPath(clipPath) {
         this._clipPath = clipPath;
         this.markRedraw();
         return this;
     }
-    /**
-     * Generate unique ID
-     */
     _generateId() {
         return `element_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }

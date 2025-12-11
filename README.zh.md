@@ -1,0 +1,398 @@
+# HudX - 高性能图表库
+
+HudX 是一个基于 React 和 TypeScript 的高性能图表库，参考了 [zrender](https://github.com/ecomfe/zrender) 的底层渲染逻辑和 [ECharts](https://github.com/apache/echarts) 的接口设计，支持 Canvas 和 SVG 两种渲染模式。
+
+## 特性
+
+- 🚀 **高性能**: 支持 Canvas 和 SVG 两种渲染模式，高效处理大量数据
+- 🎨 **丰富的图表类型**: 折线图、柱状图、饼图、散点图、热力图等
+- ⚛️ **React 集成**: 无缝的 React 组件集成
+- 📦 **模块化设计**: 核心渲染引擎和图表库完全解耦
+- 🎯 **TypeScript**: 完整的 TypeScript 支持和严格类型检查
+- 🎬 **完整的动画系统**: 多种缓动函数（linear、quadratic、cubic、elastic）
+- 🔧 **可扩展架构**: 易于添加新的图表类型和图形元素
+- 🖼️ **双渲染模式**: Canvas（高性能）和 SVG（矢量图形）
+- 🌓 **主题支持**: Light 和 Dark 主题，支持自定义
+- 🌍 **国际化**: 10+ 种语言支持，可自定义语言包
+- 💬 **交互组件**: Tooltip、Legend 和完整的事件系统
+
+## 项目结构
+
+```
+HudX/
+├── packages/
+│   ├── core/          # 核心渲染引擎（类似 zrender）
+│   │   ├── src/
+│   │   │   ├── Renderer.ts      # 主渲染引擎类
+│   │   │   ├── Element.ts       # 图形元素基类
+│   │   │   ├── Group.ts         # 组容器
+│   │   │   ├── Storage.ts       # 元素存储管理
+│   │   │   ├── Handler.ts       # 事件处理器
+│   │   │   ├── shape/           # 图形元素（11种）
+│   │   │   ├── animation/       # 动画系统
+│   │   │   ├── component/       # 组件（Tooltip、Legend）
+│   │   │   ├── painter/         # 绘制器（Canvas、SVG）
+│   │   │   ├── theme/           # 主题管理
+│   │   │   ├── i18n/            # 国际化
+│   │   │   └── util/            # 工具函数
+│   │   └── package.json
+│   └── charts/        # 图表库（类似 echarts）
+│       ├── src/
+│       │   ├── Chart.ts         # 图表基类
+│       │   ├── chart/           # 具体图表实现
+│       │   ├── react/           # React 组件
+│       │   └── util/            # 工具函数
+│       └── package.json
+├── examples/          # 交互式示例
+│   ├── src/
+│   │   ├── examples/
+│   │   │   ├── BasicLine.tsx
+│   │   │   ├── BasicBar.tsx
+│   │   │   ├── BasicPie.tsx
+│   │   │   ├── AdvancedLineChart.tsx
+│   │   │   ├── AdvancedBarChart.tsx
+│   │   │   ├── AdvancedPieChart.tsx
+│   │   │   ├── Animation.tsx
+│   │   │   ├── Interaction.tsx
+│   │   │   ├── ThemeSwitch.tsx
+│   │   │   ├── PerformanceTest.tsx
+│   │   │   └── FullFeatureDemo.tsx
+│   └── package.json
+└── docs/              # 完整文档（中英文）
+    ├── zh/            # 中文文档
+    └── en/            # 英文文档
+```
+
+## 快速开始
+
+### 安装
+
+```bash
+pnpm install
+```
+
+### 构建
+
+```bash
+pnpm build
+```
+
+### 运行示例
+
+```bash
+cd examples
+pnpm dev
+# 访问 http://localhost:5173
+```
+
+## 使用示例
+
+### React 组件方式
+
+```tsx
+import React from 'react';
+import { HudXChart } from '@hudx/charts';
+
+function App() {
+  const option = {
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [{
+      type: 'line',
+      data: [120, 200, 150, 80, 70, 110, 130]
+    }]
+  };
+
+  return (
+    <HudXChart
+      option={option}
+      width={800}
+      height={400}
+      renderMode="canvas"
+      theme="dark"
+      locale="zh-CN"
+      onEvents={{
+        click: (event) => {
+          console.log('Chart clicked:', event);
+        }
+      }}
+    />
+  );
+}
+```
+
+### 核心 API 方式
+
+```typescript
+import { Renderer, Circle, Rect, Animation, Easing } from '@hudx/core';
+
+// 初始化渲染器
+const renderer = Renderer.init('#container', 'canvas', 'light', 'en');
+
+// 创建圆形
+const circle = new Circle({
+  shape: { cx: 100, cy: 100, r: 50 },
+  style: { fill: '#ff0000', stroke: '#000000', lineWidth: 2 }
+});
+
+renderer.add(circle);
+
+// 创建矩形
+const rect = new Rect({
+  shape: { x: 200, y: 200, width: 100, height: 100 },
+  style: { fill: '#00ff00' }
+});
+
+renderer.add(rect);
+
+// 添加动画
+const animation = new Animation(
+  circle.attr('shape'),
+  'r',
+  100,
+  1000,
+  0,
+  Easing.cubicOut,
+  () => renderer.flush()
+);
+animation.start();
+```
+
+## 核心架构
+
+### 1. 核心渲染引擎 (@hudx/core)
+
+采用 MVC 架构，支持 Canvas 和 SVG 两种渲染模式：
+
+- **Model (Storage)**: 管理图形元素的存储和层次关系
+- **View (Painter)**: 负责 Canvas/SVG 绘制
+- **Controller (Handler)**: 处理用户交互事件
+
+#### 主要类
+
+- **Renderer**: 主渲染引擎，管理整个渲染流程，支持 Canvas/SVG、主题和国际化
+- **Element**: 所有图形元素的基类
+- **Group**: 容器元素，可以包含子元素
+- **Storage**: 元素存储管理器，维护元素树
+- **Painter**: 绘制器接口（CanvasPainter 和 SVGPainter）
+- **Handler**: 事件处理器，处理鼠标、触摸等交互
+- **Animation**: 动画系统，支持多种缓动函数
+- **Tooltip**: 数据提示组件
+- **Legend**: 图例组件
+
+#### 图形元素 (Shape)
+
+- `Circle`: 圆形
+- `Rect`: 矩形
+- `Line`: 直线
+- `Polyline`: 折线
+- `Polygon`: 多边形
+- `Arc`: 圆弧
+- `BezierCurve`: 贝塞尔曲线
+- `Path`: SVG 路径
+- `Text`: 文本
+- `Sector`: 扇形
+- `Image`: 图像
+
+### 2. 图表库 (@hudx/charts)
+
+参考了 ECharts 的接口设计，提供类似的使用体验。
+
+#### 图表类型
+
+- **LineChart**: 折线图
+- **BarChart**: 柱状图
+- **PieChart**: 饼图
+- **ScatterChart**: 散点图
+- **HeatmapChart**: 热力图
+
+#### 配置选项
+
+```typescript
+interface ChartOption {
+  title?: TitleOption;
+  tooltip?: TooltipOption;
+  legend?: LegendOption;
+  grid?: GridOption;
+  xAxis?: AxisOption | AxisOption[];
+  yAxis?: AxisOption | AxisOption[];
+  series?: SeriesOption[];
+  backgroundColor?: string;
+  animation?: boolean;
+  animationDuration?: number;
+  animationEasing?: string;
+}
+```
+
+## 交互功能
+
+### 动画系统
+
+支持多种缓动函数：
+
+```typescript
+import { Animation, Easing } from '@hudx/core';
+
+const animation = new Animation(
+  target,
+  'property',
+  endValue,
+  1000,           // 持续时间
+  0,              // 延迟
+  Easing.cubicOut // 缓动函数
+);
+animation.start();
+```
+
+**支持的缓动函数**:
+- `linear`: 线性
+- `quadraticIn/Out/InOut`: 二次缓动
+- `cubicIn/Out/InOut`: 三次缓动
+- `elasticIn/Out`: 弹性缓动
+
+### Tooltip 组件
+
+```typescript
+import { Tooltip } from '@hudx/core';
+
+const tooltip = new Tooltip({
+  backgroundColor: 'rgba(50, 50, 50, 0.95)',
+  textColor: '#fff',
+  padding: 12,
+  fontSize: 13
+});
+
+renderer.add(tooltip);
+tooltip.show(x, y, 'Content');
+tooltip.hide();
+```
+
+### Legend 组件
+
+```typescript
+import { Legend } from '@hudx/core';
+
+const legend = new Legend({
+  x: 20,
+  y: 20,
+  orient: 'horizontal',
+  onSelect: (name, selected) => {
+    // 处理选择事件
+  }
+});
+
+legend.setItems([
+  { name: 'Series A', color: '#5470c6' },
+  { name: 'Series B', color: '#91cc75' }
+]);
+
+renderer.add(legend);
+```
+
+### 事件系统
+
+```typescript
+// 元素事件
+element.on('click', (event) => {
+  console.log('Element clicked:', event);
+});
+
+// 支持的事件类型
+// click, dblclick, mousedown, mouseup, mousemove, mouseover, mouseout
+// touchstart, touchmove, touchend, drag, dragend
+```
+
+## 性能优化
+
+### 1. 脏标记机制
+
+只重绘需要更新的元素：
+
+```typescript
+element.markRedraw(); // 标记为需要重绘
+```
+
+### 2. 批量更新
+
+```typescript
+renderer.add(circle1);
+renderer.add(circle2);
+renderer.flush(); // 一次性渲染所有元素
+```
+
+### 3. 对象池复用
+
+```typescript
+import { ObjectPool } from '@hudx/core';
+
+const pool = new ObjectPool(
+  () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),
+  (circle) => circle.attr('shape', { cx: 0, cy: 0, r: 0 })
+);
+
+const circle = pool.acquire();
+pool.release(circle);
+```
+
+### 4. 设备像素比适配
+
+自动适配高 DPI 屏幕，确保清晰渲染。
+
+## 主题和多语言
+
+### 主题
+
+```typescript
+const renderer = Renderer.init('#container', 'canvas', 'dark');
+renderer.setTheme('light');
+```
+
+### 多语言
+
+```typescript
+const renderer = Renderer.init('#container', 'canvas', 'light', 'zh-CN');
+renderer.setLocale('en');
+const text = renderer.t('chart.title', 'Chart');
+```
+
+**支持的语言**: en, zh, zh-CN, zh-TW, ja, ko, fr, de, es, pt, ru
+
+## 渲染模式
+
+### Canvas 模式（默认）
+
+- 高性能，适合大数据集
+- 最适合实时更新和动画
+- 内存占用较低
+
+### SVG 模式
+
+- 矢量图形，无限缩放不失真
+- 适合打印和导出
+- 更好的 CSS 支持
+- 大数据集性能较低
+
+## 浏览器支持
+
+- Chrome/Edge 90+
+- Firefox 88+
+- Safari 14+
+- 支持 Canvas/SVG 的移动浏览器
+
+## 许可证
+
+MIT
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 致谢
+
+- 参考了 [ZRender](https://github.com/ecomfe/zrender) - ECharts 的渲染引擎
+- 参考了 [ECharts](https://github.com/apache/echarts) - 可视化图表库

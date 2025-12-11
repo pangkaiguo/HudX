@@ -45,3 +45,7 @@ export * from './util/color';
 export { ThemeManager } from './theme/ThemeManager';
 export { LocaleManager } from './i18n/LocaleManager';
 
+// Components
+export { default as Tooltip } from './component/Tooltip';
+export { default as Legend } from './component/Legend';
+

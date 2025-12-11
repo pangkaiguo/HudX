@@ -89,7 +89,7 @@ export type RenderMode = 'canvas' | 'svg';
 /**
  * Theme mode
  */
-export type Theme = 'light' | 'dark';
+export type Theme = 'light' | 'dark' | string;
 
 /**
  * Locale
@@ -106,11 +106,12 @@ export interface ThemeConfig {
   gridColor: string;
   axisLineColor: string;
   axisLabelColor: string;
-  seriesColors: string[];
+  seriesColors?: string[];
+  color?: string[];
   tooltipBackgroundColor: string;
   tooltipTextColor: string;
   legendTextColor: string;
-  [key: string]: string | string[];
+  [key: string]: string | string[] | undefined;
 }
 
 /**

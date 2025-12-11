@@ -265,11 +265,11 @@ export default class Renderer {
   /**
    * Set theme
    */
-  setTheme(theme: Theme): this {
+  setTheme(theme: Theme | string): this {
     if (this._theme === theme) {
       return this;
     }
-    this._theme = theme;
+    this._theme = theme as Theme;
     this._applyTheme();
     this._painter.markDirty();
     return this;

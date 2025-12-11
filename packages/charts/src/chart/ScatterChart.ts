@@ -3,9 +3,7 @@
  */
 
 import Chart from '../Chart';
-import { ChartOption, SeriesOption, ChartData } from '../types';
-import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate } from '../util/coordinate';
-import { Circle, Line } from '@hudx/core';
+import { Circle, Text } from '@hudx/core';
 
 export default class ScatterChart extends Chart {
   protected _render(): void {
@@ -13,124 +11,55 @@ export default class ScatterChart extends Chart {
 
     const option = this._option;
     const series = option.series || [];
+    if (series.length === 0) return;
+
+    const grid = option.grid || {};
+    const left = this._parseSize(grid.left, 60);
+    const top = this._parseSize(grid.top, 60);
+    const right = this._parseSize(grid.right, 60);
+    const bottom = this._parseSize(grid.bottom, 60);
+    const chartWidth = this._width - left - right;
+    const chartHeight = this._height - top - bottom;
+
     const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
     const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
 
-    if (series.length === 0) {
-      return;
-    }
+    series.forEach((s: any, seriesIndex: number) => {
+      if (s.type !== 'scatter') return;
 
-    // Calculate grid area
-    const grid = option.grid || {};
-    const gridLeft = this._parseSize(grid.left, 60);
-    const gridRight = this._parseSize(grid.right, 20);
-    const gridTop = this._parseSize(grid.top, 60);
-    const gridBottom = this._parseSize(grid.bottom, 60);
+      const data = s.data || [];
+      const color = s.color || this._getSeriesColor(seriesIndex);
+      const symbolSize = s.symbolSize || 8;
 
-    const plotWidth = this._width - gridLeft - gridRight;
-    const plotHeight = this._height - gridTop - gridBottom;
-    const plotX = gridLeft;
-    const plotY = gridTop;
+      data.forEach((item: any) => {
+        const [xVal, yVal] = Array.isArray(item) ? item : [item.value?.[0], item.value?.[1]];
+        if (xVal === undefined || yVal === undefined) return;
 
-    // Process each series
-    series.forEach((seriesItem, seriesIndex) => {
-      if (seriesItem.type !== 'scatter') {
-        return;
-      }
+        const x = left + (xVal / 100) * chartWidth;
+        const y = top + chartHeight - (yVal / 100) * chartHeight;
 
-      const data = seriesItem.data || [];
-      if (data.length === 0) {
-        return;
-      }
-
-      // Calculate scales
-      const xDomain = calculateDomain(xAxis || {}, data, true);
-      const yDomain = calculateDomain(yAxis || {}, data, false);
-
-      const xScale = xAxis?.type === 'category'
-        ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
-        : createLinearScale(xDomain, [plotX, plotX + plotWidth]);
-
-      const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
-
-      // Create scatter points
-      const itemStyle = seriesItem.itemStyle || {};
-      const pointColor = itemStyle.color || this._getSeriesColor(seriesIndex);
-      const pointSize = (seriesItem as any).symbolSize || 10;
-
-      data.forEach((item: ChartData) => {
-        const coord = dataToCoordinate(item, xScale, yScale);
-
-        const circle = new Circle({
-          shape: {
-            cx: coord.x,
-            cy: coord.y,
-            r: pointSize / 2,
-          },
-          style: {
-            fill: pointColor,
-            stroke: '#fff',
-            lineWidth: 1,
-            opacity: itemStyle.opacity || 0.8,
-          },
-          z: seriesIndex,
-        });
-
-        this._root.add(circle);
+        this._root.add(new Circle({
+          shape: { cx: x, cy: y, r: symbolSize },
+          style: { fill: color, opacity: 0.7 }
+        }));
       });
     });
 
-    // Render axes
-    this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
-
-    this._renderer.refresh();
+    // Draw axes
+    this._drawAxes(left, top, chartWidth, chartHeight, xAxis, yAxis);
   }
 
-  /**
-   * Render axes
-   */
-  private _renderAxes(
-    xAxis: any,
-    yAxis: any,
-    plotX: number,
-    plotY: number,
-    plotWidth: number,
-    plotHeight: number
-  ): void {
+  private _drawAxes(left: number, top: number, width: number, height: number, xAxis: any, yAxis: any): void {
     // X axis
-    if (xAxis?.show !== false) {
-      const xAxisLine = new Line({
-        shape: {
-          x1: plotX,
-          y1: plotY + plotHeight,
-          x2: plotX + plotWidth,
-          y2: plotY + plotHeight,
-        },
-        style: {
-          stroke: '#ccc',
-          lineWidth: 1,
-        },
-      });
-      this._root.add(xAxisLine);
-    }
+    this._root.add(new Circle({
+      shape: { cx: left, cy: top + height, r: 0 },
+      style: { stroke: '#333', lineWidth: 1 }
+    }));
 
     // Y axis
-    if (yAxis?.show !== false) {
-      const yAxisLine = new Line({
-        shape: {
-          x1: plotX,
-          y1: plotY,
-          x2: plotX,
-          y2: plotY + plotHeight,
-        },
-        style: {
-          stroke: '#ccc',
-          lineWidth: 1,
-        },
-      });
-      this._root.add(yAxisLine);
-    }
+    this._root.add(new Circle({
+      shape: { cx: left, cy: top, r: 0 },
+      style: { stroke: '#333', lineWidth: 1 }
+    }));
   }
-
 }
-
