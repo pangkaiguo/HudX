@@ -3,11 +3,11 @@
  * Similar to hrender's Group class
  */
 
-import HRElement from './HRElement';
+import ChartElement from './ChartElement';
 import { ElementOption } from './types';
 
-export default class Group extends HRElement {
-  private _children: HRElement[] = [];
+export default class Group extends ChartElement {
+  private _children: ChartElement[] = [];
 
   constructor(opts: ElementOption = {}) {
     super(opts);
@@ -16,7 +16,7 @@ export default class Group extends HRElement {
   /**
    * Add child element
    */
-  add(child: HRElement): this {
+  add(child: ChartElement): this {
     if (child === this) {
       return this;
     }
@@ -36,7 +36,7 @@ export default class Group extends HRElement {
   /**
    * Remove child element
    */
-  remove(child: HRElement): this {
+  remove(child: ChartElement): this {
     const index = this._children.indexOf(child);
     if (index >= 0) {
       this._children.splice(index, 1);
@@ -61,21 +61,21 @@ export default class Group extends HRElement {
   /**
    * Get child at index
    */
-  childAt(index: number): HRElement | undefined {
+  childAt(index: number): ChartElement | undefined {
     return this._children[index];
   }
 
   /**
    * Get child by ID
    */
-  childOfName(name: string): HRElement | undefined {
+  childOfName(name: string): ChartElement | undefined {
     return this._children.find(child => child.id === name);
   }
 
   /**
    * Get all children
    */
-  children(): HRElement[] {
+  children(): ChartElement[] {
     return [...this._children];
   }
 
@@ -89,7 +89,7 @@ export default class Group extends HRElement {
   /**
    * Traverse children
    */
-  traverse(callback: (child: HRElement) => void | boolean, includeSelf: boolean = false): void {
+  traverse(callback: (child: ChartElement) => void | boolean, includeSelf: boolean = false): void {
     if (includeSelf) {
       const result = callback(this);
       if (result === false) {

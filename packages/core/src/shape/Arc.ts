@@ -2,7 +2,7 @@
  * Arc - Arc shape element
  */
 
-import HRElement from '../HRElement';
+import ChartElement from '../ChartElement';
 import { ElementOption, BoundingRect } from '../types';
 
 export interface ArcShape {
@@ -14,7 +14,7 @@ export interface ArcShape {
   anticlockwise?: boolean;
 }
 
-export default class Arc extends HRElement {
+export default class Arc extends ChartElement {
   shape: ArcShape;
 
   constructor(opts: ElementOption & { shape: ArcShape }) {

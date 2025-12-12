@@ -2,7 +2,7 @@
  * Image - Image shape element
  */
 
-import HRElement from '../HRElement';
+import ChartElement from '../ChartElement';
 import { ElementOption, BoundingRect } from '../types';
 
 export interface ImageShape {
@@ -17,7 +17,7 @@ export interface ImageShape {
   sHeight?: number; // Source height
 }
 
-export default class Image extends HRElement {
+export default class Image extends ChartElement {
   shape: ImageShape;
 
   constructor(opts: ElementOption & { shape: ImageShape }) {
@@ -38,7 +38,7 @@ export default class Image extends HRElement {
   contain(x: number, y: number): boolean {
     const shape = this.shape;
     return x >= shape.x && x <= shape.x + shape.width &&
-           y >= shape.y && y <= shape.y + shape.height;
+      y >= shape.y && y <= shape.y + shape.height;
   }
 
   render(ctx: CanvasRenderingContext2D): void {
@@ -52,8 +52,8 @@ export default class Image extends HRElement {
 
     const shape = this.shape;
 
-    if (shape.sx !== undefined && shape.sy !== undefined && 
-        shape.sWidth !== undefined && shape.sHeight !== undefined) {
+    if (shape.sx !== undefined && shape.sy !== undefined &&
+      shape.sWidth !== undefined && shape.sHeight !== undefined) {
       // Draw image with source rectangle
       ctx.drawImage(
         shape.image,

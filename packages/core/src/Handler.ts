@@ -1,18 +1,18 @@
 /**
  * Handler - Handles user interactions (Controller layer)
- * Similar to hrender's Handler class
+ * Similar to zRender's Handler class
  */
 
 import IPainter from './painter/IPainter';
 import Storage from './Storage';
-import HRElement from './HRElement';
+import ChartElement from './ChartElement';
 import { EventData, Point } from './types';
 
 export default class Handler {
   private _painter: IPainter;
   private _storage: Storage;
-  private _hovered: HRElement | null = null;
-  private _dragging: HRElement | null = null;
+  private _hovered: ChartElement | null = null;
+  private _dragging: ChartElement | null = null;
   private _dragStart: Point | null = null;
   private _dragStartElementPos: Point | null = null;
 
@@ -48,9 +48,9 @@ export default class Handler {
   /**
    * Get element at point
    */
-  private _findHoveredElement(x: number, y: number): HRElement | null {
+  private _findHoveredElement(x: number, y: number): ChartElement | null {
     const elements = this._storage.getElementsList();
-    
+
     for (let i = elements.length - 1; i >= 0; i--) {
       const element = elements[i];
       if (!element.silent && !element.invisible && element.contain(x, y)) {
@@ -69,7 +69,7 @@ export default class Handler {
       return { x: 0, y: 0 };
     }
     const rect = target.getBoundingClientRect();
-    
+
     let clientX: number;
     let clientY: number;
 
@@ -94,14 +94,14 @@ export default class Handler {
   private _createEventData(
     type: string,
     point: Point,
-    target?: HRElement | null,
+    target?: ChartElement | null,
     originalEvent?: Event
   ): EventData {
-    let topTarget: HRElement | null | undefined = target;
+    let topTarget: ChartElement | null | undefined = target;
     if (target) {
-      let current: HRElement | undefined = target;
+      let current: ChartElement | undefined = target;
       while (current) {
-        const parent = (current as unknown as Record<string, unknown>).__parent as HRElement | undefined;
+        const parent = (current as unknown as Record<string, unknown>).__parent as ChartElement | undefined;
         if (parent) {
           current = parent;
           topTarget = current;
@@ -156,15 +156,15 @@ export default class Handler {
     if (this._dragging && this._dragStart) {
       const dx = point.x - this._dragStart.x;
       const dy = point.y - this._dragStart.y;
-      
+
       this._dragging.attr('transform', {
         ...this._dragging.transform,
         x: (this._dragStartElementPos!.x + dx),
         y: (this._dragStartElementPos!.y + dy),
       });
-      
+
       this._painter.markDirty();
-      
+
       const eventData = this._createEventData('drag', point, this._dragging, e);
       this._dragging.trigger('drag', eventData);
     }

@@ -2,7 +2,7 @@
  * Circle - Circle shape element
  */
 
-import HRElement from '../HRElement';
+import ChartElement from '../ChartElement';
 import { ElementOption, BoundingRect } from '../types';
 
 export interface CircleShape {
@@ -11,7 +11,7 @@ export interface CircleShape {
   r: number;
 }
 
-export default class Circle extends HRElement {
+export default class Circle extends ChartElement {
   shape: CircleShape;
 
   constructor(opts: ElementOption & { shape: CircleShape } = { shape: { cx: 0, cy: 0, r: 0 } }) {

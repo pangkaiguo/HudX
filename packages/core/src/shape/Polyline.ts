@@ -2,14 +2,14 @@
  * Polyline - Polyline shape element
  */
 
-import HRElement from '../HRElement';
+import ChartElement from '../ChartElement';
 import { ElementOption, BoundingRect, Point } from '../types';
 
 export interface PolylineShape {
   points: Point[] | number[][];
 }
 
-export default class Polyline extends HRElement {
+export default class Polyline extends ChartElement {
   shape: PolylineShape;
 
   constructor(opts: ElementOption & { shape: PolylineShape } = { shape: { points: [] } }) {
@@ -47,7 +47,7 @@ export default class Polyline extends HRElement {
   private _normalizePoints(): Point[] {
     const points = this.shape.points;
     if (!points || points.length === 0) return [];
-    
+
     if (Array.isArray(points[0])) {
       return (points as number[][]).map(p => ({ x: p[0], y: p[1] }));
     }

@@ -2,7 +2,7 @@
  * Path - Path shape element (SVG-like path commands)
  */
 
-import HRElement from '../HRElement';
+import ChartElement from '../ChartElement';
 import { ElementOption, BoundingRect } from '../types';
 
 export interface PathShape {
@@ -10,7 +10,7 @@ export interface PathShape {
   path?: Path2D; // Cached Path2D object
 }
 
-export default class Path extends HRElement {
+export default class Path extends ChartElement {
   shape: PathShape;
 
   constructor(opts: ElementOption & { shape: PathShape } = { shape: { d: '' } }) {

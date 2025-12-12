@@ -3,7 +3,7 @@
  */
 
 import Storage from '../Storage';
-import HRElement from '../HRElement';
+import ChartElement from '../ChartElement';
 import IPainter from './IPainter';
 
 export default class CanvasPainter implements IPainter {
@@ -37,7 +37,7 @@ export default class CanvasPainter implements IPainter {
   resize(width?: number, height?: number): void {
     const dpr = window.devicePixelRatio || 1;
     const rect = this._dom.getBoundingClientRect();
-    
+
     this._width = width ?? rect.width;
     this._height = height ?? rect.height;
 
@@ -102,10 +102,10 @@ export default class CanvasPainter implements IPainter {
 
     // Get all elements sorted by zlevel and z
     const elements = this._storage.getElementsList();
-    
+
     // Check if any element is dirty
     const hasDirtyElements = elements.some(el => el.isDirty());
-    
+
     if (!hasDirtyElements && !this._dirty) {
       return;
     }

@@ -5,7 +5,7 @@
 
 import Storage from './Storage';
 import Handler from './Handler';
-import HRElement from './HRElement';
+import ChartElement from './ChartElement';
 import Group from './Group';
 import { EventData, EventCallback, RenderMode, Theme, Locale, ThemeConfig } from './types';
 import IPainter from './painter/IPainter';
@@ -106,7 +106,7 @@ export default class Renderer {
   /**
    * Add element to root group
    */
-  add(element: HRElement): this {
+  add(element: ChartElement): this {
     this._root.add(element);
     this._storage.updateElement(element);
     this._painter.markDirty();
@@ -116,7 +116,7 @@ export default class Renderer {
   /**
    * Remove element from root group
    */
-  remove(element: HRElement): this {
+  remove(element: ChartElement): this {
     this._root.remove(element);
     this._storage.removeElement(element);
     this._painter.markDirty();
@@ -137,7 +137,7 @@ export default class Renderer {
   /**
    * Get element by ID
    */
-  getElementById(id: string): HRElement | undefined {
+  getElementById(id: string): ChartElement | undefined {
     return this._storage.getElementById(id);
   }
 

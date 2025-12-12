@@ -2,7 +2,7 @@
  * BezierCurve - Bezier curve shape element
  */
 
-import HRElement from '../HRElement';
+import ChartElement from '../ChartElement';
 import { ElementOption, BoundingRect, Point } from '../types';
 
 export interface BezierCurveShape {
@@ -16,7 +16,7 @@ export interface BezierCurveShape {
   cpy2?: number;
 }
 
-export default class BezierCurve extends HRElement {
+export default class BezierCurve extends ChartElement {
   shape: BezierCurveShape;
 
   constructor(opts: ElementOption & { shape: BezierCurveShape }) {
@@ -67,7 +67,7 @@ export default class BezierCurve extends HRElement {
     // Sample points along the curve
     for (let t = 0; t <= 1; t += 0.01) {
       let px: number, py: number;
-      
+
       if (shape.cpx2 !== undefined && shape.cpy2 !== undefined) {
         // Cubic bezier
         const t2 = t * t;

@@ -26,7 +26,7 @@ HudX/
 │   ├── core/          # 核心渲染引擎（类似 ZRender）
 │   │   ├── src/
 │   │   │   ├── Renderer.ts      # 主渲染引擎类
-│   │   │   ├── HRElement.ts     # 图形元素基类
+│   │   │   ├── ChartElement.ts     # 图形元素基类
 │   │   │   ├── Group.ts         # 分组容器
 │   │   │   ├── Storage.ts       # 元素存储管理
 │   │   │   ├── Handler.ts       # 事件处理器
@@ -178,7 +178,7 @@ animation.start();
 #### 主要类
 
 - **Renderer**: 主渲染引擎，管理整个渲染流程，支持 Canvas/SVG、主题和国际化
-- **HRElement**: 所有图形元素的基类
+- **ChartElement**: 所有图形元素的基类
 - **Group**: 容器元素，可以包含子元素
 - **Storage**: 元素存储管理器，维护元素树
 - **Painter**: 绘制器接口（CanvasPainter 和 SVGPainter 实现）
@@ -252,6 +252,7 @@ animation.start();
 ```
 
 **支持的缓动函数**:
+
 - `linear`: 线性
 - `quadraticIn/Out/InOut`: 二次缓动
 - `cubicIn/Out/InOut`: 三次缓动

@@ -3,7 +3,7 @@
  */
 
 import Storage from '../Storage';
-import HRElement from '../HRElement';
+import ChartElement from '../ChartElement';
 import Group from '../Group';
 import IPainter from './IPainter';
 
@@ -17,25 +17,25 @@ export default class SVGPainter implements IPainter {
   private _storage: Storage;
   private _dirty: boolean = true;
   private _animationFrameId?: number;
-  private _elementMap: Map<HRElement, SVGElement> = new Map();
+  private _elementMap: Map<ChartElement, SVGElement> = new Map();
 
   constructor(dom: HTMLElement, storage: Storage) {
     this._dom = dom;
     this._storage = storage;
-    
+
     // Create SVG element
     this._svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this._svg.style.width = '100%';
     this._svg.style.height = '100%';
-    
+
     // Create defs for gradients, patterns, etc.
     this._defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
     this._svg.appendChild(this._defs);
-    
+
     // Create root group
     this._rootGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     this._svg.appendChild(this._rootGroup);
-    
+
     this._dom.appendChild(this._svg);
     this.resize();
     this._initEvent();
@@ -46,7 +46,7 @@ export default class SVGPainter implements IPainter {
    */
   resize(width?: number, height?: number): void {
     const rect = this._dom.getBoundingClientRect();
-    
+
     this._width = width ?? rect.width;
     this._height = height ?? rect.height;
 
@@ -134,29 +134,29 @@ export default class SVGPainter implements IPainter {
   /**
    * Render element to SVG
    */
-  private _renderElement(element: HRElement): SVGElement | null {
+  private _renderElement(element: ChartElement): SVGElement | null {
     // Create group for element
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    
+
     // Apply transform
     const transform = element.transform;
     if (transform) {
       const transforms: string[] = [];
-      
+
       if (transform.x !== undefined || transform.y !== undefined) {
         transforms.push(`translate(${transform.x ?? 0}, ${transform.y ?? 0})`);
       }
-      
+
       if (transform.scaleX !== undefined || transform.scaleY !== undefined) {
         transforms.push(`scale(${transform.scaleX ?? 1}, ${transform.scaleY ?? 1})`);
       }
-      
+
       if (transform.rotation) {
         const originX = transform.originX ?? 0;
         const originY = transform.originY ?? 0;
         transforms.push(`rotate(${(transform.rotation * 180) / Math.PI} ${originX} ${originY})`);
       }
-      
+
       if (transforms.length > 0) {
         group.setAttribute('transform', transforms.join(' '));
       }
@@ -170,15 +170,15 @@ export default class SVGPainter implements IPainter {
       } else {
         group.setAttribute('fill', 'none');
       }
-      
+
       if (style.stroke) {
         group.setAttribute('stroke', style.stroke);
       }
-      
+
       if (style.lineWidth !== undefined) {
         group.setAttribute('stroke-width', String(style.lineWidth));
       }
-      
+
       if (style.opacity !== undefined) {
         group.setAttribute('opacity', String(style.opacity));
       }
@@ -209,7 +209,7 @@ export default class SVGPainter implements IPainter {
   /**
    * Create SVG shape element
    */
-  private _createShapeElement(element: HRElement): SVGElement | null {
+  private _createShapeElement(element: ChartElement): SVGElement | null {
     const shape = element.shape;
     if (!shape || typeof shape !== 'object') {
       if (element instanceof Group) {
@@ -220,7 +220,7 @@ export default class SVGPainter implements IPainter {
     }
 
     const shapeObj = shape as Record<string, unknown>;
-    
+
     if ('cx' in shapeObj && 'cy' in shapeObj && 'r' in shapeObj && !('startAngle' in shapeObj)) {
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.setAttribute('cx', String(shapeObj.cx));
@@ -262,7 +262,7 @@ export default class SVGPainter implements IPainter {
       if (Array.isArray(shapeObj.points[0])) {
         points = (shapeObj.points as number[][]).map(p => `${p[0]},${p[1]}`).join(' ');
       } else {
-        points = (shapeObj.points as Array<{x: number; y: number}>).map((p) => `${p.x},${p.y}`).join(' ');
+        points = (shapeObj.points as Array<{ x: number; y: number }>).map((p) => `${p.x},${p.y}`).join(' ');
       }
       const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
       poly.setAttribute('points', points);
@@ -281,7 +281,7 @@ export default class SVGPainter implements IPainter {
       text.setAttribute('x', String(shapeObj.x));
       text.setAttribute('y', String(shapeObj.y));
       text.textContent = String(shapeObj.text);
-      
+
       const style = element.style;
       if (style) {
         if (style.fontSize) {
