@@ -51,6 +51,7 @@ class Renderer {
 ```
 
 **主要职责**:
+
 - 初始化各个模块
 - 管理元素的生命周期
 - 协调渲染和事件处理
@@ -72,6 +73,7 @@ class Element extends Eventful {
 ```
 
 **关键方法**:
+
 - `render(ctx)`: 渲染元素（子类实现）
 - `getBoundingRect()`: 获取边界矩形
 - `contain(x, y)`: 判断点是否在元素内
@@ -89,6 +91,7 @@ class Storage {
 ```
 
 **功能**:
+
 - 维护元素树结构
 - 快速查找元素（通过 ID）
 - 按 zlevel 和 z 排序元素
@@ -106,6 +109,7 @@ class Painter {
 ```
 
 **渲染流程**:
+
 1. 检查是否需要重绘（dirty flag）
 2. 清空画布
 3. 从 Storage 获取所有元素
@@ -113,6 +117,7 @@ class Painter {
 5. 遍历绘制每个元素
 
 **性能优化**:
+
 - 使用 `requestAnimationFrame` 批量更新
 - 只重绘标记为 dirty 的元素
 - 支持高 DPI 屏幕（devicePixelRatio）
@@ -131,6 +136,7 @@ class Handler {
 ```
 
 **事件处理流程**:
+
 1. 监听 Canvas 原生事件
 2. 转换坐标到画布坐标系
 3. 查找目标元素（从后往前遍历）
@@ -147,6 +153,7 @@ class Group extends Element {
 ```
 
 **功能**:
+
 - 管理子元素
 - 支持嵌套结构
 - 计算组合边界矩形
@@ -329,6 +336,7 @@ class Animation {
 ```
 
 **动画流程**:
+
 1. 记录起始值和目标值
 2. 使用 `requestAnimationFrame` 更新
 3. 计算进度（0-1）
@@ -427,10 +435,10 @@ ctx.scale(dpr, dpr);
 
 ## React 集成
 
-### HudXChart 组件
+### HChart 组件
 
 ```typescript
-const HudXChart: React.FC<HudXChartProps> = ({ option, ... }) => {
+const HChart: React.FC<HChartProps> = ({ option, ... }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<Chart | null>(null);
 
@@ -453,6 +461,7 @@ const HudXChart: React.FC<HudXChartProps> = ({ option, ... }) => {
 ```
 
 **性能优化**:
+
 - 使用 `useRef` 避免重复创建实例
 - 使用 `useMemo` 缓存计算结果
 - 支持 `lazyUpdate` 延迟更新
@@ -505,7 +514,7 @@ interface EventData {
 1. 创建 Chart 类继承 Chart
 2. 实现 `_render()` 方法
 3. 在 `packages/charts/src/index.ts` 导出
-4. 在 `HudXChart` 组件中添加类型判断
+4. 在 `HChart` 组件中添加类型判断
 
 ## 总结
 
@@ -517,4 +526,3 @@ HudX 的设计参考了 hrender 和 echarts 的优秀实践：
 - **易用性**: 提供 React 组件和类似 echarts 的 API
 
 通过合理的架构设计和性能优化，HudX 能够处理大量数据并提供流畅的用户体验。
-

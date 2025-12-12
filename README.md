@@ -93,7 +93,7 @@ pnpm dev
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function App() {
   const option = {
@@ -111,7 +111,7 @@ function App() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -252,6 +252,7 @@ animation.start();
 ```
 
 **Supported Easing Functions**:
+
 - `linear`: Linear
 - `quadraticIn/Out/InOut`: Quadratic easing
 - `cubicIn/Out/InOut`: Cubic easing

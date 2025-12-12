@@ -66,9 +66,9 @@ const theme = chart.getTheme();
 #### 在 React 组件中使用
 
 ```tsx
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
-<HudXChart
+<HChart
   option={option}
   theme="dark"
   width={800}
@@ -166,9 +166,9 @@ const text = chart.t('chart.title', 'Chart');
 #### 在 React 组件中使用
 
 ```tsx
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
-<HudXChart
+<HChart
   option={option}
   locale="zh-CN"
   width={800}
@@ -234,7 +234,7 @@ const title = renderer.t('chart.title', 'Chart');
 ### React 组件完整示例
 
 ```tsx
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 import { useState } from 'react';
 
 function App() {
@@ -251,7 +251,7 @@ function App() {
           Toggle Language
         </button>
       </div>
-      <HudXChart
+      <HChart
         option={option}
         renderMode="canvas"
         theme={theme}
@@ -302,4 +302,3 @@ function App() {
 - `t(locale: Locale, key: string, defaultValue?: string): string` - 获取翻译文本
 - `registerLocale(locale: Locale, config: LocaleConfig): void` - 注册语言
 - `getLocales(): Locale[]` - 获取所有已注册语言
-

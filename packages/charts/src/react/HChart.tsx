@@ -1,5 +1,5 @@
 /**
- * HudXChart - React component wrapper for charts
+ * HChart - React component wrapper for charts
  * Performance optimized with React hooks
  */
 
@@ -12,7 +12,7 @@ import BarChart from '../chart/BarChart';
 import PieChart from '../chart/PieChart';
 import ScatterChart from '../chart/ScatterChart';
 
-export interface HudXChartProps {
+export interface HChartProps {
   option: ChartOption;
   width?: number;
   height?: number;
@@ -28,7 +28,7 @@ export interface HudXChartProps {
   lazyUpdate?: boolean;
 }
 
-const HudXChart: React.FC<HudXChartProps> = ({
+const HChart: React.FC<HChartProps> = ({
   option,
   width,
   height,
@@ -172,5 +172,5 @@ const HudXChart: React.FC<HudXChartProps> = ({
   );
 };
 
-export default HudXChart;
+export default HChart;
 

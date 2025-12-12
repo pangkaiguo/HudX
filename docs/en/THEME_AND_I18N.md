@@ -66,9 +66,9 @@ const theme = chart.getTheme();
 #### In React Component
 
 ```tsx
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
-<HudXChart
+<HChart
   option={option}
   theme="dark"
   width={800}
@@ -154,9 +154,9 @@ const locale = chart.getLocale();
 #### In React Component
 
 ```tsx
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
-<HudXChart
+<HChart
   option={option}
   locale="en"
   width={800}
@@ -189,7 +189,7 @@ const renderer = Renderer.init('#container', 'canvas', 'light', 'custom');
 
 ```tsx
 import React, { useState } from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function ThemeSwitcher() {
   const [theme, setTheme] = useState('light');
@@ -204,7 +204,7 @@ function ThemeSwitcher() {
     <div>
       <button onClick={() => setTheme('light')}>Light Theme</button>
       <button onClick={() => setTheme('dark')}>Dark Theme</button>
-      <HudXChart
+      <HChart
         option={option}
         theme={theme}
         width={800}
@@ -219,7 +219,7 @@ function ThemeSwitcher() {
 
 ```tsx
 import React, { useState } from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function LocaleSwitcher() {
   const [locale, setLocale] = useState('en');
@@ -238,7 +238,7 @@ function LocaleSwitcher() {
         <option value="ja">日本語</option>
         <option value="ko">한국어</option>
       </select>
-      <HudXChart
+      <HChart
         option={option}
         locale={locale}
         width={800}

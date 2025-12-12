@@ -129,9 +129,9 @@ renderer.add(circle);
 ### React Component
 
 ```tsx
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
-<HudXChart
+<HChart
   option={option}
   renderMode="canvas" // or "svg"
   width={800}

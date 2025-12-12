@@ -1,6 +1,5 @@
 // Core rendering engine exports
 export { default as Renderer } from './Renderer';
-export { default as HRender } from './Renderer'; // Alias for backward compatibility
 export { default as ChartElement } from './ChartElement';
 export { default as Group } from './Group';
 export { default as Storage } from './Storage';

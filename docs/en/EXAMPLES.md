@@ -6,7 +6,7 @@
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function LineChartExample() {
   const option = {
@@ -34,7 +34,7 @@ function LineChartExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -47,7 +47,7 @@ function LineChartExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function BarChartExample() {
   const option = {
@@ -71,7 +71,7 @@ function BarChartExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -84,7 +84,7 @@ function BarChartExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function PieChartExample() {
   const option = {
@@ -108,7 +108,7 @@ function PieChartExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={600}
       height={400}
@@ -121,7 +121,7 @@ function PieChartExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function ScatterChartExample() {
   const option = {
@@ -151,7 +151,7 @@ function ScatterChartExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -166,7 +166,7 @@ function ScatterChartExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function MultiSeriesExample() {
   const option = {
@@ -192,7 +192,7 @@ function MultiSeriesExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -205,7 +205,7 @@ function MultiSeriesExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function ConfigurationExample() {
   const option = {
@@ -223,7 +223,7 @@ function ConfigurationExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -307,7 +307,7 @@ circle.animate('shape', { r: 100 }, 500);
 
 ```tsx
 import React, { useState } from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function RenderingModeExample() {
   const [renderMode, setRenderMode] = useState<'canvas' | 'svg'>('canvas');
@@ -332,7 +332,7 @@ function RenderingModeExample() {
         <button onClick={() => setRenderMode('canvas')}>Canvas Mode</button>
         <button onClick={() => setRenderMode('svg')}>SVG Mode</button>
       </div>
-      <HudXChart
+      <HChart
         option={option}
         width={800}
         height={400}

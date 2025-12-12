@@ -6,7 +6,7 @@
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function LineChartExample() {
   const option = {
@@ -34,7 +34,7 @@ function LineChartExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -47,7 +47,7 @@ function LineChartExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function BarChartExample() {
   const option = {
@@ -71,7 +71,7 @@ function BarChartExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -84,7 +84,7 @@ function BarChartExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function PieChartExample() {
   const option = {
@@ -108,7 +108,7 @@ function PieChartExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={600}
       height={400}
@@ -121,7 +121,7 @@ function PieChartExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function ScatterChartExample() {
   const option = {
@@ -151,7 +151,7 @@ function ScatterChartExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -166,7 +166,7 @@ function ScatterChartExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function MultiSeriesExample() {
   const option = {
@@ -192,7 +192,7 @@ function MultiSeriesExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -205,7 +205,7 @@ function MultiSeriesExample() {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function EventExample() {
   const option = {
@@ -223,7 +223,7 @@ function EventExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -244,7 +244,7 @@ function EventExample() {
 
 ```tsx
 import React, { useState, useEffect } from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function DynamicUpdateExample() {
   const [data, setData] = useState([120, 200, 150, 80, 70, 110, 130]);
@@ -272,7 +272,7 @@ function DynamicUpdateExample() {
   };
 
   return (
-    <HudXChart
+    <HChart
       option={option}
       width={800}
       height={400}
@@ -482,14 +482,14 @@ for (let i = 0; i < 1000; i++) {
 
 ```tsx
 import React from 'react';
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 function LazyUpdateExample() {
   const [option, setOption] = useState({...});
 
   // 使用 lazyUpdate 延迟更新
   return (
-    <HudXChart
+    <HChart
       option={option}
       lazyUpdate={true}
       width={800}
@@ -549,4 +549,3 @@ export default class CustomChart extends Chart {
 6. **扩展**: 创建自定义图表类型
 
 更多详细信息请参考 [README.md](../README.md) 和 [IMPLEMENTATION.md](./IMPLEMENTATION.md)。
-

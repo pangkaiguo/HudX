@@ -69,10 +69,10 @@ renderer.setRenderMode('svg');
 ### Using React Component
 
 ```tsx
-import { HudXChart } from '@hudx/charts';
+import { HChart } from '@hudx/charts';
 
 // Canvas mode
-<HudXChart
+<HChart
   option={option}
   renderMode="canvas"
   width={800}
@@ -80,7 +80,7 @@ import { HudXChart } from '@hudx/charts';
 />
 
 // SVG mode
-<HudXChart
+<HChart
   option={option}
   renderMode="svg"
   width={800}
