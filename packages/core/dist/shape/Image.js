@@ -1,8 +1,8 @@
 /**
  * Image - Image shape element
  */
-import Element from '../Element';
-export default class Image extends Element {
+import HRElement from '../HRElement';
+export default class Image extends HRElement {
     constructor(opts) {
         super(opts);
         this.shape = opts.shape;

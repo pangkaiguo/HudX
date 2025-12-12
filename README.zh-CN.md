@@ -1,19 +1,21 @@
 # HudX - 高性能图表库
 
-HudX 是一个基于 React 和 TypeScript 的高性能图表库，参考了 [zrender](https://github.com/ecomfe/zrender) 的底层渲染逻辑和 [ECharts](https://github.com/apache/echarts) 的接口设计，支持 Canvas 和 SVG 两种渲染模式。
+[English](./README.md) | 简体中文
+
+HudX 是一个基于 React 和 TypeScript 构建的高性能图表库。它的底层渲染逻辑受 [ZRender](https://github.com/ecomfe/zrender) 启发，API 设计参考 [ECharts](https://github.com/apache/echarts)，支持 Canvas 和 SVG 双渲染模式。
 
 ## 特性
 
-- 🚀 **高性能**: 支持 Canvas 和 SVG 两种渲染模式，高效处理大量数据
-- 🎨 **丰富的图表类型**: 折线图、柱状图、饼图、散点图、热力图等
+- 🚀 **高性能**: 支持 Canvas 和 SVG 渲染模式，高效处理大数据集
+- 🎨 **丰富的图表类型**: 折线图、柱状图、饼图、散点图和热力图
 - ⚛️ **React 集成**: 无缝的 React 组件集成
-- 📦 **模块化设计**: 核心渲染引擎和图表库完全解耦
+- 📦 **模块化设计**: 核心渲染引擎与图表库解耦
 - 🎯 **TypeScript**: 完整的 TypeScript 支持和严格类型检查
-- 🎬 **完整的动画系统**: 多种缓动函数（linear、quadratic、cubic、elastic）
+- 🎬 **完整的动画系统**: 20+ 种缓动函数（线性、二次、三次、弹性、回弹等）
 - 🔧 **可扩展架构**: 易于添加新的图表类型和图形元素
 - 🖼️ **双渲染模式**: Canvas（高性能）和 SVG（矢量图形）
-- 🌓 **主题支持**: Light 和 Dark 主题，支持自定义
-- 🌍 **国际化**: 10+ 种语言支持，可自定义语言包
+- 🌓 **主题支持**: 亮色和暗色主题，支持自定义
+- 🌍 **国际化**: 支持 10+ 种语言，可自定义语言包
 - 💬 **交互组件**: Tooltip、Legend 和完整的事件系统
 
 ## 项目结构
@@ -21,14 +23,14 @@ HudX 是一个基于 React 和 TypeScript 的高性能图表库，参考了 [zre
 ```
 HudX/
 ├── packages/
-│   ├── core/          # 核心渲染引擎（类似 zrender）
+│   ├── core/          # 核心渲染引擎（类似 ZRender）
 │   │   ├── src/
 │   │   │   ├── Renderer.ts      # 主渲染引擎类
-│   │   │   ├── Element.ts       # 图形元素基类
-│   │   │   ├── Group.ts         # 组容器
+│   │   │   ├── HRElement.ts     # 图形元素基类
+│   │   │   ├── Group.ts         # 分组容器
 │   │   │   ├── Storage.ts       # 元素存储管理
 │   │   │   ├── Handler.ts       # 事件处理器
-│   │   │   ├── shape/           # 图形元素（11种）
+│   │   │   ├── shape/           # 图形元素（11 种类型）
 │   │   │   ├── animation/       # 动画系统
 │   │   │   ├── component/       # 组件（Tooltip、Legend）
 │   │   │   ├── painter/         # 绘制器（Canvas、SVG）
@@ -36,10 +38,10 @@ HudX/
 │   │   │   ├── i18n/            # 国际化
 │   │   │   └── util/            # 工具函数
 │   │   └── package.json
-│   └── charts/        # 图表库（类似 echarts）
+│   └── charts/        # 图表库（类似 ECharts）
 │       ├── src/
 │       │   ├── Chart.ts         # 图表基类
-│       │   ├── chart/           # 具体图表实现
+│       │   ├── chart/           # 图表实现
 │       │   ├── react/           # React 组件
 │       │   └── util/            # 工具函数
 │       └── package.json
@@ -87,7 +89,7 @@ pnpm dev
 
 ## 使用示例
 
-### React 组件方式
+### React 组件
 
 ```tsx
 import React from 'react';
@@ -97,7 +99,7 @@ function App() {
   const option = {
     xAxis: {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
     },
     yAxis: {
       type: 'value'
@@ -118,7 +120,7 @@ function App() {
       locale="zh-CN"
       onEvents={{
         click: (event) => {
-          console.log('Chart clicked:', event);
+          console.log('图表被点击:', event);
         }
       }}
     />
@@ -126,13 +128,13 @@ function App() {
 }
 ```
 
-### 核心 API 方式
+### 核心 API
 
 ```typescript
 import { Renderer, Circle, Rect, Animation, Easing } from '@hudx/core';
 
 // 初始化渲染器
-const renderer = Renderer.init('#container', 'canvas', 'light', 'en');
+const renderer = Renderer.init('#container', 'canvas', 'light', 'zh-CN');
 
 // 创建圆形
 const circle = new Circle({
@@ -167,22 +169,22 @@ animation.start();
 
 ### 1. 核心渲染引擎 (@hudx/core)
 
-采用 MVC 架构，支持 Canvas 和 SVG 两种渲染模式：
+采用 MVC 架构，支持 Canvas 和 SVG 双渲染模式：
 
-- **Model (Storage)**: 管理图形元素的存储和层次关系
-- **View (Painter)**: 负责 Canvas/SVG 绘制
+- **Model (Storage)**: 管理图形元素存储和层级关系
+- **View (Painter)**: 处理 Canvas/SVG 渲染
 - **Controller (Handler)**: 处理用户交互事件
 
 #### 主要类
 
 - **Renderer**: 主渲染引擎，管理整个渲染流程，支持 Canvas/SVG、主题和国际化
-- **Element**: 所有图形元素的基类
+- **HRElement**: 所有图形元素的基类
 - **Group**: 容器元素，可以包含子元素
 - **Storage**: 元素存储管理器，维护元素树
-- **Painter**: 绘制器接口（CanvasPainter 和 SVGPainter）
+- **Painter**: 绘制器接口（CanvasPainter 和 SVGPainter 实现）
 - **Handler**: 事件处理器，处理鼠标、触摸等交互
 - **Animation**: 动画系统，支持多种缓动函数
-- **Tooltip**: 数据提示组件
+- **Tooltip**: 数据提示框组件
 - **Legend**: 图例组件
 
 #### 图形元素 (Shape)
@@ -197,11 +199,11 @@ animation.start();
 - `Path`: SVG 路径
 - `Text`: 文本
 - `Sector`: 扇形
-- `Image`: 图像
+- `Image`: 图片
 
 ### 2. 图表库 (@hudx/charts)
 
-参考了 ECharts 的接口设计，提供类似的使用体验。
+参考 ECharts 的 API 设计，提供相似的用户体验。
 
 #### 图表类型
 
@@ -233,7 +235,7 @@ interface ChartOption {
 
 ### 动画系统
 
-支持多种缓动函数：
+支持 20+ 种缓动函数：
 
 ```typescript
 import { Animation, Easing } from '@hudx/core';
@@ -253,7 +255,14 @@ animation.start();
 - `linear`: 线性
 - `quadraticIn/Out/InOut`: 二次缓动
 - `cubicIn/Out/InOut`: 三次缓动
-- `elasticIn/Out`: 弹性缓动
+- `quarticIn/Out/InOut`: 四次缓动
+- `quinticIn/Out/InOut`: 五次缓动
+- `sinusoidalIn/Out/InOut`: 正弦缓动
+- `exponentialIn/Out/InOut`: 指数缓动
+- `circularIn/Out/InOut`: 圆形缓动
+- `elasticIn/Out/InOut`: 弹性缓动
+- `backIn/Out/InOut`: 回退缓动
+- `bounceIn/Out/InOut`: 回弹缓动
 
 ### Tooltip 组件
 
@@ -268,7 +277,7 @@ const tooltip = new Tooltip({
 });
 
 renderer.add(tooltip);
-tooltip.show(x, y, 'Content');
+tooltip.show(x, y, '内容');
 tooltip.hide();
 ```
 
@@ -287,8 +296,8 @@ const legend = new Legend({
 });
 
 legend.setItems([
-  { name: 'Series A', color: '#5470c6' },
-  { name: 'Series B', color: '#91cc75' }
+  { name: '系列 A', color: '#5470c6' },
+  { name: '系列 B', color: '#91cc75' }
 ]);
 
 renderer.add(legend);
@@ -299,7 +308,7 @@ renderer.add(legend);
 ```typescript
 // 元素事件
 element.on('click', (event) => {
-  console.log('Element clicked:', event);
+  console.log('元素被点击:', event);
 });
 
 // 支持的事件类型
@@ -341,9 +350,9 @@ pool.release(circle);
 
 ### 4. 设备像素比适配
 
-自动适配高 DPI 屏幕，确保清晰渲染。
+自动适配高 DPI 屏幕，实现清晰渲染。
 
-## 主题和多语言
+## 主题和国际化
 
 ### 主题
 
@@ -352,12 +361,12 @@ const renderer = Renderer.init('#container', 'canvas', 'dark');
 renderer.setTheme('light');
 ```
 
-### 多语言
+### 国际化
 
 ```typescript
 const renderer = Renderer.init('#container', 'canvas', 'light', 'zh-CN');
 renderer.setLocale('en');
-const text = renderer.t('chart.title', 'Chart');
+const text = renderer.t('chart.title', '图表');
 ```
 
 **支持的语言**: en, zh, zh-CN, zh-TW, ja, ko, fr, de, es, pt, ru
@@ -368,7 +377,7 @@ const text = renderer.t('chart.title', 'Chart');
 
 - 高性能，适合大数据集
 - 最适合实时更新和动画
-- 内存占用较低
+- 更低的内存占用
 
 ### SVG 模式
 
@@ -384,15 +393,20 @@ const text = renderer.t('chart.title', 'Chart');
 - Safari 14+
 - 支持 Canvas/SVG 的移动浏览器
 
+## 文档
+
+- [中文文档](./docs/zh/SUMMARY.md)
+- [English Documentation](./docs/en/SUMMARY.md)
+
 ## 许可证
 
 MIT
 
 ## 贡献
 
-欢迎提交 Issue 和 Pull Request！
+欢迎贡献！请随时提交 Pull Request。
 
 ## 致谢
 
-- 参考了 [ZRender](https://github.com/ecomfe/zrender) - ECharts 的渲染引擎
-- 参考了 [ECharts](https://github.com/apache/echarts) - 可视化图表库
+- 灵感来自 [ZRender](https://github.com/ecomfe/zrender) - ECharts 的渲染引擎
+- 灵感来自 [ECharts](https://github.com/apache/echarts) - 可视化图表库

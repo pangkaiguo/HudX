@@ -3,7 +3,7 @@
  */
 
 import Storage from '../Storage';
-import Element from '../Element';
+import HRElement from '../HRElement';
 import Group from '../Group';
 import IPainter from './IPainter';
 
@@ -17,7 +17,7 @@ export default class SVGPainter implements IPainter {
   private _storage: Storage;
   private _dirty: boolean = true;
   private _animationFrameId?: number;
-  private _elementMap: Map<Element, SVGElement> = new Map();
+  private _elementMap: Map<HRElement, SVGElement> = new Map();
 
   constructor(dom: HTMLElement, storage: Storage) {
     this._dom = dom;
@@ -134,7 +134,7 @@ export default class SVGPainter implements IPainter {
   /**
    * Render element to SVG
    */
-  private _renderElement(element: Element): SVGElement | null {
+  private _renderElement(element: HRElement): SVGElement | null {
     // Create group for element
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     
@@ -209,89 +209,78 @@ export default class SVGPainter implements IPainter {
   /**
    * Create SVG shape element
    */
-  private _createShapeElement(element: Element): SVGElement | null {
+  private _createShapeElement(element: HRElement): SVGElement | null {
     const shape = element.shape;
-    if (!shape) {
-      // Check if it's a Group
+    if (!shape || typeof shape !== 'object') {
       if (element instanceof Group) {
         const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        // Group children will be handled separately
         return group;
       }
       return null;
     }
 
-    // Determine element type by checking shape properties
-    if ('cx' in shape && 'cy' in shape && 'r' in shape && !('startAngle' in shape)) {
-      // Circle
+    const shapeObj = shape as Record<string, unknown>;
+    
+    if ('cx' in shapeObj && 'cy' in shapeObj && 'r' in shapeObj && !('startAngle' in shapeObj)) {
       const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circle.setAttribute('cx', String(shape.cx));
-      circle.setAttribute('cy', String(shape.cy));
-      circle.setAttribute('r', String(shape.r));
+      circle.setAttribute('cx', String(shapeObj.cx));
+      circle.setAttribute('cy', String(shapeObj.cy));
+      circle.setAttribute('r', String(shapeObj.r));
       return circle;
-    } else if ('cx' in shape && 'cy' in shape && 'r' in shape && 'startAngle' in shape && 'endAngle' in shape) {
-      // Arc or Sector
-      if ('r0' in shape) {
-        // Sector (donut)
+    } else if ('cx' in shapeObj && 'cy' in shapeObj && 'r' in shapeObj && 'startAngle' in shapeObj && 'endAngle' in shapeObj) {
+      if ('r0' in shapeObj) {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        const d = this._createSectorPath(shape);
+        const d = this._createSectorPath(shapeObj);
         path.setAttribute('d', d);
         return path;
       } else {
-        // Arc
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        const d = this._createArcPath(shape);
+        const d = this._createArcPath(shapeObj);
         path.setAttribute('d', d);
         return path;
       }
-    } else if ('x' in shape && 'y' in shape && 'width' in shape && 'height' in shape && !('text' in shape)) {
-      // Rect
+    } else if ('x' in shapeObj && 'y' in shapeObj && 'width' in shapeObj && 'height' in shapeObj && !('text' in shapeObj)) {
       const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      rect.setAttribute('x', String(shape.x));
-      rect.setAttribute('y', String(shape.y));
-      rect.setAttribute('width', String(shape.width));
-      rect.setAttribute('height', String(shape.height));
-      if (shape.r) {
-        rect.setAttribute('rx', String(shape.r));
-        rect.setAttribute('ry', String(shape.r));
+      rect.setAttribute('x', String(shapeObj.x));
+      rect.setAttribute('y', String(shapeObj.y));
+      rect.setAttribute('width', String(shapeObj.width));
+      rect.setAttribute('height', String(shapeObj.height));
+      if (shapeObj.r) {
+        rect.setAttribute('rx', String(shapeObj.r));
+        rect.setAttribute('ry', String(shapeObj.r));
       }
       return rect;
-    } else if ('x1' in shape && 'y1' in shape && 'x2' in shape && 'y2' in shape && !('cpx1' in shape)) {
-      // Line
+    } else if ('x1' in shapeObj && 'y1' in shapeObj && 'x2' in shapeObj && 'y2' in shapeObj && !('cpx1' in shapeObj)) {
       const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', String(shape.x1));
-      line.setAttribute('y1', String(shape.y1));
-      line.setAttribute('x2', String(shape.x2));
-      line.setAttribute('y2', String(shape.y2));
+      line.setAttribute('x1', String(shapeObj.x1));
+      line.setAttribute('y1', String(shapeObj.y1));
+      line.setAttribute('x2', String(shapeObj.x2));
+      line.setAttribute('y2', String(shapeObj.y2));
       return line;
-    } else if ('points' in shape && Array.isArray(shape.points)) {
-      // Polyline or Polygon - check element type
+    } else if ('points' in shapeObj && Array.isArray(shapeObj.points)) {
       let points: string;
-      if (Array.isArray(shape.points[0])) {
-        points = (shape.points as number[][]).map(p => `${p[0]},${p[1]}`).join(' ');
+      if (Array.isArray(shapeObj.points[0])) {
+        points = (shapeObj.points as number[][]).map(p => `${p[0]},${p[1]}`).join(' ');
       } else {
-        points = (shape.points as any[]).map((p: any) => `${p.x},${p.y}`).join(' ');
+        points = (shapeObj.points as Array<{x: number; y: number}>).map((p) => `${p.x},${p.y}`).join(' ');
       }
       const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
       poly.setAttribute('points', points);
       return poly;
-    } else if ('d' in shape) {
-      // Path
+    } else if ('d' in shapeObj) {
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', shape.d);
+      path.setAttribute('d', String(shapeObj.d));
       return path;
-    } else if ('x1' in shape && 'y1' in shape && 'x2' in shape && 'y2' in shape && 'cpx1' in shape) {
-      // BezierCurve
+    } else if ('x1' in shapeObj && 'y1' in shapeObj && 'x2' in shapeObj && 'y2' in shapeObj && 'cpx1' in shapeObj) {
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      const d = this._createBezierPath(shape);
+      const d = this._createBezierPath(shapeObj);
       path.setAttribute('d', d);
       return path;
-    } else if ('x' in shape && 'y' in shape && 'text' in shape) {
-      // Text
+    } else if ('x' in shapeObj && 'y' in shapeObj && 'text' in shapeObj) {
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', String(shape.x));
-      text.setAttribute('y', String(shape.y));
-      text.textContent = shape.text;
+      text.setAttribute('x', String(shapeObj.x));
+      text.setAttribute('y', String(shapeObj.y));
+      text.textContent = String(shapeObj.text);
       
       const style = element.style;
       if (style) {
@@ -302,21 +291,21 @@ export default class SVGPainter implements IPainter {
           text.setAttribute('font-family', style.fontFamily);
         }
         if (style.textAlign) {
-          text.setAttribute('text-anchor', style.textAlign === 'center' ? 'middle' : style.textAlign);
+          text.setAttribute('text-anchor', style.textAlign === 'center' ? 'middle' : (style.textAlign as string));
         }
       }
       return text;
-    } else if ('image' in shape) {
-      // Image
+    } else if ('image' in shapeObj) {
       const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      image.setAttribute('x', String(shape.x));
-      image.setAttribute('y', String(shape.y));
-      image.setAttribute('width', String(shape.width));
-      image.setAttribute('height', String(shape.height));
-      if (shape.image instanceof HTMLImageElement) {
-        image.setAttribute('href', shape.image.src);
-      } else if (shape.image instanceof HTMLCanvasElement) {
-        image.setAttribute('href', shape.image.toDataURL());
+      image.setAttribute('x', String(shapeObj.x));
+      image.setAttribute('y', String(shapeObj.y));
+      image.setAttribute('width', String(shapeObj.width));
+      image.setAttribute('height', String(shapeObj.height));
+      const img = shapeObj.image as unknown;
+      if (img instanceof HTMLImageElement) {
+        image.setAttribute('href', (img as HTMLImageElement).src);
+      } else if (img instanceof HTMLCanvasElement) {
+        image.setAttribute('href', (img as HTMLCanvasElement).toDataURL());
       }
       return image;
     }
@@ -327,13 +316,13 @@ export default class SVGPainter implements IPainter {
   /**
    * Create SVG path for arc
    */
-  private _createArcPath(shape: any): string {
-    const cx = shape.cx;
-    const cy = shape.cy;
-    const r = shape.r;
-    const startAngle = shape.startAngle;
-    const endAngle = shape.endAngle;
-    const anticlockwise = shape.anticlockwise || false;
+  private _createArcPath(shape: Record<string, unknown>): string {
+    const cx = shape.cx as number;
+    const cy = shape.cy as number;
+    const r = shape.r as number;
+    const startAngle = shape.startAngle as number;
+    const endAngle = shape.endAngle as number;
+    const anticlockwise = (shape.anticlockwise as boolean) || false;
 
     const startX = cx + r * Math.cos(startAngle);
     const startY = cy + r * Math.sin(startAngle);
@@ -349,14 +338,14 @@ export default class SVGPainter implements IPainter {
   /**
    * Create SVG path for sector
    */
-  private _createSectorPath(shape: any): string {
-    const cx = shape.cx;
-    const cy = shape.cy;
-    const r0 = shape.r0 || 0;
-    const r = shape.r;
-    const startAngle = shape.startAngle;
-    const endAngle = shape.endAngle;
-    const anticlockwise = shape.anticlockwise || false;
+  private _createSectorPath(shape: Record<string, unknown>): string {
+    const cx = shape.cx as number;
+    const cy = shape.cy as number;
+    const r0 = (shape.r0 as number) || 0;
+    const r = shape.r as number;
+    const startAngle = shape.startAngle as number;
+    const endAngle = shape.endAngle as number;
+    const anticlockwise = (shape.anticlockwise as boolean) || false;
 
     const startX0 = cx + r0 * Math.cos(startAngle);
     const startY0 = cy + r0 * Math.sin(startAngle);
@@ -371,10 +360,8 @@ export default class SVGPainter implements IPainter {
     const sweep = anticlockwise ? 0 : 1;
 
     if (r0 > 0) {
-      // Donut sector
       return `M ${startX} ${startY} A ${r} ${r} 0 ${largeArc} ${sweep} ${endX} ${endY} L ${endX0} ${endY0} A ${r0} ${r0} 0 ${largeArc} ${1 - sweep} ${startX0} ${startY0} Z`;
     } else {
-      // Pie sector
       return `M ${cx} ${cy} L ${startX} ${startY} A ${r} ${r} 0 ${largeArc} ${sweep} ${endX} ${endY} Z`;
     }
   }
@@ -382,7 +369,7 @@ export default class SVGPainter implements IPainter {
   /**
    * Create SVG path for bezier curve
    */
-  private _createBezierPath(shape: any): string {
+  private _createBezierPath(shape: Record<string, unknown>): string {
     const x1 = shape.x1;
     const y1 = shape.y1;
     const x2 = shape.x2;
@@ -391,12 +378,10 @@ export default class SVGPainter implements IPainter {
     const cpy1 = shape.cpy1;
 
     if ('cpx2' in shape && shape.cpx2 !== undefined) {
-      // Cubic bezier
       const cpx2 = shape.cpx2;
       const cpy2 = shape.cpy2;
       return `M ${x1} ${y1} C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${x2} ${y2}`;
     } else {
-      // Quadratic bezier
       return `M ${x1} ${y1} Q ${cpx1} ${cpy1}, ${x2} ${y2}`;
     }
   }
@@ -443,4 +428,3 @@ export default class SVGPainter implements IPainter {
     this._elementMap.clear();
   }
 }
-

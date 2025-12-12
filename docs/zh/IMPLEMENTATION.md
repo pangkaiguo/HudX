@@ -485,8 +485,8 @@ interface EventData {
   type: string;
   target?: Element;
   topTarget?: Element;
-  zrX: number;      // 画布坐标 X
-  zrY: number;      // 画布坐标 Y
+  rX: number;       // 画布坐标 X
+  rY: number;       // 画布坐标 Y
   offsetX: number;  // 相对坐标 X
   offsetY: number;  // 相对坐标 Y
 }

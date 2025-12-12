@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
-import BasicLine from './examples/BasicLine';
-import BasicBar from './examples/BasicBar';
-import BasicPie from './examples/BasicPie';
-import LineWithTooltip from './examples/LineWithTooltip';
-import BarWithLegend from './examples/BarWithLegend';
-import PieWithLegend from './examples/PieWithLegend';
-import PerformanceTest from './examples/PerformanceTest';
-import ThemeSwitch from './examples/ThemeSwitch';
-import CoreAPI from './examples/CoreAPI';
-import Animation from './examples/Animation';
-import Interaction from './examples/Interaction';
-import AdvancedLineChart from './examples/AdvancedLineChart';
-import AdvancedBarChart from './examples/AdvancedBarChart';
-import AdvancedPieChart from './examples/AdvancedPieChart';
-import InteractiveDashboard from './examples/InteractiveDashboard';
-import FullFeatureDemo from './examples/FullFeatureDemo';
+import React, { useState, lazy, Suspense, useMemo, memo } from 'react';
+
+// Lazy load components for better performance
+const BasicLine = lazy(() => import('./examples/BasicLine'));
+const BasicBar = lazy(() => import('./examples/BasicBar'));
+const BasicPie = lazy(() => import('./examples/BasicPie'));
+const LineWithTooltip = lazy(() => import('./examples/LineWithTooltip'));
+const BarWithLegend = lazy(() => import('./examples/BarWithLegend'));
+const PieWithLegend = lazy(() => import('./examples/PieWithLegend'));
+const PerformanceTest = lazy(() => import('./examples/PerformanceTest'));
+const ThemeSwitch = lazy(() => import('./examples/ThemeSwitch'));
+const CoreAPI = lazy(() => import('./examples/CoreAPI'));
+const Animation = lazy(() => import('./examples/Animation'));
+const Interaction = lazy(() => import('./examples/Interaction'));
+const AdvancedLineChart = lazy(() => import('./examples/AdvancedLineChart'));
+const AdvancedBarChart = lazy(() => import('./examples/AdvancedBarChart'));
+const AdvancedPieChart = lazy(() => import('./examples/AdvancedPieChart'));
+const InteractiveDashboard = lazy(() => import('./examples/InteractiveDashboard'));
+const FullFeatureDemo = lazy(() => import('./examples/FullFeatureDemo'));
 
 const examples = [
   { id: 'full-feature', name: '🚀 Full Feature Demo', component: FullFeatureDemo },
@@ -35,32 +37,40 @@ const examples = [
   { id: 'performance', name: 'Performance Test', component: PerformanceTest }
 ];
 
-export default function App() {
-  const [activeExample, setActiveExample] = useState('full-feature');
+const App = memo(function App() {
+  const [activeExample, setActiveExample] = useState('basic-line');
 
-  const ActiveComponent = examples.find(e => e.id === activeExample)?.component || BasicLine;
+  const ActiveComponent = useMemo(
+    () => examples.find(e => e.id === activeExample)?.component || BasicLine,
+    [activeExample]
+  );
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <nav style={{
-        width: 280,
-        borderRight: '1px solid #e0e0e0',
-        padding: 20,
-        overflowY: 'auto',
-        backgroundColor: '#f5f5f5'
-      }}>
+      <nav 
+        aria-label="Examples navigation"
+        style={{
+          width: 280,
+          borderRight: '1px solid #e0e0e0',
+          padding: 20,
+          overflowY: 'auto',
+          backgroundColor: '#f5f5f5'
+        }}
+      >
         <h1 style={{ fontSize: 20, marginBottom: 10, color: '#333' }}>HudX Examples</h1>
         <p style={{ fontSize: 12, color: '#999', marginBottom: 20 }}>Interactive Charts & Animations</p>
         {examples.map(example => (
           <button
             key={example.id}
             onClick={() => setActiveExample(example.id)}
+            aria-label={`View ${example.name} example`}
+            aria-current={activeExample === example.id ? 'page' : undefined}
             style={{
               display: 'block',
               width: '100%',
               padding: '10px 12px',
               marginBottom: 6,
-              border: 'none',
+              border: '2px solid transparent',
               borderRadius: 6,
               backgroundColor: activeExample === example.id ? '#5470c6' : '#fff',
               color: activeExample === example.id ? '#fff' : '#333',
@@ -68,16 +78,57 @@ export default function App() {
               textAlign: 'left',
               fontSize: 13,
               fontWeight: activeExample === example.id ? 600 : 400,
-              transition: 'all 0.2s'
+              transition: 'all 0.2s',
+              outline: 'none'
+            }}
+            onMouseEnter={(e) => {
+              if (activeExample !== example.id) {
+                e.currentTarget.style.backgroundColor = '#e8eaf6';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeExample !== example.id) {
+                e.currentTarget.style.backgroundColor = '#fff';
+              }
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = '#5470c6';
+              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(84, 112, 198, 0.2)';
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = 'transparent';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
             {example.name}
           </button>
         ))}
       </nav>
-      <main style={{ flex: 1, padding: 40, overflowY: 'auto', backgroundColor: '#fff' }}>
-        <ActiveComponent />
+      <main 
+        role="main"
+        aria-label="Example content"
+        style={{ flex: 1, padding: 40, overflowY: 'auto', backgroundColor: '#fff' }}
+      >
+        <Suspense fallback={
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            height: '400px',
+            color: '#999',
+            fontSize: '16px',
+            willChange: 'contents'
+          }}>
+            Loading...
+          </div>
+        }>
+          <div style={{ contain: 'layout style paint' }}>
+            <ActiveComponent />
+          </div>
+        </Suspense>
       </main>
     </div>
   );
-}
+});
+
+export default App;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Renderer, Circle, Rect, Animation, Easing } from '@hudx/core';
 
 export default function AnimationExample() {
@@ -23,9 +23,8 @@ export default function AnimationExample() {
     renderer.add(rect);
     renderer.resize(800, 300);
 
-    // Animate circle position
     const anim1 = new Animation(
-      circle.shape,
+      circle.shape as Record<string, unknown>,
       'cx',
       600,
       2000,
@@ -37,9 +36,8 @@ export default function AnimationExample() {
       }
     );
 
-    // Animate rect scale
     const anim2 = new Animation(
-      rect.transform,
+      rect.transform as Record<string, unknown>,
       'scaleX',
       2,
       2000,
@@ -51,9 +49,8 @@ export default function AnimationExample() {
       }
     );
 
-    // Animate rect scale Y
     const anim3 = new Animation(
-      rect.transform,
+      rect.transform as Record<string, unknown>,
       'scaleY',
       2,
       2000,

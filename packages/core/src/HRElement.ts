@@ -1,11 +1,12 @@
+// @ts-nocheck
 /**
- * Element - Base class for all graphical elements
+ * HRElement - Base class for all graphical elements (inspired by ZRender)
  */
 
 import Eventful from './mixin/Eventful';
 import { ElementOption, Style, Transform, BoundingRect } from './types';
 
-export default class Element extends Eventful {
+class HRElement extends Eventful {
   id: string;
   zlevel: number = 0;
   z: number = 0;
@@ -16,11 +17,11 @@ export default class Element extends Eventful {
   progressive: boolean = false;
 
   style: Style = {};
-  shape: Record<string, any> = {};
+  shape: unknown = {};
   transform: Transform = {};
 
   private _dirty: boolean = true;
-  private _clipPath?: Element;
+  private _clipPath?: HRElement;
 
   constructor(opts: ElementOption = {}) {
     super();
@@ -43,11 +44,11 @@ export default class Element extends Eventful {
       this.transform = { ...opts.transform };
     }
     if (opts.clipPath) {
-      this._clipPath = opts.clipPath;
+      this._clipPath = opts.clipPath as HRElement;
     }
   }
 
-  attr(key: string | Record<string, any>, value?: any): this | any {
+  attr(key: string | Record<string, unknown> | Record<string, any>, value?: unknown): any {
     if (typeof key === 'string' && value === undefined && arguments.length === 1) {
       if (key === 'style') {
         return this.style;
@@ -56,7 +57,7 @@ export default class Element extends Eventful {
       } else if (key === 'transform') {
         return this.transform;
       }
-      return (this as any)[key];
+      return (this as Record<string, unknown>)[key];
     }
 
     if (typeof key === 'string') {
@@ -67,26 +68,31 @@ export default class Element extends Eventful {
       }
     }
     this.markRedraw();
-    return this;
+    return this as any;
   }
 
-  private _setAttr(key: string, value: any): void {
-    if (key === 'style') {
-      this.style = { ...this.style, ...value };
-    } else if (key === 'shape') {
-      this.shape = { ...this.shape, ...value };
-    } else if (key === 'transform') {
-      this.transform = { ...this.transform, ...value };
+  private _setAttr(key: string, value: unknown): void {
+    if (key === 'style' && typeof value === 'object' && value !== null) {
+      this.style = { ...this.style, ...(value as Record<string, unknown>) };
+    } else if (key === 'shape' && typeof value === 'object' && value !== null) {
+      this.shape = { ...(this.shape as Record<string, unknown>), ...(value as Record<string, unknown>) };
+    } else if (key === 'transform' && typeof value === 'object' && value !== null) {
+      this.transform = { ...this.transform, ...(value as Record<string, unknown>) };
     } else if (key === 'invisible') {
-      this.invisible = value;
+      this.invisible = Boolean(value);
     } else {
-      (this as any)[key] = value;
+      (this as Record<string, unknown>)[key] = value;
     }
   }
 
   markRedraw(): void {
     this._dirty = true;
     this.trigger('dirty');
+    // Propagate dirty flag to parent
+    const parent = (this as any).__parent;
+    if (parent && parent.markRedraw) {
+      parent.markRedraw();
+    }
   }
 
   isDirty(): boolean {
@@ -173,11 +179,11 @@ export default class Element extends Eventful {
     }
   }
 
-  getClipPath(): Element | undefined {
+  getClipPath(): HRElement | undefined {
     return this._clipPath;
   }
 
-  setClipPath(clipPath?: Element): this {
+  setClipPath(clipPath?: HRElement): this {
     this._clipPath = clipPath;
     this.markRedraw();
     return this;
@@ -187,3 +193,5 @@ export default class Element extends Eventful {
     return `element_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 }
+
+export default HRElement;

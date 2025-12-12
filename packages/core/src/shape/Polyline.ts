@@ -2,14 +2,14 @@
  * Polyline - Polyline shape element
  */
 
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect, Point } from '../types';
 
 export interface PolylineShape {
   points: Point[] | number[][];
 }
 
-export default class Polyline extends Element {
+export default class Polyline extends HRElement {
   shape: PolylineShape;
 
   constructor(opts: ElementOption & { shape: PolylineShape } = { shape: { points: [] } }) {

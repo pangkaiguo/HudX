@@ -2,8 +2,8 @@
  * Group - Container for multiple elements
  * Similar to hrender's Group class
  */
-import Element from './Element';
-export default class Group extends Element {
+import HRElement from './HRElement';
+export default class Group extends HRElement {
     constructor(opts = {}) {
         super(opts);
         this._children = [];
@@ -16,11 +16,12 @@ export default class Group extends Element {
             return this;
         }
         // Remove from previous parent if exists
-        if (child.__parent) {
-            child.__parent.remove(child);
+        const childRecord = child;
+        if (childRecord.__parent) {
+            childRecord.__parent.remove(child);
         }
         this._children.push(child);
-        child.__parent = this;
+        childRecord.__parent = this;
         this.markRedraw();
         return this;
     }

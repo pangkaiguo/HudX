@@ -2,7 +2,7 @@
  * Text - Text shape element
  */
 
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect } from '../types';
 
 export interface TextShape {
@@ -11,7 +11,7 @@ export interface TextShape {
   text: string;
 }
 
-export default class Text extends Element {
+export default class Text extends HRElement {
   shape: TextShape;
 
   constructor(opts: ElementOption & { shape: TextShape } = { shape: { x: 0, y: 0, text: '' } }) {

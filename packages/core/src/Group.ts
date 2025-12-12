@@ -3,11 +3,11 @@
  * Similar to hrender's Group class
  */
 
-import Element from './Element';
+import HRElement from './HRElement';
 import { ElementOption } from './types';
 
-export default class Group extends Element {
-  private _children: Element[] = [];
+export default class Group extends HRElement {
+  private _children: HRElement[] = [];
 
   constructor(opts: ElementOption = {}) {
     super(opts);
@@ -16,18 +16,19 @@ export default class Group extends Element {
   /**
    * Add child element
    */
-  add(child: Element): this {
+  add(child: HRElement): this {
     if (child === this) {
       return this;
     }
 
     // Remove from previous parent if exists
-    if ((child as any).__parent) {
-      (child as any).__parent.remove(child);
+    const childRecord = child as unknown as Record<string, unknown>;
+    if (childRecord.__parent) {
+      (childRecord.__parent as any).remove(child);
     }
 
     this._children.push(child);
-    (child as any).__parent = this;
+    childRecord.__parent = this;
     this.markRedraw();
     return this;
   }
@@ -35,11 +36,11 @@ export default class Group extends Element {
   /**
    * Remove child element
    */
-  remove(child: Element): this {
+  remove(child: HRElement): this {
     const index = this._children.indexOf(child);
     if (index >= 0) {
       this._children.splice(index, 1);
-      delete (child as any).__parent;
+      delete (child as unknown as Record<string, unknown>).__parent;
       this.markRedraw();
     }
     return this;
@@ -50,7 +51,7 @@ export default class Group extends Element {
    */
   removeAll(): this {
     for (const child of this._children) {
-      delete (child as any).__parent;
+      delete (child as unknown as Record<string, unknown>).__parent;
     }
     this._children = [];
     this.markRedraw();
@@ -60,21 +61,21 @@ export default class Group extends Element {
   /**
    * Get child at index
    */
-  childAt(index: number): Element | undefined {
+  childAt(index: number): HRElement | undefined {
     return this._children[index];
   }
 
   /**
    * Get child by ID
    */
-  childOfName(name: string): Element | undefined {
+  childOfName(name: string): HRElement | undefined {
     return this._children.find(child => child.id === name);
   }
 
   /**
    * Get all children
    */
-  children(): Element[] {
+  children(): HRElement[] {
     return [...this._children];
   }
 
@@ -88,7 +89,7 @@ export default class Group extends Element {
   /**
    * Traverse children
    */
-  traverse(callback: (child: Element) => void | boolean, includeSelf: boolean = false): void {
+  traverse(callback: (child: HRElement) => void | boolean, includeSelf: boolean = false): void {
     if (includeSelf) {
       const result = callback(this);
       if (result === false) {

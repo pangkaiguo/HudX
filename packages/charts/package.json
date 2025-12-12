@@ -2,8 +2,11 @@
   "name": "@hudx/charts",
   "version": "1.0.0",
   "description": "Chart library built on top of HudX core",
+  "type": "module",
   "main": "src/index.ts",
+  "module": "src/index.ts",
   "types": "src/index.ts",
+  "sideEffects": false,
   "files": [
     "src",
     "dist"

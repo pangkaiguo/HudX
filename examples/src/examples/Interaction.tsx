@@ -18,19 +18,23 @@ export default function Interaction() {
       });
 
       circle.on('click', () => {
-        circle.attr('style', { fill: '#ff6b6b', opacity: 1 });
+        circle.attr({ style: { fill: '#ff6b6b', opacity: 1 } });
         setClickCount(prev => prev + 1);
+        renderer.flush();
         setTimeout(() => {
-          circle.attr('style', { fill: '#5470c6', opacity: 0.7 });
+          circle.attr({ style: { fill: '#5470c6', opacity: 0.7 } });
+          renderer.flush();
         }, 300);
       });
 
       circle.on('mouseover', () => {
-        circle.attr('style', { opacity: 1 });
+        circle.attr({ style: { opacity: 1 } });
+        renderer.flush();
       });
 
       circle.on('mouseout', () => {
-        circle.attr('style', { opacity: 0.7 });
+        circle.attr({ style: { opacity: 0.7 } });
+        renderer.flush();
       });
 
       renderer.add(circle);
@@ -52,7 +56,12 @@ export default function Interaction() {
     <div>
       <h2 style={{ marginBottom: 20 }}>Interaction Demo</h2>
       <p style={{ marginBottom: 20, color: '#666' }}>Click Count: {clickCount}</p>
-      <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 300 }} />
+      <div 
+        ref={containerRef} 
+        role="img"
+        aria-label="Interactive demo with 5 clickable circles"
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 300 }} 
+      />
     </div>
   );
 }

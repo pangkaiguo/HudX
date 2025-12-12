@@ -1,7 +1,7 @@
 /**
  * Sector - Sector shape element (pie slice)
  */
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect } from '../types';
 export interface SectorShape {
     cx: number;
@@ -12,7 +12,7 @@ export interface SectorShape {
     endAngle: number;
     anticlockwise?: boolean;
 }
-export default class Sector extends Element {
+export default class Sector extends HRElement {
     shape: SectorShape;
     constructor(opts: ElementOption & {
         shape: SectorShape;

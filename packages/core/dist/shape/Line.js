@@ -1,8 +1,8 @@
 /**
  * Line - Line shape element
  */
-import Element from '../Element';
-export default class Line extends Element {
+import HRElement from '../HRElement';
+export default class Line extends HRElement {
     constructor(opts = { shape: { x1: 0, y1: 0, x2: 0, y2: 0 } }) {
         super(opts);
         this.shape = opts.shape || { x1: 0, y1: 0, x2: 0, y2: 0 };

@@ -1,7 +1,8 @@
 // Core rendering engine exports
 export { default as Renderer } from './Renderer';
 export { default as HRender } from './Renderer'; // Alias for backward compatibility
-export { default as Element } from './Element';
+export { default as HRElement } from './HRElement';
+export { default as Element } from './HRElement'; // Backward compatibility
 export { default as Group } from './Group';
 export { default as Storage } from './Storage';
 export { default as Handler } from './Handler';

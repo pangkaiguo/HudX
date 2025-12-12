@@ -1,5 +1,7 @@
 # HudX - High-Performance Charting Library
 
+English | [简体中文](./README.zh-CN.md)
+
 HudX is a high-performance charting library built with React and TypeScript. It is inspired by the underlying rendering logic of [ZRender](https://github.com/ecomfe/zrender) and the API design of [ECharts](https://github.com/apache/echarts), supporting both Canvas and SVG rendering modes.
 
 ## Features
@@ -383,6 +385,11 @@ const text = renderer.t('chart.title', 'Chart');
 - Firefox 88+
 - Safari 14+
 - Mobile browsers with Canvas/SVG support
+
+## Documentation
+
+- [English Documentation](./docs/en/SUMMARY.md)
+- [中文文档](./docs/zh/SUMMARY.md)
 
 ## License
 

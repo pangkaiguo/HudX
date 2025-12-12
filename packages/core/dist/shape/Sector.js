@@ -1,8 +1,8 @@
 /**
  * Sector - Sector shape element (pie slice)
  */
-import Element from '../Element';
-export default class Sector extends Element {
+import HRElement from '../HRElement';
+export default class Sector extends HRElement {
     constructor(opts) {
         super(opts);
         this.shape = opts.shape;

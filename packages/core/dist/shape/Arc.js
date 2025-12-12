@@ -1,8 +1,8 @@
 /**
  * Arc - Arc shape element
  */
-import Element from '../Element';
-export default class Arc extends Element {
+import HRElement from '../HRElement';
+export default class Arc extends HRElement {
     constructor(opts) {
         super(opts);
         this.shape = opts.shape;

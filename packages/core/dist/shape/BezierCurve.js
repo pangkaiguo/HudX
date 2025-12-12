@@ -1,8 +1,8 @@
 /**
  * BezierCurve - Bezier curve shape element
  */
-import Element from '../Element';
-export default class BezierCurve extends Element {
+import HRElement from '../HRElement';
+export default class BezierCurve extends HRElement {
     constructor(opts) {
         super(opts);
         this.shape = opts.shape;

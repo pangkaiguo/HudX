@@ -16,12 +16,10 @@ export default class Handler {
      * Initialize event listeners
      */
     _initEvent() {
-        // Get target element (canvas or svg)
         const target = this._painter.getCanvas?.() || this._painter.getSVG?.();
         if (!target) {
             return;
         }
-        // Mouse events - wrap in Event listener to fix type issues
         target.addEventListener('mousedown', (e) => this._onMouseDown(e));
         target.addEventListener('mousemove', (e) => this._onMouseMove(e));
         target.addEventListener('mouseup', (e) => this._onMouseUp(e));
@@ -30,7 +28,6 @@ export default class Handler {
         target.addEventListener('dblclick', (e) => this._onDblClick(e));
         target.addEventListener('contextmenu', (e) => this._onContextMenu(e));
         target.addEventListener('wheel', (e) => this._onWheel(e));
-        // Touch events
         target.addEventListener('touchstart', (e) => this._onTouchStart(e));
         target.addEventListener('touchmove', (e) => this._onTouchMove(e));
         target.addEventListener('touchend', (e) => this._onTouchEnd(e));
@@ -40,7 +37,6 @@ export default class Handler {
      */
     _findHoveredElement(x, y) {
         const elements = this._storage.getElementsList();
-        // Check from top to bottom (reverse order)
         for (let i = elements.length - 1; i >= 0; i--) {
             const element = elements[i];
             if (!element.silent && !element.invisible && element.contain(x, y)) {
@@ -78,21 +74,24 @@ export default class Handler {
      * Create event data with proper event bubbling
      */
     _createEventData(type, point, target, originalEvent) {
-        // Find top target (root element in hierarchy)
         let topTarget = target;
         if (target) {
             let current = target;
-            while (current && current.__parent) {
-                current = current.__parent;
-                if (current) {
+            while (current) {
+                const parent = current.__parent;
+                if (parent) {
+                    current = parent;
                     topTarget = current;
+                }
+                else {
+                    break;
                 }
             }
         }
         return {
             type,
-            zrX: point.x,
-            zrY: point.y,
+            rX: point.x,
+            rY: point.y,
             offsetX: point.x,
             offsetY: point.y,
             target,
@@ -126,7 +125,6 @@ export default class Handler {
     _onMouseMove(e) {
         const point = this._getEventPoint(e);
         const element = this._findHoveredElement(point.x, point.y);
-        // Handle dragging
         if (this._dragging && this._dragStart) {
             const dx = point.x - this._dragStart.x;
             const dy = point.y - this._dragStart.y;
@@ -139,7 +137,6 @@ export default class Handler {
             const eventData = this._createEventData('drag', point, this._dragging, e);
             this._dragging.trigger('drag', eventData);
         }
-        // Handle hover
         if (element !== this._hovered) {
             if (this._hovered) {
                 const eventData = this._createEventData('mouseout', point, this._hovered, e);
@@ -269,7 +266,6 @@ export default class Handler {
      * Dispose handler
      */
     dispose() {
-        // Event listeners will be cleaned up when canvas is removed
         this._hovered = null;
         this._dragging = null;
     }

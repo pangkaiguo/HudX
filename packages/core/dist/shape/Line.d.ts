@@ -1,7 +1,7 @@
 /**
  * Line - Line shape element
  */
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect } from '../types';
 export interface LineShape {
     x1: number;
@@ -9,7 +9,7 @@ export interface LineShape {
     x2: number;
     y2: number;
 }
-export default class Line extends Element {
+export default class Line extends HRElement {
     shape: LineShape;
     constructor(opts?: ElementOption & {
         shape: LineShape;

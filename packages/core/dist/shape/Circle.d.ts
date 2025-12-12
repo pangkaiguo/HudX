@@ -1,14 +1,14 @@
 /**
  * Circle - Circle shape element
  */
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect } from '../types';
 export interface CircleShape {
     cx: number;
     cy: number;
     r: number;
 }
-export default class Circle extends Element {
+export default class Circle extends HRElement {
     shape: CircleShape;
     constructor(opts?: ElementOption & {
         shape: CircleShape;

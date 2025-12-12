@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Arc, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
+import { Renderer, Sector, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
 
 interface PieSlice {
   name: string;
@@ -7,7 +7,7 @@ interface PieSlice {
   color: string;
   startAngle: number;
   endAngle: number;
-  arc?: Arc;
+  sector?: Sector;
 }
 
 export default function AdvancedPieChart() {
@@ -59,7 +59,7 @@ export default function AdvancedPieChart() {
       const endAngle = currentAngle + sliceAngle;
       const midAngle = (startAngle + endAngle) / 2;
 
-      const arc = new Arc({
+      const sector = new Sector({
         shape: {
           cx: centerX,
           cy: centerY,
@@ -67,13 +67,13 @@ export default function AdvancedPieChart() {
           r0: 0,
           startAngle: startAngle,
           endAngle: startAngle,
-          clockwise: true
+          anticlockwise: false
         },
         style: { fill: item.color, opacity: 0.8 }
       });
 
-      arc.on('mouseover', () => {
-        arc.attr('style', { opacity: 1 });
+      sector.on('mouseover', () => {
+        sector.attr({ style: { opacity: 1 } });
         const percentage = ((item.value / total) * 100).toFixed(1);
         tooltip.show(
           centerX + Math.cos(midAngle) * (radius + 40),
@@ -83,13 +83,13 @@ export default function AdvancedPieChart() {
         renderer.flush();
       });
 
-      arc.on('mouseout', () => {
-        arc.attr('style', { opacity: 0.8 });
+      sector.on('mouseout', () => {
+        sector.attr({ style: { opacity: 0.8 } });
         tooltip.hide();
         renderer.flush();
       });
 
-      renderer.add(arc);
+      renderer.add(sector);
 
       const slice: PieSlice = {
         name: item.name,
@@ -97,30 +97,30 @@ export default function AdvancedPieChart() {
         color: item.color,
         startAngle,
         endAngle,
-        arc
+        sector
       };
 
       slices.push(slice);
 
-      // Animate arc
-      const arcAnim = new Animation(
-        arc.attr('shape'),
-        'endAngle',
-        endAngle,
-        1000,
-        index * 150,
-        Easing.cubicOut,
-        () => renderer.flush()
-      );
-      animationsRef.current.push(arcAnim);
-      arcAnim.start();
+      requestAnimationFrame(() => {
+        const sectorAnim = new Animation(
+          sector.attr('shape'),
+          'endAngle',
+          endAngle,
+          800,
+          index * 100,
+          Easing.cubicOut,
+          () => sector.markRedraw()
+        );
+        animationsRef.current.push(sectorAnim);
+        sectorAnim.start();
+      });
 
-      // Add label
       const labelDistance = radius + 50;
       const labelX = centerX + Math.cos(midAngle) * labelDistance;
       const labelY = centerY + Math.sin(midAngle) * labelDistance;
 
-      renderer.add(new Text({
+      const labelText = new Text({
         shape: { text: item.name, x: labelX, y: labelY },
         style: {
           textAlign: 'center',
@@ -129,22 +129,22 @@ export default function AdvancedPieChart() {
           fontSize: 12,
           opacity: 0
         }
-      }));
+      });
+      renderer.add(labelText);
 
-      // Animate label opacity
-      const children = renderer.getRoot().children();
-      const labelText = children[children.length - 1];
-      const labelAnim = new Animation(
-        labelText.attr('style'),
-        'opacity',
-        1,
-        600,
-        index * 150 + 500,
-        Easing.cubicOut,
-        () => renderer.flush()
-      );
-      animationsRef.current.push(labelAnim);
-      labelAnim.start();
+      requestAnimationFrame(() => {
+        const labelAnim = new Animation(
+          labelText.attr('style'),
+          'opacity',
+          1,
+          400,
+          index * 100 + 400,
+          Easing.cubicOut,
+          () => labelText.markRedraw()
+        );
+        animationsRef.current.push(labelAnim);
+        labelAnim.start();
+      });
 
       currentAngle = endAngle;
     });
@@ -158,8 +158,8 @@ export default function AdvancedPieChart() {
       orient: 'vertical',
       onSelect: (name: string, selected: boolean) => {
         slices.forEach(slice => {
-          if (slice.name === name && slice.arc) {
-            slice.arc.attr('invisible', !selected);
+          if (slice.name === name && slice.sector) {
+            slice.sector.attr({ invisible: !selected });
           }
         });
         renderer.flush();
@@ -189,7 +189,12 @@ export default function AdvancedPieChart() {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Smooth pie slice animations • Percentage display • Interactive legend • Hover tooltips
       </p>
-      <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }} />
+      <div 
+        ref={containerRef} 
+        role="img"
+        aria-label="Advanced pie chart showing distribution across 5 categories"
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }} 
+      />
     </div>
   );
 }

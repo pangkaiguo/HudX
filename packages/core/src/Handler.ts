@@ -5,14 +5,14 @@
 
 import IPainter from './painter/IPainter';
 import Storage from './Storage';
-import Element from './Element';
+import HRElement from './HRElement';
 import { EventData, Point } from './types';
 
 export default class Handler {
   private _painter: IPainter;
   private _storage: Storage;
-  private _hovered: Element | null = null;
-  private _dragging: Element | null = null;
+  private _hovered: HRElement | null = null;
+  private _dragging: HRElement | null = null;
   private _dragStart: Point | null = null;
   private _dragStartElementPos: Point | null = null;
 
@@ -26,13 +26,11 @@ export default class Handler {
    * Initialize event listeners
    */
   private _initEvent(): void {
-    // Get target element (canvas or svg)
     const target = this._painter.getCanvas?.() || this._painter.getSVG?.();
     if (!target) {
       return;
     }
 
-    // Mouse events - wrap in Event listener to fix type issues
     target.addEventListener('mousedown', (e: Event) => this._onMouseDown(e as MouseEvent));
     target.addEventListener('mousemove', (e: Event) => this._onMouseMove(e as MouseEvent));
     target.addEventListener('mouseup', (e: Event) => this._onMouseUp(e as MouseEvent));
@@ -42,7 +40,6 @@ export default class Handler {
     target.addEventListener('contextmenu', (e: Event) => this._onContextMenu(e as MouseEvent));
     target.addEventListener('wheel', (e: Event) => this._onWheel(e as WheelEvent));
 
-    // Touch events
     target.addEventListener('touchstart', (e: Event) => this._onTouchStart(e as TouchEvent));
     target.addEventListener('touchmove', (e: Event) => this._onTouchMove(e as TouchEvent));
     target.addEventListener('touchend', (e: Event) => this._onTouchEnd(e as TouchEvent));
@@ -51,10 +48,9 @@ export default class Handler {
   /**
    * Get element at point
    */
-  private _findHoveredElement(x: number, y: number): Element | null {
+  private _findHoveredElement(x: number, y: number): HRElement | null {
     const elements = this._storage.getElementsList();
     
-    // Check from top to bottom (reverse order)
     for (let i = elements.length - 1; i >= 0; i--) {
       const element = elements[i];
       if (!element.silent && !element.invisible && element.contain(x, y)) {
@@ -98,25 +94,27 @@ export default class Handler {
   private _createEventData(
     type: string,
     point: Point,
-    target?: Element | null,
+    target?: HRElement | null,
     originalEvent?: Event
   ): EventData {
-    // Find top target (root element in hierarchy)
-    let topTarget = target;
+    let topTarget: HRElement | null | undefined = target;
     if (target) {
-      let current: any = target;
-      while (current && (current as any).__parent) {
-        current = (current as any).__parent;
-        if (current) {
+      let current: HRElement | undefined = target;
+      while (current) {
+        const parent = (current as unknown as Record<string, unknown>).__parent as HRElement | undefined;
+        if (parent) {
+          current = parent;
           topTarget = current;
+        } else {
+          break;
         }
       }
     }
 
     return {
       type,
-      zrX: point.x,
-      zrY: point.y,
+      rX: point.x,
+      rY: point.y,
       offsetX: point.x,
       offsetY: point.y,
       target,
@@ -155,7 +153,6 @@ export default class Handler {
     const point = this._getEventPoint(e);
     const element = this._findHoveredElement(point.x, point.y);
 
-    // Handle dragging
     if (this._dragging && this._dragStart) {
       const dx = point.x - this._dragStart.x;
       const dy = point.y - this._dragStart.y;
@@ -172,7 +169,6 @@ export default class Handler {
       this._dragging.trigger('drag', eventData);
     }
 
-    // Handle hover
     if (element !== this._hovered) {
       if (this._hovered) {
         const eventData = this._createEventData('mouseout', point, this._hovered, e);
@@ -315,9 +311,7 @@ export default class Handler {
    * Dispose handler
    */
   dispose(): void {
-    // Event listeners will be cleaned up when canvas is removed
     this._hovered = null;
     this._dragging = null;
   }
 }
-

@@ -3,7 +3,7 @@
  */
 import Eventful from './mixin/Eventful';
 import { ElementOption, Style, Transform, BoundingRect } from './types';
-export default class Element extends Eventful {
+declare class Element extends Eventful {
     id: string;
     zlevel: number;
     z: number;
@@ -13,12 +13,12 @@ export default class Element extends Eventful {
     draggable: boolean;
     progressive: boolean;
     style: Style;
-    shape: Record<string, any>;
+    shape: unknown;
     transform: Transform;
     private _dirty;
     private _clipPath?;
     constructor(opts?: ElementOption);
-    attr(key: string | Record<string, any>, value?: any): this | any;
+    attr(key: string | Record<string, unknown> | Record<string, any>, value?: unknown): any;
     private _setAttr;
     markRedraw(): void;
     isDirty(): boolean;
@@ -32,3 +32,4 @@ export default class Element extends Eventful {
     setClipPath(clipPath?: Element): this;
     private _generateId;
 }
+export default Element;

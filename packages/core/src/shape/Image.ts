@@ -2,7 +2,7 @@
  * Image - Image shape element
  */
 
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect } from '../types';
 
 export interface ImageShape {
@@ -17,7 +17,7 @@ export interface ImageShape {
   sHeight?: number; // Source height
 }
 
-export default class Image extends Element {
+export default class Image extends HRElement {
   shape: ImageShape;
 
   constructor(opts: ElementOption & { shape: ImageShape }) {

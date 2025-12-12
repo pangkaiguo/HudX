@@ -1,5 +1,5 @@
 /**
- * Animation - Animation system
+ * Animation - Animation system with ECharts-like easing functions
  */
 export type EasingFunction = (t: number) => number;
 export declare const Easing: {
@@ -10,8 +10,28 @@ export declare const Easing: {
     cubicIn: (t: number) => number;
     cubicOut: (t: number) => number;
     cubicInOut: (t: number) => number;
+    quarticIn: (t: number) => number;
+    quarticOut: (t: number) => number;
+    quarticInOut: (t: number) => number;
+    quinticIn: (t: number) => number;
+    quinticOut: (t: number) => number;
+    quinticInOut: (t: number) => number;
+    sinusoidalIn: (t: number) => number;
+    sinusoidalOut: (t: number) => number;
+    sinusoidalInOut: (t: number) => number;
+    exponentialIn: (t: number) => number;
+    exponentialOut: (t: number) => number;
+    exponentialInOut: (t: number) => number;
+    circularIn: (t: number) => number;
+    circularOut: (t: number) => number;
+    circularInOut: (t: number) => number;
     elasticIn: (t: number) => number;
     elasticOut: (t: number) => number;
+    elasticInOut: (t: number) => number;
+    backIn: (t: number) => number;
+    backOut: (t: number) => number;
+    backInOut: (t: number) => number;
+    bounceOut: (t: number) => number;
 };
 export default class Animation {
     private _target;
@@ -27,33 +47,12 @@ export default class Animation {
     private _paused;
     private _pausedTime;
     private _animationFrameId?;
-    constructor(target: any, property: string, endValue: number, duration?: number, delay?: number, easing?: string | EasingFunction, onUpdate?: (target: any, percent: number) => void, onComplete?: () => void);
-    /**
-     * Start animation
-     */
+    constructor(target: Record<string, unknown>, property: string, endValue: number, duration?: number, delay?: number, easing?: string | EasingFunction, onUpdate?: (target: Record<string, unknown>, percent: number) => void, onComplete?: () => void);
     start(): this;
-    /**
-     * Stop animation
-     */
     stop(): this;
-    /**
-     * Pause animation
-     */
     pause(): this;
-    /**
-     * Resume animation
-     */
     resume(): this;
-    /**
-     * Animation loop
-     */
     private _animate;
-    /**
-     * Get value from target
-     */
     private _getValue;
-    /**
-     * Set value to target
-     */
     private _setValue;
 }

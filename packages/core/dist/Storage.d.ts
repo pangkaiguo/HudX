@@ -2,7 +2,7 @@
  * Storage - Manages graphical elements (Model layer)
  * Similar to hrender's Storage class
  */
-import Element from './Element';
+import HRElement from './HRElement';
 import Group from './Group';
 export default class Storage {
     private _roots;
@@ -22,25 +22,25 @@ export default class Storage {
     /**
      * Get element by ID
      */
-    getElementById(id: string): Element | undefined;
+    getElementById(id: string): HRElement | undefined;
     /**
      * Update element in storage
      * Also updates all children if element is a Group
      */
-    updateElement(element: Element): void;
+    updateElement(element: HRElement): void;
     /**
      * Remove element from storage
      * Also removes all children if element is a Group
      */
-    removeElement(element: Element): void;
+    removeElement(element: HRElement): void;
     /**
      * Iterate all elements
      */
-    iterate<T>(callback: (element: Element) => T | void, includeRoot?: boolean): T | void;
+    iterate<T>(callback: (element: HRElement) => T | void, includeRoot?: boolean): T | void;
     /**
      * Get all elements sorted by zlevel and z
      */
-    getElementsList(): Element[];
+    getElementsList(): HRElement[];
     /**
      * Clear all elements
      */

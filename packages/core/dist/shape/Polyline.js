@@ -1,8 +1,8 @@
 /**
  * Polyline - Polyline shape element
  */
-import Element from '../Element';
-export default class Polyline extends Element {
+import HRElement from '../HRElement';
+export default class Polyline extends HRElement {
     constructor(opts = { shape: { points: [] } }) {
         super(opts);
         this.shape = opts.shape || { points: [] };

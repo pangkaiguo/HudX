@@ -1,8 +1,8 @@
 /**
  * Text - Text shape element
  */
-import Element from '../Element';
-export default class Text extends Element {
+import HRElement from '../HRElement';
+export default class Text extends HRElement {
     constructor(opts = { shape: { x: 0, y: 0, text: '' } }) {
         super(opts);
         this.shape = opts.shape || { x: 0, y: 0, text: '' };

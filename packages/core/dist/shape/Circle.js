@@ -1,8 +1,8 @@
 /**
  * Circle - Circle shape element
  */
-import Element from '../Element';
-export default class Circle extends Element {
+import HRElement from '../HRElement';
+export default class Circle extends HRElement {
     constructor(opts = { shape: { cx: 0, cy: 0, r: 0 } }) {
         super(opts);
         this.shape = opts.shape || { cx: 0, cy: 0, r: 0 };

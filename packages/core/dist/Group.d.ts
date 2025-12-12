@@ -2,19 +2,19 @@
  * Group - Container for multiple elements
  * Similar to hrender's Group class
  */
-import Element from './Element';
+import HRElement from './HRElement';
 import { ElementOption } from './types';
-export default class Group extends Element {
+export default class Group extends HRElement {
     private _children;
     constructor(opts?: ElementOption);
     /**
      * Add child element
      */
-    add(child: Element): this;
+    add(child: HRElement): this;
     /**
      * Remove child element
      */
-    remove(child: Element): this;
+    remove(child: HRElement): this;
     /**
      * Remove all children
      */
@@ -22,15 +22,15 @@ export default class Group extends Element {
     /**
      * Get child at index
      */
-    childAt(index: number): Element | undefined;
+    childAt(index: number): HRElement | undefined;
     /**
      * Get child by ID
      */
-    childOfName(name: string): Element | undefined;
+    childOfName(name: string): HRElement | undefined;
     /**
      * Get all children
      */
-    children(): Element[];
+    children(): HRElement[];
     /**
      * Get children count
      */
@@ -38,7 +38,7 @@ export default class Group extends Element {
     /**
      * Traverse children
      */
-    traverse(callback: (child: Element) => void | boolean, includeSelf?: boolean): void;
+    traverse(callback: (child: HRElement) => void | boolean, includeSelf?: boolean): void;
     /**
      * Get bounding rect (union of all children)
      */

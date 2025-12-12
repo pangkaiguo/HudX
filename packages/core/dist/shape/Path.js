@@ -1,8 +1,8 @@
 /**
  * Path - Path shape element (SVG-like path commands)
  */
-import Element from '../Element';
-export default class Path extends Element {
+import HRElement from '../HRElement';
+export default class Path extends HRElement {
     constructor(opts = { shape: { d: '' } }) {
         super(opts);
         this.shape = opts.shape || { d: '' };

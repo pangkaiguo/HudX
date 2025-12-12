@@ -48,10 +48,10 @@ export interface ElementOption {
     draggable?: boolean;
     progressive?: boolean;
     style?: Style;
-    shape?: Record<string, any>;
+    shape?: Record<string, unknown>;
     transform?: Transform;
     clipPath?: any;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface EventData {
     type: string;
@@ -60,16 +60,17 @@ export interface EventData {
     cancelBubble?: boolean;
     offsetX?: number;
     offsetY?: number;
-    zrX?: number;
-    zrY?: number;
-    [key: string]: any;
+    rX?: number;
+    rY?: number;
+    originalEvent?: Event;
+    [key: string]: unknown;
 }
 export type EventCallback = (event: EventData) => void;
 export interface AnimationOption {
     duration?: number;
     delay?: number;
     easing?: string | ((t: number) => number);
-    onUpdate?: (target: any, percent: number) => void;
+    onUpdate?: (target: Record<string, unknown>, percent: number) => void;
     onComplete?: () => void;
 }
 /**
@@ -229,4 +230,10 @@ export interface DataURLOpts {
     pixelRatio?: number;
     backgroundColor?: string;
     excludeComponents?: string[];
+}
+/**
+ * Element parent reference interface
+ */
+export interface ElementWithParent {
+    __parent?: any;
 }

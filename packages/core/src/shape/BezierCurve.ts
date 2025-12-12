@@ -2,7 +2,7 @@
  * BezierCurve - Bezier curve shape element
  */
 
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect, Point } from '../types';
 
 export interface BezierCurveShape {
@@ -16,7 +16,7 @@ export interface BezierCurveShape {
   cpy2?: number;
 }
 
-export default class BezierCurve extends Element {
+export default class BezierCurve extends HRElement {
   shape: BezierCurveShape;
 
   constructor(opts: ElementOption & { shape: BezierCurveShape }) {

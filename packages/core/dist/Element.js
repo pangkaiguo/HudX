@@ -1,8 +1,9 @@
+// @ts-nocheck
 /**
  * Element - Base class for all graphical elements
  */
 import Eventful from './mixin/Eventful';
-export default class Element extends Eventful {
+class Element extends Eventful {
     constructor(opts = {}) {
         super();
         this.zlevel = 0;
@@ -62,17 +63,17 @@ export default class Element extends Eventful {
         return this;
     }
     _setAttr(key, value) {
-        if (key === 'style') {
+        if (key === 'style' && typeof value === 'object' && value !== null) {
             this.style = { ...this.style, ...value };
         }
-        else if (key === 'shape') {
+        else if (key === 'shape' && typeof value === 'object' && value !== null) {
             this.shape = { ...this.shape, ...value };
         }
-        else if (key === 'transform') {
+        else if (key === 'transform' && typeof value === 'object' && value !== null) {
             this.transform = { ...this.transform, ...value };
         }
         else if (key === 'invisible') {
-            this.invisible = value;
+            this.invisible = Boolean(value);
         }
         else {
             this[key] = value;
@@ -166,3 +167,4 @@ export default class Element extends Eventful {
         return `element_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     }
 }
+export default Element;

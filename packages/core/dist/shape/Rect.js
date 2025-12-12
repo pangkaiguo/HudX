@@ -1,8 +1,8 @@
 /**
  * Rect - Rectangle shape element
  */
-import Element from '../Element';
-export default class Rect extends Element {
+import HRElement from '../HRElement';
+export default class Rect extends HRElement {
     constructor(opts = { shape: { x: 0, y: 0, width: 0, height: 0 } }) {
         super(opts);
         this.shape = opts.shape || { x: 0, y: 0, width: 0, height: 0 };

@@ -1,26 +1,31 @@
 /**
- * Legend - Legend component
+ * Legend - Enhanced legend component (ECharts-like)
  */
 
 import Group from '../Group';
 import Rect from '../shape/Rect';
 import Text from '../shape/Text';
+import Circle from '../shape/Circle';
 
 export interface LegendItem {
   name: string;
   color: string;
+  icon?: 'circle' | 'rect' | 'line';
 }
 
 export interface LegendOption {
   show?: boolean;
   orient?: 'horizontal' | 'vertical';
-  x?: number;
-  y?: number;
+  x?: number | 'left' | 'center' | 'right';
+  y?: number | 'top' | 'middle' | 'bottom';
   backgroundColor?: string;
   textColor?: string;
   padding?: number;
   fontSize?: number;
+  itemGap?: number;
+  itemWidth?: number;
   onSelect?: (name: string, selected: boolean) => void;
+  selectedMode?: 'single' | 'multiple';
 }
 
 export default class Legend extends Group {
@@ -40,6 +45,9 @@ export default class Legend extends Group {
       textColor: '#333',
       padding: 8,
       fontSize: 12,
+      itemGap: 10,
+      itemWidth: 150,
+      selectedMode: 'multiple',
       ...option
     };
   }
@@ -61,48 +69,87 @@ export default class Legend extends Group {
 
     const padding = this._option.padding || 8;
     const fontSize = this._option.fontSize || 12;
+    const itemGap = this._option.itemGap || 10;
+    const itemWidth = this._option.itemWidth || 150;
     const itemHeight = fontSize + 4;
-    const itemWidth = 150;
+
+    let totalWidth = 0;
+    let totalHeight = 0;
+
+    if (this._option.orient === 'horizontal') {
+      totalWidth = this._items.length * itemWidth + padding * 2;
+      totalHeight = itemHeight + padding * 2;
+    } else {
+      totalWidth = itemWidth + padding * 2;
+      totalHeight = this._items.length * (itemHeight + itemGap) + padding * 2;
+    }
 
     const bgRect = new Rect({
-      shape: { x: 0, y: 0, width: this._items.length * itemWidth + padding * 2, height: itemHeight + padding * 2 },
+      shape: { x: 0, y: 0, width: totalWidth, height: totalHeight, r: 4 },
       style: { fill: this._option.backgroundColor, stroke: '#ddd', lineWidth: 1 }
     });
     this.add(bgRect);
 
     this._items.forEach((item, i) => {
-      const x = i * itemWidth + padding;
-      const y = padding;
+      let x: number;
+      let y: number;
 
-      // Interactive rect
-      const interactRect = new Rect({
-        shape: { x, y, width: itemWidth - 4, height: itemHeight },
-        style: { fill: 'transparent' }
-      });
+      if (this._option.orient === 'horizontal') {
+        x = i * itemWidth + padding;
+        y = padding;
+      } else {
+        x = padding;
+        y = i * (itemHeight + itemGap) + padding;
+      }
 
       const isSelected = this._selectedItems.has(item.name);
-      const colorBox = new Rect({
-        shape: { x, y, width: 12, height: 12 },
-        style: { 
-          fill: isSelected ? item.color : '#ccc',
-          opacity: isSelected ? 1 : 0.3
-        }
+
+      const interactRect = new Rect({
+        shape: { x, y, width: itemWidth - 4, height: itemHeight },
+        style: { fill: 'transparent' },
+        cursor: 'pointer'
       });
 
+      const icon = item.icon || 'circle';
+      let iconElement: any;
+
+      if (icon === 'circle') {
+        iconElement = new Circle({
+          shape: { cx: x + 6, cy: y + itemHeight / 2, r: 4 },
+          style: {
+            fill: isSelected ? item.color : '#ccc',
+            opacity: isSelected ? 1 : 0.3
+          }
+        });
+      } else {
+        iconElement = new Rect({
+          shape: { x, y: y + itemHeight / 2 - 4, width: 8, height: 8, r: 1 },
+          style: {
+            fill: isSelected ? item.color : '#ccc',
+            opacity: isSelected ? 1 : 0.3
+          }
+        });
+      }
+
       const label = new Text({
-        shape: { text: item.name, x: x + 18, y: y + 9 },
-        style: { 
-          fill: this._option.textColor, 
+        shape: { text: item.name, x: x + 16, y: y + itemHeight / 2 + 4 },
+        style: {
+          fill: this._option.textColor,
           fontSize,
           opacity: isSelected ? 1 : 0.5
         }
       });
 
-      interactRect.on('click', () => {
-        if (this._selectedItems.has(item.name)) {
-          this._selectedItems.delete(item.name);
-        } else {
+      (interactRect as any).on('click', () => {
+        if (this._option.selectedMode === 'single') {
+          this._selectedItems.clear();
           this._selectedItems.add(item.name);
+        } else {
+          if (this._selectedItems.has(item.name)) {
+            this._selectedItems.delete(item.name);
+          } else {
+            this._selectedItems.add(item.name);
+          }
         }
         if (this._option.onSelect) {
           this._option.onSelect(item.name, this._selectedItems.has(item.name));
@@ -111,22 +158,42 @@ export default class Legend extends Group {
         this.markRedraw();
       });
 
-      interactRect.on('mouseover', () => {
+      (interactRect as any).on('mouseover', () => {
         interactRect.attr('style', { fill: '#f0f0f0' });
         this.markRedraw();
       });
 
-      interactRect.on('mouseout', () => {
+      (interactRect as any).on('mouseout', () => {
         interactRect.attr('style', { fill: 'transparent' });
         this.markRedraw();
       });
 
       this.add(interactRect);
-      this.add(colorBox);
+      this.add(iconElement);
       this.add(label);
-      this._itemRects.set(item.name, colorBox);
+      this._itemRects.set(item.name, iconElement);
     });
 
-    this.attr('transform', { x: this._option.x, y: this._option.y });
+    const x = typeof this._option.x === 'number' ? this._option.x : this._getPositionX();
+    const y = typeof this._option.y === 'number' ? this._option.y : this._getPositionY();
+    this.attr('transform', { x, y });
+  }
+
+  private _getPositionX(): number {
+    switch (this._option.x) {
+      case 'left': return 10;
+      case 'center': return 400;
+      case 'right': return 790;
+      default: return 10;
+    }
+  }
+
+  private _getPositionY(): number {
+    switch (this._option.y) {
+      case 'top': return 10;
+      case 'middle': return 300;
+      case 'bottom': return 590;
+      default: return 10;
+    }
   }
 }

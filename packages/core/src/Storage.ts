@@ -3,12 +3,12 @@
  * Similar to hrender's Storage class
  */
 
-import Element from './Element';
+import HRElement from './HRElement';
 import Group from './Group';
 
 export default class Storage {
   private _roots: Group[] = [];
-  private _elements: Map<string, Element> = new Map();
+  private _elements: Map<string, HRElement> = new Map();
 
   /**
    * Add root group
@@ -41,7 +41,7 @@ export default class Storage {
   /**
    * Get element by ID
    */
-  getElementById(id: string): Element | undefined {
+  getElementById(id: string): HRElement | undefined {
     return this._elements.get(id);
   }
 
@@ -49,7 +49,7 @@ export default class Storage {
    * Update element in storage
    * Also updates all children if element is a Group
    */
-  updateElement(element: Element): void {
+  updateElement(element: HRElement): void {
     this._addElementToMap(element);
   }
 
@@ -57,14 +57,14 @@ export default class Storage {
    * Remove element from storage
    * Also removes all children if element is a Group
    */
-  removeElement(element: Element): void {
+  removeElement(element: HRElement): void {
     this._removeElementFromMap(element);
   }
 
   /**
    * Iterate all elements
    */
-  iterate<T>(callback: (element: Element) => T | void, includeRoot: boolean = false): T | void {
+  iterate<T>(callback: (element: HRElement) => T | void, includeRoot: boolean = false): T | void {
     for (const root of this._roots) {
       if (includeRoot) {
         const result = callback(root);
@@ -84,7 +84,7 @@ export default class Storage {
   /**
    * Get all elements sorted by zlevel and z
    */
-  getElementsList(): Element[] {
+  getElementsList(): HRElement[] {
     // Only return root elements, they will render their children
     return [...this._roots].sort((a, b) => {
       if (a.zlevel !== b.zlevel) {
@@ -105,7 +105,7 @@ export default class Storage {
   /**
    * Add element and its children to map
    */
-  private _addElementToMap(element: Element): void {
+  private _addElementToMap(element: HRElement): void {
     this._elements.set(element.id, element);
     if (element instanceof Group) {
       element.traverse((child) => {
@@ -117,7 +117,7 @@ export default class Storage {
   /**
    * Remove element and its children from map
    */
-  private _removeElementFromMap(element: Element): void {
+  private _removeElementFromMap(element: HRElement): void {
     this._elements.delete(element.id);
     if (element instanceof Group) {
       element.traverse((child) => {

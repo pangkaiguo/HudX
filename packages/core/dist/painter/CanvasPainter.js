@@ -75,21 +75,22 @@ export default class CanvasPainter {
         if (!this._dirty) {
             return;
         }
-        // Clear canvas
-        this._ctx.clearRect(0, 0, this._width, this._height);
         // Get all elements sorted by zlevel and z
         const elements = this._storage.getElementsList();
-        // Render each element
-        for (const element of elements) {
+        // Check if any element is dirty
+        const hasDirtyElements = elements.some(el => el.isDirty());
+        if (!hasDirtyElements && !this._dirty) {
+            return;
+        }
+        // Clear canvas only once
+        this._ctx.clearRect(0, 0, this._width, this._height);
+        // Render each element (batch rendering)
+        for (let i = 0, len = elements.length; i < len; i++) {
+            const element = elements[i];
             if (!element.invisible) {
                 this._ctx.save();
-                try {
-                    element.render(this._ctx);
-                    element.clearDirty();
-                }
-                catch (error) {
-                    console.error('Error rendering element:', error, element);
-                }
+                element.render(this._ctx);
+                element.clearDirty();
                 this._ctx.restore();
             }
         }

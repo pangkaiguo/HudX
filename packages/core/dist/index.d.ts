@@ -1,6 +1,7 @@
 export { default as Renderer } from './Renderer';
 export { default as HRender } from './Renderer';
-export { default as Element } from './Element';
+export { default as HRElement } from './HRElement';
+export { default as Element } from './HRElement';
 export { default as Group } from './Group';
 export { default as Storage } from './Storage';
 export { default as Handler } from './Handler';

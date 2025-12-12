@@ -85,18 +85,18 @@ export default function AdvancedBarChart() {
         const barY = padding.top + chartHeight - barHeight;
 
         const bar = new Rect({
-          shape: { x: barX, y: barY, width: barWidth, height: 0 },
+          shape: { x: barX, y: padding.top + chartHeight, width: barWidth, height: 0 },
           style: { fill: series.color, opacity: 0.8 }
         });
 
         bar.on('mouseover', () => {
-          bar.attr('style', { opacity: 1 });
+          bar.attr({ style: { opacity: 1 } });
           tooltip.show(barX + barWidth / 2, barY - 10, `${series.name}\n${labels[dataIndex]}: ${value}`);
           renderer.flush();
         });
 
         bar.on('mouseout', () => {
-          bar.attr('style', { opacity: 0.8 });
+          bar.attr({ style: { opacity: 0.8 } });
           tooltip.hide();
           renderer.flush();
         });
@@ -104,18 +104,30 @@ export default function AdvancedBarChart() {
         renderer.add(bar);
         seriesBars.push(bar);
 
-        // Animate bar height
-        const barAnim = new Animation(
-          bar.attr('shape'),
-          'height',
-          barHeight,
-          800,
-          seriesIndex * 150 + dataIndex * 100,
-          Easing.cubicOut,
-          () => renderer.flush()
-        );
-        animationsRef.current.push(barAnim);
-        barAnim.start();
+        // Delay animation until after first paint
+        requestAnimationFrame(() => {
+          const barHeightAnim = new Animation(
+            bar.attr('shape'),
+            'height',
+            barHeight,
+            600,
+            seriesIndex * 100 + dataIndex * 60,
+            Easing.cubicOut,
+            () => bar.markRedraw()
+          );
+          const barYAnim = new Animation(
+            bar.attr('shape'),
+            'y',
+            barY,
+            600,
+            seriesIndex * 100 + dataIndex * 60,
+            Easing.cubicOut,
+            () => bar.markRedraw()
+          );
+          animationsRef.current.push(barHeightAnim, barYAnim);
+          barHeightAnim.start();
+          barYAnim.start();
+        });
       });
 
       barsMap.set(series.name, seriesBars);
@@ -132,7 +144,7 @@ export default function AdvancedBarChart() {
         const bars = barsMap.get(name);
         if (bars) {
           bars.forEach(bar => {
-            bar.attr('invisible', !selected);
+            bar.attr({ invisible: !selected });
           });
         }
         renderer.flush();
@@ -162,7 +174,12 @@ export default function AdvancedBarChart() {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Staggered bar animations • Interactive legend • Hover tooltips with values
       </p>
-      <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }} />
+      <div 
+        ref={containerRef} 
+        role="img"
+        aria-label="Advanced bar chart showing Product A, B, and C data across Q1 to Q4"
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }} 
+      />
     </div>
   );
 }

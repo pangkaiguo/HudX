@@ -2,7 +2,7 @@
  * Rect - Rectangle shape element
  */
 
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect } from '../types';
 
 export interface RectShape {
@@ -13,7 +13,7 @@ export interface RectShape {
   r?: number; // border radius
 }
 
-export default class Rect extends Element {
+export default class Rect extends HRElement {
   shape: RectShape;
 
   constructor(opts: ElementOption & { shape: RectShape } = { shape: { x: 0, y: 0, width: 0, height: 0 } }) {

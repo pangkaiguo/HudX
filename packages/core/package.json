@@ -2,8 +2,11 @@
   "name": "@hudx/core",
   "version": "1.0.0",
   "description": "Core rendering engine for HudX charts",
+  "type": "module",
   "main": "src/index.ts",
+  "module": "src/index.ts",
   "types": "src/index.ts",
+  "sideEffects": false,
   "files": [
     "src",
     "dist"

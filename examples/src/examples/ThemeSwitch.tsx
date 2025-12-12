@@ -45,8 +45,20 @@ export default function ThemeSwitch() {
     <div>
       <h2 style={{ marginBottom: 20 }}>Theme Switch Demo</h2>
       <div style={{ marginBottom: 20 }}>
-        <button onClick={() => setTheme('light')} style={{ marginRight: 10, padding: '8px 16px', cursor: 'pointer' }}>Light</button>
-        <button onClick={() => setTheme('dark')} style={{ padding: '8px 16px', cursor: 'pointer' }}>Dark</button>
+        <button 
+          onClick={() => setTheme('light')} 
+          aria-label="Switch to light theme"
+          style={{ marginRight: 10, padding: '8px 16px', cursor: 'pointer' }}
+        >
+          Light
+        </button>
+        <button 
+          onClick={() => setTheme('dark')} 
+          aria-label="Switch to dark theme"
+          style={{ padding: '8px 16px', cursor: 'pointer' }}
+        >
+          Dark
+        </button>
       </div>
       <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 300 }} />
     </div>

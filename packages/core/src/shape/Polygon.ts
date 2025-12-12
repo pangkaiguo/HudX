@@ -2,14 +2,14 @@
  * Polygon - Polygon shape element
  */
 
-import Element from '../Element';
+import HRElement from '../HRElement';
 import { ElementOption, BoundingRect, Point } from '../types';
 
 export interface PolygonShape {
-  points: Point[];
+  points: Point[] | number[][];
 }
 
-export default class Polygon extends Element {
+export default class Polygon extends HRElement {
   shape: PolygonShape;
 
   constructor(opts: ElementOption & { shape: PolygonShape } = { shape: { points: [] } }) {
@@ -17,8 +17,18 @@ export default class Polygon extends Element {
     this.shape = opts.shape || { points: [] };
   }
 
-  getBoundingRect(): BoundingRect {
+  private _normalizePoints(): Point[] {
     const points = this.shape.points;
+    if (!points || points.length === 0) return [];
+    
+    if (Array.isArray(points[0])) {
+      return (points as number[][]).map(p => ({ x: p[0], y: p[1] }));
+    }
+    return points as Point[];
+  }
+
+  getBoundingRect(): BoundingRect {
+    const points = this._normalizePoints();
     if (points.length === 0) {
       return { x: 0, y: 0, width: 0, height: 0 };
     }
@@ -44,12 +54,11 @@ export default class Polygon extends Element {
   }
 
   contain(x: number, y: number): boolean {
-    const points = this.shape.points;
+    const points = this._normalizePoints();
     if (points.length < 3) {
       return false;
     }
 
-    // Ray casting algorithm
     let inside = false;
     for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
       const xi = points[i].x;
@@ -68,7 +77,8 @@ export default class Polygon extends Element {
   }
 
   render(ctx: CanvasRenderingContext2D): void {
-    if (this.invisible || this.shape.points.length === 0) {
+    const points = this._normalizePoints();
+    if (this.invisible || points.length === 0) {
       return;
     }
 
@@ -76,7 +86,6 @@ export default class Polygon extends Element {
     this.applyTransform(ctx);
     this.applyStyle(ctx);
 
-    const points = this.shape.points;
     ctx.beginPath();
     ctx.moveTo(points[0].x, points[0].y);
     for (let i = 1; i < points.length; i++) {
@@ -94,4 +103,3 @@ export default class Polygon extends Element {
     ctx.restore();
   }
 }
-

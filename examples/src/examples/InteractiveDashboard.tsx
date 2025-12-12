@@ -75,20 +75,20 @@ export default function InteractiveDashboard() {
       });
       renderer.add(line);
 
-      // Animate line
-      const lineAnim = new Animation(
-        line.attr('style'),
-        'opacity',
-        1,
-        1000,
-        seriesIndex * 300,
-        Easing.cubicOut,
-        () => renderer.flush()
-      );
-      animationsRef.current.push(lineAnim);
-      lineAnim.start();
+      requestAnimationFrame(() => {
+        const lineAnim = new Animation(
+          line.attr('style'),
+          'opacity',
+          1,
+          600,
+          seriesIndex * 150,
+          Easing.cubicOut,
+          () => line.markRedraw()
+        );
+        animationsRef.current.push(lineAnim);
+        lineAnim.start();
+      });
 
-      // Draw points
       points.forEach((point, pointIndex) => {
         const circle = new Circle({
           shape: { cx: point.x, cy: point.y, r: 0 },
@@ -96,31 +96,32 @@ export default function InteractiveDashboard() {
         });
 
         circle.on('mouseover', () => {
-          circle.attr('shape', { r: 6 });
+          circle.attr({ shape: { r: 6 } });
           tooltip.show(point.x + 10, point.y - 40, `${series.name}\n${point.label}: ${point.value}`);
           renderer.flush();
         });
 
         circle.on('mouseout', () => {
-          circle.attr('shape', { r: 4 });
+          circle.attr({ shape: { r: 4 } });
           tooltip.hide();
           renderer.flush();
         });
 
         renderer.add(circle);
 
-        // Animate point
-        const pointAnim = new Animation(
-          circle.attr('shape'),
-          'r',
-          4,
-          600,
-          seriesIndex * 300 + pointIndex * 50,
-          Easing.elasticOut,
-          () => renderer.flush()
-        );
-        animationsRef.current.push(pointAnim);
-        pointAnim.start();
+        requestAnimationFrame(() => {
+          const pointAnim = new Animation(
+            circle.attr('shape'),
+            'r',
+            4,
+            500,
+            seriesIndex * 150 + pointIndex * 40,
+            Easing.cubicOut,
+            () => circle.markRedraw()
+          );
+          animationsRef.current.push(pointAnim);
+          pointAnim.start();
+        });
       });
     });
 
@@ -169,7 +170,12 @@ export default function InteractiveDashboard() {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Multi-series line chart • Staggered animations • Interactive legend • Hover tooltips • Responsive updates
       </p>
-      <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 1000, height: 600 }} />
+      <div 
+        ref={containerRef} 
+        role="img"
+        aria-label="Interactive dashboard showing 12-month performance metrics for three series"
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 1000, height: 600 }} 
+      />
     </div>
   );
 }
