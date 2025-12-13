@@ -96,15 +96,18 @@ export default class CanvasPainter implements IPainter {
    * Paint all elements
    */
   paint(): void {
+    console.log('[CanvasPainter] paint called. dirty:', this._dirty);
     if (!this._dirty) {
       return;
     }
 
     // Get all elements sorted by zLevel and z
     const elements = this._storage.getElementsList();
+    console.log('[CanvasPainter] elements count:', elements.length);
 
     // Check if any element is dirty
     const hasDirtyElements = elements.some(el => el.isDirty());
+    console.log('[CanvasPainter] hasDirtyElements:', hasDirtyElements);
 
     if (!hasDirtyElements && !this._dirty) {
       return;
@@ -112,6 +115,10 @@ export default class CanvasPainter implements IPainter {
 
     // Clear canvas only once
     this._ctx.clearRect(0, 0, this._width, this._height);
+
+    // DEBUG: Draw a red square to verify canvas is rendering
+    this._ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+    this._ctx.fillRect(10, 10, 50, 50);
 
     // Render each element (batch rendering)
     for (let i = 0, len = elements.length; i < len; i++) {
@@ -190,7 +197,7 @@ export default class CanvasPainter implements IPainter {
       tempCanvas.width = width * pixelRatio;
       tempCanvas.height = height * pixelRatio;
       const ctx = tempCanvas.getContext('2d');
-      
+
       if (ctx) {
         if (backgroundColor) {
           ctx.fillStyle = backgroundColor;
@@ -200,7 +207,7 @@ export default class CanvasPainter implements IPainter {
         return tempCanvas.toDataURL(`image/${type}`);
       }
     }
-    
+
     return this._canvas.toDataURL(`image/${type}`);
   }
 

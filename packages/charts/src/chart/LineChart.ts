@@ -65,7 +65,7 @@ export default class LineChart extends Chart {
       const lineWidth = lineStyle.width || 2;
 
       const polyline = new Polyline({
-        shape: { points },
+        shape: { points: [] }, // Start with empty points for animation
         style: {
           stroke: lineColor,
           lineWidth,
@@ -76,18 +76,45 @@ export default class LineChart extends Chart {
 
       this._root.add(polyline);
 
+      // Animate line if animation is enabled
+      if (this._isAnimationEnabled()) {
+        const duration = this._getAnimationDuration();
+        const easing = this._getAnimationEasing();
+
+        // Animate line drawing
+        const shape = polyline.attr('shape');
+        this._animator.animate(
+          { t: 0 },
+          't',
+          1,
+          {
+            duration,
+            easing,
+            onUpdate: (target: any, percent: number) => {
+              // Gradually build the line by showing more points
+              const visiblePoints = Math.ceil(points.length * percent);
+              shape.points = points.slice(0, visiblePoints);
+              polyline.markRedraw();
+            }
+          }
+        );
+      } else {
+        // Set final points if animation is disabled
+        polyline.attr('shape', { points });
+      }
+
       // Create data points
       if (seriesItem.showSymbol !== false) {
         const itemStyle = seriesItem.itemStyle || {};
         const pointColor = itemStyle.color || lineColor;
         const pointSize = itemStyle.borderWidth || 4;
 
-        points.forEach((point) => {
+        points.forEach((point, pointIndex) => {
           const circle = new Circle({
             shape: {
               cx: point.x,
-              cy: point.y,
-              r: pointSize,
+              cy: plotY + plotHeight, // Start from bottom for animation
+              r: 0, // Start with radius 0 for animation
             },
             style: {
               fill: pointColor,
@@ -98,6 +125,35 @@ export default class LineChart extends Chart {
           });
 
           this._root.add(circle);
+
+          // Animate point if animation is enabled
+          if (this._isAnimationEnabled()) {
+            const delay = pointIndex * 100 + seriesIndex * 200; // Staggered animation delay
+            const duration = this._getAnimationDuration() / 2; // Shorter duration for points
+
+            this._animator.animate(
+              circle.attr('shape'),
+              'r',
+              pointSize,
+              {
+                duration,
+                delay,
+                easing: 'elasticOut',
+                onUpdate: (target, percent) => {
+                  // Also animate the y position
+                  target.cy = plotY + plotHeight - (plotY + plotHeight - point.y) * percent;
+                  circle.markRedraw();
+                }
+              }
+            );
+          } else {
+            // Set final position if animation is disabled
+            circle.attr('shape', {
+              cx: point.x,
+              cy: point.y,
+              r: pointSize,
+            });
+          }
         });
       }
 

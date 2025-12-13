@@ -61,7 +61,7 @@ export default class PieChart extends Chart {
           cy,
           r: radius,
           startAngle: currentAngle,
-          endAngle: currentAngle + angle,
+          endAngle: currentAngle, // Start with same angle for animation
           anticlockwise: false,
         },
         style: {
@@ -73,6 +73,39 @@ export default class PieChart extends Chart {
       });
 
       this._root.add(arc);
+
+      // Animate pie slice if animation is enabled
+      if (this._isAnimationEnabled()) {
+        const delay = index * 200; // Staggered animation delay
+        const duration = this._getAnimationDuration();
+        const easing = this._getAnimationEasing();
+
+        this._animator.animate(
+          arc.attr('shape'),
+          'endAngle',
+          currentAngle + angle,
+          {
+            duration,
+            delay,
+            easing,
+            onUpdate: (target, percent) => {
+              // Animate the slice growing from startAngle to endAngle
+              target.endAngle = currentAngle + angle * percent;
+              arc.markRedraw();
+            }
+          }
+        );
+      } else {
+        // Set final angle if animation is disabled
+        arc.attr('shape', {
+          cx,
+          cy,
+          r: radius,
+          startAngle: currentAngle,
+          endAngle: currentAngle + angle,
+          anticlockwise: false,
+        });
+      }
 
       // Render label if enabled
       if (seriesItem.label?.show) {

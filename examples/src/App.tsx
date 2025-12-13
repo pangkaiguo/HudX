@@ -11,6 +11,7 @@ const PerformanceTest = lazy(() => import('./examples/PerformanceTest'));
 const ThemeSwitch = lazy(() => import('./examples/ThemeSwitch'));
 const CoreAPI = lazy(() => import('./examples/CoreAPI'));
 const Animation = lazy(() => import('./examples/Animation'));
+const ChartAnimationDemo = lazy(() => import('./examples/ChartAnimationDemo'));
 const Interaction = lazy(() => import('./examples/Interaction'));
 const AdvancedLineChart = lazy(() => import('./examples/AdvancedLineChart'));
 const AdvancedBarChart = lazy(() => import('./examples/AdvancedBarChart'));
@@ -33,6 +34,7 @@ const examples = [
   { id: 'theme-switch', name: 'Theme Switch', component: ThemeSwitch },
   { id: 'core-api', name: 'Core API', component: CoreAPI },
   { id: 'animation', name: 'Animation', component: Animation },
+  { id: 'chart-animation', name: '🎬 Chart Animation Demo', component: ChartAnimationDemo },
   { id: 'interaction', name: 'Interaction', component: Interaction },
   { id: 'performance', name: 'Performance Test', component: PerformanceTest }
 ];
@@ -47,7 +49,7 @@ const App = memo(function App() {
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <nav 
+      <nav
         aria-label="Examples navigation"
         style={{
           width: 280,
@@ -104,16 +106,16 @@ const App = memo(function App() {
           </button>
         ))}
       </nav>
-      <main 
+      <main
         role="main"
         aria-label="Example content"
         style={{ flex: 1, padding: 40, overflowY: 'auto', backgroundColor: '#fff' }}
       >
         <Suspense fallback={
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             height: '400px',
             color: '#999',
             fontSize: '16px',

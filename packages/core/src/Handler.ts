@@ -49,7 +49,7 @@ export default class Handler {
    * Get element at point
    */
   private _findHoveredElement(x: number, y: number): ChartElement | null {
-    const elements = this._storage.getElementsList();
+    const elements = this._storage.getDisplayList();
 
     for (let i = elements.length - 1; i >= 0; i--) {
       const element = elements[i];

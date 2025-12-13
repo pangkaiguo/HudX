@@ -94,6 +94,42 @@ export default class Storage {
   }
 
   /**
+   * Get all elements in rendering order (flattened)
+   */
+  getDisplayList(includeInvisible: boolean = false): ChartElement[] {
+    const list: ChartElement[] = [];
+    
+    // Sort roots
+    const sortedRoots = [...this._roots].sort((a, b) => {
+      if (a.zLevel !== b.zLevel) return a.zLevel - b.zLevel;
+      return a.z - b.z;
+    });
+
+    // Helper to traverse
+    const traverse = (element: ChartElement) => {
+      if (!includeInvisible && element.invisible) {
+        return;
+      }
+      
+      list.push(element);
+      
+      if (element instanceof Group) {
+         // Sort children
+         const children = element.children().sort((a, b) => {
+            if (a.zLevel !== b.zLevel) return a.zLevel - b.zLevel;
+            return a.z - b.z;
+         });
+         
+         children.forEach(child => traverse(child));
+      }
+    };
+
+    sortedRoots.forEach(root => traverse(root));
+    
+    return list;
+  }
+
+  /**
    * Clear all elements
    */
   clear(): void {

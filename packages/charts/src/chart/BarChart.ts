@@ -10,6 +10,7 @@ import { Rect, Text, Line } from '@HudX/core';
 export default class BarChart extends Chart {
   protected _render(): void {
     super._render();
+    console.log('[BarChart] _render called');
 
     const option = this._option;
     const series = option.series || [];
@@ -34,6 +35,7 @@ export default class BarChart extends Chart {
 
     // Process each series
     series.forEach((seriesItem, seriesIndex) => {
+      console.log('[BarChart] Processing series', seriesIndex, seriesItem.type);
       if (seriesItem.type !== 'bar') {
         return;
       }
@@ -73,9 +75,9 @@ export default class BarChart extends Chart {
         const rect = new Rect({
           shape: {
             x: barX,
-            y: barY,
+            y: plotY + plotHeight, // Start from bottom for animation
             width: barWidthPerSeries,
-            height: barHeight,
+            height: 0, // Start with height 0 for animation
           },
           style: {
             fill: barColor,
@@ -86,6 +88,37 @@ export default class BarChart extends Chart {
         });
 
         this._root.add(rect);
+
+        // Animate bar if animation is enabled
+        if (this._isAnimationEnabled()) {
+          const delay = index * 100; // Staggered animation delay
+          const duration = this._getAnimationDuration();
+          const easing = this._getAnimationEasing();
+
+          this._animator.animate(
+            rect.attr('shape'),
+            'height',
+            barHeight,
+            {
+              duration,
+              delay,
+              easing,
+              onUpdate: (target, percent) => {
+                // Also animate the y position to keep the bar anchored at bottom
+                target.y = plotY + plotHeight - target.height;
+                rect.markRedraw();
+              }
+            }
+          );
+        } else {
+          // Set final position if animation is disabled
+          rect.attr('shape', {
+            x: barX,
+            y: barY,
+            width: barWidthPerSeries,
+            height: barHeight,
+          });
+        }
 
         // Render label if enabled
         if (seriesItem.label?.show) {
@@ -116,6 +149,7 @@ export default class BarChart extends Chart {
     // Render axes
     this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
 
+    console.log('[BarChart] refresh renderer');
     this._renderer.refresh();
   }
 
