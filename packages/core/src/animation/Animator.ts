@@ -2,7 +2,7 @@
  * Animator - Manages multiple animations
  */
 
-import Animation, { EasingFunction } from './Animation';
+import Animation, { type EasingFunction } from './Animation';
 
 export interface AnimatorOption {
   duration?: number;

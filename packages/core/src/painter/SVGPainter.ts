@@ -404,14 +404,33 @@ export default class SVGPainter implements IPainter {
    * Initialize resize observer
    */
   private _initEvent(): void {
-    // Disabled to prevent infinite loop
+    // Create ResizeObserver to handle container resize automatically
+    if (window.ResizeObserver) {
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.target === this._dom) {
+            this._resize();
+            break;
+          }
+        }
+      });
+      resizeObserver.observe(this._dom);
+    } else {
+      // Fallback for browsers without ResizeObserver
+      window.addEventListener('resize', () => {
+        this._resize();
+      });
+    }
   }
 
   /**
    * Handle resize
    */
   private _resize(): void {
-    // Disabled
+    const rect = this._dom.getBoundingClientRect();
+    if (rect.width !== this._width || rect.height !== this._height) {
+      this.resize(rect.width, rect.height);
+    }
   }
 
   /**

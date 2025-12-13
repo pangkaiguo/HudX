@@ -3,8 +3,6 @@
  * Unified interface for Canvas and SVG painters
  */
 
-import Storage from '../Storage';
-
 export default interface IPainter {
   resize(width?: number, height?: number): void;
   getWidth(): number;
