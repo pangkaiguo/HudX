@@ -4,6 +4,7 @@
 
 import Storage from '../Storage';
 import IPainter from './IPainter';
+import type { DataURLOpts } from '../types';
 
 export default class CanvasPainter implements IPainter {
   private _dom: HTMLElement;
@@ -171,6 +172,36 @@ export default class CanvasPainter implements IPainter {
     if (rect.width !== this._width || rect.height !== this._height) {
       this.resize(rect.width, rect.height);
     }
+  }
+
+  /**
+   * Get data URL
+   */
+  getDataURL(opts: DataURLOpts = {}): string {
+    const type = opts.type || 'png';
+    const pixelRatio = opts.pixelRatio || window.devicePixelRatio || 1;
+    const backgroundColor = opts.backgroundColor;
+
+    // Create a temporary canvas if we need to change pixel ratio or background color
+    if (pixelRatio !== 1 || backgroundColor) {
+      const tempCanvas = document.createElement('canvas');
+      const width = this._width;
+      const height = this._height;
+      tempCanvas.width = width * pixelRatio;
+      tempCanvas.height = height * pixelRatio;
+      const ctx = tempCanvas.getContext('2d');
+      
+      if (ctx) {
+        if (backgroundColor) {
+          ctx.fillStyle = backgroundColor;
+          ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        }
+        ctx.drawImage(this._canvas, 0, 0, tempCanvas.width, tempCanvas.height);
+        return tempCanvas.toDataURL(`image/${type}`);
+      }
+    }
+    
+    return this._canvas.toDataURL(`image/${type}`);
   }
 
   /**

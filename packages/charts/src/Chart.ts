@@ -2,7 +2,7 @@
  * Chart - Base chart class
  */
 
-import { Renderer, Group, RenderMode, Theme, Locale } from '@HudX/core';
+import { Renderer, Group, RenderMode, Theme, Locale, DataURLOpts } from '@HudX/core';
 import type { ChartOption, ChartEvent } from './types';
 
 export default class Chart {
@@ -146,6 +146,13 @@ export default class Chart {
     this._width = this._renderer.getWidth();
     this._height = this._renderer.getHeight();
     this._render();
+  }
+
+  /**
+   * Get data URL
+   */
+  getDataURL(opts: DataURLOpts = {}): string {
+    return this._renderer.getDataURL(opts);
   }
 
   /**

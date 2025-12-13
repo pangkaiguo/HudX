@@ -7,7 +7,7 @@ import Storage from './Storage';
 import Handler from './Handler';
 import ChartElement from './ChartElement';
 import Group from './Group';
-import type { EventData, EventCallback, RenderMode, Theme, Locale, ThemeConfig } from './types';
+import type { EventData, EventCallback, RenderMode, Theme, Locale, ThemeConfig, DataURLOpts } from './types';
 import IPainter from './painter/IPainter';
 import CanvasPainter from './painter/CanvasPainter';
 import SVGPainter from './painter/SVGPainter';
@@ -212,6 +212,13 @@ export default class Renderer {
   trigger(event: string, eventData?: EventData): this {
     this._root.trigger(event, eventData);
     return this;
+  }
+
+  /**
+   * Get data URL
+   */
+  getDataURL(opts: DataURLOpts = {}): string {
+    return this._painter.getDataURL(opts);
   }
 
   /**
