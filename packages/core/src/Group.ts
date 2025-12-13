@@ -1,10 +1,9 @@
 /**
  * Group - Container for multiple elements
- * Similar to hrender's Group class
  */
 
 import ChartElement from './ChartElement';
-import { ElementOption } from './types';
+import type { ElementOption } from './types';
 
 export default class Group extends ChartElement {
   private _children: ChartElement[] = [];

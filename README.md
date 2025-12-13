@@ -93,7 +93,7 @@ pnpm dev
 
 ```tsx
 import React from 'react';
-import { HChart } from '@hudx/charts';
+import { HChart } from '@HudX/charts';
 
 function App() {
   const option = {
@@ -131,7 +131,7 @@ function App() {
 ### Core API
 
 ```typescript
-import { Renderer, Circle, Rect, Animation, Easing } from '@hudx/core';
+import { Renderer, Circle, Rect, Animation, Easing } from '@HudX/core';
 
 // Initialize renderer
 const renderer = Renderer.init('#container', 'canvas', 'light', 'en');
@@ -167,7 +167,7 @@ animation.start();
 
 ## Core Architecture
 
-### 1. Core Rendering Engine (@hudx/core)
+### 1. Core Rendering Engine (@HudX/core)
 
 Uses MVC architecture, supporting both Canvas and SVG rendering modes:
 
@@ -201,7 +201,7 @@ Uses MVC architecture, supporting both Canvas and SVG rendering modes:
 - `Sector`: Sector
 - `Image`: Image
 
-### 2. Chart Library (@hudx/charts)
+### 2. Chart Library (@HudX/charts)
 
 Inspired by ECharts' API design, providing similar user experience.
 
@@ -238,7 +238,7 @@ interface ChartOption {
 Supports multiple easing functions:
 
 ```typescript
-import { Animation, Easing } from '@hudx/core';
+import { Animation, Easing } from '@HudX/core';
 
 const animation = new Animation(
   target,
@@ -261,7 +261,7 @@ animation.start();
 ### Tooltip Component
 
 ```typescript
-import { Tooltip } from '@hudx/core';
+import { Tooltip } from '@HudX/core';
 
 const tooltip = new Tooltip({
   backgroundColor: 'rgba(50, 50, 50, 0.95)',
@@ -278,7 +278,7 @@ tooltip.hide();
 ### Legend Component
 
 ```typescript
-import { Legend } from '@hudx/core';
+import { Legend } from '@HudX/core';
 
 const legend = new Legend({
   x: 20,
@@ -331,7 +331,7 @@ renderer.flush(); // Render all elements at once
 ### 3. Object Pool Reuse
 
 ```typescript
-import { ObjectPool } from '@hudx/core';
+import { ObjectPool } from '@HudX/core';
 
 const pool = new ObjectPool(
   () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),
@@ -363,7 +363,7 @@ renderer.setLocale('zh-CN');
 const text = renderer.t('chart.title', 'Chart');
 ```
 
-**Supported Languages**: en, zh, zh-CN, zh-TW, ja, ko, fr, de, es, pt, ru
+**Supported Languages**: en, zh, zh-CN, zh-TW
 
 ## Rendering Modes
 

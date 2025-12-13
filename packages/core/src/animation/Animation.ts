@@ -1,9 +1,6 @@
 /**
  * Animation - Animation system with ECharts-like easing functions
  */
-
-import { AnimationOption } from '../types';
-
 export type EasingFunction = (t: number) => number;
 
 export const Easing = {

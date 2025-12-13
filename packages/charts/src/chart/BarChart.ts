@@ -3,9 +3,9 @@
  */
 
 import Chart from '../Chart';
-import { ChartOption, SeriesOption, ChartData } from '../types';
+import type { ChartOption, SeriesOption, ChartData } from '../types';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate } from '../util/coordinate';
-import { Rect, Text, Line } from '@hudx/core';
+import { Rect, Text, Line } from '@HudX/core';
 
 export default class BarChart extends Chart {
   protected _render(): void {

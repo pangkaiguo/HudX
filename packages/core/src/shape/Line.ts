@@ -3,7 +3,7 @@
  */
 
 import ChartElement from '../ChartElement';
-import { ElementOption, BoundingRect, Point } from '../types';
+import type { ElementOption, BoundingRect, Point } from '../types';
 
 export interface LineShape {
   x1: number;

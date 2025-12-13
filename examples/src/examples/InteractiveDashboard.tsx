@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Polyline, Circle, Rect, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
+import { Renderer, Polyline, Circle, Rect, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
 
 export default function InteractiveDashboard() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -170,11 +170,11 @@ export default function InteractiveDashboard() {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Multi-series line chart • Staggered animations • Interactive legend • Hover tooltips • Responsive updates
       </p>
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         role="img"
         aria-label="Interactive dashboard showing 12-month performance metrics for three series"
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 1000, height: 600 }} 
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 1000, height: 600 }}
       />
     </div>
   );

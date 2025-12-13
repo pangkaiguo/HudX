@@ -2,7 +2,7 @@
  * Coordinate system utilities
  */
 
-import { AxisOption, ChartData, Coordinate } from '../types';
+import type { AxisOption, ChartData, Coordinate } from '../types';
 
 export interface Scale {
   (value: any): number;

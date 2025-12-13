@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Circle, Rect, Line, Polyline, Polygon, Text } from '@hudx/core';
+import { Renderer, Circle, Rect, Line, Polyline, Polygon, Text } from '@HudX/core';
 
 export default function CoreAPI() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -68,7 +68,7 @@ export default function CoreAPI() {
   return (
     <div>
       <h2 style={{ marginBottom: 20 }}>Core API Demo</h2>
-      <p style={{ marginBottom: 20, color: '#666' }}>Demonstrates basic shapes from @hudx/core</p>
+      <p style={{ marginBottom: 20, color: '#666' }}>Demonstrates basic shapes from @HudX/core</p>
       <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 200 }} />
     </div>
   );

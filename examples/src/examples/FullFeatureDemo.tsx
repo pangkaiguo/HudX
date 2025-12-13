@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Renderer, Polyline, Circle, Rect, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
+import { Renderer, Polyline, Circle, Rect, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
 
 export default function FullFeatureDemo() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -163,11 +163,11 @@ export default function FullFeatureDemo() {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Comprehensive example showcasing all interactive features
       </p>
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         role="img"
         aria-label="Full feature demo with interactive line chart showing Desktop, Mobile, and Tablet data"
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 1000, height: 650 }} 
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 1000, height: 650 }}
       />
       <div style={{ marginTop: 20, padding: 15, backgroundColor: '#f5f5f5', borderRadius: 8 }}>
         <p style={{ margin: 0, color: '#666' }}>

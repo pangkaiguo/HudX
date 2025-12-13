@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Renderer, Rect, Text, Tooltip } from '@hudx/core';
+import { Renderer, Rect, Text, Tooltip } from '@HudX/core';
 import { defaultColors, defaultPadding } from '../config';
 
 export default function BasicBar() {
@@ -84,11 +84,11 @@ export default function BasicBar() {
     <div>
       <h2 style={{ marginBottom: 10 }}>Bar Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Hover over bars to see values</p>
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         role="img"
         aria-label="Bar chart showing weekly data from Monday to Sunday"
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 400 }} 
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 400 }}
       />
     </div>
   );

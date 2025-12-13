@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Sector, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
+import { Renderer, Sector, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
 
 interface PieSlice {
   name: string;
@@ -189,11 +189,11 @@ export default function AdvancedPieChart() {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Smooth pie slice animations • Percentage display • Interactive legend • Hover tooltips
       </p>
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         role="img"
         aria-label="Advanced pie chart showing distribution across 5 categories"
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }} 
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }}
       />
     </div>
   );

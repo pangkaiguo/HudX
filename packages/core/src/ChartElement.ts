@@ -4,11 +4,11 @@
  */
 
 import Eventful from './mixin/Eventful';
-import { ElementOption, Style, Transform, BoundingRect } from './types';
+import type { ElementOption, Style, Transform, BoundingRect } from './types';
 
 class ChartElement extends Eventful {
   id: string;
-  zlevel: number = 0;
+  zLevel: number = 0;
   z: number = 0;
   silent: boolean = false;
   invisible: boolean = false;
@@ -26,7 +26,7 @@ class ChartElement extends Eventful {
   constructor(opts: ElementOption = {}) {
     super();
     this.id = opts.id || this._generateId();
-    this.zlevel = opts.zlevel ?? 0;
+    this.zLevel = opts.zLevel ?? 0;
     this.z = opts.z ?? 0;
     this.silent = opts.silent ?? false;
     this.invisible = opts.invisible ?? false;

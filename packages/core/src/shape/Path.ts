@@ -3,7 +3,7 @@
  */
 
 import ChartElement from '../ChartElement';
-import { ElementOption, BoundingRect } from '../types';
+import type { ElementOption, BoundingRect } from '../types';
 
 export interface PathShape {
   d: string; // Path data string (SVG path format)

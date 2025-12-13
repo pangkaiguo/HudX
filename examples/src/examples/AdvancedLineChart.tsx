@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
+import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
 
 interface DataPoint {
   x: number;
@@ -184,11 +184,11 @@ export default function AdvancedLineChart() {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Smooth animations on load • Interactive legend (click to toggle) • Hover tooltips with data details
       </p>
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         role="img"
         aria-label="Advanced line chart with three series showing weekly data"
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }} 
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }}
       />
     </div>
   );

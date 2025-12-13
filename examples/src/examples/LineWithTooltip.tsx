@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Polyline, Circle, Text, Tooltip, Legend } from '@hudx/core';
+import { Renderer, Polyline, Circle, Text, Tooltip, Legend } from '@HudX/core';
 
 export default function LineWithTooltip() {
   const containerRef = useRef<HTMLDivElement>(null);

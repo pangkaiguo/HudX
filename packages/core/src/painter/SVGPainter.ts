@@ -109,7 +109,7 @@ export default class SVGPainter implements IPainter {
     }
     this._elementMap.clear();
 
-    // Get all elements sorted by zlevel and z
+    // Get all elements sorted by zLevel and z
     const elements = this._storage.getElementsList();
 
     // Render each element

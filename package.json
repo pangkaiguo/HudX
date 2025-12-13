@@ -1,5 +1,5 @@
 {
-  "name": "hudx",
+  "name": "HudX",
   "version": "1.0.0",
   "description": "A high-performance charting library built with React and TypeScript",
   "private": true,
@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc --build",
     "dev": "pnpm -r dev",
-    "dev:examples": "pnpm --filter @hudx/examples dev",
+    "dev:examples": "pnpm --filter @HudX/examples dev",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "clean": "tsc --build --clean && pnpm -r clean"

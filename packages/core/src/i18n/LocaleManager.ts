@@ -2,7 +2,7 @@
  * LocaleManager - Manages internationalization
  */
 
-import { Locale, LocaleConfig } from '../types';
+import type { Locale, LocaleConfig } from '../types';
 
 export class LocaleManager {
   private static _locales: Map<Locale, LocaleConfig> = new Map();
@@ -46,97 +46,6 @@ export class LocaleManager {
       'data.empty': '暫無數據',
       'data.loading': '載入中...',
       'data.error': '數據載入錯誤',
-    });
-
-    // Japanese
-    LocaleManager._locales.set('ja', {
-      'chart.title': 'チャート',
-      'chart.legend': '凡例',
-      'chart.tooltip': 'ツールチップ',
-      'axis.x': 'X軸',
-      'axis.y': 'Y軸',
-      'series.name': 'シリーズ',
-      'data.empty': 'データなし',
-      'data.loading': '読み込み中...',
-      'data.error': 'データ読み込みエラー',
-    });
-
-    // Korean
-    LocaleManager._locales.set('ko', {
-      'chart.title': '차트',
-      'chart.legend': '범례',
-      'chart.tooltip': '툴팁',
-      'axis.x': 'X축',
-      'axis.y': 'Y축',
-      'series.name': '시리즈',
-      'data.empty': '데이터 없음',
-      'data.loading': '로딩 중...',
-      'data.error': '데이터 로딩 오류',
-    });
-
-    // French
-    LocaleManager._locales.set('fr', {
-      'chart.title': 'Graphique',
-      'chart.legend': 'Légende',
-      'chart.tooltip': 'Info-bulle',
-      'axis.x': 'Axe X',
-      'axis.y': 'Axe Y',
-      'series.name': 'Série',
-      'data.empty': 'Aucune donnée',
-      'data.loading': 'Chargement...',
-      'data.error': 'Erreur de chargement des données',
-    });
-
-    // German
-    LocaleManager._locales.set('de', {
-      'chart.title': 'Diagramm',
-      'chart.legend': 'Legende',
-      'chart.tooltip': 'Tooltip',
-      'axis.x': 'X-Achse',
-      'axis.y': 'Y-Achse',
-      'series.name': 'Serie',
-      'data.empty': 'Keine Daten',
-      'data.loading': 'Lädt...',
-      'data.error': 'Fehler beim Laden der Daten',
-    });
-
-    // Spanish
-    LocaleManager._locales.set('es', {
-      'chart.title': 'Gráfico',
-      'chart.legend': 'Leyenda',
-      'chart.tooltip': 'Información',
-      'axis.x': 'Eje X',
-      'axis.y': 'Eje Y',
-      'series.name': 'Serie',
-      'data.empty': 'Sin datos',
-      'data.loading': 'Cargando...',
-      'data.error': 'Error al cargar datos',
-    });
-
-    // Portuguese
-    LocaleManager._locales.set('pt', {
-      'chart.title': 'Gráfico',
-      'chart.legend': 'Legenda',
-      'chart.tooltip': 'Dica',
-      'axis.x': 'Eixo X',
-      'axis.y': 'Eixo Y',
-      'series.name': 'Série',
-      'data.empty': 'Sem dados',
-      'data.loading': 'Carregando...',
-      'data.error': 'Erro ao carregar dados',
-    });
-
-    // Russian
-    LocaleManager._locales.set('ru', {
-      'chart.title': 'График',
-      'chart.legend': 'Легенда',
-      'chart.tooltip': 'Подсказка',
-      'axis.x': 'Ось X',
-      'axis.y': 'Ось Y',
-      'series.name': 'Серия',
-      'data.empty': 'Нет данных',
-      'data.loading': 'Загрузка...',
-      'data.error': 'Ошибка загрузки данных',
     });
   }
 

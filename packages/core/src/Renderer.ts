@@ -7,7 +7,7 @@ import Storage from './Storage';
 import Handler from './Handler';
 import ChartElement from './ChartElement';
 import Group from './Group';
-import { EventData, EventCallback, RenderMode, Theme, Locale, ThemeConfig } from './types';
+import type { EventData, EventCallback, RenderMode, Theme, Locale, ThemeConfig } from './types';
 import IPainter from './painter/IPainter';
 import CanvasPainter from './painter/CanvasPainter';
 import SVGPainter from './painter/SVGPainter';

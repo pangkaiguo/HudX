@@ -37,14 +37,14 @@ export default defineConfig({
             }
             return 'vendor';
           }
-          if (id.includes('@hudx/core')) {
-            if (id.includes('shape/')) return 'hudx-shapes';
-            if (id.includes('animation/')) return 'hudx-animation';
-            if (id.includes('component/')) return 'hudx-components';
-            return 'hudx-core';
+          if (id.includes('@HudX/core')) {
+            if (id.includes('shape/')) return 'HudX-shapes';
+            if (id.includes('animation/')) return 'HudX-animation';
+            if (id.includes('component/')) return 'HudX-components';
+            return 'HudX-core';
           }
-          if (id.includes('@hudx/charts')) {
-            return 'hudx-charts';
+          if (id.includes('@HudX/charts')) {
+            return 'HudX-charts';
           }
         },
         chunkFileNames: 'assets/[name]-[hash].js',
@@ -59,7 +59,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['react', 'react-dom'],
-    exclude: ['@hudx/core', '@hudx/charts']
+    exclude: ['@HudX/core', '@HudX/charts']
   },
   esbuild: {
     logOverride: { 'this-is-undefined-in-esm': 'silent' },

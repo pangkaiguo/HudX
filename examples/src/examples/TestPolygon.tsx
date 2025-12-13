@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Polygon, Circle, Tooltip, Legend } from '@hudx/core';
+import { Renderer, Polygon, Circle, Tooltip, Legend } from '@HudX/core';
 
 export default function TestPolygon() {
   const containerRef = useRef<HTMLDivElement>(null);

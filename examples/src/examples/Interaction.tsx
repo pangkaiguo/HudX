@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Text } from '@hudx/core';
+import { Renderer, Circle, Text } from '@HudX/core';
 
 export default function Interaction() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,11 +56,11 @@ export default function Interaction() {
     <div>
       <h2 style={{ marginBottom: 20 }}>Interaction Demo</h2>
       <p style={{ marginBottom: 20, color: '#666' }}>Click Count: {clickCount}</p>
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         role="img"
         aria-label="Interactive demo with 5 clickable circles"
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 300 }} 
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 300 }}
       />
     </div>
   );

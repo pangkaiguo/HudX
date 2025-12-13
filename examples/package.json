@@ -1,5 +1,5 @@
 {
-  "name": "@hudx/examples",
+  "name": "@HudX/examples",
   "version": "1.0.0",
   "description": "HudX examples and performance tests",
   "private": true,
@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@hudx/core": "workspace:*",
-    "@hudx/charts": "workspace:*",
+    "@HudX/core": "workspace:*",
+    "@HudX/charts": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

@@ -3,8 +3,8 @@
  */
 
 import Chart from '../Chart';
-import { ChartOption, SeriesOption, ChartData } from '../types';
-import { Arc, Text, Point } from '@hudx/core';
+import type { ChartOption, SeriesOption, ChartData } from '../types';
+import { Arc, Text, Point } from '@HudX/core';
 
 export default class PieChart extends Chart {
   protected _render(): void {

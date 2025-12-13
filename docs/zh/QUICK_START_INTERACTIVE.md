@@ -5,7 +5,7 @@
 ### 1. 基础设置
 
 ```typescript
-import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
+import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
 
 // 初始化渲染器
 const renderer = Renderer.init(container, 'canvas', 'light', 'en');
@@ -226,6 +226,7 @@ barAnim.start();
 ## 常见问题
 
 ### Q: 如何禁用动画？
+
 ```typescript
 // 方法 1: 不调用 start()
 // const anim = new Animation(...);
@@ -237,6 +238,7 @@ anim.start();
 ```
 
 ### Q: 如何改变动画速度？
+
 ```typescript
 // 修改 duration 参数
 const anim = new Animation(
@@ -250,6 +252,7 @@ const anim = new Animation(
 ```
 
 ### Q: 如何添加自定义缓动函数？
+
 ```typescript
 const customEasing = (t: number) => {
   // t 从 0 到 1
@@ -267,6 +270,7 @@ const anim = new Animation(
 ```
 
 ### Q: 如何处理多个动画？
+
 ```typescript
 const animations: Animation[] = [];
 
@@ -367,6 +371,7 @@ circle.on('mouseover', () => {
 ---
 
 **快速链接**:
+
 - 🚀 [启动开发服务器](#快速开始)
 - 📚 [完整文档](../README.md)
 - 💡 [最佳实践](./INTERACTIVE_FEATURES_SUMMARY.md)

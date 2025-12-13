@@ -45,7 +45,7 @@ export interface Transform {
 
 export interface ElementOption {
   id?: string;
-  zlevel?: number;
+  zLevel?: number;
   z?: number;
   silent?: boolean;
   invisible?: boolean;
@@ -95,7 +95,7 @@ export type Theme = 'light' | 'dark' | string;
 /**
  * Locale
  */
-export type Locale = 'en' | 'zh' | 'zh-CN' | 'zh-TW' | 'ja' | 'ko' | 'fr' | 'de' | 'es' | 'pt' | 'ru';
+export type Locale = 'en' | 'zh' | 'zh-CN' | 'zh-TW';
 
 /**
  * Theme configuration

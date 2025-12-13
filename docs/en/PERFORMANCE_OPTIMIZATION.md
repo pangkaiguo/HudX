@@ -3,6 +3,7 @@
 ## 1. Rendering Optimization
 
 ### Canvas vs SVG Selection
+
 - **Canvas**: Suitable for large datasets (1000+ elements), better performance
 - **SVG**: Suitable for highly interactive scenarios, supports CSS styling
 
@@ -15,6 +16,7 @@ const renderer = Renderer.init(dom, 'svg', 'light');
 ```
 
 ### Dirty Flag Mechanism
+
 Only redraw elements that need updating:
 
 ```typescript
@@ -23,6 +25,7 @@ element.isDirty();    // Check if needs redraw
 ```
 
 ### Batch Updates
+
 Use `flush()` to render immediately, avoiding multiple redraws:
 
 ```typescript
@@ -35,8 +38,9 @@ renderer.flush(); // Render all elements at once
 ## 2. Memory Optimization
 
 ### Object Pool Reuse
+
 ```typescript
-import { ObjectPool } from '@hudx/core';
+import { ObjectPool } from '@HudX/core';
 
 const pool = new ObjectPool(
   () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),
@@ -49,6 +53,7 @@ pool.release(circle);
 ```
 
 ### Timely Resource Release
+
 ```typescript
 renderer.dispose(); // Release all resources
 element.remove();   // Remove element
@@ -57,6 +62,7 @@ element.remove();   // Remove element
 ## 3. Data Processing Optimization
 
 ### Data Sampling
+
 Sample large datasets:
 
 ```typescript
@@ -67,11 +73,13 @@ function sampleData(data: number[], sampleSize: number): number[] {
 ```
 
 ### Virtual Scrolling
+
 Only render elements in visible area.
 
 ## 4. Animation Optimization
 
 ### Use requestAnimationFrame
+
 Animation system has built-in optimization, automatically uses RAF:
 
 ```typescript
@@ -87,12 +95,14 @@ animation.start();
 ```
 
 ### Avoid Over-Animation
+
 - Limit number of simultaneous animations
 - Use reasonable animation duration (200-500ms)
 
 ## 5. Event Handling Optimization
 
 ### Event Delegation
+
 Use event bubbling to reduce listener count:
 
 ```typescript
@@ -103,6 +113,7 @@ renderer.on('click', (event) => {
 ```
 
 ### Debounce and Throttle
+
 ```typescript
 function debounce(fn: Function, delay: number) {
   let timer: any;
@@ -116,6 +127,7 @@ function debounce(fn: Function, delay: number) {
 ## 6. Performance Monitoring
 
 ### Use Performance API
+
 ```typescript
 const start = performance.now();
 // Execute operation
@@ -124,6 +136,7 @@ console.log(`Time: ${end - start}ms`);
 ```
 
 ### Chrome DevTools
+
 - Performance tab: Record and analyze performance
 - Rendering tab: View redraw information
 - Memory tab: Check for memory leaks

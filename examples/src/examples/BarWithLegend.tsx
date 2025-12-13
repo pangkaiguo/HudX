@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Rect, Text, Tooltip, Legend } from '@hudx/core';
+import { Renderer, Rect, Text, Tooltip, Legend } from '@HudX/core';
 
 export default function BarWithLegend() {
   const containerRef = useRef<HTMLDivElement>(null);

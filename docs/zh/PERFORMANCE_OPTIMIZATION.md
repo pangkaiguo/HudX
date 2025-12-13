@@ -3,6 +3,7 @@
 ## 1. 渲染优化
 
 ### Canvas vs SVG 选择
+
 - **Canvas**: 适合大量数据（1000+ 元素），性能更好
 - **SVG**: 适合交互性强的场景，支持 CSS 样式
 
@@ -15,6 +16,7 @@ const renderer = Renderer.init(dom, 'svg', 'light');
 ```
 
 ### 脏标记机制
+
 只重绘需要更新的元素：
 
 ```typescript
@@ -23,6 +25,7 @@ element.isDirty();    // 检查是否需要重绘
 ```
 
 ### 批量更新
+
 使用 `flush()` 立即渲染，避免多次重绘：
 
 ```typescript
@@ -35,8 +38,9 @@ renderer.flush(); // 一次性渲染所有元素
 ## 2. 内存优化
 
 ### 对象池复用
+
 ```typescript
-import { ObjectPool } from '@hudx/core';
+import { ObjectPool } from '@HudX/core';
 
 const pool = new ObjectPool(
   () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),
@@ -49,6 +53,7 @@ pool.release(circle);
 ```
 
 ### 及时释放资源
+
 ```typescript
 renderer.dispose(); // 释放所有资源
 element.remove();   // 移除元素
@@ -57,6 +62,7 @@ element.remove();   // 移除元素
 ## 3. 数据处理优化
 
 ### 数据采样
+
 处理大量数据时进行采样：
 
 ```typescript
@@ -67,11 +73,13 @@ function sampleData(data: number[], sampleSize: number): number[] {
 ```
 
 ### 虚拟滚动
+
 只渲染可见区域的元素。
 
 ## 4. 动画优化
 
 ### 使用 requestAnimationFrame
+
 动画系统已内置优化，自动使用 RAF：
 
 ```typescript
@@ -87,12 +95,14 @@ animation.start();
 ```
 
 ### 避免过度动画
+
 - 限制同时运行的动画数量
 - 使用合理的动画时长（200-500ms）
 
 ## 5. 事件处理优化
 
 ### 事件委托
+
 使用事件冒泡减少监听器数量：
 
 ```typescript
@@ -103,6 +113,7 @@ renderer.on('click', (event) => {
 ```
 
 ### 防抖和节流
+
 ```typescript
 function debounce(fn: Function, delay: number) {
   let timer: any;
@@ -116,6 +127,7 @@ function debounce(fn: Function, delay: number) {
 ## 6. 性能监测
 
 ### 使用 Performance API
+
 ```typescript
 const start = performance.now();
 // 执行操作
@@ -124,6 +136,7 @@ console.log(`耗时: ${end - start}ms`);
 ```
 
 ### Chrome DevTools
+
 - Performance 标签：记录和分析性能
 - Rendering 标签：查看重绘情况
 - Memory 标签：检查内存泄漏

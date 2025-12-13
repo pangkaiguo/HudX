@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Rect, Line, Polyline, Polygon } from '@hudx/core';
+import { Renderer, Circle, Rect, Line, Polyline, Polygon } from '@HudX/core';
 
 type ShapeType = 'circle' | 'rect' | 'line' | 'polyline' | 'polygon';
 
@@ -82,7 +82,7 @@ export default function PerformanceTest() {
   return (
     <div>
       <h2 style={{ marginBottom: 20 }}>Performance Test</h2>
-      
+
       <div style={{ marginBottom: 20, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20 }}>
         <label>
           Element Count:
@@ -93,7 +93,7 @@ export default function PerformanceTest() {
             style={{ marginLeft: 10, padding: '4px 8px', width: '100%' }}
           />
         </label>
-        
+
         <label>
           Render Mode:
           <select value={mode} onChange={(e) => setMode(e.target.value as 'canvas' | 'svg')} style={{ marginLeft: 10, padding: '4px 8px', width: '100%' }}>

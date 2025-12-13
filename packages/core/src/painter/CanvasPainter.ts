@@ -100,7 +100,7 @@ export default class CanvasPainter implements IPainter {
       return;
     }
 
-    // Get all elements sorted by zlevel and z
+    // Get all elements sorted by zLevel and z
     const elements = this._storage.getElementsList();
 
     // Check if any element is dirty

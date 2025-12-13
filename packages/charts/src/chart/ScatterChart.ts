@@ -3,7 +3,7 @@
  */
 
 import Chart from '../Chart';
-import { Circle, Text } from '@hudx/core';
+import { Circle, Text } from '@HudX/core';
 
 export default class ScatterChart extends Chart {
   protected _render(): void {

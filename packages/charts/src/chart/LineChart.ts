@@ -3,9 +3,9 @@
  */
 
 import Chart from '../Chart';
-import { ChartOption, SeriesOption, ChartData } from '../types';
+import type { ChartOption, SeriesOption, ChartData } from '../types';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate, Scale } from '../util/coordinate';
-import { Group, Polyline, Circle, Text, Line, Point } from '@hudx/core';
+import { Group, Polyline, Circle, Text, Line, Point } from '@HudX/core';
 
 export default class LineChart extends Chart {
   protected _render(): void {

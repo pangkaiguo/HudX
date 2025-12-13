@@ -2,8 +2,8 @@
  * Chart - Base chart class
  */
 
-import { Renderer, Group, RenderMode, Theme, Locale } from '@hudx/core';
-import { ChartOption, ChartEvent } from './types';
+import { Renderer, Group, RenderMode, Theme, Locale } from '@HudX/core';
+import type { ChartOption, ChartEvent } from './types';
 
 export default class Chart {
   protected _renderer: Renderer;

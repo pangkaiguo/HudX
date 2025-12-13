@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Rect, Circle, Text } from '@hudx/core';
+import { Renderer, Rect, Circle, Text } from '@HudX/core';
 
 export default function ThemeSwitch() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,15 +45,15 @@ export default function ThemeSwitch() {
     <div>
       <h2 style={{ marginBottom: 20 }}>Theme Switch Demo</h2>
       <div style={{ marginBottom: 20 }}>
-        <button 
-          onClick={() => setTheme('light')} 
+        <button
+          onClick={() => setTheme('light')}
           aria-label="Switch to light theme"
           style={{ marginRight: 10, padding: '8px 16px', cursor: 'pointer' }}
         >
           Light
         </button>
-        <button 
-          onClick={() => setTheme('dark')} 
+        <button
+          onClick={() => setTheme('dark')}
           aria-label="Switch to dark theme"
           style={{ padding: '8px 16px', cursor: 'pointer' }}
         >

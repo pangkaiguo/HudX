@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Sector, Text, Tooltip, Legend } from '@hudx/core';
+import { Renderer, Sector, Text, Tooltip, Legend } from '@HudX/core';
 
 export default function PieWithLegend() {
   const containerRef = useRef<HTMLDivElement>(null);

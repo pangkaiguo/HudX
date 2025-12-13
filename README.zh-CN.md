@@ -93,7 +93,7 @@ pnpm dev
 
 ```tsx
 import React from 'react';
-import { HChart } from '@hudx/charts';
+import { HChart } from '@HudX/charts';
 
 function App() {
   const option = {
@@ -131,7 +131,7 @@ function App() {
 ### 核心 API
 
 ```typescript
-import { Renderer, Circle, Rect, Animation, Easing } from '@hudx/core';
+import { Renderer, Circle, Rect, Animation, Easing } from '@HudX/core';
 
 // 初始化渲染器
 const renderer = Renderer.init('#container', 'canvas', 'light', 'zh-CN');
@@ -167,7 +167,7 @@ animation.start();
 
 ## 核心架构
 
-### 1. 核心渲染引擎 (@hudx/core)
+### 1. 核心渲染引擎 (@HudX/core)
 
 采用 MVC 架构，支持 Canvas 和 SVG 双渲染模式：
 
@@ -201,7 +201,7 @@ animation.start();
 - `Sector`: 扇形
 - `Image`: 图片
 
-### 2. 图表库 (@hudx/charts)
+### 2. 图表库 (@HudX/charts)
 
 参考 ECharts 的 API 设计，提供相似的用户体验。
 
@@ -238,7 +238,7 @@ interface ChartOption {
 支持 20+ 种缓动函数：
 
 ```typescript
-import { Animation, Easing } from '@hudx/core';
+import { Animation, Easing } from '@HudX/core';
 
 const animation = new Animation(
   target,
@@ -268,7 +268,7 @@ animation.start();
 ### Tooltip 组件
 
 ```typescript
-import { Tooltip } from '@hudx/core';
+import { Tooltip } from '@HudX/core';
 
 const tooltip = new Tooltip({
   backgroundColor: 'rgba(50, 50, 50, 0.95)',
@@ -285,7 +285,7 @@ tooltip.hide();
 ### Legend 组件
 
 ```typescript
-import { Legend } from '@hudx/core';
+import { Legend } from '@HudX/core';
 
 const legend = new Legend({
   x: 20,
@@ -338,7 +338,7 @@ renderer.flush(); // 一次性渲染所有元素
 ### 3. 对象池复用
 
 ```typescript
-import { ObjectPool } from '@hudx/core';
+import { ObjectPool } from '@HudX/core';
 
 const pool = new ObjectPool(
   () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),
@@ -370,7 +370,7 @@ renderer.setLocale('en');
 const text = renderer.t('chart.title', '图表');
 ```
 
-**支持的语言**: en, zh, zh-CN, zh-TW, ja, ko, fr, de, es, pt, ru
+**支持的语言**: en, zh, zh-CN, zh-TW
 
 ## 渲染模式
 

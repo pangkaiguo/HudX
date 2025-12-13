@@ -2,7 +2,7 @@
  * ThemeManager - Manages theme configuration
  */
 
-import { Theme, ThemeConfig } from '../types';
+import type { Theme, ThemeConfig } from '../types';
 
 export class ThemeManager {
   private static _themes: Map<Theme, ThemeConfig> = new Map();

@@ -1,5 +1,5 @@
 {
-  "name": "@hudx/charts",
+  "name": "@HudX/charts",
   "version": "1.0.0",
   "description": "Chart library built on top of HudX core",
   "type": "module",
@@ -17,7 +17,7 @@
     "clean": "tsc --build --clean && rm -rf dist"
   },
   "dependencies": {
-    "@hudx/core": "workspace:*",
+    "@HudX/core": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

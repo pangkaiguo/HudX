@@ -3,7 +3,7 @@
  */
 
 import Chart from '../Chart';
-import { Rect, Text } from '@hudx/core';
+import { Rect, Text } from '@HudX/core';
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {

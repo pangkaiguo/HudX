@@ -4,8 +4,8 @@
  */
 
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
-import { ChartOption, ChartEvent } from '../types';
-import { RenderMode, Theme, Locale } from '@hudx/core';
+import type { ChartOption, ChartEvent } from '../types';
+import { RenderMode, Theme, Locale } from '@HudX/core';
 import Chart from '../Chart';
 import LineChart from '../chart/LineChart';
 import BarChart from '../chart/BarChart';

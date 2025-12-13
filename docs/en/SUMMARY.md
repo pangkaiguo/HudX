@@ -4,7 +4,6 @@
 
 ### 1. Naming Updates
 
-- ✅ All "zrender" references replaced with "hrender"
 - ✅ All code comments and documentation updated
 
 ### 2. Function Implementation Check
@@ -103,7 +102,7 @@
 ### Canvas Mode
 
 ```typescript
-import { Renderer, Circle } from '@hudx/core';
+import { Renderer, Circle } from '@HudX/core';
 
 const renderer = Renderer.init('#container', 'canvas');
 const circle = new Circle({
@@ -116,7 +115,7 @@ renderer.add(circle);
 ### SVG Mode
 
 ```typescript
-import { Renderer, Circle } from '@hudx/core';
+import { Renderer, Circle } from '@HudX/core';
 
 const renderer = Renderer.init('#container', 'svg');
 const circle = new Circle({
@@ -129,7 +128,7 @@ renderer.add(circle);
 ### React Component
 
 ```tsx
-import { HChart } from '@hudx/charts';
+import { HChart } from '@HudX/charts';
 
 <HChart
   option={option}

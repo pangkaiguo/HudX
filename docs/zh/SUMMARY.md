@@ -4,7 +4,6 @@
 
 ### 1. 命名更新
 
-- ✅ 所有 "zrender" 字眼已替换为 "hrender"
 - ✅ 所有代码注释和文档已更新
 
 ### 2. 实现函数检查
@@ -103,7 +102,7 @@
 ### Canvas 模式
 
 ```typescript
-import { Renderer, Circle } from '@hudx/core';
+import { Renderer, Circle } from '@HudX/core';
 
 const renderer = Renderer.init('#container', 'canvas');
 const circle = new Circle({
@@ -116,7 +115,7 @@ renderer.add(circle);
 ### SVG 模式
 
 ```typescript
-import { Renderer, Circle } from '@hudx/core';
+import { Renderer, Circle } from '@HudX/core';
 
 const renderer = Renderer.init('#container', 'svg');
 const circle = new Circle({
@@ -129,7 +128,7 @@ renderer.add(circle);
 ### React 组件
 
 ```tsx
-import { HChart } from '@hudx/charts';
+import { HChart } from '@HudX/charts';
 
 <HChart
   option={option}

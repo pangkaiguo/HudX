@@ -1,6 +1,5 @@
 /**
  * Storage - Manages graphical elements (Model layer)
- * Similar to hrender's Storage class
  */
 
 import ChartElement from './ChartElement';
@@ -82,13 +81,13 @@ export default class Storage {
   }
 
   /**
-   * Get all elements sorted by zlevel and z
+   * Get all elements sorted by zLevel and z
    */
   getElementsList(): ChartElement[] {
     // Only return root elements, they will render their children
     return [...this._roots].sort((a, b) => {
-      if (a.zlevel !== b.zlevel) {
-        return a.zlevel - b.zlevel;
+      if (a.zLevel !== b.zLevel) {
+        return a.zLevel - b.zLevel;
       }
       return a.z - b.z;
     });

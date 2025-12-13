@@ -5,7 +5,7 @@
 ### 1. Basic Setup
 
 ```typescript
-import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
+import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
 
 // Initialize renderer
 const renderer = Renderer.init(container, 'canvas', 'light', 'en');
@@ -271,6 +271,7 @@ data.forEach((value, index) => {
 ## FAQ
 
 ### Q: How to disable animations?
+
 ```typescript
 // Method 1: Don't call start()
 // const anim = new Animation(...);
@@ -282,6 +283,7 @@ anim.start();
 ```
 
 ### Q: How to change animation speed?
+
 ```typescript
 // Modify duration parameter
 const anim = new Animation(
@@ -295,6 +297,7 @@ const anim = new Animation(
 ```
 
 ### Q: How to add custom easing functions?
+
 ```typescript
 const customEasing = (t: number) => {
   // t ranges from 0 to 1
@@ -312,6 +315,7 @@ const anim = new Animation(
 ```
 
 ### Q: How to handle multiple animations?
+
 ```typescript
 const animations: Animation[] = [];
 
@@ -336,6 +340,7 @@ return () => {
 ```
 
 ### Q: How to update chart data?
+
 ```typescript
 // Clear old data
 renderer.removeAll();
@@ -424,6 +429,7 @@ View the following files for complete examples:
 ---
 
 **Quick Links**:
+
 - 🚀 [Start Development Server](#quick-start)
 - 📚 [Complete Documentation](../README.md)
 - 💡 [Best Practices](../INTERACTIVE_FEATURES_SUMMARY.md)

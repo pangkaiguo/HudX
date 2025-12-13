@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Rect, Text, Tooltip, Legend, Animation, Easing } from '@hudx/core';
+import { Renderer, Rect, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
 
 interface BarData {
   x: number;
@@ -174,11 +174,11 @@ export default function AdvancedBarChart() {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Staggered bar animations • Interactive legend • Hover tooltips with values
       </p>
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         role="img"
         aria-label="Advanced bar chart showing Product A, B, and C data across Q1 to Q4"
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }} 
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 900, height: 500 }}
       />
     </div>
   );

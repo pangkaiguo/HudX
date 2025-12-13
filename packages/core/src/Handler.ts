@@ -6,7 +6,7 @@
 import IPainter from './painter/IPainter';
 import Storage from './Storage';
 import ChartElement from './ChartElement';
-import { EventData, Point } from './types';
+import type { EventData, Point } from './types';
 
 export default class Handler {
   private _painter: IPainter;

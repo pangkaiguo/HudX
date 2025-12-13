@@ -1,6 +1,5 @@
 /**
  * Matrix utilities for transformations
- * Similar to hrender's matrix utilities
  */
 
 export interface Matrix {

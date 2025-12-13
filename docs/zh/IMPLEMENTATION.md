@@ -8,8 +8,8 @@
 
 HudX 采用分层架构，分为两个主要包：
 
-1. **@hudx/core**: 核心渲染引擎，类似 hrender，支持 Canvas 和 SVG 两种渲染模式
-2. **@hudx/charts**: 图表库，类似 echarts
+1. **@HudX/core**: 核心渲染引擎，类似 hrender，支持 Canvas 和 SVG 两种渲染模式
+2. **@HudX/charts**: 图表库，类似 echarts
 
 ### MVC 模式
 
@@ -64,7 +64,7 @@ class Renderer {
 ```typescript
 class Element extends Eventful {
   id: string;                    // 唯一标识
-  zlevel: number;                // 层级
+  zLevel: number;                // 层级
   z: number;                      // 同层级内的顺序
   style: Style;                  // 样式
   shape: Record<string, any>;    // 形状属性
@@ -94,7 +94,7 @@ class Storage {
 
 - 维护元素树结构
 - 快速查找元素（通过 ID）
-- 按 zlevel 和 z 排序元素
+- 按 zLevel 和 z 排序元素
 
 ### 4. Painter 类
 
@@ -113,7 +113,7 @@ class Painter {
 1. 检查是否需要重绘（dirty flag）
 2. 清空画布
 3. 从 Storage 获取所有元素
-4. 按 zlevel 和 z 排序
+4. 按 zLevel 和 z 排序
 5. 遍历绘制每个元素
 
 **性能优化**:
@@ -518,7 +518,7 @@ interface EventData {
 
 ## 总结
 
-HudX 的设计参考了 hrender 和 echarts 的优秀实践：
+HudX 的设计参考了 zRender 和 echarts 的优秀实践：
 
 - **模块化**: 核心引擎和图表库分离
 - **可扩展**: 易于添加新元素和图表类型

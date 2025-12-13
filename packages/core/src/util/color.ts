@@ -1,6 +1,5 @@
 /**
  * Color utilities
- * Similar to hrender's color utilities
  */
 
 /**
