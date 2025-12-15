@@ -1,42 +1,40 @@
 import React, { useState, lazy, Suspense, useMemo, memo } from 'react';
 
 // Lazy load components for better performance
+const Shape = lazy(() => import('./examples/Shape'));
+const Polygon = lazy(() => import('./examples/Polygon'));
+const Theme = lazy(() => import('./examples/Theme'));
+const Interaction = lazy(() => import('./examples/Interaction'));
+const Animation = lazy(() => import('./examples/Animation'));
+const ChartAnimation = lazy(() => import('./examples/ChartAnimation'));
 const BasicLine = lazy(() => import('./examples/BasicLine'));
 const BasicBar = lazy(() => import('./examples/BasicBar'));
 const BasicPie = lazy(() => import('./examples/BasicPie'));
 const LineWithTooltip = lazy(() => import('./examples/LineWithTooltip'));
 const BarWithLegend = lazy(() => import('./examples/BarWithLegend'));
 const PieWithLegend = lazy(() => import('./examples/PieWithLegend'));
-const PerformanceTest = lazy(() => import('./examples/PerformanceTest'));
-const ThemeSwitch = lazy(() => import('./examples/ThemeSwitch'));
-const CoreAPI = lazy(() => import('./examples/CoreAPI'));
-const Animation = lazy(() => import('./examples/Animation'));
-const ChartAnimationDemo = lazy(() => import('./examples/ChartAnimationDemo'));
-const Interaction = lazy(() => import('./examples/Interaction'));
-const AdvancedLineChart = lazy(() => import('./examples/AdvancedLineChart'));
-const AdvancedBarChart = lazy(() => import('./examples/AdvancedBarChart'));
-const AdvancedPieChart = lazy(() => import('./examples/AdvancedPieChart'));
-const InteractiveDashboard = lazy(() => import('./examples/InteractiveDashboard'));
-const FullFeatureDemo = lazy(() => import('./examples/FullFeatureDemo'));
+const AdvancedLineChart = lazy(() => import('./examples/AdvancedLine'));
+const AdvancedBarChart = lazy(() => import('./examples/AdvancedBar'));
+const AdvancedPieChart = lazy(() => import('./examples/AdvancedPie'));
+const Performance = lazy(() => import('./examples/Performance'));
 
 const examples = [
-  { id: 'full-feature', name: '🚀 Full Feature Demo', component: FullFeatureDemo },
-  { id: 'dashboard', name: '📊 Interactive Dashboard', component: InteractiveDashboard },
-  { id: 'advanced-line', name: '✨ Advanced Line Chart', component: AdvancedLineChart },
-  { id: 'advanced-bar', name: '✨ Advanced Bar Chart', component: AdvancedBarChart },
-  { id: 'advanced-pie', name: '✨ Advanced Pie Chart', component: AdvancedPieChart },
-  { id: 'basic-line', name: 'Basic Line Chart', component: BasicLine },
-  { id: 'basic-bar', name: 'Basic Bar Chart', component: BasicBar },
-  { id: 'basic-pie', name: 'Basic Pie Chart', component: BasicPie },
+  { id: 'shape', name: 'Shape', component: Shape },
+  { id: 'polygon', name: 'Polygon', component: Polygon },
+  { id: 'themes', name: 'Theme', component: Theme },
+  { id: 'interaction', name: 'Interaction', component: Interaction },
+  { id: 'animation', name: 'Animation', component: Animation },
+  { id: 'chart-animation', name: 'Chart Animation', component: ChartAnimation },
+  { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChart },
+  { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChart },
+  { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChart },
+  { id: 'basic-line', name: 'Basic Line', component: BasicLine },
+  { id: 'basic-bar', name: 'Basic Bar', component: BasicBar },
+  { id: 'basic-pie', name: 'Basic Pie', component: BasicPie },
   { id: 'line-tooltip', name: 'Line + Tooltip', component: LineWithTooltip },
   { id: 'bar-legend', name: 'Bar + Legend', component: BarWithLegend },
   { id: 'pie-legend', name: 'Pie + Legend', component: PieWithLegend },
-  { id: 'theme-switch', name: 'Theme Switch', component: ThemeSwitch },
-  { id: 'core-api', name: 'Core API', component: CoreAPI },
-  { id: 'animation', name: 'Animation', component: Animation },
-  { id: 'chart-animation', name: '🎬 Chart Animation Demo', component: ChartAnimationDemo },
-  { id: 'interaction', name: 'Interaction', component: Interaction },
-  { id: 'performance', name: 'Performance Test', component: PerformanceTest }
+  { id: 'performance', name: 'Performance', component: Performance }
 ];
 
 const App = memo(function App() {

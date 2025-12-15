@@ -56,7 +56,7 @@ HudX/
 │   │   │   ├── AdvancedPieChart.tsx
 │   │   │   ├── Animation.tsx
 │   │   │   ├── Interaction.tsx
-│   │   │   ├── ThemeSwitch.tsx
+│   │   │   ├── Theme.tsx
 │   │   │   ├── PerformanceTest.tsx
 │   │   │   └── FullFeatureDemo.tsx
 │   └── package.json

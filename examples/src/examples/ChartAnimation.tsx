@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BarChart, LineChart, PieChart, ScatterChart, HeatmapChart } from '@HudX/charts';
 
-export default function ChartAnimationDemo() {
+export default function ChartAnimation() {
   const barChartRef = useRef<HTMLDivElement>(null);
   const lineChartRef = useRef<HTMLDivElement>(null);
   const pieChartRef = useRef<HTMLDivElement>(null);

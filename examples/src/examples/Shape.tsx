@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Circle, Rect, Line, Polyline, Polygon, Text } from '@HudX/core';
 
-export default function CoreAPI() {
+export default function Shape() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

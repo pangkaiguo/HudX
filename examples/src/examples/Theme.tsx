@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Renderer, Rect, Circle, Text } from '@HudX/core';
 
-export default function ThemeSwitch() {
+export default function Theme() {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
