@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Rect, Text, Tooltip, Legend } from '@HudX/core';
 
-export default function BarWithLegend() {
+export const BarWithLegendExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const barsRef = useRef<Map<number, Rect>>(new Map());
@@ -92,3 +92,5 @@ export default function BarWithLegend() {
     </div>
   );
 }
+
+export default BarWithLegendExample;

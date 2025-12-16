@@ -11,7 +11,7 @@ interface BarData {
   seriesName: string;
 }
 
-export default function AdvancedBarChart() {
+export const AdvancedBarExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const barsRef = useRef<Map<string, Rect[]>>(new Map());
@@ -183,3 +183,5 @@ export default function AdvancedBarChart() {
     </div>
   );
 }
+
+export default AdvancedBarExample;

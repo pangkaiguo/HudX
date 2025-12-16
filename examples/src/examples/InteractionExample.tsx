@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Renderer, Circle, Text } from '@HudX/core';
 
-export default function Interaction() {
+export const InteractionExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [clickCount, setClickCount] = useState(0);
 
@@ -65,3 +65,5 @@ export default function Interaction() {
     </div>
   );
 }
+
+export default InteractionExample;

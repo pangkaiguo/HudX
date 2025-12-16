@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Circle, Rect, Line, Polyline, Polygon, Text } from '@HudX/core';
 
-export default function Shape() {
+export const ShapeExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -73,3 +73,5 @@ export default function Shape() {
     </div>
   );
 }
+
+export default ShapeExample;

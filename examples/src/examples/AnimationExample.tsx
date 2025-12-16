@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Renderer, Circle, Rect, Animation, Easing } from '@HudX/core';
 
-export default function AnimationExample() {
+export const AnimationExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function AnimationExample() {
     renderer.resize(800, 300);
 
     const anim1 = new Animation(
-      circle.shape as Record<string, unknown>,
+      circle.shape as unknown as Record<string, unknown>,
       'cx',
       600,
       2000,
@@ -79,3 +79,5 @@ export default function AnimationExample() {
     </div>
   );
 }
+
+export default AnimationExample;

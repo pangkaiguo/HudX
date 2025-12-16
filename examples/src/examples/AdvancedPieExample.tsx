@@ -10,7 +10,7 @@ interface PieSlice {
   sector?: Sector;
 }
 
-export default function AdvancedPieChart() {
+export const AdvancedPieExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const slicesRef = useRef<PieSlice[]>([]);
@@ -198,3 +198,5 @@ export default function AdvancedPieChart() {
     </div>
   );
 }
+
+export default AdvancedPieExample;

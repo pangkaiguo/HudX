@@ -3,7 +3,7 @@ import { Renderer, Circle, Rect, Line, Polyline, Polygon } from '@HudX/core';
 
 type ShapeType = 'circle' | 'rect' | 'line' | 'polyline' | 'polygon';
 
-export default function Performance() {
+export const PerformanceExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(1000);
   const [renderTime, setRenderTime] = useState(0);
@@ -122,3 +122,5 @@ export default function Performance() {
     </div>
   );
 }
+
+export default PerformanceExample;

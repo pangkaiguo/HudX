@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Renderer, Sector, Text, Tooltip, Legend } from '@HudX/core';
 import { defaultColors } from '../config';
 
-export default function BasicPie() {
+export const BasicPieExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -118,3 +118,5 @@ export default function BasicPie() {
     </div>
   );
 }
+
+export default BasicPieExample;

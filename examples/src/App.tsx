@@ -1,47 +1,43 @@
 import React, { useState, lazy, Suspense, useMemo, memo } from 'react';
 
 // Lazy load components for better performance
-const Shape = lazy(() => import('./examples/Shape'));
-const Polygon = lazy(() => import('./examples/Polygon'));
-const Theme = lazy(() => import('./examples/Theme'));
-const Interaction = lazy(() => import('./examples/Interaction'));
-const Animation = lazy(() => import('./examples/Animation'));
-const ChartAnimation = lazy(() => import('./examples/ChartAnimation'));
-const BasicLine = lazy(() => import('./examples/BasicLine'));
-const BasicBar = lazy(() => import('./examples/BasicBar'));
-const BasicPie = lazy(() => import('./examples/BasicPie'));
-const LineWithTooltip = lazy(() => import('./examples/LineWithTooltip'));
-const BarWithLegend = lazy(() => import('./examples/BarWithLegend'));
-const PieWithLegend = lazy(() => import('./examples/PieWithLegend'));
-const AdvancedLineChart = lazy(() => import('./examples/AdvancedLine'));
-const AdvancedBarChart = lazy(() => import('./examples/AdvancedBar'));
-const AdvancedPieChart = lazy(() => import('./examples/AdvancedPie'));
-const Performance = lazy(() => import('./examples/Performance'));
+const ShapeExample = lazy(() => import('./examples/ShapeExample'));
+const ThemeExample = lazy(() => import('./examples/ThemeExample'));
+const InteractionExample = lazy(() => import('./examples/InteractionExample'));
+const AnimationExample = lazy(() => import('./examples/AnimationExample'));
+const BasicLineExample = lazy(() => import('./examples/BasicLineExample'));
+const BasicBarExample = lazy(() => import('./examples/BasicBarExample'));
+const BasicPieExample = lazy(() => import('./examples/BasicPieExample'));
+const LineWithTooltipExample = lazy(() => import('./examples/LineWithTooltipExample'));
+const BarWithLegendExample = lazy(() => import('./examples/BarWithLegendExample'));
+const PieWithLegendExample = lazy(() => import('./examples/PieWithLegendExample'));
+const AdvancedLineChartExample = lazy(() => import('./examples/AdvancedLineExample'));
+const AdvancedBarChartExample = lazy(() => import('./examples/AdvancedBarExample'));
+const AdvancedPieChartExample = lazy(() => import('./examples/AdvancedPieExample'));
+const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
 
 const examples = [
-  { id: 'shape', name: 'Shape', component: Shape },
-  { id: 'polygon', name: 'Polygon', component: Polygon },
-  { id: 'themes', name: 'Theme', component: Theme },
-  { id: 'interaction', name: 'Interaction', component: Interaction },
-  { id: 'animation', name: 'Animation', component: Animation },
-  { id: 'chart-animation', name: 'Chart Animation', component: ChartAnimation },
-  { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChart },
-  { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChart },
-  { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChart },
-  { id: 'basic-line', name: 'Basic Line', component: BasicLine },
-  { id: 'basic-bar', name: 'Basic Bar', component: BasicBar },
-  { id: 'basic-pie', name: 'Basic Pie', component: BasicPie },
-  { id: 'line-tooltip', name: 'Line + Tooltip', component: LineWithTooltip },
-  { id: 'bar-legend', name: 'Bar + Legend', component: BarWithLegend },
-  { id: 'pie-legend', name: 'Pie + Legend', component: PieWithLegend },
-  { id: 'performance', name: 'Performance', component: Performance }
+  { id: 'shape', name: 'Shape', component: ShapeExample },
+  { id: 'themes', name: 'Theme', component: ThemeExample },
+  { id: 'interaction', name: 'Interaction', component: InteractionExample },
+  { id: 'animation', name: 'Animation', component: AnimationExample },
+  { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
+  { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
+  { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
+  { id: 'line-tooltip', name: 'Line + Tooltip', component: LineWithTooltipExample },
+  { id: 'bar-legend', name: 'Bar + Legend', component: BarWithLegendExample },
+  { id: 'pie-legend', name: 'Pie + Legend', component: PieWithLegendExample },
+  { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChartExample },
+  { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
+  { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
+  { id: 'performance', name: 'Performance', component: PerformanceExample }
 ];
 
 const App = memo(function App() {
   const [activeExample, setActiveExample] = useState('basic-line');
 
   const ActiveComponent = useMemo(
-    () => examples.find(e => e.id === activeExample)?.component || BasicLine,
+    () => examples.find(e => e.id === activeExample)?.component || AdvancedPieChartExample,
     [activeExample]
   );
 

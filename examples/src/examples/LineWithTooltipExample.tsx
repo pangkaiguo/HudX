@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Polyline, Circle, Text, Tooltip, Legend } from '@HudX/core';
 
-export default function LineWithTooltip() {
+export const LineWithTooltipExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const pointsRef = useRef<Map<number, Circle>>(new Map());
@@ -101,3 +101,5 @@ export default function LineWithTooltip() {
     </div>
   );
 }
+
+export default LineWithTooltipExample;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Sector, Text, Tooltip, Legend } from '@HudX/core';
 
-export default function PieWithLegend() {
+export const PieWithLegendExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const sectorsRef = useRef<Map<string, Sector>>(new Map());
@@ -104,3 +104,5 @@ export default function PieWithLegend() {
     </div>
   );
 }
+
+export default PieWithLegendExample;

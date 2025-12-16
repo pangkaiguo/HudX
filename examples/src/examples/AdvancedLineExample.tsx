@@ -15,7 +15,7 @@ interface Series {
   points: DataPoint[];
 }
 
-export default function AdvancedLineChart() {
+export const AdvancedLineExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const seriesRef = useRef<Series[]>([]);
@@ -193,3 +193,5 @@ export default function AdvancedLineChart() {
     </div>
   );
 }
+
+export default AdvancedLineExample;
