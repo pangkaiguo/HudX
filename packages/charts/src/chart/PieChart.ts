@@ -1,145 +1,290 @@
-/**
- * PieChart - Pie chart implementation
- */
-
 import Chart from '../Chart';
 import type { ChartOption, SeriesOption, ChartData } from '../types';
-import { Arc, Text, Point } from '@HudX/core';
+import { Sector, Text, Point, Legend } from '@HudX/core';
 
 export default class PieChart extends Chart {
   protected _render(): void {
-    super._render();
+    try {
+      super._render();
 
-    const option = this._option;
-    const series = option.series || [];
+      const option = this._option;
+      const series = option.series || [];
 
-    if (series.length === 0) {
-      return;
-    }
-
-    const seriesItem = series[0];
-    if (seriesItem.type !== 'pie') {
-      return;
-    }
-
-    const data = seriesItem.data || [];
-    if (data.length === 0) {
-      return;
-    }
-
-    // Calculate pie center and radius
-    const center = this._getCenter(seriesItem);
-    const radius = this._getRadius(seriesItem);
-    const cx = center[0];
-    const cy = center[1];
-
-    // Calculate total value
-    const total = data.reduce((sum: number, item: ChartData) => {
-      const value = typeof item.value === 'number' ? item.value : 0;
-      return sum + value;
-    }, 0);
-
-    if (total === 0) {
-      return;
-    }
-
-    // Render pie slices
-    let currentAngle = -Math.PI / 2; // Start from top
-
-    data.forEach((item: ChartData, index: number) => {
-      const value = typeof item.value === 'number' ? item.value : 0;
-      const percent = value / total;
-      const angle = percent * Math.PI * 2;
-
-      const itemStyle = seriesItem.itemStyle || {};
-      const color = itemStyle.color || this._getSeriesColor(index);
-
-      // Create arc
-      const arc = new Arc({
-        shape: {
-          cx,
-          cy,
-          r: radius,
-          startAngle: currentAngle,
-          endAngle: currentAngle, // Start with same angle for animation
-          anticlockwise: false,
-        },
-        style: {
-          fill: color,
-          stroke: '#fff',
-          lineWidth: 2,
-        },
-        z: index,
-      });
-
-      this._root.add(arc);
-
-      // Animate pie slice if animation is enabled
-      if (this._isAnimationEnabled()) {
-        const delay = index * 200; // Staggered animation delay
-        const duration = this._getAnimationDuration();
-        const easing = this._getAnimationEasing();
-
-        this._animator.animate(
-          arc.attr('shape'),
-          'endAngle',
-          currentAngle + angle,
-          {
-            duration,
-            delay,
-            easing,
-            onUpdate: (target, percent) => {
-              // Animate the slice growing from startAngle to endAngle
-              target.endAngle = currentAngle + angle * percent;
-              arc.markRedraw();
-            }
-          }
-        );
-      } else {
-        // Set final angle if animation is disabled
-        arc.attr('shape', {
-          cx,
-          cy,
-          r: radius,
-          startAngle: currentAngle,
-          endAngle: currentAngle + angle,
-          anticlockwise: false,
-        });
+      if (series.length === 0) {
+        return;
       }
 
-      // Render label if enabled
-      if (seriesItem.label?.show) {
-        const labelAngle = currentAngle + angle / 2;
-        const labelRadius = radius * 0.7;
-        const labelX = cx + Math.cos(labelAngle) * labelRadius;
-        const labelY = cy + Math.sin(labelAngle) * labelRadius;
+      const seriesItem = series[0];
+      if (seriesItem.type !== 'pie') {
+        return;
+      }
 
-        const labelText = typeof seriesItem.label?.formatter === 'function'
-          ? seriesItem.label.formatter({ ...item, percent: percent * 100 })
-          : `${item.name || ''}: ${(percent * 100).toFixed(1)}%`;
+      const data = seriesItem.data || [];
+      if (data.length === 0) {
+        return;
+      }
 
-        const text = new Text({
+      // Calculate pie center and radius
+      const center = this._getCenter(seriesItem);
+      const radius = this._getRadius(seriesItem);
+      const cx = center[0];
+      const cy = center[1];
+
+      // Calculate total value
+      const total = data.reduce((sum: number, item: ChartData) => {
+        const value = typeof item === 'object' ? item.value : item;
+        return sum + (typeof value === 'number' ? value : 0);
+      }, 0);
+
+      if (total === 0) {
+        return;
+      }
+
+      // Render pie slices
+      let currentAngle = -Math.PI / 2; // Start from top
+
+      // Legend for pie (use data item names)
+      if (option.legend?.show !== false) {
+        const items = (data as any[]).map((it: any, i: number) => ({
+          name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
+          color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
+          icon: 'circle'
+        }));
+        this._mountLegend(items);
+      }
+
+      data.forEach((item: ChartData, index: number) => {
+        const value = typeof item === 'object' ? item.value : item;
+        if (typeof value !== 'number') return;
+        const percent = value / total;
+        const angle = percent * Math.PI * 2;
+        // legend selection
+        const itemName = (typeof item === 'object' && item.name) ? item.name : `item-${index + 1}`;
+        if (this._legend && !this._legendSelected.has(itemName)) {
+          currentAngle += angle;
+          return;
+        }
+
+        const itemStyle = seriesItem.itemStyle || {};
+        const color = (typeof item === 'object' && item.itemStyle?.color) || itemStyle.color || this._getSeriesColor(index);
+
+        // Create sector
+        const start = currentAngle;
+        const sector = new Sector({
           shape: {
-            x: labelX,
-            y: labelY,
-            text: labelText,
+            cx,
+            cy,
+            r: radius,
+            r0: 0,
+            startAngle: start,
+            endAngle: start, // Start with same angle for animation
+            anticlockwise: false,
           },
           style: {
-            fontSize: 12,
-            fill: '#333',
-            textAlign: 'center',
-            textBaseline: 'middle',
+            fill: color,
+            stroke: '#fff',
+            lineWidth: 2,
           },
-          z: index + 100,
+          transform: {
+            x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy
+          },
+          z: index,
+          cursor: this._tooltip ? 'pointer' : 'default',
         });
 
-        this._root.add(text);
-      }
+        this._root.add(sector);
 
-      currentAngle += angle;
-    });
+        // Tooltip & Emphasis interaction
+        if (this._tooltip || seriesItem.emphasis) {
+          sector.on('mouseover', (evt: any) => {
+            // Highlight (color change with opacity)
+            // Use Animator for opacity transition
+            this._animator.animate(
+              sector.style as Record<string, unknown>,
+              'opacity',
+              0.8,
+              { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+            ).start();
 
-    this._renderer.refresh();
+            // Hover scale effect
+            const emphasis = seriesItem.emphasis;
+            if (emphasis?.scale) {
+              const scaleSize = emphasis.scaleSize || 1.1;
+
+              // Ensure transform is ready (it should be from init, but safe check)
+              if (!sector.transform) {
+                sector.attr('transform', { x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy });
+              }
+
+              // Animate scale
+              this._animator.animate(
+                sector.transform || {},
+                'scaleX',
+                scaleSize,
+                { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+              ).start();
+
+              this._animator.animate(
+                sector.transform || {},
+                'scaleY',
+                scaleSize,
+                { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+              ).start();
+            }
+
+            // Tooltip content
+            if (this._tooltip) {
+              const itemName = (typeof item === 'object' && item.name) ? item.name : '';
+              const itemValue = value;
+
+              const content = this._generateTooltipContent({
+                componentType: 'series',
+                seriesType: 'pie',
+                seriesIndex: 0,
+                seriesName: seriesItem.name,
+                name: itemName,
+                dataIndex: index,
+                data: item,
+                value: itemValue,
+                percent: percent * 100
+              });
+
+              const mx = evt?.offsetX ?? cx;
+              const my = evt?.offsetY ?? cy;
+              this._tooltip.show(mx + 12, my - 16, content);
+            }
+          });
+          sector.on('mousemove', (evt: any) => {
+            if (!this._tooltip?.isVisible()) return;
+            const mx = evt?.offsetX ?? cx;
+            const my = evt?.offsetY ?? cy;
+            // Recompute content to avoid stale percent (during animation)
+            const currentEnd = sector.shape.endAngle;
+            const partPercent = (currentEnd - sector.shape.startAngle) / (Math.PI * 2) * 100;
+            const itemName = (typeof item === 'object' && item.name) ? item.name : '';
+            const itemValue = value;
+
+            const content = this._generateTooltipContent({
+              componentType: 'series',
+              seriesType: 'pie',
+              seriesIndex: 0,
+              seriesName: seriesItem.name,
+              name: itemName,
+              dataIndex: index,
+              data: item,
+              value: itemValue,
+              percent: partPercent
+            });
+
+            this._tooltip.show(mx + 12, my - 16, content);
+          });
+          sector.on('mouseout', () => {
+            // Restore color
+            this._animator.animate(
+              sector.style as Record<string, unknown>,
+              'opacity',
+              1,
+              { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+            ).start();
+
+            // Restore scale
+            const emphasis = seriesItem.emphasis;
+            if (emphasis?.scale) {
+              this._animator.animate(
+                sector.transform || {},
+                'scaleX',
+                1,
+                { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+              ).start();
+
+              this._animator.animate(
+                sector.transform || {},
+                'scaleY',
+                1,
+                { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+              ).start();
+            }
+
+            if (this._tooltip) {
+              this._tooltip.hide();
+            }
+          });
+        }
+
+        // Animate pie slice if animation is enabled
+        if (this._shouldAnimateFor(itemName)) {
+          const delay = index * 200; // Staggered animation delay
+          const duration = this._getAnimationDuration();
+          const easing = this._getAnimationEasing();
+
+          this._animator.animate(
+            sector.attr('shape'),
+            'endAngle',
+            start + angle,
+            {
+              duration,
+              delay,
+              easing,
+              onUpdate: (target, percent) => {
+                // Animate the slice growing from startAngle to endAngle
+                target.endAngle = start + angle * percent;
+                sector.markRedraw();
+              }
+            }
+          );
+        } else {
+          // Set final angle if animation is disabled
+          sector.attr('shape', {
+            cx,
+            cy,
+            r: radius,
+            r0: 0,
+            startAngle: currentAngle,
+            endAngle: currentAngle + angle,
+            anticlockwise: false,
+          });
+        }
+
+        // Render label if enabled
+        if (seriesItem.label?.show) {
+          const labelAngle = start + angle / 2;
+          const labelRadius = radius * 0.7; // Internal label or external? Usually internal for simple
+          // If position outside
+          const isOutside = seriesItem.label.position === 'outside';
+          const finalLabelRadius = isOutside ? radius * 1.1 : radius * 0.7;
+
+          const labelX = cx + Math.cos(labelAngle) * finalLabelRadius;
+          const labelY = cy + Math.sin(labelAngle) * finalLabelRadius;
+
+          const labelText = typeof seriesItem.label?.formatter === 'function'
+            ? seriesItem.label.formatter({ name: (item as any).name || '', value, percent: percent * 100 })
+            : (seriesItem.label?.formatter === '{b}' ? ((item as any).name || '') : String(value));
+
+          const text = new Text({
+            shape: {
+              x: labelX,
+              y: labelY,
+              text: labelText,
+            },
+            style: {
+              fontSize: 12,
+              fill: isOutside ? '#333' : '#fff', // White if inside
+              textAlign: 'center',
+              textBaseline: 'middle',
+            },
+            z: index + 100,
+          });
+
+          this._root.add(text);
+        }
+
+        currentAngle += angle;
+      });
+
+      this._renderer.flush();
+    } catch (e) {
+      console.error('[PieChart] Render error:', e);
+    }
   }
 
   /**
@@ -179,6 +324,4 @@ export default class PieChart extends Chart {
     }
     return parseFloat(value) || 0;
   }
-
 }
-

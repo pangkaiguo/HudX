@@ -73,6 +73,15 @@ export interface SeriesOption {
   lineStyle?: LineStyle;
   areaStyle?: AreaStyle;
   label?: LabelOption;
+  emphasis?: EmphasisOption;
+  [key: string]: any;
+}
+
+export interface EmphasisOption {
+  scale?: boolean;
+  scaleSize?: number;
+  itemStyle?: ItemStyle;
+  label?: LabelOption;
   [key: string]: any;
 }
 

@@ -1,49 +1,32 @@
-/**
- * BarChart - Bar chart implementation
- */
-
 import Chart from '../Chart';
 import type { ChartOption, SeriesOption, ChartData } from '../types';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate } from '../util/coordinate';
-import { Rect, Text, Line } from '@HudX/core';
+import { Rect, Text, Line, Legend } from '@HudX/core';
 
 export default class BarChart extends Chart {
   protected _render(): void {
-    super._render();
-    console.log('[BarChart] _render called');
+    try {
+      super._render();
 
-    const option = this._option;
-    const series = option.series || [];
-    const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
-    const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
+      const option = this._option;
+      const series = option.series || [];
+      if (series.length === 0) return;
 
-    if (series.length === 0) {
-      return;
-    }
+      // Calculate grid area
+      const { x: plotX, y: plotY, width: plotWidth, height: plotHeight } = this._calculateGrid(option);
 
-    // Calculate grid area
-    const grid = option.grid || {};
-    const gridLeft = this._parseSize(grid.left, 60);
-    const gridRight = this._parseSize(grid.right, 20);
-    const gridTop = this._parseSize(grid.top, 60);
-    const gridBottom = this._parseSize(grid.bottom, 60);
+      const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
+      const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
 
-    const plotWidth = this._width - gridLeft - gridRight;
-    const plotHeight = this._height - gridTop - gridBottom;
-    const plotX = gridLeft;
-    const plotY = gridTop;
+      // Collect all data to calculate domain
+      let data: any[] = [];
+      series.forEach(s => {
+        if (s.type === 'bar' && s.show !== false) {
+          data = data.concat(s.data || []);
+        }
+      });
 
-    // Process each series
-    series.forEach((seriesItem, seriesIndex) => {
-      console.log('[BarChart] Processing series', seriesIndex, seriesItem.type);
-      if (seriesItem.type !== 'bar') {
-        return;
-      }
-
-      const data = seriesItem.data || [];
-      if (data.length === 0) {
-        return;
-      }
+      if (data.length === 0) return;
 
       // Calculate scales
       const xDomain = calculateDomain(xAxis || {}, data, true);
@@ -55,173 +38,172 @@ export default class BarChart extends Chart {
 
       const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
-      // Calculate bar width
-      const barWidth = plotWidth / data.length * 0.6;
-      const barGap = plotWidth / data.length * 0.4;
-      const seriesCount = series.filter(s => s.type === 'bar').length;
-      const barWidthPerSeries = barWidth / seriesCount;
-      const barOffset = (seriesIndex - (seriesCount - 1) / 2) * barWidthPerSeries;
+      // Prepare bar grouping info based on categories (ECharts-style)
+      const barSeries = series.filter(s => s.type === 'bar' && s.show !== false);
+      const seriesCount = barSeries.length || 1;
+      const categoryCount = xAxis?.type === 'category'
+        ? (Array.isArray(xAxis?.data) ? xAxis.data.length : xDomain.length)
+        : data.length;
+      const groupWidth = categoryCount > 0 ? (plotWidth / categoryCount) : plotWidth;
+      const groupInnerWidth = groupWidth * 0.8;
+      const barWidthPerSeries = groupInnerWidth / seriesCount;
 
-      // Create bars
-      data.forEach((item: ChartData, index: number) => {
-        const coord = dataToCoordinate(item, xScale, yScale);
-        const itemStyle = seriesItem.itemStyle || {};
-        const barColor = itemStyle.color || this._getSeriesColor(seriesIndex);
+      // Render axes
+      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
 
-        const barX = coord.x - barWidth / 2 + barOffset;
-        const barY = Math.min(coord.y, plotY + plotHeight);
-        const barHeight = Math.abs(coord.y - (plotY + plotHeight));
-
-        const rect = new Rect({
-          shape: {
-            x: barX,
-            y: plotY + plotHeight, // Start from bottom for animation
-            width: barWidthPerSeries,
-            height: 0, // Start with height 0 for animation
-          },
-          style: {
-            fill: barColor,
-            stroke: itemStyle.borderColor || '#fff',
-            lineWidth: itemStyle.borderWidth || 0,
-          },
-          z: seriesIndex,
-        });
-
-        this._root.add(rect);
-
-        // Animate bar if animation is enabled
-        if (this._isAnimationEnabled()) {
-          const delay = index * 100; // Staggered animation delay
-          const duration = this._getAnimationDuration();
-          const easing = this._getAnimationEasing();
-
-          this._animator.animate(
-            rect.attr('shape'),
-            'height',
-            barHeight,
-            {
-              duration,
-              delay,
-              easing,
-              onUpdate: (target, percent) => {
-                // Also animate the y position to keep the bar anchored at bottom
-                target.y = plotY + plotHeight - target.height;
-                rect.markRedraw();
-              }
-            }
-          );
-        } else {
-          // Set final position if animation is disabled
-          rect.attr('shape', {
-            x: barX,
-            y: barY,
-            width: barWidthPerSeries,
-            height: barHeight,
-          });
-        }
-
-        // Render label if enabled
-        if (seriesItem.label?.show) {
-          const labelText = typeof seriesItem.label?.formatter === 'function'
-            ? seriesItem.label.formatter(item)
-            : String(item.value);
-
-          const text = new Text({
-            shape: {
-              x: coord.x + barOffset,
-              y: barY - 5,
-              text: labelText,
-            },
-            style: {
-              fontSize: 12,
-              fill: '#666',
-              textAlign: 'center',
-              textBaseline: 'bottom',
-            },
-            z: seriesIndex + 1,
-          });
-
-          this._root.add(text);
-        }
-      });
-    });
-
-    // Render axes
-    this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
-
-    console.log('[BarChart] refresh renderer');
-    this._renderer.refresh();
-  }
-
-  /**
-   * Render axes
-   */
-  private _renderAxes(
-    xAxis: any,
-    yAxis: any,
-    plotX: number,
-    plotY: number,
-    plotWidth: number,
-    plotHeight: number
-  ): void {
-    // X axis
-    if (xAxis?.show !== false) {
-      const xAxisLine = new Line({
-        shape: {
-          x1: plotX,
-          y1: plotY + plotHeight,
-          x2: plotX + plotWidth,
-          y2: plotY + plotHeight,
-        },
-        style: {
-          stroke: '#ccc',
-          lineWidth: 1,
-        },
-      });
-      this._root.add(xAxisLine);
-
-      if (xAxis?.data && xAxis.data.length > 0) {
-        const xScale = xAxis.type === 'category'
-          ? createOrdinalScale(xAxis.data, [plotX, plotX + plotWidth])
-          : createLinearScale([0, xAxis.data.length - 1], [plotX, plotX + plotWidth]);
-
-        xAxis.data.forEach((label: any, index: number) => {
-          const x = xScale(index);
-          const text = new Text({
-            shape: {
-              x,
-              y: plotY + plotHeight + 20,
-              text: String(label),
-            },
-            style: {
-              fontSize: 12,
-              fill: '#666',
-              textAlign: 'center',
-              textBaseline: 'top',
-            },
-          });
-          this._root.add(text);
-        });
+      // Render legend
+      if (option.legend?.show !== false) {
+        const items = (series as any[])
+          .filter(s => s.type === 'bar' && s.show !== false)
+          .map((s, i) => ({
+            name: s.name || `series-${i + 1}`,
+            color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
+            icon: 'rect'
+          }));
+        this._mountLegend(items);
       }
-    }
 
-    // Y axis
-    if (yAxis?.show !== false) {
-      const yAxisLine = new Line({
-        shape: {
-          x1: plotX,
-          y1: plotY,
-          x2: plotX,
-          y2: plotY + plotHeight,
-        },
-        style: {
-          stroke: '#ccc',
-          lineWidth: 1,
-        },
+      // Process each series
+      series.forEach((seriesItem, seriesIndex) => {
+        if (seriesItem.type !== 'bar') {
+          return;
+        }
+        if (seriesItem.show === false) {
+          return;
+        }
+        if (this._legend && !this._legendSelected.has(seriesItem.name || `series-${seriesIndex + 1}`)) return;
+
+        const seriesData = seriesItem.data || [];
+        const seriesIndexInBars = barSeries.indexOf(seriesItem);
+        const barColor = seriesItem.itemStyle?.color || seriesItem.color || this._getSeriesColor(seriesIndex);
+
+        seriesData.forEach((item, index) => {
+          let xVal, yVal;
+          if (xAxis?.type === 'category') {
+            xVal = xDomain[index];
+            // Handle object data { value: 120 }
+            if (typeof item === 'object' && item !== null && item.value !== undefined) {
+              yVal = item.value;
+            } else {
+              yVal = item;
+            }
+          } else {
+            // Value axis for X (e.g. horizontal bar) - Not fully supported yet in this simple logic
+            // Assuming vertical bar chart for now
+            xVal = item[0];
+            yVal = item[1];
+          }
+
+          if (xVal === undefined || yVal === undefined) return;
+
+          const groupCenter = xScale(xVal);
+          const groupStart = groupCenter - groupInnerWidth / 2;
+          const barX = groupStart + seriesIndexInBars * barWidthPerSeries;
+          const barY = yScale(yVal);
+          const barHeight = plotY + plotHeight - barY;
+
+          const itemStyle = seriesItem.itemStyle || {};
+
+          const rect = new Rect({
+            shape: {
+              x: barX,
+              y: plotY + plotHeight, // Start from bottom for animation
+              width: barWidthPerSeries,
+              height: 0, // Start with height 0 for animation
+            },
+            style: {
+              fill: barColor,
+              stroke: itemStyle.borderColor || '#fff',
+              lineWidth: itemStyle.borderWidth || 0,
+            },
+            z: seriesIndex,
+            cursor: this._tooltip ? 'pointer' : 'default',
+          });
+
+          this._root.add(rect);
+
+          // Tooltip
+          if (this._tooltip) {
+            rect.on('mouseover', (evt: any) => {
+              rect.attr('style', { opacity: 0.8 });
+              const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
+              const itemValue = this._getDataValue(item);
+
+              const content = this._generateTooltipContent({
+                componentType: 'series',
+                seriesType: 'bar',
+                seriesIndex,
+                seriesName: seriesItem.name,
+                name: itemName,
+                dataIndex: index,
+                data: item,
+                value: itemValue
+              });
+
+              const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
+              const my = evt?.offsetY ?? (barY - 10);
+              this._tooltip!.show(mx + 12, my - 16, content);
+            });
+            rect.on('mousemove', (evt: any) => {
+              if (!this._tooltip!.isVisible()) return;
+              const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
+              const itemValue = this._getDataValue(item);
+
+              const content = this._generateTooltipContent({
+                componentType: 'series',
+                seriesType: 'bar',
+                seriesIndex,
+                seriesName: seriesItem.name,
+                name: itemName,
+                dataIndex: index,
+                data: item,
+                value: itemValue
+              });
+
+              const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
+              const my = evt?.offsetY ?? (barY - 10);
+              this._tooltip!.show(mx + 12, my - 16, content);
+            });
+            rect.on('mouseout', () => {
+              rect.attr('style', { opacity: 1 });
+              this._tooltip!.hide();
+            });
+          }
+
+          // Animate bar if animation is enabled
+          if (this._shouldAnimateFor(seriesItem.name || `series-${seriesIndex + 1}`)) {
+            const delay = index * 100 + seriesIndex * 200;
+            const duration = this._getAnimationDuration();
+
+            this._animator.animate(
+              rect.attr('shape'),
+              'height',
+              barHeight,
+              {
+                duration,
+                delay,
+                easing: 'cubicOut',
+                onUpdate: (target, percent) => {
+                  target.height = barHeight * percent;
+                  target.y = plotY + plotHeight - target.height;
+                  rect.markRedraw();
+                }
+              }
+            );
+          } else {
+            rect.attr('shape', {
+              x: barX,
+              y: barY,
+              width: barWidthPerSeries,
+              height: barHeight
+            });
+          }
+        });
       });
-      this._root.add(yAxisLine);
+
+      this._renderer.flush();
+    } catch (e) {
+      console.error('[BarChart] Render error:', e);
     }
   }
-
 }
-

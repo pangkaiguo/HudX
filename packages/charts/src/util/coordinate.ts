@@ -17,26 +17,33 @@ export interface Scale {
  * Create linear scale
  */
 export function createLinearScale(domain: number[], range: number[]): Scale {
-  const [d0, d1] = domain;
+  let [d0, d1] = domain;
   const [r0, r1] = range;
+  if (!isFinite(d0) || !isFinite(d1) || d1 === d0) {
+    const base = isFinite(d0) ? d0 : 0;
+    d0 = base - 1;
+    d1 = base + 1;
+  }
   const k = (r1 - r0) / (d1 - d0);
 
-  const scale = function(value: number): number {
-    return r0 + (value - d0) * k;
+  const scale = function (value: number): number {
+    const v = r0 + (value - d0) * k;
+    if (!isFinite(v)) return r0;
+    return v;
   } as Scale;
 
-  scale.invert = function(value: number): number {
+  scale.invert = function (value: number): number {
     return d0 + (value - r0) / k;
   };
 
-  scale.domain = function(newDomain?: number[]): any {
+  scale.domain = function (newDomain?: number[]): any {
     if (newDomain) {
       return createLinearScale(newDomain, range);
     }
     return domain;
   };
 
-  scale.range = function(newRange?: number[]): any {
+  scale.range = function (newRange?: number[]): any {
     if (newRange) {
       return createLinearScale(domain, newRange);
     }
@@ -55,29 +62,32 @@ export function createOrdinalScale(domain: any[], range: number[]): Scale {
     domainMap.set(d, i);
   });
 
-  const scale = function(value: any): number {
+  const scale = function (value: any): number {
     const index = domainMap.get(value);
     if (index === undefined) {
       return range[0];
     }
-    const step = (range[range.length - 1] - range[0]) / (domain.length - 1);
-    return range[0] + index * step;
+    const total = Math.max(1, domain.length);
+    const step = (range[range.length - 1] - range[0]) / total;
+    // Return band center position
+    return range[0] + (index + 0.5) * step;
   } as Scale;
 
-  scale.invert = function(value: number): any {
-    const step = (range[range.length - 1] - range[0]) / (domain.length - 1);
-    const index = Math.round((value - range[0]) / step);
+  scale.invert = function (value: number): any {
+    const total = Math.max(1, domain.length);
+    const step = (range[range.length - 1] - range[0]) / total;
+    const index = Math.floor((value - range[0]) / step);
     return domain[Math.max(0, Math.min(index, domain.length - 1))];
   };
 
-  scale.domain = function(newDomain?: any[]): any {
+  scale.domain = function (newDomain?: any[]): any {
     if (newDomain) {
       return createOrdinalScale(newDomain, range);
     }
     return domain;
   };
 
-  scale.range = function(newRange?: number[]): any {
+  scale.range = function (newRange?: number[]): any {
     if (newRange) {
       return createOrdinalScale(domain, newRange);
     }
@@ -88,11 +98,44 @@ export function createOrdinalScale(domain: any[], range: number[]): Scale {
 }
 
 /**
+ * Calculate nice scale domain
+ */
+export function niceDomain(min: number, max: number, tickCount: number = 5): number[] {
+  if (min === max) {
+    if (min === 0) return [0, 10];
+    return [min > 0 ? 0 : min * 1.2, min > 0 ? min * 1.2 : 0];
+  }
+
+  // Handle special case where all values are same
+  const range = max - min;
+  if (range === 0) return [min - 1, max + 1];
+
+  // Calculate raw step
+  const rawStep = range / tickCount;
+  // Calculate magnitude (power of 10)
+  const mag = Math.floor(Math.log10(rawStep));
+  const magPow = Math.pow(10, mag);
+  // Calculate normalized step
+  const magStep = rawStep / magPow;
+
+  let stepSize;
+  if (magStep < 1.5) stepSize = 1 * magPow;
+  else if (magStep < 2.5) stepSize = 2 * magPow;
+  else if (magStep < 5) stepSize = 5 * magPow;
+  else stepSize = 10 * magPow;
+
+  return [
+    Math.floor(min / stepSize) * stepSize,
+    Math.ceil(max / stepSize) * stepSize
+  ];
+}
+
+/**
  * Calculate axis domain from data
  */
 export function calculateDomain(
   axis: AxisOption,
-  data: ChartData[],
+  data: any[],
   isXAxis: boolean = true
 ): any[] {
   if (axis.type === 'category') {
@@ -102,20 +145,39 @@ export function calculateDomain(
     // Extract categories from data
     const categories = new Set<any>();
     data.forEach((item) => {
-      const value = isXAxis ? item.name : item.value;
-      if (value !== undefined) {
-        categories.add(value);
+      if (typeof item === 'object' && item !== null) {
+        const value = isXAxis ? (item.name ?? (Array.isArray(item.value) ? item.value[0] : item.value)) : item.value;
+        if (value !== undefined) {
+          categories.add(value);
+        }
+      } else {
+        categories.add(item);
       }
     });
     return Array.from(categories);
   } else if (axis.type === 'value') {
     const values: number[] = [];
     data.forEach((item) => {
-      const value = isXAxis ? item.name : item.value;
-      if (typeof value === 'number') {
-        values.push(value);
-      } else if (Array.isArray(value)) {
-        values.push(...value.filter(v => typeof v === 'number'));
+      if (typeof item === 'number') {
+        values.push(item);
+      } else if (Array.isArray(item)) {
+        const idx = isXAxis ? 0 : 1;
+        const v = item[idx];
+        if (typeof v === 'number') values.push(v);
+      } else if (typeof item === 'object' && item !== null) {
+        if (isXAxis) {
+          if (typeof item.name === 'number') {
+            values.push(item.name);
+          } else if (Array.isArray(item.value) && typeof item.value[0] === 'number') {
+            values.push(item.value[0]);
+          }
+        } else {
+          if (typeof item.value === 'number') {
+            values.push(item.value);
+          } else if (Array.isArray(item.value) && typeof item.value[1] === 'number') {
+            values.push(item.value[1]);
+          }
+        }
       }
     });
 
@@ -123,12 +185,26 @@ export function calculateDomain(
       return [0, 100];
     }
 
-    const min = axis.min === 'dataMin' ? Math.min(...values) : (axis.min ?? Math.min(...values));
-    const max = axis.max === 'dataMax' ? Math.max(...values) : (axis.max ?? Math.max(...values));
+    let min = axis.min === 'dataMin' ? Math.min(...values) : (typeof axis.min === 'number' ? axis.min : Math.min(...values));
+    let max = axis.max === 'dataMax' ? Math.max(...values) : (typeof axis.max === 'number' ? axis.max : Math.max(...values));
 
-    // Add padding
+    // If scale is not enabled, include zero
+    if (!axis.scale) {
+      if (min > 0) min = 0;
+      if (max < 0) max = 0;
+    }
+
+    // Use nice ticks if no explicit min/max
+    if (axis.min === undefined && axis.max === undefined) {
+      return niceDomain(min, max);
+    }
+
+    // Add padding otherwise
     const padding = (max - min) * 0.1;
-    return [min - padding, max + padding];
+    return [
+      axis.min !== undefined && axis.min !== 'dataMin' ? axis.min : min - padding,
+      axis.max !== undefined && axis.max !== 'dataMax' ? axis.max : max + padding
+    ];
   }
 
   return [0, 100];
@@ -146,4 +222,3 @@ export function dataToCoordinate(
   const y = typeof data.value === 'number' ? yScale(data.value) : yScale(Array.isArray(data.value) ? data.value[0] : 0);
   return { x, y };
 }
-

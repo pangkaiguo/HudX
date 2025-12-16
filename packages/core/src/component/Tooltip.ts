@@ -54,14 +54,22 @@ export default class Tooltip extends Group {
   }
 
   show(x: number, y: number, content: string | Record<string, unknown>): void {
+    // Check if content changed to avoid unnecessary rebuild
+    const text = typeof content === 'string' ? content : (this._option.formatter?.(content) || JSON.stringify(content));
+    
+    // If already visible and content/position is similar, just update position
+    // For now, always rebuild to ensure correctness, but we can optimize text reuse later
+    
     this.removeAll();
     
-    const text = typeof content === 'string' ? content : (this._option.formatter?.(content) || JSON.stringify(content));
     const padding = this._option.padding || 10;
     const fontSize = this._option.fontSize || 12;
     const lines = text.split('\n');
-    const width = Math.max(...lines.map(l => l.length)) * 7 + padding * 2;
-    const height = lines.length * (fontSize + 4) + padding * 2;
+    
+    // Estimate text width (rough approximation)
+    const maxLineLen = Math.max(...lines.map(l => l.length));
+    const estimatedWidth = maxLineLen * (fontSize * 0.6) + padding * 2; 
+    const height = lines.length * (fontSize * 1.4) + padding * 2;
 
     // Smart positioning
     let finalX = x;
@@ -69,8 +77,8 @@ export default class Tooltip extends Group {
 
     if (this._option.confine) {
       // Adjust X position
-      if (finalX + width > this._containerWidth) {
-        finalX = x - width - 10;
+      if (finalX + estimatedWidth > this._containerWidth) {
+        finalX = x - estimatedWidth - 10;
       }
       if (finalX < 0) {
         finalX = 10;
@@ -86,7 +94,7 @@ export default class Tooltip extends Group {
     }
 
     const bgRect = new Rect({
-      shape: { x: 0, y: 0, width, height, r: this._option.borderRadius },
+      shape: { x: 0, y: 0, width: estimatedWidth, height, r: this._option.borderRadius },
       style: {
         fill: this._option.backgroundColor,
         stroke: this._option.borderColor,
@@ -97,49 +105,59 @@ export default class Tooltip extends Group {
 
     lines.forEach((line, i) => {
       this.add(new Text({
-        shape: { text: line, x: padding, y: padding + (i + 1) * (fontSize + 2) },
-        style: { fill: this._option.textColor, fontSize }
+        shape: { text: line, x: padding, y: padding + i * (fontSize * 1.4) },
+        style: { 
+          fill: this._option.textColor, 
+          fontSize,
+          textBaseline: 'top' 
+        }
       }));
     });
 
-    this.attr('transform', { x: finalX, y: finalY, scaleX: 0.8, scaleY: 0.8 });
-    this.invisible = false;
-    this._visible = true;
+    // If showing for first time (transition in)
+    if (!this._visible) {
+      this.attr('transform', { x: finalX, y: finalY, scaleX: 0.8, scaleY: 0.8 });
+      this.invisible = false;
+      this._visible = true;
 
-    if (this._animation) {
-      this._animation.stop();
+      if (this._animation) this._animation.stop();
+
+      this._animation = new Animation(
+        this.transform as Record<string, unknown>,
+        'scaleX',
+        1,
+        this._option.transitionDuration,
+        0,
+        'cubicOut',
+        () => this.markRedraw()
+      );
+      this._animation.start();
+
+      new Animation(
+        this.transform as Record<string, unknown>,
+        'scaleY',
+        1,
+        this._option.transitionDuration,
+        0,
+        'cubicOut',
+        () => this.markRedraw()
+      ).start();
+
+      new Animation(
+        this.style as Record<string, unknown>,
+        'opacity',
+        1,
+        this._option.transitionDuration,
+        0,
+        'cubicOut',
+        () => this.markRedraw()
+      ).start();
+    } else {
+      // Just move if already visible
+      this.attr('transform', { x: finalX, y: finalY, scaleX: 1, scaleY: 1 });
+      this.style.opacity = 1;
+      this.markRedraw();
     }
-
-    this._animation = new Animation(
-      this.transform as Record<string, unknown>,
-      'scaleX',
-      1,
-      this._option.transitionDuration,
-      0,
-      'cubicOut',
-      () => this.markRedraw()
-    );
-    this._animation.start();
-
-    new Animation(
-      this.transform as Record<string, unknown>,
-      'scaleY',
-      1,
-      this._option.transitionDuration,
-      0,
-      'cubicOut',
-      () => this.markRedraw()
-    ).start();
-
-    new Animation(
-      this.style as Record<string, unknown>,
-      'opacity',
-      1,
-      this._option.transitionDuration,
-      0,
-      'cubicOut',
-      () => this.markRedraw()
-    ).start();
   }
 
   hide(): void {

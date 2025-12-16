@@ -18,6 +18,8 @@ export interface LegendOption {
   orient?: 'horizontal' | 'vertical';
   x?: number | 'left' | 'center' | 'right';
   y?: number | 'top' | 'middle' | 'bottom';
+  right?: number;
+  bottom?: number;
   backgroundColor?: string;
   textColor?: string;
   padding?: number;
@@ -33,6 +35,8 @@ export default class Legend extends Group {
   private _items: LegendItem[] = [];
   private _selectedItems: Set<string> = new Set();
   private _itemRects: Map<string, Rect> = new Map();
+  private _containerWidth: number = 800;
+  private _containerHeight: number = 600;
 
   constructor(option: LegendOption = {}) {
     super();
@@ -41,6 +45,8 @@ export default class Legend extends Group {
       orient: 'horizontal',
       x: 10,
       y: 10,
+      right: undefined,
+      bottom: undefined,
       backgroundColor: 'rgba(255, 255, 255, 0.9)',
       textColor: '#333',
       padding: 8,
@@ -52,11 +58,28 @@ export default class Legend extends Group {
     };
   }
 
-  setItems(items: LegendItem[]): void {
+  setItems(items: LegendItem[], selected?: string[]): void {
     this._items = items;
-    this._selectedItems.clear();
-    items.forEach(item => this._selectedItems.add(item.name));
+    if (selected && selected.length > 0) {
+      this._selectedItems = new Set(selected);
+    } else if (this._selectedItems.size === 0) {
+      this._selectedItems.clear();
+      items.forEach(item => this._selectedItems.add(item.name));
+    } else {
+      // Keep existing selection across updates; remove selections not in items
+      const valid = new Set(items.map(i => i.name));
+      this._selectedItems = new Set([...this._selectedItems].filter(n => valid.has(n)));
+      if (this._selectedItems.size === 0) {
+        items.forEach(item => this._selectedItems.add(item.name));
+      }
+    }
     this._render();
+  }
+
+  setContainer(width: number, height: number): void {
+    this._containerWidth = width;
+    this._containerHeight = height;
+    this.markRedraw();
   }
 
   isSelected(name: string): boolean {
@@ -76,12 +99,16 @@ export default class Legend extends Group {
     let totalWidth = 0;
     let totalHeight = 0;
 
+    let perRow = this._items.length;
+    let rows = 1;
     if (this._option.orient === 'horizontal') {
-      totalWidth = this._items.length * itemWidth + padding * 2;
-      totalHeight = itemHeight + padding * 2;
+      perRow = Math.max(1, Math.floor((this._containerWidth - padding * 2) / itemWidth));
+      rows = Math.max(1, Math.ceil(this._items.length / perRow));
+      totalWidth = Math.min(this._containerWidth - padding * 2, perRow * itemWidth) + padding * 2;
+      totalHeight = rows * (itemHeight + itemGap) - itemGap + padding * 2;
     } else {
       totalWidth = itemWidth + padding * 2;
-      totalHeight = this._items.length * (itemHeight + itemGap) + padding * 2;
+      totalHeight = this._items.length * (itemHeight + itemGap) - itemGap + padding * 2;
     }
 
     const bgRect = new Rect({
@@ -95,11 +122,13 @@ export default class Legend extends Group {
       let y: number;
 
       if (this._option.orient === 'horizontal') {
-        x = i * itemWidth + padding;
-        y = padding;
+        const row = Math.floor(i / perRow);
+        const col = i % perRow;
+        x = padding + col * itemWidth;
+        y = padding + row * (itemHeight + itemGap);
       } else {
         x = padding;
-        y = i * (itemHeight + itemGap) + padding;
+        y = padding + i * (itemHeight + itemGap);
       }
 
       const isSelected = this._selectedItems.has(item.name);
@@ -174,26 +203,21 @@ export default class Legend extends Group {
       this._itemRects.set(item.name, iconElement);
     });
 
-    const x = typeof this._option.x === 'number' ? this._option.x : this._getPositionX();
-    const y = typeof this._option.y === 'number' ? this._option.y : this._getPositionY();
+    const x = typeof this._option.x === 'number'
+      ? this._option.x
+      : (this._option.x === 'left'
+        ? 10
+        : this._option.x === 'center'
+          ? Math.max(0, (this._containerWidth - totalWidth) / 2)
+          : Math.max(0, this._containerWidth - totalWidth - (this._option.right ?? 10)));
+
+    const y = typeof this._option.y === 'number'
+      ? this._option.y
+      : (this._option.y === 'top'
+        ? 10
+        : this._option.y === 'middle'
+          ? Math.max(0, (this._containerHeight - totalHeight) / 2)
+          : Math.max(0, this._containerHeight - totalHeight - (this._option.bottom ?? 10)));
     this.attr('transform', { x, y });
-  }
-
-  private _getPositionX(): number {
-    switch (this._option.x) {
-      case 'left': return 10;
-      case 'center': return 400;
-      case 'right': return 790;
-      default: return 10;
-    }
-  }
-
-  private _getPositionY(): number {
-    switch (this._option.y) {
-      case 'top': return 10;
-      case 'middle': return 300;
-      case 'bottom': return 590;
-      default: return 10;
-    }
   }
 }
