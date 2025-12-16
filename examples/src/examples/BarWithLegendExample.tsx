@@ -1,7 +1,11 @@
 import { HChart } from '@HudX/charts';
 import type { ChartOption } from '@HudX/charts';
+import { ThemeManager } from '@HudX/core';
 
 export const BarWithLegendExample = () => {
+  const theme = ThemeManager.getTheme('light');
+  const colors = theme.seriesColors || [];
+
   const option: ChartOption = {
     title: {
       text: 'Bar Chart with Interactive Legend',
@@ -38,7 +42,7 @@ export const BarWithLegendExample = () => {
         name: 'Sales',
         type: 'bar',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: '#5470c6' }
+        itemStyle: { color: colors[0] }
       }
     ],
     animation: true

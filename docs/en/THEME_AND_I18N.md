@@ -25,8 +25,55 @@ interface ThemeConfig {
   tooltipBackgroundColor: string; // Tooltip background color
   tooltipTextColor: string;       // Tooltip text color
   legendTextColor: string;        // Legend text color
+  fontFamily?: string;            // Font family
+  fontSize?: number;              // Font size
+  token?: ThemeToken;             // Theme token (raw values)
 }
 ```
+
+### Theme Token System
+
+HudX v1.0 introduces a Token system for more granular and maintainable theme customization.
+
+```typescript
+interface ThemeToken {
+  colorText?: string;
+  colorBackground?: string;
+  colorBorder?: string;
+  colorGrid?: string;
+  colorAxisLine?: string;
+  colorAxisLabel?: string;
+  colorTooltipBackground?: string;
+  colorTooltipText?: string;
+  colorLegendText?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  seriesColors?: string[];
+  [key: string]: string | number | string[] | number[] | undefined;
+}
+```
+
+#### Using Tokens
+
+You can access theme tokens via `ThemeManager` or directly from the theme configuration.
+
+```typescript
+import { ThemeManager } from '@HudX/core';
+
+// 1. Register/Update Tokens
+ThemeManager.registerToken('light', {
+  colorText: '#000000',           // Darker text
+  colorBackground: '#f0f0f0',     // Light gray background
+  seriesColors: ['#ff0000', '#00ff00', '#0000ff'] // Custom palette
+});
+
+// 2. Access Tokens in Code
+const theme = ThemeManager.getTheme('light');
+const colors = theme.seriesColors; // Contains updated colors
+const bgColor = theme.backgroundColor; // Contains updated background
+```
+
+This is particularly useful when you want to align chart colors with your design system's tokens.
 
 ### Usage
 
@@ -98,6 +145,13 @@ ThemeManager.registerTheme('custom', {
 // Use custom theme
 const renderer = Renderer.init('#container', 'canvas', 'custom');
 ```
+
+### ThemeManager
+
+- `getTheme(theme: Theme): ThemeConfig` - Get theme configuration
+- `registerTheme(theme: Theme, config: ThemeConfig): void` - Register custom theme
+- `registerToken(theme: string, token: ThemeToken): void` - Register or update theme tokens
+- `getThemes(): Theme[]` - Get all registered themes
 
 ## Internationalization (i18n)
 
@@ -175,6 +229,13 @@ LocaleManager.registerLocale('custom', {
 // Use custom language
 const renderer = Renderer.init('#container', 'canvas', 'light', 'custom');
 ```
+
+### LocaleManager
+
+- `getLocale(locale: Locale): LocaleConfig` - Get locale configuration
+- `t(locale: Locale, key: string, defaultValue?: string): string` - Get translated text
+- `registerLocale(locale: Locale, config: LocaleConfig): void` - Register custom locale
+- `getLocales(): Locale[]` - Get all registered locales
 
 ## Advanced Features
 

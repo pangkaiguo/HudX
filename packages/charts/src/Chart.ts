@@ -2,7 +2,7 @@
   * Chart - Base chart class 
   */
 
-import { Renderer, Group, RenderMode, Theme, Locale, DataURLOpts, Animator, Tooltip, Legend, Line, Text } from '@HudX/core';
+import { Renderer, Group, RenderMode, Theme, Locale, DataURLOpts, Animator, Tooltip, Legend, Line, Text, ThemeConfig } from '@HudX/core';
 import type { ChartOption, ChartEvent, GridOption } from './types';
 import { createLinearScale, createOrdinalScale } from './util/coordinate';
 
@@ -57,6 +57,13 @@ export default class Chart {
   setTheme(theme: Theme): void {
     this._renderer.setTheme(theme);
     this._render();
+  }
+
+  /**
+   * Get theme configuration
+   */
+  getThemeConfig(): ThemeConfig {
+    return this._renderer.getThemeConfig();
   }
 
   /** 
@@ -346,14 +353,15 @@ export default class Chart {
       const xAxisLine = new Line({
         shape: {
           x1: plotX,
-          y1: plotY + height,
+          y1: plotY + height + 0.5,
           x2: plotX + width,
-          y2: plotY + height,
+          y2: plotY + height + 0.5,
         },
         style: {
-          stroke: '#ccc',
+          stroke: this.getThemeConfig().axisLineColor, // Use theme color
           lineWidth: 1,
         },
+        z: 100,
       });
       this._root.add(xAxisLine);
 
@@ -373,7 +381,7 @@ export default class Chart {
             },
             style: {
               fontSize: 12,
-              fill: '#666',
+              fill: this.getThemeConfig().axisLabelColor, // Use theme color
               textAlign: 'center',
               textBaseline: 'top',
             },
@@ -387,15 +395,16 @@ export default class Chart {
     if (yAxis?.show !== false) {
       const yAxisLine = new Line({
         shape: {
-          x1: plotX,
+          x1: plotX + 0.5,
           y1: plotY,
-          x2: plotX,
+          x2: plotX + 0.5,
           y2: plotY + height,
         },
         style: {
-          stroke: '#ccc',
+          stroke: this.getThemeConfig().axisLineColor, // Use theme color
           lineWidth: 1,
         },
+        z: 100,
       });
       this._root.add(yAxisLine);
     }
@@ -569,7 +578,7 @@ export default class Chart {
   }): void {
     // Implementation depends on Renderer capabilities
     const opts = {
-      text: loadingOpts?.text || this.t('loading', 'Loading...'),
+      text: loadingOpts?.text || this.t('data.loading', 'Loading...'),
       color: loadingOpts?.color || '#5470c6',
       textColor: loadingOpts?.textColor || '#333',
       maskColor: loadingOpts?.maskColor || 'rgba(255, 255, 255, 0.8)',
@@ -644,7 +653,9 @@ export default class Chart {
    * Get series color 
    */
   protected _getSeriesColor(index: number): string {
-    const colors = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
+    const theme = this.getTheme();
+    const config = this._renderer.getThemeConfig();
+    const colors = config.seriesColors || ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
     return colors[index % colors.length];
   }
 

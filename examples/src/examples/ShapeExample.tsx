@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Circle, Rect, Line, Polyline, Polygon, Text } from '@HudX/core';
+import { Renderer, Circle, Rect, Line, Polyline, Polygon, Text, ThemeManager } from '@HudX/core';
 
 export const ShapeExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -8,10 +8,12 @@ export const ShapeExample = () => {
     if (!containerRef.current) return;
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const theme = ThemeManager.getTheme('light');
+    const colors = theme.seriesColors || [];
 
     renderer.add(new Circle({
       shape: { cx: 100, cy: 100, r: 40 },
-      style: { fill: '#5470c6', stroke: '#fff', lineWidth: 2 }
+      style: { fill: colors[0], stroke: '#fff', lineWidth: 2 }
     }));
     renderer.add(new Text({
       shape: { text: 'Circle', x: 100, y: 160 },
@@ -20,7 +22,7 @@ export const ShapeExample = () => {
 
     renderer.add(new Rect({
       shape: { x: 200, y: 60, width: 80, height: 80 },
-      style: { fill: '#91cc75' }
+      style: { fill: colors[1] }
     }));
     renderer.add(new Text({
       shape: { text: 'Rect', x: 240, y: 160 },
@@ -29,7 +31,7 @@ export const ShapeExample = () => {
 
     renderer.add(new Line({
       shape: { x1: 320, y1: 60, x2: 400, y2: 140 },
-      style: { stroke: '#fac858', lineWidth: 3 }
+      style: { stroke: colors[2], lineWidth: 3 }
     }));
     renderer.add(new Text({
       shape: { text: 'Line', x: 360, y: 160 },
@@ -38,7 +40,7 @@ export const ShapeExample = () => {
 
     renderer.add(new Polyline({
       shape: { points: [[440, 100], [480, 60], [520, 100], [560, 80]] },
-      style: { stroke: '#ee6666', lineWidth: 2 }
+      style: { stroke: colors[3], lineWidth: 2 }
     }));
     renderer.add(new Text({
       shape: { text: 'Polyline', x: 500, y: 160 },
@@ -47,7 +49,7 @@ export const ShapeExample = () => {
 
     renderer.add(new Polygon({
       shape: { points: [[640, 60], [680, 100], [660, 140], [620, 140], [600, 100]] },
-      style: { fill: '#73c0de' }
+      style: { fill: colors[4] }
     }));
     renderer.add(new Text({
       shape: { text: 'Polygon', x: 640, y: 160 },

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Renderer, Polyline, Circle, Text, Tooltip } from '@HudX/core';
+import { Renderer, Polyline, Circle, Text, Tooltip, ThemeManager } from '@HudX/core';
 import { defaultColors, defaultPadding } from '../config';
 
 export const BasicLineExample = () => {
@@ -9,6 +9,9 @@ export const BasicLineExample = () => {
     if (!containerRef.current) return;
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const theme = ThemeManager.getTheme('light');
+    const colors = theme.seriesColors || defaultColors;
+
     const width = 800;
     const height = 400;
     const padding = defaultPadding.small;
@@ -18,7 +21,7 @@ export const BasicLineExample = () => {
     const data = [120, 200, 150, 80, 70, 110, 130];
     const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const max = Math.max(...data);
-    const color = defaultColors[0];
+    const color = colors[0];
 
     // Grid lines
     for (let i = 0; i <= 5; i++) {

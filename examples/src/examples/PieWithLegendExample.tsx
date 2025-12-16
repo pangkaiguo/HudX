@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Sector, Text, Tooltip, Legend } from '@HudX/core';
+import { Renderer, Sector, Text, Tooltip, Legend, ThemeManager } from '@HudX/core';
 
 export const PieWithLegendExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,6 +10,8 @@ export const PieWithLegendExample = () => {
     if (!containerRef.current) return;
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const theme = ThemeManager.getTheme('light');
+    const colors = theme.seriesColors || [];
     rendererRef.current = renderer;
 
     const width = 800;
@@ -19,11 +21,11 @@ export const PieWithLegendExample = () => {
     const radius = 120;
 
     const data = [
-      { name: 'Direct', value: 335, color: '#5470c6' },
-      { name: 'Email', value: 310, color: '#91cc75' },
-      { name: 'Ads', value: 234, color: '#fac858' },
-      { name: 'Video', value: 135, color: '#ee6666' },
-      { name: 'Search', value: 148, color: '#73c0de' }
+      { name: 'Direct', value: 335, color: colors[0] },
+      { name: 'Email', value: 310, color: colors[1] },
+      { name: 'Ads', value: 234, color: colors[2] },
+      { name: 'Video', value: 135, color: colors[3] },
+      { name: 'Search', value: 148, color: colors[4] }
     ];
 
     const total = data.reduce((sum, item) => sum + item.value, 0);

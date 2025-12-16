@@ -57,9 +57,10 @@ export default class BarChart extends Chart {
         const items = (series as any[])
           .filter(s => s.type === 'bar' && s.show !== false)
           .map((s, i) => ({
-            name: s.name || `series-${i + 1}`,
+            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: 'rect'
+            icon: 'rect',
+            textColor: this.getThemeConfig().legendTextColor // Use theme color
           }));
         this._mountLegend(items);
       }
@@ -72,7 +73,8 @@ export default class BarChart extends Chart {
         if (seriesItem.show === false) {
           return;
         }
-        if (this._legend && !this._legendSelected.has(seriesItem.name || `series-${seriesIndex + 1}`)) return;
+        const seriesName = seriesItem.name || this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
+        if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
         const seriesIndexInBars = barSeries.indexOf(seriesItem);
@@ -114,7 +116,7 @@ export default class BarChart extends Chart {
             },
             style: {
               fill: barColor,
-              stroke: itemStyle.borderColor || '#fff',
+              stroke: itemStyle.borderColor || this.getThemeConfig().borderColor,
               lineWidth: itemStyle.borderWidth || 0,
             },
             z: seriesIndex,
@@ -136,7 +138,7 @@ export default class BarChart extends Chart {
                   componentType: 'series',
                   seriesType: 'bar',
                   seriesIndex,
-                  seriesName: seriesItem.name,
+                  seriesName: seriesName,
                   name: itemName,
                   dataIndex: index,
                   data: item,
@@ -162,7 +164,7 @@ export default class BarChart extends Chart {
                 componentType: 'series',
                 seriesType: 'bar',
                 seriesIndex,
-                seriesName: seriesItem.name,
+                seriesName: seriesName,
                 name: itemName,
                 dataIndex: index,
                 data: item,
@@ -176,7 +178,7 @@ export default class BarChart extends Chart {
           }
 
           // Animate bar if animation is enabled
-          if (this._shouldAnimateFor(seriesItem.name || `series-${seriesIndex + 1}`)) {
+          if (this._shouldAnimateFor(seriesName)) {
             const delay = index * 100 + seriesIndex * 200;
             const duration = this._getAnimationDuration();
 

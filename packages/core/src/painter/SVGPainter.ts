@@ -46,10 +46,8 @@ export default class SVGPainter implements IPainter {
    * Resize SVG
    */
   resize(width?: number, height?: number): void {
-    const rect = this._dom.getBoundingClientRect();
-
-    this._width = width ?? rect.width;
-    this._height = height ?? rect.height;
+    this._width = width ?? this._dom.clientWidth;
+    this._height = height ?? this._dom.clientHeight;
 
     this._svg.setAttribute('width', String(this._width));
     this._svg.setAttribute('height', String(this._height));

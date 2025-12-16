@@ -25,8 +25,55 @@ interface ThemeConfig {
   tooltipBackgroundColor: string; // 提示框背景色
   tooltipTextColor: string;       // 提示框文本颜色
   legendTextColor: string;        // 图例文本颜色
+  fontFamily?: string;            // 字体
+  fontSize?: number;              // 字号
+  token?: ThemeToken;             // 主题 Token (原始值)
 }
 ```
+
+### 主题 Token 系统
+
+HudX v1.0 引入了 Token 系统，以支持更细粒度和更易维护的主题定制。
+
+```typescript
+interface ThemeToken {
+  colorText?: string;
+  colorBackground?: string;
+  colorBorder?: string;
+  colorGrid?: string;
+  colorAxisLine?: string;
+  colorAxisLabel?: string;
+  colorTooltipBackground?: string;
+  colorTooltipText?: string;
+  colorLegendText?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  seriesColors?: string[];
+  [key: string]: string | number | string[] | number[] | undefined;
+}
+```
+
+#### 使用 Token
+
+你可以通过 `ThemeManager` 注册或更新 Token，系统会自动将其映射到主题配置中。
+
+```typescript
+import { ThemeManager } from '@HudX/core';
+
+// 1. 注册/更新 Token
+ThemeManager.registerToken('light', {
+  colorText: '#000000',           // 更深的黑色
+  colorBackground: '#f0f0f0',     // 浅灰色背景
+  seriesColors: ['#ff0000', '#00ff00', '#0000ff'] // 自定义色板
+});
+
+// 2. 在代码中访问
+const theme = ThemeManager.getTheme('light');
+const colors = theme.seriesColors; // 包含更新后的颜色
+const bgColor = theme.backgroundColor; // 包含更新后的背景色
+```
+
+当你需要将图表颜色与设计系统的 Token 对齐时，这非常有用。
 
 ### 使用方法
 
@@ -287,6 +334,7 @@ function App() {
 
 - `getTheme(theme: Theme): ThemeConfig` - 获取主题配置
 - `registerTheme(theme: Theme, config: ThemeConfig): void` - 注册主题
+- `registerToken(theme: string, token: ThemeToken): void` - 注册或更新主题 Token
 - `getThemes(): Theme[]` - 获取所有已注册主题
 
 ### LocaleManager

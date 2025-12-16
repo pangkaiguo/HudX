@@ -2,49 +2,81 @@
  * ThemeManager - Manages theme configuration
  */
 
-import type { Theme, ThemeConfig } from '../types';
+import type { Theme, ThemeConfig, ThemeToken } from '../types';
 
 export class ThemeManager {
   private static _themes: Map<Theme, ThemeConfig> = new Map();
+  private static _tokens: Map<Theme, ThemeToken> = new Map();
 
   static {
-    // Light theme
-    const lightColors = [
-      '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
-      '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'
-    ];
-    ThemeManager._themes.set('light', {
-      backgroundColor: '#ffffff',
-      textColor: '#333333',
-      borderColor: '#cccccc',
-      gridColor: '#e6e6e6',
-      axisLineColor: '#333333',
-      axisLabelColor: '#666666',
-      seriesColors: lightColors,
-      color: lightColors,
-      tooltipBackgroundColor: 'rgba(50, 50, 50, 0.9)',
-      tooltipTextColor: '#ffffff',
-      legendTextColor: '#333333',
-    });
+    // Default Light Token
+    const lightToken: ThemeToken = {
+      colorText: '#333333',
+      colorBackground: '#ffffff',
+      colorBorder: '#cccccc',
+      colorGrid: '#e6e6e6',
+      colorAxisLine: '#e0e0e0',
+      colorAxisLabel: '#999999',
+      colorTooltipBackground: 'rgba(50, 50, 50, 0.9)',
+      colorTooltipText: '#ffffff',
+      colorLegendText: '#333333',
+      fontFamily: 'sans-serif',
+      fontSize: 12,
+      seriesColors: [
+        '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
+        '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'
+      ]
+    };
+    ThemeManager.registerToken('light', lightToken);
 
-    // Dark theme
-    const darkColors = [
-      '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
-      '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'
-    ];
-    ThemeManager._themes.set('dark', {
-      backgroundColor: '#1e1e1e',
-      textColor: '#e0e0e0',
-      borderColor: '#444444',
-      gridColor: '#2d2d2d',
-      axisLineColor: '#888888',
-      axisLabelColor: '#aaaaaa',
-      seriesColors: darkColors,
-      color: darkColors,
-      tooltipBackgroundColor: 'rgba(200, 200, 200, 0.9)',
-      tooltipTextColor: '#1e1e1e',
-      legendTextColor: '#e0e0e0',
-    });
+    // Default Dark Token
+    const darkToken: ThemeToken = {
+      colorText: '#e0e0e0',
+      colorBackground: '#1e1e1e',
+      colorBorder: '#444444',
+      colorGrid: '#2d2d2d',
+      colorAxisLine: '#888888',
+      colorAxisLabel: '#aaaaaa',
+      colorTooltipBackground: 'rgba(200, 200, 200, 0.9)',
+      colorTooltipText: '#1e1e1e',
+      colorLegendText: '#e0e0e0',
+      fontFamily: 'sans-serif',
+      fontSize: 12,
+      seriesColors: [
+        '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
+        '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'
+      ]
+    };
+    ThemeManager.registerToken('dark', darkToken);
+  }
+
+  /**
+   * Register theme token
+   */
+  static registerToken(theme: string, token: ThemeToken): void {
+    const currentToken = ThemeManager._tokens.get(theme) || {};
+    const newToken = { ...currentToken, ...token };
+    ThemeManager._tokens.set(theme, newToken);
+    
+    // Map token to theme config
+    const config: ThemeConfig = {
+      backgroundColor: String(newToken.colorBackground),
+      textColor: String(newToken.colorText),
+      borderColor: String(newToken.colorBorder),
+      gridColor: String(newToken.colorGrid),
+      axisLineColor: String(newToken.colorAxisLine),
+      axisLabelColor: String(newToken.colorAxisLabel),
+      seriesColors: newToken.seriesColors as string[],
+      color: newToken.seriesColors as string[],
+      tooltipBackgroundColor: String(newToken.colorTooltipBackground),
+      tooltipTextColor: String(newToken.colorTooltipText),
+      legendTextColor: String(newToken.colorLegendText),
+      fontFamily: String(newToken.fontFamily),
+      fontSize: Number(newToken.fontSize),
+      token: newToken
+    };
+    
+    ThemeManager.registerTheme(theme, config);
   }
 
   /**

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Renderer, Circle, Rect, Animation, Easing } from '@HudX/core';
+import { Renderer, Circle, Rect, Animation, Easing, ThemeManager } from '@HudX/core';
 
 export const AnimationExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -8,15 +8,17 @@ export const AnimationExample = () => {
     if (!containerRef.current) return;
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const theme = ThemeManager.getTheme('light');
+    const colors = theme.seriesColors || [];
 
     const circle = new Circle({
       shape: { cx: 100, cy: 100, r: 30 },
-      style: { fill: '#5470c6' }
+      style: { fill: colors[0] }
     });
 
     const rect = new Rect({
       shape: { x: 300, y: 100, width: 60, height: 60 },
-      style: { fill: '#91cc75' }
+      style: { fill: colors[1] }
     });
 
     renderer.add(circle);

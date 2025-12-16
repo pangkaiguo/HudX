@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Renderer, Sector, Text, Tooltip, Legend } from '@HudX/core';
+import { Renderer, Sector, Text, Tooltip, Legend, ThemeManager } from '@HudX/core';
 import { defaultColors } from '../config';
 
 export const BasicPieExample = () => {
@@ -9,6 +9,9 @@ export const BasicPieExample = () => {
     if (!containerRef.current) return;
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const theme = ThemeManager.getTheme('light');
+    const colors = theme.seriesColors || defaultColors;
+
     const width = 800;
     const height = 400;
     const centerX = width / 2;
@@ -37,7 +40,7 @@ export const BasicPieExample = () => {
       const angle = (item.value / total) * Math.PI * 2;
       const endAngle = startAngle + angle;
       const midAngle = startAngle + angle / 2;
-      const color = defaultColors[index % defaultColors.length];
+      const color = colors[index % colors.length];
 
       const sector = new Sector({
         shape: { cx: centerX, cy: centerY, r0: 0, r: radius, startAngle, endAngle },
@@ -89,7 +92,7 @@ export const BasicPieExample = () => {
     });
     legend.setItems(data.map((item, index) => ({
       name: item.name,
-      color: defaultColors[index % defaultColors.length]
+      color: colors[index % colors.length]
     })));
     renderer.add(legend);
 

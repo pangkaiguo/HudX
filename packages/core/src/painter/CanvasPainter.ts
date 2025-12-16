@@ -36,10 +36,9 @@ export default class CanvasPainter implements IPainter {
    */
   resize(width?: number, height?: number): void {
     const dpr = window.devicePixelRatio || 1;
-    const rect = this._dom.getBoundingClientRect();
 
-    this._width = width ?? rect.width;
-    this._height = height ?? rect.height;
+    this._width = width ?? this._dom.clientWidth;
+    this._height = height ?? this._dom.clientHeight;
 
     // Set canvas size considering device pixel ratio for crisp rendering
     this._canvas.width = this._width * dpr;
@@ -175,9 +174,10 @@ export default class CanvasPainter implements IPainter {
    * Handle resize
    */
   private _resize(): void {
-    const rect = this._dom.getBoundingClientRect();
-    if (rect.width !== this._width || rect.height !== this._height) {
-      this.resize(rect.width, rect.height);
+    const width = this._dom.clientWidth;
+    const height = this._dom.clientHeight;
+    if (width !== this._width || height !== this._height) {
+      this.resize(width, height);
     }
   }
 

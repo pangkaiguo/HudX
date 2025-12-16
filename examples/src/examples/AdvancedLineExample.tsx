@@ -1,7 +1,11 @@
 import { HChart } from '@HudX/charts';
 import type { ChartOption } from '@HudX/charts';
+import { ThemeManager } from '@HudX/core';
 
 export const AdvancedLineExample = () => {
+  const theme = ThemeManager.getTheme('light');
+  const colors = theme.seriesColors || [];
+
   const option: ChartOption = {
     title: {
       text: 'Advanced Line Chart with Animation',
@@ -38,7 +42,7 @@ export const AdvancedLineExample = () => {
         name: 'Series A',
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: '#5470c6' },
+        itemStyle: { color: colors[0] },
         lineStyle: { width: 2 },
         showSymbol: true
       },
@@ -46,7 +50,7 @@ export const AdvancedLineExample = () => {
         name: 'Series B',
         type: 'line',
         data: [100, 150, 120, 110, 90, 140, 120],
-        itemStyle: { color: '#91cc75' },
+        itemStyle: { color: colors[1] },
         lineStyle: { width: 2 },
         showSymbol: true
       },
@@ -54,7 +58,7 @@ export const AdvancedLineExample = () => {
         name: 'Series C',
         type: 'line',
         data: [80, 120, 100, 140, 110, 100, 90],
-        itemStyle: { color: '#fac858' },
+        itemStyle: { color: colors[2] },
         lineStyle: { width: 2 },
         showSymbol: true
       }

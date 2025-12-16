@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Renderer, Rect, Text, Tooltip } from '@HudX/core';
+import { Renderer, Rect, Text, Tooltip, ThemeManager } from '@HudX/core';
 import { defaultColors, defaultPadding } from '../config';
 
 export const BasicBarExample = () => {
@@ -9,6 +9,9 @@ export const BasicBarExample = () => {
     if (!containerRef.current) return;
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const theme = ThemeManager.getTheme('light');
+    const colors = theme.seriesColors || defaultColors;
+
     const width = 800;
     const height = 400;
     const padding = defaultPadding.small;
@@ -19,7 +22,7 @@ export const BasicBarExample = () => {
     const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     const max = Math.max(...data);
     const barWidth = chartWidth / data.length * 0.6;
-    const color = defaultColors[0];
+    const color = colors[0];
 
     // Grid lines
     for (let i = 0; i <= 5; i++) {

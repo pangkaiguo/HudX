@@ -98,6 +98,13 @@ export type Theme = 'light' | 'dark' | string;
 export type Locale = 'en' | 'zh' | 'zh-CN' | 'zh-TW';
 
 /**
+ * Theme Token
+ */
+export interface ThemeToken {
+  [key: string]: string | number | string[] | number[];
+}
+
+/**
  * Theme configuration
  */
 export interface ThemeConfig {
@@ -112,7 +119,10 @@ export interface ThemeConfig {
   tooltipBackgroundColor: string;
   tooltipTextColor: string;
   legendTextColor: string;
-  [key: string]: string | string[] | undefined;
+  fontFamily?: string;
+  fontSize?: number;
+  token?: ThemeToken;
+  [key: string]: string | number | string[] | number[] | ThemeToken | undefined;
 }
 
 /**

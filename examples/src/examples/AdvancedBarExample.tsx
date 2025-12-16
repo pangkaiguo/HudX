@@ -1,7 +1,12 @@
 import { HChart } from '@HudX/charts';
 import type { ChartOption } from '@HudX/charts';
+import { ThemeManager } from '@HudX/core';
 
 export const AdvancedBarExample = () => {
+  // Get current theme colors (assuming light for now, but could be dynamic)
+  const theme = ThemeManager.getTheme('light');
+  const colors = theme.seriesColors || [];
+
   const option: ChartOption = {
     title: {
       text: 'Advanced Bar Chart with Animation',
@@ -38,19 +43,19 @@ export const AdvancedBarExample = () => {
         name: 'Product A',
         type: 'bar',
         data: [320, 332, 301, 334],
-        itemStyle: { color: '#5470c6' }
+        itemStyle: { color: colors[0] }
       },
       {
         name: 'Product B',
         type: 'bar',
         data: [220, 182, 191, 234],
-        itemStyle: { color: '#91cc75' }
+        itemStyle: { color: colors[1] }
       },
       {
         name: 'Product C',
         type: 'bar',
         data: [150, 232, 201, 154],
-        itemStyle: { color: '#fac858' }
+        itemStyle: { color: colors[2] }
       }
     ],
     animation: true,

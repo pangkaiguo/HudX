@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Renderer, Polyline, Circle, Text, Tooltip, Legend } from '@HudX/core';
+import { Renderer, Polyline, Circle, Text, Tooltip, Legend, ThemeManager } from '@HudX/core';
 
 export const LineWithTooltipExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,6 +10,8 @@ export const LineWithTooltipExample = () => {
     if (!containerRef.current) return;
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const theme = ThemeManager.getTheme('light');
+    const colors = theme.seriesColors || [];
     rendererRef.current = renderer;
 
     const width = 800;
@@ -38,7 +40,7 @@ export const LineWithTooltipExample = () => {
 
     renderer.add(new Polyline({
       shape: { points },
-      style: { stroke: '#5470c6', lineWidth: 2 }
+      style: { stroke: colors[0], lineWidth: 2 }
     }));
 
     const tooltip = new Tooltip();
@@ -49,17 +51,17 @@ export const LineWithTooltipExample = () => {
     points.forEach((point, index) => {
       const circle = new Circle({
         shape: { cx: point[0], cy: point[1], r: 4 },
-        style: { fill: '#5470c6', stroke: '#fff', lineWidth: 2 }
+        style: { fill: colors[0], stroke: '#fff', lineWidth: 2 }
       });
 
       circle.on('mouseover', () => {
-        circle.attr('style', { fill: '#ff6b6b' });
+        circle.attr('style', { fill: colors[3] });
         tooltip.show(point[0] + 10, point[1] - 30, `${labels[index]}\n${data[index]}`);
         renderer.flush();
       });
 
       circle.on('mouseout', () => {
-        circle.attr('style', { fill: '#5470c6' });
+        circle.attr('style', { fill: colors[0] });
         tooltip.hide();
         renderer.flush();
       });
@@ -79,7 +81,7 @@ export const LineWithTooltipExample = () => {
         renderer.flush();
       }
     });
-    legend.setItems([{ name: 'Weekly Data', color: '#5470c6' }]);
+    legend.setItems([{ name: 'Weekly Data', color: colors[0] }]);
     renderer.add(legend);
 
     renderer.add(new Text({

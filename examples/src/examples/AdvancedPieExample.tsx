@@ -1,7 +1,11 @@
 import { HChart } from '@HudX/charts';
 import type { ChartOption } from '@HudX/charts';
+import { ThemeManager } from '@HudX/core';
 
 export const AdvancedPieExample = () => {
+  const theme = ThemeManager.getTheme('light');
+  const colors = theme.seriesColors || [];
+
   const option: ChartOption = {
     title: {
       text: 'Advanced Pie Chart with Animation',
@@ -30,11 +34,11 @@ export const AdvancedPieExample = () => {
           scaleSize: 1.1
         },
         data: [
-          { name: 'Category A', value: 335, itemStyle: { color: '#5470c6' } },
-          { name: 'Category B', value: 310, itemStyle: { color: '#91cc75' } },
-          { name: 'Category C', value: 234, itemStyle: { color: '#fac858' } },
-          { name: 'Category D', value: 135, itemStyle: { color: '#ee6666' } },
-          { name: 'Category E', value: 148, itemStyle: { color: '#73c0de' } }
+          { name: 'Category A', value: 335, itemStyle: { color: colors[0] } },
+          { name: 'Category B', value: 310, itemStyle: { color: colors[1] } },
+          { name: 'Category C', value: 234, itemStyle: { color: colors[2] } },
+          { name: 'Category D', value: 135, itemStyle: { color: colors[3] } },
+          { name: 'Category E', value: 148, itemStyle: { color: colors[4] } }
         ],
         label: {
           show: true,

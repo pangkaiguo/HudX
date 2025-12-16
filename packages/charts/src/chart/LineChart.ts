@@ -127,9 +127,10 @@ export default class LineChart extends Chart {
         const items = (series as any[])
           .filter(s => s.type === 'line' && s.show !== false)
           .map((s, i) => ({
-            name: s.name || `series-${i + 1}`,
+            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: 'line'
+            icon: 'line',
+            textColor: this.getThemeConfig().legendTextColor // Use theme color
           }));
         this._mountLegend(items);
       }
@@ -138,7 +139,8 @@ export default class LineChart extends Chart {
       series.forEach((seriesItem, seriesIndex) => {
         if (seriesItem.type !== 'line') return;
         if (seriesItem.show === false) return;
-        if (this._legend && !this._legendSelected.has(seriesItem.name || `series-${seriesIndex + 1}`)) return;
+        const seriesName = seriesItem.name || this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
+        if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const data = seriesItem.data || [];
         const lineColor = seriesItem.itemStyle?.color || seriesItem.color || this._getSeriesColor(seriesIndex);
@@ -187,7 +189,7 @@ export default class LineChart extends Chart {
         this._root.add(line);
 
         // Animate line
-        if (this._shouldAnimateFor(seriesItem.name || `series-${seriesIndex + 1}`)) {
+        if (this._shouldAnimateFor(seriesName)) {
           const duration = this._getAnimationDuration();
           const easing = this._getAnimationEasing();
           // Animate line drawing
@@ -249,7 +251,7 @@ export default class LineChart extends Chart {
                   componentType: 'series',
                   seriesType: 'line',
                   seriesIndex,
-                  seriesName: seriesItem.name,
+                  seriesName: seriesName,
                   name: itemName,
                   dataIndex: pointIndex,
                   data: item,
@@ -266,7 +268,7 @@ export default class LineChart extends Chart {
             }
 
             // Animate point if animation is enabled
-            if (this._shouldAnimateFor(seriesItem.name || `series-${seriesIndex + 1}`)) {
+            if (this._shouldAnimateFor(seriesName)) {
               const delay = pointIndex * 50 + seriesIndex * 100;
               const duration = this._getAnimationDuration();
               this._animator.animate(
