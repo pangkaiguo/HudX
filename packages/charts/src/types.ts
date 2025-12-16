@@ -82,6 +82,9 @@ export interface EmphasisOption {
   scaleSize?: number;
   itemStyle?: ItemStyle;
   label?: LabelOption;
+  // Focus effects
+  focus?: 'none' | 'self' | 'series';
+  blurScope?: 'coordinateSystem' | 'series' | 'global';
   [key: string]: any;
 }
 

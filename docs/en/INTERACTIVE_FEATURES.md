@@ -1,448 +1,98 @@
-# HudX Interactive Features - Complete Guide
+# HudX Interactive Features
 
 ## Overview
 
-HudX has been successfully enhanced with complete interactive features (animations, Tooltip, Legend, event handling), bringing its capabilities on par with ECharts.
+HudX provides a rich set of interactive features including animations, tooltips, legends, and advanced event handling, designed to match ECharts' capabilities.
 
----
+## 1. Emphasis & Hover Effects
 
-## ✅ Completed Work
+HudX supports high-performance hover effects with configurable animations.
 
-### 1. Five New Advanced Examples
+### Scale Animation (`emphasis.scale`)
 
-#### 🚀 Full Feature Demo (`FullFeatureDemo.tsx`)
+You can enable scale animation on hover for charts (e.g., Pie, Bar).
 
-- Complete feature demonstration
-- All interactive features included
-- Real-time interaction statistics
-- **Location**: `examples/src/examples/FullFeatureDemo.tsx`
+```typescript
+series: [{
+  type: 'pie',
+  data: [...],
+  emphasis: {
+    scale: true,
+    scaleSize: 1.1, // Scale up to 110%
+    itemStyle: {
+      shadowBlur: 10,
+      shadowColor: 'rgba(0,0,0,0.5)'
+    }
+  }
+}]
+```
 
-#### 📊 Interactive Dashboard (`InteractiveDashboard.tsx`)
+### Style Transition
 
-- 12-month performance metrics dashboard
-- Multi-series data visualization
-- Staggered animation effects
-- **Location**: `examples/src/examples/InteractiveDashboard.tsx`
+Color and opacity transitions are automatically handled using `lerp` (linear interpolation) for smooth visual feedback.
 
-#### ✨ Advanced Line Chart (`AdvancedLineChart.tsx`)
+## 2. Event System
 
-- Advanced line chart
-- Multi-series support
-- Elastic animations
-- **Location**: `examples/src/examples/AdvancedLineChart.tsx`
+### EventHelper
 
-#### ✨ Advanced Bar Chart (`AdvancedBarChart.tsx`)
+The `EventHelper` utility simplifies binding hover interactions while handling cleanups.
 
-- Advanced bar chart
-- Grouped bar chart
-- Bar height animations
-- **Location**: `examples/src/examples/AdvancedBarChart.tsx`
+```typescript
+import { EventHelper } from '../util/EventHelper';
 
-#### ✨ Advanced Pie Chart (`AdvancedPieChart.tsx`)
+EventHelper.bindHoverEvents(
+  element,
+  (evt) => {
+    // onMouseOver: animate scale up, show tooltip
+  },
+  (evt) => {
+    // onMouseOut: animate scale down, hide tooltip
+  }
+);
+```
 
-- Advanced pie chart
-- Slice angle animations
-- Percentage display
-- **Location**: `examples/src/examples/AdvancedPieChart.tsx`
+### Supported Events
 
-### 2. Application Updates
+- `click`, `dblclick`
+- `mousedown`, `mousemove`, `mouseup`
+- `mouseover`, `mouseout`
+- `touchstart`, `touchmove`, `touchend`
+- `drag`, `dragend`
 
-#### App.tsx Updates
+## 3. Animation System
 
-- Added new example navigation
-- Improved navigation bar styling
-- Set Full Feature Demo as default
-- **Location**: `examples/src/App.tsx`
-
-### 3. Complete Documentation
-
-#### 📖 INTERACTIVE_EXAMPLES.md
-
-- Detailed example descriptions
-- Core features introduction
-- Best practices guide
-- **Location**: `examples/INTERACTIVE_EXAMPLES.md`
-
-#### 📖 INTERACTIVE_FEATURES_SUMMARY.md
-
-- Feature optimization summary
-- Feature comparison table
-- Performance metrics
-- Future improvements
-- **Location**: `HudX/INTERACTIVE_FEATURES_SUMMARY.md`
-
-#### 📖 QUICK_START_INTERACTIVE.md
-
-- 5-minute quick start
-- Common code snippets
-- FAQ
-- Performance optimization tips
-- **Location**: `HudX/QUICK_START_INTERACTIVE.md`
-
----
-
-## 🎯 Core Features Implementation
-
-### 1. Animation System ✅
+The core animation engine (`Animator`) supports complex transitions.
 
 ```typescript
 import { Animation, Easing } from '@HudX/core';
 
-const animation = new Animation(
-  target,              // Target object
-  'property',          // Property path
-  endValue,            // Target value
-  duration,            // Duration in ms
-  delay,               // Delay in ms
-  Easing.cubicOut,     // Easing function
-  onUpdate,            // Update callback
-  onComplete           // Complete callback
+const anim = new Animation(
+  target, 'x', 100, 500, 0, Easing.cubicOut
 );
-
-animation.start();
+anim.start();
 ```
 
-**Supported Easing Functions**:
+## 4. Components
 
-- `linear` - Linear
-- `quadraticIn/Out/InOut` - Quadratic easing
-- `cubicIn/Out/InOut` - Cubic easing
-- `elasticIn/Out` - Elastic easing
+### Tooltip
 
-### 2. Tooltip Component ✅
+Configurable tooltip with HTML content support.
 
 ```typescript
-import { Tooltip } from '@HudX/core';
-
-const tooltip = new Tooltip({
-  backgroundColor: 'rgba(50, 50, 50, 0.95)',
-  textColor: '#fff',
-  padding: 12,
-  fontSize: 13
-});
-
-renderer.add(tooltip);
-tooltip.show(x, y, 'Content');
-tooltip.hide();
+tooltip: {
+  show: true,
+  formatter: '{b}: {c} ({d}%)'
+}
 ```
 
-### 3. Legend Component ✅
+### Legend
+
+Interactive legend for toggling series visibility.
 
 ```typescript
-import { Legend } from '@HudX/core';
-
-const legend = new Legend({
-  x: 20,
-  y: 20,
+legend: {
+  data: ['A', 'B'],
   orient: 'horizontal',
-  onSelect: (name, selected) => {
-    // Handle selection event
-  }
-});
-
-legend.setItems([
-  { name: 'Series A', color: '#5470c6' },
-  { name: 'Series B', color: '#91cc75' }
-]);
-
-renderer.add(legend);
+  bottom: 0
+}
 ```
-
-### 4. Event Handling ✅
-
-```typescript
-element.on('mouseover', () => { /* ... */ });
-element.on('mouseout', () => { /* ... */ });
-element.on('click', () => { /* ... */ });
-element.on('dblclick', () => { /* ... */ });
-element.on('touchstart', () => { /* ... */ });
-element.on('touchmove', () => { /* ... */ });
-element.on('touchend', () => { /* ... */ });
-```
-
----
-
-## 📊 Feature Comparison
-
-| Feature | Before | Now | ECharts |
-|---------|--------|-----|---------|
-| Basic Charts | ✅ | ✅ | ✅ |
-| Animation System | ❌ | ✅ | ✅ |
-| Tooltip | ❌ | ✅ | ✅ |
-| Legend | ❌ | ✅ | ✅ |
-| Multi-Series Support | ❌ | ✅ | ✅ |
-| Event Handling | ❌ | ✅ | ✅ |
-| Interactive Feedback | ❌ | ✅ | ✅ |
-| Easing Functions | ❌ | ✅ | ✅ |
-| Theme Switching | ✅ | ✅ | ✅ |
-| Internationalization | ✅ | ✅ | ✅ |
-
----
-
-## 📁 File Structure
-
-```
-HudX/
-├── examples/
-│   ├── src/
-│   │   ├── examples/
-│   │   │   ├── FullFeatureDemo.tsx          ✨ New
-│   │   │   ├── InteractiveDashboard.tsx     ✨ New
-│   │   │   ├── AdvancedLineChart.tsx        ✨ New
-│   │   │   ├── AdvancedBarChart.tsx         ✨ New
-│   │   │   ├── AdvancedPieChart.tsx         ✨ New
-│   │   │   ├── BasicLine.tsx                (Retained)
-│   │   │   ├── BasicBar.tsx                 (Retained)
-│   │   │   ├── BasicPie.tsx                 (Retained)
-│   │   │   └── ... (Other examples)
-│   │   └── App.tsx                          📝 Updated
-│   └── INTERACTIVE_EXAMPLES.md              ✨ New
-├── docs/
-│   ├── INTERACTIVE_FEATURES.en.md           ✨ New
-│   └── INTERACTIVE_FEATURES.md              ✨ New
-├── INTERACTIVE_FEATURES_SUMMARY.md          ✨ New
-├── QUICK_START_INTERACTIVE.md               ✨ New
-└── OPTIMIZATION_SUMMARY.md                  ✨ New
-```
-
----
-
-## 🚀 Quick Start
-
-### Installation and Running
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start development server
-cd examples
-pnpm dev
-
-# Visit http://localhost:5173
-```
-
-### Viewing Examples
-
-1. Open browser and visit `http://localhost:5173`
-2. Select example from left navigation
-3. Default shows "🚀 Full Feature Demo"
-4. Try the following interactions:
-   - **Hover**: Display Tooltip
-   - **Click**: Trigger pulse animation
-   - **Legend**: Click to toggle series visibility
-
----
-
-## 💡 Best Practices
-
-### 1. Animation Performance Optimization
-
-```typescript
-// ✅ Use staggered delays
-seriesData.forEach((series, index) => {
-  const anim = new Animation(
-    target,
-    'property',
-    value,
-    duration,
-    index * 200,  // Staggered delay
-    easing
-  );
-  anim.start();
-});
-```
-
-### 2. Memory Management
-
-```typescript
-// ✅ Save and clean up animations
-const animationsRef = useRef<Animation[]>([]);
-
-return () => {
-  animationsRef.current.forEach(anim => anim.stop());
-  renderer.dispose();
-};
-```
-
-### 3. Interactive Feedback
-
-```typescript
-// ✅ Provide visual feedback
-element.on('mouseover', () => {
-  element.attr('style', { opacity: 1 });
-  tooltip.show(x, y, content);
-  renderer.flush();
-});
-```
-
----
-
-## 📈 Performance Metrics
-
-### Animation Performance
-
-- **Single Series**: 60 FPS
-- **Three Series**: 60 FPS (with staggered delays)
-- **Ten Series**: 45-50 FPS
-
-### Memory Usage
-
-- **Basic Chart**: ~2MB
-- **Advanced Chart**: ~3-4MB
-- **Dashboard**: ~5MB
-
-### Load Time
-
-- **Basic Chart**: ~100ms
-- **Advanced Chart**: ~200ms
-- **Dashboard**: ~300ms
-
----
-
-## 📚 Documentation Navigation
-
-| Document | Content | Location |
-|----------|---------|----------|
-| INTERACTIVE_EXAMPLES.md | Detailed example descriptions | `examples/` |
-| INTERACTIVE_FEATURES_SUMMARY.md | Feature summary | `HudX/` |
-| QUICK_START_INTERACTIVE.md | Quick start guide | `HudX/` |
-| OPTIMIZATION_SUMMARY.md | Completion summary | `HudX/` |
-| INTERACTIVE_FEATURES.en.md | English guide | `docs/` |
-
----
-
-## 🎓 Learning Path
-
-### Beginner (5-10 minutes)
-
-1. Read [QUICK_START_INTERACTIVE.md](../QUICK_START_INTERACTIVE.md)
-2. View "🚀 Full Feature Demo" example
-3. Try modifying code
-
-### Intermediate (30-60 minutes)
-
-1. Read [INTERACTIVE_EXAMPLES.md](../examples/INTERACTIVE_EXAMPLES.md)
-2. View all advanced examples
-3. Learn best practices
-
-### Advanced (1-2 hours)
-
-1. Read [Core API Documentation](../packages/core/README.md)
-2. Study source code implementation
-3. Create custom charts
-
----
-
-## 🔍 FAQ
-
-### Q: How to disable animations?
-
-A: Set `duration` to 0 or don't call `start()`
-
-### Q: How to change animation speed?
-
-A: Modify the `duration` parameter in Animation constructor
-
-### Q: How to add custom easing functions?
-
-A: Pass custom function to `easing` parameter
-
-### Q: How to handle large datasets?
-
-A: Use data sampling or virtual scrolling techniques
-
----
-
-## 🎯 Future Improvements
-
-### Short Term (1-2 weeks)
-
-- [ ] Add data sampling functionality
-- [ ] Optimize large dataset performance
-- [ ] Add more easing functions
-- [ ] Improve Tooltip positioning
-
-### Medium Term (1 month)
-
-- [ ] Implement virtual scrolling
-- [ ] Add chart export functionality
-- [ ] Support more chart types
-- [ ] Improve mobile device support
-
-### Long Term (2-3 months)
-
-- [ ] Complete ECharts API compatibility
-- [ ] Advanced data processing features
-- [ ] Real-time data update support
-- [ ] Complete documentation and tutorials
-
----
-
-## 📞 Support
-
-If you have questions or suggestions:
-
-1. Check [FAQ](../QUICK_START_INTERACTIVE.md#faq)
-2. Read [Complete Documentation](../README.md)
-3. View [Example Code](../examples/src/examples/)
-
----
-
-## 📝 Changelog
-
-### v1.0.0 (Current Version)
-
-**Added**:
-
-- ✨ 5 new interactive examples
-- ✨ Complete animation system
-- ✨ Tooltip and Legend components
-- ✨ Event handling system
-- ✨ Detailed documentation and guides
-
-**Improvements**:
-
-- 📝 Updated navigation bar styling
-- 📝 Improved example organization
-- 📝 Added performance optimization tips
-
-**Documentation**:
-
-- 📖 INTERACTIVE_EXAMPLES.md
-- 📖 INTERACTIVE_FEATURES_SUMMARY.md
-- 📖 QUICK_START_INTERACTIVE.md
-- 📖 OPTIMIZATION_SUMMARY.md
-- 📖 INTERACTIVE_FEATURES.en.md
-
----
-
-## 🏆 Summary
-
-✅ **Completed**:
-
-- 5 new interactive examples
-- Complete animation system
-- Tooltip and Legend components
-- Event handling system
-- Detailed documentation and guides
-
-🎯 **Current Capabilities**:
-
-- Interactive features on par with ECharts
-- Smooth animation effects
-- Complete event handling
-- Flexible customization options
-
-📈 **Performance**:
-
-- 60 FPS smooth animations
-- Multi-series data support
-- Optimized memory usage
-- Fast loading time
-
----
-
-**Version**: 1.0.0  
-**Last Updated**: 2024  
-**Status**: ✅ Complete

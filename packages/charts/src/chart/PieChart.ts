@@ -1,6 +1,7 @@
 import Chart from '../Chart';
-import type { ChartOption, SeriesOption, ChartData } from '../types';
+import type { ChartOption, SeriesOption, ChartData, EmphasisOption } from '../types';
 import { Sector, Text, Point, Legend } from '@HudX/core';
+import { EventHelper } from '../util/EventHelper';
 
 export default class PieChart extends Chart {
   protected _render(): void {
@@ -96,64 +97,47 @@ export default class PieChart extends Chart {
 
         // Tooltip & Emphasis interaction
         if (this._tooltip || seriesItem.emphasis) {
-          sector.on('mouseover', (evt: any) => {
-            // Highlight (color change with opacity)
-            // Use Animator for opacity transition
-            this._animator.animate(
-              sector.style as Record<string, unknown>,
-              'opacity',
-              0.8,
-              { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-            ).start();
+          const emphasis = seriesItem.emphasis;
 
-            // Hover scale effect
-            const emphasis = seriesItem.emphasis;
-            if (emphasis?.scale) {
-              const scaleSize = emphasis.scaleSize || 1.1;
+          EventHelper.bindHoverEvents(
+            sector,
+            (evt: any) => {
+              // Apply emphasis animation
+              this._applyEmphasisAnimation(sector, emphasis, true);
 
-              // Ensure transform is ready (it should be from init, but safe check)
-              if (!sector.transform) {
-                sector.attr('transform', { x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy });
+              // Show tooltip
+              if (this._tooltip) {
+                const itemName = (typeof item === 'object' && item.name) ? item.name : '';
+                const itemValue = value;
+
+                const content = this._generateTooltipContent({
+                  componentType: 'series',
+                  seriesType: 'pie',
+                  seriesIndex: 0,
+                  seriesName: seriesItem.name,
+                  name: itemName,
+                  dataIndex: index,
+                  data: item,
+                  value: itemValue,
+                  percent: percent * 100
+                });
+
+                const mx = evt?.offsetX ?? cx;
+                const my = evt?.offsetY ?? cy;
+                this._tooltip.show(mx + 12, my - 16, content);
               }
+            },
+            () => {
+              // Restore emphasis
+              this._applyEmphasisAnimation(sector, emphasis, false);
 
-              // Animate scale
-              this._animator.animate(
-                sector.transform || {},
-                'scaleX',
-                scaleSize,
-                { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-              ).start();
-
-              this._animator.animate(
-                sector.transform || {},
-                'scaleY',
-                scaleSize,
-                { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-              ).start();
+              // Hide tooltip
+              if (this._tooltip) {
+                this._tooltip.hide();
+              }
             }
+          );
 
-            // Tooltip content
-            if (this._tooltip) {
-              const itemName = (typeof item === 'object' && item.name) ? item.name : '';
-              const itemValue = value;
-
-              const content = this._generateTooltipContent({
-                componentType: 'series',
-                seriesType: 'pie',
-                seriesIndex: 0,
-                seriesName: seriesItem.name,
-                name: itemName,
-                dataIndex: index,
-                data: item,
-                value: itemValue,
-                percent: percent * 100
-              });
-
-              const mx = evt?.offsetX ?? cx;
-              const my = evt?.offsetY ?? cy;
-              this._tooltip.show(mx + 12, my - 16, content);
-            }
-          });
           sector.on('mousemove', (evt: any) => {
             if (!this._tooltip?.isVisible()) return;
             const mx = evt?.offsetX ?? cx;
@@ -177,37 +161,6 @@ export default class PieChart extends Chart {
             });
 
             this._tooltip.show(mx + 12, my - 16, content);
-          });
-          sector.on('mouseout', () => {
-            // Restore color
-            this._animator.animate(
-              sector.style as Record<string, unknown>,
-              'opacity',
-              1,
-              { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-            ).start();
-
-            // Restore scale
-            const emphasis = seriesItem.emphasis;
-            if (emphasis?.scale) {
-              this._animator.animate(
-                sector.transform || {},
-                'scaleX',
-                1,
-                { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-              ).start();
-
-              this._animator.animate(
-                sector.transform || {},
-                'scaleY',
-                1,
-                { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-              ).start();
-            }
-
-            if (this._tooltip) {
-              this._tooltip.hide();
-            }
           });
         }
 
@@ -323,5 +276,34 @@ export default class PieChart extends Chart {
       return parseFloat(value) / 100 * base;
     }
     return parseFloat(value) || 0;
+  }
+
+  private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean): void {
+    // Opacity animation
+    this._animator.animate(
+      sector.style as Record<string, unknown>,
+      'opacity',
+      isEnter ? 0.8 : 1,
+      { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+    ).start();
+
+    // Scale animation
+    if (emphasis?.scale) {
+      const scaleSize = isEnter ? (emphasis.scaleSize || 1.1) : 1;
+
+      this._animator.animate(
+        sector.transform || {},
+        'scaleX',
+        scaleSize,
+        { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+      ).start();
+
+      this._animator.animate(
+        sector.transform || {},
+        'scaleY',
+        scaleSize,
+        { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+      ).start();
+    }
   }
 }

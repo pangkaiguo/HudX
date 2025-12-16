@@ -11,12 +11,15 @@ export interface Scale {
   range(): number[];
   domain(domain: any[]): Scale;
   range(range: number[]): Scale;
+  // Aliases for ECharts compatibility
+  getPixel?(value: any): number;
+  getValue?(pixel: number): any;
 }
 
 /**
  * Create linear scale
  */
-export function createLinearScale(domain: number[], range: number[]): Scale {
+export const createLinearScale = (domain: number[], range: number[]): Scale => {
   let [d0, d1] = domain;
   const [r0, r1] = range;
   if (!isFinite(d0) || !isFinite(d1) || d1 === d0) {
@@ -36,6 +39,9 @@ export function createLinearScale(domain: number[], range: number[]): Scale {
     return d0 + (value - r0) / k;
   };
 
+  scale.getPixel = scale;
+  scale.getValue = scale.invert;
+
   scale.domain = function (newDomain?: number[]): any {
     if (newDomain) {
       return createLinearScale(newDomain, range);
@@ -51,12 +57,12 @@ export function createLinearScale(domain: number[], range: number[]): Scale {
   };
 
   return scale;
-}
+};
 
 /**
  * Create ordinal scale (for categories)
  */
-export function createOrdinalScale(domain: any[], range: number[]): Scale {
+export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
   const domainMap = new Map<any, number>();
   domain.forEach((d, i) => {
     domainMap.set(d, i);
@@ -80,6 +86,9 @@ export function createOrdinalScale(domain: any[], range: number[]): Scale {
     return domain[Math.max(0, Math.min(index, domain.length - 1))];
   };
 
+  scale.getPixel = scale;
+  scale.getValue = scale.invert;
+
   scale.domain = function (newDomain?: any[]): any {
     if (newDomain) {
       return createOrdinalScale(newDomain, range);
@@ -95,12 +104,12 @@ export function createOrdinalScale(domain: any[], range: number[]): Scale {
   };
 
   return scale;
-}
+};
 
 /**
  * Calculate nice scale domain
  */
-export function niceDomain(min: number, max: number, tickCount: number = 5): number[] {
+export const niceDomain = (min: number, max: number, tickCount: number = 5): number[] => {
   if (min === max) {
     if (min === 0) return [0, 10];
     return [min > 0 ? 0 : min * 1.2, min > 0 ? min * 1.2 : 0];
@@ -128,16 +137,16 @@ export function niceDomain(min: number, max: number, tickCount: number = 5): num
     Math.floor(min / stepSize) * stepSize,
     Math.ceil(max / stepSize) * stepSize
   ];
-}
+};
 
 /**
  * Calculate axis domain from data
  */
-export function calculateDomain(
+export const calculateDomain = (
   axis: AxisOption,
   data: any[],
   isXAxis: boolean = true
-): any[] {
+): any[] => {
   if (axis.type === 'category') {
     if (axis.data && axis.data.length > 0) {
       return axis.data;
@@ -208,17 +217,40 @@ export function calculateDomain(
   }
 
   return [0, 100];
-}
+};
+
+export const calculateNiceTicks = (min: number, max: number, tickCount: number = 5): number[] => {
+  const domain = niceDomain(min, max, tickCount);
+  const step = (domain[1] - domain[0]) / tickCount;
+  const ticks = [];
+  for (let i = 0; i <= tickCount; i++) {
+    ticks.push(domain[0] + step * i);
+  }
+  return ticks;
+};
+
+export const formatAxisLabel = (value: number, precision: number = 0): string => {
+  if (value >= 1000000000) {
+    return (value / 1000000000).toFixed(precision) + 'B';
+  }
+  if (value >= 1000000) {
+    return (value / 1000000).toFixed(precision) + 'M';
+  }
+  if (value >= 1000) {
+    return (value / 1000).toFixed(precision) + 'K';
+  }
+  return value.toFixed(precision);
+};
 
 /**
  * Convert data point to coordinate
  */
-export function dataToCoordinate(
+export const dataToCoordinate = (
   data: ChartData,
   xScale: Scale,
   yScale: Scale
-): Coordinate {
+): Coordinate => {
   const x = typeof data.name === 'number' ? xScale(data.name) : xScale(data.name || 0);
   const y = typeof data.value === 'number' ? yScale(data.value) : yScale(Array.isArray(data.value) ? data.value[0] : 0);
   return { x, y };
-}
+};

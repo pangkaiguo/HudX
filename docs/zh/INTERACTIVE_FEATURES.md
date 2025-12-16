@@ -1,448 +1,98 @@
-# HudX 交互功能完整指南
+# HudX 交互功能
 
 ## 概述
 
-HudX 已成功增强了完整的交互功能（动画、Tooltip、Legend、事件处理），使其能力与 ECharts 相当。
+HudX 提供了一套丰富的交互功能，包括动画、提示框（Tooltip）、图例（Legend）和高级事件处理，旨在对标 ECharts 的能力。
 
----
+## 1. 高亮与悬停效果 (Emphasis)
 
-## ✅ 已完成的工作
+HudX 支持高性能的悬停效果，并带有可配置的动画。
 
-### 1. 五个新的高级示例
+### 缩放动画 (`emphasis.scale`)
 
-#### 🚀 Full Feature Demo (`FullFeatureDemo.tsx`)
+你可以为图表（如饼图、柱状图）启用悬停时的缩放动画。
 
-- 完整功能演示
-- 包含所有交互特性
-- 实时交互统计
-- **位置**: `examples/src/examples/FullFeatureDemo.tsx`
+```typescript
+series: [{
+  type: 'pie',
+  data: [...],
+  emphasis: {
+    scale: true,
+    scaleSize: 1.1, // 放大至 110%
+    itemStyle: {
+      shadowBlur: 10,
+      shadowColor: 'rgba(0,0,0,0.5)'
+    }
+  }
+}]
+```
 
-#### 📊 Interactive Dashboard (`InteractiveDashboard.tsx`)
+### 样式过渡
 
-- 12 个月性能指标仪表板
-- 多系列数据展示
-- 错开动画效果
-- **位置**: `examples/src/examples/InteractiveDashboard.tsx`
+颜色和透明度的过渡会自动使用 `lerp`（线性插值）处理，以提供平滑的视觉反馈。
 
-#### ✨ Advanced Line Chart (`AdvancedLineChart.tsx`)
+## 2. 事件系统
 
-- 高级折线图
-- 多系列支持
-- 弹性动画
-- **位置**: `examples/src/examples/AdvancedLineChart.tsx`
+### EventHelper
 
-#### ✨ Advanced Bar Chart (`AdvancedBarChart.tsx`)
+`EventHelper` 工具简化了绑定悬停交互并处理清理工作的过程。
 
-- 高级柱状图
-- 分组柱状图
-- 柱子高度动画
-- **位置**: `examples/src/examples/AdvancedBarChart.tsx`
+```typescript
+import { EventHelper } from '../util/EventHelper';
 
-#### ✨ Advanced Pie Chart (`AdvancedPieChart.tsx`)
+EventHelper.bindHoverEvents(
+  element,
+  (evt) => {
+    // onMouseOver: 放大动画，显示 Tooltip
+  },
+  (evt) => {
+    // onMouseOut: 缩小动画，隐藏 Tooltip
+  }
+);
+```
 
-- 高级饼图
-- 扇形角度动画
-- 百分比显示
-- **位置**: `examples/src/examples/AdvancedPieChart.tsx`
+### 支持的事件
 
-### 2. 应用更新
+- `click`, `dblclick`
+- `mousedown`, `mousemove`, `mouseup`
+- `mouseover`, `mouseout`
+- `touchstart`, `touchmove`, `touchend`
+- `drag`, `dragend`
 
-#### App.tsx 更新
+## 3. 动画系统
 
-- 添加新示例导航
-- 改进导航栏样式
-- 设置默认示例为 Full Feature Demo
-- **位置**: `examples/src/App.tsx`
-
-### 3. 完整文档
-
-#### 📖 INTERACTIVE_EXAMPLES.md
-
-- 详细的示例说明
-- 核心功能介绍
-- 最佳实践指南
-- **位置**: `examples/INTERACTIVE_EXAMPLES.md`
-
-#### 📖 INTERACTIVE_FEATURES_SUMMARY.md
-
-- 功能优化总结
-- 功能对比表
-- 性能指标
-- 下一步改进计划
-- **位置**: `HudX/INTERACTIVE_FEATURES_SUMMARY.md`
-
-#### 📖 QUICK_START_INTERACTIVE.md
-
-- 5 分钟快速开始
-- 常用代码片段
-- 常见问题解答
-- 性能优化建议
-- **位置**: `HudX/QUICK_START_INTERACTIVE.md`
-
----
-
-## 🎯 核心功能实现
-
-### 1. 动画系统 ✅
+核心动画引擎 (`Animator`) 支持复杂的过渡效果。
 
 ```typescript
 import { Animation, Easing } from '@HudX/core';
 
-const animation = new Animation(
-  target,              // 目标对象
-  'property',          // 属性路径
-  endValue,            // 目标值
-  duration,            // 持续时间 (毫秒)
-  delay,               // 延迟时间 (毫秒)
-  Easing.cubicOut,     // 缓动函数
-  onUpdate,            // 更新回调
-  onComplete           // 完成回调
+const anim = new Animation(
+  target, 'x', 100, 500, 0, Easing.cubicOut
 );
-
-animation.start();
+anim.start();
 ```
 
-**支持的缓动函数**:
+## 4. 组件
 
-- `linear` - 线性
-- `quadraticIn/Out/InOut` - 二次缓动
-- `cubicIn/Out/InOut` - 三次缓动
-- `elasticIn/Out` - 弹性缓动
+### Tooltip (提示框)
 
-### 2. Tooltip 组件 ✅
+可配置的提示框，支持 HTML 内容。
 
 ```typescript
-import { Tooltip } from '@HudX/core';
-
-const tooltip = new Tooltip({
-  backgroundColor: 'rgba(50, 50, 50, 0.95)',
-  textColor: '#fff',
-  padding: 12,
-  fontSize: 13
-});
-
-renderer.add(tooltip);
-tooltip.show(x, y, 'Content');
-tooltip.hide();
+tooltip: {
+  show: true,
+  formatter: '{b}: {c} ({d}%)'
+}
 ```
 
-### 3. Legend 组件 ✅
+### Legend (图例)
+
+交互式图例，用于切换系列的可见性。
 
 ```typescript
-import { Legend } from '@HudX/core';
-
-const legend = new Legend({
-  x: 20,
-  y: 20,
+legend: {
+  data: ['A', 'B'],
   orient: 'horizontal',
-  onSelect: (name, selected) => {
-    // 处理选择事件
-  }
-});
-
-legend.setItems([
-  { name: 'Series A', color: '#5470c6' },
-  { name: 'Series B', color: '#91cc75' }
-]);
-
-renderer.add(legend);
+  bottom: 0
+}
 ```
-
-### 4. 事件处理 ✅
-
-```typescript
-element.on('mouseover', () => { /* ... */ });
-element.on('mouseout', () => { /* ... */ });
-element.on('click', () => { /* ... */ });
-element.on('dblclick', () => { /* ... */ });
-element.on('touchstart', () => { /* ... */ });
-element.on('touchmove', () => { /* ... */ });
-element.on('touchend', () => { /* ... */ });
-```
-
----
-
-## 📊 功能对比
-
-| 功能 | 之前 | 现在 | ECharts |
-|------|------|------|---------|
-| 基础图表 | ✅ | ✅ | ✅ |
-| 动画系统 | ❌ | ✅ | ✅ |
-| Tooltip | ❌ | ✅ | ✅ |
-| Legend | ❌ | ✅ | ✅ |
-| 多系列支持 | ❌ | ✅ | ✅ |
-| 事件处理 | ❌ | ✅ | ✅ |
-| 交互反馈 | ❌ | ✅ | ✅ |
-| 缓动函数 | ❌ | ✅ | ✅ |
-| 主题切换 | ✅ | ✅ | ✅ |
-| 国际化 | ✅ | ✅ | ✅ |
-
----
-
-## 📁 文件结构
-
-```
-HudX/
-├── examples/
-│   ├── src/
-│   │   ├── examples/
-│   │   │   ├── FullFeatureDemo.tsx          ✨ 新增
-│   │   │   ├── InteractiveDashboard.tsx     ✨ 新增
-│   │   │   ├── AdvancedLineChart.tsx        ✨ 新增
-│   │   │   ├── AdvancedBarChart.tsx         ✨ 新增
-│   │   │   ├── AdvancedPieChart.tsx         ✨ 新增
-│   │   │   ├── BasicLine.tsx                (保留)
-│   │   │   ├── BasicBar.tsx                 (保留)
-│   │   │   ├── BasicPie.tsx                 (保留)
-│   │   │   └── ... (其他示例)
-│   │   └── App.tsx                          📝 已更新
-│   └── INTERACTIVE_EXAMPLES.md              ✨ 新增
-├── docs/
-│   ├── INTERACTIVE_FEATURES.en.md           ✨ 新增
-│   └── INTERACTIVE_FEATURES.md              ✨ 新增
-├── INTERACTIVE_FEATURES_SUMMARY.md          ✨ 新增
-├── QUICK_START_INTERACTIVE.md               ✨ 新增
-└── OPTIMIZATION_SUMMARY.md                  ✨ 新增
-```
-
----
-
-## 🚀 快速开始
-
-### 安装和运行
-
-```bash
-# 安装依赖
-pnpm install
-
-# 启动开发服务器
-cd examples
-pnpm dev
-
-# 访问 http://localhost:5173
-```
-
-### 查看示例
-
-1. 打开浏览器访问 `http://localhost:5173`
-2. 左侧导航栏选择示例
-3. 默认显示 "🚀 Full Feature Demo"
-4. 尝试以下交互：
-   - **悬停**: 显示 Tooltip
-   - **点击**: 触发脉冲动画
-   - **图例**: 点击切换系列显示/隐藏
-
----
-
-## 💡 最佳实践
-
-### 1. 动画性能优化
-
-```typescript
-// ✅ 使用错开延迟
-seriesData.forEach((series, index) => {
-  const anim = new Animation(
-    target,
-    'property',
-    value,
-    duration,
-    index * 200,  // 错开延迟
-    easing
-  );
-  anim.start();
-});
-```
-
-### 2. 内存管理
-
-```typescript
-// ✅ 保存和清理动画
-const animationsRef = useRef<Animation[]>([]);
-
-return () => {
-  animationsRef.current.forEach(anim => anim.stop());
-  renderer.dispose();
-};
-```
-
-### 3. 交互反馈
-
-```typescript
-// ✅ 提供视觉反馈
-element.on('mouseover', () => {
-  element.attr('style', { opacity: 1 });
-  tooltip.show(x, y, content);
-  renderer.flush();
-});
-```
-
----
-
-## 📈 性能指标
-
-### 动画性能
-
-- **单系列**: 60 FPS
-- **三系列**: 60 FPS (错开延迟)
-- **十系列**: 45-50 FPS
-
-### 内存使用
-
-- **基础图表**: ~2MB
-- **高级图表**: ~3-4MB
-- **仪表板**: ~5MB
-
-### 加载时间
-
-- **基础图表**: ~100ms
-- **高级图表**: ~200ms
-- **仪表板**: ~300ms
-
----
-
-## 📚 文档导航
-
-| 文档 | 内容 | 位置 |
-|------|------|------|
-| INTERACTIVE_EXAMPLES.md | 详细示例说明 | `examples/` |
-| INTERACTIVE_FEATURES_SUMMARY.md | 功能总结 | `HudX/` |
-| QUICK_START_INTERACTIVE.md | 快速开始 | `HudX/` |
-| OPTIMIZATION_SUMMARY.md | 完成总结 | `HudX/` |
-| INTERACTIVE_FEATURES.en.md | 英文指南 | `docs/` |
-
----
-
-## 🎓 学习路径
-
-### 初级 (5-10 分钟)
-
-1. 阅读 [QUICK_START_INTERACTIVE.md](../QUICK_START_INTERACTIVE.md)
-2. 查看 "🚀 Full Feature Demo" 示例
-3. 尝试修改代码
-
-### 中级 (30-60 分钟)
-
-1. 阅读 [INTERACTIVE_EXAMPLES.md](../examples/INTERACTIVE_EXAMPLES.md)
-2. 查看所有高级示例
-3. 学习最佳实践
-
-### 高级 (1-2 小时)
-
-1. 阅读 [Core API 文档](../packages/core/README.md)
-2. 研究源代码实现
-3. 创建自定义图表
-
----
-
-## 🔍 常见问题
-
-### Q: 如何禁用动画？
-
-A: 设置 `duration` 为 0 或不调用 `start()`
-
-### Q: 如何改变动画速度？
-
-A: 修改 `Animation` 构造函数中的 `duration` 参数
-
-### Q: 如何添加自定义缓动函数？
-
-A: 传递自定义函数给 `easing` 参数
-
-### Q: 如何处理大量数据点？
-
-A: 使用数据采样或虚拟滚动技术
-
----
-
-## 🎯 下一步改进
-
-### 短期 (1-2 周)
-
-- [ ] 添加数据采样功能
-- [ ] 优化大数据集性能
-- [ ] 添加更多缓动函数
-- [ ] 改进 Tooltip 位置计算
-
-### 中期 (1 个月)
-
-- [ ] 实现虚拟滚动
-- [ ] 添加图表导出功能
-- [ ] 支持更多图表类型
-- [ ] 改进移动设备支持
-
-### 长期 (2-3 个月)
-
-- [ ] 完整的 ECharts API 兼容性
-- [ ] 高级数据处理功能
-- [ ] 实时数据更新支持
-- [ ] 完整的文档和教程
-
----
-
-## 📞 支持
-
-如有问题或建议，请：
-
-1. 查看 [常见问题](../QUICK_START_INTERACTIVE.md#常见问题)
-2. 阅读 [完整文档](../README.md)
-3. 查看 [示例代码](../examples/src/examples/)
-
----
-
-## 📝 更新日志
-
-### v1.0.0 (当前版本)
-
-**新增**:
-
-- ✨ 5 个新的交互式示例
-- ✨ 完整的动画系统
-- ✨ Tooltip 和 Legend 组件
-- ✨ 事件处理系统
-- ✨ 详细的文档和指南
-
-**改进**:
-
-- 📝 更新导航栏样式
-- 📝 改进示例组织
-- 📝 添加性能优化建议
-
-**文档**:
-
-- 📖 INTERACTIVE_EXAMPLES.md
-- 📖 INTERACTIVE_FEATURES_SUMMARY.md
-- 📖 QUICK_START_INTERACTIVE.md
-- 📖 OPTIMIZATION_SUMMARY.md
-- 📖 INTERACTIVE_FEATURES.en.md
-
----
-
-## 🏆 总结
-
-✅ **已完成**:
-
-- 5 个新的交互式示例
-- 完整的动画系统
-- Tooltip 和 Legend 组件
-- 事件处理系统
-- 详细的文档和指南
-
-🎯 **现在的能力**:
-
-- 与 ECharts 相当的交互功能
-- 平滑的动画效果
-- 完整的事件处理
-- 灵活的自定义选项
-
-📈 **性能**:
-
-- 60 FPS 的流畅动画
-- 支持多系列数据
-- 优化的内存使用
-- 快速的加载时间
-
----
-
-**版本**: 1.0.0  
-**最后更新**: 2024 年  
-**状态**: ✅ 完成

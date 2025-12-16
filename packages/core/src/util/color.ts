@@ -5,7 +5,7 @@
 /**
  * Parse color string to rgba array
  */
-export function parseColor(color: string): [number, number, number, number] | null {
+export const parseColor = (color: string): [number, number, number, number] | null => {
   if (!color) return null;
 
   // Hex color
@@ -63,22 +63,22 @@ export function parseColor(color: string): [number, number, number, number] | nu
   }
 
   return null;
-}
+};
 
 /**
  * Convert rgba array to color string
  */
-export function rgbaToString(rgba: [number, number, number, number]): string {
+export const rgbaToString = (rgba: [number, number, number, number]): string => {
   if (rgba[3] === 1) {
     return `rgb(${rgba[0]}, ${rgba[1]}, ${rgba[2]})`;
   }
   return `rgba(${rgba[0]}, ${rgba[1]}, ${rgba[2]}, ${rgba[3]})`;
-}
+};
 
 /**
  * Lighten color
  */
-export function lighten(color: string, amount: number): string {
+export const lighten = (color: string, amount: number): string => {
   const rgba = parseColor(color);
   if (!rgba) return color;
 
@@ -87,12 +87,12 @@ export function lighten(color: string, amount: number): string {
   const b = Math.min(255, rgba[2] + amount * 255);
 
   return rgbaToString([r, g, b, rgba[3]]);
-}
+};
 
 /**
  * Darken color
  */
-export function darken(color: string, amount: number): string {
+export const darken = (color: string, amount: number): string => {
   const rgba = parseColor(color);
   if (!rgba) return color;
 
@@ -101,15 +101,74 @@ export function darken(color: string, amount: number): string {
   const b = Math.max(0, rgba[2] - amount * 255);
 
   return rgbaToString([r, g, b, rgba[3]]);
-}
+};
 
 /**
  * Adjust opacity
  */
-export function adjustOpacity(color: string, opacity: number): string {
+export const adjustOpacity = (color: string, opacity: number): string => {
   const rgba = parseColor(color);
   if (!rgba) return color;
 
   return rgbaToString([rgba[0], rgba[1], rgba[2], opacity]);
-}
+};
 
+/**
+ * Linear interpolation between two colors
+ */
+export const lerp = (start: string, end: string, percent: number): string => {
+  const startRgba = parseColor(start);
+  const endRgba = parseColor(end);
+
+  if (!startRgba || !endRgba) return end;
+
+  const r = Math.round(startRgba[0] + (endRgba[0] - startRgba[0]) * percent);
+  const g = Math.round(startRgba[1] + (endRgba[1] - startRgba[1]) * percent);
+  const b = Math.round(startRgba[2] + (endRgba[2] - startRgba[2]) * percent);
+  const a = startRgba[3] + (endRgba[3] - startRgba[3]) * percent;
+
+  return rgbaToString([r, g, b, a]);
+};
+
+/**
+ * Lift color (lighten or darken)
+ * @param color Color string
+ * @param level Level of lift (-1 to 1). Positive for lighten, negative for darken.
+ */
+export const lift = (color: string, level: number): string => {
+  const rgba = parseColor(color);
+  if (!rgba) return color;
+
+  if (level > 0) {
+    // Lighten
+    const r = Math.min(255, rgba[0] + level * 255);
+    const g = Math.min(255, rgba[1] + level * 255);
+    const b = Math.min(255, rgba[2] + level * 255);
+    return rgbaToString([r, g, b, rgba[3]]);
+  } else {
+    // Darken
+    const r = Math.max(0, rgba[0] + level * 255);
+    const g = Math.max(0, rgba[1] + level * 255);
+    const b = Math.max(0, rgba[2] + level * 255);
+    return rgbaToString([r, g, b, rgba[3]]);
+  }
+};
+
+/**
+ * Convert color to hex string
+ */
+export const toHex = (color: string): string => {
+  const rgba = parseColor(color);
+  if (!rgba) return color;
+
+  const r = Math.round(rgba[0]).toString(16).padStart(2, '0');
+  const g = Math.round(rgba[1]).toString(16).padStart(2, '0');
+  const b = Math.round(rgba[2]).toString(16).padStart(2, '0');
+
+  if (rgba[3] < 1) {
+    const a = Math.round(rgba[3] * 255).toString(16).padStart(2, '0');
+    return `#${r}${g}${b}${a}`;
+  }
+
+  return `#${r}${g}${b}`;
+};

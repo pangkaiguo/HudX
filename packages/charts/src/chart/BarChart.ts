@@ -2,6 +2,7 @@ import Chart from '../Chart';
 import type { ChartOption, SeriesOption, ChartData } from '../types';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate } from '../util/coordinate';
 import { Rect, Text, Line, Legend } from '@HudX/core';
+import { EventHelper } from '../util/EventHelper';
 
 export default class BarChart extends Chart {
   protected _render(): void {
@@ -124,26 +125,34 @@ export default class BarChart extends Chart {
 
           // Tooltip
           if (this._tooltip) {
-            rect.on('mouseover', (evt: any) => {
-              rect.attr('style', { opacity: 0.8 });
-              const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
-              const itemValue = this._getDataValue(item);
+            EventHelper.bindHoverEvents(
+              rect,
+              (evt: any) => {
+                rect.attr('style', { opacity: 0.8 });
+                const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
+                const itemValue = this._getDataValue(item);
 
-              const content = this._generateTooltipContent({
-                componentType: 'series',
-                seriesType: 'bar',
-                seriesIndex,
-                seriesName: seriesItem.name,
-                name: itemName,
-                dataIndex: index,
-                data: item,
-                value: itemValue
-              });
+                const content = this._generateTooltipContent({
+                  componentType: 'series',
+                  seriesType: 'bar',
+                  seriesIndex,
+                  seriesName: seriesItem.name,
+                  name: itemName,
+                  dataIndex: index,
+                  data: item,
+                  value: itemValue
+                });
 
-              const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
-              const my = evt?.offsetY ?? (barY - 10);
-              this._tooltip!.show(mx + 12, my - 16, content);
-            });
+                const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
+                const my = evt?.offsetY ?? (barY - 10);
+                this._tooltip!.show(mx + 12, my - 16, content);
+              },
+              () => {
+                rect.attr('style', { opacity: 1 });
+                this._tooltip!.hide();
+              }
+            );
+
             rect.on('mousemove', (evt: any) => {
               if (!this._tooltip!.isVisible()) return;
               const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
@@ -163,10 +172,6 @@ export default class BarChart extends Chart {
               const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
               const my = evt?.offsetY ?? (barY - 10);
               this._tooltip!.show(mx + 12, my - 16, content);
-            });
-            rect.on('mouseout', () => {
-              rect.attr('style', { opacity: 1 });
-              this._tooltip!.hide();
             });
           }
 
