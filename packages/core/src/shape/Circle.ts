@@ -30,9 +30,13 @@ export default class Circle extends ChartElement {
   }
 
   contain(x: number, y: number): boolean {
+    const local = this.transformPointToLocal(x, y);
+    if (!local) return false;
+    const [lx, ly] = local;
+
     const shape = this.shape;
-    const dx = x - shape.cx;
-    const dy = y - shape.cy;
+    const dx = lx - shape.cx;
+    const dy = ly - shape.cy;
     return dx * dx + dy * dy <= shape.r * shape.r;
   }
 

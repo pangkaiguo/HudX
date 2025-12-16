@@ -64,7 +64,7 @@ class Renderer {
 ```typescript
 class Element extends Eventful {
   id: string;                    // 唯一标识
-  zLevel: number;                // 层级
+  zlevel: number;                // 层级
   z: number;                      // 同层级内的顺序
   style: Style;                  // 样式
   shape: Record<string, any>;    // 形状属性
@@ -94,7 +94,7 @@ class Storage {
 
 - 维护元素树结构
 - 快速查找元素（通过 ID）
-- 按 zLevel 和 z 排序元素
+- 按 zlevel 和 z 排序元素
 
 ### 4. Painter 类
 
@@ -113,7 +113,7 @@ class Painter {
 1. 检查是否需要重绘（dirty flag）
 2. 清空画布
 3. 从 Storage 获取所有元素
-4. 按 zLevel 和 z 排序
+4. 按 zlevel 和 z 排序
 5. 遍历绘制每个元素
 
 **性能优化**:

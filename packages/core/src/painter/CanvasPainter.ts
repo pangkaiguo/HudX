@@ -100,7 +100,7 @@ export default class CanvasPainter implements IPainter {
       return;
     }
 
-    // Get all elements sorted by zLevel and z
+    // Get all elements sorted by zlevel and z
     const elements = this._storage.getElementsList();
     console.log('[CanvasPainter] elements count:', elements.length);
 

@@ -5,10 +5,20 @@
 
 import Eventful from './mixin/Eventful';
 import type { ElementOption, Style, Transform, BoundingRect } from './types';
+import {
+  Matrix,
+  createIdentityMatrix,
+  translate,
+  scale,
+  rotate,
+  multiplyMatrix,
+  invertMatrix,
+  applyMatrix
+} from './util/matrix';
 
 class ChartElement extends Eventful {
   id: string;
-  zLevel: number = 0;
+  zlevel: number = 0;
   z: number = 0;
   silent: boolean = false;
   invisible: boolean = false;
@@ -26,7 +36,7 @@ class ChartElement extends Eventful {
   constructor(opts: ElementOption = {}) {
     super();
     this.id = opts.id || this._generateId();
-    this.zLevel = opts.zLevel ?? 0;
+    this.zlevel = opts.zlevel ?? 0;
     this.z = opts.z ?? 0;
     this.silent = opts.silent ?? false;
     this.invisible = opts.invisible ?? false;
@@ -113,6 +123,56 @@ class ChartElement extends Eventful {
 
   render(ctx: CanvasRenderingContext2D): void {
     // To be implemented by subclasses
+  }
+
+  /**
+   * Get local transform matrix
+   */
+  getLocalTransform(): Matrix {
+    const t = this.transform || {};
+    let m = createIdentityMatrix();
+
+    const x = t.x ?? 0;
+    const y = t.y ?? 0;
+    const originX = t.originX ?? 0;
+    const originY = t.originY ?? 0;
+    const rotation = t.rotation ?? 0;
+    const scaleX = t.scaleX ?? 1;
+    const scaleY = t.scaleY ?? 1;
+
+    m = translate(m, x, y);
+    if (originX || originY) m = translate(m, originX, originY);
+    if (rotation) m = rotate(m, rotation);
+    if (scaleX !== 1 || scaleY !== 1) m = scale(m, scaleX, scaleY);
+    if (originX || originY) m = translate(m, -originX, -originY);
+
+    return m;
+  }
+
+  /**
+   * Get global transform matrix
+   */
+  getGlobalTransform(): Matrix {
+    let m = this.getLocalTransform();
+    let parent = (this as any).__parent;
+    while (parent) {
+      const pm = parent.getLocalTransform();
+      m = multiplyMatrix(pm, m);
+      parent = (parent as any).__parent;
+    }
+    return m;
+  }
+
+  /**
+   * Transform global point to local coordinate space
+   */
+  transformPointToLocal(x: number, y: number): [number, number] | null {
+    const globalTransform = this.getGlobalTransform();
+    const invTransform = invertMatrix(globalTransform);
+    if (!invTransform) {
+      return null;
+    }
+    return applyMatrix(invTransform, x, y);
   }
 
   protected applyTransform(ctx: CanvasRenderingContext2D): void {

@@ -61,9 +61,13 @@ export default class Text extends ChartElement {
   }
 
   contain(x: number, y: number): boolean {
+    const local = this.transformPointToLocal(x, y);
+    if (!local) return false;
+    const [lx, ly] = local;
+
     const rect = this.getBoundingRect();
-    return x >= rect.x && x <= rect.x + rect.width &&
-           y >= rect.y && y <= rect.y + rect.height;
+    return lx >= rect.x && lx <= rect.x + rect.width &&
+           ly >= rect.y && ly <= rect.y + rect.height;
   }
 
   render(ctx: CanvasRenderingContext2D): void {

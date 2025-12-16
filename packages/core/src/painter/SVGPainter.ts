@@ -108,7 +108,7 @@ export default class SVGPainter implements IPainter {
     }
     this._elementMap.clear();
 
-    // Get all elements sorted by zLevel and z
+    // Get all elements sorted by zlevel and z
     const elements = this._storage.getElementsList();
 
     // Render each element
@@ -216,7 +216,7 @@ export default class SVGPainter implements IPainter {
     // Serialize SVG
     const serializer = new XMLSerializer();
     let svgString = serializer.serializeToString(this._svg);
-    
+
     // Add background color if needed
     if (backgroundColor) {
       const style = `style="background-color: ${backgroundColor}"`;
@@ -233,7 +233,7 @@ export default class SVGPainter implements IPainter {
     canvas.width = this._width * pixelRatio;
     canvas.height = this._height * pixelRatio;
     const ctx = canvas.getContext('2d');
-    
+
     if (!ctx) {
       return '';
     }
@@ -246,23 +246,23 @@ export default class SVGPainter implements IPainter {
     const img = new Image();
     const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(svgBlob);
-    
+
     // Note: This is asynchronous in nature but we need synchronous return.
     // In a real implementation we might want to return a Promise or handle this differently.
     // For now, we'll return a placeholder or handle it if the image loads immediately (which it won't).
     // A better approach for SVG to PNG conversion usually involves async operations.
     // Given the constraints, we might want to just return the SVG string for now or 
     // reconsider the interface if async is needed.
-    
+
     // However, since the interface expects a string, let's return the SVG data URL if type is not supported properly synchronously
     // or implement a synchronous way if possible (rare for SVG to Canvas).
-    
+
     // Actually, let's return a data URL of the SVG itself if we can't do canvas conversion synchronously.
     // But wait, the user might expect a PNG data URL.
-    
+
     // Let's implement a basic synchronous SVG data URL return for now as a fallback or 
     // acknowledge that SVG->PNG is typically async.
-    
+
     // For the purpose of this exercise, let's return the SVG data URL.
     return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
   }

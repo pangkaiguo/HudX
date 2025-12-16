@@ -574,7 +574,7 @@ export default class Chart {
     color?: string;
     textColor?: string;
     maskColor?: string;
-    zLevel?: number;
+    zlevel?: number;
   }): void {
     // Implementation depends on Renderer capabilities
     const opts = {
@@ -582,7 +582,7 @@ export default class Chart {
       color: loadingOpts?.color || '#5470c6',
       textColor: loadingOpts?.textColor || '#333',
       maskColor: loadingOpts?.maskColor || 'rgba(255, 255, 255, 0.8)',
-      zLevel: loadingOpts?.zLevel || 9999
+      zlevel: loadingOpts?.zlevel || 9999
     };
 
     // Dispatch loading event
@@ -720,13 +720,13 @@ export default class Chart {
     const posBottom = (option.legend as any)?.bottom;
 
     const legend = new Legend({
-      orient: option.legend?.orient || 'horizontal',
+      orient: option.legend?.orient || 'vertical',
       x: typeof posLeft !== 'undefined'
         ? posLeft
-        : (typeof posRight !== 'undefined' ? 'right' : 'center'),
+        : (typeof posRight !== 'undefined' ? 'right' : 'left'),
       y: typeof posTop !== 'undefined'
         ? posTop
-        : (typeof posBottom !== 'undefined' ? 'bottom' : 'top'),
+        : (typeof posBottom !== 'undefined' ? 'bottom' : 'bottom'),
       right: typeof posRight === 'number' ? posRight : undefined,
       bottom: typeof posBottom === 'number' ? posBottom : undefined,
       selectedMode: option.legend?.selectedMode || 'multiple',
@@ -742,6 +742,7 @@ export default class Chart {
         this.endAnimateControl();
       }
     } as any);
+    legend.z = 500; // Ensure legend is above grid/axes
 
     legend.setContainer(this._width, this._height);
     legend.setItems(items, Array.from(this._legendSelected));

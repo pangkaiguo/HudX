@@ -32,9 +32,13 @@ export default class Rect extends ChartElement {
   }
 
   contain(x: number, y: number): boolean {
+    const local = this.transformPointToLocal(x, y);
+    if (!local) return false;
+    const [lx, ly] = local;
+
     const shape = this.shape;
-    return x >= shape.x && x <= shape.x + shape.width &&
-           y >= shape.y && y <= shape.y + shape.height;
+    return lx >= shape.x && lx <= shape.x + shape.width &&
+           ly >= shape.y && ly <= shape.y + shape.height;
   }
 
   render(ctx: CanvasRenderingContext2D): void {

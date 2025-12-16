@@ -44,6 +44,8 @@ export default class Tooltip extends Group {
       confine: true,
       ...option
     };
+    this.z = 1000; // Ensure tooltip is on top
+    this.silent = true; // Tooltip should not block mouse events
     this.invisible = true;
     this.style.opacity = 0;
   }

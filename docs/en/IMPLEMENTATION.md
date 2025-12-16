@@ -64,7 +64,7 @@ All graphic elements inherit from Element:
 ```typescript
 class Element extends Eventful {
   id: string;                      // Unique identifier
-  zLevel: number;                  // Z-level
+  zlevel: number;                  // Z-level
   z: number;                       // Order within z-level
   style: Style;                    // Style
   shape: Record<string, any>;      // Shape properties
@@ -94,7 +94,7 @@ class Storage {
 
 - Maintains element tree structure
 - Quick element lookup (by ID)
-- Elements sorted by zLevel and z
+- Elements sorted by zlevel and z
 
 ### 4. Painter Classes
 
@@ -113,7 +113,7 @@ class CanvasPainter implements IPainter {
 1. Check if redraw needed (dirty flag)
 2. Clear canvas
 3. Get all elements from Storage
-4. Sort by zLevel and z
+4. Sort by zlevel and z
 5. Render each element
 
 **Performance Optimization**:

@@ -159,14 +159,27 @@ export default class Group extends ChartElement {
       return;
     }
 
+    ctx.save();
+    this.applyTransform(ctx);
+    this.applyStyle(ctx);
+
+    // Sort children by zlevel and z
+    const sortedChildren = [...this._children].sort((a, b) => {
+      if (a.zlevel !== b.zlevel) {
+        return a.zlevel - b.zlevel;
+      }
+      return a.z - b.z;
+    });
+
     // Render children
-    for (const child of this._children) {
+    for (const child of sortedChildren) {
       if (!child.invisible) {
-        ctx.save();
+        // Child handles its own save/restore
         child.render(ctx);
-        ctx.restore();
       }
     }
+
+    ctx.restore();
   }
 }
 

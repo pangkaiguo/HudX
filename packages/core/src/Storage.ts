@@ -81,13 +81,13 @@ export default class Storage {
   }
 
   /**
-   * Get all elements sorted by zLevel and z
+   * Get all elements sorted by zlevel and z
    */
   getElementsList(): ChartElement[] {
     // Only return root elements, they will render their children
     return [...this._roots].sort((a, b) => {
-      if (a.zLevel !== b.zLevel) {
-        return a.zLevel - b.zLevel;
+      if (a.zlevel !== b.zlevel) {
+        return a.zlevel - b.zlevel;
       }
       return a.z - b.z;
     });
@@ -98,10 +98,10 @@ export default class Storage {
    */
   getDisplayList(includeInvisible: boolean = false): ChartElement[] {
     const list: ChartElement[] = [];
-    
+
     // Sort roots
     const sortedRoots = [...this._roots].sort((a, b) => {
-      if (a.zLevel !== b.zLevel) return a.zLevel - b.zLevel;
+      if (a.zlevel !== b.zlevel) return a.zlevel - b.zlevel;
       return a.z - b.z;
     });
 
@@ -110,22 +110,22 @@ export default class Storage {
       if (!includeInvisible && element.invisible) {
         return;
       }
-      
+
       list.push(element);
-      
+
       if (element instanceof Group) {
-         // Sort children
-         const children = element.children().sort((a, b) => {
-            if (a.zLevel !== b.zLevel) return a.zLevel - b.zLevel;
-            return a.z - b.z;
-         });
-         
-         children.forEach(child => traverse(child));
+        // Sort children
+        const children = element.children().sort((a, b) => {
+          if (a.zlevel !== b.zlevel) return a.zlevel - b.zlevel;
+          return a.z - b.z;
+        });
+
+        children.forEach(child => traverse(child));
       }
     };
 
     sortedRoots.forEach(root => traverse(root));
-    
+
     return list;
   }
 
