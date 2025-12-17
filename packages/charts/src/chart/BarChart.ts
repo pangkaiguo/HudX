@@ -1,13 +1,24 @@
 import Chart from '../Chart';
 import type { ChartOption, SeriesOption, ChartData } from '../types';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate } from '../util/coordinate';
-import { Rect, Text, Line, Legend } from '@HudX/core';
+import { Rect, Text, Line, Legend, createDecalPattern } from '@HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class BarChart extends Chart {
+  private _activeBars: Map<string, Rect> = new Map();
+
   protected _render(): void {
     try {
       super._render();
+
+      // Ensure activeBars is initialized
+      if (!this._activeBars) {
+        this._activeBars = new Map();
+      }
+
+      // Keep track of old bars
+      const oldBars = this._activeBars;
+      this._activeBars = new Map();
 
       const option = this._option;
       const series = option.series || [];
@@ -107,15 +118,38 @@ export default class BarChart extends Chart {
 
           const itemStyle = seriesItem.itemStyle || {};
 
+          // Handle aria decal
+          let fillStyle: string | CanvasPattern = barColor;
+          const aria = option.aria;
+          if (aria?.enabled && aria?.decal?.show) {
+            const decals = aria.decal.decals || [];
+            // Use series index for bar chart to distinguish series
+            const decal = decals[seriesIndex % decals.length] || { symbol: 'rect' };
+
+            const pattern = createDecalPattern(decal, barColor);
+            if (pattern) {
+              fillStyle = pattern;
+            }
+          }
+
+          const barKey = `${seriesIndex}-${index}`;
+          const oldBar = oldBars.get(barKey);
+
+          let initialHeight = 0;
+
+          if (oldBar) {
+            initialHeight = oldBar.shape.height;
+          }
+
           const rect = new Rect({
             shape: {
               x: barX,
-              y: plotY + plotHeight, // Start from bottom for animation
+              y: plotY + plotHeight - initialHeight, // Start from previous position
               width: barWidthPerSeries,
-              height: 0, // Start with height 0 for animation
+              height: initialHeight,
             },
             style: {
-              fill: barColor,
+              fill: fillStyle,
               stroke: itemStyle.borderColor || this.getThemeConfig().borderColor,
               lineWidth: itemStyle.borderWidth || 0,
             },
@@ -124,6 +158,7 @@ export default class BarChart extends Chart {
           });
 
           this._root.add(rect);
+          this._activeBars.set(barKey, rect);
 
           // Tooltip
           if (this._tooltip) {
@@ -178,9 +213,10 @@ export default class BarChart extends Chart {
           }
 
           // Animate bar if animation is enabled
-          if (this._shouldAnimateFor(seriesName)) {
-            const delay = index * 100 + seriesIndex * 200;
-            const duration = this._getAnimationDuration();
+          if (this._shouldAnimateFor(seriesName) || oldBar) {
+            const isUpdate = !!oldBar;
+            const delay = isUpdate ? 0 : (index * 100 + seriesIndex * 200);
+            const duration = this._getAnimationDuration(isUpdate);
 
             this._animator.animate(
               rect.attr('shape'),
@@ -191,7 +227,8 @@ export default class BarChart extends Chart {
                 delay,
                 easing: 'cubicOut',
                 onUpdate: (target, percent) => {
-                  target.height = barHeight * percent;
+                  const currentHeight = initialHeight + (barHeight - initialHeight) * percent;
+                  target.height = currentHeight;
                   target.y = plotY + plotHeight - target.height;
                   rect.markRedraw();
                 }

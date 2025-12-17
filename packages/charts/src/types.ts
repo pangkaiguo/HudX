@@ -2,6 +2,9 @@
  * Chart type definitions
  */
 
+import type { DecalObject } from '@HudX/core';
+export type { DecalObject };
+
 export interface ChartOption {
   title?: TitleOption;
   tooltip?: TooltipOption;
@@ -14,7 +17,19 @@ export interface ChartOption {
   animation?: boolean;
   animationDuration?: number;
   animationEasing?: string;
+  aria?: AriaOption;
   [key: string]: any;
+}
+
+export interface AriaOption {
+  enabled?: boolean;
+  decal?: DecalOption;
+  [key: string]: any;
+}
+
+export interface DecalOption {
+  show?: boolean;
+  decals?: DecalObject[];
 }
 
 export interface TitleOption {

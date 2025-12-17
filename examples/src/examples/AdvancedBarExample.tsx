@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import { HChart } from '@HudX/charts';
 import type { ChartOption } from '@HudX/charts';
 import { ThemeManager } from '@HudX/core';
 
 export const AdvancedBarExample = () => {
-  // Get current theme colors (assuming light for now, but could be dynamic)
+  const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
   const colors = theme.seriesColors || [];
 
@@ -16,6 +17,17 @@ export const AdvancedBarExample = () => {
     tooltip: {
       show: true,
       trigger: 'axis' // Ideally we want axis trigger, but item is supported for now
+    },
+    aria: {
+      enabled: true,
+      decal: {
+        show: isDecal,
+        decals: [
+          { symbol: 'rect', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
+          { symbol: 'circle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
+          { symbol: 'triangle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' }
+        ]
+      }
     },
     legend: {
       show: true,
@@ -69,6 +81,16 @@ export const AdvancedBarExample = () => {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Staggered bar animations • Interactive legend • Hover tooltips with values
       </p>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={isDecal}
+            onChange={(e) => setIsDecal(e.target.checked)}
+          />
+          Enable Accessibility Decal Patterns
+        </label>
+      </div>
       <HChart
         option={option}
         width={900}

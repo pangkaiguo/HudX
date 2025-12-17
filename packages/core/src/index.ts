@@ -39,6 +39,7 @@ export { default as ObjectPool } from './util/ObjectPool';
 export { default as BatchUpdater } from './util/BatchUpdater';
 export * from './util/matrix';
 export * from './util/color';
+export * from './util/pattern';
 
 // Theme and i18n
 export { ThemeManager } from './theme/ThemeManager';

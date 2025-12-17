@@ -15,8 +15,8 @@ export interface BoundingRect {
 }
 
 export interface Style {
-  fill?: string;
-  stroke?: string;
+  fill?: string | CanvasGradient | CanvasPattern;
+  stroke?: string | CanvasGradient | CanvasPattern;
   lineWidth?: number;
   lineDash?: number[];
   lineDashOffset?: number;
@@ -269,4 +269,17 @@ export interface DataURLOpts {
  */
 export interface ElementWithParent {
   __parent?: any;
+}
+
+export interface DecalObject {
+  symbol?: 'circle' | 'rect' | 'triangle' | 'diamond' | 'pin' | 'arrow' | 'none' | string;
+  symbolSize?: number;
+  symbolKeepAspect?: boolean;
+  color?: string;
+  backgroundColor?: string;
+  dashArrayX?: number[] | number;
+  dashArrayY?: number[] | number;
+  rotation?: number;
+  maxTileWidth?: number;
+  maxTileHeight?: number;
 }

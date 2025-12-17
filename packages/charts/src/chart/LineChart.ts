@@ -1,7 +1,7 @@
 import Chart from '../Chart';
 import type { ChartOption, SeriesOption, ChartData } from '../types';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate, Scale } from '../util/coordinate';
-import { Group, Polyline, Circle, Text, Line, Point, Legend, Rect } from '@HudX/core';
+import { Group, Polyline, Circle, Text, Line, Point, Legend, Rect, createDecalPattern } from '@HudX/core';
 
 export default class LineChart extends Chart {
   protected _render(): void {
@@ -220,6 +220,19 @@ export default class LineChart extends Chart {
           const pointColor = itemStyle.color || lineColor;
           const pointSize = itemStyle.borderWidth || 4;
 
+          // Handle aria decal
+          let pointFill: string | CanvasPattern = pointColor;
+          const aria = option.aria;
+          if (aria?.enabled && aria?.decal?.show) {
+            const decals = aria.decal.decals || [];
+            const decal = decals[seriesIndex % decals.length] || { symbol: 'circle' };
+
+            const pattern = createDecalPattern(decal, pointColor);
+            if (pattern) {
+              pointFill = pattern;
+            }
+          }
+
           points.forEach((point, pointIndex) => {
             const item = data[pointIndex];
             const circle = new Circle({
@@ -229,7 +242,7 @@ export default class LineChart extends Chart {
                 r: 0, // Start with radius 0 for animation
               },
               style: {
-                fill: pointColor,
+                fill: pointFill,
                 stroke: '#fff',
                 lineWidth: 2,
               },

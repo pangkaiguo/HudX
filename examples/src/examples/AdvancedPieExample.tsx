@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { HChart } from '@HudX/charts';
 import type { ChartOption } from '@HudX/charts';
 import { ThemeManager } from '@HudX/core';
 
 export const AdvancedPieExample = () => {
+  const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
   const colors = theme.seriesColors || [];
 
@@ -16,6 +18,20 @@ export const AdvancedPieExample = () => {
       show: true,
       trigger: 'item',
       formatter: '{b}\n{c} ({d}%)'
+    },
+    aria: {
+      enabled: true,
+      decal: {
+        show: isDecal,
+        decals: [
+          { symbol: 'circle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
+          { symbol: 'rect', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
+          { symbol: 'triangle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
+          { symbol: 'diamond', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
+          { symbol: 'pin', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
+          { symbol: 'arrow', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' }
+        ]
+      }
     },
     legend: {
       show: true,
@@ -62,6 +78,16 @@ export const AdvancedPieExample = () => {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Smooth pie slice animations • Percentage display • Interactive legend • Hover tooltips
       </p>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={isDecal}
+            onChange={(e) => setIsDecal(e.target.checked)}
+          />
+          Enable Accessibility Decal Patterns
+        </label>
+      </div>
       <HChart
         option={option}
         width={900}

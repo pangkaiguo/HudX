@@ -1,6 +1,6 @@
 import Chart from '../Chart';
 import type { ChartOption, SeriesOption, ChartData, EmphasisOption } from '../types';
-import { Sector, Text, Point, Legend } from '@HudX/core';
+import { Sector, Text, Point, Legend, createDecalPattern } from '@HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class PieChart extends Chart {
@@ -16,6 +16,11 @@ export default class PieChart extends Chart {
       }
       if (this._legend) {
         this._root.remove(this._legend);
+      }
+
+      // Ensure activeSectors is initialized (first render called from super constructor)
+      if (!this._activeSectors) {
+        this._activeSectors = new Map();
       }
 
       // Keep track of old sectors
@@ -113,6 +118,19 @@ export default class PieChart extends Chart {
         const itemStyle = seriesItem.itemStyle || {};
         const color = (typeof item === 'object' && item.itemStyle?.color) || itemStyle.color || this._getSeriesColor(index);
 
+        // Handle aria decal
+        let fillStyle: string | CanvasPattern = color;
+        const aria = option.aria;
+        if (aria?.enabled && aria?.decal?.show) {
+          const decals = aria.decal.decals || [];
+          const decal = decals[index % decals.length] || { symbol: 'circle' };
+
+          const pattern = createDecalPattern(decal, color);
+          if (pattern) {
+            fillStyle = pattern;
+          }
+        }
+
         // Calculate target angles
         const targetStart = currentAngle;
         const targetEnd = currentAngle + angle;
@@ -145,7 +163,7 @@ export default class PieChart extends Chart {
             anticlockwise: false,
           },
           style: {
-            fill: color,
+            fill: fillStyle,
             stroke: seriesItem.itemStyle?.borderColor || '#fff',
             lineWidth: seriesItem.itemStyle?.borderWidth ?? 0,
           },

@@ -164,13 +164,13 @@ export default class SVGPainter implements IPainter {
     // Apply style
     const style = element.style;
     if (style) {
-      if (style.fill) {
+      if (style.fill && typeof style.fill === 'string') {
         group.setAttribute('fill', style.fill);
       } else {
         group.setAttribute('fill', 'none');
       }
 
-      if (style.stroke) {
+      if (style.stroke && typeof style.stroke === 'string') {
         group.setAttribute('stroke', style.stroke);
       }
 
