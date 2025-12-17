@@ -448,13 +448,70 @@ export default class PieChart extends Chart {
   }
 
   private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number): void {
-    // Opacity animation
-    this._animator.animate(
-      sector.style as Record<string, unknown>,
-      'opacity',
-      isEnter ? 0.8 : 1,
-      { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-    ).start();
+    // Style animation (shadow, opacity, etc.)
+    if (emphasis?.itemStyle) {
+      const style = sector.style as Record<string, unknown>;
+      const emphasisStyle = emphasis.itemStyle;
+
+      // Store initial styles if not already stored
+      if (!(sector as any).__initialStyle) {
+        (sector as any).__initialStyle = { ...style };
+      }
+
+      const targetStyle: Record<string, unknown> = {};
+
+      if (isEnter) {
+        if (emphasisStyle.shadowBlur !== undefined) targetStyle.shadowBlur = emphasisStyle.shadowBlur;
+        if (emphasisStyle.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = emphasisStyle.shadowOffsetX;
+        if (emphasisStyle.shadowOffsetY !== undefined) targetStyle.shadowOffsetY = emphasisStyle.shadowOffsetY;
+        if (emphasisStyle.shadowColor !== undefined) targetStyle.shadowColor = emphasisStyle.shadowColor;
+        if (emphasisStyle.color !== undefined) targetStyle.fill = emphasisStyle.color;
+        if (emphasisStyle.borderColor !== undefined) targetStyle.stroke = emphasisStyle.borderColor;
+        if (emphasisStyle.borderWidth !== undefined) targetStyle.lineWidth = emphasisStyle.borderWidth;
+
+        // Opacity is handled separately above, but we can merge it if we want consistency
+        targetStyle.opacity = 0.8; // Default emphasis opacity
+      } else {
+        // Restore to initial style
+        const init = (sector as any).__initialStyle;
+        if (init.shadowBlur !== undefined) targetStyle.shadowBlur = init.shadowBlur; else targetStyle.shadowBlur = 0;
+        if (init.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = init.shadowOffsetX; else targetStyle.shadowOffsetX = 0;
+        if (init.shadowOffsetY !== undefined) targetStyle.shadowOffsetY = init.shadowOffsetY; else targetStyle.shadowOffsetY = 0;
+        if (init.shadowColor !== undefined) targetStyle.shadowColor = init.shadowColor; else targetStyle.shadowColor = 'transparent';
+        if (init.fill !== undefined) targetStyle.fill = init.fill;
+        if (init.stroke !== undefined) targetStyle.stroke = init.stroke;
+        if (init.lineWidth !== undefined) targetStyle.lineWidth = init.lineWidth;
+
+        targetStyle.opacity = init.opacity !== undefined ? init.opacity : 1;
+      }
+
+      // Apply style animation
+      Object.keys(targetStyle).forEach(key => {
+        const value = targetStyle[key];
+        if (typeof value === 'number') {
+          this._animator.animate(
+            style,
+            key,
+            value,
+            { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+          ).start();
+        } else {
+          // For non-numeric properties (colors), set directly to avoid breaking animator
+          // which expects numbers. Color interpolation can be added later if needed.
+          style[key] = value;
+          sector.markRedraw();
+        }
+      });
+    } else {
+      // Fallback simple opacity animation if no specific itemStyle is provided
+      const initialOpacity = (sector as any).__initialOpacity ?? 1;
+      this._animator.animate(
+        sector.style as Record<string, unknown>,
+        'opacity',
+        isEnter ? 0.8 : initialOpacity,
+        { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+      ).start();
+    }
 
     // Scale animation (Radius Expansion)
     if (emphasis?.scale && baseR !== undefined) {
