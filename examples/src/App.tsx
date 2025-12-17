@@ -14,6 +14,8 @@ const PieWithLegendExample = lazy(() => import('./examples/PieWithLegendExample'
 const AdvancedLineChartExample = lazy(() => import('./examples/AdvancedLineExample'));
 const AdvancedBarChartExample = lazy(() => import('./examples/AdvancedBarExample'));
 const AdvancedPieChartExample = lazy(() => import('./examples/AdvancedPieExample'));
+const DoughnutExample = lazy(() => import('./examples/DoughnutExample'));
+const HalfDoughnutExample = lazy(() => import('./examples/HalfDoughnutExample'));
 const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
 
 const examples = [
@@ -30,6 +32,8 @@ const examples = [
   { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChartExample },
   { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
   { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
+  { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
+  { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
   { id: 'performance', name: 'Performance', component: PerformanceExample }
 ];
 

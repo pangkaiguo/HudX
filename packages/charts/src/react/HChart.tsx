@@ -10,6 +10,8 @@ import Chart from '../Chart';
 import LineChart from '../chart/LineChart';
 import BarChart from '../chart/BarChart';
 import PieChart from '../chart/PieChart';
+import DoughnutChart from '../chart/DoughnutChart';
+import HalfDoughnutChart from '../chart/HalfDoughnutChart';
 import ScatterChart from '../chart/ScatterChart';
 
 export interface HChartProps {
@@ -70,6 +72,12 @@ const HChart: React.FC<HChartProps> = ({
         break;
       case 'pie':
         ChartClass = PieChart;
+        break;
+      case 'doughnut':
+        ChartClass = DoughnutChart;
+        break;
+      case 'half-doughnut':
+        ChartClass = HalfDoughnutChart;
         break;
       case 'scatter':
         ChartClass = ScatterChart;

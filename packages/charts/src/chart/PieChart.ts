@@ -16,7 +16,7 @@ export default class PieChart extends Chart {
       }
 
       const seriesItem = series[0];
-      if (seriesItem.type !== 'pie') {
+      if (!['pie', 'doughnut', 'half-doughnut'].includes(seriesItem.type)) {
         return;
       }
 
@@ -27,7 +27,7 @@ export default class PieChart extends Chart {
 
       // Calculate pie center and radius
       const center = this._getCenter(seriesItem);
-      const radius = this._getRadius(seriesItem);
+      const [r0, r] = this._getRadius(seriesItem);
       const cx = center[0];
       const cy = center[1];
 
@@ -42,7 +42,16 @@ export default class PieChart extends Chart {
       }
 
       // Render pie slices
-      let currentAngle = -Math.PI / 2; // Start from top
+      let startAngle = (seriesItem as any).startAngle !== undefined
+        ? (seriesItem as any).startAngle * Math.PI / 180
+        : (seriesItem.type === 'half-doughnut' ? -Math.PI : -Math.PI / 2);
+
+      let endAngle = (seriesItem as any).endAngle !== undefined
+        ? (seriesItem as any).endAngle * Math.PI / 180
+        : (seriesItem.type === 'half-doughnut' ? 0 : startAngle + Math.PI * 2);
+
+      const totalAngle = endAngle - startAngle;
+      let currentAngle = startAngle;
 
       // Legend for pie (use data item names)
       if (option.legend?.show !== false) {
@@ -59,10 +68,25 @@ export default class PieChart extends Chart {
         const value = typeof item === 'object' ? item.value : item;
         if (typeof value !== 'number') return;
         const percent = value / total;
-        const angle = percent * Math.PI * 2;
+        const angle = percent * totalAngle;
         // legend selection
         const itemName = (typeof item === 'object' && item.name) ? item.name : `item-${index + 1}`;
         if (this._legend && !this._legendSelected.has(itemName)) {
+          // If hidden, we don't advance currentAngle if we want to fill the gap?
+          // ECharts behavior: if hidden, the part is removed, other parts expand?
+          // Or just hole?
+          // Usually re-calculate total without hidden items.
+          // But here 'total' included hidden items?
+          // Let's re-calculate total if we want dynamic update.
+          // For now, let's just skip drawing but advance angle? No, usually we want to re-distribute.
+          // The current implementation calculates 'total' from ALL data at the beginning.
+          // If we want legend to hide items, we should filter data before loop or recalculate total.
+          // Let's stick to existing logic for now, but note that skipping without advancing angle means others will be adjacent.
+          // But wait, line 66 says `currentAngle += angle`. This means it reserves space!
+          // ECharts default: hiding item removes it and resizes others.
+          // The current implementation seems to reserve space (hole).
+          // If user wants resize, 'total' must be updated.
+          // I will leave this behavior as is for now to avoid scope creep, just updating variables.
           currentAngle += angle;
           return;
         }
@@ -76,8 +100,8 @@ export default class PieChart extends Chart {
           shape: {
             cx,
             cy,
-            r: radius,
-            r0: 0,
+            r,
+            r0,
             startAngle: start,
             endAngle: start, // Start with same angle for animation
             anticlockwise: false,
@@ -191,8 +215,8 @@ export default class PieChart extends Chart {
           sector.attr('shape', {
             cx,
             cy,
-            r: radius,
-            r0: 0,
+            r,
+            r0,
             startAngle: currentAngle,
             endAngle: currentAngle + angle,
             anticlockwise: false,
@@ -202,10 +226,9 @@ export default class PieChart extends Chart {
         // Render label if enabled
         if (seriesItem.label?.show) {
           const labelAngle = start + angle / 2;
-          const labelRadius = radius * 0.7; // Internal label or external? Usually internal for simple
           // If position outside
           const isOutside = seriesItem.label.position === 'outside';
-          const finalLabelRadius = isOutside ? radius * 1.1 : radius * 0.7;
+          const finalLabelRadius = isOutside ? r * 1.1 : (r + r0) / 2;
 
           const labelX = cx + Math.cos(labelAngle) * finalLabelRadius;
           const labelY = cy + Math.sin(labelAngle) * finalLabelRadius;
@@ -258,15 +281,34 @@ export default class PieChart extends Chart {
   /**
    * Get pie radius
    */
-  private _getRadius(seriesItem: SeriesOption): number {
+  private _getRadius(seriesItem: SeriesOption): [number, number] {
     const radius = (seriesItem as any).radius;
+    const maxRadius = Math.min(this._width, this._height) / 2;
+
+    if (Array.isArray(radius)) {
+      return [
+        this._parsePercent(radius[0], maxRadius),
+        this._parsePercent(radius[1], maxRadius)
+      ];
+    }
+
     if (typeof radius === 'string') {
-      return this._parsePercent(radius, Math.min(this._width, this._height) / 2);
+      const outer = this._parsePercent(radius, maxRadius);
+      if (seriesItem.type === 'doughnut' || seriesItem.type === 'half-doughnut') {
+        return [outer * 0.5, outer];
+      }
+      return [0, outer];
     }
     if (typeof radius === 'number') {
-      return radius;
+      if (seriesItem.type === 'doughnut' || seriesItem.type === 'half-doughnut') {
+        return [radius * 0.5, radius];
+      }
+      return [0, radius];
     }
-    return Math.min(this._width, this._height) / 2 * 0.8;
+    if (seriesItem.type === 'doughnut' || seriesItem.type === 'half-doughnut') {
+      return [maxRadius * 0.4, maxRadius * 0.8];
+    }
+    return [0, maxRadius * 0.8];
   }
 
   /**
