@@ -28,7 +28,13 @@ export const DoughnutExample = () => {
         name: 'Access Source',
         type: 'doughnut',
         radius: ['40%', '70%'],
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: 'transparent'
+        },
         emphasis: {
+          scale: true,
+          scaleSize: 1.02,
           itemStyle: {
             shadowBlur: 10,
             shadowOffsetX: 0,

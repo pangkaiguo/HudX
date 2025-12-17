@@ -115,10 +115,6 @@ export default class CanvasPainter implements IPainter {
     // Clear canvas only once
     this._ctx.clearRect(0, 0, this._width, this._height);
 
-    // DEBUG: Draw a red square to verify canvas is rendering
-    this._ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
-    this._ctx.fillRect(10, 10, 50, 50);
-
     // Render each element (batch rendering)
     for (let i = 0, len = elements.length; i < len; i++) {
       const element = elements[i];

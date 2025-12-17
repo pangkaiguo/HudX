@@ -146,8 +146,8 @@ export default class PieChart extends Chart {
           },
           style: {
             fill: color,
-            stroke: '#fff',
-            lineWidth: 2,
+            stroke: seriesItem.itemStyle?.borderColor || '#fff',
+            lineWidth: seriesItem.itemStyle?.borderWidth ?? 0,
           },
           transform: {
             x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy
@@ -167,7 +167,7 @@ export default class PieChart extends Chart {
             sector,
             (evt: any) => {
               // Apply emphasis animation
-              this._applyEmphasisAnimation(sector, emphasis, true);
+              this._applyEmphasisAnimation(sector, emphasis, true, r);
 
               // Show tooltip
               if (this._tooltip) {
@@ -193,7 +193,7 @@ export default class PieChart extends Chart {
             },
             () => {
               // Restore emphasis
-              this._applyEmphasisAnimation(sector, emphasis, false);
+              this._applyEmphasisAnimation(sector, emphasis, false, r);
 
               // Hide tooltip
               if (this._tooltip) {
@@ -230,9 +230,10 @@ export default class PieChart extends Chart {
 
         // Animate pie slice
         if (this._shouldAnimateFor(itemName) || oldSector) {
-          const delay = oldSector ? 0 : index * 200; // Stagger only for new entrance
-          const duration = this._getAnimationDuration();
-          const easing = this._getAnimationEasing();
+          const isUpdate = oldSectors.size > 0;
+          const delay = isUpdate ? 0 : index * 200; // Stagger only for new entrance
+          const duration = this._getAnimationDuration(isUpdate);
+          const easing = this._getAnimationEasing(isUpdate);
 
           // Animate startAngle
           this._animator.animate(
@@ -327,11 +328,12 @@ export default class PieChart extends Chart {
     if (series.length === 0) return;
     const seriesItem = series[0];
     const emphasis = seriesItem.emphasis;
+    const [r0, r] = this._getRadius(seriesItem);
 
     // Find sector by name
     this._root.traverse((child) => {
       if (child instanceof Sector && (child as any).name === name) {
-        this._applyEmphasisAnimation(child, emphasis, hovered);
+        this._applyEmphasisAnimation(child, emphasis, hovered, r);
 
         // Show/hide tooltip on legend hover
         if (this._tooltip) {
@@ -407,7 +409,7 @@ export default class PieChart extends Chart {
     return parseFloat(value) || 0;
   }
 
-  private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean): void {
+  private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number): void {
     // Opacity animation
     this._animator.animate(
       sector.style as Record<string, unknown>,
@@ -416,8 +418,19 @@ export default class PieChart extends Chart {
       { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
     ).start();
 
-    // Scale animation
-    if (emphasis?.scale) {
+    // Scale animation (Radius Expansion)
+    if (emphasis?.scale && baseR !== undefined) {
+      const scaleSize = emphasis.scaleSize || 1.1;
+      const targetR = isEnter ? baseR * scaleSize : baseR;
+
+      this._animator.animate(
+        sector.shape as unknown as Record<string, unknown>,
+        'r',
+        targetR,
+        { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
+      ).start();
+    } else if (emphasis?.scale) {
+      // Fallback to transform scale if baseR is not provided (should not happen if correctly implemented)
       const scaleSize = isEnter ? (emphasis.scaleSize || 1.1) : 1;
 
       this._animator.animate(

@@ -311,14 +311,20 @@ export default class Chart {
   /**
    * Get animation duration
    */
-  protected _getAnimationDuration(): number {
+  protected _getAnimationDuration(isUpdate: boolean = false): number {
+    if (isUpdate) {
+      return this._option.animationDurationUpdate || 300;
+    }
     return this._option.animationDuration || 1000;
   }
 
   /**
    * Get animation easing function
    */
-  protected _getAnimationEasing(): string {
+  protected _getAnimationEasing(isUpdate: boolean = false): string {
+    if (isUpdate) {
+      return this._option.animationEasingUpdate || 'cubicOut';
+    }
     return this._option.animationEasing || 'cubicOut';
   }
 

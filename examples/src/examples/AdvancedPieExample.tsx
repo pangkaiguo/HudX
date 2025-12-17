@@ -31,7 +31,11 @@ export const AdvancedPieExample = () => {
         center: ['50%', '50%'],
         emphasis: {
           scale: true,
-          scaleSize: 1.1
+          scaleSize: 1.02
+        },
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: 'transparent'
         },
         data: [
           { name: 'Category A', value: 335, itemStyle: { color: colors[0] } },
@@ -48,7 +52,7 @@ export const AdvancedPieExample = () => {
       }
     ],
     animation: true,
-    animationDuration: 800,
+    animationDuration: 1000,
     animationEasing: 'cubicOut'
   };
 

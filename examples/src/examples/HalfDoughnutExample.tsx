@@ -35,6 +35,14 @@ export const HalfDoughnutExample = () => {
         // adjust the start angle
         startAngle: 180,
         endAngle: 360,
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: 'transparent'
+        },
+        emphasis: {
+          scale: true,
+          scaleSize: 1.02,
+        },
         data: [
           { value: 1048, name: 'Search Engine' },
           { value: 735, name: 'Direct' },
