@@ -1,7 +1,9 @@
 import Chart from '../Chart';
-import type { ChartOption, SeriesOption, ChartData } from '../types';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate, Scale } from '../util/coordinate';
-import { Group, Polyline, Circle, Text, Line, Point, Legend, Rect, createDecalPattern } from '@HudX/core';
+import {
+  Polyline, Circle, Text, Rect, createDecalPattern,
+  type Point
+} from '@HudX/core';
 
 export default class LineChart extends Chart {
   protected _render(): void {

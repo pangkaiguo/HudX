@@ -1,5 +1,5 @@
 
-import { DecalObject } from '../types';
+import type { DecalObject } from '../types';
 
 export function createDecalPattern(
   decal: DecalObject,

@@ -2,8 +2,11 @@
   * Chart - Base chart class 
   */
 
-import { Renderer, Group, RenderMode, Theme, Locale, DataURLOpts, Animator, Tooltip, Legend, Line, Text, ThemeConfig } from '@HudX/core';
-import type { ChartOption, ChartEvent, GridOption } from './types';
+import {
+  Renderer, Group, Animator, Tooltip, Legend, Line, Text,
+  type RenderMode, type Theme, type Locale, type DataURLOpts, type ThemeConfig
+} from '@HudX/core';
+import type { ChartOption, ChartEvent } from './types';
 import { createLinearScale, createOrdinalScale } from './util/coordinate';
 
 export default class Chart {
