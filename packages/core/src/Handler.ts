@@ -124,6 +124,26 @@ export default class Handler {
   }
 
   /**
+   * Update cursor style
+   */
+  private _updateCursor(): void {
+    const target = this._painter.getCanvas?.() || this._painter.getSVG?.();
+    if (!target) {
+      return;
+    }
+
+    if (this._hovered && this._hovered.cursor) {
+      if (target.style.cursor !== this._hovered.cursor) {
+        target.style.cursor = this._hovered.cursor;
+      }
+    } else {
+      if (target.style.cursor !== 'default') {
+        target.style.cursor = 'default';
+      }
+    }
+  }
+
+  /**
    * Handle mouse down
    */
   private _onMouseDown(e: MouseEvent): void {
@@ -179,6 +199,7 @@ export default class Handler {
         element.trigger('mouseover', eventData);
       }
       this._hovered = element;
+      this._updateCursor();
     }
 
     const eventData = this._createEventData('mousemove', point, element, e);
@@ -217,6 +238,7 @@ export default class Handler {
       const eventData = this._createEventData('mouseout', point, this._hovered, e);
       this._hovered.trigger('mouseout', eventData);
       this._hovered = null;
+      this._updateCursor();
     }
   }
 

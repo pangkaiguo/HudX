@@ -1,108 +1,71 @@
-import React, { useEffect, useRef } from 'react';
-import { Renderer, Sector, Text, Tooltip, Legend, ThemeManager } from '@HudX/core';
+import { HChart } from '@HudX/charts';
+import type { ChartOption } from '@HudX/charts';
+import { ThemeManager } from '@HudX/core';
 
 export const PieWithLegendExample = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<Renderer>();
-  const sectorsRef = useRef<Map<string, Sector>>(new Map());
+  const theme = ThemeManager.getTheme('light');
+  const colors = theme.seriesColors || [];
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
-    const theme = ThemeManager.getTheme('light');
-    const colors = theme.seriesColors || [];
-    rendererRef.current = renderer;
-
-    const width = 800;
-    const height = 400;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const radius = 120;
-
-    const data = [
-      { name: 'Direct', value: 335, color: colors[0] },
-      { name: 'Email', value: 310, color: colors[1] },
-      { name: 'Ads', value: 234, color: colors[2] },
-      { name: 'Video', value: 135, color: colors[3] },
-      { name: 'Search', value: 148, color: colors[4] }
-    ];
-
-    const total = data.reduce((sum, item) => sum + item.value, 0);
-    const tooltip = new Tooltip();
-    renderer.add(tooltip);
-
-    let startAngle = -Math.PI / 2;
-    sectorsRef.current.clear();
-
-    data.forEach((item) => {
-      const angle = (item.value / total) * Math.PI * 2;
-      const endAngle = startAngle + angle;
-
-      const sector = new Sector({
-        shape: { cx: centerX, cy: centerY, r0: 0, r: radius, startAngle, endAngle },
-        style: { fill: item.color, opacity: 0.8 }
-      });
-
-      sector.on('mouseover', () => {
-        sector.attr('style', { opacity: 1 });
-        const percent = ((item.value / total) * 100).toFixed(1);
-        tooltip.show(centerX + 80, centerY - 80, `${item.name}\n${item.value}\n${percent}%`);
-        renderer.flush();
-      });
-
-      sector.on('mouseout', () => {
-        sector.attr('style', { opacity: 0.8 });
-        tooltip.hide();
-        renderer.flush();
-      });
-
-      renderer.add(sector);
-      sectorsRef.current.set(item.name, sector);
-
-      const midAngle = startAngle + angle / 2;
-      const labelX = centerX + Math.cos(midAngle) * (radius + 30);
-      const labelY = centerY + Math.sin(midAngle) * (radius + 30);
-
-      renderer.add(new Text({
-        shape: { text: item.name, x: labelX, y: labelY },
-        style: { textAlign: 'center', fill: '#666', fontSize: 12 }
-      }));
-
-      startAngle = endAngle;
-    });
-
-    const legend = new Legend({
-      x: 20,
-      y: 20,
+  const option: ChartOption = {
+    title: {
+      text: 'Pie Chart with Interactive Legend',
+      left: 'center',
+      top: 30
+    },
+    tooltip: {
+      show: true,
+      trigger: 'item',
+      formatter: '{b}\n{c}\n{d}%'
+    },
+    legend: {
+      show: true,
       orient: 'vertical',
-      onSelect: (name: string, selected: boolean) => {
-        const sector = sectorsRef.current.get(name);
-        if (sector) {
-          sector.attr('invisible', !selected);
-          renderer.flush();
+      left: 20,
+      top: 20
+    },
+    series: [
+      {
+        name: 'Distribution',
+        type: 'pie',
+        radius: 120,
+        center: ['50%', '50%'],
+        data: [
+          { name: 'Direct', value: 335, itemStyle: { color: colors[0] } },
+          { name: 'Email', value: 310, itemStyle: { color: colors[1] } },
+          { name: 'Ads', value: 234, itemStyle: { color: colors[2] } },
+          { name: 'Video', value: 135, itemStyle: { color: colors[3] } },
+          { name: 'Search', value: 148, itemStyle: { color: colors[4] } }
+        ],
+        itemStyle: {
+          opacity: 0.8
+        },
+        emphasis: {
+          scale: true,
+          scaleSize: 1.05,
+          itemStyle: {
+            opacity: 1
+          }
+        },
+        label: {
+          show: true,
+          position: 'outside',
+          formatter: '{b}'
         }
       }
-    });
-    legend.setItems(data.map(d => ({ name: d.name, color: d.color })));
-    renderer.add(legend);
-
-    renderer.add(new Text({
-      shape: { text: 'Pie Chart with Interactive Legend', x: width / 2, y: 30 },
-      style: { textAlign: 'center', fill: '#333', fontSize: 16, fontWeight: 'bold' }
-    }));
-
-    renderer.resize(width, height);
-    renderer.flush();
-
-    return () => renderer.dispose();
-  }, []);
+    ],
+    animation: true
+  };
 
   return (
     <div>
       <h2 style={{ marginBottom: 20 }}>Pie Chart with Interactive Legend</h2>
       <p style={{ marginBottom: 20, color: '#666' }}>Hover over slices for tooltip, click legend to show/hide</p>
-      <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 400 }} />
+      <HChart
+        option={option}
+        width={800}
+        height={400}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
+      />
     </div>
   );
 }

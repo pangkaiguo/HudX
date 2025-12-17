@@ -146,6 +146,7 @@ export default class BarChart extends Chart {
               y: plotY + plotHeight - initialHeight, // Start from previous position
               width: barWidthPerSeries,
               height: initialHeight,
+              r: itemStyle.borderRadius
             },
             style: {
               fill: fillStyle,

@@ -249,6 +249,7 @@ export default class LineChart extends Chart {
                 lineWidth: 2,
               },
               z: seriesIndex + 1,
+              silent: false,
               cursor: this._tooltip ? 'pointer' : 'default',
             });
 

@@ -40,7 +40,8 @@ export default class ScatterChart extends Chart {
 
           const circle = new Circle({
             shape: { cx: x, cy: y, r: 0 }, // Start with radius 0 for animation
-            style: { fill: color, opacity: 0.7 }
+            style: { fill: color, opacity: 0.7 },
+            cursor: this._tooltip ? 'pointer' : 'default',
           });
 
           this._root.add(circle);

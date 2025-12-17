@@ -153,6 +153,7 @@ export default class PieChart extends Chart {
         const sector = new Sector({
           name: itemName,
           data: item,
+          dataIndex: index,
           shape: {
             cx,
             cy,
@@ -171,7 +172,7 @@ export default class PieChart extends Chart {
             x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy
           },
           z: index,
-          cursor: this._tooltip ? 'pointer' : 'default',
+          cursor: (this._tooltip || seriesItem.emphasis) ? 'pointer' : 'default',
         });
 
         this._root.add(sector);

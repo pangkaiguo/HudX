@@ -37,7 +37,8 @@ export default class HeatmapChart extends Chart {
 
               const rect = new Rect({
                 shape: { x, y, width: cellWidth, height: cellHeight },
-                style: { fill: color, stroke: '#fff', lineWidth: 1, opacity: 0 } // Start with opacity 0 for animation
+                style: { fill: color, stroke: '#fff', lineWidth: 1, opacity: 0 }, // Start with opacity 0 for animation
+                cursor: this._tooltip ? 'pointer' : 'default',
               });
 
               this._root.add(rect);

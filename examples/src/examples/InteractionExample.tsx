@@ -16,7 +16,8 @@ export const InteractionExample = () => {
     for (let i = 0; i < 5; i++) {
       const circle = new Circle({
         shape: { cx: 100 + i * 130, cy: 150, r: 40 },
-        style: { fill: colors[0], opacity: 0.7 }
+        style: { fill: colors[0], opacity: 0.7 },
+        cursor: 'pointer'
       });
 
       circle.on('click', () => {
