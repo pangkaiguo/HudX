@@ -45,6 +45,8 @@ export interface Transform {
 
 export interface ElementOption {
   id?: string;
+  name?: string;
+  data?: any;
   zlevel?: number;
   z?: number;
   silent?: boolean;

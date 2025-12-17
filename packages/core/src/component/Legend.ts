@@ -27,6 +27,7 @@ export interface LegendOption {
   itemGap?: number;
   itemWidth?: number;
   onSelect?: (name: string, selected: boolean) => void;
+  onHover?: (name: string, hovered: boolean) => void;
   selectedMode?: 'single' | 'multiple';
 }
 
@@ -189,11 +190,17 @@ export default class Legend extends Group {
 
       (interactRect as any).on('mouseover', () => {
         interactRect.attr('style', { fill: '#f0f0f0' });
+        if (this._option.onHover) {
+          this._option.onHover(item.name, true);
+        }
         this.markRedraw();
       });
 
       (interactRect as any).on('mouseout', () => {
         interactRect.attr('style', { fill: 'transparent' });
+        if (this._option.onHover) {
+          this._option.onHover(item.name, false);
+        }
         this.markRedraw();
       });
 

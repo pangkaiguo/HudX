@@ -740,6 +740,9 @@ export default class Chart {
         }
         this._render();
         this.endAnimateControl();
+      },
+      onHover: (name: string, hovered: boolean) => {
+        this._onLegendHover(name, hovered);
       }
     } as any);
     legend.z = 500; // Ensure legend is above grid/axes
@@ -754,6 +757,13 @@ export default class Chart {
 
     this._legend = legend;
     this._root.add(legend);
+  }
+
+  /**
+   * Handle legend hover event
+   */
+  protected _onLegendHover(name: string, hovered: boolean): void {
+    // To be implemented by subclasses
   }
 
   /**

@@ -36,6 +36,8 @@ class ChartElement extends Eventful {
   constructor(opts: ElementOption = {}) {
     super();
     this.id = opts.id || this._generateId();
+    this.name = opts.name;
+    this.data = opts.data;
     this.zlevel = opts.zlevel ?? 0;
     this.z = opts.z ?? 0;
     this.silent = opts.silent ?? false;

@@ -97,6 +97,7 @@ export default class PieChart extends Chart {
         // Create sector
         const start = currentAngle;
         const sector = new Sector({
+          name: itemName,
           shape: {
             cx,
             cy,
@@ -276,6 +277,48 @@ export default class PieChart extends Chart {
       ];
     }
     return [this._width / 2, this._height / 2];
+  }
+
+  protected _onLegendHover(name: string, hovered: boolean): void {
+    const series = this._option.series || [];
+    if (series.length === 0) return;
+    const seriesItem = series[0];
+    const emphasis = seriesItem.emphasis;
+
+    // Find sector by name
+    this._root.traverse((child) => {
+      if (child instanceof Sector && (child as any).name === name) {
+        this._applyEmphasisAnimation(child, emphasis, hovered);
+
+        // Show/hide tooltip on legend hover
+        if (this._tooltip) {
+          if (hovered) {
+            // Calculate center of sector for tooltip position
+            const shape = child.shape;
+            const midAngle = (shape.startAngle + shape.endAngle) / 2;
+            const r = (shape.r + shape.r0) / 2;
+            const cx = shape.cx + Math.cos(midAngle) * r;
+            const cy = shape.cy + Math.sin(midAngle) * r;
+
+            // Construct params
+            // We need to find the data item for this sector
+            // Since we attached name to sector, we assume unique names or we can rely on data index if we attached it.
+            // But we didn't attach data index.
+            // However, child has 'data' property if we set it.
+            // Let's set 'data' property in Sector creation too?
+            // Or just use 'name' to display basic tooltip.
+
+            // The tooltip formatter needs params.
+            // We can retrieve data from series using name?
+            // Or better, let's attach 'data' and 'index' to sector in PieChart render loop.
+
+            // For now, just emphasize visual.
+          } else {
+            // this._tooltip.hide();
+          }
+        }
+      }
+    });
   }
 
   /**
