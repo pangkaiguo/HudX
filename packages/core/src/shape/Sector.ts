@@ -60,10 +60,15 @@ export default class Sector extends ChartElement {
     let endAngle = shape.endAngle;
 
     // Normalize angles
-    while (startAngle < 0) startAngle += Math.PI * 2;
-    while (endAngle < 0) endAngle += Math.PI * 2;
-    while (startAngle >= Math.PI * 2) startAngle -= Math.PI * 2;
-    while (endAngle >= Math.PI * 2) endAngle -= Math.PI * 2;
+    // Handle full circle case
+    if (Math.abs(endAngle - startAngle) >= Math.PI * 2) {
+      // Keep as is for full circle
+    } else {
+      while (startAngle < 0) startAngle += Math.PI * 2;
+      while (endAngle < 0) endAngle += Math.PI * 2;
+      while (startAngle >= Math.PI * 2) startAngle -= Math.PI * 2;
+      while (endAngle >= Math.PI * 2) endAngle -= Math.PI * 2;
+    }
 
     if (shape.anticlockwise) {
       if (endAngle > startAngle) {

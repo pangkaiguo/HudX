@@ -55,6 +55,11 @@ export const DoughnutExample = () => {
             shadowBlur: 10,
             shadowOffsetX: 0,
             shadowColor: 'rgba(0, 0, 0, 0.5)'
+          },
+          label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: 'bold'
           }
         },
         data: [
@@ -65,8 +70,9 @@ export const DoughnutExample = () => {
           { value: 300, name: 'Video Ads' }
         ],
         label: {
-          show: true,
-          formatter: '{b}: {d}%'
+          show: false,
+          position: 'center',
+          formatter: '{b}: {c} ({d}%)'
         }
       }
     ],

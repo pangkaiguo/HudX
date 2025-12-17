@@ -57,7 +57,17 @@ export const HalfDoughnutExample = () => {
         },
         emphasis: {
           scale: true,
-          scaleSize: 1.02,
+          scaleSize: 1.05,
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          },
+          label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: 'bold'
+          }
         },
         data: [
           { value: 1048, name: 'Search Engine' },
@@ -67,8 +77,8 @@ export const HalfDoughnutExample = () => {
           { value: 300, name: 'Video Ads' }
         ],
         label: {
-          show: true,
-          position: 'outside',
+          show: false,
+          position: 'center',
           formatter: '{b}'
         }
       }

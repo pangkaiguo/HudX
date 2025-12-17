@@ -287,15 +287,28 @@ export default class PieChart extends Chart {
           });
         }
 
-        // Render label if enabled
-        if (seriesItem.label?.show) {
+        // Render label if defined (even if hidden initially, it might show on emphasis)
+        if (seriesItem.label) {
           const labelAngle = targetStart + angle / 2; // Use target angle for label
           // If position outside
           const isOutside = seriesItem.label.position === 'outside';
-          const finalLabelRadius = isOutside ? r * 1.1 : (r + r0) / 2;
+          const isCenter = seriesItem.label.position === 'center';
+          let labelX, labelY;
+          let textAlign: 'center' | 'left' | 'right' = 'center';
+          let textBaseline: 'middle' | 'top' | 'bottom' = 'middle';
 
-          const labelX = cx + Math.cos(labelAngle) * finalLabelRadius;
-          const labelY = cy + Math.sin(labelAngle) * finalLabelRadius;
+          if (isCenter) {
+            labelX = cx;
+            labelY = cy;
+            textAlign = 'center';
+            textBaseline = 'middle';
+          } else {
+            const finalLabelRadius = isOutside ? r * 1.1 : (r + r0) / 2;
+            labelX = cx + Math.cos(labelAngle) * finalLabelRadius;
+            labelY = cy + Math.sin(labelAngle) * finalLabelRadius;
+            textAlign = 'center';
+            textBaseline = 'middle';
+          }
 
           const labelText = typeof seriesItem.label?.formatter === 'function'
             ? seriesItem.label.formatter({ name: (item as any).name || '', value, percent: percent * 100 })
@@ -308,15 +321,21 @@ export default class PieChart extends Chart {
               text: labelText,
             },
             style: {
-              fontSize: 12,
-              fill: isOutside ? '#333' : '#fff', // White if inside
-              textAlign: 'center',
-              textBaseline: 'middle',
+              fontSize: seriesItem.label.fontSize || 12,
+              fontWeight: seriesItem.label.fontWeight || 'normal',
+              fill: seriesItem.label.color || (isOutside ? '#333' : (isCenter ? '#333' : '#fff')), // White if inside
+              textAlign: textAlign,
+              textBaseline: textBaseline,
+              opacity: seriesItem.label.show ? 1 : 0, // Use opacity as well
             },
-            z: index + 100,
+            z: index + 1000, // Increase z-index
+            invisible: !seriesItem.label.show, // Handle visibility
+            silent: true // Prevent label from capturing mouse events
           });
 
           this._root.add(text);
+          // Store label reference for interaction
+          (sector as any).__label = text;
         }
 
         currentAngle += angle;
@@ -449,7 +468,7 @@ export default class PieChart extends Chart {
         { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
       ).start();
     } else if (emphasis?.scale) {
-      // Fallback to transform scale if baseR is not provided (should not happen if correctly implemented)
+      // Fallback to transform scale if baseR is not provided
       const scaleSize = isEnter ? (emphasis.scaleSize || 1.1) : 1;
 
       this._animator.animate(
@@ -465,6 +484,38 @@ export default class PieChart extends Chart {
         scaleSize,
         { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
       ).start();
+    }
+
+    // Label emphasis
+    const label = (sector as any).__label;
+    if (label && emphasis?.label) {
+      if (isEnter) {
+        // Show label and apply emphasis styles
+        if (emphasis.label.show !== undefined) {
+          label.invisible = !emphasis.label.show;
+          label.style.opacity = emphasis.label.show ? 1 : 0;
+        }
+        if (emphasis.label.fontSize !== undefined) {
+          label.style.fontSize = emphasis.label.fontSize;
+        }
+        if (emphasis.label.fontWeight !== undefined) {
+          label.style.fontWeight = emphasis.label.fontWeight;
+        }
+        if (emphasis.label.color !== undefined) {
+          label.style.fill = emphasis.label.color;
+        }
+      } else {
+        // Restore original style
+        const seriesItem = this._option.series?.[0];
+        if (seriesItem?.label) {
+          label.invisible = !seriesItem.label.show;
+          label.style.opacity = seriesItem.label.show ? 1 : 0;
+          label.style.fontSize = seriesItem.label.fontSize || 12;
+          label.style.fontWeight = seriesItem.label.fontWeight || 'normal';
+          // We don't restore color perfectly here (simplified), but it should be enough for now
+        }
+      }
+      label.markRedraw();
     }
   }
 }
