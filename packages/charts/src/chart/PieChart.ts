@@ -4,9 +4,30 @@ import { Sector, Text, Point, Legend } from '@HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class PieChart extends Chart {
+  private _activeSectors: Map<string, Sector> = new Map();
+
   protected _render(): void {
     try {
-      super._render();
+      // We manually manage children clearing to support smooth transitions
+      // Do NOT call super._render() which clears everything
+      // But we need to ensure tooltip is present
+      if (this._tooltip) {
+        this._root.remove(this._tooltip);
+      }
+      if (this._legend) {
+        this._root.remove(this._legend);
+      }
+
+      // Keep track of old sectors
+      const oldSectors = this._activeSectors;
+      this._activeSectors = new Map();
+
+      // Clear root but we will re-add reused sectors
+      this._root.removeAll();
+
+      if (this._tooltip) {
+        this._root.add(this._tooltip);
+      }
 
       const option = this._option;
       const series = option.series || [];
@@ -32,12 +53,26 @@ export default class PieChart extends Chart {
       const cy = center[1];
 
       // Calculate total value
-      const total = data.reduce((sum: number, item: ChartData) => {
+      const total = data.reduce((sum: number, item: ChartData, index: number) => {
+        const itemName = (typeof item === 'object' && item.name) ? item.name : `item-${index + 1}`;
+        if (this._legend && !this._legendSelected.has(itemName)) {
+          return sum;
+        }
         const value = typeof item === 'object' ? item.value : item;
         return sum + (typeof value === 'number' ? value : 0);
       }, 0);
 
       if (total === 0) {
+        // If all hidden, we still need to render legend
+        if (option.legend?.show !== false) {
+          const items = (data as any[]).map((it: any, i: number) => ({
+            name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
+            color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
+            icon: 'circle',
+            textColor: this.getThemeConfig().legendTextColor
+          }));
+          this._mountLegend(items);
+        }
         return;
       }
 
@@ -72,39 +107,41 @@ export default class PieChart extends Chart {
         // legend selection
         const itemName = (typeof item === 'object' && item.name) ? item.name : `item-${index + 1}`;
         if (this._legend && !this._legendSelected.has(itemName)) {
-          // If hidden, we don't advance currentAngle if we want to fill the gap?
-          // ECharts behavior: if hidden, the part is removed, other parts expand?
-          // Or just hole?
-          // Usually re-calculate total without hidden items.
-          // But here 'total' included hidden items?
-          // Let's re-calculate total if we want dynamic update.
-          // For now, let's just skip drawing but advance angle? No, usually we want to re-distribute.
-          // The current implementation calculates 'total' from ALL data at the beginning.
-          // If we want legend to hide items, we should filter data before loop or recalculate total.
-          // Let's stick to existing logic for now, but note that skipping without advancing angle means others will be adjacent.
-          // But wait, line 66 says `currentAngle += angle`. This means it reserves space!
-          // ECharts default: hiding item removes it and resizes others.
-          // The current implementation seems to reserve space (hole).
-          // If user wants resize, 'total' must be updated.
-          // I will leave this behavior as is for now to avoid scope creep, just updating variables.
-          currentAngle += angle;
           return;
         }
 
         const itemStyle = seriesItem.itemStyle || {};
         const color = (typeof item === 'object' && item.itemStyle?.color) || itemStyle.color || this._getSeriesColor(index);
 
+        // Calculate target angles
+        const targetStart = currentAngle;
+        const targetEnd = currentAngle + angle;
+
+        // Determine initial angles for animation
+        let initialStart = targetStart;
+        let initialEnd = targetStart; // Default for new items (grow from 0)
+
+        const oldSector = oldSectors.get(itemName);
+        if (oldSector) {
+          initialStart = oldSector.shape.startAngle;
+          initialEnd = oldSector.shape.endAngle;
+        } else if (oldSectors.size > 0) {
+          // If we have other sectors but this one is new (e.g. data added), 
+          // maybe grow from previous sector's end? 
+          // For now, grow from targetStart is fine.
+        }
+
         // Create sector
-        const start = currentAngle;
         const sector = new Sector({
           name: itemName,
+          data: item,
           shape: {
             cx,
             cy,
             r,
             r0,
-            startAngle: start,
-            endAngle: start, // Start with same angle for animation
+            startAngle: initialStart,
+            endAngle: initialEnd,
             anticlockwise: false,
           },
           style: {
@@ -120,6 +157,7 @@ export default class PieChart extends Chart {
         });
 
         this._root.add(sector);
+        this._activeSectors.set(itemName, sector);
 
         // Tooltip & Emphasis interaction
         if (this._tooltip || seriesItem.emphasis) {
@@ -190,43 +228,48 @@ export default class PieChart extends Chart {
           });
         }
 
-        // Animate pie slice if animation is enabled
-        if (this._shouldAnimateFor(itemName)) {
-          const delay = index * 200; // Staggered animation delay
+        // Animate pie slice
+        if (this._shouldAnimateFor(itemName) || oldSector) {
+          const delay = oldSector ? 0 : index * 200; // Stagger only for new entrance
           const duration = this._getAnimationDuration();
           const easing = this._getAnimationEasing();
 
+          // Animate startAngle
           this._animator.animate(
             sector.attr('shape'),
-            'endAngle',
-            start + angle,
+            'startAngle',
+            targetStart,
             {
               duration,
               delay,
               easing,
-              onUpdate: (target, percent) => {
-                // Animate the slice growing from startAngle to endAngle
-                target.endAngle = start + angle * percent;
-                sector.markRedraw();
-              }
+              onUpdate: () => sector.markRedraw()
             }
-          );
+          ).start();
+
+          // Animate endAngle
+          this._animator.animate(
+            sector.attr('shape'),
+            'endAngle',
+            targetEnd,
+            {
+              duration,
+              delay,
+              easing,
+              onUpdate: () => sector.markRedraw()
+            }
+          ).start();
         } else {
           // Set final angle if animation is disabled
           sector.attr('shape', {
-            cx,
-            cy,
-            r,
-            r0,
-            startAngle: currentAngle,
-            endAngle: currentAngle + angle,
-            anticlockwise: false,
+            startAngle: targetStart,
+            endAngle: targetEnd
           });
         }
 
         // Render label if enabled
         if (seriesItem.label?.show) {
-          const labelAngle = start + angle / 2;
+          const labelAngle = targetStart + angle / 2; // Use target angle for label
           // If position outside
           const isOutside = seriesItem.label.position === 'outside';
           const finalLabelRadius = isOutside ? r * 1.1 : (r + r0) / 2;
