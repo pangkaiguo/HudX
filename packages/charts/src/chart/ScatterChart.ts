@@ -3,7 +3,7 @@
  */
 
 import Chart from '../Chart';
-import { Circle, Text } from '@HudX/core';
+import { Circle, Text } from 'HudX/core';
 
 export default class ScatterChart extends Chart {
   protected _render(): void {
@@ -31,48 +31,48 @@ export default class ScatterChart extends Chart {
       const color = s.color || this._getSeriesColor(seriesIndex);
       const symbolSize = s.symbolSize || 8;
 
-        data.forEach((item: any, index: number) => {
-          const [xVal, yVal] = Array.isArray(item) ? item : [item.value?.[0], item.value?.[1]];
-          if (xVal === undefined || yVal === undefined) return;
+      data.forEach((item: any, index: number) => {
+        const [xVal, yVal] = Array.isArray(item) ? item : [item.value?.[0], item.value?.[1]];
+        if (xVal === undefined || yVal === undefined) return;
 
-          const x = left + (xVal / 100) * chartWidth;
-          const y = top + chartHeight - (yVal / 100) * chartHeight;
+        const x = left + (xVal / 100) * chartWidth;
+        const y = top + chartHeight - (yVal / 100) * chartHeight;
 
-          const circle = new Circle({
-            shape: { cx: x, cy: y, r: 0 }, // Start with radius 0 for animation
-            style: { fill: color, opacity: 0.7 },
-            cursor: this._tooltip ? 'pointer' : 'default',
-          });
-
-          this._root.add(circle);
-
-          // Animate scatter point if animation is enabled
-          if (this._isAnimationEnabled()) {
-            const delay = index * 50 + seriesIndex * 100; // Staggered animation delay
-            const duration = this._getAnimationDuration() / 2; // Shorter duration for points
-
-            this._animator.animate(
-              circle.attr('shape'),
-              'r',
-              symbolSize,
-              {
-                duration,
-                delay,
-                easing: 'elasticOut',
-                onUpdate: (target, percent) => {
-                  // Also animate opacity for smoother appearance
-                  circle.attr('style', { 
-                    fill: color, 
-                    opacity: 0.7 * percent 
-                  });
-                }
-              }
-            );
-          } else {
-            // Set final size if animation is disabled
-            circle.attr('shape', { cx: x, cy: y, r: symbolSize });
-          }
+        const circle = new Circle({
+          shape: { cx: x, cy: y, r: 0 }, // Start with radius 0 for animation
+          style: { fill: color, opacity: 0.7 },
+          cursor: this._tooltip ? 'pointer' : 'default',
         });
+
+        this._root.add(circle);
+
+        // Animate scatter point if animation is enabled
+        if (this._isAnimationEnabled()) {
+          const delay = index * 50 + seriesIndex * 100; // Staggered animation delay
+          const duration = this._getAnimationDuration() / 2; // Shorter duration for points
+
+          this._animator.animate(
+            circle.attr('shape'),
+            'r',
+            symbolSize,
+            {
+              duration,
+              delay,
+              easing: 'elasticOut',
+              onUpdate: (target, percent) => {
+                // Also animate opacity for smoother appearance
+                circle.attr('style', {
+                  fill: color,
+                  opacity: 0.7 * percent
+                });
+              }
+            }
+          );
+        } else {
+          // Set final size if animation is disabled
+          circle.attr('shape', { cx: x, cy: y, r: symbolSize });
+        }
+      });
     });
 
     // Draw axes

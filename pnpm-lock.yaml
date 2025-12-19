@@ -23,10 +23,10 @@ importers:
 
   examples:
     dependencies:
-      '@HudX/charts':
+      HudX/charts:
         specifier: workspace:*
         version: link:../packages/charts
-      '@HudX/core':
+      HudX/core:
         specifier: workspace:*
         version: link:../packages/core
       react:
@@ -54,7 +54,7 @@ importers:
 
   packages/charts:
     dependencies:
-      '@HudX/core':
+      HudX/core:
         specifier: workspace:*
         version: link:../core
       react:

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Text, ThemeManager } from '@HudX/core';
+import { Renderer, Circle, Text, ThemeManager } from 'HudX/core';
 
 export const InteractionExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);

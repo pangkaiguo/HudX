@@ -2,7 +2,7 @@
  * Chart type definitions
  */
 
-import type { DecalObject } from '@HudX/core';
+import type { DecalObject } from 'HudX/core';
 export type { DecalObject };
 
 export interface ChartOption {

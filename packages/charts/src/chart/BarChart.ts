@@ -1,6 +1,6 @@
 import Chart from '../Chart';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate } from '../util/coordinate';
-import { Rect, createDecalPattern } from '@HudX/core';
+import { Rect, createDecalPattern } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class BarChart extends Chart {

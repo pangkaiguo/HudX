@@ -9,7 +9,7 @@ HudX 是一个基于 React 和 TypeScript 构建的高性能图表库。它的�
 - 🚀 **高性能**: 支持 Canvas 和 SVG 渲染模式，高效处理大数据集。
 - 🎨 **丰富的图表类型**: 折线图、柱状图、饼图、散点图和热力图。
 - ⚛️ **React 集成**: 无缝的 React 组件集成 (`HChart`)。
-- 📦 **模块化设计**: 核心渲染引擎 (`@HudX/core`) 与图表库 (`@HudX/charts`) 解耦。
+- 📦 **模块化设计**: 核心渲染引擎 (`HudX/core`) 与图表库 (`HudX/charts`) 解耦。
 - 🎯 **TypeScript**: 完整的 TypeScript 支持和严格类型检查。
 - 🎬 **完整的动画系统**: 支持属性过渡、多种缓动函数和错开动画。
 - 🖱️ **丰富的交互**: 内置 Tooltip、Legend 和完整的事件处理（点击、悬停、拖拽等）。
@@ -67,7 +67,7 @@ pnpm dev
 
 ```tsx
 import React from 'react';
-import { HChart } from '@HudX/charts';
+import { HChart } from 'HudX/charts';
 
 function App() {
   const option = {
@@ -106,7 +106,7 @@ function App() {
 ### 核心 API (底层)
 
 ```typescript
-import { Renderer, Circle, Animation, Easing } from '@HudX/core';
+import { Renderer, Circle, Animation, Easing } from 'HudX/core';
 
 // 初始化
 const renderer = Renderer.init(document.getElementById('container'));

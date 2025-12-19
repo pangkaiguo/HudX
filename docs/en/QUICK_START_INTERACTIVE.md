@@ -5,7 +5,7 @@
 ### 1. Basic Setup
 
 ```typescript
-import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
+import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from 'HudX/core';
 
 // Initialize renderer
 const renderer = Renderer.init(container, 'canvas', 'light', 'en');

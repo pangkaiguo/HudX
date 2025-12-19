@@ -1,6 +1,6 @@
 import Chart from '../Chart';
 import type { SeriesOption, ChartData, EmphasisOption } from '../types';
-import { Sector, Text, createDecalPattern } from '@HudX/core';
+import { Sector, Text, createDecalPattern } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class PieChart extends Chart {

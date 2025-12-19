@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Rect, Line, Polyline, Polygon } from '@HudX/core';
+import { Renderer, Circle, Rect, Line, Polyline, Polygon } from 'HudX/core';
 
 type ShapeType = 'circle' | 'rect' | 'line' | 'polyline' | 'polygon';
 

@@ -1,6 +1,6 @@
-import { HChart } from '@HudX/charts';
-import type { ChartOption } from '@HudX/charts';
-import { ThemeManager } from '@HudX/core';
+import { HChart } from 'HudX/charts';
+import type { ChartOption } from 'HudX/charts';
+import { ThemeManager } from 'HudX/core';
 import { defaultColors } from '../config';
 
 export const BasicPieExample = () => {

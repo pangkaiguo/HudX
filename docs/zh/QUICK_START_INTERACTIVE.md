@@ -5,7 +5,7 @@
 ### 1. 基础设置
 
 ```typescript
-import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from '@HudX/core';
+import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from 'HudX/core';
 
 // 初始化渲染器
 const renderer = Renderer.init(container, 'canvas', 'light', 'en');

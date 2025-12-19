@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -37,13 +38,13 @@ export default defineConfig({
             }
             return 'vendor';
           }
-          if (id.includes('@HudX/core')) {
+          if (id.includes('HudX/core')) {
             if (id.includes('shape/')) return 'HudX-shapes';
             if (id.includes('animation/')) return 'HudX-animation';
             if (id.includes('component/')) return 'HudX-components';
             return 'HudX-core';
           }
-          if (id.includes('@HudX/charts')) {
+          if (id.includes('HudX/charts')) {
             return 'HudX-charts';
           }
         },
@@ -57,9 +58,14 @@ export default defineConfig({
     reportCompressedSize: false,
     sourcemap: false
   },
+  resolve: {
+    alias: {
+      'HudX/core': path.resolve(__dirname, '../packages/core/src'),
+      'HudX/charts': path.resolve(__dirname, '../packages/charts/src')
+    }
+  },
   optimizeDeps: {
     include: ['react', 'react-dom'],
-    exclude: ['@HudX/core', '@HudX/charts']
   },
   esbuild: {
     logOverride: { 'this-is-undefined-in-esm': 'silent' },

@@ -16,8 +16,8 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@HudX/core": ["packages/core/src"],
-      "@HudX/charts": ["packages/charts/src"]
+      "HudX/core": ["packages/core/src"],
+      "HudX/charts": ["packages/charts/src"]
     }
   },
   "files": [],

@@ -1,5 +1,5 @@
 {
-  "name": "@HudX/core",
+  "name": "HudX/core",
   "version": "1.0.0",
   "description": "Core rendering engine for HudX charts",
   "type": "module",

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Renderer, Circle, Rect, Animation, Easing, ThemeManager } from '@HudX/core';
+import { Renderer, Circle, Rect, Animation, Easing, ThemeManager } from 'HudX/core';
 
 export const AnimationExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);

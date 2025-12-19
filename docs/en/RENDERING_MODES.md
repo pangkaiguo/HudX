@@ -54,7 +54,7 @@ HudX supports two rendering modes: **Canvas** and **SVG**.
 ### Using Renderer
 
 ```typescript
-import { Renderer, Circle, Rect } from '@HudX/core';
+import { Renderer, Circle, Rect } from 'HudX/core';
 
 // Canvas mode
 const renderer = Renderer.init('#container', 'canvas');
@@ -69,7 +69,7 @@ renderer.setRenderMode('svg');
 ### Using React Component
 
 ```tsx
-import { HChart } from '@HudX/charts';
+import { HChart } from 'HudX/charts';
 
 // Canvas mode
 <HChart
@@ -91,7 +91,7 @@ import { HChart } from '@HudX/charts';
 ### Using Chart Class
 
 ```typescript
-import { LineChart } from '@HudX/charts';
+import { LineChart } from 'HudX/charts';
 
 // Canvas mode
 const chart = new LineChart(dom, option, 'canvas');

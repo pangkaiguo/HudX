@@ -1,6 +1,6 @@
-import { HChart } from '@HudX/charts';
-import type { ChartOption } from '@HudX/charts';
-import { ThemeManager } from '@HudX/core';
+import { HChart } from 'HudX/charts';
+import type { ChartOption } from 'HudX/charts';
+import { ThemeManager } from 'HudX/core';
 
 export const PieWithLegendExample = () => {
   const theme = ThemeManager.getTheme('light');

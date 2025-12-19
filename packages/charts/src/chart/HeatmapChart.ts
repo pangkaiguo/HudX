@@ -3,7 +3,7 @@
  */
 
 import Chart from '../Chart';
-import { Rect, Text } from '@HudX/core';
+import { Rect, Text } from 'HudX/core';
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {
@@ -28,47 +28,47 @@ export default class HeatmapChart extends Chart {
       const cellWidth = chartWidth / (s.xAxisData?.length || 10);
       const cellHeight = chartHeight / (s.yAxisData?.length || 10);
 
-          data.forEach((row: any[], rowIndex: number) => {
-            row.forEach((value: number, colIndex: number) => {
-              const x = left + colIndex * cellWidth;
-              const y = top + rowIndex * cellHeight;
-              const intensity = Math.min(value / 100, 1);
-              const color = this._getHeatmapColor(intensity);
+      data.forEach((row: any[], rowIndex: number) => {
+        row.forEach((value: number, colIndex: number) => {
+          const x = left + colIndex * cellWidth;
+          const y = top + rowIndex * cellHeight;
+          const intensity = Math.min(value / 100, 1);
+          const color = this._getHeatmapColor(intensity);
 
-              const rect = new Rect({
-                shape: { x, y, width: cellWidth, height: cellHeight },
-                style: { fill: color, stroke: '#fff', lineWidth: 1, opacity: 0 }, // Start with opacity 0 for animation
-                cursor: this._tooltip ? 'pointer' : 'default',
-              });
-
-              this._root.add(rect);
-
-              // Animate heatmap cell if animation is enabled
-              if (this._isAnimationEnabled()) {
-                const delay = (rowIndex + colIndex) * 20; // Staggered animation delay based on position
-                const duration = this._getAnimationDuration() / 3; // Shorter duration for cells
-
-                this._animator.animate(
-                  rect.attr('style'),
-                  'opacity',
-                  1,
-                  {
-                    duration,
-                    delay,
-                    easing: 'cubicOut',
-                    onUpdate: (target, percent) => {
-                      // Animate opacity for fade-in effect
-                      target.opacity = percent;
-                      rect.markRedraw();
-                    }
-                  }
-                );
-              } else {
-                // Set final opacity if animation is disabled
-                rect.attr('style', { fill: color, stroke: '#fff', lineWidth: 1, opacity: 1 });
-              }
-            });
+          const rect = new Rect({
+            shape: { x, y, width: cellWidth, height: cellHeight },
+            style: { fill: color, stroke: '#fff', lineWidth: 1, opacity: 0 }, // Start with opacity 0 for animation
+            cursor: this._tooltip ? 'pointer' : 'default',
           });
+
+          this._root.add(rect);
+
+          // Animate heatmap cell if animation is enabled
+          if (this._isAnimationEnabled()) {
+            const delay = (rowIndex + colIndex) * 20; // Staggered animation delay based on position
+            const duration = this._getAnimationDuration() / 3; // Shorter duration for cells
+
+            this._animator.animate(
+              rect.attr('style'),
+              'opacity',
+              1,
+              {
+                duration,
+                delay,
+                easing: 'cubicOut',
+                onUpdate: (target, percent) => {
+                  // Animate opacity for fade-in effect
+                  target.opacity = percent;
+                  rect.markRedraw();
+                }
+              }
+            );
+          } else {
+            // Set final opacity if animation is disabled
+            rect.attr('style', { fill: color, stroke: '#fff', lineWidth: 1, opacity: 1 });
+          }
+        });
+      });
     });
   }
 

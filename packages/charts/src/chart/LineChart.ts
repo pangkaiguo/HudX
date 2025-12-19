@@ -3,7 +3,7 @@ import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinat
 import {
   Polyline, Circle, Text, Rect, createDecalPattern,
   type Point
-} from '@HudX/core';
+} from 'HudX/core';
 
 export default class LineChart extends Chart {
   protected _render(): void {

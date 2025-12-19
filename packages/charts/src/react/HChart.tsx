@@ -5,7 +5,7 @@
 
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import type { ChartOption, ChartEvent } from '../types';
-import type { RenderMode, Theme, Locale } from '@HudX/core';
+import type { RenderMode, Theme, Locale } from 'HudX/core';
 import Chart from '../Chart';
 import LineChart from '../chart/LineChart';
 import BarChart from '../chart/BarChart';
