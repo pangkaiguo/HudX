@@ -15,6 +15,7 @@ import {
   invertMatrix,
   applyMatrix
 } from './util/matrix';
+import { getUnit32RandomValues } from './util/random';
 
 class ChartElement extends Eventful {
   id: string;
@@ -120,11 +121,15 @@ class ChartElement extends Eventful {
   }
 
   contain(x: number, y: number): boolean {
+    // TODO
+    console.info(x, y);
     return false;
   }
 
   render(ctx: CanvasRenderingContext2D): void {
     // To be implemented by subclasses
+    // TODO
+    console.info(ctx);
   }
 
   /**
@@ -252,7 +257,7 @@ class ChartElement extends Eventful {
   }
 
   private _generateId(): string {
-    return `element_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `element_${Date.now()}_${getUnit32RandomValues()}`;
   }
 }
 

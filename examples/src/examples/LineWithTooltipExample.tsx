@@ -1,10 +1,10 @@
+import React from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 
 export const LineWithTooltipExample = () => {
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || [];
 
   const option: ChartOption = {
     title: {
@@ -37,13 +37,13 @@ export const LineWithTooltipExample = () => {
         name: 'Weekly Data',
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: colors[0] },
+        itemStyle: { color: theme.seriesColors?.[0] },
         lineStyle: { width: 2 },
         showSymbol: true,
         emphasis: {
           scale: true,
           itemStyle: {
-            color: colors[3]
+            color: theme.seriesColors?.[3]
           }
         }
       }

@@ -1,11 +1,10 @@
+import React from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
-import { defaultColors } from '../config';
 
 export const BasicLineExample = () => {
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || defaultColors;
 
   const option: ChartOption = {
     title: {
@@ -31,7 +30,7 @@ export const BasicLineExample = () => {
         name: 'Weekly Data',
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: colors[0] },
+        itemStyle: { color: theme.seriesColors?.[0] },
         showSymbol: true
       }
     ],

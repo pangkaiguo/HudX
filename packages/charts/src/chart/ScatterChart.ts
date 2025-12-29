@@ -3,7 +3,7 @@
  */
 
 import Chart from '../Chart';
-import { Circle, Text } from 'HudX/core';
+import { Circle } from 'HudX/core';
 
 export default class ScatterChart extends Chart {
   protected _render(): void {
@@ -59,7 +59,7 @@ export default class ScatterChart extends Chart {
               duration,
               delay,
               easing: 'elasticOut',
-              onUpdate: (target, percent) => {
+              onUpdate: (target: any, percent: number) => {
                 // Also animate opacity for smoother appearance
                 circle.attr('style', {
                   fill: color,

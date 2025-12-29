@@ -104,16 +104,6 @@ export const darken = (color: string, amount: number): string => {
 };
 
 /**
- * Adjust opacity
- */
-export const adjustOpacity = (color: string, opacity: number): string => {
-  const rgba = parseColor(color);
-  if (!rgba) return color;
-
-  return rgbaToString([rgba[0], rgba[1], rgba[2], opacity]);
-};
-
-/**
  * Linear interpolation between two colors
  */
 export const lerp = (start: string, end: string, percent: number): string => {
@@ -156,6 +146,10 @@ export const lift = (color: string, level: number): string => {
 
 /**
  * Convert color to hex string
+ * toHex('rgba(255, 153,51,0.5)') // '#ff993380'
+ * toHex('rgb(255, 153,51)') // '#ff9933'
+ * toHex('#ff9933') // '#ff9933' parseColor success, alpha = 1
+ * toHex('unknown') // 'unknown' parseColor failed
  */
 export const toHex = (color: string): string => {
   const rgba = parseColor(color);
@@ -171,4 +165,26 @@ export const toHex = (color: string): string => {
   }
 
   return `#${r}${g}${b}`;
+};
+
+/**
+ * Parse color with opacity
+ * toRgbaWithOpacity('#ff9933', 0.6) // 'rgba(255, 153, 51, 0.6)'
+ * toRgbaWithOpacity('rgba(255, 153, 51, 0.5)', 0.6) // 'rgba(255, 153, 51, 0.6)'
+ * toRgbaWithOpacity('rgb(255, 153, 51)', 0.6) // 'rgba(255, 153, 51, 0.6)'
+ * toRgbaWithOpacity('unknown', 0.6) // 'unknown' parseColor failed
+ * toRgbaWithOpacity('red', 0.6) // 'rgba(255, 0, 0, 0.6)'
+ */
+export const toRgbaWithOpacity = (color: string, opacity: number): string => {
+  const rgba = parseColor(color);
+  if (!rgba) return color;
+
+  const [r, g, b, a] = rgba;
+  const clampedOpacity = Math.min(1, Math.max(0, opacity));
+  const finalA = Math.max(0, Math.min(1, a * clampedOpacity));
+
+  if (finalA === 1 && a === 1) {
+    return color;
+  }
+  return rgbaToString([Math.round(r), Math.round(g), Math.round(b), finalA])
 };

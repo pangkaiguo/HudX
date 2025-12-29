@@ -247,6 +247,9 @@ export default class SVGPainter implements IPainter {
     const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(svgBlob);
 
+    // TODO 
+    console.info(img, url);
+
     // Note: This is asynchronous in nature but we need synchronous return.
     // In a real implementation we might want to return a Promise or handle this differently.
     // For now, we'll return a placeholder or handle it if the image loads immediately (which it won't).

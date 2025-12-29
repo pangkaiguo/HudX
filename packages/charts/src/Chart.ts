@@ -4,7 +4,8 @@
 
 import {
   Renderer, Group, Animator, Tooltip, Legend, Line, Text,
-  type RenderMode, type Theme, type Locale, type DataURLOpts, type ThemeConfig
+  type RenderMode, type Theme, type Locale, type DataURLOpts, type ThemeConfig,
+  toRgbaWithOpacity
 } from 'HudX/core';
 import type { ChartOption, ChartEvent } from './types';
 import { createLinearScale, createOrdinalScale } from './util/coordinate';
@@ -662,9 +663,8 @@ export default class Chart {
    * Get series color 
    */
   protected _getSeriesColor(index: number): string {
-    const theme = this.getTheme();
     const config = this._renderer.getThemeConfig();
-    const colors = config.seriesColors || ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
+    const colors = config.seriesColors || [];
     return colors[index % colors.length];
   }
 
@@ -674,12 +674,9 @@ export default class Chart {
   protected _getSeriesColorWithOpacity(index: number, opacity: number = 1): string {
     const color = this._getSeriesColor(index);
 
-    // Convert hex to rgba if opacity is not 1
-    if (opacity < 1 && color.startsWith('#')) {
-      const r = parseInt(color.slice(1, 3), 16);
-      const g = parseInt(color.slice(3, 5), 16);
-      const b = parseInt(color.slice(5, 7), 16);
-      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    // Convert hex to rgba
+    if (color.startsWith('#')) {
+      return toRgbaWithOpacity(color, opacity);
     }
 
     return color;
@@ -729,16 +726,12 @@ export default class Chart {
     const posBottom = (option.legend as any)?.bottom;
 
     const legend = new Legend({
-      orient: option.legend?.orient || 'vertical',
-      x: typeof posLeft !== 'undefined'
-        ? posLeft
-        : (typeof posRight !== 'undefined' ? 'right' : 'left'),
-      y: typeof posTop !== 'undefined'
-        ? posTop
-        : (typeof posBottom !== 'undefined' ? 'bottom' : 'bottom'),
+      orient: option.legend?.orient ?? 'vertical',
+      x: posLeft ?? posRight ?? 'left',
+      y: posTop ?? posBottom ?? 'top',
       right: typeof posRight === 'number' ? posRight : undefined,
       bottom: typeof posBottom === 'number' ? posBottom : undefined,
-      selectedMode: option.legend?.selectedMode || 'multiple',
+      selectedMode: option.legend?.selectedMode ?? 'multiple',
       onSelect: (name: string, selected: boolean) => {
         if (selected) {
           this._legendSelected.add(name);
@@ -773,6 +766,7 @@ export default class Chart {
    */
   protected _onLegendHover(name: string, hovered: boolean): void {
     // To be implemented by subclasses
+    //TOTO console.info('Legend hover', name, hovered);
   }
 
   /**

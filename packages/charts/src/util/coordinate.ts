@@ -194,8 +194,8 @@ export const calculateDomain = (
       return [0, 100];
     }
 
-    let min = axis.min === 'dataMin' ? Math.min(...values) : (typeof axis.min === 'number' ? axis.min : Math.min(...values));
-    let max = axis.max === 'dataMax' ? Math.max(...values) : (typeof axis.max === 'number' ? axis.max : Math.max(...values));
+    let min = axis.min !== 'dataMin' && typeof axis.min === 'number' ? axis.min : Math.min(...values);
+    let max = axis.max !== 'dataMax' && typeof axis.max === 'number' ? axis.max : Math.max(...values);
 
     // If scale is not enabled, include zero
     if (!axis.scale) {

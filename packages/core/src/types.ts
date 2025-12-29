@@ -118,6 +118,8 @@ export interface ThemeConfig {
   axisLabelColor: string;
   seriesColors?: string[];
   color?: string[];
+  shadowColor?: string;
+  maskColor?: string;
   tooltipBackgroundColor: string;
   tooltipTextColor: string;
   legendTextColor: string;

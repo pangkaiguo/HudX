@@ -3,7 +3,7 @@
  */
 
 import Chart from '../Chart';
-import { Rect, Text } from 'HudX/core';
+import { Rect } from 'HudX/core';
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {
@@ -56,7 +56,7 @@ export default class HeatmapChart extends Chart {
                 duration,
                 delay,
                 easing: 'cubicOut',
-                onUpdate: (target, percent) => {
+                onUpdate: (target: any, percent: number) => {
                   // Animate opacity for fade-in effect
                   target.opacity = percent;
                   rect.markRedraw();

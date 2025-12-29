@@ -22,7 +22,11 @@ export const Easing = {
   sinusoidalInOut: (t: number) => -(Math.cos(Math.PI * t) - 1) / 2,
   exponentialIn: (t: number) => (t === 0 ? 0 : Math.pow(2, 10 * t - 10)),
   exponentialOut: (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
-  exponentialInOut: (t: number) => t === 0 ? 0 : t === 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2,
+  exponentialInOut: (t: number) => {
+    if (t === 0 || t === 1) return t;
+    if (t < 0.5) return Math.pow(2, 20 * t - 10) / 2;
+    return (2 - Math.pow(2, -20 * t + 10)) / 2;
+  },
   circularIn: (t: number) => 1 - Math.sqrt(1 - Math.pow(t, 2)),
   circularOut: (t: number) => Math.sqrt(1 - Math.pow(t - 1, 2)),
   circularInOut: (t: number) => t < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * t, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * t + 2, 2)) + 1) / 2,

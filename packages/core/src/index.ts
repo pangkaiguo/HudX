@@ -32,11 +32,11 @@ export { default as Eventful } from './mixin/Eventful';
 
 // Types
 export * from './types';
-export type { RenderMode } from './types';
 
 // Utils
 export { default as ObjectPool } from './util/ObjectPool';
 export { default as BatchUpdater } from './util/BatchUpdater';
+export { default as uuidV4, getUnit32RandomValues } from './util/random';
 export * from './util/matrix';
 export * from './util/color';
 export * from './util/pattern';

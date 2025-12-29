@@ -210,21 +210,27 @@ export default class Legend extends Group {
       this._itemRects.set(item.name, iconElement);
     });
 
-    const x = typeof this._option.x === 'number'
-      ? this._option.x
-      : (this._option.x === 'left'
-        ? 10
-        : this._option.x === 'center'
-          ? Math.max(0, (this._containerWidth - totalWidth) / 2)
-          : Math.max(0, this._containerWidth - totalWidth - (this._option.right ?? 10)));
+    let x: number;
+    if (typeof this._option.x === 'number') {
+      x = this._option.x;
+    } else if (this._option.x === 'left') {
+      x = 10;
+    } else if (this._option.x === 'center') {
+      x = Math.max(0, (this._containerWidth - totalWidth) / 2);
+    } else {
+      x = Math.max(0, this._containerWidth - totalWidth - (this._option.right ?? 10));
+    }
 
-    const y = typeof this._option.y === 'number'
-      ? this._option.y
-      : (this._option.y === 'top'
-        ? 10
-        : this._option.y === 'middle'
-          ? Math.max(0, (this._containerHeight - totalHeight) / 2)
-          : Math.max(0, this._containerHeight - totalHeight - (this._option.bottom ?? 10)));
+    let y: number;
+    if (typeof this._option.y === 'number') {
+      y = this._option.y;
+    } else if (this._option.y === 'top') {
+      y = 10;
+    } else if (this._option.y === 'middle') {
+      y = Math.max(0, (this._containerHeight - totalHeight) / 2);
+    } else {
+      y = Math.max(0, this._containerHeight - totalHeight - (this._option.bottom ?? 10));
+    }
     this.attr('transform', { x, y });
   }
 }

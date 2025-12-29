@@ -10,22 +10,21 @@ export const InteractionExample = () => {
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
     const theme = ThemeManager.getTheme('light');
-    const colors = theme.seriesColors || [];
 
     const circles = [];
     for (let i = 0; i < 5; i++) {
       const circle = new Circle({
         shape: { cx: 100 + i * 130, cy: 150, r: 40 },
-        style: { fill: colors[0], opacity: 0.7 },
+        style: { fill: theme.seriesColors?.[0], opacity: 0.7 },
         cursor: 'pointer'
       });
 
       circle.on('click', () => {
-        circle.attr({ style: { fill: colors[3], opacity: 1 } });
+        circle.attr({ style: { fill: theme.seriesColors?.[3], opacity: 1 } });
         setClickCount(prev => prev + 1);
         renderer.flush();
         setTimeout(() => {
-          circle.attr({ style: { fill: colors[0], opacity: 0.7 } });
+          circle.attr({ style: { fill: theme.seriesColors?.[0], opacity: 0.7 } });
           renderer.flush();
         }, 300);
       });

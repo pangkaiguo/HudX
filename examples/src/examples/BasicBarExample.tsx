@@ -1,11 +1,10 @@
+import React from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
-import { defaultColors } from '../config';
 
 export const BasicBarExample = () => {
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || defaultColors;
 
   const option: ChartOption = {
     title: {
@@ -32,7 +31,7 @@ export const BasicBarExample = () => {
         name: 'Weekly Data',
         type: 'bar',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: colors[0], opacity: 0.8 }
+        itemStyle: { color: theme.seriesColors?.[0], opacity: 0.8 }
       }
     ],
     animation: true

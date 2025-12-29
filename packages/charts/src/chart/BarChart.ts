@@ -1,5 +1,5 @@
 import Chart from '../Chart';
-import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate } from '../util/coordinate';
+import { createLinearScale, createOrdinalScale, calculateDomain } from '../util/coordinate';
 import { Rect, createDecalPattern } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
@@ -52,9 +52,12 @@ export default class BarChart extends Chart {
       // Prepare bar grouping info based on categories (ECharts-style)
       const barSeries = series.filter(s => s.type === 'bar' && s.show !== false);
       const seriesCount = barSeries.length || 1;
-      const categoryCount = xAxis?.type === 'category'
-        ? (Array.isArray(xAxis?.data) ? xAxis.data.length : xDomain.length)
-        : data.length;
+      let categoryCount: number;
+      if (xAxis?.type === 'category') {
+        categoryCount = (Array.isArray(xAxis?.data) ? xAxis.data.length : xDomain.length);
+      } else {
+        categoryCount = data.length;
+      }
       const groupWidth = categoryCount > 0 ? (plotWidth / categoryCount) : plotWidth;
       const groupInnerWidth = groupWidth * 0.8;
       const barWidthPerSeries = groupInnerWidth / seriesCount;
@@ -226,7 +229,7 @@ export default class BarChart extends Chart {
                 duration,
                 delay,
                 easing: 'cubicOut',
-                onUpdate: (target, percent) => {
+                onUpdate: (target: any, percent: number) => {
                   const currentHeight = initialHeight + (barHeight - initialHeight) * percent;
                   target.height = currentHeight;
                   target.y = plotY + plotHeight - target.height;

@@ -20,6 +20,8 @@ export class ThemeManager {
       colorTooltipBackground: 'rgba(50, 50, 50, 0.9)',
       colorTooltipText: '#ffffff',
       colorLegendText: '#333333',
+      colorShadow: 'rgba(0, 0, 0, 0.6)',
+      colorMask: 'rgba(255, 255, 255, 0.8)',
       fontFamily: 'sans-serif',
       fontSize: 12,
       seriesColors: [
@@ -40,6 +42,8 @@ export class ThemeManager {
       colorTooltipBackground: 'rgba(200, 200, 200, 0.9)',
       colorTooltipText: '#1e1e1e',
       colorLegendText: '#e0e0e0',
+      colorShadow: 'rgba(0, 0, 0, 0.6)',
+      colorMask: 'rgba(255, 255, 255, 0.8)',
       fontFamily: 'sans-serif',
       fontSize: 12,
       seriesColors: [
@@ -57,7 +61,7 @@ export class ThemeManager {
     const currentToken = ThemeManager._tokens.get(theme) || {};
     const newToken = { ...currentToken, ...token };
     ThemeManager._tokens.set(theme, newToken);
-    
+
     // Map token to theme config
     const config: ThemeConfig = {
       backgroundColor: String(newToken.colorBackground),
@@ -68,6 +72,8 @@ export class ThemeManager {
       axisLabelColor: String(newToken.colorAxisLabel),
       seriesColors: newToken.seriesColors as string[],
       color: newToken.seriesColors as string[],
+      shadowColor: String(newToken.colorShadow),
+      maskColor: String(newToken.colorMask),
       tooltipBackgroundColor: String(newToken.colorTooltipBackground),
       tooltipTextColor: String(newToken.colorTooltipText),
       legendTextColor: String(newToken.colorLegendText),
@@ -75,7 +81,7 @@ export class ThemeManager {
       fontSize: Number(newToken.fontSize),
       token: newToken
     };
-    
+
     ThemeManager.registerTheme(theme, config);
   }
 

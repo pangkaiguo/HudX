@@ -76,9 +76,7 @@ export default class LineChart extends Chart {
           silent: false,
           cursor: 'crosshair'
         });
-        const domain = xAxis?.type === 'category'
-          ? (Array.isArray(xAxis?.data) ? xAxis.data : xDomain)
-          : xDomain;
+        const domain = xAxis?.type === 'category' && Array.isArray(xAxis?.data) ? xAxis.data : xDomain;
         (interact as any).on('mousemove', (evt: any) => {
           const mx = evt.offsetX;
           const my = evt.offsetY;
@@ -103,7 +101,7 @@ export default class LineChart extends Chart {
             return;
           }
           const lines: string[] = [];
-          series.forEach((s, si) => {
+          series.forEach((s) => {
             if (s.type !== 'line' || s.show === false) return;
             const item = (s.data || [])[idx];
             if (item === undefined) return;
@@ -175,6 +173,7 @@ export default class LineChart extends Chart {
         // Create line path
         // Simple polyline for now, support smooth curve later
         const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+        console.info(pathData);
 
         const line = new Polyline({
           shape: {

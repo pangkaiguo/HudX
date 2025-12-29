@@ -1,10 +1,10 @@
+import React from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 
 export const PieWithLegendExample = () => {
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || [];
 
   const option: ChartOption = {
     title: {
@@ -30,11 +30,11 @@ export const PieWithLegendExample = () => {
         radius: 120,
         center: ['50%', '50%'],
         data: [
-          { name: 'Direct', value: 335, itemStyle: { color: colors[0] } },
-          { name: 'Email', value: 310, itemStyle: { color: colors[1] } },
-          { name: 'Ads', value: 234, itemStyle: { color: colors[2] } },
-          { name: 'Video', value: 135, itemStyle: { color: colors[3] } },
-          { name: 'Search', value: 148, itemStyle: { color: colors[4] } }
+          { name: 'Direct', value: 335, itemStyle: { color: theme.seriesColors?.[0] } },
+          { name: 'Email', value: 310, itemStyle: { color: theme.seriesColors?.[1] } },
+          { name: 'Ads', value: 234, itemStyle: { color: theme.seriesColors?.[2] } },
+          { name: 'Video', value: 135, itemStyle: { color: theme.seriesColors?.[3] } },
+          { name: 'Search', value: 148, itemStyle: { color: theme.seriesColors?.[4] } }
         ],
         itemStyle: {
           opacity: 0.8

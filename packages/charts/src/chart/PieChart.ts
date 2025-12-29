@@ -82,13 +82,30 @@ export default class PieChart extends Chart {
       }
 
       // Render pie slices
-      let startAngle = (seriesItem as any).startAngle !== undefined
-        ? (seriesItem as any).startAngle * Math.PI / 180
-        : (seriesItem.type === 'half-doughnut' ? -Math.PI : -Math.PI / 2);
+      const computeAngles = (seriesItem: any) => {
+        let startAngle: number;
+        const degToRad = (deg: number) => deg * Math.PI / 180;
+        if (seriesItem.startAngle !== undefined) {
+          startAngle = degToRad(seriesItem.startAngle);
+        } else if (seriesItem.type === 'half-doughnut') {
+          startAngle = -Math.PI;
+        } else {
+          startAngle = -Math.PI / 2;
+        }
 
-      let endAngle = (seriesItem as any).endAngle !== undefined
-        ? (seriesItem as any).endAngle * Math.PI / 180
-        : (seriesItem.type === 'half-doughnut' ? 0 : startAngle + Math.PI * 2);
+        let endAngle: number;
+        if (seriesItem.endAngle !== undefined) {
+          endAngle = degToRad(seriesItem.endAngle);
+        } else if (seriesItem.type === 'half-doughnut') {
+          endAngle = 0;
+        } else {
+          endAngle = startAngle + Math.PI * 2;
+        }
+
+        return { startAngle, endAngle };
+      }
+
+      const { startAngle, endAngle } = computeAngles(seriesItem);
 
       const totalAngle = endAngle - startAngle;
       let currentAngle = startAngle;
@@ -310,10 +327,15 @@ export default class PieChart extends Chart {
             textBaseline = 'middle';
           }
 
-          const labelText = typeof seriesItem.label?.formatter === 'function'
-            ? seriesItem.label.formatter({ name: (item as any).name || '', value, percent: percent * 100 })
-            : (seriesItem.label?.formatter === '{b}' ? ((item as any).name || '') : String(value));
-
+          let labelText: string;
+          const formatter = seriesItem.label?.formatter;
+          if (typeof formatter === 'function') {
+            labelText = formatter({ name: (item as any).name || '', value, percent: percent * 100 });
+          } else if (formatter === '{b}') {
+            labelText = (item as any).name || '';
+          } else {
+            labelText = String(value);
+          }
           const text = new Text({
             shape: {
               x: labelX,
@@ -323,7 +345,7 @@ export default class PieChart extends Chart {
             style: {
               fontSize: seriesItem.label.fontSize || 12,
               fontWeight: seriesItem.label.fontWeight || 'normal',
-              fill: seriesItem.label.color || (isOutside ? '#333' : (isCenter ? '#333' : '#fff')), // White if inside
+              fill: seriesItem.label.color || (isOutside || isCenter ? '#333' : '#fff'), // White if inside
               textAlign: textAlign,
               textBaseline: textBaseline,
               opacity: seriesItem.label.show ? 1 : 0, // Use opacity as well
@@ -367,10 +389,12 @@ export default class PieChart extends Chart {
     const seriesItem = series[0];
     const emphasis = seriesItem.emphasis;
     const [r0, r] = this._getRadius(seriesItem);
+    // TODO
+    console.info(r0);
 
     // Find sector by name
-    this._root.traverse((child) => {
-      if (child instanceof Sector && (child as any).name === name) {
+    this._root.traverse((child: any) => {
+      if (child instanceof Sector && (child as any)?.name === name) {
         this._applyEmphasisAnimation(child, emphasis, hovered, r);
 
         // Show/hide tooltip on legend hover
@@ -382,6 +406,9 @@ export default class PieChart extends Chart {
             const r = (shape.r + shape.r0) / 2;
             const cx = shape.cx + Math.cos(midAngle) * r;
             const cy = shape.cy + Math.sin(midAngle) * r;
+
+            // TODO
+            console.info(cx, cy);
 
             // Construct params
             // We need to find the data item for this sector

@@ -26,15 +26,15 @@ export default class Path extends ChartElement {
     try {
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', this.shape.d);
-      
+
       // Note: getBBox might return 0 if not attached to DOM in some environments
       // but it's the most reliable way without writing a full path parser
       // We can append to a hidden SVG if needed, but let's try direct call first
       // or check if we can approximate from points if provided
-      
+
       // If we are in a browser environment where we can't get BBox easily without DOM,
       // we might need a backup. For now, we assume this works or returns 0.
-      
+
       // To ensure it works, we might need to append to a hidden SVG
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.style.position = 'absolute';
@@ -43,11 +43,11 @@ export default class Path extends ChartElement {
       svg.style.height = '0';
       svg.appendChild(path);
       document.body.appendChild(svg);
-      
+
       const bbox = path.getBBox();
-      
+
       document.body.removeChild(svg);
-      
+
       return {
         x: bbox.x,
         y: bbox.y,
@@ -55,6 +55,7 @@ export default class Path extends ChartElement {
         height: bbox.height
       };
     } catch (e) {
+      console.error(e);
       return { x: 0, y: 0, width: 0, height: 0 };
     }
   }
@@ -71,6 +72,7 @@ export default class Path extends ChartElement {
         path2d = new Path2D(this.shape.d);
         this.shape.path = path2d;
       } catch (e) {
+        console.error(e);
         return false;
       }
     }
@@ -79,7 +81,7 @@ export default class Path extends ChartElement {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     if (!ctx) return false;
-    
+
     return ctx.isPointInPath(path2d, x, y);
   }
 
@@ -99,7 +101,7 @@ export default class Path extends ChartElement {
         path2d = new Path2D(this.shape.d);
         this.shape.path = path2d;
       } catch (e) {
-        console.error('Invalid path data:', this.shape.d);
+        console.error(e, 'Invalid path data:', this.shape.d);
         ctx.restore();
         return;
       }

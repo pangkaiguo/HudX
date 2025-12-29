@@ -9,7 +9,7 @@ export { default as ScatterChart } from './chart/ScatterChart';
 export { default as HeatmapChart } from './chart/HeatmapChart';
 
 // React components
-export { default as HChart } from './react/HChart';
+export { default as HChart, type HChartProps } from './react/HChart';
 
 // Types
 export * from './types';

@@ -95,18 +95,15 @@ export default class CanvasPainter implements IPainter {
    * Paint all elements
    */
   paint(): void {
-    console.log('[CanvasPainter] paint called. dirty:', this._dirty);
     if (!this._dirty) {
       return;
     }
 
     // Get all elements sorted by zlevel and z
     const elements = this._storage.getElementsList();
-    console.log('[CanvasPainter] elements count:', elements.length);
 
     // Check if any element is dirty
     const hasDirtyElements = elements.some(el => el.isDirty());
-    console.log('[CanvasPainter] hasDirtyElements:', hasDirtyElements);
 
     if (!hasDirtyElements && !this._dirty) {
       return;

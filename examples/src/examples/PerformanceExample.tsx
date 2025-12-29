@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Rect, Line, Polyline, Polygon } from 'HudX/core';
+import { Renderer, Circle, Rect, Line, Polyline, Polygon, getUnit32RandomValues } from 'HudX/core';
 
 type ShapeType = 'circle' | 'rect' | 'line' | 'polyline' | 'polygon';
 
@@ -20,34 +20,34 @@ export const PerformanceExample = () => {
     const height = 600;
 
     for (let i = 0; i < count; i++) {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
-      const color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+      const x = getUnit32RandomValues() * width;
+      const y = getUnit32RandomValues() * height;
+      const color = `hsl(${getUnit32RandomValues() * 360}, 70%, 60%)`;
 
       let element;
       switch (shapeType) {
         case 'circle':
           element = new Circle({
-            shape: { cx: x, cy: y, r: Math.random() * 5 + 2 },
+            shape: { cx: x, cy: y, r: getUnit32RandomValues() * 5 + 2 },
             style: { fill: color, opacity: 0.6 }
           });
           break;
         case 'rect':
           element = new Rect({
-            shape: { x, y, width: Math.random() * 10 + 5, height: Math.random() * 10 + 5 },
+            shape: { x, y, width: getUnit32RandomValues() * 10 + 5, height: getUnit32RandomValues() * 10 + 5 },
             style: { fill: color, opacity: 0.6 }
           });
           break;
         case 'line':
           element = new Line({
-            shape: { x1: x, y1: y, x2: x + Math.random() * 20, y2: y + Math.random() * 20 },
+            shape: { x1: x, y1: y, x2: x + getUnit32RandomValues() * 20, y2: y + getUnit32RandomValues() * 20 },
             style: { stroke: color, lineWidth: 2, opacity: 0.6 }
           });
           break;
         case 'polyline':
           const points = [];
           for (let j = 0; j < 3; j++) {
-            points.push([x + Math.random() * 20, y + Math.random() * 20]);
+            points.push([x + getUnit32RandomValues() * 20, y + getUnit32RandomValues() * 20]);
           }
           element = new Polyline({
             shape: { points },
@@ -57,7 +57,7 @@ export const PerformanceExample = () => {
         case 'polygon':
           const polyPoints = [];
           for (let j = 0; j < 4; j++) {
-            polyPoints.push([x + Math.random() * 20, y + Math.random() * 20]);
+            polyPoints.push([x + getUnit32RandomValues() * 20, y + getUnit32RandomValues() * 20]);
           }
           element = new Polygon({
             shape: { points: polyPoints },
