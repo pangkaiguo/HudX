@@ -6,7 +6,6 @@ import { ThemeManager } from 'HudX/core';
 export const AdvancedLineExample = () => {
   const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || [];
 
   const option: ChartOption = {
     title: {
@@ -56,7 +55,7 @@ export const AdvancedLineExample = () => {
         name: 'Series A',
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: colors[0] },
+        itemStyle: { color: theme.seriesColors?.[0] },
         lineStyle: { width: 2 },
         showSymbol: true
       },
@@ -64,7 +63,7 @@ export const AdvancedLineExample = () => {
         name: 'Series B',
         type: 'line',
         data: [100, 150, 120, 110, 90, 140, 120],
-        itemStyle: { color: colors[1] },
+        itemStyle: { color: theme.seriesColors?.[1] },
         lineStyle: { width: 2 },
         showSymbol: true
       },
@@ -72,7 +71,7 @@ export const AdvancedLineExample = () => {
         name: 'Series C',
         type: 'line',
         data: [80, 120, 100, 140, 110, 100, 90],
-        itemStyle: { color: colors[2] },
+        itemStyle: { color: theme.seriesColors?.[2] },
         lineStyle: { width: 2 },
         showSymbol: true
       }

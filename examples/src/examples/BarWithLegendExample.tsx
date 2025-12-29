@@ -6,7 +6,6 @@ import { ThemeManager } from 'HudX/core';
 export const BarWithLegendExample = () => {
   const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || [];
 
   const option: ChartOption = {
     title: {
@@ -53,7 +52,9 @@ export const BarWithLegendExample = () => {
         name: 'Sales',
         type: 'bar',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: colors[0] }
+        itemStyle: {
+          color: theme.seriesColors?.[0]
+        }
       }
     ],
     animation: true

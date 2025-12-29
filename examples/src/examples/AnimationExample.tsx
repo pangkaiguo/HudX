@@ -9,16 +9,15 @@ export const AnimationExample = () => {
 
     const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
     const theme = ThemeManager.getTheme('light');
-    const colors = theme.seriesColors || [];
 
     const circle = new Circle({
       shape: { cx: 100, cy: 100, r: 30 },
-      style: { fill: colors[0] }
+      style: { fill: theme.seriesColors?.[0] }
     });
 
     const rect = new Rect({
       shape: { x: 300, y: 100, width: 60, height: 60 },
-      style: { fill: colors[1] }
+      style: { fill: theme.seriesColors?.[1] }
     });
 
     renderer.add(circle);

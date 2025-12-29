@@ -6,7 +6,6 @@ import { ThemeManager } from 'HudX/core';
 export const AdvancedPieExample = () => {
   const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || [];
 
   const option: ChartOption = {
     title: {
@@ -54,11 +53,11 @@ export const AdvancedPieExample = () => {
           borderColor: 'transparent'
         },
         data: [
-          { name: 'Category A', value: 335, itemStyle: { color: colors[0] } },
-          { name: 'Category B', value: 310, itemStyle: { color: colors[1] } },
-          { name: 'Category C', value: 234, itemStyle: { color: colors[2] } },
-          { name: 'Category D', value: 135, itemStyle: { color: colors[3] } },
-          { name: 'Category E', value: 148, itemStyle: { color: colors[4] } }
+          { name: 'Category A', value: 335, itemStyle: { color: theme.seriesColors?.[0] } },
+          { name: 'Category B', value: 310, itemStyle: { color: theme.seriesColors?.[1] } },
+          { name: 'Category C', value: 234, itemStyle: { color: theme.seriesColors?.[2] } },
+          { name: 'Category D', value: 135, itemStyle: { color: theme.seriesColors?.[3] } },
+          { name: 'Category E', value: 148, itemStyle: { color: theme.seriesColors?.[4] } }
         ],
         label: {
           show: true,

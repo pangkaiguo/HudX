@@ -6,7 +6,6 @@ import { ThemeManager } from 'HudX/core';
 export const AdvancedBarExample = () => {
   const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || [];
 
   const option: ChartOption = {
     title: {
@@ -55,19 +54,19 @@ export const AdvancedBarExample = () => {
         name: 'Product A',
         type: 'bar',
         data: [320, 332, 301, 334],
-        itemStyle: { color: colors[0] }
+        itemStyle: { color: theme.seriesColors?.[0] }
       },
       {
         name: 'Product B',
         type: 'bar',
         data: [220, 182, 191, 234],
-        itemStyle: { color: colors[1] }
+        itemStyle: { color: theme.seriesColors?.[1] }
       },
       {
         name: 'Product C',
         type: 'bar',
         data: [150, 232, 201, 154],
-        itemStyle: { color: colors[2] }
+        itemStyle: { color: theme.seriesColors?.[2] }
       }
     ],
     animation: true,
