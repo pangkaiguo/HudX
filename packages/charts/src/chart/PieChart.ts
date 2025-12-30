@@ -42,7 +42,7 @@ export default class PieChart extends Chart {
       }
 
       const seriesItem = series[0];
-      if (!['pie', 'doughnut', 'half-doughnut'].includes(seriesItem.type)) {
+      if (!seriesItem.type || !['pie', 'doughnut', 'half-doughnut'].includes(seriesItem.type)) {
         return;
       }
 
@@ -239,7 +239,7 @@ export default class PieChart extends Chart {
           );
 
           sector.on('mousemove', (evt: any) => {
-            if (!this._tooltip?.isVisible()) return;
+
             const mx = evt?.offsetX ?? cx;
             const my = evt?.offsetY ?? cy;
             // Recompute content to avoid stale percent (during animation)
@@ -260,7 +260,12 @@ export default class PieChart extends Chart {
               percent: partPercent
             });
 
-            this._tooltip.show(mx + 12, my - 16, content);
+            if (this._tooltip) {
+              if (!this._tooltip.isVisible()) {
+                this._applyEmphasisAnimation(sector, emphasis, true, r);
+              }
+              this._tooltip.show(mx + 12, my - 16, content);
+            }
           });
         }
 

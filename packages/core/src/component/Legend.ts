@@ -53,7 +53,7 @@ export default class Legend extends Group {
       padding: 8,
       fontSize: 12,
       itemGap: 10,
-      itemWidth: 150,
+      itemWidth: 100,
       selectedMode: 'multiple',
       ...option
     };

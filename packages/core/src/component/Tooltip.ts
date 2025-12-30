@@ -29,6 +29,8 @@ export default class Tooltip extends Group {
   private _containerWidth: number = 800;
   private _containerHeight: number = 600;
 
+  private _currentContent: string = '';
+
   constructor(option: TooltipOption = {}) {
     super();
     this._option = {
@@ -58,42 +60,80 @@ export default class Tooltip extends Group {
   show(x: number, y: number, content: string | Record<string, unknown>): void {
     // Check if content changed to avoid unnecessary rebuild
     const text = typeof content === 'string' ? content : (this._option.formatter?.(content) || JSON.stringify(content));
-    
-    // If already visible and content/position is similar, just update position
-    // For now, always rebuild to ensure correctness, but we can optimize text reuse later
-    
-    this.removeAll();
-    
+
+    // Estimate dimensions for smart positioning
     const padding = this._option.padding || 10;
     const fontSize = this._option.fontSize || 12;
     const lines = text.split('\n');
-    
-    // Estimate text width (rough approximation)
     const maxLineLen = Math.max(...lines.map(l => l.length));
-    const estimatedWidth = maxLineLen * (fontSize * 0.6) + padding * 2; 
+    const estimatedWidth = maxLineLen * (fontSize * 0.6) + padding * 2;
     const height = lines.length * (fontSize * 1.4) + padding * 2;
 
     // Smart positioning
-    let finalX = x;
-    let finalY = y;
+    const offset = 15; // Basic offset to avoid covering mouse
+    let finalX = x + offset;
+    let finalY = y + offset;
 
     if (this._option.confine) {
-      // Adjust X position
-      if (finalX + estimatedWidth > this._containerWidth) {
-        finalX = x - estimatedWidth - 10;
-      }
-      if (finalX < 0) {
-        finalX = 10;
+      // Check Horizontal
+      const overflowRight = finalX + estimatedWidth > this._containerWidth;
+
+      if (overflowRight) {
+        // Try left
+        finalX = x - estimatedWidth - offset;
       }
 
-      // Adjust Y position
-      if (finalY + height > this._containerHeight) {
-        finalY = y - height - 10;
+      // Check Left Overflow (if flipped to left and still overflow, or original was too far left??)
+      if (finalX < 0) {
+        if (overflowRight) {
+          finalX = 10;
+        } else {
+          finalX = 10;
+        }
+      }
+
+      // Check Vertical
+      const overflowBottom = finalY + height > this._containerHeight;
+      if (overflowBottom) {
+        finalY = y - height - offset;
       }
       if (finalY < 0) {
         finalY = 10;
       }
+
+      const mouseSafeZone = { x: x - 10, y: y - 10, w: 20, h: 20 };
+      const tooltipRect = { x: finalX, y: finalY, w: estimatedWidth, h: height };
+
+      const intersect = (r1: any, r2: any) => {
+        return !(r2.x > r1.x + r1.w ||
+          r2.x + r2.w < r1.x ||
+          r2.y > r1.y + r1.h ||
+          r2.y + r2.h < r1.y);
+      };
+
+      if (intersect(mouseSafeZone, tooltipRect)) {
+        if (finalY > y) {
+          finalY = y - height - offset;
+        } else {
+          finalY = y + offset;
+        }
+
+        // Re-clamp Y
+        if (finalY < 0) finalY = 10;
+        if (finalY + height > this._containerHeight) finalY = this._containerHeight - height - 10;
+      }
     }
+
+    // Optimization: If visible and content hasn't changed, just move
+    if (this._visible && this._currentContent === text) {
+      this.attr('transform', { x: finalX, y: finalY, scaleX: 1, scaleY: 1 });
+      this.style.opacity = 1;
+      this.markRedraw();
+      return;
+    }
+
+    this._currentContent = text;
+    this.removeAll();
 
     const bgRect = new Rect({
       shape: { x: 0, y: 0, width: estimatedWidth, height, r: this._option.borderRadius },
@@ -101,18 +141,20 @@ export default class Tooltip extends Group {
         fill: this._option.backgroundColor,
         stroke: this._option.borderColor,
         lineWidth: this._option.borderWidth
-      }
+      },
+      silent: true // Ensure tooltip background doesn't block events
     });
     this.add(bgRect);
 
     lines.forEach((line, i) => {
       this.add(new Text({
         shape: { text: line, x: padding, y: padding + i * (fontSize * 1.4) },
-        style: { 
-          fill: this._option.textColor, 
+        style: {
+          fill: this._option.textColor,
           fontSize,
-          textBaseline: 'top' 
-        }
+          textBaseline: 'top'
+        },
+        silent: true // Ensure tooltip text doesn't block events
       }));
     });
 

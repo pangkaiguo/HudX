@@ -77,49 +77,60 @@ export default class LineChart extends Chart {
           cursor: 'crosshair'
         });
         const domain = xAxis?.type === 'category' && Array.isArray(xAxis?.data) ? xAxis.data : xDomain;
-        (interact as any).on('mousemove', (evt: any) => {
-          const mx = evt.offsetX;
-          const my = evt.offsetY;
-          if (mx < plotX || mx > plotX + plotWidth || my < plotY || my > plotY + plotHeight) {
-            this._tooltip!.hide();
-            return;
-          }
-          let idx = 0;
-          let name: any = '';
-          if (xAxis?.type === 'category') {
-            const label = (xScale as any).invert(mx);
-            idx = domain.indexOf(label);
-            name = label;
-          } else {
-            const xv = (xScale as any).invert(mx);
-            // nearest index by value
-            idx = Math.max(0, Math.min(Math.round((xv - xDomain[0]) / ((xDomain[1] - xDomain[0]) || 1)), domain.length - 1));
-            name = xv;
-          }
-          if (idx < 0 || idx >= domain.length) {
-            this._tooltip!.hide();
-            return;
-          }
-          const lines: string[] = [];
-          series.forEach((s) => {
-            if (s.type !== 'line' || s.show === false) return;
-            const item = (s.data || [])[idx];
-            if (item === undefined) return;
+          let lastX = -1;
+          let lastY = -1;
+          (interact as any).on('mousemove', (evt: any) => {
+            const mx = evt.offsetX;
+            const my = evt.offsetY;
+            lastX = mx;
+            lastY = my;
+            
+            if (mx < plotX || mx > plotX + plotWidth || my < plotY || my > plotY + plotHeight) {
+              this._tooltip!.hide();
+              return;
+            }
+            let idx = 0;
+            let name: any = '';
+            if (xAxis?.type === 'category') {
+              const label = (xScale as any).invert(mx);
+              idx = domain.indexOf(label);
+              name = label;
+            } else {
+              const xv = (xScale as any).invert(mx);
+              // nearest index by value
+              idx = Math.max(0, Math.min(Math.round((xv - xDomain[0]) / ((xDomain[1] - xDomain[0]) || 1)), domain.length - 1));
+              name = xv;
+            }
+            if (idx < 0 || idx >= domain.length) {
+              this._tooltip!.hide();
+              return;
+            }
+            const lines: string[] = [];
+            series.forEach((s) => {
+              if (s.type !== 'line' || s.show === false) return;
+              const item = (s.data || [])[idx];
+              if (item === undefined) return;
 
-            const val = this._getDataValue(item);
-            if (typeof val === 'number') {
-              const seriesName = s.name ? s.name + '\n' : '';
-              lines.push(`${seriesName}${name ? name + ': ' : ''}${val}`);
+              const val = this._getDataValue(item);
+              if (typeof val === 'number') {
+                const seriesName = s.name ? s.name + '\n' : '';
+                lines.push(`${seriesName}${name ? name + ': ' : ''}${val}`);
+              }
+            });
+            if (lines.length === 0) {
+              this._tooltip!.hide();
+              return;
+            }
+            
+            // Force show if hidden (e.g. rapid movement or re-entry)
+            if (!this._tooltip!.isVisible()) {
+               this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
+            } else {
+               this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
             }
           });
-          if (lines.length === 0) {
-            this._tooltip!.hide();
-            return;
-          }
-          this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
-        });
-        (interact as any).on('mouseout', () => this._tooltip!.hide());
-        this._root.add(interact as any);
+          (interact as any).on('mouseout', () => this._tooltip!.hide());
+          this._root.add(interact as any);
       }
 
       // Render legend

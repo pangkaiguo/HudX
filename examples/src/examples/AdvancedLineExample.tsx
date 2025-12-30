@@ -76,7 +76,7 @@ export const AdvancedLineExample = () => {
       const newDataA = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
       const newDataB = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
       const newDataC = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
-      
+
       chartInstance.setOption({
         series: [
           { data: newDataA },
@@ -96,8 +96,6 @@ export const AdvancedLineExample = () => {
       <HChart
         ref={chartRef}
         option={option}
-        width={900}
-        height={500}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>

@@ -4,12 +4,12 @@ import { Renderer, Rect, Circle, Text } from 'HudX/core';
 export const ThemeExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [themeName, setThemeName] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const renderer = Renderer.init(containerRef.current, 'canvas', theme, 'en');
+    const renderer = Renderer.init(containerRef.current, 'canvas', themeName, 'en');
     rendererRef.current = renderer;
 
     const drawChart = () => {
@@ -27,7 +27,7 @@ export const ThemeExample = () => {
       }));
 
       renderer.add(new Text({
-        shape: { text: `Theme: ${theme}`, x: 400, y: 200 },
+        shape: { text: `Theme: ${themeName}`, x: 400, y: 200 },
         style: { textAlign: 'center', fill: theme.textColor, fontSize: 20, fontWeight: 'bold' }
       }));
 
@@ -38,21 +38,21 @@ export const ThemeExample = () => {
     drawChart();
 
     return () => renderer.dispose();
-  }, [theme]);
+  }, [themeName]);
 
   return (
     <div>
       <h2 style={{ marginBottom: 20 }}>Theme Switch Demo</h2>
       <div style={{ marginBottom: 20 }}>
         <button
-          onClick={() => setTheme('light')}
+          onClick={() => setThemeName('light')}
           aria-label="Switch to light theme"
           style={{ marginRight: 10, padding: '8px 16px', cursor: 'pointer' }}
         >
           Light
         </button>
         <button
-          onClick={() => setTheme('dark')}
+          onClick={() => setThemeName('dark')}
           aria-label="Switch to dark theme"
           style={{ padding: '8px 16px', cursor: 'pointer' }}
         >

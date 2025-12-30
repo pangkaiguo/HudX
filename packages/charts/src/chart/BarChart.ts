@@ -194,7 +194,6 @@ export default class BarChart extends Chart {
             );
 
             rect.on('mousemove', (evt: any) => {
-              if (!this._tooltip!.isVisible()) return;
               const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
               const itemValue = this._getDataValue(item);
 
@@ -211,7 +210,13 @@ export default class BarChart extends Chart {
 
               const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
               const my = evt?.offsetY ?? (barY - 10);
-              this._tooltip!.show(mx + 12, my - 16, content);
+              
+              if (this._tooltip) {
+                 if (!this._tooltip.isVisible()) {
+                    rect.attr('style', { opacity: 0.8 });
+                 }
+                 this._tooltip.show(mx + 12, my - 16, content);
+              }
             });
           }
 

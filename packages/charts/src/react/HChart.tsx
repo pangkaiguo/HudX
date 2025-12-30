@@ -22,6 +22,7 @@ export interface HChartProps {
   style?: React.CSSProperties;
   renderMode?: RenderMode; // 'canvas' | 'svg'
   theme?: Theme; // 'light' | 'dark'
+  mode?: string; // 'Light' | 'Dark' to support external standard
   locale?: Locale; // 'en' | 'zh' | 'zh-CN' | etc.
   onEvents?: {
     [eventName: string]: (event: ChartEvent) => void;
@@ -41,7 +42,8 @@ const HChart = forwardRef<HChartRef, HChartProps>(({
   className,
   style,
   renderMode = 'canvas',
-  theme = 'light',
+  theme: propTheme,
+  mode,
   locale = 'en',
   onEvents,
   notMerge = false,
@@ -50,6 +52,17 @@ const HChart = forwardRef<HChartRef, HChartProps>(({
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<Chart | null>(null);
   const optionRef = useRef<ChartOption>(option);
+
+  // Determine the effective theme
+  const theme = useMemo(() => {
+    if (propTheme) {
+      return propTheme;
+    }
+    if (mode) {
+      return mode.toLowerCase() === 'dark' ? 'dark' : 'light';
+    }
+    return 'light';
+  }, [propTheme, mode]);
 
   useImperativeHandle(ref, () => ({
     getChartInstance: () => chartRef.current
@@ -147,10 +160,10 @@ const HChart = forwardRef<HChartRef, HChartProps>(({
   }, [width, height]);
 
   useEffect(() => {
-    if (width !== undefined || height !== undefined) {
-      handleResize();
-    } else {
-      // Auto resize on window resize
+    handleResize(); // Initial resize
+
+    // Auto resize on window resize if dimensions are not fixed numbers
+    if (typeof width !== 'number' || typeof height !== 'number') {
       window.addEventListener('resize', handleResize);
       return () => {
         window.removeEventListener('resize', handleResize);
@@ -180,8 +193,8 @@ const HChart = forwardRef<HChartRef, HChartProps>(({
       ref={containerRef}
       className={className}
       style={{
-        width: width || '100%',
-        height: height || '400px',
+        width: width === undefined ? '100%' : width,
+        height: height === undefined ? 300 : height,
         ...style,
       }}
     />

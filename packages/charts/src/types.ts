@@ -79,7 +79,7 @@ export interface AxisOption {
 }
 
 export interface SeriesOption {
-  type: string;
+  type?: string;
   name?: string;
   data?: any[];
   xAxisIndex?: number;

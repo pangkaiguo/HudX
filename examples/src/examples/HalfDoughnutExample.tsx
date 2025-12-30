@@ -124,8 +124,6 @@ export const HalfDoughnutExample = () => {
       <HChart
         ref={chartRef}
         option={option}
-        width={800}
-        height={500}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
