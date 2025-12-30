@@ -73,7 +73,6 @@ export default class PieChart extends Chart {
           const items = (data as any[]).map((it: any, i: number) => ({
             name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
             color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
-            icon: 'circle',
             textColor: this.getThemeConfig().legendTextColor
           }));
           this._mountLegend(items);
@@ -115,7 +114,6 @@ export default class PieChart extends Chart {
         const items = (data as any[]).map((it: any, i: number) => ({
           name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
           color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
-          icon: 'circle',
           textColor: this.getThemeConfig().legendTextColor // Use theme color
         }));
         this._mountLegend(items);

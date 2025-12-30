@@ -140,7 +140,7 @@ export default class Legend extends Group {
         cursor: 'pointer'
       });
 
-      const icon = item.icon || 'circle';
+      const icon = item.icon || 'rect';
       let iconElement: any;
 
       if (icon === 'circle') {
