@@ -14,10 +14,12 @@
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --watch",
+    "test": "vitest --environment happy-dom",
     "clean": "tsc --build --clean && rm -rf dist"
   },
-  "dependencies": {},
   "devDependencies": {
-    "typescript": "^5.3.3"
+    "happy-dom": "^20.0.11",
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.16"
   }
 }

@@ -6,6 +6,7 @@ import Group from '../Group';
 import Rect from '../shape/Rect';
 import Text from '../shape/Text';
 import Circle from '../shape/Circle';
+import Line from '../shape/Line';
 
 export interface LegendItem {
   name: string;
@@ -148,6 +149,20 @@ export default class Legend extends Group {
           shape: { cx: x + 6, cy: y + itemHeight / 2, r: 4 },
           style: {
             fill: isSelected ? item.color : '#ccc',
+            opacity: isSelected ? 1 : 0.3
+          }
+        });
+      } else if (icon === 'line') {
+        iconElement = new Line({
+          shape: {
+            x1: x,
+            y1: y + itemHeight / 2,
+            x2: x + 12,
+            y2: y + itemHeight / 2
+          },
+          style: {
+            stroke: isSelected ? item.color : '#ccc',
+            lineWidth: 2,
             opacity: isSelected ? 1 : 0.3
           }
         });
