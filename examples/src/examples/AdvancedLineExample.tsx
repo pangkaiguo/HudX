@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 
 export const AdvancedLineExample = () => {
-  const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
 
   const option: ChartOption = {
@@ -17,21 +16,9 @@ export const AdvancedLineExample = () => {
       show: true,
       trigger: 'axis'
     },
-    aria: {
-      enabled: true,
-      decal: {
-        show: isDecal,
-        decals: [
-          { symbol: 'circle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'rect', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'triangle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'diamond', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' }
-        ]
-      }
-    },
     legend: {
       show: true,
-      orient: 'horizontal',
+      orient: 'vertical',
       left: 'center',
       bottom: 30
     },
@@ -85,18 +72,8 @@ export const AdvancedLineExample = () => {
     <div>
       <h2 style={{ marginBottom: 10 }}>Advanced Line Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Features: Smooth animations on load • Interactive legend (click to toggle) • Hover tooltips with data details
+        Features: Smooth animations on load, Interactive legend (click to toggle), Hover tooltips with data details
       </p>
-      <div style={{ marginBottom: 20 }}>
-        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
-          <input
-            type="checkbox"
-            checked={isDecal}
-            onChange={(e) => setIsDecal(e.target.checked)}
-          />
-          Enable Accessibility Decal Patterns
-        </label>
-      </div>
       <HChart
         option={option}
         width={900}

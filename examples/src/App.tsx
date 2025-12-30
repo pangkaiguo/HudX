@@ -8,9 +8,6 @@ const AnimationExample = lazy(() => import('./examples/AnimationExample'));
 const BasicLineExample = lazy(() => import('./examples/BasicLineExample'));
 const BasicBarExample = lazy(() => import('./examples/BasicBarExample'));
 const BasicPieExample = lazy(() => import('./examples/BasicPieExample'));
-const LineWithTooltipExample = lazy(() => import('./examples/LineWithTooltipExample'));
-const BarWithLegendExample = lazy(() => import('./examples/BarWithLegendExample'));
-const PieWithLegendExample = lazy(() => import('./examples/PieWithLegendExample'));
 const AdvancedLineChartExample = lazy(() => import('./examples/AdvancedLineExample'));
 const AdvancedBarChartExample = lazy(() => import('./examples/AdvancedBarExample'));
 const AdvancedPieChartExample = lazy(() => import('./examples/AdvancedPieExample'));
@@ -19,21 +16,18 @@ const HalfDoughnutExample = lazy(() => import('./examples/HalfDoughnutExample'))
 const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
 
 const examples = [
-  { id: 'shape', name: 'Shape', component: ShapeExample },
-  { id: 'themes', name: 'Theme', component: ThemeExample },
-  { id: 'interaction', name: 'Interaction', component: InteractionExample },
-  { id: 'animation', name: 'Animation', component: AnimationExample },
   { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
   { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
   { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
-  { id: 'line-tooltip', name: 'Line + Tooltip', component: LineWithTooltipExample },
-  { id: 'bar-legend', name: 'Bar + Legend', component: BarWithLegendExample },
-  { id: 'pie-legend', name: 'Pie + Legend', component: PieWithLegendExample },
   { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChartExample },
   { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
   { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
   { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
   { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
+  { id: 'shape', name: 'Shape', component: ShapeExample },
+  { id: 'themes', name: 'Theme', component: ThemeExample },
+  { id: 'interaction', name: 'Interaction', component: InteractionExample },
+  { id: 'animation', name: 'Animation', component: AnimationExample },
   { id: 'performance', name: 'Performance', component: PerformanceExample }
 ];
 

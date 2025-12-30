@@ -14,7 +14,14 @@ export const BasicLineExample = () => {
     },
     tooltip: {
       show: true,
-      trigger: 'axis'
+      trigger: 'axis',
+      formatter: '{b}\n{c}'
+    },
+    legend: {
+      show: true,
+      orient: 'vertical',
+      left: 'center',
+      bottom: 20
     },
     xAxis: {
       type: 'category',
@@ -31,7 +38,12 @@ export const BasicLineExample = () => {
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
         itemStyle: { color: theme.seriesColors?.[0] },
-        showSymbol: true
+        lineStyle: { width: 2 },
+        showSymbol: true,
+        emphasis: {
+          scale: true,
+          itemStyle: { color: theme.seriesColors?.[3] }
+        }
       }
     ],
     animation: true

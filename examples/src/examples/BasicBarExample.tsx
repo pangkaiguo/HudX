@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 
 export const BasicBarExample = () => {
+  const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
 
   const option: ChartOption = {
@@ -16,6 +17,27 @@ export const BasicBarExample = () => {
       show: true,
       trigger: 'item',
       formatter: '{b}\n{c}'
+    },
+    aria: {
+      enabled: true,
+      decal: {
+        show: isDecal,
+        decals: [
+          { symbol: 'rect', symbolSize: 0.4, color: theme.decalColor },
+        ]
+      }
+    },
+    legend: {
+      show: true,
+      orient: 'vertical',
+      left: 'center',
+      bottom: 20
+    },
+    grid: {
+      left: 60,
+      right: 40,
+      top: 40,
+      bottom: 60,
     },
     xAxis: {
       type: 'category',
@@ -41,6 +63,16 @@ export const BasicBarExample = () => {
     <div>
       <h2 style={{ marginBottom: 10 }}>Bar Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Hover over bars to see values</p>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={isDecal}
+            onChange={(e) => setIsDecal(e.target.checked)}
+          />
+          Decal Patterns
+        </label>
+      </div>
       <HChart
         option={option}
         width={800}

@@ -6,7 +6,6 @@ import { ThemeManager } from 'HudX/core';
 export const HalfDoughnutExample = () => {
   const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
-  const colors = theme.seriesColors || [];
 
   const option: ChartOption = {
     title: {
@@ -27,12 +26,12 @@ export const HalfDoughnutExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'circle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'rect', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'triangle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'diamond', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'pin', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'arrow', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' }
+          { symbol: 'circle', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'rect', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'triangle', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'diamond', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'pin', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'arrow', symbolSize: 0.4, color: theme.decalColor }
         ]
       }
     },
@@ -40,7 +39,7 @@ export const HalfDoughnutExample = () => {
       show: true,
       orient: 'vertical',
       left: 'left',
-      top: 'center'
+      top: 'middle'
     },
     series: [
       {
@@ -61,7 +60,7 @@ export const HalfDoughnutExample = () => {
           itemStyle: {
             shadowBlur: 10,
             shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
+            shadowColor: theme.shadowColor
           },
           label: {
             show: true,
@@ -99,7 +98,7 @@ export const HalfDoughnutExample = () => {
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
-          Enable Accessibility Decal Patterns
+          Decal Patterns
         </label>
       </div>
       <HChart

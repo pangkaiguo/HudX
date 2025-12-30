@@ -23,20 +23,20 @@ export const AdvancedPieExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'circle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'rect', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'triangle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'diamond', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'pin', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'arrow', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' }
+          { symbol: 'circle', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'rect', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'triangle', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'diamond', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'pin', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'arrow', symbolSize: 0.4, color: theme.decalColor }
         ]
       }
     },
     legend: {
       show: true,
-      orient: 'horizontal',
-      left: 'center',
-      bottom: 30
+      orient: 'vertical',
+      left: 'left',
+      top: 'middle'
     },
     series: [
       {
@@ -75,7 +75,7 @@ export const AdvancedPieExample = () => {
     <div>
       <h2 style={{ marginBottom: 10 }}>Advanced Pie Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Features: Smooth pie slice animations • Percentage display • Interactive legend • Hover tooltips
+        Features: Smooth pie slice animations, Percentage display, Interactive legend, Hover tooltips
       </p>
       <div style={{ marginBottom: 20 }}>
         <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -84,7 +84,7 @@ export const AdvancedPieExample = () => {
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
-          Enable Accessibility Decal Patterns
+          Decal Patterns
         </label>
       </div>
       <HChart

@@ -22,15 +22,15 @@ export const AdvancedBarExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'rect', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'circle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' },
-          { symbol: 'triangle', symbolSize: 0.4, color: 'rgba(0, 0, 0, 0.2)' }
+          { symbol: 'rect', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'circle', symbolSize: 0.4, color: theme.decalColor },
+          { symbol: 'triangle', symbolSize: 0.4, color: theme.decalColor }
         ]
       }
     },
     legend: {
       show: true,
-      orient: 'horizontal',
+      orient: 'vertical',
       left: 'center',
       bottom: 30
     },
@@ -78,7 +78,7 @@ export const AdvancedBarExample = () => {
     <div>
       <h2 style={{ marginBottom: 10 }}>Advanced Bar Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Features: Staggered bar animations • Interactive legend • Hover tooltips with values
+        Features: Staggered bar animations, Interactive legend, Hover tooltips with values
       </p>
       <div style={{ marginBottom: 20 }}>
         <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -87,7 +87,7 @@ export const AdvancedBarExample = () => {
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
-          Enable Accessibility Decal Patterns
+          Decal Patterns
         </label>
       </div>
       <HChart

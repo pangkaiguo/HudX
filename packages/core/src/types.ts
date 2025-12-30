@@ -120,6 +120,7 @@ export interface ThemeConfig {
   color?: string[];
   shadowColor?: string;
   maskColor?: string;
+  decalColor?: string;
   tooltipBackgroundColor: string;
   tooltipTextColor: string;
   legendTextColor: string;

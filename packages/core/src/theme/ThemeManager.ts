@@ -22,6 +22,7 @@ export class ThemeManager {
       colorLegendText: '#333333',
       colorShadow: 'rgba(0, 0, 0, 0.6)',
       colorMask: 'rgba(255, 255, 255, 0.8)',
+      colorDecal: 'rgba(0, 0, 0, 0.2)',
       fontFamily: 'sans-serif',
       fontSize: 12,
       seriesColors: [
@@ -44,6 +45,7 @@ export class ThemeManager {
       colorLegendText: '#e0e0e0',
       colorShadow: 'rgba(0, 0, 0, 0.6)',
       colorMask: 'rgba(255, 255, 255, 0.8)',
+      colorDecal: 'rgba(0, 0, 0, 0.2)',
       fontFamily: 'sans-serif',
       fontSize: 12,
       seriesColors: [
@@ -74,6 +76,7 @@ export class ThemeManager {
       color: newToken.seriesColors as string[],
       shadowColor: String(newToken.colorShadow),
       maskColor: String(newToken.colorMask),
+      decalColor: String(newToken.colorDecal),
       tooltipBackgroundColor: String(newToken.colorTooltipBackground),
       tooltipTextColor: String(newToken.colorTooltipText),
       legendTextColor: String(newToken.colorLegendText),

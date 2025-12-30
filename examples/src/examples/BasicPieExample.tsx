@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 
 export const BasicPieExample = () => {
+  const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
 
   const option: ChartOption = {
@@ -19,9 +20,22 @@ export const BasicPieExample = () => {
     },
     legend: {
       show: true,
-      orient: 'horizontal',
-      left: 'center',
-      bottom: 20
+      orient: 'vertical',
+      left: 'left',
+      top: 'middle'
+    },
+    aria: {
+      show: true,
+      decal: {
+        show: isDecal,
+        decals: [
+          {
+            symbol: 'rect',
+            symbolSize: 0.4,
+            color: theme.decalColor,
+          }
+        ]
+      }
     },
     series: [
       {
@@ -45,6 +59,11 @@ export const BasicPieExample = () => {
           itemStyle: {
             opacity: 1
           }
+        },
+        label: {
+          show: true,
+          position: 'outside',
+          formatter: '{b}'
         }
       }
     ],
@@ -54,7 +73,17 @@ export const BasicPieExample = () => {
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Pie Chart</h2>
-      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Hover over slices to see details • Click legend to toggle</p>
+      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Hover over slices to see details, Click legend to toggle</p>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={isDecal}
+            onChange={(e) => setIsDecal(e.target.checked)}
+          />
+          Decal Patterns
+        </label>
+      </div>
       <HChart
         option={option}
         width={800}
