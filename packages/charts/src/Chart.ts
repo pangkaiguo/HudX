@@ -171,7 +171,7 @@ export default class Chart {
     if (opts.notMerge) {
       this._option = option;
     } else {
-      this._option = { ...this._option, ...option };
+      this._option = this._mergeOption(this._option, option);
     }
 
     // Emit event if not silent 
@@ -188,6 +188,46 @@ export default class Chart {
     }
 
     return this;
+  }
+
+  /**
+   * Merge options (support partial update for series)
+   */
+  protected _mergeOption(oldOpt: ChartOption, newOpt: ChartOption): ChartOption {
+    const merged = { ...oldOpt };
+    
+    // Iterate over new option keys
+    for (const key in newOpt) {
+      const k = key as keyof ChartOption;
+      const newVal = newOpt[k];
+      const oldVal = oldOpt[k];
+
+      if (k === 'series' && Array.isArray(newVal)) {
+        // Merge series by index
+        const mergedSeries = [...(Array.isArray(oldVal) ? oldVal : [])];
+        newVal.forEach((s, i) => {
+          if (mergedSeries[i]) {
+            // Shallow merge the series object
+            mergedSeries[i] = { ...mergedSeries[i], ...s };
+          } else {
+            mergedSeries[i] = s;
+          }
+        });
+        merged.series = mergedSeries;
+      } else if (typeof newVal === 'object' && newVal !== null && !Array.isArray(newVal)) {
+        // Shallow merge object properties (like tooltip, legend, etc.)
+         if (typeof oldVal === 'object' && oldVal !== null && !Array.isArray(oldVal)) {
+            merged[k] = { ...oldVal, ...newVal } as any;
+         } else {
+            merged[k] = newVal as any;
+         }
+      } else {
+        // Replace primitive or array values (like xAxis.data, or colors array)
+        merged[k] = newVal as any;
+      }
+    }
+    
+    return merged;
   }
 
   /** 

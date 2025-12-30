@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { HChart } from 'HudX/charts';
-import type { ChartOption } from 'HudX/charts';
+import type { ChartOption, HChartRef } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 
 export const AdvancedPieExample = () => {
   const [isDecal, setIsDecal] = useState(false);
   const theme = ThemeManager.getTheme('light');
+  const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
     title: {
@@ -71,6 +72,25 @@ export const AdvancedPieExample = () => {
     animationEasing: 'cubicOut'
   };
 
+  const handleUpdateSeries = () => {
+    const chartInstance = chartRef.current?.getChartInstance();
+    if (chartInstance) {
+      // Simulate new data
+      const newData = [
+        { name: 'Category A', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[0] } },
+        { name: 'Category B', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[1] } },
+        { name: 'Category C', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[2] } },
+        { name: 'Category D', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[3] } },
+        { name: 'Category E', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[4] } }
+      ];
+      chartInstance.setOption({
+        series: [{
+          data: newData
+        }]
+      });
+    }
+  };
+
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Advanced Pie Chart</h2>
@@ -88,11 +108,28 @@ export const AdvancedPieExample = () => {
         </label>
       </div>
       <HChart
+        ref={chartRef}
         option={option}
         width={900}
         height={500}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
       />
+      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
+        <button
+          onClick={handleUpdateSeries}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#5470c6',
+            color: 'white',
+            border: 'none',
+            borderRadius: 4,
+            cursor: 'pointer',
+            fontSize: 14
+          }}
+        >
+          Update Data (via getChartInstance)
+        </button>
+      </div>
     </div>
   );
 };

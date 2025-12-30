@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { HChart } from 'HudX/charts';
-import type { ChartOption } from 'HudX/charts';
+import type { ChartOption, HChartRef } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 
 export const AdvancedLineExample = () => {
   const theme = ThemeManager.getTheme('light');
+  const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
     title: {
@@ -68,6 +69,24 @@ export const AdvancedLineExample = () => {
     animationEasing: 'cubicOut'
   };
 
+  const handleUpdateSeries = () => {
+    const chartInstance = chartRef.current?.getChartInstance();
+    if (chartInstance) {
+      // Simulate new data for all 3 series
+      const newDataA = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
+      const newDataB = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
+      const newDataC = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
+      
+      chartInstance.setOption({
+        series: [
+          { data: newDataA },
+          { data: newDataB },
+          { data: newDataC }
+        ]
+      });
+    }
+  };
+
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Advanced Line Chart</h2>
@@ -75,11 +94,28 @@ export const AdvancedLineExample = () => {
         Features: Smooth animations on load, Interactive legend (click to toggle), Hover tooltips with data details
       </p>
       <HChart
+        ref={chartRef}
         option={option}
         width={900}
         height={500}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
       />
+      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
+        <button
+          onClick={handleUpdateSeries}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#5470c6',
+            color: 'white',
+            border: 'none',
+            borderRadius: 4,
+            cursor: 'pointer',
+            fontSize: 14
+          }}
+        >
+          Update Data (via getChartInstance)
+        </button>
+      </div>
     </div>
   );
 };

@@ -3,7 +3,7 @@
  * Performance optimized with React hooks
  */
 
-import React, { useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback, forwardRef, useImperativeHandle } from 'react';
 import type { ChartOption, ChartEvent } from '../types';
 import type { RenderMode, Theme, Locale } from 'HudX/core';
 import Chart from '../Chart';
@@ -30,7 +30,11 @@ export interface HChartProps {
   lazyUpdate?: boolean;
 }
 
-const HChart: React.FC<HChartProps> = ({
+export interface HChartRef {
+  getChartInstance: () => Chart | null;
+}
+
+const HChart = forwardRef<HChartRef, HChartProps>(({
   option,
   width,
   height,
@@ -42,10 +46,14 @@ const HChart: React.FC<HChartProps> = ({
   onEvents,
   notMerge = false,
   lazyUpdate = false,
-}) => {
+}, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<Chart | null>(null);
   const optionRef = useRef<ChartOption>(option);
+
+  useImperativeHandle(ref, () => ({
+    getChartInstance: () => chartRef.current
+  }));
 
   // Determine chart type from option
   const chartType = useMemo(() => {
@@ -178,7 +186,8 @@ const HChart: React.FC<HChartProps> = ({
       }}
     />
   );
-};
+});
+
+HChart.displayName = 'HChart';
 
 export default HChart;
-
