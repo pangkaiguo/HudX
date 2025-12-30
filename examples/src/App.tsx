@@ -15,7 +15,7 @@ const DoughnutExample = lazy(() => import('./examples/DoughnutExample'));
 const HalfDoughnutExample = lazy(() => import('./examples/HalfDoughnutExample'));
 const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
 
-const examples = [
+const componentDemos = [
   { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
   { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
   { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
@@ -24,6 +24,9 @@ const examples = [
   { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
   { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
   { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
+];
+
+const testDemos = [
   { id: 'shape', name: 'Shape', component: ShapeExample },
   { id: 'themes', name: 'Theme', component: ThemeExample },
   { id: 'interaction', name: 'Interaction', component: InteractionExample },
@@ -31,11 +34,57 @@ const examples = [
   { id: 'performance', name: 'Performance', component: PerformanceExample }
 ];
 
+const allExamples = [...componentDemos, ...testDemos];
+
+const NavButton = ({ example, activeExample, setActiveExample }: { example: any, activeExample: string, setActiveExample: (id: string) => void }) => (
+  <button
+    onClick={() => setActiveExample(example.id)}
+    aria-label={`View ${example.name} example`}
+    aria-current={activeExample === example.id ? 'page' : undefined}
+    style={{
+      display: 'block',
+      width: '100%',
+      padding: '10px 12px',
+      marginBottom: 6,
+      border: '2px solid transparent',
+      borderRadius: 6,
+      backgroundColor: activeExample === example.id ? '#5470c6' : '#fff',
+      color: activeExample === example.id ? '#fff' : '#333',
+      cursor: 'pointer',
+      textAlign: 'left',
+      fontSize: 13,
+      fontWeight: activeExample === example.id ? 600 : 400,
+      transition: 'all 0.2s',
+      outline: 'none'
+    }}
+    onMouseEnter={(e) => {
+      if (activeExample !== example.id) {
+        e.currentTarget.style.backgroundColor = '#e8eaf6';
+      }
+    }}
+    onMouseLeave={(e) => {
+      if (activeExample !== example.id) {
+        e.currentTarget.style.backgroundColor = '#fff';
+      }
+    }}
+    onFocus={(e) => {
+      e.currentTarget.style.borderColor = '#5470c6';
+      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(84, 112, 198, 0.2)';
+    }}
+    onBlur={(e) => {
+      e.currentTarget.style.borderColor = 'transparent';
+      e.currentTarget.style.boxShadow = 'none';
+    }}
+  >
+    {example.name}
+  </button>
+);
+
 const App = memo(function App() {
   const [activeExample, setActiveExample] = useState('basic-line');
 
   const ActiveComponent = useMemo(
-    () => examples.find(e => e.id === activeExample)?.component || AdvancedPieChartExample,
+    () => allExamples.find(e => e.id === activeExample)?.component || AdvancedPieChartExample,
     [activeExample]
   );
 
@@ -53,49 +102,25 @@ const App = memo(function App() {
       >
         <h1 style={{ fontSize: 20, marginBottom: 10, color: '#333' }}>HudX Examples</h1>
         <p style={{ fontSize: 12, color: '#999', marginBottom: 20 }}>Interactive Charts & Animations</p>
-        {examples.map(example => (
-          <button
-            key={example.id}
-            onClick={() => setActiveExample(example.id)}
-            aria-label={`View ${example.name} example`}
-            aria-current={activeExample === example.id ? 'page' : undefined}
-            style={{
-              display: 'block',
-              width: '100%',
-              padding: '10px 12px',
-              marginBottom: 6,
-              border: '2px solid transparent',
-              borderRadius: 6,
-              backgroundColor: activeExample === example.id ? '#5470c6' : '#fff',
-              color: activeExample === example.id ? '#fff' : '#333',
-              cursor: 'pointer',
-              textAlign: 'left',
-              fontSize: 13,
-              fontWeight: activeExample === example.id ? 600 : 400,
-              transition: 'all 0.2s',
-              outline: 'none'
-            }}
-            onMouseEnter={(e) => {
-              if (activeExample !== example.id) {
-                e.currentTarget.style.backgroundColor = '#e8eaf6';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (activeExample !== example.id) {
-                e.currentTarget.style.backgroundColor = '#fff';
-              }
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#5470c6';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(84, 112, 198, 0.2)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = 'transparent';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            {example.name}
-          </button>
+        
+        <h2 style={{ fontSize: 14, fontWeight: 'bold', margin: '20px 0 10px', color: '#666' }}>Component Demos</h2>
+        {componentDemos.map(example => (
+          <NavButton 
+            key={example.id} 
+            example={example} 
+            activeExample={activeExample} 
+            setActiveExample={setActiveExample} 
+          />
+        ))}
+
+        <h2 style={{ fontSize: 14, fontWeight: 'bold', margin: '20px 0 10px', color: '#666' }}>Test Demos</h2>
+        {testDemos.map(example => (
+          <NavButton 
+            key={example.id} 
+            example={example} 
+            activeExample={activeExample} 
+            setActiveExample={setActiveExample} 
+          />
         ))}
       </nav>
       <main
