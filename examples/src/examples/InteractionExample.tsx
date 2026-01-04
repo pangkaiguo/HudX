@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Renderer, Circle, Text, ThemeManager } from 'HudX/core';
+import type { RenderMode } from 'HudX/core';
 
 export const InteractionExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [clickCount, setClickCount] = useState(0);
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const renderer = Renderer.init(containerRef.current, renderMode, 'light', 'en');
     const theme = ThemeManager.getTheme('light');
 
     const circles = [];
@@ -52,11 +54,24 @@ export const InteractionExample = () => {
     renderer.flush();
 
     return () => renderer.dispose();
-  }, []);
+  }, [renderMode]);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>Interaction Demo</h2>
+      <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h2 style={{ margin: 0 }}>Interaction Demo</h2>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Render Mode:</span>
+          <select
+            value={renderMode}
+            onChange={(e) => setRenderMode(e.target.value as RenderMode)}
+            style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+          >
+            <option value="canvas">Canvas</option>
+            <option value="svg">SVG</option>
+          </select>
+        </label>
+      </div>
       <p style={{ marginBottom: 20, color: '#666' }}>Click Count: {clickCount}</p>
       <div
         ref={containerRef}

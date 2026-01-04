@@ -53,11 +53,16 @@ pnpm install
 pnpm build
 ```
 
+### Run Tests
+
+```bash
+pnpm test
+```
+
 ### Run Examples
 
 ```bash
-cd examples
-pnpm dev
+pnpm dev:examples
 # Visit http://localhost:5173
 ```
 

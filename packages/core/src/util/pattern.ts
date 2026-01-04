@@ -81,5 +81,11 @@ export function createDecalPattern(
 
   pCtx.restore();
 
-  return pCtx.createPattern(canvas, 'repeat');
+  const pattern = pCtx.createPattern(canvas, 'repeat');
+  if (pattern) {
+    // Attach source canvas for SVG renderer
+    (pattern as any)._canvas = canvas;
+  }
+
+  return pattern;
 }

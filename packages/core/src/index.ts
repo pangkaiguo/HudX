@@ -49,3 +49,6 @@ export { LocaleManager } from './i18n/LocaleManager';
 export { default as Tooltip } from './component/Tooltip';
 export { default as Legend } from './component/Legend';
 
+// Constants
+export * from './constants';
+

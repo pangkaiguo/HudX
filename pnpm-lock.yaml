@@ -70,9 +70,15 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.18
         version: 18.3.7(@types/react@18.3.27)
+      happy-dom:
+        specifier: ^20.0.11
+        version: 20.0.11
       typescript:
         specifier: ^5.3.3
         version: 5.9.3
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.16(@types/node@20.19.26)(happy-dom@20.0.11)
 
   packages/core:
     devDependencies:

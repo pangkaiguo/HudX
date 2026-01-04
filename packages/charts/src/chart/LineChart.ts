@@ -2,7 +2,7 @@ import Chart from '../Chart';
 import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate, Scale } from '../util/coordinate';
 import {
   Polyline, Circle, Text, Rect, createDecalPattern,
-  type Point
+  type Point, Z_SERIES, Z_LABEL
 } from 'HudX/core';
 
 export default class LineChart extends Chart {
@@ -77,60 +77,60 @@ export default class LineChart extends Chart {
           cursor: 'crosshair'
         });
         const domain = xAxis?.type === 'category' && Array.isArray(xAxis?.data) ? xAxis.data : xDomain;
-          let lastX = -1;
-          let lastY = -1;
-          (interact as any).on('mousemove', (evt: any) => {
-            const mx = evt.offsetX;
-            const my = evt.offsetY;
-            lastX = mx;
-            lastY = my;
-            
-            if (mx < plotX || mx > plotX + plotWidth || my < plotY || my > plotY + plotHeight) {
-              this._tooltip!.hide();
-              return;
-            }
-            let idx = 0;
-            let name: any = '';
-            if (xAxis?.type === 'category') {
-              const label = (xScale as any).invert(mx);
-              idx = domain.indexOf(label);
-              name = label;
-            } else {
-              const xv = (xScale as any).invert(mx);
-              // nearest index by value
-              idx = Math.max(0, Math.min(Math.round((xv - xDomain[0]) / ((xDomain[1] - xDomain[0]) || 1)), domain.length - 1));
-              name = xv;
-            }
-            if (idx < 0 || idx >= domain.length) {
-              this._tooltip!.hide();
-              return;
-            }
-            const lines: string[] = [];
-            series.forEach((s) => {
-              if (s.type !== 'line' || s.show === false) return;
-              const item = (s.data || [])[idx];
-              if (item === undefined) return;
+        let lastX = -1;
+        let lastY = -1;
+        (interact as any).on('mousemove', (evt: any) => {
+          const mx = evt.offsetX;
+          const my = evt.offsetY;
+          lastX = mx;
+          lastY = my;
 
-              const val = this._getDataValue(item);
-              if (typeof val === 'number') {
-                const seriesName = s.name ? s.name + '\n' : '';
-                lines.push(`${seriesName}${name ? name + ': ' : ''}${val}`);
-              }
-            });
-            if (lines.length === 0) {
-              this._tooltip!.hide();
-              return;
-            }
-            
-            // Force show if hidden (e.g. rapid movement or re-entry)
-            if (!this._tooltip!.isVisible()) {
-               this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
-            } else {
-               this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
+          if (mx < plotX || mx > plotX + plotWidth || my < plotY || my > plotY + plotHeight) {
+            this._tooltip!.hide();
+            return;
+          }
+          let idx = 0;
+          let name: any = '';
+          if (xAxis?.type === 'category') {
+            const label = (xScale as any).invert(mx);
+            idx = domain.indexOf(label);
+            name = label;
+          } else {
+            const xv = (xScale as any).invert(mx);
+            // nearest index by value
+            idx = Math.max(0, Math.min(Math.round((xv - xDomain[0]) / ((xDomain[1] - xDomain[0]) || 1)), domain.length - 1));
+            name = xv;
+          }
+          if (idx < 0 || idx >= domain.length) {
+            this._tooltip!.hide();
+            return;
+          }
+          const lines: string[] = [];
+          series.forEach((s) => {
+            if (s.type !== 'line' || s.show === false) return;
+            const item = (s.data || [])[idx];
+            if (item === undefined) return;
+
+            const val = this._getDataValue(item);
+            if (typeof val === 'number') {
+              const seriesName = s.name ? s.name + '\n' : '';
+              lines.push(`${seriesName}${name ? name + ': ' : ''}${val}`);
             }
           });
-          (interact as any).on('mouseout', () => this._tooltip!.hide());
-          this._root.add(interact as any);
+          if (lines.length === 0) {
+            this._tooltip!.hide();
+            return;
+          }
+
+          // Force show if hidden (e.g. rapid movement or re-entry)
+          if (!this._tooltip!.isVisible()) {
+            this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
+          } else {
+            this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
+          }
+        });
+        (interact as any).on('mouseout', () => this._tooltip!.hide());
+        this._root.add(interact as any);
       }
 
       // Render legend
@@ -140,7 +140,7 @@ export default class LineChart extends Chart {
           .map((s, i) => ({
             name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: 'line',
+            icon: option.legend?.icon || 'rect', // Use user config or default to 'rect' (was 'line')
             textColor: this.getThemeConfig().legendTextColor // Use theme color
           }));
         this._mountLegend(items);
@@ -195,7 +195,7 @@ export default class LineChart extends Chart {
             lineWidth: seriesItem.lineStyle?.width || 2,
             fill: 'none',
           },
-          z: seriesIndex,
+          z: Z_SERIES,
         });
 
         this._root.add(line);
@@ -258,7 +258,7 @@ export default class LineChart extends Chart {
                 stroke: '#fff',
                 lineWidth: 2,
               },
-              z: seriesIndex + 1,
+              z: Z_SERIES + 1, // Points on top of lines
               silent: false,
               cursor: this._tooltip ? 'pointer' : 'default',
             });
@@ -330,7 +330,7 @@ export default class LineChart extends Chart {
             const text = new Text({
               shape: { x: point.x, y: point.y - 10, text: labelText },
               style: { fontSize: 12, fill: '#666', textAlign: 'center', textBaseline: 'bottom' },
-              z: seriesIndex + 2
+              z: Z_LABEL
             });
             this._root.add(text);
           });

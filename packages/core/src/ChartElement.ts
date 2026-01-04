@@ -18,17 +18,32 @@ import {
 import { getUnit32RandomValues } from './util/random';
 
 class ChartElement extends Eventful {
+  /** Unique ID */
   id: string;
+  /** Element name */
+  name?: string;
+  /** User data */
+  data?: any;
+  /** Layer index (z-index equivalent) */
   zlevel: number = 0;
+  /** Element stacking order within same layer */
   z: number = 0;
+  /** Whether to ignore mouse events */
   silent: boolean = false;
+  /** Whether the element is invisible */
   invisible: boolean = false;
+  /** Mouse cursor style */
   cursor: string = 'default';
+  /** Whether the element is draggable */
   draggable: boolean = false;
+  /** Whether to render progressively */
   progressive: boolean = false;
 
+  /** Element style */
   style: Style = {};
+  /** Shape properties */
   shape: unknown = {};
+  /** Transform properties */
   transform: Transform = {};
 
   private _dirty: boolean = true;
@@ -121,15 +136,20 @@ class ChartElement extends Eventful {
   }
 
   contain(x: number, y: number): boolean {
-    // TODO
-    console.info(x, y);
-    return false;
+    // Transform point to local coordinate system
+    const localPoint = this.transformPointToLocal(x, y);
+    if (!localPoint) return false;
+
+    const [lx, ly] = localPoint;
+    const rect = this.getBoundingRect();
+
+    // Simple bounding box check
+    return lx >= rect.x && lx <= rect.x + rect.width &&
+      ly >= rect.y && ly <= rect.y + rect.height;
   }
 
   render(ctx: CanvasRenderingContext2D): void {
     // To be implemented by subclasses
-    // TODO
-    console.info(ctx);
   }
 
   /**

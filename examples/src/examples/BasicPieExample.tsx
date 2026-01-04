@@ -2,9 +2,11 @@ import React, { useState, useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
+import type { RenderMode } from 'HudX/core';
 
 export const BasicPieExample = () => {
   const [isDecal, setIsDecal] = useState(false);
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const theme = ThemeManager.getTheme('light');
   const chartRef = useRef<HChartRef>(null);
 
@@ -23,10 +25,11 @@ export const BasicPieExample = () => {
       show: true,
       orient: 'vertical',
       left: 'left',
-      top: 'middle'
+      top: 'middle',
+      icon: 'rect'
     },
     aria: {
-      show: true,
+      enabled: true,
       decal: {
         show: isDecal,
         decals: [
@@ -56,7 +59,7 @@ export const BasicPieExample = () => {
         },
         emphasis: {
           scale: true,
-          scaleSize: 1.05,
+          scaleSize: 1.02,
           itemStyle: {
             opacity: 1
           }
@@ -94,7 +97,19 @@ export const BasicPieExample = () => {
     <div>
       <h2 style={{ marginBottom: 10 }}>Pie Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Hover over slices to see details, Click legend to toggle</p>
-      <div style={{ marginBottom: 20 }}>
+      <div style={{ marginBottom: 20, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Render Mode:</span>
+          <select
+            value={renderMode}
+            onChange={(e) => setRenderMode(e.target.value as RenderMode)}
+            style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+          >
+            <option value="canvas">Canvas</option>
+            <option value="svg">SVG</option>
+          </select>
+        </label>
+
         <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
           <input
             type="checkbox"
@@ -107,6 +122,7 @@ export const BasicPieExample = () => {
       <HChart
         ref={chartRef}
         option={option}
+        renderMode={renderMode}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>

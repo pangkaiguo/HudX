@@ -53,11 +53,16 @@ pnpm install
 pnpm build
 ```
 
+### 运行测试
+
+```bash
+pnpm test
+```
+
 ### 运行示例
 
 ```bash
-cd examples
-pnpm dev
+pnpm dev:examples
 # 访问 http://localhost:5173
 ```
 

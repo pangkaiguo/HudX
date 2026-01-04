@@ -5,7 +5,7 @@
 import {
   Renderer, Group, Animator, Tooltip, Legend, Line, Text,
   type RenderMode, type Theme, type Locale, type DataURLOpts, type ThemeConfig,
-  toRgbaWithOpacity
+  toRgbaWithOpacity, Z_AXIS
 } from 'HudX/core';
 import type { ChartOption, ChartEvent } from './types';
 import { createLinearScale, createOrdinalScale } from './util/coordinate';
@@ -195,7 +195,7 @@ export default class Chart {
    */
   protected _mergeOption(oldOpt: ChartOption, newOpt: ChartOption): ChartOption {
     const merged = { ...oldOpt };
-    
+
     // Iterate over new option keys
     for (const key in newOpt) {
       const k = key as keyof ChartOption;
@@ -216,17 +216,17 @@ export default class Chart {
         merged.series = mergedSeries;
       } else if (typeof newVal === 'object' && newVal !== null && !Array.isArray(newVal)) {
         // Shallow merge object properties (like tooltip, legend, etc.)
-         if (typeof oldVal === 'object' && oldVal !== null && !Array.isArray(oldVal)) {
-            merged[k] = { ...oldVal, ...newVal } as any;
-         } else {
-            merged[k] = newVal as any;
-         }
+        if (typeof oldVal === 'object' && oldVal !== null && !Array.isArray(oldVal)) {
+          merged[k] = { ...oldVal, ...newVal } as any;
+        } else {
+          merged[k] = newVal as any;
+        }
       } else {
         // Replace primitive or array values (like xAxis.data, or colors array)
         merged[k] = newVal as any;
       }
     }
-    
+
     return merged;
   }
 
@@ -411,9 +411,44 @@ export default class Chart {
           stroke: this.getThemeConfig().axisLineColor, // Use theme color
           lineWidth: 1,
         },
-        z: 100,
+        z: Z_AXIS,
       });
       this._root.add(xAxisLine);
+
+      // Split line (vertical grid)
+      if (xAxis?.splitLine?.show) {
+        if (xAxis?.data && xAxis.data.length > 0) {
+          const xScale = xAxis.type === 'category'
+            ? createOrdinalScale(xAxis.data, [plotX, plotX + width])
+            : createLinearScale([0, xAxis.data.length - 1], [plotX, plotX + width]);
+
+          const interval = xAxis.splitLine?.interval ?? 0;
+
+          xAxis.data.forEach((label: any, index: number) => {
+            if (typeof interval === 'number' && interval > 0 && index % (interval + 1) !== 0) return;
+
+            // For category, split line usually at ticks (not center), but ordinal scale returns center.
+            // Adjust logic if needed. ECharts draws splitLine at interval boundaries for category.
+            // For simplicity, we draw at tick position for now.
+            const x = xAxis.type === 'category' ? xScale(label) : xScale(index);
+            const line = new Line({
+              shape: {
+                x1: x,
+                y1: plotY,
+                x2: x,
+                y2: plotY + height,
+              },
+              style: {
+                stroke: xAxis.splitLine.lineStyle?.color || '#eee',
+                lineWidth: xAxis.splitLine.lineStyle?.width || 1,
+                lineDash: xAxis.splitLine.lineStyle?.type === 'dashed' || !xAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
+              },
+              z: Z_AXIS - 0.5, // Below axis line
+            });
+            this._root.add(line);
+          });
+        }
+      }
 
       // Axis labels
       if (xAxis?.data && xAxis.data.length > 0) {
@@ -435,6 +470,7 @@ export default class Chart {
               textAlign: 'center',
               textBaseline: 'top',
             },
+            z: Z_AXIS
           });
           this._root.add(text);
         });
@@ -454,9 +490,40 @@ export default class Chart {
           stroke: this.getThemeConfig().axisLineColor, // Use theme color
           lineWidth: 1,
         },
-        z: 100,
+        z: Z_AXIS,
       });
       this._root.add(yAxisLine);
+
+      // Split line (horizontal grid)
+      if (yAxis?.splitLine?.show) {
+        // We need ticks for Y axis.
+        // For value axis, we usually don't have 'data'. We need a tick generator.
+        // Current implementation of LineChart/BarChart calculates yScale but doesn't expose ticks easily to here.
+        // But wait, _renderAxes is called by subclasses.
+        // Subclasses should probably pass ticks or scale?
+        // Or we can generate simple ticks here if yAxis is value type.
+
+        // Simplified: Draw 5 grid lines if not provided
+        const tickCount = yAxis.splitNumber ?? 5;
+        for (let i = 0; i <= tickCount; i++) {
+          const y = plotY + height - (i / tickCount) * height;
+          const line = new Line({
+            shape: {
+              x1: plotX,
+              y1: y,
+              x2: plotX + width,
+              y2: y,
+            },
+            style: {
+              stroke: yAxis.splitLine.lineStyle?.color || '#eee',
+              lineWidth: yAxis.splitLine.lineStyle?.width || 1,
+              lineDash: yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
+            },
+            z: Z_AXIS - 0.5, // Below axis line
+          });
+          this._root.add(line);
+        }
+      }
     }
   }
 
@@ -787,7 +854,6 @@ export default class Chart {
         this._onLegendHover(name, hovered);
       }
     } as any);
-    legend.z = 500; // Ensure legend is above grid/axes
 
     legend.setContainer(this._width, this._height);
     legend.setItems(items, Array.from(this._legendSelected));
@@ -806,7 +872,6 @@ export default class Chart {
    */
   protected _onLegendHover(name: string, hovered: boolean): void {
     // To be implemented by subclasses
-    //TOTO console.info('Legend hover', name, hovered);
   }
 
   /**

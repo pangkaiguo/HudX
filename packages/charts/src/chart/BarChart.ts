@@ -1,6 +1,6 @@
 import Chart from '../Chart';
 import { createLinearScale, createOrdinalScale, calculateDomain } from '../util/coordinate';
-import { Rect, createDecalPattern } from 'HudX/core';
+import { Rect, createDecalPattern, Z_SERIES } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class BarChart extends Chart {
@@ -58,9 +58,60 @@ export default class BarChart extends Chart {
       } else {
         categoryCount = data.length;
       }
-      const groupWidth = categoryCount > 0 ? (plotWidth / categoryCount) : plotWidth;
-      const groupInnerWidth = groupWidth * 0.8;
-      const barWidthPerSeries = groupInnerWidth / seriesCount;
+
+      // Calculate layout
+      // Support barGap (gap between bars in same category) and barCategoryGap (gap between categories)
+      // ECharts defaults: barGap: '30%', barCategoryGap: '20%'
+      // These are percentages of the bar width or category width
+
+      const categoryWidth = categoryCount > 0 ? (plotWidth / categoryCount) : plotWidth;
+
+      // We need to parse percentages relative to available space
+      // But simple implementation: 
+      // 1. Determine barCategoryGap to find width available for all bars in a category
+      const firstSeries = barSeries[0] || {};
+      const barCategoryGapStr = firstSeries.barCategoryGap ?? '20%';
+      const barGapStr = firstSeries.barGap ?? '30%';
+
+      const parsePercent = (val: string | number) => {
+        if (typeof val === 'string' && val.endsWith('%')) {
+          return parseFloat(val) / 100;
+        }
+        return 0; // Default fallback if not percent
+      };
+
+      const categoryGapPercent = parsePercent(barCategoryGapStr);
+      // Available width for all bars in one category
+      const availableWidth = categoryWidth * (1 - categoryGapPercent);
+
+      let barWidthPerSeries: number;
+      let gapWidth: number;
+
+      if (typeof barGapStr === 'string' && barGapStr.endsWith('%')) {
+        // Percentage mode (relative to bar width)
+        const gapPercent = parsePercent(barGapStr);
+        // w = availableWidth / (n + (n - 1) * gapPercent)
+        barWidthPerSeries = availableWidth / (seriesCount + (seriesCount - 1) * gapPercent);
+        gapWidth = barWidthPerSeries * gapPercent;
+      } else {
+        // Pixel mode (fixed width)
+        // Assume input is number or string like "10px" or "10"
+        gapWidth = parseFloat(String(barGapStr));
+        if (isNaN(gapWidth)) gapWidth = 0;
+
+        // availableWidth = n * w + (n - 1) * gapWidth
+        // n * w = availableWidth - (n - 1) * gapWidth
+        // w = (availableWidth - (n - 1) * gapWidth) / n
+        const totalGapWidth = (seriesCount - 1) * gapWidth;
+        if (totalGapWidth >= availableWidth) {
+          // Gaps are too large, force bars to 0 width or minimal
+          barWidthPerSeries = 0;
+        } else {
+          barWidthPerSeries = (availableWidth - totalGapWidth) / seriesCount;
+        }
+      }
+
+      const groupInnerWidth = seriesCount * barWidthPerSeries + (seriesCount - 1) * gapWidth;
 
       // Render axes
       this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
@@ -72,7 +123,7 @@ export default class BarChart extends Chart {
           .map((s, i) => ({
             name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: 'rect',
+            icon: option.legend?.icon || 'rect', // Use user config or default to 'rect'
             textColor: this.getThemeConfig().legendTextColor // Use theme color
           }));
         this._mountLegend(items);
@@ -114,7 +165,7 @@ export default class BarChart extends Chart {
 
           const groupCenter = xScale(xVal);
           const groupStart = groupCenter - groupInnerWidth / 2;
-          const barX = groupStart + seriesIndexInBars * barWidthPerSeries;
+          const barX = groupStart + seriesIndexInBars * (barWidthPerSeries + gapWidth);
           const barY = yScale(yVal);
           const barHeight = plotY + plotHeight - barY;
 
@@ -156,7 +207,7 @@ export default class BarChart extends Chart {
               stroke: itemStyle.borderColor || this.getThemeConfig().borderColor,
               lineWidth: itemStyle.borderWidth || 0,
             },
-            z: seriesIndex,
+            z: Z_SERIES,
             cursor: this._tooltip ? 'pointer' : 'default',
           });
 
@@ -210,12 +261,12 @@ export default class BarChart extends Chart {
 
               const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
               const my = evt?.offsetY ?? (barY - 10);
-              
+
               if (this._tooltip) {
-                 if (!this._tooltip.isVisible()) {
-                    rect.attr('style', { opacity: 0.8 });
-                 }
-                 this._tooltip.show(mx + 12, my - 16, content);
+                if (!this._tooltip.isVisible()) {
+                  rect.attr('style', { opacity: 0.8 });
+                }
+                this._tooltip.show(mx + 12, my - 16, content);
               }
             });
           }

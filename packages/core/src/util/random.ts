@@ -1,7 +1,10 @@
 export const getUnit32RandomValues = () => {
+  if (typeof window === 'undefined') {
+    return Math.random();
+  }
   const crypto = (window as any).crypto || (window as any).webkitCrypto || (window as any).mozCrypto || (window as any).oCrypto || (window as any).msCrypto;
   if (!crypto || !crypto.getRandomValues) {
-    throw new Error('Secure crypto.getRandomValues() is not available');
+    return Math.random();
   }
   const array = new Uint32Array(1);
   const random = crypto.getRandomValues(array)[0] / 4294967295;

@@ -106,6 +106,10 @@ export default class SVGPainter implements IPainter {
     while (this._rootGroup.firstChild) {
       this._rootGroup.removeChild(this._rootGroup.firstChild);
     }
+    // Clear defs
+    while (this._defs.firstChild) {
+      this._defs.removeChild(this._defs.firstChild);
+    }
     this._elementMap.clear();
 
     // Get all elements sorted by zlevel and z
@@ -164,8 +168,15 @@ export default class SVGPainter implements IPainter {
     // Apply style
     const style = element.style;
     if (style) {
-      if (style.fill && typeof style.fill === 'string') {
-        group.setAttribute('fill', style.fill);
+      if (style.fill) {
+        if (typeof style.fill === 'string') {
+          group.setAttribute('fill', style.fill);
+        } else if ((style.fill as any)._canvas) {
+          const patternId = this._createSVGPattern((style.fill as any)._canvas);
+          group.setAttribute('fill', `url(#${patternId})`);
+        } else {
+          group.setAttribute('fill', 'none');
+        }
       } else {
         group.setAttribute('fill', 'none');
       }
@@ -448,6 +459,30 @@ export default class SVGPainter implements IPainter {
     } else {
       return `M ${x1} ${y1} Q ${cpx1} ${cpy1}, ${x2} ${y2}`;
     }
+  }
+
+  /**
+   * Create SVG pattern from canvas
+   */
+  private _createSVGPattern(canvas: HTMLCanvasElement): string {
+    const id = `pattern_${Math.random().toString(36).substr(2, 9)}`;
+    const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+    pattern.setAttribute('id', id);
+    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+    pattern.setAttribute('width', String(canvas.width));
+    pattern.setAttribute('height', String(canvas.height));
+
+    const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+    image.setAttribute('href', canvas.toDataURL());
+    image.setAttribute('x', '0');
+    image.setAttribute('y', '0');
+    image.setAttribute('width', String(canvas.width));
+    image.setAttribute('height', String(canvas.height));
+
+    pattern.appendChild(image);
+    this._defs.appendChild(pattern);
+
+    return id;
   }
 
   /**

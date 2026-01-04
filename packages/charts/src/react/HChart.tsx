@@ -15,19 +15,31 @@ import HalfDoughnutChart from '../chart/HalfDoughnutChart';
 import ScatterChart from '../chart/ScatterChart';
 
 export interface HChartProps {
+  /** Chart configuration option */
   option: ChartOption;
+  /** Width in pixels */
   width?: number;
+  /** Height in pixels */
   height?: number;
+  /** CSS class name */
   className?: string;
+  /** Inline style */
   style?: React.CSSProperties;
-  renderMode?: RenderMode; // 'canvas' | 'svg'
-  theme?: Theme; // 'light' | 'dark'
-  mode?: string; // 'Light' | 'Dark' to support external standard
-  locale?: Locale; // 'en' | 'zh' | 'zh-CN' | etc.
+  /** Render mode: 'canvas' or 'svg' */
+  renderMode?: RenderMode;
+  /** Theme: 'light' or 'dark' */
+  theme?: Theme;
+  /** Mode: 'Light' or 'Dark' (for compatibility) */
+  mode?: string;
+  /** Locale: 'en', 'zh', etc. */
+  locale?: Locale;
+  /** Event handlers */
   onEvents?: {
     [eventName: string]: (event: ChartEvent) => void;
   };
+  /** Whether to merge option */
   notMerge?: boolean;
+  /** Whether to update lazily */
   lazyUpdate?: boolean;
 }
 

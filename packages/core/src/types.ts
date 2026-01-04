@@ -15,61 +15,107 @@ export interface BoundingRect {
 }
 
 export interface Style {
+  /** Fill color or gradient/pattern */
   fill?: string | CanvasGradient | CanvasPattern;
+  /** Stroke color or gradient/pattern */
   stroke?: string | CanvasGradient | CanvasPattern;
+  /** Line width */
   lineWidth?: number;
+  /** Line dash pattern [dash, gap] */
   lineDash?: number[];
+  /** Line dash offset */
   lineDashOffset?: number;
+  /** Opacity (0-1) */
   opacity?: number;
+  /** Shadow blur radius */
   shadowBlur?: number;
+  /** Shadow color */
   shadowColor?: string;
+  /** Shadow horizontal offset */
   shadowOffsetX?: number;
+  /** Shadow vertical offset */
   shadowOffsetY?: number;
+  /** Text content */
   text?: string;
+  /** Font size in pixels */
   fontSize?: number;
+  /** Font family */
   fontFamily?: string;
+  /** Font weight */
   fontWeight?: string | number;
+  /** Text alignment */
   textAlign?: 'left' | 'center' | 'right';
+  /** Text baseline */
   textBaseline?: 'top' | 'middle' | 'bottom' | 'alphabetic';
 }
 
 export interface Transform {
+  /** Translation X */
   x?: number;
+  /** Translation Y */
   y?: number;
+  /** Scale X */
   scaleX?: number;
+  /** Scale Y */
   scaleY?: number;
+  /** Rotation in radians */
   rotation?: number;
+  /** Transform origin X */
   originX?: number;
+  /** Transform origin Y */
   originY?: number;
 }
 
 export interface ElementOption {
+  /** Unique ID */
   id?: string;
+  /** Element name */
   name?: string;
+  /** User data */
   data?: any;
+  /** Layer index (canvas z-index equivalent) */
   zlevel?: number;
+  /** Element stacking order within the same layer */
   z?: number;
+  /** Whether the element ignores mouse events */
   silent?: boolean;
+  /** Whether the element is invisible */
   invisible?: boolean;
+  /** Mouse cursor style */
   cursor?: string;
+  /** Whether the element is draggable */
   draggable?: boolean;
+  /** Whether to render progressively */
   progressive?: boolean;
+  /** Element style */
   style?: Style;
+  /** Shape definition */
   shape?: Record<string, unknown>;
+  /** Transform properties */
   transform?: Transform;
+  /** Clip path element */
   clipPath?: any;
   [key: string]: unknown;
 }
 
 export interface EventData {
+  /** Event type */
   type: string;
+  /** Target element */
   target?: any;
+  /** Top-most target element */
   topTarget?: any;
+  /** Whether to stop propagation */
   cancelBubble?: boolean;
+  /** X coordinate relative to container */
   offsetX?: number;
+  /** Y coordinate relative to container */
   offsetY?: number;
+  /** X coordinate relative to element */
   rX?: number;
+  /** Y coordinate relative to element */
   rY?: number;
+  /** Original DOM event */
   originalEvent?: Event;
   [key: string]: unknown;
 }
@@ -77,10 +123,15 @@ export interface EventData {
 export type EventCallback = (event: EventData) => void;
 
 export interface AnimationOption {
+  /** Animation duration in ms */
   duration?: number;
+  /** Animation delay in ms */
   delay?: number;
+  /** Easing function name or custom function */
   easing?: string | ((t: number) => number);
+  /** Callback on each frame */
   onUpdate?: (target: Record<string, unknown>, percent: number) => void;
+  /** Callback when animation completes */
   onComplete?: () => void;
 }
 

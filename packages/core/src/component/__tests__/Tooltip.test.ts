@@ -1,13 +1,24 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import Tooltip from '../Tooltip';
+import { Z_TOOLTIP } from '../../constants';
 
 describe('Tooltip', () => {
+  beforeAll(() => {
+    // Mock requestAnimationFrame
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
+      return setTimeout(callback, 0);
+    });
+    vi.stubGlobal('cancelAnimationFrame', (id: number) => {
+      clearTimeout(id);
+    });
+  });
+
   it('should initialize correctly', () => {
     const tooltip = new Tooltip();
     expect(tooltip.isVisible()).toBe(false);
     expect(tooltip.invisible).toBe(true);
     expect(tooltip.style.opacity).toBe(0);
-    expect(tooltip.z).toBe(1000);
+    expect(tooltip.z).toBe(Z_TOOLTIP);
     expect(tooltip.silent).toBe(true);
   });
 

@@ -11,13 +11,15 @@ export interface Scale {
   range(): number[];
   domain(domain: any[]): Scale;
   range(range: number[]): Scale;
-  // Aliases for ECharts compatibility
+  /** Alias for getPixel (ECharts compatibility) */
   getPixel?(value: any): number;
+  /** Alias for invert (ECharts compatibility) */
   getValue?(pixel: number): any;
 }
 
 /**
  * Create linear scale
+ * Maps a continuous domain to a continuous range
  */
 export const createLinearScale = (domain: number[], range: number[]): Scale => {
   let [d0, d1] = domain;
@@ -61,6 +63,7 @@ export const createLinearScale = (domain: number[], range: number[]): Scale => {
 
 /**
  * Create ordinal scale (for categories)
+ * Maps discrete values to a continuous range (bands)
  */
 export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
   const domainMap = new Map<any, number>();

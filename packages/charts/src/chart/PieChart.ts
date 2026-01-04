@@ -1,6 +1,6 @@
 import Chart from '../Chart';
 import type { SeriesOption, ChartData, EmphasisOption } from '../types';
-import { Sector, Text, createDecalPattern } from 'HudX/core';
+import { Sector, Text, createDecalPattern, Z_SERIES, Z_LABEL } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class PieChart extends Chart {
@@ -114,6 +114,7 @@ export default class PieChart extends Chart {
         const items = (data as any[]).map((it: any, i: number) => ({
           name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
           color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
+          icon: option.legend?.icon || 'circle', // Use user config or default to 'circle' for Pie
           textColor: this.getThemeConfig().legendTextColor // Use theme color
         }));
         this._mountLegend(items);
@@ -186,7 +187,7 @@ export default class PieChart extends Chart {
           transform: {
             x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy
           },
-          z: index,
+          z: Z_SERIES,
           cursor: (this._tooltip || seriesItem.emphasis) ? 'pointer' : 'default',
         });
 
@@ -353,7 +354,7 @@ export default class PieChart extends Chart {
               textBaseline: textBaseline,
               opacity: seriesItem.label.show ? 1 : 0, // Use opacity as well
             },
-            z: index + 1000, // Increase z-index
+            z: Z_LABEL,
             invisible: !seriesItem.label.show, // Handle visibility
             silent: true // Prevent label from capturing mouse events
           });
@@ -392,8 +393,6 @@ export default class PieChart extends Chart {
     const seriesItem = series[0];
     const emphasis = seriesItem.emphasis;
     const [r0, r] = this._getRadius(seriesItem);
-    // TODO
-    console.info(r0);
 
     // Find sector by name
     this._root.traverse((child: any) => {
@@ -409,9 +408,6 @@ export default class PieChart extends Chart {
             const r = (shape.r + shape.r0) / 2;
             const cx = shape.cx + Math.cos(midAngle) * r;
             const cy = shape.cy + Math.sin(midAngle) * r;
-
-            // TODO
-            console.info(cx, cy);
 
             // Construct params
             // We need to find the data item for this sector
@@ -478,7 +474,26 @@ export default class PieChart extends Chart {
   }
 
   private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number): void {
-    // Style animation (shadow, opacity, etc.)
+    // 1. Handle other sectors (Dimming)
+    if (isEnter) {
+      this._activeSectors.forEach((s) => {
+        if (s !== sector) {
+          this._animator.animate(s.style, 'opacity', 0.7, { duration: 200 }).start();
+          if ((s as any).__label) {
+            this._animator.animate(((s as any).__label).style, 'opacity', 0.7, { duration: 200 }).start();
+          }
+        }
+      });
+    } else {
+      this._activeSectors.forEach((s) => {
+        this._animator.animate(s.style, 'opacity', 1, { duration: 200 }).start();
+        if ((s as any).__label) {
+          this._animator.animate(((s as any).__label).style, 'opacity', 1, { duration: 200 }).start();
+        }
+      });
+    }
+
+    // 2. Handle current sector style (Shadow, etc. but Opacity -> 1)
     if (emphasis?.itemStyle) {
       const style = sector.style as Record<string, unknown>;
       const emphasisStyle = emphasis.itemStyle;
@@ -499,8 +514,7 @@ export default class PieChart extends Chart {
         if (emphasisStyle.borderColor !== undefined) targetStyle.stroke = emphasisStyle.borderColor;
         if (emphasisStyle.borderWidth !== undefined) targetStyle.lineWidth = emphasisStyle.borderWidth;
 
-        // Opacity is handled separately above, but we can merge it if we want consistency
-        targetStyle.opacity = 0.8; // Default emphasis opacity
+        targetStyle.opacity = 1; // Current sector stays opaque
       } else {
         // Restore to initial style
         const init = (sector as any).__initialStyle;
@@ -538,7 +552,7 @@ export default class PieChart extends Chart {
       this._animator.animate(
         sector.style as Record<string, unknown>,
         'opacity',
-        isEnter ? 0.8 : initialOpacity,
+        isEnter ? 1 : initialOpacity,
         { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
       ).start();
     }

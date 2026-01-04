@@ -6,6 +6,7 @@ import Group from '../Group';
 import Rect from '../shape/Rect';
 import Text from '../shape/Text';
 import Animation from '../animation/Animation';
+import { Z_TOOLTIP } from '../constants';
 
 export interface TooltipOption {
   show?: boolean;
@@ -46,7 +47,7 @@ export default class Tooltip extends Group {
       confine: true,
       ...option
     };
-    this.z = 1000; // Ensure tooltip is on top
+    this.z = Z_TOOLTIP; // Ensure tooltip is on top
     this.silent = true; // Tooltip should not block mouse events
     this.invisible = true;
     this.style.opacity = 0;

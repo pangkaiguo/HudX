@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Renderer, Rect, Circle, Text } from 'HudX/core';
+import type { RenderMode } from 'HudX/core';
 
 export const ThemeExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const [themeName, setThemeName] = useState<'light' | 'dark'>('light');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const renderer = Renderer.init(containerRef.current, 'canvas', themeName, 'en');
+    const renderer = Renderer.init(containerRef.current, renderMode, themeName, 'en');
     rendererRef.current = renderer;
 
     const drawChart = () => {
@@ -42,7 +44,20 @@ export const ThemeExample = () => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>Theme Switch Demo</h2>
+      <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h2 style={{ margin: 0 }}>Theme Switch Demo</h2>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Render Mode:</span>
+          <select
+            value={renderMode}
+            onChange={(e) => setRenderMode(e.target.value as RenderMode)}
+            style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+          >
+            <option value="canvas">Canvas</option>
+            <option value="svg">SVG</option>
+          </select>
+        </label>
+      </div>
       <div style={{ marginBottom: 20 }}>
         <button
           onClick={() => setThemeName('light')}

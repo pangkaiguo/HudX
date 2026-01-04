@@ -7,6 +7,7 @@ import Rect from '../shape/Rect';
 import Text from '../shape/Text';
 import Circle from '../shape/Circle';
 import Line from '../shape/Line';
+import { Z_LEGEND } from '../constants';
 
 export interface LegendItem {
   name: string;
@@ -58,6 +59,7 @@ export default class Legend extends Group {
       selectedMode: 'multiple',
       ...option
     };
+    this.z = Z_LEGEND;
   }
 
   setItems(items: LegendItem[], selected?: string[]): void {
@@ -168,7 +170,7 @@ export default class Legend extends Group {
         });
       } else {
         iconElement = new Rect({
-          shape: { x, y: y + itemHeight / 2 - 4, width: 8, height: 8, r: 1 },
+          shape: { x, y: y + itemHeight / 2 - 4, width: 8, height: 8, r: 2 },
           style: {
             fill: isSelected ? item.color : '#ccc',
             opacity: isSelected ? 1 : 0.3

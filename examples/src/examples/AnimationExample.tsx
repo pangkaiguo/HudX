@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Renderer, Circle, Rect, Animation, Easing, ThemeManager } from 'HudX/core';
+import type { RenderMode } from 'HudX/core';
 
 export const AnimationExample = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const renderer = Renderer.init(containerRef.current, 'canvas', 'light', 'en');
+    const renderer = Renderer.init(containerRef.current, renderMode, 'light', 'en');
     const theme = ThemeManager.getTheme('light');
 
     const circle = new Circle({
@@ -70,11 +72,24 @@ export const AnimationExample = () => {
     renderer.flush();
 
     return () => renderer.dispose();
-  }, []);
+  }, [renderMode]);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>Animation Demo</h2>
+      <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h2 style={{ margin: 0 }}>Animation Demo</h2>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Render Mode:</span>
+          <select
+            value={renderMode}
+            onChange={(e) => setRenderMode(e.target.value as RenderMode)}
+            style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+          >
+            <option value="canvas">Canvas</option>
+            <option value="svg">SVG</option>
+          </select>
+        </label>
+      </div>
       <p style={{ marginBottom: 20, color: '#666' }}>Circle moves right, Rectangle scales</p>
       <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 300 }} />
     </div>
