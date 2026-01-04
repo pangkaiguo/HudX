@@ -14,6 +14,7 @@ HudX is a high-performance charting library compatible with ECharts API design, 
 ### Core Concepts
 
 - [Implementation Details](./IMPLEMENTATION.md)
+- [API Reference](./API_REFERENCE.md)
 - [Rendering Modes (Canvas/SVG)](./RENDERING_MODES.md)
 - [Theme and Internationalization](./THEME_AND_I18N.md)
 

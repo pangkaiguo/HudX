@@ -14,6 +14,7 @@ HudX 是一个高性能图表库，兼容 ECharts API 设计，拥有强大的�
 ### 核心概念
 
 - [实现细节](./IMPLEMENTATION.md)
+- [API 参考文档](./API_REFERENCE.md)
 - [渲染模式 (Canvas/SVG)](./RENDERING_MODES.md)
 - [主题与国际化](./THEME_AND_I18N.md)
 
