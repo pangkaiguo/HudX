@@ -15,12 +15,14 @@ const Bar3DExample = lazy(() => import('./examples/Bar3DExample'));
 const StackBar3DExample = lazy(() => import('./examples/StackBar3DExample'));
 const DoughnutExample = lazy(() => import('./examples/DoughnutExample'));
 const HalfDoughnutExample = lazy(() => import('./examples/HalfDoughnutExample'));
+const RichTextPieExample = lazy(() => import('./examples/RichTextPieExample'));
 const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
 
 const componentDemos = [
   { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
   { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
   { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
+  { id: 'rich-text-pie', name: 'Rich Text Pie', component: RichTextPieExample },
   { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChartExample },
   { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
   { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },

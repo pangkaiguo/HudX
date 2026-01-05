@@ -185,7 +185,7 @@ export const Bar3DExample = () => {
             fontSize: 14
           }}
         >
-          Update Data
+          Update Data (via getChartInstance)
         </button>
       </div>
     </div>

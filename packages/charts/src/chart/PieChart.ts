@@ -1,6 +1,6 @@
 import Chart from '../Chart';
 import type { SeriesOption, ChartData, EmphasisOption } from '../types';
-import { Sector, Text, createDecalPattern, Z_SERIES, Z_LABEL } from 'HudX/core';
+import { Sector, Text, Polyline, createDecalPattern, Z_SERIES, Z_LABEL } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class PieChart extends Chart {
@@ -29,10 +29,6 @@ export default class PieChart extends Chart {
 
       // Clear root but we will re-add reused sectors
       this._root.removeAll();
-
-      // if (this._tooltip) {
-      //   this._root.add(this._tooltip);
-      // }
 
       const option = this._option;
       const series = option.series || [];
@@ -129,6 +125,9 @@ export default class PieChart extends Chart {
         }));
         this._mountLegend(items);
       }
+
+      // Collect labels for layout adjustment
+      const labelLayoutList: any[] = [];
 
       data.forEach((item: ChartData, index: number) => {
         let value = 0;
@@ -339,28 +338,10 @@ export default class PieChart extends Chart {
           });
         }
 
-        // Render label if defined (even if hidden initially, it might show on emphasis)
-        if (seriesItem.label) {
-          const labelAngle = targetStart + angle / 2; // Use target angle for label
-          // If position outside
-          const isOutside = seriesItem.label.position === 'outside';
-          const isCenter = seriesItem.label.position === 'center';
-          let labelX, labelY;
-          let textAlign: 'center' | 'left' | 'right' = 'center';
-          let textBaseline: 'middle' | 'top' | 'bottom' = 'middle';
-
-          if (isCenter) {
-            labelX = cx;
-            labelY = cy;
-            textAlign = 'center';
-            textBaseline = 'middle';
-          } else {
-            const finalLabelRadius = isOutside ? r * 1.1 : (r + r0) / 2;
-            labelX = cx + Math.cos(labelAngle) * finalLabelRadius;
-            labelY = cy + Math.sin(labelAngle) * finalLabelRadius;
-            textAlign = 'center';
-            textBaseline = 'middle';
-          }
+        // Collect label info
+        if (seriesItem.label?.show !== false) {
+          const labelAngle = targetStart + angle / 2;
+          const isOutside = seriesItem.label?.position === 'outside' || seriesItem.label?.position === undefined;
 
           let labelText: string;
           const formatter = seriesItem.label?.formatter;
@@ -371,38 +352,234 @@ export default class PieChart extends Chart {
           } else {
             labelText = String(value);
           }
-          const text = new Text({
-            shape: {
-              x: labelX,
-              y: labelY,
-              text: labelText,
-            },
-            style: {
-              fontSize: seriesItem.label.fontSize || 12,
-              fontWeight: seriesItem.label.fontWeight || 'normal',
-              fill: seriesItem.label.color || (isOutside || isCenter ? '#333' : '#fff'), // White if inside
-              textAlign: textAlign,
-              textBaseline: textBaseline,
-              opacity: seriesItem.label.show ? 1 : 0, // Use opacity as well
-            },
-            z: Z_LABEL,
-            invisible: !seriesItem.label.show, // Handle visibility
-            silent: true // Prevent label from capturing mouse events
-          });
 
-          this._root.add(text);
-          // Store label reference for interaction
-          (sector as any).__label = text;
+          labelLayoutList.push({
+            text: labelText,
+            angle: labelAngle,
+            sector,
+            isOutside,
+            item,
+            color: seriesItem.label?.color || (isOutside ? '#333' : '#fff'),
+            itemColor: color,
+            seriesItem
+          });
         }
 
         currentAngle += angle;
       });
+
+      // Layout and Render Labels
+      this._layoutLabels(labelLayoutList, cx, cy, r, r0);
 
       this._renderer.flush();
     } catch (e) {
       console.error('[PieChart] Render error:', e);
     }
   }
+
+  private _layoutLabels(labels: any[], cx: number, cy: number, r: number, r0: number): void {
+    const leftLabels: any[] = [];
+    const rightLabels: any[] = [];
+
+    // 1. Initial calculation and split
+    labels.forEach(label => {
+      const angle = label.angle;
+      // Normalize angle to -PI ~ PI
+      let normalizedAngle = angle % (Math.PI * 2);
+      if (normalizedAngle > Math.PI) normalizedAngle -= Math.PI * 2;
+      if (normalizedAngle < -Math.PI) normalizedAngle += Math.PI * 2;
+
+      const isRight = normalizedAngle >= -Math.PI / 2 && normalizedAngle <= Math.PI / 2;
+
+      // Calculate anchor point on the pie edge
+      const anchorR = r;
+      const anchorX = cx + Math.cos(angle) * anchorR;
+      const anchorY = cy + Math.sin(angle) * anchorR;
+
+      label.anchor = { x: anchorX, y: anchorY };
+      label.normalizedAngle = normalizedAngle;
+      label.isRight = isRight;
+
+      if (label.isOutside) {
+        if (isRight) rightLabels.push(label);
+        else leftLabels.push(label);
+      } else {
+        // Inside/Center labels - no collision detection for now
+        this._renderSingleLabel(label, cx, cy, r, r0);
+      }
+    });
+
+    // 2. Sort by angle (or Y coordinate roughly)
+    // For right side: -PI/2 (top) to PI/2 (bottom)
+    rightLabels.sort((a, b) => a.normalizedAngle - b.normalizedAngle);
+    // For left side: PI/2 (bottom) to PI (mid) to -PI (mid) to -PI/2 (top). 
+    // We want top to bottom for layout processing? Or just follow angle order?
+    // ECharts processes top-to-bottom or by angle.
+    // Let's sort by Y coordinate of anchor for simpler vertical distribution
+    rightLabels.sort((a, b) => a.anchor.y - b.anchor.y);
+    leftLabels.sort((a, b) => a.anchor.y - b.anchor.y);
+
+    // 3. Layout logic
+    this._adjustLabelPositions(rightLabels, cx, cy, r, 1);
+    this._adjustLabelPositions(leftLabels, cx, cy, r, -1);
+  }
+
+  private _adjustLabelPositions(labels: any[], cx: number, cy: number, r: number, dir: 1 | -1): void {
+    if (labels.length === 0) return;
+
+    const labelHeight = 14; // Approximate height, should measure
+    const minGap = 5;
+    const labelLineLen1 = 15; // First segment
+    const labelLineLen2 = 15; // Second segment (horizontal)
+
+    // Calculate ideal positions first
+    labels.forEach(label => {
+      const angle = label.angle;
+      // Initial position based on angle
+      const targetR = r + labelLineLen1;
+      let y = cy + Math.sin(angle) * targetR;
+      label.y = y;
+      label.x = cx + Math.cos(angle) * targetR; // Temp X
+    });
+
+    // Resolve overlaps (simple 1D collision resolution)
+    // Iterate top-down
+    for (let i = 1; i < labels.length; i++) {
+      const prev = labels[i - 1];
+      const curr = labels[i];
+      if (curr.y - prev.y < labelHeight + minGap) {
+        curr.y = prev.y + labelHeight + minGap;
+      }
+    }
+
+    // Check bottom bound (if container height known) - push up if needed?
+    // For simplicity, just let them stack down for now.
+    // Ideally we should check if they exceed view height and compress/shift up.
+
+    // Render final labels
+    labels.forEach(label => {
+      // Recalculate X based on new Y?
+      // For Pie label lines, usually:
+      // Point 1: Anchor on pie
+      // Point 2: Elbow point. 
+      // Point 3: Text position (horizontal)
+
+      // If we shifted Y, we need to adjust Elbow point.
+      // Elbow X is usually calculated such that label line has fixed length or projection.
+      // Simple approach: Elbow is at fixed radius? 
+      // If we move Y, Elbow moves on the vertical line? No.
+      // Standard: 
+      // P1 = (r, angle)
+      // P2 = (r + L1, angle') -> Wait, if we change Y, angle changes.
+      // ECharts strategy: 
+      // Keep P1.
+      // P2's Y is determined by layout. P2's X is determined by... geometry.
+      // Often P2 is on a circle of r + L1.
+      // But if we force Y, X is determined by circle equation?
+      // Or we just relax the constraint and say P2 is at (X, Y) where X is enough to clear pie.
+
+      const r2 = r + labelLineLen1;
+      // X corresponding to Y on circle r2: x = sqrt(r2^2 - (y-cy)^2) + cx
+      // This only works if |y-cy| < r2. If pushed too far, it breaks.
+
+      let dy = label.y - cy;
+      // Clamp dy to avoid Math.sqrt error if label pushed too far out vertically
+      if (Math.abs(dy) > r2) dy = (dy > 0 ? 1 : -1) * r2;
+
+      let dx = Math.sqrt(Math.abs(r2 * r2 - dy * dy));
+      let elbowX = cx + (dir * dx); // dir 1 for right, -1 for left
+
+      const elbowY = label.y;
+
+      const textX = elbowX + (dir * labelLineLen2);
+      const textY = elbowY;
+
+      // Render Text
+      const seriesItem = label.seriesItem;
+      const rich = seriesItem.label?.rich;
+
+      const text = new Text({
+        shape: {
+          x: textX + (dir * 5), // Padding
+          y: textY,
+          text: label.text,
+        },
+        style: {
+          fontSize: seriesItem.label?.fontSize || 12,
+          fontWeight: seriesItem.label?.fontWeight || 'normal',
+          fill: label.color,
+          textAlign: dir === 1 ? 'left' : 'right',
+          textBaseline: 'middle',
+          rich: rich, // Pass rich config
+          backgroundColor: seriesItem.label?.backgroundColor,
+          borderColor: seriesItem.label?.borderColor,
+          borderWidth: seriesItem.label?.borderWidth,
+          borderRadius: seriesItem.label?.borderRadius,
+          padding: seriesItem.label?.padding
+        },
+        z: Z_LABEL,
+        silent: true
+      });
+      this._root.add(text);
+      (label.sector as any).__label = text; // Link for emphasis
+
+      // Render Label Line
+      if (seriesItem.labelLine?.show !== false) {
+        const linePoints = [
+          [label.anchor.x, label.anchor.y],
+          [elbowX, elbowY],
+          [textX, textY]
+        ];
+        const line = new Polyline({
+          shape: { points: linePoints },
+          style: {
+            stroke: seriesItem.labelLine?.lineStyle?.color || label.itemColor || label.color,
+            lineWidth: seriesItem.labelLine?.lineStyle?.width || 1,
+            fill: 'none'
+          },
+          z: Z_LABEL
+        });
+        this._root.add(line);
+      }
+    });
+  }
+
+  private _renderSingleLabel(label: any, cx: number, cy: number, r: number, r0: number): void {
+    const seriesItem = label.seriesItem;
+    const isCenter = seriesItem.label?.position === 'center';
+    const angle = label.angle;
+
+    let labelX, labelY;
+    if (isCenter) {
+      labelX = cx;
+      labelY = cy;
+    } else {
+      const finalLabelRadius = (r + r0) / 2;
+      labelX = cx + Math.cos(angle) * finalLabelRadius;
+      labelY = cy + Math.sin(angle) * finalLabelRadius;
+    }
+
+    const text = new Text({
+      shape: {
+        x: labelX,
+        y: labelY,
+        text: label.text,
+      },
+      style: {
+        fontSize: seriesItem.label?.fontSize || 12,
+        fontWeight: seriesItem.label?.fontWeight || 'normal',
+        fill: label.color, // Usually white for inside
+        textAlign: 'center',
+        textBaseline: 'middle',
+        rich: seriesItem.label?.rich
+      },
+      z: Z_LABEL,
+      silent: true
+    });
+    this._root.add(text);
+    (label.sector as any).__label = text;
+  }
+
 
   /**
    * Get pie center
@@ -497,11 +674,14 @@ export default class PieChart extends Chart {
   /**
    * Parse percent string
    */
-  private _parsePercent(value: string, base: number): number {
-    if (value.endsWith('%')) {
+  private _parsePercent(value: string | number, base: number): number {
+    if (typeof value === 'number') {
+      return value;
+    }
+    if (typeof value === 'string' && value.endsWith('%')) {
       return parseFloat(value) / 100 * base;
     }
-    return parseFloat(value) || 0;
+    return parseFloat(value as string) || 0;
   }
 
   private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number): void {

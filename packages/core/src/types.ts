@@ -47,6 +47,22 @@ export interface Style {
   textAlign?: 'left' | 'center' | 'right';
   /** Text baseline */
   textBaseline?: 'top' | 'middle' | 'bottom' | 'alphabetic';
+  /** Background color */
+  backgroundColor?: string;
+  /** Border color */
+  borderColor?: string;
+  /** Border width */
+  borderWidth?: number;
+  /** Border radius */
+  borderRadius?: number;
+  /** Padding [top, right, bottom, left] or number */
+  padding?: number | number[];
+  /** Rich text style configuration */
+  rich?: Record<string, Style>;
+  /** Width of the text block */
+  width?: number;
+  /** Height of the text block */
+  height?: number;
 }
 
 export interface Transform {
