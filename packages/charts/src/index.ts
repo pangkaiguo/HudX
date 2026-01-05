@@ -2,6 +2,8 @@
 export { default as Chart } from './Chart';
 export { default as LineChart } from './chart/LineChart';
 export { default as BarChart } from './chart/BarChart';
+export { default as Bar3DChart } from './chart/Bar3DChart';
+export { default as StackBar3DChart } from './chart/StackBar3DChart';
 export { default as PieChart } from './chart/PieChart';
 export { default as DoughnutChart } from './chart/DoughnutChart';
 export { default as HalfDoughnutChart } from './chart/HalfDoughnutChart';

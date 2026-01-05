@@ -11,6 +11,8 @@ const BasicPieExample = lazy(() => import('./examples/BasicPieExample'));
 const AdvancedLineChartExample = lazy(() => import('./examples/AdvancedLineExample'));
 const AdvancedBarChartExample = lazy(() => import('./examples/AdvancedBarExample'));
 const AdvancedPieChartExample = lazy(() => import('./examples/AdvancedPieExample'));
+const Bar3DExample = lazy(() => import('./examples/Bar3DExample'));
+const StackBar3DExample = lazy(() => import('./examples/StackBar3DExample'));
 const DoughnutExample = lazy(() => import('./examples/DoughnutExample'));
 const HalfDoughnutExample = lazy(() => import('./examples/HalfDoughnutExample'));
 const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
@@ -22,6 +24,8 @@ const componentDemos = [
   { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChartExample },
   { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
   { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
+  { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
+  { id: 'stack-bar-3d', name: 'Stack Bar 3D', component: StackBar3DExample },
   { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
   { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
 ];
@@ -102,24 +106,24 @@ const App = memo(function App() {
       >
         <h1 style={{ fontSize: 20, marginBottom: 10, color: '#333' }}>HudX Examples</h1>
         <p style={{ fontSize: 12, color: '#999', marginBottom: 20 }}>Interactive Charts & Animations</p>
-        
+
         <h2 style={{ fontSize: 14, fontWeight: 'bold', margin: '20px 0 10px', color: '#666' }}>Component Demos</h2>
         {componentDemos.map(example => (
-          <NavButton 
-            key={example.id} 
-            example={example} 
-            activeExample={activeExample} 
-            setActiveExample={setActiveExample} 
+          <NavButton
+            key={example.id}
+            example={example}
+            activeExample={activeExample}
+            setActiveExample={setActiveExample}
           />
         ))}
 
         <h2 style={{ fontSize: 14, fontWeight: 'bold', margin: '20px 0 10px', color: '#666' }}>Test Demos</h2>
         {testDemos.map(example => (
-          <NavButton 
-            key={example.id} 
-            example={example} 
-            activeExample={activeExample} 
-            setActiveExample={setActiveExample} 
+          <NavButton
+            key={example.id}
+            example={example}
+            activeExample={activeExample}
+            setActiveExample={setActiveExample}
           />
         ))}
       </nav>

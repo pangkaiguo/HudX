@@ -200,7 +200,7 @@ export default class BarChart extends Chart {
               y: plotY + plotHeight - initialHeight, // Start from previous position
               width: barWidthPerSeries,
               height: initialHeight,
-              r: itemStyle.borderRadius
+              r: itemStyle.borderRadius as any
             },
             style: {
               fill: fillStyle,
@@ -223,7 +223,7 @@ export default class BarChart extends Chart {
                 const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
                 const itemValue = this._getDataValue(item);
 
-                const content = this._generateTooltipContent({
+                const params = {
                   componentType: 'series',
                   seriesType: 'bar',
                   seriesIndex,
@@ -232,11 +232,12 @@ export default class BarChart extends Chart {
                   dataIndex: index,
                   data: item,
                   value: itemValue
-                });
+                };
+                const content = this._generateTooltipContent(params);
 
                 const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
                 const my = evt?.offsetY ?? (barY - 10);
-                this._tooltip!.show(mx + 12, my - 16, content);
+                this._tooltip!.show(mx, my, content, params, rect.attr('shape'));
               },
               () => {
                 rect.attr('style', { opacity: 1 });
@@ -248,7 +249,7 @@ export default class BarChart extends Chart {
               const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
               const itemValue = this._getDataValue(item);
 
-              const content = this._generateTooltipContent({
+              const params = {
                 componentType: 'series',
                 seriesType: 'bar',
                 seriesIndex,
@@ -257,7 +258,8 @@ export default class BarChart extends Chart {
                 dataIndex: index,
                 data: item,
                 value: itemValue
-              });
+              };
+              const content = this._generateTooltipContent(params);
 
               const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
               const my = evt?.offsetY ?? (barY - 10);
@@ -266,7 +268,7 @@ export default class BarChart extends Chart {
                 if (!this._tooltip.isVisible()) {
                   rect.attr('style', { opacity: 0.8 });
                 }
-                this._tooltip.show(mx + 12, my - 16, content);
+                this._tooltip.show(mx, my, content, params, rect.attr('shape'));
               }
             });
           }

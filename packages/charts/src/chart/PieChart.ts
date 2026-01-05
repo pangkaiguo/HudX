@@ -11,9 +11,9 @@ export default class PieChart extends Chart {
       // We manually manage children clearing to support smooth transitions
       // Do NOT call super._render() which clears everything
       // But we need to ensure tooltip is present
-      if (this._tooltip) {
-        this._root.remove(this._tooltip);
-      }
+      // if (this._tooltip) {
+      //   this._root.remove(this._tooltip);
+      // }
       if (this._legend) {
         this._root.remove(this._legend);
       }
@@ -30,9 +30,9 @@ export default class PieChart extends Chart {
       // Clear root but we will re-add reused sectors
       this._root.removeAll();
 
-      if (this._tooltip) {
-        this._root.add(this._tooltip);
-      }
+      // if (this._tooltip) {
+      //   this._root.add(this._tooltip);
+      // }
 
       const option = this._option;
       const series = option.series || [];
@@ -59,11 +59,21 @@ export default class PieChart extends Chart {
 
       // Calculate total value
       const total = data.reduce((sum: number, item: ChartData, index: number) => {
-        const itemName = (typeof item === 'object' && item.name) ? item.name : `item-${index + 1}`;
+        let itemName = `item-${index + 1}`;
+        if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+          itemName = item.name;
+        }
         if (this._legend && !this._legendSelected.has(itemName)) {
           return sum;
         }
-        const value = typeof item === 'object' ? item.value : item;
+        let value: number = 0;
+        if (typeof item === 'number') {
+          value = item;
+        } else if (Array.isArray(item)) {
+          value = item[0] || 0;
+        } else if (typeof item === 'object' && item !== null) {
+          value = item.value;
+        }
         return sum + (typeof value === 'number' ? value : 0);
       }, 0);
 
@@ -121,18 +131,30 @@ export default class PieChart extends Chart {
       }
 
       data.forEach((item: ChartData, index: number) => {
-        const value = typeof item === 'object' ? item.value : item;
+        let value = 0;
+        if (typeof item === 'number') value = item;
+        else if (Array.isArray(item)) value = item[0] || 0;
+        else if (typeof item === 'object' && item !== null) value = item.value;
+
         if (typeof value !== 'number') return;
         const percent = value / total;
         const angle = percent * totalAngle;
         // legend selection
-        const itemName = (typeof item === 'object' && item.name) ? item.name : `item-${index + 1}`;
+        let itemName = `item-${index + 1}`;
+        if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+          itemName = item.name;
+        }
         if (this._legend && !this._legendSelected.has(itemName)) {
           return;
         }
 
         const itemStyle = seriesItem.itemStyle || {};
-        const color = (typeof item === 'object' && item.itemStyle?.color) || itemStyle.color || this._getSeriesColor(index);
+        let color: string;
+        if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.itemStyle?.color) {
+          color = item.itemStyle.color;
+        } else {
+          color = itemStyle.color || this._getSeriesColor(index);
+        }
 
         // Handle aria decal
         let fillStyle: string | CanvasPattern = color;
@@ -206,10 +228,13 @@ export default class PieChart extends Chart {
 
               // Show tooltip
               if (this._tooltip) {
-                const itemName = (typeof item === 'object' && item.name) ? item.name : '';
+                let itemName = '';
+                if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+                  itemName = item.name;
+                }
                 const itemValue = value;
 
-                const content = this._generateTooltipContent({
+                const params = {
                   componentType: 'series',
                   seriesType: 'pie',
                   seriesIndex: 0,
@@ -219,11 +244,13 @@ export default class PieChart extends Chart {
                   data: item,
                   value: itemValue,
                   percent: percent * 100
-                });
+                };
+
+                const content = this._generateTooltipContent(params);
 
                 const mx = evt?.offsetX ?? cx;
                 const my = evt?.offsetY ?? cy;
-                this._tooltip.show(mx + 12, my - 16, content);
+                this._tooltip.show(mx, my, content, params);
               }
             },
             () => {
@@ -244,10 +271,13 @@ export default class PieChart extends Chart {
             // Recompute content to avoid stale percent (during animation)
             const currentEnd = sector.shape.endAngle;
             const partPercent = (currentEnd - sector.shape.startAngle) / (Math.PI * 2) * 100;
-            const itemName = (typeof item === 'object' && item.name) ? item.name : '';
+            let itemName = '';
+            if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+              itemName = item.name;
+            }
             const itemValue = value;
 
-            const content = this._generateTooltipContent({
+            const params = {
               componentType: 'series',
               seriesType: 'pie',
               seriesIndex: 0,
@@ -257,13 +287,14 @@ export default class PieChart extends Chart {
               data: item,
               value: itemValue,
               percent: partPercent
-            });
+            };
+            const content = this._generateTooltipContent(params);
 
             if (this._tooltip) {
               if (!this._tooltip.isVisible()) {
                 this._applyEmphasisAnimation(sector, emphasis, true, r);
               }
-              this._tooltip.show(mx + 12, my - 16, content);
+              this._tooltip.show(mx, my, content, params);
             }
           });
         }

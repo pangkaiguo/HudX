@@ -4,6 +4,7 @@
 
 import Chart from '../Chart';
 import { Circle } from 'HudX/core';
+import { EventHelper } from '../util/EventHelper';
 
 export default class ScatterChart extends Chart {
   protected _render(): void {
@@ -45,6 +46,47 @@ export default class ScatterChart extends Chart {
         });
 
         this._root.add(circle);
+
+        // Tooltip
+        if (this._tooltip) {
+          circle.on('mouseover', (evt: any) => {
+            const currentR = circle.shape.r;
+            // Enlarge slightly
+            circle.attr('shape', { r: symbolSize + 3 });
+            circle.attr('style', { opacity: 1 });
+
+            const itemName = (typeof item === 'object' && item.name) ? item.name : '';
+            const params = {
+              componentType: 'series',
+              seriesType: 'scatter',
+              seriesIndex,
+              seriesName: s.name,
+              name: itemName,
+              dataIndex: index,
+              data: item,
+              value: [xVal, yVal]
+            };
+            const content = this._generateTooltipContent(params);
+
+            const r = symbolSize + 3;
+            const targetRect = {
+              x: x - r,
+              y: y - r,
+              width: r * 2,
+              height: r * 2
+            };
+
+            const mx = evt?.offsetX ?? x;
+            const my = evt?.offsetY ?? y;
+            this._tooltip!.show(mx, my, content, params, targetRect);
+          });
+
+          circle.on('mouseout', () => {
+            circle.attr('shape', { r: symbolSize });
+            circle.attr('style', { opacity: 0.7 });
+            this._tooltip!.hide();
+          });
+        }
 
         // Animate scatter point if animation is enabled
         if (this._isAnimationEnabled()) {

@@ -273,7 +273,7 @@ export default class LineChart extends Chart {
                 const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[pointIndex] || '');
                 const itemValue = this._getDataValue(item);
 
-                const content = this._generateTooltipContent({
+                const params = {
                   componentType: 'series',
                   seriesType: 'line',
                   seriesIndex,
@@ -282,9 +282,19 @@ export default class LineChart extends Chart {
                   dataIndex: pointIndex,
                   data: item,
                   value: itemValue
-                });
+                };
 
-                this._tooltip!.show(point.x, point.y - 10, content);
+                const content = this._generateTooltipContent(params);
+                
+                const r = pointSize + 3;
+                const targetRect = {
+                    x: point.x - r,
+                    y: point.y - r,
+                    width: r * 2,
+                    height: r * 2
+                };
+
+                this._tooltip!.show(point.x, point.y, content, params, targetRect);
               });
 
               circle.on('mouseout', () => {

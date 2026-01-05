@@ -253,7 +253,19 @@ export const dataToCoordinate = (
   xScale: Scale,
   yScale: Scale
 ): Coordinate => {
-  const x = typeof data.name === 'number' ? xScale(data.name) : xScale(data.name || 0);
-  const y = typeof data.value === 'number' ? yScale(data.value) : yScale(Array.isArray(data.value) ? data.value[0] : 0);
+  let name: any = 0;
+  let value: any = 0;
+
+  if (typeof data === 'number') {
+    value = data;
+  } else if (Array.isArray(data)) {
+    value = data[0];
+  } else if (typeof data === 'object' && data !== null) {
+    name = data.name;
+    value = data.value;
+  }
+
+  const x = typeof name === 'number' ? xScale(name) : xScale(name || 0);
+  const y = typeof value === 'number' ? yScale(value) : yScale(Array.isArray(value) ? value[0] : 0);
   return { x, y };
 };

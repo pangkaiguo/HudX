@@ -100,11 +100,12 @@ export default class Chart {
     this.resize();
     const tooltipOpt = this._option?.tooltip || {};
     this._tooltip = new Tooltip({
+      ...tooltipOpt,
       show: tooltipOpt?.show !== false,
       formatter: typeof tooltipOpt?.formatter === 'function' ? tooltipOpt.formatter : undefined
     });
-    this._tooltip.setContainer(this._width, this._height);
-    this._root.add(this._tooltip);
+    this._tooltip.setContainer(this.getDom());
+    // this._root.add(this._tooltip); // Tooltip is now DOM-based
     this.setOption(this._option);
   }
 
@@ -245,7 +246,8 @@ export default class Chart {
     this._width = this._renderer.getWidth();
     this._height = this._renderer.getHeight();
     if (this._tooltip) {
-      this._tooltip.setContainer(this._width, this._height);
+      // Tooltip handles resize via container dimensions
+      // this._tooltip.setContainer(this.getDom());
     }
     if (this._legend) {
       this._legend.setContainer(this._width, this._height);
@@ -532,9 +534,10 @@ export default class Chart {
    */
   protected _render(): void {
     this._root.removeAll();
-    if (this._tooltip) {
-      this._root.add(this._tooltip);
-    }
+    // Tooltip is DOM based now
+    // if (this._tooltip) {
+    //   this._root.add(this._tooltip);
+    // }
     // To be implemented by subclasses 
   }
 

@@ -197,7 +197,14 @@ export default class SVGPainter implements IPainter {
     // Render based on element type
     if (element instanceof Group) {
       // Render group children
-      const children = element.children();
+      // Sort children by zlevel and z
+      const children = element.children().sort((a, b) => {
+        if (a.zlevel !== b.zlevel) {
+          return a.zlevel - b.zlevel;
+        }
+        return a.z - b.z;
+      });
+
       for (const child of children) {
         if (!child.invisible) {
           const childElement = this._renderElement(child);

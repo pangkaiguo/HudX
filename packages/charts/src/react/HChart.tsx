@@ -9,6 +9,8 @@ import type { RenderMode, Theme, Locale } from 'HudX/core';
 import Chart from '../Chart';
 import LineChart from '../chart/LineChart';
 import BarChart from '../chart/BarChart';
+import Bar3DChart from '../chart/Bar3DChart';
+import StackBar3DChart from '../chart/StackBar3DChart';
 import PieChart from '../chart/PieChart';
 import DoughnutChart from '../chart/DoughnutChart';
 import HalfDoughnutChart from '../chart/HalfDoughnutChart';
@@ -102,6 +104,12 @@ const HChart = forwardRef<HChartRef, HChartProps>(({
         break;
       case 'bar':
         ChartClass = BarChart;
+        break;
+      case 'bar3D':
+        ChartClass = Bar3DChart;
+        break;
+      case 'stackBar3D':
+        ChartClass = StackBar3DChart;
         break;
       case 'pie':
         ChartClass = PieChart;

@@ -4,6 +4,7 @@
 
 import Chart from '../Chart';
 import { Rect } from 'HudX/core';
+import { EventHelper } from '../util/EventHelper';
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {
@@ -42,6 +43,43 @@ export default class HeatmapChart extends Chart {
           });
 
           this._root.add(rect);
+
+          // Tooltip
+          if (this._tooltip) {
+            rect.on('mouseover', (evt: any) => {
+              // Highlight
+              rect.attr('style', { stroke: '#333', lineWidth: 2 });
+
+              const xName = s.xAxisData?.[colIndex] || colIndex;
+              const yName = s.yAxisData?.[rowIndex] || rowIndex;
+
+              const params = {
+                componentType: 'series',
+                seriesType: 'heatmap',
+                seriesName: s.name,
+                dataIndex: [rowIndex, colIndex],
+                value: value,
+                name: `${xName}, ${yName}`
+              };
+
+              const content = this._generateTooltipContent(params);
+
+              const targetRect = {
+                x, y, width: cellWidth, height: cellHeight
+              };
+
+              const mx = evt?.offsetX ?? (x + cellWidth / 2);
+              const my = evt?.offsetY ?? (y + cellHeight / 2);
+
+              this._tooltip!.show(mx, my, content, params, targetRect);
+            });
+
+            rect.on('mouseout', () => {
+              // Restore
+              rect.attr('style', { stroke: '#fff', lineWidth: 1 });
+              this._tooltip!.hide();
+            });
+          }
 
           // Animate heatmap cell if animation is enabled
           if (this._isAnimationEnabled()) {
