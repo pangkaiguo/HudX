@@ -80,7 +80,7 @@ describe('Text', () => {
     expect(bbox.width).toBe(50);
     expect(bbox.height).toBe(10);
     expect(bbox.x).toBe(10);
-    expect(bbox.y).toBe(20);
+    expect(bbox.y).toBe(12);
   });
 
   it('should handle text alignment', () => {

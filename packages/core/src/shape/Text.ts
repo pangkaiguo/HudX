@@ -57,7 +57,7 @@ export default class Text extends ChartElement {
     if (textBaseline === 'middle') {
       y -= height / 2;
     } else if (textBaseline === 'top') {
-      y -= height; // Assume y is top
+      // y is top
     } else if (textBaseline === 'bottom') {
       // y stays as is if baseline is bottom? 
       // Actually standard baseline is alphabetic which is near bottom.
