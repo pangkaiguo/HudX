@@ -4,6 +4,7 @@
 
 import Storage from '../Storage';
 import ChartElement from '../ChartElement';
+import Text from '../shape/Text';
 import Group from '../Group';
 import IPainter from './IPainter';
 import type { DataURLOpts } from '../types';
@@ -358,6 +359,116 @@ export default class SVGPainter implements IPainter {
       const d = this._createBezierPath(shapeObj);
       path.setAttribute('d', d);
       return path;
+    } else if (element instanceof Text) {
+      // Use bounding rect logic for consistent alignment (especially for rich text)
+      const rect = element.getBoundingRect();
+      const fragments = element.getTextFragments();
+      const style = element.style;
+
+      const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+      // 1. Draw background for the whole text block
+      if (style.backgroundColor || (style.borderColor && style.borderWidth)) {
+        const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bgRect.setAttribute('x', String(rect.x));
+        bgRect.setAttribute('y', String(rect.y));
+        bgRect.setAttribute('width', String(rect.width));
+        bgRect.setAttribute('height', String(rect.height));
+
+        if (style.backgroundColor) {
+          bgRect.setAttribute('fill', style.backgroundColor);
+        } else {
+          bgRect.setAttribute('fill', 'none');
+        }
+
+        if (style.borderColor && style.borderWidth) {
+          bgRect.setAttribute('stroke', style.borderColor);
+          bgRect.setAttribute('stroke-width', String(style.borderWidth));
+        }
+
+        if (style.borderRadius) {
+          bgRect.setAttribute('rx', String(style.borderRadius));
+          bgRect.setAttribute('ry', String(style.borderRadius));
+        }
+        group.appendChild(bgRect);
+      }
+
+      // 2. Draw text fragments
+      // We use the same logic as Text.render: calculate positions relative to bounding box
+      const startX = rect.x + element.getPaddingLeft(style.padding);
+      const startY = rect.y + element.getPaddingTop(style.padding);
+      const totalHeight = element.getTotalHeight();
+      const centerY = startY + totalHeight / 2;
+
+      let currentX = startX;
+
+      if (fragments) {
+        fragments.forEach(frag => {
+          const fStyle = frag.style;
+          const fragWidth = frag.width;
+          const fragHeight = frag.height;
+
+          // Fragment background/border
+          if (fStyle.backgroundColor || (fStyle.borderColor && fStyle.borderWidth)) {
+            const fragRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            // Center vertically
+            const fy = centerY - fragHeight / 2;
+            fragRect.setAttribute('x', String(currentX));
+            fragRect.setAttribute('y', String(fy));
+            fragRect.setAttribute('width', String(fragWidth));
+            fragRect.setAttribute('height', String(fragHeight));
+
+            if (fStyle.backgroundColor) {
+              fragRect.setAttribute('fill', fStyle.backgroundColor);
+            } else {
+              fragRect.setAttribute('fill', 'none');
+            }
+
+            if (fStyle.borderColor && fStyle.borderWidth) {
+              fragRect.setAttribute('stroke', fStyle.borderColor);
+              fragRect.setAttribute('stroke-width', String(fStyle.borderWidth));
+            }
+
+            if (fStyle.borderRadius) {
+              fragRect.setAttribute('rx', String(fStyle.borderRadius));
+              fragRect.setAttribute('ry', String(fStyle.borderRadius));
+            }
+            group.appendChild(fragRect);
+          }
+
+          // Text Content
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          const contentX = currentX + element.getPaddingLeft(fStyle.padding);
+          // SVG text y is baseline. Canvas 'middle' baseline means y is middle.
+          // In Text.render: ctx.textBaseline = 'middle'. ctx.fillText(..., contentY) where contentY = centerY.
+          // For SVG, to emulate 'middle' baseline, we can use dominant-baseline="middle" or dy.
+          // dominant-baseline is widely supported in SVG.
+
+          text.setAttribute('x', String(contentX));
+          text.setAttribute('y', String(centerY));
+          text.setAttribute('dominant-baseline', 'middle');
+          // text-anchor is always start because we positioned it manually at contentX
+          text.setAttribute('text-anchor', 'start');
+          text.textContent = frag.text;
+
+          // Apply fragment styles
+          const fontSize = fStyle.fontSize || style.fontSize || 12;
+          const fontFamily = fStyle.fontFamily || style.fontFamily || 'sans-serif';
+          const fontWeight = fStyle.fontWeight || style.fontWeight || 'normal';
+          const color = fStyle.color || style.fill || '#000';
+
+          text.setAttribute('font-size', String(fontSize));
+          text.setAttribute('font-family', fontFamily);
+          text.setAttribute('font-weight', String(fontWeight));
+          text.setAttribute('fill', color);
+
+          group.appendChild(text);
+
+          currentX += fragWidth;
+        });
+      }
+
+      return group;
     } else if ('x' in shapeObj && 'y' in shapeObj && 'text' in shapeObj) {
       const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('x', String(shapeObj.x));

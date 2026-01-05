@@ -28,6 +28,21 @@ export default class Text extends ChartElement {
   private _totalWidth: number = 0;
   private _totalHeight: number = 0;
 
+  getTextFragments(): any[] | null {
+    if (!this._textFragments || this.isDirty()) {
+      this._parseText(this.style.rich);
+    }
+    return this._textFragments;
+  }
+
+  getTotalWidth(): number {
+    return this._totalWidth;
+  }
+
+  getTotalHeight(): number {
+    return this._totalHeight;
+  }
+
   getBoundingRect(): BoundingRect {
     const shape = this.shape;
     const style = this.style;
@@ -76,6 +91,14 @@ export default class Text extends ChartElement {
     }
 
     return { x, y, width, height };
+  }
+
+  getPaddingLeft(padding?: number | number[]): number {
+    return this._getPaddingLeft(padding);
+  }
+
+  getPaddingTop(padding?: number | number[]): number {
+    return this._getPaddingTop(padding);
   }
 
   private _getPaddingWidth(padding?: number | number[]): number {
