@@ -1,7 +1,3 @@
-/**
- * ScatterChart - Scatter chart implementation
- */
-
 import Chart from '../Chart';
 import { Circle } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
@@ -40,18 +36,16 @@ export default class ScatterChart extends Chart {
         const y = top + chartHeight - (yVal / 100) * chartHeight;
 
         const circle = new Circle({
-          shape: { cx: x, cy: y, r: 0 }, // Start with radius 0 for animation
+          shape: { cx: x, cy: y, r: 0 },
           style: { fill: color, opacity: 0.7 },
           cursor: this._tooltip ? 'pointer' : 'default',
         });
 
         this._root.add(circle);
 
-        // Tooltip
         if (this._tooltip) {
           circle.on('mouseover', (evt: any) => {
             const currentR = circle.shape.r;
-            // Enlarge slightly
             circle.attr('shape', { r: symbolSize + 3 });
             circle.attr('style', { opacity: 1 });
 
@@ -88,10 +82,9 @@ export default class ScatterChart extends Chart {
           });
         }
 
-        // Animate scatter point if animation is enabled
         if (this._isAnimationEnabled()) {
-          const delay = index * 50 + seriesIndex * 100; // Staggered animation delay
-          const duration = this._getAnimationDuration() / 2; // Shorter duration for points
+          const delay = index * 50 + seriesIndex * 100;
+          const duration = this._getAnimationDuration() / 2;
 
           this._animator.animate(
             circle.attr('shape'),
@@ -102,7 +95,6 @@ export default class ScatterChart extends Chart {
               delay,
               easing: 'elasticOut',
               onUpdate: (target: any, percent: number) => {
-                // Also animate opacity for smoother appearance
                 circle.attr('style', {
                   fill: color,
                   opacity: 0.7 * percent
@@ -111,24 +103,20 @@ export default class ScatterChart extends Chart {
             }
           );
         } else {
-          // Set final size if animation is disabled
           circle.attr('shape', { cx: x, cy: y, r: symbolSize });
         }
       });
     });
 
-    // Draw axes
     this._drawAxes(left, top, chartWidth, chartHeight, xAxis, yAxis);
   }
 
   private _drawAxes(left: number, top: number, width: number, height: number, xAxis: any, yAxis: any): void {
-    // X axis
     this._root.add(new Circle({
       shape: { cx: left, cy: top + height, r: 0 },
       style: { stroke: '#333', lineWidth: 1 }
     }));
 
-    // Y axis
     this._root.add(new Circle({
       shape: { cx: left, cy: top, r: 0 },
       style: { stroke: '#333', lineWidth: 1 }

@@ -15,6 +15,7 @@ export const BasicLineExample = () => {
   const option: ChartOption = {
     title: {
       text: 'Line Chart',
+      subtext: 'Basic Example',
       left: 'center',
       top: 20
     },
@@ -26,8 +27,8 @@ export const BasicLineExample = () => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'center',
-      bottom: 20,
+      left: 'right',
+      top: 20,
       icon: 'rect'
     },
     grid: {
@@ -149,7 +150,7 @@ export const BasicLineExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button

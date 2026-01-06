@@ -6,29 +6,28 @@ import { EventHelper } from '../util/EventHelper';
 export default class PieChart extends Chart {
   private _activeSectors: Map<string, Sector> = new Map();
 
+  private _centerLabel: Text | null = null;
+
   protected _render(): void {
     try {
-      // We manually manage children clearing to support smooth transitions
-      // Do NOT call super._render() which clears everything
-      // But we need to ensure tooltip is present
-      // if (this._tooltip) {
-      //   this._root.remove(this._tooltip);
-      // }
       if (this._legend) {
         this._root.remove(this._legend);
       }
 
-      // Ensure activeSectors is initialized (first render called from super constructor)
+      if (this._centerLabel) {
+        this._root.remove(this._centerLabel);
+        this._centerLabel = null;
+      }
+
       if (!this._activeSectors) {
         this._activeSectors = new Map();
       }
 
-      // Keep track of old sectors
       const oldSectors = this._activeSectors;
       this._activeSectors = new Map();
 
-      // Clear root but we will re-add reused sectors
       this._root.removeAll();
+      this._mountTitle();
 
       const option = this._option;
       const series = option.series || [];
@@ -47,13 +46,11 @@ export default class PieChart extends Chart {
         return;
       }
 
-      // Calculate pie center and radius
       const center = this._getCenter(seriesItem);
       const [r0, r] = this._getRadius(seriesItem);
       const cx = center[0];
       const cy = center[1];
 
-      // Calculate total value
       const total = data.reduce((sum: number, item: ChartData, index: number) => {
         let itemName = `item-${index + 1}`;
         if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
@@ -74,7 +71,6 @@ export default class PieChart extends Chart {
       }, 0);
 
       if (total === 0) {
-        // If all hidden, we still need to render legend
         if (option.legend?.show !== false) {
           const items = (data as any[]).map((it: any, i: number) => ({
             name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
@@ -86,7 +82,6 @@ export default class PieChart extends Chart {
         return;
       }
 
-      // Render pie slices
       const computeAngles = (seriesItem: any) => {
         let startAngle: number;
         const degToRad = (deg: number) => deg * Math.PI / 180;
@@ -115,18 +110,16 @@ export default class PieChart extends Chart {
       const totalAngle = endAngle - startAngle;
       let currentAngle = startAngle;
 
-      // Legend for pie (use data item names)
       if (option.legend?.show !== false) {
         const items = (data as any[]).map((it: any, i: number) => ({
           name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
           color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
-          icon: option.legend?.icon || 'circle', // Use user config or default to 'circle' for Pie
-          textColor: this.getThemeConfig().legendTextColor // Use theme color
+          icon: option.legend?.icon || 'circle',
+          textColor: this.getThemeConfig().legendTextColor
         }));
         this._mountLegend(items);
       }
 
-      // Collect labels for layout adjustment
       const labelLayoutList: any[] = [];
 
       data.forEach((item: ChartData, index: number) => {
@@ -138,7 +131,6 @@ export default class PieChart extends Chart {
         if (typeof value !== 'number') return;
         const percent = value / total;
         const angle = percent * totalAngle;
-        // legend selection
         let itemName = `item-${index + 1}`;
         if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
           itemName = item.name;
@@ -155,7 +147,6 @@ export default class PieChart extends Chart {
           color = itemStyle.color || this._getSeriesColor(index);
         }
 
-        // Handle aria decal
         let fillStyle: string | CanvasPattern = color;
         const aria = option.aria;
         if (aria?.enabled && aria?.decal?.show) {
@@ -168,25 +159,19 @@ export default class PieChart extends Chart {
           }
         }
 
-        // Calculate target angles
         const targetStart = currentAngle;
         const targetEnd = currentAngle + angle;
 
-        // Determine initial angles for animation
         let initialStart = targetStart;
-        let initialEnd = targetStart; // Default for new items (grow from 0)
+        let initialEnd = targetStart;
 
         const oldSector = oldSectors.get(itemName);
         if (oldSector) {
           initialStart = oldSector.shape.startAngle;
           initialEnd = oldSector.shape.endAngle;
         } else if (oldSectors.size > 0) {
-          // If we have other sectors but this one is new (e.g. data added), 
-          // maybe grow from previous sector's end? 
-          // For now, grow from targetStart is fine.
         }
 
-        // Create sector
         const sector = new Sector({
           name: itemName,
           data: item,
@@ -215,17 +200,14 @@ export default class PieChart extends Chart {
         this._root.add(sector);
         this._activeSectors.set(itemName, sector);
 
-        // Tooltip & Emphasis interaction
         if (this._tooltip || seriesItem.emphasis) {
           const emphasis = seriesItem.emphasis;
 
           EventHelper.bindHoverEvents(
             sector,
             (evt: any) => {
-              // Apply emphasis animation
               this._applyEmphasisAnimation(sector, emphasis, true, r);
 
-              // Show tooltip
               if (this._tooltip) {
                 let itemName = '';
                 if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
@@ -251,14 +233,46 @@ export default class PieChart extends Chart {
                 const my = evt?.offsetY ?? cy;
                 this._tooltip.show(mx, my, content, params);
               }
+
+              const seriesType = seriesItem.type || 'pie';
+              if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+                if (this._centerLabel) {
+                  this._root.remove(this._centerLabel);
+                }
+
+                let itemName = '';
+                if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+                  itemName = item.name;
+                }
+
+                this._centerLabel = new Text({
+                  shape: {
+                    x: cx,
+                    y: cy,
+                    text: itemName
+                  },
+                  style: {
+                    fill: seriesItem.label?.color || '#333',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    textBaseline: 'middle'
+                  },
+                  z: Z_LABEL + 1
+                });
+                this._root.add(this._centerLabel);
+              }
             },
             () => {
-              // Restore emphasis
               this._applyEmphasisAnimation(sector, emphasis, false, r);
 
-              // Hide tooltip
               if (this._tooltip) {
                 this._tooltip.hide();
+              }
+
+              if (this._centerLabel) {
+                this._root.remove(this._centerLabel);
+                this._centerLabel = null;
               }
             }
           );
@@ -267,7 +281,6 @@ export default class PieChart extends Chart {
 
             const mx = evt?.offsetX ?? cx;
             const my = evt?.offsetY ?? cy;
-            // Recompute content to avoid stale percent (during animation)
             const currentEnd = sector.shape.endAngle;
             const partPercent = (currentEnd - sector.shape.startAngle) / (Math.PI * 2) * 100;
             let itemName = '';
@@ -298,14 +311,12 @@ export default class PieChart extends Chart {
           });
         }
 
-        // Animate pie slice
         if (this._shouldAnimateFor(itemName) || oldSector) {
           const isUpdate = oldSectors.size > 0;
-          const delay = isUpdate ? 0 : index * 200; // Stagger only for new entrance
+          const delay = isUpdate ? 0 : index * 200;
           const duration = this._getAnimationDuration(isUpdate);
           const easing = this._getAnimationEasing(isUpdate);
 
-          // Animate startAngle
           this._animator.animate(
             sector.attr('shape'),
             'startAngle',
@@ -318,7 +329,6 @@ export default class PieChart extends Chart {
             }
           ).start();
 
-          // Animate endAngle
           this._animator.animate(
             sector.attr('shape'),
             'endAngle',
@@ -331,14 +341,12 @@ export default class PieChart extends Chart {
             }
           ).start();
         } else {
-          // Set final angle if animation is disabled
           sector.attr('shape', {
             startAngle: targetStart,
             endAngle: targetEnd
           });
         }
 
-        // Collect label info
         if (seriesItem.label?.show !== false) {
           const labelAngle = targetStart + angle / 2;
           const isOutside = seriesItem.label?.position === 'outside' || seriesItem.label?.position === undefined;
@@ -368,7 +376,6 @@ export default class PieChart extends Chart {
         currentAngle += angle;
       });
 
-      // Layout and Render Labels
       this._layoutLabels(labelLayoutList, cx, cy, r, r0);
 
       this._renderer.flush();
@@ -381,17 +388,14 @@ export default class PieChart extends Chart {
     const leftLabels: any[] = [];
     const rightLabels: any[] = [];
 
-    // 1. Initial calculation and split
     labels.forEach(label => {
       const angle = label.angle;
-      // Normalize angle to -PI ~ PI
       let normalizedAngle = angle % (Math.PI * 2);
       if (normalizedAngle > Math.PI) normalizedAngle -= Math.PI * 2;
       if (normalizedAngle < -Math.PI) normalizedAngle += Math.PI * 2;
 
       const isRight = normalizedAngle >= -Math.PI / 2 && normalizedAngle <= Math.PI / 2;
 
-      // Calculate anchor point on the pie edge
       const anchorR = r;
       const anchorX = cx + Math.cos(angle) * anchorR;
       const anchorY = cy + Math.sin(angle) * anchorR;
@@ -404,22 +408,14 @@ export default class PieChart extends Chart {
         if (isRight) rightLabels.push(label);
         else leftLabels.push(label);
       } else {
-        // Inside/Center labels - no collision detection for now
         this._renderSingleLabel(label, cx, cy, r, r0);
       }
     });
 
-    // 2. Sort by angle (or Y coordinate roughly)
-    // For right side: -PI/2 (top) to PI/2 (bottom)
     rightLabels.sort((a, b) => a.normalizedAngle - b.normalizedAngle);
-    // For left side: PI/2 (bottom) to PI (mid) to -PI (mid) to -PI/2 (top). 
-    // We want top to bottom for layout processing? Or just follow angle order?
-    // ECharts processes top-to-bottom or by angle.
-    // Let's sort by Y coordinate of anchor for simpler vertical distribution
     rightLabels.sort((a, b) => a.anchor.y - b.anchor.y);
     leftLabels.sort((a, b) => a.anchor.y - b.anchor.y);
 
-    // 3. Layout logic
     this._adjustLabelPositions(rightLabels, cx, cy, r, 1);
     this._adjustLabelPositions(leftLabels, cx, cy, r, -1);
   }
@@ -427,23 +423,19 @@ export default class PieChart extends Chart {
   private _adjustLabelPositions(labels: any[], cx: number, cy: number, r: number, dir: 1 | -1): void {
     if (labels.length === 0) return;
 
-    const labelHeight = 14; // Approximate height, should measure
+    const labelHeight = 14;
     const minGap = 5;
-    const labelLineLen1 = 15; // First segment
-    const labelLineLen2 = 15; // Second segment (horizontal)
+    const labelLineLen1 = 15;
+    const labelLineLen2 = 15;
 
-    // Calculate ideal positions first
     labels.forEach(label => {
       const angle = label.angle;
-      // Initial position based on angle
       const targetR = r + labelLineLen1;
       let y = cy + Math.sin(angle) * targetR;
       label.y = y;
-      label.x = cx + Math.cos(angle) * targetR; // Temp X
+      label.x = cx + Math.cos(angle) * targetR;
     });
 
-    // Resolve overlaps (simple 1D collision resolution)
-    // Iterate top-down
     for (let i = 1; i < labels.length; i++) {
       const prev = labels[i - 1];
       const curr = labels[i];
@@ -452,55 +444,25 @@ export default class PieChart extends Chart {
       }
     }
 
-    // Check bottom bound (if container height known) - push up if needed?
-    // For simplicity, just let them stack down for now.
-    // Ideally we should check if they exceed view height and compress/shift up.
-
-    // Render final labels
     labels.forEach(label => {
-      // Recalculate X based on new Y?
-      // For Pie label lines, usually:
-      // Point 1: Anchor on pie
-      // Point 2: Elbow point. 
-      // Point 3: Text position (horizontal)
-
-      // If we shifted Y, we need to adjust Elbow point.
-      // Elbow X is usually calculated such that label line has fixed length or projection.
-      // Simple approach: Elbow is at fixed radius? 
-      // If we move Y, Elbow moves on the vertical line? No.
-      // Standard: 
-      // P1 = (r, angle)
-      // P2 = (r + L1, angle') -> Wait, if we change Y, angle changes.
-      // ECharts strategy: 
-      // Keep P1.
-      // P2's Y is determined by layout. P2's X is determined by... geometry.
-      // Often P2 is on a circle of r + L1.
-      // But if we force Y, X is determined by circle equation?
-      // Or we just relax the constraint and say P2 is at (X, Y) where X is enough to clear pie.
-
       const r2 = r + labelLineLen1;
-      // X corresponding to Y on circle r2: x = sqrt(r2^2 - (y-cy)^2) + cx
-      // This only works if |y-cy| < r2. If pushed too far, it breaks.
-
       let dy = label.y - cy;
-      // Clamp dy to avoid Math.sqrt error if label pushed too far out vertically
       if (Math.abs(dy) > r2) dy = (dy > 0 ? 1 : -1) * r2;
 
       let dx = Math.sqrt(Math.abs(r2 * r2 - dy * dy));
-      let elbowX = cx + (dir * dx); // dir 1 for right, -1 for left
+      let elbowX = cx + (dir * dx);
 
       const elbowY = label.y;
 
       const textX = elbowX + (dir * labelLineLen2);
       const textY = elbowY;
 
-      // Render Text
       const seriesItem = label.seriesItem;
       const rich = seriesItem.label?.rich;
 
       const text = new Text({
         shape: {
-          x: textX + (dir * 5), // Padding
+          x: textX + (dir * 5),
           y: textY,
           text: label.text,
         },
@@ -510,7 +472,7 @@ export default class PieChart extends Chart {
           fill: label.color,
           textAlign: dir === 1 ? 'left' : 'right',
           textBaseline: 'middle',
-          rich: rich, // Pass rich config
+          rich: rich,
           backgroundColor: seriesItem.label?.backgroundColor,
           borderColor: seriesItem.label?.borderColor,
           borderWidth: seriesItem.label?.borderWidth,
@@ -521,9 +483,8 @@ export default class PieChart extends Chart {
         silent: true
       });
       this._root.add(text);
-      (label.sector as any).__label = text; // Link for emphasis
+      (label.sector as any).__label = text;
 
-      // Render Label Line
       if (seriesItem.labelLine?.show !== false) {
         const linePoints = [
           [label.anchor.x, label.anchor.y],
@@ -568,7 +529,7 @@ export default class PieChart extends Chart {
       style: {
         fontSize: seriesItem.label?.fontSize || 12,
         fontWeight: seriesItem.label?.fontWeight || 'normal',
-        fill: label.color, // Usually white for inside
+        fill: label.color,
         textAlign: 'center',
         textBaseline: 'middle',
         rich: seriesItem.label?.rich
@@ -581,9 +542,6 @@ export default class PieChart extends Chart {
   }
 
 
-  /**
-   * Get pie center
-   */
   private _getCenter(seriesItem: SeriesOption): [number, number] {
     const center = (seriesItem as any).center;
     if (Array.isArray(center)) {
@@ -602,45 +560,24 @@ export default class PieChart extends Chart {
     const emphasis = seriesItem.emphasis;
     const [r0, r] = this._getRadius(seriesItem);
 
-    // Find sector by name
     this._root.traverse((child: any) => {
       if (child instanceof Sector && (child as any)?.name === name) {
         this._applyEmphasisAnimation(child, emphasis, hovered, r);
 
-        // Show/hide tooltip on legend hover
         if (this._tooltip) {
           if (hovered) {
-            // Calculate center of sector for tooltip position
             const shape = child.shape;
             const midAngle = (shape.startAngle + shape.endAngle) / 2;
             const r = (shape.r + shape.r0) / 2;
             const cx = shape.cx + Math.cos(midAngle) * r;
             const cy = shape.cy + Math.sin(midAngle) * r;
-
-            // Construct params
-            // We need to find the data item for this sector
-            // Since we attached name to sector, we assume unique names or we can rely on data index if we attached it.
-            // But we didn't attach data index.
-            // However, child has 'data' property if we set it.
-            // Let's set 'data' property in Sector creation too?
-            // Or just use 'name' to display basic tooltip.
-
-            // The tooltip formatter needs params.
-            // We can retrieve data from series using name?
-            // Or better, let's attach 'data' and 'index' to sector in PieChart render loop.
-
-            // For now, just emphasize visual.
           } else {
-            // this._tooltip.hide();
           }
         }
       }
     });
   }
 
-  /**
-   * Get pie radius
-   */
   private _getRadius(seriesItem: SeriesOption): [number, number] {
     const radius = (seriesItem as any).radius;
     const maxRadius = Math.min(this._width, this._height) / 2;
@@ -671,9 +608,6 @@ export default class PieChart extends Chart {
     return [0, maxRadius * 0.8];
   }
 
-  /**
-   * Parse percent string
-   */
   private _parsePercent(value: string | number, base: number): number {
     if (typeof value === 'number') {
       return value;
@@ -685,7 +619,6 @@ export default class PieChart extends Chart {
   }
 
   private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number): void {
-    // 1. Handle other sectors (Dimming)
     if (isEnter) {
       this._activeSectors.forEach((s) => {
         if (s !== sector) {
@@ -704,12 +637,10 @@ export default class PieChart extends Chart {
       });
     }
 
-    // 2. Handle current sector style (Shadow, etc. but Opacity -> 1)
     if (emphasis?.itemStyle) {
       const style = sector.style as Record<string, unknown>;
       const emphasisStyle = emphasis.itemStyle;
 
-      // Store initial styles if not already stored
       if (!(sector as any).__initialStyle) {
         (sector as any).__initialStyle = { ...style };
       }
@@ -725,9 +656,8 @@ export default class PieChart extends Chart {
         if (emphasisStyle.borderColor !== undefined) targetStyle.stroke = emphasisStyle.borderColor;
         if (emphasisStyle.borderWidth !== undefined) targetStyle.lineWidth = emphasisStyle.borderWidth;
 
-        targetStyle.opacity = 1; // Current sector stays opaque
+        targetStyle.opacity = 1;
       } else {
-        // Restore to initial style
         const init = (sector as any).__initialStyle;
         if (init.shadowBlur !== undefined) targetStyle.shadowBlur = init.shadowBlur; else targetStyle.shadowBlur = 0;
         if (init.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = init.shadowOffsetX; else targetStyle.shadowOffsetX = 0;
@@ -740,7 +670,6 @@ export default class PieChart extends Chart {
         targetStyle.opacity = init.opacity !== undefined ? init.opacity : 1;
       }
 
-      // Apply style animation
       Object.keys(targetStyle).forEach(key => {
         const value = targetStyle[key];
         if (typeof value === 'number') {
@@ -751,14 +680,11 @@ export default class PieChart extends Chart {
             { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
           ).start();
         } else {
-          // For non-numeric properties (colors), set directly to avoid breaking animator
-          // which expects numbers. Color interpolation can be added later if needed.
           style[key] = value;
           sector.markRedraw();
         }
       });
     } else {
-      // Fallback simple opacity animation if no specific itemStyle is provided
       const initialOpacity = (sector as any).__initialOpacity ?? 1;
       this._animator.animate(
         sector.style as Record<string, unknown>,
@@ -768,7 +694,6 @@ export default class PieChart extends Chart {
       ).start();
     }
 
-    // Scale animation (Radius Expansion)
     if (emphasis?.scale && baseR !== undefined) {
       const scaleSize = emphasis.scaleSize || 1.1;
       const targetR = isEnter ? baseR * scaleSize : baseR;
@@ -780,7 +705,6 @@ export default class PieChart extends Chart {
         { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
       ).start();
     } else if (emphasis?.scale) {
-      // Fallback to transform scale if baseR is not provided
       const scaleSize = isEnter ? (emphasis.scaleSize || 1.1) : 1;
 
       this._animator.animate(
@@ -798,11 +722,9 @@ export default class PieChart extends Chart {
       ).start();
     }
 
-    // Label emphasis
     const label = (sector as any).__label;
     if (label && emphasis?.label) {
       if (isEnter) {
-        // Show label and apply emphasis styles
         if (emphasis.label.show !== undefined) {
           label.invisible = !emphasis.label.show;
           label.style.opacity = emphasis.label.show ? 1 : 0;
@@ -817,14 +739,12 @@ export default class PieChart extends Chart {
           label.style.fill = emphasis.label.color;
         }
       } else {
-        // Restore original style
         const seriesItem = this._option.series?.[0];
         if (seriesItem?.label) {
           label.invisible = !seriesItem.label.show;
           label.style.opacity = seriesItem.label.show ? 1 : 0;
           label.style.fontSize = seriesItem.label.fontSize || 12;
           label.style.fontWeight = seriesItem.label.fontWeight || 'normal';
-          // We don't restore color perfectly here (simplified), but it should be enough for now
         }
       }
       label.markRedraw();

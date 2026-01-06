@@ -1,5 +1,5 @@
 import Chart from '../Chart';
-import { createLinearScale, createOrdinalScale, calculateDomain, dataToCoordinate, Scale } from '../util/coordinate';
+import { createLinearScale, createOrdinalScale, calculateDomain } from '../util/coordinate';
 import {
   Polyline, Circle, Text, Rect, createDecalPattern,
   type Point, Z_SERIES, Z_LABEL
@@ -14,13 +14,11 @@ export default class LineChart extends Chart {
       const series = option.series || [];
       if (series.length === 0) return;
 
-      // Calculate grid area
       const { x: plotX, y: plotY, width: plotWidth, height: plotHeight } = this._calculateGrid(option);
 
       const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
       const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
 
-      // Collect all data to calculate domain
       let data: any[] = [];
       series.forEach(s => {
         if (s.type === 'line' && s.show !== false) {
@@ -30,7 +28,6 @@ export default class LineChart extends Chart {
 
       if (data.length === 0) return;
 
-      // Calculate scales
       const xDomain = calculateDomain(xAxis || {}, data, true);
       const yValues: number[] = [];
       series.forEach(s => {
@@ -65,10 +62,8 @@ export default class LineChart extends Chart {
 
       const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
-      // Render axes
       this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
 
-      // Axis-trigger tooltip interaction (follow mouse)
       if (this._tooltip && option.tooltip?.trigger === 'axis') {
         const interact = new Rect({
           shape: { x: plotX, y: plotY, width: plotWidth, height: plotHeight, r: 0 },
@@ -97,7 +92,6 @@ export default class LineChart extends Chart {
             name = label;
           } else {
             const xv = (xScale as any).invert(mx);
-            // nearest index by value
             idx = Math.max(0, Math.min(Math.round((xv - xDomain[0]) / ((xDomain[1] - xDomain[0]) || 1)), domain.length - 1));
             name = xv;
           }
@@ -122,7 +116,6 @@ export default class LineChart extends Chart {
             return;
           }
 
-          // Force show if hidden (e.g. rapid movement or re-entry)
           if (!this._tooltip!.isVisible()) {
             this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
           } else {
@@ -133,20 +126,18 @@ export default class LineChart extends Chart {
         this._root.add(interact as any);
       }
 
-      // Render legend
       if (option.legend?.show !== false) {
         const items = (series as any[])
           .filter(s => s.type === 'line' && s.show !== false)
           .map((s, i) => ({
             name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: option.legend?.icon || 'rect', // Use user config or default to 'rect' (was 'line')
-            textColor: this.getThemeConfig().legendTextColor // Use theme color
+            icon: option.legend?.icon || 'rect',
+            textColor: this.getThemeConfig().legendTextColor
           }));
         this._mountLegend(items);
       }
 
-      // Process each series
       series.forEach((seriesItem, seriesIndex) => {
         if (seriesItem.type !== 'line') return;
         if (seriesItem.show === false) return;
@@ -181,14 +172,12 @@ export default class LineChart extends Chart {
 
         if (points.length === 0) return;
 
-        // Create line path
-        // Simple polyline for now, support smooth curve later
         const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
         console.info(pathData);
 
         const line = new Polyline({
           shape: {
-            points: [], // Start with empty points for animation
+            points: [],
           },
           style: {
             stroke: lineColor,
@@ -200,11 +189,9 @@ export default class LineChart extends Chart {
 
         this._root.add(line);
 
-        // Animate line
         if (this._shouldAnimateFor(seriesName)) {
           const duration = this._getAnimationDuration();
           const easing = this._getAnimationEasing();
-          // Animate line drawing
           const shape = line.attr('shape');
           this._animator.animate(
             { t: 0 },
@@ -214,7 +201,6 @@ export default class LineChart extends Chart {
               duration,
               easing,
               onUpdate: (target: any, percent: number) => {
-                // Gradually build the line by showing more points
                 const visiblePoints = Math.ceil(points.length * percent);
                 shape.points = points.slice(0, visiblePoints);
                 line.markRedraw();
@@ -222,17 +208,14 @@ export default class LineChart extends Chart {
             }
           );
         } else {
-          // Set final points if animation is disabled
           line.attr('shape', { points });
         }
 
-        // Create data points
         if (seriesItem.showSymbol !== false) {
           const itemStyle = seriesItem.itemStyle || {};
           const pointColor = itemStyle.color || lineColor;
           const pointSize = itemStyle.borderWidth || 4;
 
-          // Handle aria decal
           let pointFill: string | CanvasPattern = pointColor;
           const aria = option.aria;
           if (aria?.enabled && aria?.decal?.show) {
@@ -250,22 +233,21 @@ export default class LineChart extends Chart {
             const circle = new Circle({
               shape: {
                 cx: point.x,
-                cy: plotY + plotHeight, // Start from bottom for animation
-                r: 0, // Start with radius 0 for animation
+                cy: plotY + plotHeight,
+                r: 0,
               },
               style: {
                 fill: pointFill,
                 stroke: '#fff',
                 lineWidth: 2,
               },
-              z: Z_SERIES + 1, // Points on top of lines
+              z: Z_SERIES + 1,
               silent: false,
               cursor: this._tooltip ? 'pointer' : 'default',
             });
 
             this._root.add(circle);
 
-            // Tooltip
             if (this._tooltip) {
               circle.on('mouseover', () => {
                 circle.attr('shape', { r: pointSize + 3 });
@@ -285,13 +267,13 @@ export default class LineChart extends Chart {
                 };
 
                 const content = this._generateTooltipContent(params);
-                
+
                 const r = pointSize + 3;
                 const targetRect = {
-                    x: point.x - r,
-                    y: point.y - r,
-                    width: r * 2,
-                    height: r * 2
+                  x: point.x - r,
+                  y: point.y - r,
+                  width: r * 2,
+                  height: r * 2
                 };
 
                 this._tooltip!.show(point.x, point.y, content, params, targetRect);
@@ -303,7 +285,6 @@ export default class LineChart extends Chart {
               });
             }
 
-            // Animate point if animation is enabled
             if (this._shouldAnimateFor(seriesName)) {
               const delay = pointIndex * 50 + seriesIndex * 100;
               const duration = this._getAnimationDuration();
@@ -329,7 +310,6 @@ export default class LineChart extends Chart {
           });
         }
 
-        // Render labels
         if (seriesItem.label?.show) {
           points.forEach((point, index) => {
             const item = data[index];

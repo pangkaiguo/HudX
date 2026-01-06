@@ -13,8 +13,9 @@ export const BasicPieExample = () => {
   const option: ChartOption = {
     title: {
       text: 'Pie Chart',
+      subtext: 'Basic Example',
       left: 'center',
-      top: 25
+      top: 20
     },
     tooltip: {
       show: true,
@@ -123,7 +124,7 @@ export const BasicPieExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button

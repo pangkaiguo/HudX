@@ -3,7 +3,7 @@
   */
 
 import {
-  Renderer, Group, Animator, Tooltip, Legend, Line, Text,
+  Renderer, Group, Animator, Tooltip, Legend, Title, Line, Text,
   type RenderMode, type Theme, type Locale, type DataURLOpts, type ThemeConfig,
   toRgbaWithOpacity, Z_AXIS
 } from 'HudX/core';
@@ -22,6 +22,7 @@ export default class Chart {
   protected _animator: Animator = new Animator();
   protected _tooltip?: Tooltip;
   protected _legend?: Legend;
+  protected _title?: Title;
   protected _legendSelected: Set<string> = new Set();
   protected _suppressAnimationOnce: boolean = false;
   protected _animateOnlyFor?: Set<string>;
@@ -251,6 +252,9 @@ export default class Chart {
     }
     if (this._legend) {
       this._legend.setContainer(this._width, this._height);
+    }
+    if (this._title) {
+      this._title.setContainer(this._width, this._height);
     }
     this._render();
   }
@@ -534,6 +538,7 @@ export default class Chart {
    */
   protected _render(): void {
     this._root.removeAll();
+    this._mountTitle();
     // Tooltip is DOM based now
     // if (this._tooltip) {
     //   this._root.add(this._tooltip);
@@ -868,6 +873,24 @@ export default class Chart {
 
     this._legend = legend;
     this._root.add(legend);
+  }
+
+  /**
+   * Mount title helper
+   */
+  protected _mountTitle(): void {
+    const option = this._option;
+    if (option.title?.show === false) return;
+    if (!option.title) return;
+
+    if (!this._title) {
+      this._title = new Title(option.title);
+    } else {
+      this._title.updateOption(option.title);
+    }
+
+    this._title.setContainer(this._width, this._height);
+    this._root.add(this._title);
   }
 
   /**

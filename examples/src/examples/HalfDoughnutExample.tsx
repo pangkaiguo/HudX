@@ -12,12 +12,10 @@ export const HalfDoughnutExample = () => {
 
   const option: ChartOption = {
     title: {
-      text: 'Half Doughnut Chart (Gauge)',
+      text: 'Half Doughnut Chart',
+      subtext: 'Start/End Angle Config',
       left: 'center',
-      top: '50%',
-      textStyle: {
-        fontSize: 20
-      }
+      top: 20
     },
     tooltip: {
       show: true,
@@ -139,7 +137,7 @@ export const HalfDoughnutExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button

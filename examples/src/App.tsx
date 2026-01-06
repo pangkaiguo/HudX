@@ -8,6 +8,7 @@ const AnimationExample = lazy(() => import('./examples/AnimationExample'));
 const BasicLineExample = lazy(() => import('./examples/BasicLineExample'));
 const BasicBarExample = lazy(() => import('./examples/BasicBarExample'));
 const BasicPieExample = lazy(() => import('./examples/BasicPieExample'));
+const StackBarExample = lazy(() => import('./examples/StackBarExample'));
 const AdvancedLineChartExample = lazy(() => import('./examples/AdvancedLineExample'));
 const AdvancedBarChartExample = lazy(() => import('./examples/AdvancedBarExample'));
 const AdvancedPieChartExample = lazy(() => import('./examples/AdvancedPieExample'));
@@ -18,21 +19,37 @@ const HalfDoughnutExample = lazy(() => import('./examples/HalfDoughnutExample'))
 const RichTextPieExample = lazy(() => import('./examples/RichTextPieExample'));
 const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
 
-const componentDemos = [
-  { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
-  { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
-  { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
-  { id: 'rich-text-pie', name: 'Rich Text Pie', component: RichTextPieExample },
-  { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChartExample },
-  { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
-  { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
-  { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
-  { id: 'stack-bar-3d', name: 'Stack Bar 3D', component: StackBar3DExample },
-  { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
-  { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
+const chartExamples = [
+  {
+    category: 'Line Charts',
+    items: [
+      { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
+      { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChartExample },
+    ]
+  },
+  {
+    category: 'Bar Charts',
+    items: [
+      { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
+      { id: 'stack-bar', name: 'Stack Bar', component: StackBarExample },
+      { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
+      { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
+      { id: 'stack-bar-3d', name: 'Stack Bar 3D', component: StackBar3DExample },
+    ]
+  },
+  {
+    category: 'Pie Charts',
+    items: [
+      { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
+      { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
+      { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
+      { id: 'rich-text-pie', name: 'Rich Text Pie', component: RichTextPieExample },
+      { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
+    ]
+  }
 ];
 
-const testDemos = [
+const featureExamples = [
   { id: 'shape', name: 'Shape', component: ShapeExample },
   { id: 'themes', name: 'Theme', component: ThemeExample },
   { id: 'interaction', name: 'Interaction', component: InteractionExample },
@@ -40,7 +57,10 @@ const testDemos = [
   { id: 'performance', name: 'Performance', component: PerformanceExample }
 ];
 
-const allExamples = [...componentDemos, ...testDemos];
+const allExamples = [
+  ...chartExamples.flatMap(c => c.items),
+  ...featureExamples
+];
 
 const NavButton = ({ example, activeExample, setActiveExample }: { example: any, activeExample: string, setActiveExample: (id: string) => void }) => (
   <button
@@ -50,11 +70,11 @@ const NavButton = ({ example, activeExample, setActiveExample }: { example: any,
     style={{
       display: 'block',
       width: '100%',
-      padding: '10px 12px',
-      marginBottom: 6,
+      padding: '8px 12px',
+      marginBottom: 4,
       border: '2px solid transparent',
       borderRadius: 6,
-      backgroundColor: activeExample === example.id ? '#5470c6' : '#fff',
+      backgroundColor: activeExample === example.id ? '#5470c6' : 'transparent',
       color: activeExample === example.id ? '#fff' : '#333',
       cursor: 'pointer',
       textAlign: 'left',
@@ -65,12 +85,12 @@ const NavButton = ({ example, activeExample, setActiveExample }: { example: any,
     }}
     onMouseEnter={(e) => {
       if (activeExample !== example.id) {
-        e.currentTarget.style.backgroundColor = '#e8eaf6';
+        e.currentTarget.style.backgroundColor = '#f0f0f0';
       }
     }}
     onMouseLeave={(e) => {
       if (activeExample !== example.id) {
-        e.currentTarget.style.backgroundColor = '#fff';
+        e.currentTarget.style.backgroundColor = 'transparent';
       }
     }}
     onFocus={(e) => {
@@ -109,18 +129,22 @@ const App = memo(function App() {
         <h1 style={{ fontSize: 20, marginBottom: 10, color: '#333' }}>HudX Examples</h1>
         <p style={{ fontSize: 12, color: '#999', marginBottom: 20 }}>Interactive Charts & Animations</p>
 
-        <h2 style={{ fontSize: 14, fontWeight: 'bold', margin: '20px 0 10px', color: '#666' }}>Component Demos</h2>
-        {componentDemos.map(example => (
-          <NavButton
-            key={example.id}
-            example={example}
-            activeExample={activeExample}
-            setActiveExample={setActiveExample}
-          />
+        {chartExamples.map(category => (
+          <React.Fragment key={category.category}>
+            <h2 style={{ fontSize: 14, fontWeight: 'bold', margin: '20px 0 10px', color: '#666' }}>{category.category}</h2>
+            {category.items.map(example => (
+              <NavButton
+                key={example.id}
+                example={example}
+                activeExample={activeExample}
+                setActiveExample={setActiveExample}
+              />
+            ))}
+          </React.Fragment>
         ))}
 
-        <h2 style={{ fontSize: 14, fontWeight: 'bold', margin: '20px 0 10px', color: '#666' }}>Test Demos</h2>
-        {testDemos.map(example => (
+        <h2 style={{ fontSize: 14, fontWeight: 'bold', margin: '20px 0 10px', color: '#666' }}>Feature Demos</h2>
+        {featureExamples.map(example => (
           <NavButton
             key={example.id}
             example={example}

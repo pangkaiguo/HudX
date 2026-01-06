@@ -13,6 +13,7 @@ export const AdvancedPieExample = () => {
   const option: ChartOption = {
     title: {
       text: 'Advanced Pie Chart with Animation',
+      subtext: 'Feature Demonstration',
       left: 'center',
       top: 30
     },
@@ -126,7 +127,7 @@ export const AdvancedPieExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button

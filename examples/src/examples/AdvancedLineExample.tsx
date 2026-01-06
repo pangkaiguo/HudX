@@ -15,6 +15,7 @@ export const AdvancedLineExample = () => {
   const option: ChartOption = {
     title: {
       text: 'Advanced Line Chart with Animation',
+      subtext: 'Feature Demonstration',
       left: 'center',
       top: 20
     },
@@ -25,8 +26,8 @@ export const AdvancedLineExample = () => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'center',
-      bottom: 30,
+      left: 'right',
+      top: 20,
       icon: 'rect'
     },
     grid: {
@@ -167,7 +168,7 @@ export const AdvancedLineExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button

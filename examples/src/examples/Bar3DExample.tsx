@@ -17,6 +17,7 @@ export const Bar3DExample = () => {
   const option = useMemo<ChartOption>(() => ({
     title: {
       text: '3D Bar Chart',
+      subtext: 'Pseudo-3D Effect',
       left: 'center',
       top: 20
     },
@@ -27,7 +28,9 @@ export const Bar3DExample = () => {
     },
     legend: {
       show: true,
-      bottom: 20,
+      orient: 'vertical',
+      left: 'right',
+      top: 20,
       icon: 'rect'
     },
     grid: {
@@ -169,7 +172,7 @@ export const Bar3DExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '400px' }}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />
 
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>

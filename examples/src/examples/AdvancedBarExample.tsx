@@ -17,6 +17,7 @@ export const AdvancedBarExample = () => {
   const option: ChartOption = {
     title: {
       text: 'Advanced Bar Chart with Animation',
+      subtext: 'Feature Demonstration',
       left: 'center',
       top: 20
     },
@@ -38,8 +39,8 @@ export const AdvancedBarExample = () => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'center',
-      bottom: 30,
+      left: 'right',
+      top: 20,
       icon: 'rect'
     },
     grid: {
@@ -220,7 +221,7 @@ export const AdvancedBarExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button

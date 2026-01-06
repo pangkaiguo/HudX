@@ -17,6 +17,8 @@ export interface BoundingRect {
 export interface Style {
   /** Fill color or gradient/pattern */
   fill?: string | CanvasGradient | CanvasPattern;
+  /** Text color (alias for fill) */
+  color?: string;
   /** Stroke color or gradient/pattern */
   stroke?: string | CanvasGradient | CanvasPattern;
   /** Line width */
@@ -352,4 +354,40 @@ export interface DecalObject {
   rotation?: number;
   maxTileWidth?: number;
   maxTileHeight?: number;
+}
+
+export interface TitleOption {
+  /** Whether to show title */
+  show?: boolean;
+  /** Title text */
+  text?: string;
+  /** Subtitle text */
+  subtext?: string;
+  /** Left position (pixel or percent) */
+  left?: string | number;
+  /** Top position (pixel or percent) */
+  top?: string | number;
+  /** Right position (pixel or percent) */
+  right?: string | number;
+  /** Bottom position (pixel or percent) */
+  bottom?: string | number;
+  /** Background color */
+  backgroundColor?: string;
+  /** Border color */
+  borderColor?: string;
+  /** Border width */
+  borderWidth?: number;
+  /** Border radius */
+  borderRadius?: number;
+  /** Padding */
+  padding?: number | number[];
+  /** Gap between title and subtitle */
+  itemGap?: number;
+  /** Title text style */
+  textStyle?: Partial<Style>;
+  /** Subtitle text style */
+  subtextStyle?: Partial<Style>;
+  /** Horizontal alignment of title text */
+  textAlign?: 'auto' | 'left' | 'right' | 'center';
+  [key: string]: any;
 }

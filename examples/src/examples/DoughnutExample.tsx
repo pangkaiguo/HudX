@@ -13,6 +13,7 @@ export const DoughnutExample = () => {
   const option: ChartOption = {
     title: {
       text: 'Doughnut Chart',
+      subtext: 'Inner Radius Config',
       left: 'center',
       top: 20
     },
@@ -132,7 +133,7 @@ export const DoughnutExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8 }}
+        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button

@@ -1,43 +1,44 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useState, useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const StackBar3DExample = () => {
-  const chartRef = useRef<HChartRef>(null);
-  const theme = ThemeManager.getTheme('light');
-
+export const StackBarExample = () => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(5);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const theme = ThemeManager.getTheme('light');
+  const chartRef = useRef<HChartRef>(null);
 
-  const option = useMemo<ChartOption>(() => ({
+  const option: ChartOption = {
     title: {
-      text: 'Stacked 3D Bar Chart',
-      subtext: 'Pseudo-3D Effect',
+      text: 'Stack Bar Chart',
+      subtext: 'Data Accumulation',
       left: 'center',
       top: 20
     },
     tooltip: {
       show: true,
-      trigger: 'item',
-      formatter: '{b}\n{c}'
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
     },
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'right',
-      top: 20,
-      icon: 'rect'
+      left: 'left',
+      top: 'middle'
     },
     grid: {
-      left: 60,
-      right: 60,
+      left: '15%',
+      right: '4%',
+      bottom: '3%',
       top: gridTop,
-      bottom: 60
+      containLabel: true
     },
     aria: {
       enabled: true,
@@ -48,74 +49,147 @@ export const StackBar3DExample = () => {
         ]
       }
     },
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      show: true,
-      splitLine: {
-        show: showGrid,
-        lineStyle: {
-          color: '#eee',
-          type: 'dashed'
+    xAxis: [
+      {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        show: true,
+        splitLine: {
+          show: showGrid,
+          lineStyle: {
+            color: '#eee',
+            type: 'dashed'
+          }
         }
-      }
-    },
-    yAxis: {
-      type: 'value',
-      show: true,
-      splitNumber: splitNumber,
-      splitLine: {
-        show: showGrid,
-        lineStyle: {
-          color: '#eee'
-        }
-      }
-    },
-    series: [
-      {
-        name: 'Product A',
-        type: 'stackBar3D',
-        data: [120, 132, 101, 134, 90, 230, 210],
-        itemStyle: { color: '#5470c6' }
-      },
-      {
-        name: 'Product B',
-        type: 'stackBar3D',
-        data: [220, 182, 191, 234, 290, 330, 310],
-        itemStyle: { color: '#91cc75' }
-      },
-      {
-        name: 'Product C',
-        type: 'stackBar3D',
-        data: [150, 232, 201, 154, 190, 330, 410],
-        itemStyle: { color: '#fac858' }
       }
     ],
-    animation: true
-  }), [isDecal, showGrid, gridTop, splitNumber, theme]);
+    yAxis: [
+      {
+        type: 'value',
+        show: true,
+        splitNumber: splitNumber,
+        splitLine: {
+          show: showGrid,
+          lineStyle: {
+            color: '#eee'
+          }
+        }
+      }
+    ],
+    series: [
+      {
+        name: 'Direct',
+        type: 'bar',
+        stack: 'total',
+        emphasis: {
+          focus: 'series'
+        },
+        data: [320, 332, 301, 334, 390, 330, 320]
+      },
+      {
+        name: 'Email',
+        type: 'bar',
+        stack: 'total',
+        emphasis: {
+          focus: 'series'
+        },
+        data: [120, 132, 101, 134, 90, 230, 210]
+      },
+      {
+        name: 'Union Ads',
+        type: 'bar',
+        stack: 'total',
+        emphasis: {
+          focus: 'series'
+        },
+        data: [220, 182, 191, 234, 290, 330, 310]
+      },
+      {
+        name: 'Video Ads',
+        type: 'bar',
+        stack: 'total',
+        emphasis: {
+          focus: 'series'
+        },
+        data: [150, 232, 201, 154, 190, 330, 410]
+      },
+      {
+        name: 'Search Engine',
+        type: 'bar',
+        data: [862, 1018, 964, 1026, 1679, 1600, 1570],
+        emphasis: {
+          focus: 'series'
+        },
+        markLine: {
+          lineStyle: {
+            type: 'dashed'
+          },
+          data: [
+            [{ type: 'min' }, { type: 'max' }]
+          ]
+        }
+      },
+      {
+        name: 'Baidu',
+        type: 'bar',
+        barWidth: 5,
+        stack: 'search',
+        emphasis: {
+          focus: 'series'
+        },
+        data: [620, 732, 701, 734, 1090, 1130, 1120]
+      },
+      {
+        name: 'Google',
+        type: 'bar',
+        stack: 'search',
+        emphasis: {
+          focus: 'series'
+        },
+        data: [120, 132, 101, 134, 290, 230, 220]
+      },
+      {
+        name: 'Bing',
+        type: 'bar',
+        stack: 'search',
+        emphasis: {
+          focus: 'series'
+        },
+        data: [60, 72, 71, 74, 190, 130, 110]
+      },
+      {
+        name: 'Others',
+        type: 'bar',
+        stack: 'search',
+        emphasis: {
+          focus: 'series'
+        },
+        data: [62, 82, 91, 84, 109, 110, 120]
+      }
+    ]
+  };
 
   const handleUpdateSeries = () => {
     const chartInstance = chartRef.current?.getChartInstance();
     if (chartInstance) {
-      // Simulate new data
-      const newData1 = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
-      const newData2 = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
-      const newData3 = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
+      const seriesCount = 9;
+      const newSeriesData = [];
+
+      for (let i = 0; i < seriesCount; i++) {
+        const newData = Array.from({ length: 7 }, () => Math.floor(Math.random() * 300) + 50);
+        newSeriesData.push({ data: newData });
+      }
 
       chartInstance.setOption({
-        series: [
-          { data: newData1 },
-          { data: newData2 },
-          { data: newData3 }
-        ]
+        series: newSeriesData
       });
     }
   };
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Stacked 3D Bar Chart</h2>
-      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Stacked bars with pseudo-3D effect</p>
+      <h2 style={{ marginBottom: 10 }}>Stack Bar Chart</h2>
+      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Hover over bars to see values</p>
 
       <div style={{ marginBottom: 20, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -181,7 +255,7 @@ export const StackBar3DExample = () => {
         ref={chartRef}
         option={option}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
+        style={{ width: '100%', height: '600px', border: '1px solid #e0e0e0', borderRadius: 8 }}
       />
 
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
@@ -204,4 +278,4 @@ export const StackBar3DExample = () => {
   );
 };
 
-export default StackBar3DExample;
+export default StackBarExample;

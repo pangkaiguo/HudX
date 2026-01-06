@@ -230,6 +230,9 @@ export interface SeriesOption {
   type?: string;
   name?: string;
   data?: any[];
+  stack?: string;
+  barGap?: string | number;
+  barCategoryGap?: string | number;
   itemStyle?: ItemStyleOption;
   label?: LabelOption;
   emphasis?: EmphasisOption;

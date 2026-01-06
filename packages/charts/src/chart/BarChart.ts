@@ -10,12 +10,10 @@ export default class BarChart extends Chart {
     try {
       super._render();
 
-      // Ensure activeBars is initialized
       if (!this._activeBars) {
         this._activeBars = new Map();
       }
 
-      // Keep track of old bars
       const oldBars = this._activeBars;
       this._activeBars = new Map();
 
@@ -23,13 +21,11 @@ export default class BarChart extends Chart {
       const series = option.series || [];
       if (series.length === 0) return;
 
-      // Calculate grid area
       const { x: plotX, y: plotY, width: plotWidth, height: plotHeight } = this._calculateGrid(option);
 
       const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
       const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
 
-      // Collect all data to calculate domain
       let data: any[] = [];
       series.forEach(s => {
         if (s.type === 'bar' && s.show !== false) {
@@ -39,9 +35,41 @@ export default class BarChart extends Chart {
 
       if (data.length === 0) return;
 
-      // Calculate scales
+      const hasStack = series.some(s => s.type === 'bar' && s.stack);
+      let finalData = data;
+
+      if (hasStack) {
+        const stackTotals: Record<number, Record<string, { pos: number, neg: number }>> = {};
+
+        series.forEach(s => {
+          if (s.type !== 'bar' || s.show === false) return;
+          const stackId = s.stack || `__no_stack_${s.name || Math.random()}`;
+          const sData = s.data || [];
+          sData.forEach((val: any, idx: number) => {
+            const value = (typeof val === 'object' && val !== null && val.value !== undefined) ? val.value : val;
+            if (typeof value !== 'number') return;
+
+            if (!stackTotals[idx]) stackTotals[idx] = {};
+            if (!stackTotals[idx][stackId]) stackTotals[idx][stackId] = { pos: 0, neg: 0 };
+
+            if (value >= 0) stackTotals[idx][stackId].pos += value;
+            else stackTotals[idx][stackId].neg += value;
+          });
+        });
+
+        const stackData: number[] = [];
+        Object.values(stackTotals).forEach(catStacks => {
+          Object.values(catStacks).forEach(stack => {
+            stackData.push(stack.pos);
+            stackData.push(stack.neg);
+          });
+        });
+
+        finalData = [...data, ...stackData];
+      }
+
       const xDomain = calculateDomain(xAxis || {}, data, true);
-      const yDomain = calculateDomain(yAxis || {}, data, false);
+      const yDomain = calculateDomain(yAxis || {}, finalData, false);
 
       const xScale = xAxis?.type === 'category'
         ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
@@ -49,7 +77,6 @@ export default class BarChart extends Chart {
 
       const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
-      // Prepare bar grouping info based on categories (ECharts-style)
       const barSeries = series.filter(s => s.type === 'bar' && s.show !== false);
       const seriesCount = barSeries.length || 1;
       let categoryCount: number;
@@ -59,16 +86,23 @@ export default class BarChart extends Chart {
         categoryCount = data.length;
       }
 
-      // Calculate layout
-      // Support barGap (gap between bars in same category) and barCategoryGap (gap between categories)
-      // ECharts defaults: barGap: '30%', barCategoryGap: '20%'
-      // These are percentages of the bar width or category width
+      const stacks: Record<string, any[]> = {};
+      series.forEach((s, i) => {
+        if (s.type !== 'bar' || s.show === false) return;
+        const seriesName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
+        const stackId = s.stack || `__no_stack_${seriesName}`;
+
+        if (!stacks[stackId]) {
+          stacks[stackId] = [];
+        }
+        stacks[stackId].push(s);
+      });
+
+      const stackGroups = Object.keys(stacks).length;
+      const stackGroupSeries = Object.values(stacks);
 
       const categoryWidth = categoryCount > 0 ? (plotWidth / categoryCount) : plotWidth;
 
-      // We need to parse percentages relative to available space
-      // But simple implementation: 
-      // 1. Determine barCategoryGap to find width available for all bars in a category
       const firstSeries = barSeries[0] || {};
       const barCategoryGapStr = firstSeries.barCategoryGap ?? '20%';
       const barGapStr = firstSeries.barGap ?? '30%';
@@ -77,59 +111,51 @@ export default class BarChart extends Chart {
         if (typeof val === 'string' && val.endsWith('%')) {
           return parseFloat(val) / 100;
         }
-        return 0; // Default fallback if not percent
+        return 0;
       };
 
       const categoryGapPercent = parsePercent(barCategoryGapStr);
-      // Available width for all bars in one category
       const availableWidth = categoryWidth * (1 - categoryGapPercent);
 
       let barWidthPerSeries: number;
       let gapWidth: number;
 
+      const groupCount = stackGroups;
+
       if (typeof barGapStr === 'string' && barGapStr.endsWith('%')) {
-        // Percentage mode (relative to bar width)
         const gapPercent = parsePercent(barGapStr);
-        // w = availableWidth / (n + (n - 1) * gapPercent)
-        barWidthPerSeries = availableWidth / (seriesCount + (seriesCount - 1) * gapPercent);
+        barWidthPerSeries = availableWidth / (groupCount + (groupCount - 1) * gapPercent);
         gapWidth = barWidthPerSeries * gapPercent;
       } else {
-        // Pixel mode (fixed width)
-        // Assume input is number or string like "10px" or "10"
         gapWidth = parseFloat(String(barGapStr));
         if (isNaN(gapWidth)) gapWidth = 0;
 
-        // availableWidth = n * w + (n - 1) * gapWidth
-        // n * w = availableWidth - (n - 1) * gapWidth
-        // w = (availableWidth - (n - 1) * gapWidth) / n
-        const totalGapWidth = (seriesCount - 1) * gapWidth;
+        const totalGapWidth = (groupCount - 1) * gapWidth;
         if (totalGapWidth >= availableWidth) {
-          // Gaps are too large, force bars to 0 width or minimal
           barWidthPerSeries = 0;
         } else {
-          barWidthPerSeries = (availableWidth - totalGapWidth) / seriesCount;
+          barWidthPerSeries = (availableWidth - totalGapWidth) / groupCount;
         }
       }
 
-      const groupInnerWidth = seriesCount * barWidthPerSeries + (seriesCount - 1) * gapWidth;
+      const groupInnerWidth = groupCount * barWidthPerSeries + (groupCount - 1) * gapWidth;
 
-      // Render axes
       this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
 
-      // Render legend
       if (option.legend?.show !== false) {
         const items = (series as any[])
           .filter(s => s.type === 'bar' && s.show !== false)
           .map((s, i) => ({
             name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: option.legend?.icon || 'rect', // Use user config or default to 'rect'
-            textColor: this.getThemeConfig().legendTextColor // Use theme color
+            icon: option.legend?.icon || 'rect',
+            textColor: this.getThemeConfig().legendTextColor
           }));
         this._mountLegend(items);
       }
 
-      // Process each series
+      const stackValues: Record<string, Record<string, { pos: number, neg: number }>> = {};
+
       series.forEach((seriesItem, seriesIndex) => {
         if (seriesItem.type !== 'bar') {
           return;
@@ -141,42 +167,63 @@ export default class BarChart extends Chart {
         if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
-        const seriesIndexInBars = barSeries.indexOf(seriesItem);
+        const stackId = seriesItem.stack || `__no_stack_${seriesName}`;
+        const stackGroupIndex = Object.keys(stacks).indexOf(stackId);
+
         const barColor = seriesItem.itemStyle?.color || seriesItem.color || this._getSeriesColor(seriesIndex);
 
         seriesData.forEach((item, index) => {
           let xVal, yVal;
           if (xAxis?.type === 'category') {
             xVal = xDomain[index];
-            // Handle object data { value: 120 }
             if (typeof item === 'object' && item !== null && item.value !== undefined) {
               yVal = item.value;
             } else {
               yVal = item;
             }
           } else {
-            // Value axis for X (e.g. horizontal bar) - Not fully supported yet in this simple logic
-            // Assuming vertical bar chart for now
             xVal = item[0];
             yVal = item[1];
           }
 
           if (xVal === undefined || yVal === undefined) return;
 
+          const catKey = String(index);
+          if (!stackValues[catKey]) {
+            stackValues[catKey] = {};
+          }
+          if (!stackValues[catKey][stackId]) {
+            stackValues[catKey][stackId] = { pos: 0, neg: 0 };
+          }
+
+          const currentStack = stackValues[catKey][stackId];
+          const isPositive = yVal >= 0;
+          const baseValue = isPositive ? currentStack.pos : currentStack.neg;
+
+          if (isPositive) {
+            currentStack.pos += yVal;
+          } else {
+            currentStack.neg += yVal;
+          }
+
+          const topValue = baseValue + yVal;
+
           const groupCenter = xScale(xVal);
           const groupStart = groupCenter - groupInnerWidth / 2;
-          const barX = groupStart + seriesIndexInBars * (barWidthPerSeries + gapWidth);
-          const barY = yScale(yVal);
-          const barHeight = plotY + plotHeight - barY;
+          const barX = groupStart + stackGroupIndex * (barWidthPerSeries + gapWidth);
+
+          const barYTop = yScale(topValue);
+          const barYBottom = yScale(baseValue);
+
+          const barY = Math.min(barYTop, barYBottom);
+          const barHeight = Math.abs(barYBottom - barYTop);
 
           const itemStyle = seriesItem.itemStyle || {};
 
-          // Handle aria decal
           let fillStyle: string | CanvasPattern = barColor;
           const aria = option.aria;
           if (aria?.enabled && aria?.decal?.show) {
             const decals = aria.decal.decals || [];
-            // Use series index for bar chart to distinguish series
             const decal = decals[seriesIndex % decals.length] || { symbol: 'rect' };
 
             const pattern = createDecalPattern(decal, barColor);
@@ -189,15 +236,19 @@ export default class BarChart extends Chart {
           const oldBar = oldBars.get(barKey);
 
           let initialHeight = 0;
+          let initialY = plotY + plotHeight;
 
           if (oldBar) {
             initialHeight = oldBar.shape.height;
+            initialY = oldBar.shape.y;
+          } else if (seriesItem.stack) {
+            initialY = yScale(baseValue);
           }
 
           const rect = new Rect({
             shape: {
               x: barX,
-              y: plotY + plotHeight - initialHeight, // Start from previous position
+              y: initialY,
               width: barWidthPerSeries,
               height: initialHeight,
               r: itemStyle.borderRadius as any
@@ -214,7 +265,6 @@ export default class BarChart extends Chart {
           this._root.add(rect);
           this._activeBars.set(barKey, rect);
 
-          // Tooltip
           if (this._tooltip) {
             EventHelper.bindHoverEvents(
               rect,
@@ -273,7 +323,6 @@ export default class BarChart extends Chart {
             });
           }
 
-          // Animate bar if animation is enabled
           if (this._shouldAnimateFor(seriesName) || oldBar) {
             const isUpdate = !!oldBar;
             const delay = isUpdate ? 0 : (index * 100 + seriesIndex * 200);
@@ -289,12 +338,15 @@ export default class BarChart extends Chart {
                 easing: 'cubicOut',
                 onUpdate: (target: any, percent: number) => {
                   const currentHeight = initialHeight + (barHeight - initialHeight) * percent;
+                  const currentY = initialY + (barY - initialY) * percent;
+
                   target.height = currentHeight;
-                  target.y = plotY + plotHeight - target.height;
+                  target.y = currentY;
                   rect.markRedraw();
                 }
               }
-            );
+            ).start();
+
           } else {
             rect.attr('shape', {
               x: barX,

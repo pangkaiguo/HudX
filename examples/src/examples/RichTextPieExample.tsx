@@ -9,6 +9,7 @@ export const RichTextPieExample = () => {
   const option: ChartOption = {
     title: {
       text: 'Rich Text Pie',
+      subtext: 'Custom Formatter',
       left: 'center',
       top: 25
     },
@@ -94,7 +95,7 @@ export const RichTextPieExample = () => {
         Demonstrating rich text labels and auto-colored label lines.
       </p>
       <div style={{ height: 500, border: '1px solid #eee' }}>
-        <HChart option={option} style={{ width: '100%', height: '100%' }} />
+        <HChart option={option} style={{ width: '100%', height: '600px' }} />
       </div>
     </div>
   );
