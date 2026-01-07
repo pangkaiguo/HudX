@@ -1,23 +1,31 @@
 import React, { useState, lazy, Suspense, useMemo, memo } from 'react';
 
 // Lazy load components for better performance
+// Root examples
+const AnimationExample = lazy(() => import('./examples/AnimationExample'));
+const InteractionExample = lazy(() => import('./examples/InteractionExample'));
+const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
 const ShapeExample = lazy(() => import('./examples/ShapeExample'));
 const ThemeExample = lazy(() => import('./examples/ThemeExample'));
-const InteractionExample = lazy(() => import('./examples/InteractionExample'));
-const AnimationExample = lazy(() => import('./examples/AnimationExample'));
-const BasicLineExample = lazy(() => import('./examples/BasicLineExample'));
-const BasicBarExample = lazy(() => import('./examples/BasicBarExample'));
-const BasicPieExample = lazy(() => import('./examples/BasicPieExample'));
-const StackBarExample = lazy(() => import('./examples/StackBarExample'));
-const AdvancedLineChartExample = lazy(() => import('./examples/AdvancedLineExample'));
-const AdvancedBarChartExample = lazy(() => import('./examples/AdvancedBarExample'));
-const AdvancedPieChartExample = lazy(() => import('./examples/AdvancedPieExample'));
-const Bar3DExample = lazy(() => import('./examples/Bar3DExample'));
-const StackBar3DExample = lazy(() => import('./examples/StackBar3DExample'));
-const DoughnutExample = lazy(() => import('./examples/DoughnutExample'));
-const HalfDoughnutExample = lazy(() => import('./examples/HalfDoughnutExample'));
-const RichTextPieExample = lazy(() => import('./examples/RichTextPieExample'));
-const PerformanceExample = lazy(() => import('./examples/PerformanceExample'));
+
+// Bar charts
+const AdvancedBarChartExample = lazy(() => import('./examples/bar/AdvancedBarExample'));
+const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
+const BasicBarExample = lazy(() => import('./examples/bar/BasicBarExample'));
+const StackBar3DExample = lazy(() => import('./examples/bar/StackBar3DExample'));
+const StackBarExample = lazy(() => import('./examples/bar/StackBarExample'));
+
+// Line charts
+const AdvancedLineChartExample = lazy(() => import('./examples/line/AdvancedLineExample'));
+const BasicLineExample = lazy(() => import('./examples/line/BasicLineExample'));
+
+// Pie charts
+const AdvancedDoughnutExample = lazy(() => import('./examples/pie/AdvancedDoughnutExample'));
+const AdvancedPieChartExample = lazy(() => import('./examples/pie/AdvancedPieExample'));
+const BasicPieExample = lazy(() => import('./examples/pie/BasicPieExample'));
+const DoughnutExample = lazy(() => import('./examples/pie/DoughnutExample'));
+const HalfDoughnutExample = lazy(() => import('./examples/pie/HalfDoughnutExample'));
+const RichTextPieExample = lazy(() => import('./examples/pie/RichTextPieExample'));
 
 const chartExamples = [
   {
@@ -45,6 +53,7 @@ const chartExamples = [
       { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
       { id: 'rich-text-pie', name: 'Rich Text Pie', component: RichTextPieExample },
       { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
+      { id: 'advanced-doughnut', name: 'Advanced Doughnut', component: AdvancedDoughnutExample },
     ]
   }
 ];

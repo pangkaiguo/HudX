@@ -274,6 +274,8 @@ export default class PieChart extends Chart {
                 this._root.remove(this._centerLabel);
                 this._centerLabel = null;
               }
+
+              this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
             }
           );
 
@@ -353,12 +355,14 @@ export default class PieChart extends Chart {
 
           let labelText: string;
           const formatter = seriesItem.label?.formatter;
-          if (typeof formatter === 'function') {
-            labelText = formatter({ name: (item as any).name || '', value, percent: percent * 100 });
-          } else if (formatter === '{b}') {
-            labelText = (item as any).name || '';
+          if (formatter) {
+            labelText = this._formatLabel(formatter, {
+              name: (item as any).name || '',
+              value,
+              percent: (percent * 100).toFixed(0)
+            });
           } else {
-            labelText = String(value);
+            labelText = (item as any).name || '';
           }
 
           labelLayoutList.push({
@@ -378,10 +382,80 @@ export default class PieChart extends Chart {
 
       this._layoutLabels(labelLayoutList, cx, cy, r, r0);
 
+      this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
+
       this._renderer.flush();
     } catch (e) {
       console.error('[PieChart] Render error:', e);
     }
+  }
+
+  private _renderStaticCenterLabel(seriesItem: any, cx: number, cy: number, r0: number, total: number): void {
+    const centerLabelConfig = seriesItem.centerLabel || {};
+    if (centerLabelConfig.show === false || r0 <= 0) return;
+    if (this._centerLabel) return;
+
+    let textContent = '';
+    let rich = centerLabelConfig.rich || seriesItem.label?.rich;
+    const style = {
+      fill: seriesItem.label?.color || '#333',
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      textBaseline: 'middle',
+      ...centerLabelConfig.style
+    };
+
+    if (centerLabelConfig.type === 'percentage') {
+      const data = seriesItem.data || [];
+      if (data.length > 0) {
+        const firstVal = (data[0].value || data[0]);
+        const percent = (firstVal / total * 100).toFixed(0);
+        const defaultFormatter = '{d}%';
+        const fmt = centerLabelConfig.formatter || defaultFormatter;
+        textContent = this._formatLabel(fmt, { name: data[0].name || '', value: firstVal, percent });
+
+        if (!centerLabelConfig.style?.backgroundColor) {
+          style.backgroundColor = '#eee';
+          style.borderRadius = 20;
+          style.padding = [5, 15];
+        }
+      }
+    } else {
+      const fmt = centerLabelConfig.formatter;
+      if (typeof fmt === 'string') {
+        textContent = fmt;
+      } else if (typeof fmt === 'function') {
+        textContent = fmt({ total });
+      }
+    }
+
+    if (textContent) {
+      this._centerLabel = new Text({
+        shape: { x: cx, y: cy, text: textContent },
+        style: { ...style, rich },
+        z: Z_LABEL
+      });
+      this._root.add(this._centerLabel);
+    }
+  }
+
+
+
+  private _formatLabel(formatter: string | Function, params: { name: string, value: number, percent: string | number }): string {
+    if (typeof formatter === 'function') {
+      return formatter(params);
+    }
+    if (typeof formatter === 'string') {
+      return formatter
+        .replace(/\{b\}/g, params.name)
+        .replace(/\{c\}/g, String(params.value))
+        .replace(/\{d\}/g, String(params.percent))
+        .replace(/\{name\}/g, params.name)
+        .replace(/\{value\}/g, String(params.value))
+        .replace(/\{percent\}/g, String(params.percent));
+    }
+    return '';
   }
 
   private _layoutLabels(labels: any[], cx: number, cy: number, r: number, r0: number): void {
