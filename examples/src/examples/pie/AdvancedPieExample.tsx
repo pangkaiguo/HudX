@@ -61,7 +61,8 @@ export const AdvancedPieExample = () => {
         center: ['60%', '50%'],
         emphasis: {
           scale: true,
-          scaleSize: 1.03
+          scaleSize: 1.03,
+          focus: 'self'
         },
         itemStyle: {
           borderWidth: 0,

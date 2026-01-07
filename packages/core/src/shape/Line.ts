@@ -72,7 +72,7 @@ export default class Line extends ChartElement {
     ctx.moveTo(shape.x1, shape.y1);
     ctx.lineTo(shape.x2, shape.y2);
 
-    if (this.style.stroke) {
+    if (this.style.stroke && this.style.lineWidth !== 0) {
       ctx.stroke();
     }
 

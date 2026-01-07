@@ -6,7 +6,6 @@ import Rect from '../../shape/Rect';
 
 describe('Legend', () => {
   beforeAll(() => {
-    // Mock Canvas API for createDecalPattern
     const mockContext = {
       fillRect: vi.fn(),
       beginPath: vi.fn(),
@@ -20,6 +19,7 @@ describe('Legend', () => {
       translate: vi.fn(),
       rotate: vi.fn(),
       arc: vi.fn(),
+      measureText: vi.fn().mockReturnValue({ width: 10 }),
       createPattern: vi.fn().mockReturnValue({ setTransform: vi.fn() }),
     } as unknown as CanvasRenderingContext2D;
 
@@ -50,17 +50,14 @@ describe('Legend', () => {
     const children = legend.children();
     expect(children.length).toBe(10);
 
-    // Filter icons
     const icons = children.filter(c =>
       c instanceof Circle || c instanceof Line || (c instanceof Rect && c.style.fill !== 'transparent' && c.style.fill !== 'rgba(255, 255, 255, 0.9)')
     );
 
-    // Series A -> Circle
     const circleIcon = children.find(c => c instanceof Circle);
     expect(circleIcon).toBeDefined();
     expect(circleIcon?.style.fill).toBe('red');
 
-    // Series B -> Line
     const lineIcon = children.find(c => c instanceof Line);
     expect(lineIcon).toBeDefined();
     expect(lineIcon?.style.stroke).toBe('blue');

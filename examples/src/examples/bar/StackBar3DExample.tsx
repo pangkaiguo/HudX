@@ -80,19 +80,19 @@ export const StackBar3DExample = () => {
         name: 'Product A',
         type: 'stackBar3D',
         data: [120, 132, 101, 134, 90, 230, 210],
-        itemStyle: { color: '#5470c6' }
+        itemStyle: { color: '#5470c6', borderWidth: 0 }
       },
       {
         name: 'Product B',
         type: 'stackBar3D',
         data: [220, 182, 191, 234, 290, 330, 310],
-        itemStyle: { color: '#91cc75' }
+        itemStyle: { color: '#91cc75', borderWidth: 0 }
       },
       {
         name: 'Product C',
         type: 'stackBar3D',
         data: [150, 232, 201, 154, 190, 330, 410],
-        itemStyle: { color: '#fac858' }
+        itemStyle: { color: '#fac858', borderWidth: 0 }
       }
     ],
     animation: true

@@ -263,6 +263,9 @@ export interface EmphasisOption {
   itemStyle?: ItemStyleOption;
   label?: LabelOption;
   scale?: boolean;
+  scaleSize?: number;
+  focus?: 'none' | 'self' | 'series';
+  blurScope?: 'coordinateSystem' | 'series' | 'global';
   [key: string]: any;
 }
 

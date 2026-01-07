@@ -88,7 +88,8 @@ export const StackBarExample = () => {
         emphasis: {
           focus: 'series'
         },
-        data: [320, 332, 301, 334, 390, 330, 320]
+        data: [320, 332, 301, 334, 390, 330, 320],
+        itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Email',
@@ -97,7 +98,8 @@ export const StackBarExample = () => {
         emphasis: {
           focus: 'series'
         },
-        data: [120, 132, 101, 134, 90, 230, 210]
+        data: [120, 132, 101, 134, 90, 230, 210],
+        itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Union Ads',
@@ -106,7 +108,8 @@ export const StackBarExample = () => {
         emphasis: {
           focus: 'series'
         },
-        data: [220, 182, 191, 234, 290, 330, 310]
+        data: [220, 182, 191, 234, 290, 330, 310],
+        itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Video Ads',
@@ -115,7 +118,8 @@ export const StackBarExample = () => {
         emphasis: {
           focus: 'series'
         },
-        data: [150, 232, 201, 154, 190, 330, 410]
+        data: [150, 232, 201, 154, 190, 330, 410],
+        itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Search Engine',
@@ -131,7 +135,8 @@ export const StackBarExample = () => {
           data: [
             [{ type: 'min' }, { type: 'max' }]
           ]
-        }
+        },
+        itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Baidu',
@@ -141,7 +146,8 @@ export const StackBarExample = () => {
         emphasis: {
           focus: 'series'
         },
-        data: [620, 732, 701, 734, 1090, 1130, 1120]
+        data: [620, 732, 701, 734, 1090, 1130, 1120],
+        itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Google',
@@ -150,7 +156,8 @@ export const StackBarExample = () => {
         emphasis: {
           focus: 'series'
         },
-        data: [120, 132, 101, 134, 290, 230, 220]
+        data: [120, 132, 101, 134, 290, 230, 220],
+        itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Bing',
@@ -159,7 +166,8 @@ export const StackBarExample = () => {
         emphasis: {
           focus: 'series'
         },
-        data: [60, 72, 71, 74, 190, 130, 110]
+        data: [60, 72, 71, 74, 190, 130, 110],
+        itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Others',
@@ -168,7 +176,8 @@ export const StackBarExample = () => {
         emphasis: {
           focus: 'series'
         },
-        data: [62, 82, 91, 84, 109, 110, 120]
+        data: [62, 82, 91, 84, 109, 110, 120],
+        itemStyle: { borderWidth: 0 }
       }
     ]
   };

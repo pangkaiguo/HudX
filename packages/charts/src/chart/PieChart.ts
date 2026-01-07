@@ -51,24 +51,7 @@ export default class PieChart extends Chart {
       const cx = center[0];
       const cy = center[1];
 
-      const total = data.reduce((sum: number, item: ChartData, index: number) => {
-        let itemName = `item-${index + 1}`;
-        if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
-          itemName = item.name;
-        }
-        if (this._legend && !this._legendSelected.has(itemName)) {
-          return sum;
-        }
-        let value: number = 0;
-        if (typeof item === 'number') {
-          value = item;
-        } else if (Array.isArray(item)) {
-          value = item[0] || 0;
-        } else if (typeof item === 'object' && item !== null) {
-          value = item.value;
-        }
-        return sum + (typeof value === 'number' ? value : 0);
-      }, 0);
+      const total = this._calculateTotal(data as any[]);
 
       if (total === 0) {
         if (option.legend?.show !== false) {
@@ -197,6 +180,8 @@ export default class PieChart extends Chart {
           cursor: (this._tooltip || seriesItem.emphasis) ? 'pointer' : 'default',
         });
         (sector as any).__baseR = r;
+        // Fix: Save initial style immediately to prevent capturing modified style (e.g. opacity) later
+        (sector as any).__initialStyle = { ...sector.style };
 
         this._root.add(sector);
         this._activeSectors.set(itemName, sector);
@@ -242,31 +227,7 @@ export default class PieChart extends Chart {
 
               const seriesType = seriesItem.type || 'pie';
               if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
-                if (this._centerLabel) {
-                  this._root.remove(this._centerLabel);
-                }
-
-                let itemName = '';
-                if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
-                  itemName = item.name;
-                }
-
-                this._centerLabel = new Text({
-                  shape: {
-                    x: cx,
-                    y: cy,
-                    text: itemName
-                  },
-                  style: {
-                    fill: seriesItem.label?.color || '#333',
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    textBaseline: 'middle'
-                  },
-                  z: Z_LABEL + 1
-                });
-                this._root.add(this._centerLabel);
+                this._showDynamicCenterLabel(seriesItem, item, value, percent, cx, cy, emphasis);
               }
             },
             () => {
@@ -369,7 +330,8 @@ export default class PieChart extends Chart {
             labelText = this._formatLabel(formatter, {
               name: (item as any).name || '',
               value,
-              percent: (percent * 100).toFixed(0)
+              percent: (percent * 100).toFixed(0),
+              data: item
             });
           } else {
             labelText = (item as any).name || '';
@@ -400,6 +362,88 @@ export default class PieChart extends Chart {
     }
   }
 
+  private _calculateTotal(data: any[]): number {
+    return data.reduce((sum: number, item: ChartData, index: number) => {
+      let itemName = `item-${index + 1}`;
+      if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+        itemName = item.name;
+      }
+      if (this._legend && !this._legendSelected.has(itemName)) {
+        return sum;
+      }
+      let value: number = 0;
+      if (typeof item === 'number') {
+        value = item;
+      } else if (Array.isArray(item)) {
+        value = item[0] || 0;
+      } else if (typeof item === 'object' && item !== null) {
+        value = item.value;
+      }
+      return sum + (typeof value === 'number' ? value : 0);
+    }, 0);
+  }
+
+  private _showDynamicCenterLabel(seriesItem: any, item: any, value: number, percent: number, cx: number, cy: number, emphasis: any): void {
+    if (this._centerLabel) {
+      this._root.remove(this._centerLabel);
+    }
+
+    let itemName = '';
+    if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+      itemName = item.name;
+    }
+    const itemValue = value;
+
+    let textContent = itemName;
+    let rich = emphasis?.label?.rich || seriesItem.label?.rich;
+    let style: any = {
+      fill: emphasis?.label?.color || seriesItem.label?.color || '#333',
+      fontSize: emphasis?.label?.fontSize || 20,
+      fontWeight: emphasis?.label?.fontWeight || 'bold',
+      textAlign: 'center',
+      textBaseline: 'middle'
+    };
+
+    // Merge emphasis label style
+    if (emphasis?.label) {
+      style = { ...style, ...emphasis.label };
+    }
+
+    // Ensure rich style falls back to centerLabel.rich if not defined in emphasis/label
+    if (!rich) {
+      rich = seriesItem.centerLabel?.rich;
+    }
+
+    // Use formatter if available
+    if (emphasis?.label?.formatter) {
+      textContent = this._formatLabel(emphasis.label.formatter, {
+        name: itemName,
+        value: itemValue,
+        percent: percent * 100,
+        data: item
+      });
+    } else if (seriesItem.centerLabel?.formatter) {
+      // Reuse centerLabel formatter for generic template
+      textContent = this._formatLabel(seriesItem.centerLabel.formatter, {
+        name: itemName,
+        value: itemValue,
+        percent: percent * 100,
+        data: item
+      });
+    }
+
+    this._centerLabel = new Text({
+      shape: {
+        x: cx,
+        y: cy,
+        text: textContent
+      },
+      style: { ...style, rich },
+      z: Z_LABEL + 1
+    });
+    this._root.add(this._centerLabel);
+  }
+
   private _renderStaticCenterLabel(seriesItem: any, cx: number, cy: number, r0: number, total: number): void {
     const centerLabelConfig = seriesItem.centerLabel || {};
     if (centerLabelConfig.show === false || r0 <= 0) return;
@@ -423,7 +467,7 @@ export default class PieChart extends Chart {
         const percent = (firstVal / total * 100).toFixed(0);
         const defaultFormatter = '{d}%';
         const fmt = centerLabelConfig.formatter || defaultFormatter;
-        textContent = this._formatLabel(fmt, { name: data[0].name || '', value: firstVal, percent });
+        textContent = this._formatLabel(fmt, { name: data[0].name || '', value: firstVal, percent, data: data[0] });
 
         if (!centerLabelConfig.style?.backgroundColor) {
           style.backgroundColor = '#eee';
@@ -452,18 +496,28 @@ export default class PieChart extends Chart {
 
 
 
-  private _formatLabel(formatter: string | Function, params: { name: string, value: number, percent: string | number }): string {
+  private _formatLabel(formatter: string | Function, params: { name: string, value: number, percent: string | number, data?: any }): string {
     if (typeof formatter === 'function') {
       return formatter(params);
     }
     if (typeof formatter === 'string') {
-      return formatter
+      let result = formatter
         .replace(/\{b\}/g, params.name)
         .replace(/\{c\}/g, String(params.value))
         .replace(/\{d\}/g, String(params.percent))
         .replace(/\{name\}/g, params.name)
         .replace(/\{value\}/g, String(params.value))
         .replace(/\{percent\}/g, String(params.percent));
+
+      if (params.data && typeof params.data === 'object') {
+        Object.keys(params.data).forEach(key => {
+          const val = params.data[key];
+          if (typeof val === 'string' || typeof val === 'number') {
+            result = result.replace(new RegExp(`\\{${key}\\}`, 'g'), String(val));
+          }
+        });
+      }
+      return result;
     }
     return '';
   }
@@ -582,7 +636,8 @@ export default class PieChart extends Chart {
             lineWidth: seriesItem.labelLine?.lineStyle?.width || 1,
             fill: 'none'
           },
-          z: Z_LABEL
+          z: Z_LABEL,
+          silent: true
         });
         this._root.add(line);
       }
@@ -643,23 +698,51 @@ export default class PieChart extends Chart {
     const seriesItem = series[0];
     const emphasis = seriesItem.emphasis;
     const [r0, r] = this._getRadius(seriesItem);
+    const sector = this._activeSectors.get(name);
 
-    this._root.traverse((child: any) => {
-      if (child instanceof Sector && (child as any)?.name === name) {
-        this._applyEmphasisAnimation(child, emphasis, hovered, r);
+    if (!sector) return;
 
-        if (this._tooltip) {
-          if (hovered) {
-            const shape = child.shape;
-            const midAngle = (shape.startAngle + shape.endAngle) / 2;
-            const r = (shape.r + shape.r0) / 2;
-            const cx = shape.cx + Math.cos(midAngle) * r;
-            const cy = shape.cy + Math.sin(midAngle) * r;
-          } else {
-          }
-        }
+    const cx = sector.shape.cx;
+    const cy = sector.shape.cy;
+
+    if (hovered) {
+      if (this._restoreTimeout) {
+        clearTimeout(this._restoreTimeout);
+        this._restoreTimeout = null;
       }
-    });
+
+      this._applyEmphasisAnimation(sector, emphasis, true, r);
+
+      const seriesType = seriesItem.type || 'pie';
+      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+        const item = (sector as any).data;
+        const total = this._calculateTotal(seriesItem.data || []);
+        const value = this._getDataValue(item) || 0;
+        const percent = total > 0 ? value / total : 0;
+
+        this._showDynamicCenterLabel(seriesItem, item, value, percent, cx, cy, emphasis);
+      }
+    } else {
+      this._applyEmphasisAnimation(sector, emphasis, false, r);
+
+      const seriesType = seriesItem.type || 'pie';
+      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+        if (this._restoreTimeout) {
+          clearTimeout(this._restoreTimeout);
+        }
+
+        this._restoreTimeout = setTimeout(() => {
+          if (this._centerLabel) {
+            this._root.remove(this._centerLabel);
+            this._centerLabel = null;
+          }
+
+          const total = this._calculateTotal(seriesItem.data || []);
+          this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
+          this._restoreTimeout = null;
+        }, 50);
+      }
+    }
   }
 
   private _getRadius(seriesItem: SeriesOption): [number, number] {
@@ -706,9 +789,13 @@ export default class PieChart extends Chart {
     if (isEnter) {
       this._activeSectors.forEach((s) => {
         if (s !== sector) {
-          this._animator.animate(s.style, 'opacity', 0.7, { duration: 200 }).start();
-          if ((s as any).__label) {
-            this._animator.animate(((s as any).__label).style, 'opacity', 0.7, { duration: 200 }).start();
+          // Check focus policy
+          const focus = emphasis?.focus || 'none';
+          if (focus === 'self') {
+            this._animator.animate(s.style, 'opacity', 0.7, { duration: 200 }).start();
+            if ((s as any).__label) {
+              this._animator.animate(((s as any).__label).style, 'opacity', 0.7, { duration: 200 }).start();
+            }
           }
 
           // Reset other properties (scale, radius, style) that might be stuck due to cancelled restore

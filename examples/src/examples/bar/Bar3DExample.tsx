@@ -80,13 +80,13 @@ export const Bar3DExample = () => {
         name: 'Sales',
         type: 'bar3D',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: '#5470c6' }
+        itemStyle: { color: '#5470c6', borderWidth: 0 }
       },
       {
         name: 'Profits',
         type: 'bar3D',
         data: [60, 100, 75, 40, 35, 55, 65],
-        itemStyle: { color: '#91cc75' }
+        itemStyle: { color: '#91cc75', borderWidth: 0 }
       }
     ],
     animation: true

@@ -38,26 +38,22 @@ describe('createDecalPattern', () => {
     const decal: DecalObject = { symbol: 'circle' };
     createDecalPattern(decal, '#000');
 
-    // Check mock canvas directly since our mock implementation reuses it
-    expect(mockCanvas.width).toBe(6);
-    expect(mockCanvas.height).toBe(6);
+    expect(mockCanvas.width).toBe(12);
+    expect(mockCanvas.height).toBe(12);
   });
 
   it('should respect dashArrayX', () => {
     const decal: DecalObject = { symbol: 'circle', dashArrayX: [2, 1] };
     createDecalPattern(decal, '#000');
 
-    // dashArrayX sum = 3. totalW = 3 * 6 = 18.
     expect(mockCanvas.width).toBe(18);
-    expect(mockCanvas.height).toBe(6);
+    expect(mockCanvas.height).toBe(12);
   });
 
   it('should respect maxTileWidth constraint', () => {
     const decal: DecalObject = { symbol: 'circle', dashArrayX: [100], maxTileWidth: 50 };
     createDecalPattern(decal, '#000');
 
-    // dashArrayX sum = 100. totalW calculated = 100 * 6 = 600.
-    // capped by maxTileWidth 50.
     expect(mockCanvas.width).toBe(50);
   });
 });

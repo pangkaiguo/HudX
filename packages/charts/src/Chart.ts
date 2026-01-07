@@ -24,6 +24,7 @@ export default class Chart {
   protected _legend?: Legend;
   protected _title?: Title;
   protected _legendSelected: Set<string> = new Set();
+  protected _hasInitLegend: boolean = false;
   protected _suppressAnimationOnce: boolean = false;
   protected _animateOnlyFor?: Set<string>;
 
@@ -857,9 +858,9 @@ export default class Chart {
           if (option.legend?.selectedMode === 'single') {
             if (currentSelected.length === 1) {
               this.beginAnimateShow(currentSelected[0]);
-            } else {
-              this.beginSilentHide();
             }
+            // If length != 1 (e.g. 0 or >1), do not suppress animation.
+            // This allows "restore all" to animate properly.
           } else {
             if (selected) {
               this.beginAnimateShow(name);
@@ -881,12 +882,14 @@ export default class Chart {
     } as any);
 
     legend.setContainer(this._width, this._height);
-    legend.setItems(items, Array.from(this._legendSelected));
 
-    // Init default selection if empty
-    if (this._legendSelected.size === 0) {
+    // Init default selection if not initialized
+    if (!this._hasInitLegend) {
       items.forEach(item => this._legendSelected.add(item.name));
+      this._hasInitLegend = true;
     }
+
+    legend.setItems(items, Array.from(this._legendSelected));
 
     this._legend = legend;
     this._root.add(legend);

@@ -61,17 +61,40 @@ export const DoughnutExample = () => {
           },
           label: {
             show: true,
-            fontSize: 16,
-            fontWeight: 'bold'
+            formatter: '{title|{name}}\n{value|{value}}\n{sub|{desc}}'
           }
         },
         data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
+          { value: 1048, name: 'Search Engine', desc: 'Google, Bing' },
+          { value: 735, name: 'Direct', desc: 'Direct URL' },
+          { value: 580, name: 'Email', desc: 'Marketing' },
+          { value: 484, name: 'Union Ads', desc: 'Partners' },
+          { value: 300, name: 'Video Ads', desc: 'Youtube' }
         ],
+        centerLabel: {
+          show: true,
+          formatter: '{title|Amount (HKD)}\n{value|999,999}\n{sub|Supporting text}',
+          rich: {
+            title: {
+              fontSize: 14,
+              color: '#999',
+              fontWeight: 'normal',
+              padding: [0, 0, 4, 0]
+            },
+            value: {
+              fontSize: 24,
+              color: '#333',
+              fontWeight: 'bold',
+              padding: [4, 0, 4, 0]
+            },
+            sub: {
+              fontSize: 12,
+              color: '#aaa',
+              fontWeight: 'normal',
+              padding: [4, 0, 0, 0]
+            }
+          }
+        },
         label: {
           show: false,
           position: 'center',

@@ -80,21 +80,21 @@ export const AdvancedBarExample = () => {
         name: 'Product A',
         type: 'bar',
         data: [320, 332, 301, 334],
-        itemStyle: { color: theme.seriesColors?.[0] },
+        itemStyle: { color: theme.seriesColors?.[0], borderWidth: 0 },
         barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
       },
       {
         name: 'Product B',
         type: 'bar',
         data: [220, 182, 191, 234],
-        itemStyle: { color: theme.seriesColors?.[1] },
+        itemStyle: { color: theme.seriesColors?.[1], borderWidth: 0 },
         barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
       },
       {
         name: 'Product C',
         type: 'bar',
         data: [150, 232, 201, 154],
-        itemStyle: { color: theme.seriesColors?.[2] },
+        itemStyle: { color: theme.seriesColors?.[2], borderWidth: 0 },
         barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
       }
     ],

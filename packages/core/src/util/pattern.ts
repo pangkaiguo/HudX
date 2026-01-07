@@ -154,10 +154,8 @@ export function createDecalPattern(
 
   const pattern = pCtx.createPattern(canvas, 'repeat');
   if (pattern) {
-    // Attach source canvas for SVG renderer
     (pattern as any)._canvas = canvas;
 
-    // Apply rotation to the pattern itself
     if (decal.rotation && typeof DOMMatrix !== 'undefined') {
       const matrix = new DOMMatrix().rotateSelf(decal.rotation * 180 / Math.PI);
       pattern.setTransform(matrix);

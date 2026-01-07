@@ -43,7 +43,7 @@ export default class Legend extends Group {
   private _option: LegendOption;
   private _items: LegendItem[] = [];
   private _selectedItems: Set<string> = new Set();
-  private _itemRects: Map<string, Rect> = new Map();
+  private _itemRects: Map<string, any> = new Map();
   private _containerWidth: number = 800;
   private _containerHeight: number = 600;
 
@@ -71,8 +71,19 @@ export default class Legend extends Group {
 
   setItems(items: LegendItem[], selected?: string[]): void {
     this._items = items;
-    if (selected && selected.length > 0) {
-      this._selectedItems = new Set(selected);
+    if (selected !== undefined) {
+      this._items.forEach(item => {
+        // Ensure only valid items are selected
+        if (selected.includes(item.name)) {
+          this._selectedItems.add(item.name);
+        } else {
+          this._selectedItems.delete(item.name);
+        }
+      });
+      // Handle case where selected might contain items not in current items list?
+      // For now, let's just rebuild the set from the valid intersection
+      const validNames = new Set(items.map(i => i.name));
+      this._selectedItems = new Set(selected.filter(name => validNames.has(name)));
     } else if (this._selectedItems.size === 0) {
       this._selectedItems.clear();
       items.forEach(item => this._selectedItems.add(item.name));

@@ -155,6 +155,7 @@ export default class BarChart extends Chart {
       }
 
       const stackValues: Record<string, Record<string, { pos: number, neg: number }>> = {};
+      const lastBars: Record<string, Record<string, { pos?: Rect, neg?: Rect }>> = {};
 
       series.forEach((seriesItem, seriesIndex) => {
         if (seriesItem.type !== 'bar') {
@@ -189,6 +190,7 @@ export default class BarChart extends Chart {
           if (xVal === undefined || yVal === undefined) return;
 
           const catKey = String(index);
+
           if (!stackValues[catKey]) {
             stackValues[catKey] = {};
           }
@@ -261,6 +263,20 @@ export default class BarChart extends Chart {
             z: Z_SERIES,
             cursor: this._tooltip ? 'pointer' : 'default',
           });
+          (rect as any).__isPositive = isPositive;
+
+          // Update lastBars for the next item in the stack
+          if (!lastBars[catKey]) {
+            lastBars[catKey] = {};
+          }
+          if (!lastBars[catKey][stackId]) {
+            lastBars[catKey][stackId] = {};
+          }
+          if (isPositive) {
+            lastBars[catKey][stackId].pos = rect;
+          } else {
+            lastBars[catKey][stackId].neg = rect;
+          }
 
           this._root.add(rect);
           this._activeBars.set(barKey, rect);
@@ -325,9 +341,12 @@ export default class BarChart extends Chart {
 
           if (this._shouldAnimateFor(seriesName) || oldBar) {
             const isUpdate = !!oldBar;
-            const delay = isUpdate ? 0 : (index * 100 + seriesIndex * 200);
+            // If chart has existing bars (update scenario), skip staggered delay to ensure sync
+            const hasOldBars = oldBars.size > 0;
+            const delay = (isUpdate || hasOldBars) ? 0 : (index * 100 + seriesIndex * 200);
             const duration = this._getAnimationDuration(isUpdate);
 
+            // Animate height
             this._animator.animate(
               rect.attr('shape'),
               'height',
@@ -336,14 +355,20 @@ export default class BarChart extends Chart {
                 duration,
                 delay,
                 easing: 'cubicOut',
-                onUpdate: (target: any, percent: number) => {
-                  const currentHeight = initialHeight + (barHeight - initialHeight) * percent;
-                  const currentY = initialY + (barY - initialY) * percent;
+                onUpdate: () => rect.markRedraw()
+              }
+            ).start();
 
-                  target.height = currentHeight;
-                  target.y = currentY;
-                  rect.markRedraw();
-                }
+            // Animate y position
+            this._animator.animate(
+              rect.attr('shape'),
+              'y',
+              barY,
+              {
+                duration,
+                delay,
+                easing: 'cubicOut',
+                onUpdate: () => rect.markRedraw()
               }
             ).start();
 
@@ -356,6 +381,35 @@ export default class BarChart extends Chart {
             });
           }
         });
+      });
+
+      // Handle exit animation for removed bars
+      oldBars.forEach((bar, key) => {
+        if (!this._activeBars.has(key)) {
+          // Ensure exiting bars are behind new bars
+          bar.z = Z_SERIES - 1;
+          this._root.add(bar);
+          const isPositive = (bar as any).__isPositive ?? true;
+          const initialH = bar.shape.height;
+          const initialY = bar.shape.y;
+          const targetY = isPositive ? (initialY + initialH) : initialY;
+
+          // Animate height to 0
+          this._animator.animate(
+            bar.shape,
+            'height',
+            0,
+            { duration: 300, easing: 'cubicOut', onUpdate: () => bar.markRedraw() }
+          ).start();
+
+          // Animate y to target (bottom for positive, top for negative)
+          this._animator.animate(
+            bar.shape,
+            'y',
+            targetY,
+            { duration: 300, easing: 'cubicOut', onUpdate: () => bar.markRedraw() }
+          ).start();
+        }
       });
 
       this._renderer.flush();

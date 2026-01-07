@@ -35,10 +35,13 @@ export const AdvancedDoughnutExample = () => {
           position: 'center'
         },
         emphasis: {
+          scale: true,
+          scaleSize: 1.03,
           label: {
             show: true,
             fontSize: 20,
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            formatter: '{title|{name}}\n{value|{value}}\n{sub|{d}%}'
           }
         },
         labelLine: {
@@ -108,6 +111,8 @@ export const AdvancedDoughnutExample = () => {
           position: 'center'
         },
         emphasis: {
+          scale: true,
+          scaleSize: 1.03,
           label: {
             show: true,
             fontSize: 40,
@@ -168,11 +173,14 @@ export const AdvancedDoughnutExample = () => {
           position: 'center'
         },
         emphasis: {
+          scale: true,
+          scaleSize: 1.03,
           label: {
             show: true,
             fontSize: 40,
             fontWeight: 'bold',
-            color: '#fff'
+            color: '#fff',
+            formatter: '{title|{name}}\n{value|{value}}'
           }
         },
         labelLine: {

@@ -79,7 +79,7 @@ export const BasicBarExample = () => {
         name: 'Weekly Data',
         type: 'bar',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: theme.seriesColors?.[0], opacity: 0.8 }
+        itemStyle: { color: theme.seriesColors?.[0], opacity: 0.8, borderWidth: 0 }
       }
     ],
     animation: true

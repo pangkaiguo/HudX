@@ -56,7 +56,7 @@ export default class Circle extends ChartElement {
     if (this.style.fill) {
       ctx.fill();
     }
-    if (this.style.stroke) {
+    if (this.style.stroke && this.style.lineWidth !== 0) {
       ctx.stroke();
     }
 

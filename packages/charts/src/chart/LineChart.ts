@@ -233,7 +233,7 @@ export default class LineChart extends Chart {
             const circle = new Circle({
               shape: {
                 cx: point.x,
-                cy: plotY + plotHeight,
+                cy: point.y,
                 r: 0,
               },
               style: {
@@ -286,20 +286,20 @@ export default class LineChart extends Chart {
             }
 
             if (this._shouldAnimateFor(seriesName)) {
-              const delay = pointIndex * 50 + seriesIndex * 100;
-              const duration = this._getAnimationDuration();
+              const lineDuration = this._getAnimationDuration();
+              const delay = (pointIndex / points.length) * lineDuration;
+
               this._animator.animate(
                 { t: 0 },
                 't',
                 1,
                 {
-                  duration,
+                  duration: 300,
                   delay,
                   easing: 'cubicOut',
                   onUpdate: (_target: any, percent: number) => {
-                    const cy = plotY + plotHeight - (plotY + plotHeight - point.y) * percent;
                     const r = pointSize * percent;
-                    circle.attr('shape', { cx: point.x, cy, r });
+                    circle.attr('shape', { r });
                     circle.markRedraw();
                   }
                 }

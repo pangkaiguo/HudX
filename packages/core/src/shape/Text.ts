@@ -25,6 +25,8 @@ export default class Text extends ChartElement {
 
   // Cache for text fragments
   private _textFragments: any[] | null = null;
+  // Cache for text lines
+  private _textLines: { fragments: any[], width: number, height: number }[] | null = null;
   private _totalWidth: number = 0;
   private _totalHeight: number = 0;
 
@@ -115,95 +117,110 @@ export default class Text extends ChartElement {
 
   private _parseText(rich?: Record<string, any>): void {
     const text = this.shape.text || '';
-    const fragments: any[] = [];
+    const lines = text.split('\n');
+    const parsedLines: { fragments: any[], width: number, height: number }[] = [];
 
-    if (!rich) {
-      // Simple text
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d')!;
-      const style = this.style;
-      const font = `${style.fontWeight || 'normal'} ${style.fontSize || 12}px ${style.fontFamily || 'sans-serif'}`;
-      ctx.font = font;
-      const metrics = ctx.measureText(text);
-      fragments.push({
-        text,
-        width: metrics.width,
-        height: style.fontSize || 12,
-        style: {}
-      });
-      this._totalWidth = metrics.width;
-      this._totalHeight = style.fontSize || 12;
-    } else {
-      // Rich text parsing
-      const regex = /\{([a-zA-Z0-9_]+)\|([^}]+)\}/g;
-      let lastIndex = 0;
-      let match;
-      let totalWidth = 0;
-      let maxHeight = 0;
+    let maxTotalWidth = 0;
+    let totalHeight = 0;
 
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d')!;
-      const baseStyle = this.style;
-      const baseFont = `${baseStyle.fontWeight || 'normal'} ${baseStyle.fontSize || 12}px ${baseStyle.fontFamily || 'sans-serif'}`;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    const baseStyle = this.style;
+    const baseFont = `${baseStyle.fontWeight || 'normal'} ${baseStyle.fontSize || 12}px ${baseStyle.fontFamily || 'sans-serif'}`;
+    const baseFontSize = baseStyle.fontSize || 12;
 
-      while ((match = regex.exec(text)) !== null) {
-        // Add text before match
-        if (match.index > lastIndex) {
-          const sub = text.substring(lastIndex, match.index);
-          ctx.font = baseFont;
-          const metrics = ctx.measureText(sub);
-          const h = baseStyle.fontSize || 12;
-          fragments.push({ text: sub, width: metrics.width, height: h, style: {} });
-          totalWidth += metrics.width;
-          maxHeight = Math.max(maxHeight, h);
+    lines.forEach(lineText => {
+      const fragments: any[] = [];
+      let lineWidth = 0;
+      let lineHeight = 0;
+
+      if (!rich) {
+        // Simple text
+        ctx.font = baseFont;
+        const metrics = ctx.measureText(lineText);
+        const h = baseFontSize;
+        fragments.push({
+          text: lineText,
+          width: metrics.width,
+          height: h,
+          style: {}
+        });
+        lineWidth = metrics.width;
+        lineHeight = h;
+      } else {
+        // Rich text parsing
+        const regex = /\{([a-zA-Z0-9_]+)\|([^}]+)\}/g;
+        let lastIndex = 0;
+        let match;
+
+        while ((match = regex.exec(lineText)) !== null) {
+          // Add text before match
+          if (match.index > lastIndex) {
+            const sub = lineText.substring(lastIndex, match.index);
+            ctx.font = baseFont;
+            const metrics = ctx.measureText(sub);
+            const h = baseFontSize;
+            fragments.push({ text: sub, width: metrics.width, height: h, style: {} });
+            lineWidth += metrics.width;
+            lineHeight = Math.max(lineHeight, h);
+          }
+
+          const styleName = match[1];
+          const content = match[2];
+          const style = rich[styleName] || {};
+
+          // Measure with specific style
+          const fontSize = style.fontSize || baseFontSize;
+          const fontFamily = style.fontFamily || baseStyle.fontFamily || 'sans-serif';
+          const fontWeight = style.fontWeight || baseStyle.fontWeight || 'normal';
+          ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+          const metrics = ctx.measureText(content);
+
+          // Calculate box width (content + padding)
+          const pW = this._getPaddingWidth(style.padding);
+          const pH = this._getPaddingHeight(style.padding);
+          const w = metrics.width + pW;
+          const h = fontSize + pH;
+
+          fragments.push({
+            text: content,
+            width: w,
+            height: h,
+            style: style,
+            contentWidth: metrics.width
+          });
+          lineWidth += w;
+          lineHeight = Math.max(lineHeight, h);
+
+          lastIndex = regex.lastIndex;
         }
 
-        const styleName = match[1];
-        const content = match[2];
-        const style = rich[styleName] || {};
-
-        // Measure with specific style
-        const fontSize = style.fontSize || baseStyle.fontSize || 12;
-        const fontFamily = style.fontFamily || baseStyle.fontFamily || 'sans-serif';
-        const fontWeight = style.fontWeight || baseStyle.fontWeight || 'normal';
-        ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-        const metrics = ctx.measureText(content);
-
-        // Calculate box width (content + padding)
-        const pW = this._getPaddingWidth(style.padding);
-        const pH = this._getPaddingHeight(style.padding);
-        const w = metrics.width + pW;
-        const h = fontSize + pH;
-
-        fragments.push({
-          text: content,
-          width: w,
-          height: h,
-          style: style,
-          contentWidth: metrics.width
-        });
-        totalWidth += w;
-        maxHeight = Math.max(maxHeight, h);
-
-        lastIndex = regex.lastIndex;
+        // Add trailing text
+        if (lastIndex < lineText.length) {
+          const sub = lineText.substring(lastIndex);
+          ctx.font = baseFont;
+          const metrics = ctx.measureText(sub);
+          const h = baseFontSize;
+          fragments.push({ text: sub, width: metrics.width, height: h, style: {} });
+          lineWidth += metrics.width;
+          lineHeight = Math.max(lineHeight, h);
+        }
       }
 
-      // Add trailing text
-      if (lastIndex < text.length) {
-        const sub = text.substring(lastIndex);
-        ctx.font = baseFont;
-        const metrics = ctx.measureText(sub);
-        const h = baseStyle.fontSize || 12;
-        fragments.push({ text: sub, width: metrics.width, height: h, style: {} });
-        totalWidth += metrics.width;
-        maxHeight = Math.max(maxHeight, h);
+      // Handle empty lines (height of base font)
+      if (fragments.length === 0) {
+        lineHeight = baseFontSize;
       }
 
-      this._totalWidth = totalWidth;
-      this._totalHeight = maxHeight;
-    }
+      parsedLines.push({ fragments, width: lineWidth, height: lineHeight });
+      maxTotalWidth = Math.max(maxTotalWidth, lineWidth);
+      totalHeight += lineHeight;
+    });
 
-    this._textFragments = fragments;
+    this._textLines = parsedLines;
+    this._totalWidth = maxTotalWidth;
+    this._totalHeight = totalHeight;
+    this._textFragments = parsedLines.flatMap(l => l.fragments);
   }
 
   contain(x: number, y: number): boolean {
@@ -235,7 +252,7 @@ export default class Text extends ChartElement {
     }
 
     // Parse if needed
-    if (!this._textFragments || this.isDirty()) {
+    if (!this._textLines || this.isDirty()) {
       this._parseText(style.rich);
     }
 
@@ -266,61 +283,74 @@ export default class Text extends ChartElement {
       }
     }
 
-    // Draw fragments
-    let currentX = startX;
-    // Align vertically: middle of the line
-    const centerY = startY + this._totalHeight / 2;
+    // Draw fragments line by line
+    let currentY = startY;
+    const textAlign = style.textAlign || 'left';
 
-    this._textFragments!.forEach(frag => {
-      const fStyle = frag.style;
-      const fontSize = fStyle.fontSize || style.fontSize || 12;
-      const fontFamily = fStyle.fontFamily || style.fontFamily || 'sans-serif';
-      const fontWeight = fStyle.fontWeight || style.fontWeight || 'normal';
+    this._textLines!.forEach(line => {
+      const { fragments, width, height } = line;
 
-      ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-      ctx.textBaseline = 'middle';
-
-      const fragHeight = frag.height;
-      const fragWidth = frag.width;
-
-      // Draw fragment background/border
-      if (fStyle.backgroundColor || (fStyle.borderColor && fStyle.borderWidth)) {
-        // Center vertically in the line
-        const fy = centerY - fragHeight / 2;
-        if (fStyle.backgroundColor) {
-          ctx.fillStyle = fStyle.backgroundColor;
-          const r = fStyle.borderRadius || 0;
-          if (r > 0) {
-            this._roundRect(ctx, currentX, fy, fragWidth, fragHeight, r);
-            ctx.fill();
-          } else {
-            ctx.fillRect(currentX, fy, fragWidth, fragHeight);
-          }
-        }
-        if (fStyle.borderColor && fStyle.borderWidth) {
-          ctx.strokeStyle = fStyle.borderColor;
-          ctx.lineWidth = fStyle.borderWidth;
-          const r = fStyle.borderRadius || 0;
-          if (r > 0) {
-            this._roundRect(ctx, currentX, fy, fragWidth, fragHeight, r);
-            ctx.stroke();
-          } else {
-            ctx.strokeRect(currentX, fy, fragWidth, fragHeight);
-          }
-        }
+      // Calculate X start based on alignment relative to text block
+      let lineStartX = startX;
+      if (textAlign === 'center') {
+        lineStartX += (this._totalWidth - width) / 2;
+      } else if (textAlign === 'right') {
+        lineStartX += (this._totalWidth - width);
       }
 
-      // Draw text
-      const contentX = currentX + this._getPaddingLeft(fStyle.padding);
-      const contentY = centerY; // Middle baseline
+      let currentX = lineStartX;
+      const centerY = currentY + height / 2;
 
-      ctx.fillStyle = fStyle.color || style.fill || '#000';
-      // Note: we use fillText even if style says stroke? 
-      // Standard Text shape logic distinguishes fill vs stroke.
-      // For rich text, let's assume fill unless textStroke is added later.
-      ctx.fillText(frag.text, contentX, contentY);
+      fragments.forEach(frag => {
+        const fStyle = frag.style;
+        const fontSize = fStyle.fontSize || style.fontSize || 12;
+        const fontFamily = fStyle.fontFamily || style.fontFamily || 'sans-serif';
+        const fontWeight = fStyle.fontWeight || style.fontWeight || 'normal';
 
-      currentX += fragWidth;
+        ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+        ctx.textBaseline = 'middle';
+
+        const fragHeight = frag.height;
+        const fragWidth = frag.width;
+
+        // Draw fragment background/border
+        if (fStyle.backgroundColor || (fStyle.borderColor && fStyle.borderWidth)) {
+          // Center vertically in the line
+          const fy = centerY - fragHeight / 2;
+          if (fStyle.backgroundColor) {
+            ctx.fillStyle = fStyle.backgroundColor;
+            const r = fStyle.borderRadius || 0;
+            if (r > 0) {
+              this._roundRect(ctx, currentX, fy, fragWidth, fragHeight, r);
+              ctx.fill();
+            } else {
+              ctx.fillRect(currentX, fy, fragWidth, fragHeight);
+            }
+          }
+          if (fStyle.borderColor && fStyle.borderWidth) {
+            ctx.strokeStyle = fStyle.borderColor;
+            ctx.lineWidth = fStyle.borderWidth;
+            const r = fStyle.borderRadius || 0;
+            if (r > 0) {
+              this._roundRect(ctx, currentX, fy, fragWidth, fragHeight, r);
+              ctx.stroke();
+            } else {
+              ctx.strokeRect(currentX, fy, fragWidth, fragHeight);
+            }
+          }
+        }
+
+        // Draw text
+        const contentX = currentX + this._getPaddingLeft(fStyle.padding);
+        const contentY = centerY; // Middle baseline
+
+        ctx.fillStyle = fStyle.color || style.fill || '#000';
+        ctx.fillText(frag.text, contentX, contentY);
+
+        currentX += fragWidth;
+      });
+
+      currentY += height;
     });
 
     ctx.restore();
