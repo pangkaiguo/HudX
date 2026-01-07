@@ -4,10 +4,10 @@ import type { ChartOption, HChartRef } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const StackBarExample = () => {
+export const StackHorizontalBarExample = () => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
-  const [gridTop, setGridTop] = useState(40);
+  const [gridTop, setGridTop] = useState(80);
   const [splitNumber, setSplitNumber] = useState(5);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const theme = ThemeManager.getTheme('light');
@@ -15,7 +15,7 @@ export const StackBarExample = () => {
 
   const option: ChartOption = {
     title: {
-      text: 'Stack Bar Chart',
+      text: 'Stacked Horizontal Bar',
       subtext: 'Data Accumulation',
       left: 'center',
       top: 20
@@ -28,15 +28,13 @@ export const StackBarExample = () => {
       }
     },
     legend: {
-      show: true,
-      orient: 'vertical',
-      left: 'left',
-      top: 'middle'
+      data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine'],
+      bottom: 10
     },
     grid: {
-      left: '15%',
+      left: '3%',
       right: '4%',
-      bottom: '3%',
+      bottom: '10%',
       top: gridTop,
       containLabel: true
     },
@@ -53,139 +51,82 @@ export const StackBarExample = () => {
         ]
       }
     },
-    xAxis: [
-      {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        show: true,
-        splitLine: {
-          show: showGrid,
-          lineStyle: {
-            color: '#eee',
-            type: 'dashed'
-          }
+    xAxis: {
+      type: 'value',
+      show: true,
+      splitLine: {
+        show: showGrid,
+        lineStyle: {
+          color: '#eee',
+          type: 'dashed'
         }
       }
-    ],
-    yAxis: [
-      {
-        type: 'value',
-        show: true,
-        splitNumber: splitNumber,
-        splitLine: {
-          show: showGrid,
-          lineStyle: {
-            color: '#eee'
-          }
+    },
+    yAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      show: true,
+      splitLine: {
+        show: showGrid,
+        lineStyle: {
+          color: '#eee'
         }
       }
-    ],
+    },
     series: [
       {
         name: 'Direct',
         type: 'bar',
         stack: 'total',
-        emphasis: {
-          focus: 'series'
-        },
-        data: [320, 332, 301, 334, 390, 330, 320],
+        label: { show: true },
+        emphasis: { focus: 'series' },
+        data: [320, 302, 301, 334, 390, 330, 320],
         itemStyle: { borderWidth: 0 }
       },
       {
-        name: 'Email',
+        name: 'Mail Ad',
         type: 'bar',
         stack: 'total',
-        emphasis: {
-          focus: 'series'
-        },
+        label: { show: true },
+        emphasis: { focus: 'series' },
         data: [120, 132, 101, 134, 90, 230, 210],
         itemStyle: { borderWidth: 0 }
       },
       {
-        name: 'Union Ads',
+        name: 'Affiliate Ad',
         type: 'bar',
         stack: 'total',
-        emphasis: {
-          focus: 'series'
-        },
+        label: { show: true },
+        emphasis: { focus: 'series' },
         data: [220, 182, 191, 234, 290, 330, 310],
         itemStyle: { borderWidth: 0 }
       },
       {
-        name: 'Video Ads',
+        name: 'Video Ad',
         type: 'bar',
         stack: 'total',
-        emphasis: {
-          focus: 'series'
-        },
-        data: [150, 232, 201, 154, 190, 330, 410],
+        label: { show: true },
+        emphasis: { focus: 'series' },
+        data: [150, 212, 201, 154, 190, 330, 410],
         itemStyle: { borderWidth: 0 }
       },
       {
         name: 'Search Engine',
         type: 'bar',
-        data: [862, 1018, 964, 1026, 1679, 1600, 1570],
-        emphasis: {
-          focus: 'series'
-        },
-        markLine: {
-          lineStyle: {
-            type: 'dashed'
-          },
-          data: [
-            [{ type: 'min' }, { type: 'max' }]
-          ]
-        },
-        itemStyle: { borderWidth: 0 }
-      },
-      {
-        name: 'Baidu',
-        type: 'bar',
-        barWidth: 5,
-        stack: 'search',
-        emphasis: {
-          focus: 'series'
-        },
-        data: [620, 732, 701, 734, 1090, 1130, 1120],
-        itemStyle: { borderWidth: 0 }
-      },
-      {
-        name: 'Google',
-        type: 'bar',
-        stack: 'search',
-        emphasis: {
-          focus: 'series'
-        },
-        data: [120, 132, 101, 134, 290, 230, 220],
-        itemStyle: { borderWidth: 0 }
-      },
-      {
-        name: 'Bing',
-        type: 'bar',
-        stack: 'search',
-        emphasis: {
-          focus: 'series'
-        },
-        data: [60, 72, 71, 74, 190, 130, 110],
-        itemStyle: { borderWidth: 0 }
-      },
-      {
-        name: 'Others',
-        type: 'bar',
-        stack: 'search',
-        emphasis: {
-          focus: 'series'
-        },
-        data: [62, 82, 91, 84, 109, 110, 120],
+        stack: 'total',
+        label: { show: true },
+        emphasis: { focus: 'series' },
+        data: [820, 832, 901, 934, 1290, 1330, 1320],
         itemStyle: { borderWidth: 0 }
       }
-    ]
+    ],
+    animation: true
   };
 
   const handleUpdateSeries = () => {
     const chartInstance = chartRef.current?.getChartInstance();
     if (chartInstance) {
-      const seriesCount = 9;
+      const seriesCount = 5;
       const newSeriesData = [];
 
       for (let i = 0; i < seriesCount; i++) {
@@ -201,9 +142,7 @@ export const StackBarExample = () => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Stack Bar Chart</h2>
-      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Hover over bars to see values</p>
-
+      <h2 style={{ marginBottom: 10 }}>Stacked Horizontal Bar Chart</h2>
       <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
@@ -242,14 +181,14 @@ export const StackBarExample = () => {
               <input
                 type="range"
                 min="20"
-                max="100"
+                max="150"
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Y Split: {splitNumber}</span>
+              <span>X Split: {splitNumber}</span>
               <input
                 type="range"
                 min="2"
@@ -263,14 +202,12 @@ export const StackBarExample = () => {
           </>
         )}
       </div>
-
       <HChart
         ref={chartRef}
         option={option}
         renderMode={renderMode}
         style={{ width: '100%', height: '600px', border: '1px solid #e0e0e0', borderRadius: 8 }}
       />
-
       <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={handleUpdateSeries}
@@ -291,4 +228,4 @@ export const StackBarExample = () => {
   );
 };
 
-export default StackBarExample;
+export default StackHorizontalBarExample;

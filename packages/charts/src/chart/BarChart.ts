@@ -25,6 +25,7 @@ export default class BarChart extends Chart {
 
       const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
       const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
+      const isHorizontal = yAxis?.type === 'category';
 
       let data: any[] = [];
       series.forEach(s => {
@@ -68,19 +69,26 @@ export default class BarChart extends Chart {
         finalData = [...data, ...stackData];
       }
 
-      const xDomain = calculateDomain(xAxis || {}, data, true);
-      const yDomain = calculateDomain(yAxis || {}, finalData, false);
+      const xDataForDomain = isHorizontal ? finalData : data;
+      const yDataForDomain = isHorizontal ? data : finalData;
+
+      const xDomain = calculateDomain(xAxis || {}, xDataForDomain, true);
+      const yDomain = calculateDomain(yAxis || {}, yDataForDomain, false);
 
       const xScale = xAxis?.type === 'category'
         ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
         : createLinearScale(xDomain, [plotX, plotX + plotWidth]);
 
-      const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
+      const yScale = yAxis?.type === 'category'
+        ? createOrdinalScale(yDomain, [plotY, plotY + plotHeight])
+        : createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
       const barSeries = series.filter(s => s.type === 'bar' && s.show !== false);
       const seriesCount = barSeries.length || 1;
       let categoryCount: number;
-      if (xAxis?.type === 'category') {
+      if (isHorizontal) {
+        categoryCount = (Array.isArray(yAxis?.data) ? yAxis.data.length : yDomain.length);
+      } else if (xAxis?.type === 'category') {
         categoryCount = (Array.isArray(xAxis?.data) ? xAxis.data.length : xDomain.length);
       } else {
         categoryCount = data.length;
@@ -101,7 +109,8 @@ export default class BarChart extends Chart {
       const stackGroups = Object.keys(stacks).length;
       const stackGroupSeries = Object.values(stacks);
 
-      const categoryWidth = categoryCount > 0 ? (plotWidth / categoryCount) : plotWidth;
+      const axisLength = isHorizontal ? plotHeight : plotWidth;
+      const categoryWidth = categoryCount > 0 ? (axisLength / categoryCount) : axisLength;
 
       const firstSeries = barSeries[0] || {};
       const barCategoryGapStr = firstSeries.barCategoryGap ?? '20%';
@@ -175,7 +184,16 @@ export default class BarChart extends Chart {
 
         seriesData.forEach((item, index) => {
           let xVal, yVal;
-          if (xAxis?.type === 'category') {
+          if (isHorizontal) {
+            yVal = yDomain[index];
+            if (typeof item === 'object' && item !== null && item.value !== undefined) {
+              xVal = item.value;
+            } else if (Array.isArray(item)) {
+              xVal = item[0];
+            } else {
+              xVal = item;
+            }
+          } else if (xAxis?.type === 'category') {
             xVal = xDomain[index];
             if (typeof item === 'object' && item !== null && item.value !== undefined) {
               yVal = item.value;
@@ -198,27 +216,44 @@ export default class BarChart extends Chart {
             stackValues[catKey][stackId] = { pos: 0, neg: 0 };
           }
 
+          const valueVal = isHorizontal ? xVal : yVal;
+
           const currentStack = stackValues[catKey][stackId];
-          const isPositive = yVal >= 0;
+          const isPositive = valueVal >= 0;
           const baseValue = isPositive ? currentStack.pos : currentStack.neg;
 
           if (isPositive) {
-            currentStack.pos += yVal;
+            currentStack.pos += valueVal;
           } else {
-            currentStack.neg += yVal;
+            currentStack.neg += valueVal;
           }
 
-          const topValue = baseValue + yVal;
+          const topValue = baseValue + valueVal;
 
-          const groupCenter = xScale(xVal);
+          const categoryScale = isHorizontal ? yScale : xScale;
+          const valueScale = isHorizontal ? xScale : yScale;
+          const categoryVal = isHorizontal ? yVal : xVal;
+
+          const groupCenter = categoryScale(categoryVal);
           const groupStart = groupCenter - groupInnerWidth / 2;
-          const barX = groupStart + stackGroupIndex * (barWidthPerSeries + gapWidth);
+          const barCategoryPos = groupStart + stackGroupIndex * (barWidthPerSeries + gapWidth);
 
-          const barYTop = yScale(topValue);
-          const barYBottom = yScale(baseValue);
+          const barValueEnd = valueScale(topValue);
+          const barValueStart = valueScale(baseValue);
 
-          const barY = Math.min(barYTop, barYBottom);
-          const barHeight = Math.abs(barYBottom - barYTop);
+          let barX, barY, barWidth, barHeight;
+
+          if (isHorizontal) {
+            barX = Math.min(barValueStart, barValueEnd);
+            barWidth = Math.abs(barValueEnd - barValueStart);
+            barY = barCategoryPos;
+            barHeight = barWidthPerSeries;
+          } else {
+            barX = barCategoryPos;
+            barWidth = barWidthPerSeries;
+            barY = Math.min(barValueStart, barValueEnd);
+            barHeight = Math.abs(barValueEnd - barValueStart);
+          }
 
           const itemStyle = seriesItem.itemStyle || {};
 
@@ -237,21 +272,35 @@ export default class BarChart extends Chart {
           const barKey = `${seriesIndex}-${index}`;
           const oldBar = oldBars.get(barKey);
 
-          let initialHeight = 0;
-          let initialY = plotY + plotHeight;
+          let initialX = barX;
+          let initialY = barY;
+          let initialWidth = barWidth;
+          let initialHeight = barHeight;
 
           if (oldBar) {
-            initialHeight = oldBar.shape.height;
+            initialX = oldBar.shape.x;
             initialY = oldBar.shape.y;
-          } else if (seriesItem.stack) {
-            initialY = yScale(baseValue);
+            initialWidth = oldBar.shape.width;
+            initialHeight = oldBar.shape.height;
+          } else {
+            if (isHorizontal) {
+              initialWidth = 0;
+              initialX = valueScale(baseValue);
+              initialY = barY;
+              initialHeight = barHeight;
+            } else {
+              initialHeight = 0;
+              initialY = valueScale(baseValue);
+              initialX = barX;
+              initialWidth = barWidth;
+            }
           }
 
           const rect = new Rect({
             shape: {
-              x: barX,
+              x: initialX,
               y: initialY,
-              width: barWidthPerSeries,
+              width: initialWidth,
               height: initialHeight,
               r: itemStyle.borderRadius as any
             },
@@ -286,7 +335,7 @@ export default class BarChart extends Chart {
               rect,
               (evt: any) => {
                 rect.attr('style', { opacity: 0.8 });
-                const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
+                const itemName = (typeof item === 'object' && item.name) ? item.name : (isHorizontal ? yDomain[index] : (xAxis?.data?.[index] || ''));
                 const itemValue = this._getDataValue(item);
 
                 const params = {
@@ -301,8 +350,8 @@ export default class BarChart extends Chart {
                 };
                 const content = this._generateTooltipContent(params);
 
-                const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
-                const my = evt?.offsetY ?? (barY - 10);
+                const mx = evt?.offsetX ?? (barX + barWidth / 2);
+                const my = evt?.offsetY ?? (barY + barHeight / 2);
                 this._tooltip!.show(mx, my, content, params, rect.attr('shape'));
               },
               () => {
@@ -312,7 +361,7 @@ export default class BarChart extends Chart {
             );
 
             rect.on('mousemove', (evt: any) => {
-              const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[index] || '');
+              const itemName = (typeof item === 'object' && item.name) ? item.name : (isHorizontal ? yDomain[index] : (xAxis?.data?.[index] || ''));
               const itemValue = this._getDataValue(item);
 
               const params = {
@@ -327,8 +376,8 @@ export default class BarChart extends Chart {
               };
               const content = this._generateTooltipContent(params);
 
-              const mx = evt?.offsetX ?? (barX + barWidthPerSeries / 2);
-              const my = evt?.offsetY ?? (barY - 10);
+              const mx = evt?.offsetX ?? (barX + barWidth / 2);
+              const my = evt?.offsetY ?? (barY + barHeight / 2);
 
               if (this._tooltip) {
                 if (!this._tooltip.isVisible()) {
@@ -346,37 +395,40 @@ export default class BarChart extends Chart {
             const delay = (isUpdate || hasOldBars) ? 0 : (index * 100 + seriesIndex * 200);
             const duration = this._getAnimationDuration(isUpdate);
 
-            // Animate height
+            // Animate properties
             this._animator.animate(
               rect.attr('shape'),
               'height',
               barHeight,
-              {
-                duration,
-                delay,
-                easing: 'cubicOut',
-                onUpdate: () => rect.markRedraw()
-              }
+              { duration, delay, easing: 'cubicOut', onUpdate: () => rect.markRedraw() }
             ).start();
 
-            // Animate y position
             this._animator.animate(
               rect.attr('shape'),
               'y',
               barY,
-              {
-                duration,
-                delay,
-                easing: 'cubicOut',
-                onUpdate: () => rect.markRedraw()
-              }
+              { duration, delay, easing: 'cubicOut', onUpdate: () => rect.markRedraw() }
+            ).start();
+
+            this._animator.animate(
+              rect.attr('shape'),
+              'width',
+              barWidth,
+              { duration, delay, easing: 'cubicOut', onUpdate: () => rect.markRedraw() }
+            ).start();
+
+            this._animator.animate(
+              rect.attr('shape'),
+              'x',
+              barX,
+              { duration, delay, easing: 'cubicOut', onUpdate: () => rect.markRedraw() }
             ).start();
 
           } else {
             rect.attr('shape', {
               x: barX,
               y: barY,
-              width: barWidthPerSeries,
+              width: barWidth,
               height: barHeight
             });
           }
@@ -390,25 +442,44 @@ export default class BarChart extends Chart {
           bar.z = Z_SERIES - 1;
           this._root.add(bar);
           const isPositive = (bar as any).__isPositive ?? true;
-          const initialH = bar.shape.height;
-          const initialY = bar.shape.y;
-          const targetY = isPositive ? (initialY + initialH) : initialY;
 
-          // Animate height to 0
-          this._animator.animate(
-            bar.shape,
-            'height',
-            0,
-            { duration: 300, easing: 'cubicOut', onUpdate: () => bar.markRedraw() }
-          ).start();
+          if (isHorizontal) {
+            const initialW = bar.shape.width;
+            const initialX = bar.shape.x;
+            const targetX = isPositive ? initialX : (initialX + initialW);
 
-          // Animate y to target (bottom for positive, top for negative)
-          this._animator.animate(
-            bar.shape,
-            'y',
-            targetY,
-            { duration: 300, easing: 'cubicOut', onUpdate: () => bar.markRedraw() }
-          ).start();
+            this._animator.animate(
+              bar.shape,
+              'width',
+              0,
+              { duration: 300, easing: 'cubicOut', onUpdate: () => bar.markRedraw() }
+            ).start();
+
+            this._animator.animate(
+              bar.shape,
+              'x',
+              targetX,
+              { duration: 300, easing: 'cubicOut', onUpdate: () => bar.markRedraw() }
+            ).start();
+          } else {
+            const initialH = bar.shape.height;
+            const initialY = bar.shape.y;
+            const targetY = isPositive ? (initialY + initialH) : initialY;
+
+            this._animator.animate(
+              bar.shape,
+              'height',
+              0,
+              { duration: 300, easing: 'cubicOut', onUpdate: () => bar.markRedraw() }
+            ).start();
+
+            this._animator.animate(
+              bar.shape,
+              'y',
+              targetY,
+              { duration: 300, easing: 'cubicOut', onUpdate: () => bar.markRedraw() }
+            ).start();
+          }
         }
       });
 

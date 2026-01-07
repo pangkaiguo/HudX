@@ -121,7 +121,7 @@ export const StackBar3DExample = () => {
       <h2 style={{ marginBottom: 10 }}>Stacked 3D Bar Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Stacked bars with pseudo-3D effect</p>
 
-      <div style={{ marginBottom: 20, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select

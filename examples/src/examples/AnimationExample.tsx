@@ -76,8 +76,8 @@ export const AnimationExample = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h2 style={{ margin: 0 }}>Animation Demo</h2>
+      <h2 style={{ marginBottom: 10 }}>Animation Demo</h2>
+      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select

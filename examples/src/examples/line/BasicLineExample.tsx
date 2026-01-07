@@ -96,7 +96,7 @@ export const BasicLineExample = () => {
         <h2 style={{ marginBottom: 10 }}>Line Chart</h2>
         <p style={{ color: '#666', fontSize: 14 }}>Hover over data points to see values</p>
       </div>
-      <div style={{ marginBottom: 20, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select

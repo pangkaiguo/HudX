@@ -44,8 +44,24 @@ export const ThemeExample = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h2 style={{ margin: 0 }}>Theme Switch Demo</h2>
+      <h2 style={{ marginBottom: 10 }}>Theme Switch Demo</h2>
+      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            onClick={() => setThemeName('light')}
+            aria-label="Switch to light theme"
+            style={{ padding: '8px 16px', cursor: 'pointer' }}
+          >
+            Light
+          </button>
+          <button
+            onClick={() => setThemeName('dark')}
+            aria-label="Switch to dark theme"
+            style={{ padding: '8px 16px', cursor: 'pointer' }}
+          >
+            Dark
+          </button>
+        </div>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select
@@ -57,22 +73,6 @@ export const ThemeExample = () => {
             <option value="svg">SVG</option>
           </select>
         </label>
-      </div>
-      <div style={{ marginBottom: 20 }}>
-        <button
-          onClick={() => setThemeName('light')}
-          aria-label="Switch to light theme"
-          style={{ marginRight: 10, padding: '8px 16px', cursor: 'pointer' }}
-        >
-          Light
-        </button>
-        <button
-          onClick={() => setThemeName('dark')}
-          aria-label="Switch to dark theme"
-          style={{ padding: '8px 16px', cursor: 'pointer' }}
-        >
-          Dark
-        </button>
       </div>
       <div ref={containerRef} style={{ border: '1px solid #e0e0e0', borderRadius: 8, width: 800, height: 300 }} />
     </div>

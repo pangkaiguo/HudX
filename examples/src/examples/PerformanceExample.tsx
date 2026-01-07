@@ -83,28 +83,28 @@ export const PerformanceExample = () => {
     <div>
       <h2 style={{ marginBottom: 20 }}>Performance Test</h2>
 
-      <div style={{ marginBottom: 20, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20 }}>
-        <label>
-          Render Mode:
-          <select value={mode} onChange={(e) => setMode(e.target.value as 'canvas' | 'svg')} style={{ marginLeft: 10, padding: '4px 8px', width: '100%' }}>
+      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Render Mode:</span>
+          <select value={mode} onChange={(e) => setMode(e.target.value as 'canvas' | 'svg')} style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}>
             <option value="canvas">Canvas</option>
             <option value="svg">SVG</option>
           </select>
         </label>
 
-        <label>
-          Element Count:
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Element Count:</span>
           <input
             type="number"
             value={count}
             onChange={(e) => setCount(Number(e.target.value))}
-            style={{ marginLeft: 10, padding: '4px 8px', width: '100%' }}
+            style={{ padding: '4px 8px', width: 80, borderRadius: 4, border: '1px solid #ddd' }}
           />
         </label>
 
-        <label>
-          Shape Type:
-          <select value={shapeType} onChange={(e) => setShapeType(e.target.value as ShapeType)} style={{ marginLeft: 10, padding: '4px 8px', width: '100%' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Shape Type:</span>
+          <select value={shapeType} onChange={(e) => setShapeType(e.target.value as ShapeType)} style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}>
             <option value="circle">Circle</option>
             <option value="rect">Rect</option>
             <option value="line">Line</option>

@@ -127,7 +127,7 @@ export const AdvancedBarExample = () => {
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Staggered bar animations, Interactive legend, Hover tooltips with values
       </p>
-      <div style={{ marginBottom: 20, display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select

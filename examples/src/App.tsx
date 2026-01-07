@@ -12,6 +12,7 @@ const ThemeExample = lazy(() => import('./examples/ThemeExample'));
 const AdvancedBarChartExample = lazy(() => import('./examples/bar/AdvancedBarExample'));
 const BasicBarExample = lazy(() => import('./examples/bar/BasicBarExample'));
 const StackBarExample = lazy(() => import('./examples/bar/StackBarExample'));
+const StackHorizontalBarExample = lazy(() => import('./examples/bar/StackHorizontalBarExample'));
 // const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
 // const StackBar3DExample = lazy(() => import('./examples/bar/StackBar3DExample'));
 
@@ -40,6 +41,7 @@ const chartExamples = [
     items: [
       { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
       { id: 'stack-bar', name: 'Stack Bar', component: StackBarExample },
+      { id: 'stack-horizontal-bar', name: 'Stack Horizontal Bar', component: StackHorizontalBarExample },
       { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
       // { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
       // { id: 'stack-bar-3d', name: 'Stack Bar 3D', component: StackBar3DExample },

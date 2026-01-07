@@ -182,6 +182,8 @@ export const calculateDomain = (
             values.push(item.name);
           } else if (Array.isArray(item.value) && typeof item.value[0] === 'number') {
             values.push(item.value[0]);
+          } else if (typeof item.value === 'number') {
+            values.push(item.value);
           }
         } else {
           if (typeof item.value === 'number') {
