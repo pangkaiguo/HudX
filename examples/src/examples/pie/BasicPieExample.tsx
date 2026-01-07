@@ -27,18 +27,18 @@ export const BasicPieExample = () => {
       orient: 'vertical',
       left: 'left',
       top: 'middle',
-      icon: 'rect'
+      icon: 'rect',
     },
     aria: {
       enabled: true,
       decal: {
         show: isDecal,
         decals: [
-          {
-            symbol: 'rect',
-            symbolSize: 0.4,
-            color: theme.decalColor,
-          }
+          { symbol: 'diagonal', color: theme.decalColor },
+          { symbol: 'dots', color: theme.decalColor },
+          { symbol: 'diagonal-reverse', color: theme.decalColor },
+          { symbol: 'checkerboard', color: theme.decalColor },
+          { symbol: 'crosshatch', color: theme.decalColor }
         ]
       }
     },
@@ -46,7 +46,7 @@ export const BasicPieExample = () => {
       {
         name: 'Distribution',
         type: 'pie',
-        radius: 120,
+        radius: 200,
         center: ['50%', '55%'],
         data: [
           { name: 'Direct', value: 335, itemStyle: { color: theme.seriesColors?.[0] } },
@@ -60,7 +60,7 @@ export const BasicPieExample = () => {
         },
         emphasis: {
           scale: true,
-          scaleSize: 1.02,
+          scaleSize: 1.03,
           itemStyle: {
             opacity: 1
           }

@@ -32,7 +32,9 @@ export const AdvancedBarExample = () => {
         decals: [
           { symbol: 'rect', symbolSize: 0.3, color: theme.decalColor },
           { symbol: 'circle', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'triangle', symbolSize: 0.3, color: theme.decalColor }
+          { symbol: 'triangle', symbolSize: 0.3, color: theme.decalColor },
+          { symbol: 'diagonal', color: theme.decalColor },
+          { symbol: 'diagonal-reverse', color: theme.decalColor }
         ]
       }
     },
@@ -41,7 +43,8 @@ export const AdvancedBarExample = () => {
       orient: 'vertical',
       left: 'right',
       top: 20,
-      icon: 'rect'
+      icon: 'rect',
+      selectedMode: 'single'
     },
     grid: {
       left: 70,

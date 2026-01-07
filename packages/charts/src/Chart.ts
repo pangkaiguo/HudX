@@ -846,15 +846,32 @@ export default class Chart {
       y: posTop ?? posBottom ?? 'top',
       right: typeof posRight === 'number' ? posRight : undefined,
       bottom: typeof posBottom === 'number' ? posBottom : undefined,
+      width: option.legend?.width,
+      height: option.legend?.height,
       selectedMode: option.legend?.selectedMode ?? 'multiple',
       onSelect: (name: string, selected: boolean) => {
-        if (selected) {
-          this._legendSelected.add(name);
-          this.beginAnimateShow(name);
+        if (this._legend) {
+          const currentSelected = this._legend.getSelected();
+          this._legendSelected = new Set(currentSelected);
+
+          if (option.legend?.selectedMode === 'single') {
+            if (currentSelected.length === 1) {
+              this.beginAnimateShow(currentSelected[0]);
+            } else {
+              this.beginSilentHide();
+            }
+          } else {
+            if (selected) {
+              this.beginAnimateShow(name);
+            } else {
+              this.beginSilentHide();
+            }
+          }
         } else {
-          this._legendSelected.delete(name);
-          this.beginSilentHide();
+          if (selected) this._legendSelected.add(name);
+          else this._legendSelected.delete(name);
         }
+
         this._render();
         this.endAnimateControl();
       },

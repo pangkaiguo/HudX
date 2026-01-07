@@ -30,7 +30,11 @@ export const BasicBarExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'rect', symbolSize: 0.3, color: theme.decalColor },
+          { symbol: 'diagonal', color: theme.decalColor },
+          { symbol: 'dots', color: theme.decalColor },
+          { symbol: 'diagonal-reverse', color: theme.decalColor },
+          { symbol: 'checkerboard', color: theme.decalColor },
+          { symbol: 'crosshatch', color: theme.decalColor }
         ]
       }
     },

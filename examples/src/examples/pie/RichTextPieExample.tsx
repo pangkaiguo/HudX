@@ -23,6 +23,7 @@ export const RichTextPieExample = () => {
       orient: 'vertical',
       left: 'left',
       top: 'middle',
+      height: 150
     },
     series: [
       {

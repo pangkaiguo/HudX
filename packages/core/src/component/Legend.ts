@@ -8,11 +8,14 @@ import Text from '../shape/Text';
 import Circle from '../shape/Circle';
 import Line from '../shape/Line';
 import { Z_LEGEND } from '../constants';
+import { createDecalPattern } from '../util/pattern';
+import type { DecalObject } from '../types';
 
 export interface LegendItem {
   name: string;
   color: string;
   icon?: 'circle' | 'rect' | 'line';
+  decal?: DecalObject;
 }
 
 export interface LegendOption {
@@ -28,6 +31,9 @@ export interface LegendOption {
   fontSize?: number;
   itemGap?: number;
   itemWidth?: number;
+  iconGap?: number;
+  width?: number;
+  height?: number;
   onSelect?: (name: string, selected: boolean) => void;
   onHover?: (name: string, hovered: boolean) => void;
   selectedMode?: 'single' | 'multiple';
@@ -56,6 +62,7 @@ export default class Legend extends Group {
       fontSize: 12,
       itemGap: 10,
       itemWidth: 100,
+      iconGap: 8,
       selectedMode: 'multiple',
       ...option
     };
@@ -70,7 +77,6 @@ export default class Legend extends Group {
       this._selectedItems.clear();
       items.forEach(item => this._selectedItems.add(item.name));
     } else {
-      // Keep existing selection across updates; remove selections not in items
       const valid = new Set(items.map(i => i.name));
       this._selectedItems = new Set([...this._selectedItems].filter(n => valid.has(n)));
       if (this._selectedItems.size === 0) {
@@ -90,6 +96,10 @@ export default class Legend extends Group {
     return this._selectedItems.has(name);
   }
 
+  getSelected(): string[] {
+    return Array.from(this._selectedItems);
+  }
+
   private _render(): void {
     this.removeAll();
     this._itemRects.clear();
@@ -97,22 +107,135 @@ export default class Legend extends Group {
     const padding = this._option.padding || 8;
     const fontSize = this._option.fontSize || 12;
     const itemGap = this._option.itemGap || 10;
-    const itemWidth = this._option.itemWidth || 150;
-    const itemHeight = fontSize + 4;
+    const itemWidth = this._option.itemWidth || 100;
+    const iconGap = this._option.iconGap || 8;
+    const iconWidth = 12;
 
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
+    ctx.font = `${fontSize}px sans-serif`;
+
+    const wrapText = (text: string, maxWidth: number): string[] => {
+      const words = text.split('');
+      let lines: string[] = [];
+      let currentLine = '';
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const width = ctx.measureText(currentLine + char).width;
+        if (width < maxWidth) {
+          currentLine += char;
+        } else {
+          lines.push(currentLine);
+          currentLine = char;
+        }
+      }
+      lines.push(currentLine);
+      return lines;
+    };
+
+    const layoutItems: any[] = [];
+    let currentX = padding;
+    let currentY = padding;
+    let maxRowHeight = 0;
     let totalWidth = 0;
     let totalHeight = 0;
 
-    let perRow = this._items.length;
-    let rows = 1;
+    const textMaxWidth = Math.max(10, itemWidth - iconWidth - iconGap);
+
+    const measurements = this._items.map(item => {
+      const lines = wrapText(item.name, textMaxWidth);
+      const lineHeight = fontSize + 4;
+      const textHeight = lines.length * lineHeight;
+      const itemH = Math.max(16, textHeight);
+      return { item, lines, lineHeight, itemH };
+    });
+
+    let itemsPerColLimit = measurements.length;
+    const containerWidth = this._option.width || this._containerWidth;
+    const containerHeight = this._option.height || this._containerHeight;
+
+    if (this._option.orient === 'vertical') {
+      const effectiveHeight = containerHeight - padding;
+
+      let maxItemsPhysically = 0;
+      let simY = padding;
+      for (const m of measurements) {
+        if (simY + m.itemH > effectiveHeight) break;
+        simY += m.itemH + itemGap;
+        maxItemsPhysically++;
+      }
+      maxItemsPhysically = Math.max(1, maxItemsPhysically);
+
+      const totalItems = measurements.length;
+      const numCols = Math.ceil(totalItems / maxItemsPhysically);
+      const balancedCount = Math.ceil(totalItems / numCols);
+
+      itemsPerColLimit = Math.min(maxItemsPhysically, balancedCount);
+    }
+
+    let colItemCount = 0;
+
+    measurements.forEach((m, i) => {
+      const { item, lines, lineHeight, itemH } = m;
+
+      if (this._option.orient === 'horizontal') {
+        if (currentX + itemWidth > containerWidth - padding && i > 0) {
+          currentX = padding;
+          currentY += maxRowHeight + itemGap;
+          maxRowHeight = 0;
+        }
+
+        layoutItems.push({
+          item,
+          x: currentX,
+          y: currentY,
+          width: itemWidth,
+          height: itemH,
+          lines,
+          lineHeight
+        });
+
+        maxRowHeight = Math.max(maxRowHeight, itemH);
+        totalWidth = Math.max(totalWidth, currentX + itemWidth);
+        currentX += itemWidth + itemGap;
+      } else {
+        const needsWrap = (colItemCount >= itemsPerColLimit) ||
+          (currentY + itemH > containerHeight - padding);
+
+        if (needsWrap && i > 0) {
+          totalHeight = Math.max(totalHeight, currentY - itemGap + padding);
+          currentY = padding;
+          currentX += itemWidth + itemGap;
+          colItemCount = 0;
+        }
+
+        if (currentX + itemWidth > containerWidth - padding) {
+          return;
+        }
+
+        layoutItems.push({
+          item,
+          x: currentX,
+          y: currentY,
+          width: itemWidth,
+          height: itemH,
+          lines,
+          lineHeight
+        });
+
+        totalWidth = Math.max(totalWidth, currentX + itemWidth);
+        currentY += itemH + itemGap;
+        colItemCount++;
+      }
+    });
+
     if (this._option.orient === 'horizontal') {
-      perRow = Math.max(1, Math.floor((this._containerWidth - padding * 2) / itemWidth));
-      rows = Math.max(1, Math.ceil(this._items.length / perRow));
-      totalWidth = Math.min(this._containerWidth - padding * 2, perRow * itemWidth) + padding * 2;
-      totalHeight = rows * (itemHeight + itemGap) - itemGap + padding * 2;
+      totalHeight = currentY + maxRowHeight + padding;
+      totalWidth += padding;
     } else {
-      totalWidth = itemWidth + padding * 2;
-      totalHeight = this._items.length * (itemHeight + itemGap) - itemGap + padding * 2;
+      totalHeight = Math.max(totalHeight, currentY - itemGap + padding);
+      totalWidth += padding;
     }
 
     const bgRect = new Rect({
@@ -121,36 +244,30 @@ export default class Legend extends Group {
     });
     this.add(bgRect);
 
-    this._items.forEach((item, i) => {
-      let x: number;
-      let y: number;
-
-      if (this._option.orient === 'horizontal') {
-        const row = Math.floor(i / perRow);
-        const col = i % perRow;
-        x = padding + col * itemWidth;
-        y = padding + row * (itemHeight + itemGap);
-      } else {
-        x = padding;
-        y = padding + i * (itemHeight + itemGap);
-      }
-
+    layoutItems.forEach(layout => {
+      const { item, x, y, width, height, lines, lineHeight } = layout;
       const isSelected = this._selectedItems.has(item.name);
-
-      const interactRect = new Rect({
-        shape: { x, y, width: itemWidth - 4, height: itemHeight },
-        style: { fill: 'transparent' },
-        cursor: 'pointer'
-      });
 
       const icon = item.icon || 'rect';
       let iconElement: any;
 
+      let fillStyle: string | CanvasPattern = item.color;
+      let strokeStyle: string | CanvasPattern = item.color;
+
+      if (item.decal) {
+        const pattern = createDecalPattern(item.decal, item.color);
+        if (pattern) {
+          fillStyle = pattern;
+          strokeStyle = pattern;
+        }
+      }
+      const firstLineCenterY = y + lineHeight / 2;
+
       if (icon === 'circle') {
         iconElement = new Circle({
-          shape: { cx: x + 6, cy: y + itemHeight / 2, r: 4 },
+          shape: { cx: x + 6, cy: firstLineCenterY, r: 4 },
           style: {
-            fill: isSelected ? item.color : '#ccc',
+            fill: isSelected ? fillStyle : '#ccc',
             opacity: isSelected ? 1 : 0.3
           }
         });
@@ -158,39 +275,61 @@ export default class Legend extends Group {
         iconElement = new Line({
           shape: {
             x1: x,
-            y1: y + itemHeight / 2,
+            y1: firstLineCenterY,
             x2: x + 12,
-            y2: y + itemHeight / 2
+            y2: firstLineCenterY
           },
           style: {
-            stroke: isSelected ? item.color : '#ccc',
+            stroke: isSelected ? strokeStyle : '#ccc',
             lineWidth: 2,
             opacity: isSelected ? 1 : 0.3
           }
         });
       } else {
         iconElement = new Rect({
-          shape: { x, y: y + itemHeight / 2 - 4, width: 8, height: 8, r: 2 },
+          shape: { x, y: firstLineCenterY - 6, width: 12, height: 12, r: 2 },
           style: {
-            fill: isSelected ? item.color : '#ccc',
+            fill: isSelected ? fillStyle : '#ccc',
             opacity: isSelected ? 1 : 0.3
           }
         });
       }
 
-      const label = new Text({
-        shape: { text: item.name, x: x + 16, y: y + itemHeight / 2 + 4 },
-        style: {
-          fill: this._option.textColor,
-          fontSize,
-          opacity: isSelected ? 1 : 0.5
-        }
+      this.add(iconElement);
+      this._itemRects.set(item.name, iconElement);
+
+      lines.forEach((line: string, lineIndex: number) => {
+        const label = new Text({
+          shape: {
+            text: line,
+            x: x + iconWidth + iconGap,
+            y: y + lineHeight * lineIndex + lineHeight / 2
+          },
+          style: {
+            fill: this._option.textColor,
+            fontSize,
+            opacity: isSelected ? 1 : 0.5,
+            textBaseline: 'middle'
+          }
+        });
+        this.add(label);
+      });
+
+      const interactRect = new Rect({
+        shape: { x, y, width: width, height: height },
+        style: { fill: 'transparent' },
+        cursor: 'pointer'
       });
 
       (interactRect as any).on('click', () => {
         if (this._option.selectedMode === 'single') {
-          this._selectedItems.clear();
-          this._selectedItems.add(item.name);
+          if (this._selectedItems.has(item.name) && this._selectedItems.size === 1) {
+            // Already selected and it's the only one -> Restore all
+            this._items.forEach(i => this._selectedItems.add(i.name));
+          } else {
+            this._selectedItems.clear();
+            this._selectedItems.add(item.name);
+          }
         } else {
           if (this._selectedItems.has(item.name)) {
             this._selectedItems.delete(item.name);
@@ -206,7 +345,7 @@ export default class Legend extends Group {
       });
 
       (interactRect as any).on('mouseover', () => {
-        interactRect.attr('style', { fill: '#f0f0f0' });
+        interactRect.attr('style', { fill: 'transparent' });
         if (this._option.onHover) {
           this._option.onHover(item.name, true);
         }
@@ -222,9 +361,6 @@ export default class Legend extends Group {
       });
 
       this.add(interactRect);
-      this.add(iconElement);
-      this.add(label);
-      this._itemRects.set(item.name, iconElement);
     });
 
     let x: number;

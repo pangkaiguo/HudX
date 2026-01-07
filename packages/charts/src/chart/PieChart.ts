@@ -5,8 +5,8 @@ import { EventHelper } from '../util/EventHelper';
 
 export default class PieChart extends Chart {
   private _activeSectors: Map<string, Sector> = new Map();
-
   private _centerLabel: Text | null = null;
+  private _restoreTimeout: any = null;
 
   protected _render(): void {
     try {
@@ -196,6 +196,7 @@ export default class PieChart extends Chart {
           z: Z_SERIES,
           cursor: (this._tooltip || seriesItem.emphasis) ? 'pointer' : 'default',
         });
+        (sector as any).__baseR = r;
 
         this._root.add(sector);
         this._activeSectors.set(itemName, sector);
@@ -206,6 +207,11 @@ export default class PieChart extends Chart {
           EventHelper.bindHoverEvents(
             sector,
             (evt: any) => {
+              if (this._restoreTimeout) {
+                clearTimeout(this._restoreTimeout);
+                this._restoreTimeout = null;
+              }
+
               this._applyEmphasisAnimation(sector, emphasis, true, r);
 
               if (this._tooltip) {
@@ -264,18 +270,22 @@ export default class PieChart extends Chart {
               }
             },
             () => {
-              this._applyEmphasisAnimation(sector, emphasis, false, r);
+              // Delay restore to prevent flickering when moving between sectors
+              this._restoreTimeout = setTimeout(() => {
+                this._applyEmphasisAnimation(sector, emphasis, false, r);
 
-              if (this._tooltip) {
-                this._tooltip.hide();
-              }
+                if (this._tooltip) {
+                  this._tooltip.hide();
+                }
 
-              if (this._centerLabel) {
-                this._root.remove(this._centerLabel);
-                this._centerLabel = null;
-              }
+                if (this._centerLabel) {
+                  this._root.remove(this._centerLabel);
+                  this._centerLabel = null;
+                }
 
-              this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
+                this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
+                this._restoreTimeout = null;
+              }, 50);
             }
           );
 
@@ -699,6 +709,38 @@ export default class PieChart extends Chart {
           this._animator.animate(s.style, 'opacity', 0.7, { duration: 200 }).start();
           if ((s as any).__label) {
             this._animator.animate(((s as any).__label).style, 'opacity', 0.7, { duration: 200 }).start();
+          }
+
+          // Reset other properties (scale, radius, style) that might be stuck due to cancelled restore
+          const sBaseR = (s as any).__baseR;
+          if (sBaseR !== undefined) {
+            this._animator.animate(s.shape, 'r', sBaseR, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+          }
+          if (s.transform) {
+            this._animator.animate(s.transform, 'scaleX', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+            this._animator.animate(s.transform, 'scaleY', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+          }
+
+          const init = (s as any).__initialStyle;
+          if (init) {
+            const targetStyle: Record<string, unknown> = {};
+            if (init.shadowBlur !== undefined) targetStyle.shadowBlur = init.shadowBlur; else targetStyle.shadowBlur = 0;
+            if (init.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = init.shadowOffsetX; else targetStyle.shadowOffsetX = 0;
+            if (init.shadowOffsetY !== undefined) targetStyle.shadowOffsetY = init.shadowOffsetY; else targetStyle.shadowOffsetY = 0;
+            if (init.shadowColor !== undefined) targetStyle.shadowColor = init.shadowColor; else targetStyle.shadowColor = 'transparent';
+            if (init.fill !== undefined) targetStyle.fill = init.fill;
+            if (init.stroke !== undefined) targetStyle.stroke = init.stroke;
+            if (init.lineWidth !== undefined) targetStyle.lineWidth = init.lineWidth;
+
+            Object.keys(targetStyle).forEach(key => {
+              const value = targetStyle[key];
+              if (typeof value === 'number') {
+                this._animator.animate(s.style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+              } else {
+                (s.style as any)[key] = value;
+                s.markRedraw();
+              }
+            });
           }
         }
       });

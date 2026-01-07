@@ -27,12 +27,18 @@ export const AdvancedPieExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'circle', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'rect', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'triangle', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'diamond', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'pin', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'arrow', symbolSize: 0.3, color: theme.decalColor }
+          { symbol: 'diagonal', color: theme.decalColor },
+          { symbol: 'dots', color: theme.decalColor },
+          { symbol: 'diagonal-reverse', color: theme.decalColor },
+          { symbol: 'checkerboard', color: theme.decalColor },
+          { symbol: 'crosshatch', color: theme.decalColor },
+          { symbol: 'rect', color: theme.decalColor },
+          { symbol: 'circle', color: theme.decalColor },
+          { symbol: 'triangle', color: theme.decalColor },
+          { symbol: 'cross', color: theme.decalColor },
+          { symbol: 'pin', color: theme.decalColor },
+          { symbol: 'pentagon', color: theme.decalColor },
+          { symbol: 'arrow', color: theme.decalColor }
         ]
       }
     },
@@ -41,28 +47,39 @@ export const AdvancedPieExample = () => {
       orient: 'vertical',
       left: 'left',
       top: 'middle',
-      icon: 'rect'
+      icon: 'rect',
+      // Demonstrating conflict/interaction between width, height and itemWidth
+      width: 400,      // Limits the total width. With itemWidth 140, only 1 column fits (2nd column would overflow 200px)
+      height: 150,     // Limits height, forcing wrap to 2nd column. But 2nd column is clipped by width.
+      itemWidth: 140   // Fixed width for each legend item (icon + text space)
     },
     series: [
       {
         name: 'Distribution',
         type: 'pie',
-        radius: 120,
-        center: ['50%', '50%'],
+        radius: 200,
+        center: ['60%', '50%'],
         emphasis: {
           scale: true,
-          scaleSize: 1.02
+          scaleSize: 1.03
         },
         itemStyle: {
           borderWidth: 0,
           borderColor: 'transparent'
         },
         data: [
-          { name: 'Category A', value: 335, itemStyle: { color: theme.seriesColors?.[0] } },
-          { name: 'Category B', value: 310, itemStyle: { color: theme.seriesColors?.[1] } },
-          { name: 'Category C', value: 234, itemStyle: { color: theme.seriesColors?.[2] } },
-          { name: 'Category D', value: 135, itemStyle: { color: theme.seriesColors?.[3] } },
-          { name: 'Category E', value: 148, itemStyle: { color: theme.seriesColors?.[4] } }
+          { name: 'Category Label A', value: 335 },
+          { name: 'Category Label B', value: 310 },
+          { name: 'Category Label C', value: 234 },
+          { name: 'Category Label D', value: 135 },
+          { name: 'Category Label E', value: 148 },
+          { name: 'Category Label F', value: 200 },
+          { name: 'Category Label G', value: 180 },
+          { name: 'Category Label H', value: 160 },
+          { name: 'Category Label I', value: 140 },
+          { name: 'Category Label J', value: 120 },
+          { name: 'Category Label K', value: 100 },
+          { name: 'Category Label L', value: 80 }
         ],
         label: {
           show: true,
@@ -81,11 +98,18 @@ export const AdvancedPieExample = () => {
     if (chartInstance) {
       // Simulate new data
       const newData = [
-        { name: 'Category A', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[0] } },
-        { name: 'Category B', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[1] } },
-        { name: 'Category C', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[2] } },
-        { name: 'Category D', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[3] } },
-        { name: 'Category E', value: Math.floor(Math.random() * 500) + 100, itemStyle: { color: theme.seriesColors?.[4] } }
+        { name: 'Category Label A', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label B', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label C', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label D', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label E', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label F', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label G', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label H', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label I', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label J', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label K', value: Math.floor(Math.random() * 500) + 100 },
+        { name: 'Category Label L', value: Math.floor(Math.random() * 500) + 100 }
       ];
       chartInstance.setOption({
         series: [{

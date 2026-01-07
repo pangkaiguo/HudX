@@ -10,10 +10,10 @@ const ThemeExample = lazy(() => import('./examples/ThemeExample'));
 
 // Bar charts
 const AdvancedBarChartExample = lazy(() => import('./examples/bar/AdvancedBarExample'));
-const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
 const BasicBarExample = lazy(() => import('./examples/bar/BasicBarExample'));
-const StackBar3DExample = lazy(() => import('./examples/bar/StackBar3DExample'));
 const StackBarExample = lazy(() => import('./examples/bar/StackBarExample'));
+// const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
+// const StackBar3DExample = lazy(() => import('./examples/bar/StackBar3DExample'));
 
 // Line charts
 const AdvancedLineChartExample = lazy(() => import('./examples/line/AdvancedLineExample'));
@@ -41,19 +41,19 @@ const chartExamples = [
       { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
       { id: 'stack-bar', name: 'Stack Bar', component: StackBarExample },
       { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
-      { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
-      { id: 'stack-bar-3d', name: 'Stack Bar 3D', component: StackBar3DExample },
+      // { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
+      // { id: 'stack-bar-3d', name: 'Stack Bar 3D', component: StackBar3DExample },
     ]
   },
   {
     category: 'Pie Charts',
     items: [
       { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
-      { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
-      { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
       { id: 'rich-text-pie', name: 'Rich Text Pie', component: RichTextPieExample },
       { id: 'advanced-pie', name: 'Advanced Pie', component: AdvancedPieChartExample },
+      { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
       { id: 'advanced-doughnut', name: 'Advanced Doughnut', component: AdvancedDoughnutExample },
+      { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
     ]
   }
 ];

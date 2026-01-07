@@ -27,12 +27,11 @@ export const HalfDoughnutExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'circle', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'rect', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'triangle', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'diamond', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'pin', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'arrow', symbolSize: 0.3, color: theme.decalColor }
+          { symbol: 'diagonal', color: theme.decalColor },
+          { symbol: 'dots', color: theme.decalColor },
+          { symbol: 'diagonal-reverse', color: theme.decalColor },
+          { symbol: 'checkerboard', color: theme.decalColor },
+          { symbol: 'crosshatch', color: theme.decalColor }
         ]
       }
     },
@@ -58,7 +57,7 @@ export const HalfDoughnutExample = () => {
         },
         emphasis: {
           scale: true,
-          scaleSize: 1.02,
+          scaleSize: 1.03,
           itemStyle: {
             shadowBlur: 10,
             shadowOffsetX: 0,
