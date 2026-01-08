@@ -334,7 +334,22 @@ export default class BarChart extends Chart {
             EventHelper.bindHoverEvents(
               rect,
               (evt: any) => {
-                rect.attr('style', { opacity: 0.8 });
+                const emphasis = seriesItem.emphasis || {};
+                const focus = emphasis.focus;
+
+                if (focus === 'series') {
+                  this._activeBars.forEach((bar, key) => {
+                    const [sIdx] = key.split('-').map(Number);
+                    if (sIdx === seriesIndex) {
+                      bar.attr('style', { opacity: 1 });
+                    } else {
+                      bar.attr('style', { opacity: 0.2 });
+                    }
+                  });
+                } else {
+                  rect.attr('style', { opacity: 0.8 });
+                }
+
                 const itemName = (typeof item === 'object' && item.name) ? item.name : (isHorizontal ? yDomain[index] : (xAxis?.data?.[index] || ''));
                 const itemValue = this._getDataValue(item);
 
@@ -355,7 +370,16 @@ export default class BarChart extends Chart {
                 this._tooltip!.show(mx, my, content, params, rect.attr('shape'));
               },
               () => {
-                rect.attr('style', { opacity: 1 });
+                const emphasis = seriesItem.emphasis || {};
+                const focus = emphasis.focus;
+
+                if (focus === 'series') {
+                  this._activeBars.forEach((bar) => {
+                    bar.attr('style', { opacity: 1 });
+                  });
+                } else {
+                  rect.attr('style', { opacity: 1 });
+                }
                 this._tooltip!.hide();
               }
             );
@@ -381,7 +405,20 @@ export default class BarChart extends Chart {
 
               if (this._tooltip) {
                 if (!this._tooltip.isVisible()) {
-                  rect.attr('style', { opacity: 0.8 });
+                  const emphasis = seriesItem.emphasis || {};
+                  const focus = emphasis.focus;
+                  if (focus === 'series') {
+                    this._activeBars.forEach((bar, key) => {
+                      const [sIdx] = key.split('-').map(Number);
+                      if (sIdx === seriesIndex) {
+                        bar.attr('style', { opacity: 1 });
+                      } else {
+                        bar.attr('style', { opacity: 0.2 });
+                      }
+                    });
+                  } else {
+                    rect.attr('style', { opacity: 0.8 });
+                  }
                 }
                 this._tooltip.show(mx, my, content, params, rect.attr('shape'));
               }

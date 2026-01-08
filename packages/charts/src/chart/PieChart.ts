@@ -792,9 +792,9 @@ export default class PieChart extends Chart {
           // Check focus policy
           const focus = emphasis?.focus || 'none';
           if (focus === 'self') {
-            this._animator.animate(s.style, 'opacity', 0.7, { duration: 200 }).start();
+            this._animator.animate(s.style, 'opacity', 0.2, { duration: 200 }).start();
             if ((s as any).__label) {
-              this._animator.animate(((s as any).__label).style, 'opacity', 0.7, { duration: 200 }).start();
+              this._animator.animate(((s as any).__label).style, 'opacity', 0.2, { duration: 200 }).start();
             }
           }
 
