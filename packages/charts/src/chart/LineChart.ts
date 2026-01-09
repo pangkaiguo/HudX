@@ -62,7 +62,7 @@ export default class LineChart extends Chart {
 
       const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
-      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
+      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, { x: xScale, y: yScale });
 
       if (this._tooltip && option.tooltip?.trigger === 'axis') {
         const interact = new Rect({

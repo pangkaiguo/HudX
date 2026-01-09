@@ -8,7 +8,7 @@ import {
   toRgbaWithOpacity, Z_AXIS
 } from 'HudX/core';
 import type { ChartOption, ChartEvent } from './types';
-import { createLinearScale, createOrdinalScale } from './util/coordinate';
+import { createLinearScale, createOrdinalScale, calculateNiceTicks, formatAxisLabel, type Scale } from './util/coordinate';
 
 export default class Chart {
   protected _renderer: Renderer;
@@ -402,7 +402,8 @@ export default class Chart {
     plotX: number,
     plotY: number,
     width: number,
-    height: number
+    height: number,
+    scales?: { x?: Scale, y?: Scale }
   ): void {
     // X axis
     if (xAxis?.show !== false) {
@@ -425,9 +426,9 @@ export default class Chart {
       // Split line (vertical grid)
       if (xAxis?.splitLine?.show) {
         if (xAxis?.data && xAxis.data.length > 0) {
-          const xScale = xAxis.type === 'category'
+          const xScale = scales?.x || (xAxis.type === 'category'
             ? createOrdinalScale(xAxis.data, [plotX, plotX + width])
-            : createLinearScale([0, xAxis.data.length - 1], [plotX, plotX + width]);
+            : createLinearScale([0, xAxis.data.length - 1], [plotX, plotX + width]));
 
           const interval = xAxis.splitLine?.interval ?? 0;
 
@@ -459,25 +460,135 @@ export default class Chart {
 
       // Axis labels
       if (xAxis?.data && xAxis.data.length > 0) {
-        const xScale = xAxis.type === 'category'
+        const xScale = scales?.x || (xAxis.type === 'category'
           ? createOrdinalScale(xAxis.data, [plotX, plotX + width])
-          : createLinearScale([0, xAxis.data.length - 1], [plotX, plotX + width]);
+          : createLinearScale([0, xAxis.data.length - 1], [plotX, plotX + width]));
+
+        const axisLabel = xAxis.axisLabel || {};
+        const rotate = axisLabel.rotate || 0;
+        const maxWidth = axisLabel.width;
+        const overflow = axisLabel.overflow || 'break';
+        const fontSize = axisLabel.fontSize || 12;
+        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
         xAxis.data.forEach((label: any, index: number) => {
           const x = xAxis.type === 'category' ? xScale(label) : xScale(index);
+          let labelText = String(label);
+
+          if (axisLabel.formatter) {
+            if (typeof axisLabel.formatter === 'string') {
+              labelText = axisLabel.formatter.replace('{value}', labelText);
+            } else if (typeof axisLabel.formatter === 'function') {
+              labelText = axisLabel.formatter(label, index);
+            }
+          }
+
+          if (maxWidth) {
+            labelText = this._wrapText(labelText, maxWidth, fontSize, fontFamily, overflow);
+          }
+
+          let textAlign: any = 'center';
+          let textBaseline: any = 'top';
+          let transform: any = undefined;
+          let shapeX = x;
+          let shapeY = plotY + height + 10; // Default gap
+
+          if (rotate) {
+            textAlign = rotate > 0 ? 'left' : 'right';
+            textBaseline = 'middle';
+            shapeX = 0;
+            shapeY = 0;
+            transform = {
+              x: x,
+              y: plotY + height + 10,
+              rotation: rotate * Math.PI / 180
+            };
+          }
+
           const text = new Text({
             shape: {
-              x,
-              y: plotY + height + 20,
-              text: String(label),
+              x: shapeX,
+              y: shapeY,
+              text: labelText,
             },
             style: {
-              fontSize: 12,
-              fill: this.getThemeConfig().axisLabelColor, // Use theme color
-              textAlign: 'center',
-              textBaseline: 'top',
+              fontSize,
+              fill: color,
+              textAlign,
+              textBaseline,
+              fontFamily
             },
-            z: Z_AXIS
+            z: Z_AXIS,
+            transform
+          });
+          this._root.add(text);
+        });
+      } else if (xAxis?.type === 'value' && scales?.x) {
+        // Value X Axis Labels using scales
+        const domain = scales.x.domain();
+        const tickCount = xAxis.splitNumber ?? 5;
+        const axisLabel = xAxis.axisLabel || {};
+        const rotate = axisLabel.rotate || 0;
+        const maxWidth = axisLabel.width;
+        const overflow = axisLabel.overflow || 'break';
+        const fontSize = axisLabel.fontSize || 12;
+        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
+
+        const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
+
+        ticks.forEach((tick, index) => {
+          const x = scales.x!(tick);
+          if (x < plotX - 0.1 || x > plotX + width + 0.1) return;
+
+          let labelText = formatAxisLabel(tick);
+
+          if (axisLabel.formatter) {
+            if (typeof axisLabel.formatter === 'string') {
+              labelText = axisLabel.formatter.replace('{value}', labelText);
+            } else if (typeof axisLabel.formatter === 'function') {
+              labelText = axisLabel.formatter(tick, index);
+            }
+          }
+
+          if (maxWidth) {
+            labelText = this._wrapText(labelText, maxWidth, fontSize, fontFamily, overflow);
+          }
+
+          let textAlign: any = 'center';
+          let textBaseline: any = 'top';
+          let transform: any = undefined;
+          let shapeX = x;
+          let shapeY = plotY + height + 10;
+
+          if (rotate) {
+            textAlign = rotate > 0 ? 'left' : 'right';
+            textBaseline = 'middle';
+            shapeX = 0;
+            shapeY = 0;
+            transform = {
+              x: x,
+              y: plotY + height + 10,
+              rotation: rotate * Math.PI / 180
+            };
+          }
+
+          const text = new Text({
+            shape: {
+              x: shapeX,
+              y: shapeY,
+              text: labelText,
+            },
+            style: {
+              fontSize,
+              fill: color,
+              textAlign,
+              textBaseline,
+              fontFamily
+            },
+            z: Z_AXIS,
+            transform
           });
           this._root.add(text);
         });
@@ -503,38 +614,238 @@ export default class Chart {
 
       // Split line (horizontal grid)
       if (yAxis?.splitLine?.show) {
-        // We need ticks for Y axis.
-        // For value axis, we usually don't have 'data'. We need a tick generator.
-        // Current implementation of LineChart/BarChart calculates yScale but doesn't expose ticks easily to here.
-        // But wait, _renderAxes is called by subclasses.
-        // Subclasses should probably pass ticks or scale?
-        // Or we can generate simple ticks here if yAxis is value type.
+        if (scales?.y && yAxis.type === 'value') {
+          const domain = scales.y.domain();
+          const tickCount = yAxis.splitNumber ?? 5;
+          const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
 
-        // Simplified: Draw 5 grid lines if not provided
-        const tickCount = yAxis.splitNumber ?? 5;
-        for (let i = 0; i <= tickCount; i++) {
-          const y = plotY + height - (i / tickCount) * height;
-          const line = new Line({
+          ticks.forEach(tick => {
+            const y = scales.y!(tick);
+            // Skip if out of range
+            if (y < plotY - 0.1 || y > plotY + height + 0.1) return;
+
+            const line = new Line({
+              shape: {
+                x1: plotX,
+                y1: y,
+                x2: plotX + width,
+                y2: y,
+              },
+              style: {
+                stroke: yAxis.splitLine.lineStyle?.color || '#eee',
+                lineWidth: yAxis.splitLine.lineStyle?.width || 1,
+                lineDash: yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
+              },
+              z: Z_AXIS - 0.5,
+            });
+            this._root.add(line);
+          });
+        } else {
+          // Simplified: Draw 5 grid lines if not provided
+          const tickCount = yAxis.splitNumber ?? 5;
+          for (let i = 0; i <= tickCount; i++) {
+            const y = plotY + height - (i / tickCount) * height;
+            const line = new Line({
+              shape: {
+                x1: plotX,
+                y1: y,
+                x2: plotX + width,
+                y2: y,
+              },
+              style: {
+                stroke: yAxis.splitLine.lineStyle?.color || '#eee',
+                lineWidth: yAxis.splitLine.lineStyle?.width || 1,
+                lineDash: yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
+              },
+              z: Z_AXIS - 0.5, // Below axis line
+            });
+            this._root.add(line);
+          }
+        }
+      }
+
+      // Y Axis labels (Added logic)
+      if (yAxis?.data && yAxis.data.length > 0) {
+        // Category Y Axis
+        const yScale = scales?.y || createOrdinalScale(yAxis.data, [plotY + height, plotY]);
+        const axisLabel = yAxis.axisLabel || {};
+        const rotate = axisLabel.rotate || 0;
+        const maxWidth = axisLabel.width;
+        const overflow = axisLabel.overflow || 'break';
+        const fontSize = axisLabel.fontSize || 12;
+        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
+
+        yAxis.data.forEach((label: any, index: number) => {
+          const y = yScale(label);
+          let labelText = String(label);
+
+          if (axisLabel.formatter) {
+            if (typeof axisLabel.formatter === 'string') {
+              labelText = axisLabel.formatter.replace('{value}', labelText);
+            } else if (typeof axisLabel.formatter === 'function') {
+              labelText = axisLabel.formatter(label, index);
+            }
+          }
+
+          if (maxWidth) {
+            labelText = this._wrapText(labelText, maxWidth, fontSize, fontFamily, overflow);
+          }
+
+          let textAlign: any = 'right';
+          let textBaseline: any = 'middle';
+          let transform: any = undefined;
+          let shapeX = plotX - 10;
+          let shapeY = y;
+
+          if (rotate) {
+            shapeX = 0;
+            shapeY = 0;
+            transform = {
+              x: plotX - 10,
+              y: y,
+              rotation: rotate * Math.PI / 180
+            };
+            // Adjust align if needed
+          }
+
+          const text = new Text({
             shape: {
-              x1: plotX,
-              y1: y,
-              x2: plotX + width,
-              y2: y,
+              x: shapeX,
+              y: shapeY,
+              text: labelText,
             },
             style: {
-              stroke: yAxis.splitLine.lineStyle?.color || '#eee',
-              lineWidth: yAxis.splitLine.lineStyle?.width || 1,
-              lineDash: yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
+              fontSize,
+              fill: color,
+              textAlign,
+              textBaseline,
+              fontFamily
             },
-            z: Z_AXIS - 0.5, // Below axis line
+            z: Z_AXIS,
+            transform
           });
-          this._root.add(line);
-        }
+          this._root.add(text);
+        });
+      } else if (yAxis?.type === 'value' && scales?.y) {
+        // Value Y Axis Labels using scales
+        const domain = scales.y.domain();
+        const tickCount = yAxis.splitNumber ?? 5;
+        const axisLabel = yAxis.axisLabel || {};
+        const rotate = axisLabel.rotate || 0;
+        const maxWidth = axisLabel.width;
+        const overflow = axisLabel.overflow || 'break';
+        const fontSize = axisLabel.fontSize || 12;
+        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
+
+        const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
+
+        ticks.forEach((tick, index) => {
+          const y = scales.y!(tick);
+          if (y < plotY - 0.1 || y > plotY + height + 0.1) return;
+
+          let labelText = formatAxisLabel(tick);
+
+          if (axisLabel.formatter) {
+            if (typeof axisLabel.formatter === 'string') {
+              labelText = axisLabel.formatter.replace('{value}', labelText);
+            } else if (typeof axisLabel.formatter === 'function') {
+              labelText = axisLabel.formatter(tick, index);
+            }
+          }
+
+          if (maxWidth) {
+            labelText = this._wrapText(labelText, maxWidth, fontSize, fontFamily, overflow);
+          }
+
+          let textAlign: any = 'right';
+          let textBaseline: any = 'middle';
+          let transform: any = undefined;
+          let shapeX = plotX - 10;
+          let shapeY = y;
+
+          if (rotate) {
+            shapeX = 0;
+            shapeY = 0;
+            transform = {
+              x: plotX - 10,
+              y: y,
+              rotation: rotate * Math.PI / 180
+            };
+          }
+
+          const text = new Text({
+            shape: {
+              x: shapeX,
+              y: shapeY,
+              text: labelText,
+            },
+            style: {
+              fontSize,
+              fill: color,
+              textAlign,
+              textBaseline,
+              fontFamily
+            },
+            z: Z_AXIS,
+            transform
+          });
+          this._root.add(text);
+        });
       }
     }
   }
 
-  /** 
+  /**
+   * Helper to wrap text
+   */
+  private _wrapText(text: string, width: number, fontSize: number = 12, fontFamily: string = 'sans-serif', overflow: string = 'break'): string {
+    if (!width || width <= 0) return text;
+    if (overflow === 'none') return text;
+
+    // Create temporary canvas for measuring
+    // Note: In Node environment this might fail if not mocked, but we are in browser env mainly.
+    // For tests, we might need a mock.
+    if (typeof document === 'undefined') return text;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return text;
+
+    ctx.font = `${fontSize}px ${fontFamily}`;
+
+    if (overflow === 'truncate') {
+      if (ctx.measureText(text).width <= width) return text;
+      let len = text.length;
+      while (len > 0) {
+        const sub = text.substring(0, len) + '...';
+        if (ctx.measureText(sub).width <= width) return sub;
+        len--;
+      }
+      return '...';
+    }
+
+    // Break
+    let line = '';
+    let result = '';
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const testLine = line + char;
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > width && i > 0) {
+        result += line + '\n';
+        line = char;
+      } else {
+        line = testLine;
+      }
+    }
+    result += line;
+    return result;
+  }
+
+  /**
    * Render chart (to be implemented by subclasses) 
    */
   protected _render(): void {

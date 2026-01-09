@@ -218,6 +218,9 @@ export interface AxisLabelOption {
   color?: string;
   fontSize?: number;
   rotate?: number;
+  width?: number;
+  overflow?: 'break' | 'breakAll' | 'truncate' | 'none';
+  lineHeight?: number;
   formatter?: string | ((value: any, index: number) => string);
   [key: string]: any;
 }

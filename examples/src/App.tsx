@@ -28,7 +28,16 @@ const DoughnutExample = lazy(() => import('./examples/pie/DoughnutExample'));
 const HalfDoughnutExample = lazy(() => import('./examples/pie/HalfDoughnutExample'));
 const RichTextPieExample = lazy(() => import('./examples/pie/RichTextPieExample'));
 
+// Axis charts
+const AxisLabelExample = lazy(() => import('./examples/axis/AxisLabelExample'));
+
 const chartExamples = [
+  {
+    category: 'Axis',
+    items: [
+      { id: 'axis-label', name: 'Axis Label', component: AxisLabelExample },
+    ]
+  },
   {
     category: 'Line Charts',
     items: [

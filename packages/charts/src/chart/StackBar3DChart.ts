@@ -132,7 +132,7 @@ export default class StackBar3DChart extends Chart {
       const categoryGapPercent = parsePercent(barCategoryGapStr);
       const barWidth = categoryWidth * (1 - categoryGapPercent); // Single bar width (since stacked)
 
-      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
+      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, { x: xScale, y: yScale });
 
       // Legend
       if (option.legend?.show !== false) {

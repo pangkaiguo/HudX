@@ -149,7 +149,7 @@ export default class BarChart extends Chart {
 
       const groupInnerWidth = groupCount * barWidthPerSeries + (groupCount - 1) * gapWidth;
 
-      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
+      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, { x: xScale, y: yScale });
 
       if (option.legend?.show !== false) {
         const items = (series as any[])
