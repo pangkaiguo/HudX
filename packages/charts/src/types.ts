@@ -156,8 +156,22 @@ export interface LegendOption {
   left?: string | number;
   /** Top position */
   top?: string | number;
+  /** Right position */
+  right?: string | number;
+  /** Bottom position */
+  bottom?: string | number;
   /** Layout orientation */
   orient?: 'horizontal' | 'vertical';
+  /** Render mode */
+  renderMode?: 'canvas' | 'html';
+  /** Custom formatter */
+  formatter?: string | ((name: string, item: any) => string | string[]);
+  /** Table header for html mode */
+  tableHead?: string[];
+  /** Item max width */
+  itemMaxWidth?: number;
+  /** Text alignment */
+  align?: 'left' | 'center' | 'right';
   [key: string]: any;
 }
 

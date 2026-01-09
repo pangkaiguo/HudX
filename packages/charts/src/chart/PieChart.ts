@@ -94,12 +94,24 @@ export default class PieChart extends Chart {
       let currentAngle = startAngle;
 
       if (option.legend?.show !== false) {
-        const items = (data as any[]).map((it: any, i: number) => ({
-          name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
-          color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
-          icon: option.legend?.icon || 'circle',
-          textColor: this.getThemeConfig().legendTextColor
-        }));
+        const items = (data as any[]).map((it: any, i: number) => {
+          let value = 0;
+          if (typeof it === 'number') value = it;
+          else if (Array.isArray(it)) value = it[0] || 0;
+          else if (typeof it === 'object' && it !== null) value = it.value;
+
+          const percent = total > 0 ? (value / total) : 0;
+
+          return {
+            name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
+            color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
+            icon: option.legend?.icon || 'circle',
+            textColor: this.getThemeConfig().legendTextColor,
+            value,
+            percent,
+            data: it
+          };
+        });
         this._mountLegend(items);
       }
 

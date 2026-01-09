@@ -133,7 +133,8 @@ export default class LineChart extends Chart {
             name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
             icon: option.legend?.icon || 'rect',
-            textColor: this.getThemeConfig().legendTextColor
+            textColor: this.getThemeConfig().legendTextColor,
+            data: s
           }));
         this._mountLegend(items);
       }

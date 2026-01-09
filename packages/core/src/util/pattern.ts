@@ -2,18 +2,18 @@
 import type { DecalObject } from '../types';
 
 const DECAL_PRESETS: Record<string, Partial<DecalObject>> = {
-  'diagonal': { symbol: 'line', dashArrayX: [1, 0], dashArrayY: [1, 1], rotation: Math.PI / 4, symbolSize: 1 },
-  'diagonal-reverse': { symbol: 'line', dashArrayX: [1, 0], dashArrayY: [1, 1], rotation: -Math.PI / 4, symbolSize: 1 },
-  'grid': { symbol: 'cross', dashArrayX: [1, 0], dashArrayY: [1, 0], rotation: 0, symbolSize: 1 },
-  'crosshatch': { symbol: 'cross', dashArrayX: [1, 0], dashArrayY: [1, 0], rotation: Math.PI / 4, symbolSize: 1 },
-  'checkerboard': { symbol: 'rect', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 1 },
-  'dots': { symbol: 'circle', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 0.8 },
-  'rect': { symbol: 'rect', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 0.8 },
-  'circle': { symbol: 'circle', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 0.8 },
-  'triangle': { symbol: 'triangle', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 0.8 },
-  'diamond': { symbol: 'diamond', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 0.8 },
-  'pin': { symbol: 'pin', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 0.8 },
-  'arrow': { symbol: 'arrow', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 0.8 },
+  'diagonal': { symbol: 'line', dashArrayX: [1, 0], dashArrayY: [1, 0.5], rotation: Math.PI / 4, symbolSize: 0.5 },
+  'diagonal-reverse': { symbol: 'line', dashArrayX: [1, 0], dashArrayY: [1, 0.5], rotation: -Math.PI / 4, symbolSize: 0.5 },
+  'grid': { symbol: 'cross', dashArrayX: [1, 0], dashArrayY: [1, 0], rotation: 0, symbolSize: 0.5 },
+  'crosshatch': { symbol: 'cross', dashArrayX: [1, 0], dashArrayY: [1, 0], rotation: Math.PI / 4, symbolSize: 0.5 },
+  'checkerboard': { symbol: 'rect', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
+  'dots': { symbol: 'circle', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
+  'rect': { symbol: 'rect', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
+  'circle': { symbol: 'circle', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
+  'triangle': { symbol: 'triangle', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
+  'diamond': { symbol: 'diamond', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
+  'pin': { symbol: 'pin', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
+  'arrow': { symbol: 'arrow', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
 };
 
 export function createDecalPattern(

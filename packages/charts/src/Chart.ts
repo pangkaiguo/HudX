@@ -601,6 +601,12 @@ export default class Chart {
    * Dispose chart 
    */
   dispose(): void {
+    if (this._legend) {
+      this._legend.dispose();
+    }
+    if (this._tooltip) {
+      this._tooltip.dispose();
+    }
     this.stopAnimation();
     this.stopResponsive();
     this.unmount();
@@ -836,6 +842,11 @@ export default class Chart {
     const option = this._option;
     if (option.legend?.show === false) return;
 
+    if (this._legend) {
+      this._legend.dispose();
+      this._root.remove(this._legend);
+    }
+
     const posLeft = (option.legend as any)?.left;
     const posRight = (option.legend as any)?.right;
     const posTop = (option.legend as any)?.top;
@@ -845,11 +856,16 @@ export default class Chart {
       orient: option.legend?.orient ?? 'vertical',
       x: posLeft ?? posRight ?? 'left',
       y: posTop ?? posBottom ?? 'top',
-      right: typeof posRight === 'number' ? posRight : undefined,
-      bottom: typeof posBottom === 'number' ? posBottom : undefined,
+      right: posRight,
+      bottom: posBottom,
       width: option.legend?.width,
       height: option.legend?.height,
       selectedMode: option.legend?.selectedMode ?? 'multiple',
+      renderMode: option.legend?.renderMode,
+      formatter: option.legend?.formatter,
+      tableHead: option.legend?.tableHead,
+      itemMaxWidth: option.legend?.itemMaxWidth,
+      align: option.legend?.align,
       onSelect: (name: string, selected: boolean) => {
         if (this._legend) {
           const currentSelected = this._legend.getSelected();
@@ -882,6 +898,7 @@ export default class Chart {
     } as any);
 
     legend.setContainer(this._width, this._height);
+    legend.setDomContainer(this.getDom());
 
     // Init default selection if not initialized
     if (!this._hasInitLegend) {

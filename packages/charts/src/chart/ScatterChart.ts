@@ -21,6 +21,19 @@ export default class ScatterChart extends Chart {
     const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
     const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
 
+    if (option.legend?.show !== false) {
+      const items = (series as any[])
+        .filter((s: any) => s.type === 'scatter' && s.show !== false)
+        .map((s: any, i: number) => ({
+          name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
+          color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
+          icon: option.legend?.icon || 'circle',
+          textColor: this.getThemeConfig().legendTextColor,
+          data: s
+        }));
+      this._mountLegend(items);
+    }
+
     series.forEach((s: any, seriesIndex: number) => {
       if (s.type !== 'scatter') return;
 

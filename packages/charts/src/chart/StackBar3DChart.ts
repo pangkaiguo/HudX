@@ -140,7 +140,8 @@ export default class StackBar3DChart extends Chart {
           name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
           color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
           icon: option.legend?.icon || 'rect',
-          textColor: this.getThemeConfig().legendTextColor
+          textColor: this.getThemeConfig().legendTextColor,
+          data: s
         }));
         this._mountLegend(items);
       }
@@ -295,49 +296,49 @@ export default class StackBar3DChart extends Chart {
           group.add(side);
           group.add(top);
           group.add(front);
-          
+
           if (this._tooltip) {
-              const handleMouseOver = (evt: any) => {
-                  group.attr('opacity', 0.8);
-                  const itemName = (typeof item === 'object' && item.name) ? item.name : (xKey || '');
-                  const params = {
-                    componentType: 'series',
-                    seriesType: 'stackBar3D',
-                    seriesIndex,
-                    seriesName,
-                    name: itemName,
-                    dataIndex: index,
-                    data: item,
-                    value: yVal
-                  };
-                  const content = this._generateTooltipContent(params);
-                  const mx = evt?.offsetX ?? (barX + barWidth / 2);
-                  const my = evt?.offsetY ?? (finalY);
-                  
-                  // StackBar3D height is tricky, let's estimate
-                  const targetRect = {
-                      x: barX,
-                      y: finalY, // finalY is the top of the bar segment?
-                      width: barWidth,
-                      height: Math.abs(yVal) // Approximate
-                  };
-    
-                  this._tooltip!.show(mx, my, content, params, targetRect);
+            const handleMouseOver = (evt: any) => {
+              group.attr('opacity', 0.8);
+              const itemName = (typeof item === 'object' && item.name) ? item.name : (xKey || '');
+              const params = {
+                componentType: 'series',
+                seriesType: 'stackBar3D',
+                seriesIndex,
+                seriesName,
+                name: itemName,
+                dataIndex: index,
+                data: item,
+                value: yVal
               };
-              
-              const handleMouseOut = () => {
-                  group.attr('opacity', 1);
-                  this._tooltip!.hide();
+              const content = this._generateTooltipContent(params);
+              const mx = evt?.offsetX ?? (barX + barWidth / 2);
+              const my = evt?.offsetY ?? (finalY);
+
+              // StackBar3D height is tricky, let's estimate
+              const targetRect = {
+                x: barX,
+                y: finalY, // finalY is the top of the bar segment?
+                width: barWidth,
+                height: Math.abs(yVal) // Approximate
               };
 
-              EventHelper.bindHoverEvents(front, handleMouseOver, handleMouseOut);
-              EventHelper.bindHoverEvents(top, handleMouseOver, handleMouseOut);
-              EventHelper.bindHoverEvents(side, handleMouseOver, handleMouseOut);
+              this._tooltip!.show(mx, my, content, params, targetRect);
+            };
+
+            const handleMouseOut = () => {
+              group.attr('opacity', 1);
+              this._tooltip!.hide();
+            };
+
+            EventHelper.bindHoverEvents(front, handleMouseOver, handleMouseOut);
+            EventHelper.bindHoverEvents(top, handleMouseOver, handleMouseOut);
+            EventHelper.bindHoverEvents(side, handleMouseOver, handleMouseOut);
           }
 
           this._root.add(group);
           this._activeGroups.set(barKey, group);
-          
+
           // Original Group binding removed
         });
       });
