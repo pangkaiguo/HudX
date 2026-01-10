@@ -173,7 +173,7 @@ export default class SVGPainter implements IPainter {
         if (typeof style.fill === 'string') {
           group.setAttribute('fill', style.fill);
         } else if ((style.fill as any)._canvas) {
-          const patternId = this._createSVGPattern((style.fill as any)._canvas);
+          const patternId = this._createSVGPattern(style.fill as any);
           group.setAttribute('fill', `url(#${patternId})`);
         } else {
           group.setAttribute('fill', 'none');
@@ -192,6 +192,10 @@ export default class SVGPainter implements IPainter {
 
       if (style.opacity !== undefined) {
         group.setAttribute('opacity', String(style.opacity));
+      }
+
+      if (style.lineDash) {
+        group.setAttribute('stroke-dasharray', style.lineDash.join(' '));
       }
     }
 
@@ -362,7 +366,7 @@ export default class SVGPainter implements IPainter {
     } else if (element instanceof Text) {
       // Use bounding rect logic for consistent alignment (especially for rich text)
       const rect = element.getBoundingRect();
-      const fragments = element.getTextFragments();
+      const lines = element.getTextLines();
       const style = element.style;
 
       const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -393,78 +397,88 @@ export default class SVGPainter implements IPainter {
         group.appendChild(bgRect);
       }
 
-      // 2. Draw text fragments
-      // We use the same logic as Text.render: calculate positions relative to bounding box
+      // 2. Draw text fragments line by line
       const startX = rect.x + element.getPaddingLeft(style.padding);
       const startY = rect.y + element.getPaddingTop(style.padding);
-      const totalHeight = element.getTotalHeight();
-      const centerY = startY + totalHeight / 2;
+      const totalWidth = element.getTotalWidth();
+      const textAlign = style.textAlign || 'left';
 
-      let currentX = startX;
+      let currentY = startY;
 
-      if (fragments) {
-        fragments.forEach(frag => {
-          const fStyle = frag.style;
-          const fragWidth = frag.width;
-          const fragHeight = frag.height;
+      if (lines) {
+        lines.forEach(line => {
+          const { fragments, width, height } = line;
 
-          // Fragment background/border
-          if (fStyle.backgroundColor || (fStyle.borderColor && fStyle.borderWidth)) {
-            const fragRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            // Center vertically
-            const fy = centerY - fragHeight / 2;
-            fragRect.setAttribute('x', String(currentX));
-            fragRect.setAttribute('y', String(fy));
-            fragRect.setAttribute('width', String(fragWidth));
-            fragRect.setAttribute('height', String(fragHeight));
-
-            if (fStyle.backgroundColor) {
-              fragRect.setAttribute('fill', fStyle.backgroundColor);
-            } else {
-              fragRect.setAttribute('fill', 'none');
-            }
-
-            if (fStyle.borderColor && fStyle.borderWidth) {
-              fragRect.setAttribute('stroke', fStyle.borderColor);
-              fragRect.setAttribute('stroke-width', String(fStyle.borderWidth));
-            }
-
-            if (fStyle.borderRadius) {
-              fragRect.setAttribute('rx', String(fStyle.borderRadius));
-              fragRect.setAttribute('ry', String(fStyle.borderRadius));
-            }
-            group.appendChild(fragRect);
+          let lineStartX = startX;
+          if (textAlign === 'center') {
+            lineStartX += (totalWidth - width) / 2;
+          } else if (textAlign === 'right') {
+            lineStartX += (totalWidth - width);
           }
 
-          // Text Content
-          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          const contentX = currentX + element.getPaddingLeft(fStyle.padding);
-          // SVG text y is baseline. Canvas 'middle' baseline means y is middle.
-          // In Text.render: ctx.textBaseline = 'middle'. ctx.fillText(..., contentY) where contentY = centerY.
-          // For SVG, to emulate 'middle' baseline, we can use dominant-baseline="middle" or dy.
-          // dominant-baseline is widely supported in SVG.
+          let currentX = lineStartX;
+          const centerY = currentY + height / 2;
 
-          text.setAttribute('x', String(contentX));
-          text.setAttribute('y', String(centerY));
-          text.setAttribute('dominant-baseline', 'middle');
-          // text-anchor is always start because we positioned it manually at contentX
-          text.setAttribute('text-anchor', 'start');
-          text.textContent = frag.text;
+          fragments.forEach((frag: any) => {
+            const fStyle = frag.style;
+            const fragWidth = frag.width;
+            const fragHeight = frag.height;
 
-          // Apply fragment styles
-          const fontSize = fStyle.fontSize || style.fontSize || 12;
-          const fontFamily = fStyle.fontFamily || style.fontFamily || 'sans-serif';
-          const fontWeight = fStyle.fontWeight || style.fontWeight || 'normal';
-          const color = fStyle.color || style.fill || '#000';
+            // Fragment background/border
+            if (fStyle.backgroundColor || (fStyle.borderColor && fStyle.borderWidth)) {
+              const fragRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+              // Center vertically
+              const fy = centerY - fragHeight / 2;
+              fragRect.setAttribute('x', String(currentX));
+              fragRect.setAttribute('y', String(fy));
+              fragRect.setAttribute('width', String(fragWidth));
+              fragRect.setAttribute('height', String(fragHeight));
 
-          text.setAttribute('font-size', String(fontSize));
-          text.setAttribute('font-family', fontFamily);
-          text.setAttribute('font-weight', String(fontWeight));
-          text.setAttribute('fill', color);
+              if (fStyle.backgroundColor) {
+                fragRect.setAttribute('fill', fStyle.backgroundColor);
+              } else {
+                fragRect.setAttribute('fill', 'none');
+              }
 
-          group.appendChild(text);
+              if (fStyle.borderColor && fStyle.borderWidth) {
+                fragRect.setAttribute('stroke', fStyle.borderColor);
+                fragRect.setAttribute('stroke-width', String(fStyle.borderWidth));
+              }
 
-          currentX += fragWidth;
+              if (fStyle.borderRadius) {
+                fragRect.setAttribute('rx', String(fStyle.borderRadius));
+                fragRect.setAttribute('ry', String(fStyle.borderRadius));
+              }
+              group.appendChild(fragRect);
+            }
+
+            // Text Content
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            const contentX = currentX + element.getPaddingLeft(fStyle.padding);
+
+            text.setAttribute('x', String(contentX));
+            text.setAttribute('y', String(centerY));
+            text.setAttribute('dominant-baseline', 'middle');
+            text.setAttribute('text-anchor', 'start');
+            text.textContent = frag.text;
+
+            // Apply fragment styles
+            const fontSize = fStyle.fontSize || style.fontSize || 12;
+            const fontFamily = fStyle.fontFamily || style.fontFamily || 'sans-serif';
+            const fontWeight = fStyle.fontWeight || style.fontWeight || 'normal';
+            const color = fStyle.color || style.fill || '#000';
+
+            text.setAttribute('font-size', String(fontSize));
+            text.setAttribute('font-family', fontFamily);
+            text.setAttribute('font-weight', String(fontWeight));
+            text.setAttribute('fill', color);
+
+            group.appendChild(text);
+
+            currentX += fragWidth;
+          });
+
+          currentY += height;
         });
       }
 
@@ -488,13 +502,19 @@ export default class SVGPainter implements IPainter {
         }
       }
       return text;
-    } else if ('image' in shapeObj) {
+    } else if ('image' in shapeObj && shapeObj.image) {
+      const img = shapeObj.image as unknown;
+      // Strict check to ensure it's a valid image source
+      if (!(img instanceof HTMLImageElement || img instanceof HTMLCanvasElement || img instanceof HTMLVideoElement || (typeof ImageBitmap !== 'undefined' && img instanceof ImageBitmap))) {
+        return null;
+      }
+
       const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
       image.setAttribute('x', String(shapeObj.x));
       image.setAttribute('y', String(shapeObj.y));
       image.setAttribute('width', String(shapeObj.width));
       image.setAttribute('height', String(shapeObj.height));
-      const img = shapeObj.image as unknown;
+
       if (img instanceof HTMLImageElement) {
         image.setAttribute('href', (img as HTMLImageElement).src);
       } else if (img instanceof HTMLCanvasElement) {
@@ -582,13 +602,20 @@ export default class SVGPainter implements IPainter {
   /**
    * Create SVG pattern from canvas
    */
-  private _createSVGPattern(canvas: HTMLCanvasElement): string {
+  private _createSVGPattern(patternObj: CanvasPattern & { _canvas: HTMLCanvasElement; _rotation?: number }): string {
+    const canvas = patternObj._canvas;
+    const rotation = patternObj._rotation || 0;
+
     const id = `pattern_${Math.random().toString(36).substr(2, 9)}`;
     const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
     pattern.setAttribute('id', id);
     pattern.setAttribute('patternUnits', 'userSpaceOnUse');
     pattern.setAttribute('width', String(canvas.width));
     pattern.setAttribute('height', String(canvas.height));
+
+    if (rotation) {
+      pattern.setAttribute('patternTransform', `rotate(${rotation * 180 / Math.PI})`);
+    }
 
     const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
     image.setAttribute('href', canvas.toDataURL());

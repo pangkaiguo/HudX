@@ -75,6 +75,13 @@ describe('createDecalPattern', () => {
     expect(mockContext.arc).toHaveBeenCalledWith(0, 0, 1.5, 0, Math.PI * 2);
   });
 
+  it('should store rotation on the pattern object', () => {
+    const decal: DecalObject = { symbol: 'line', rotation: Math.PI / 4 };
+    const pattern = createDecalPattern(decal, '#000');
+
+    expect((pattern as any)._rotation).toBeCloseTo(Math.PI / 4);
+  });
+
   describe('Presets verification', () => {
     it('should verify diagonal preset dimensions', () => {
       createDecalPattern({ symbol: 'diagonal' }, '#000');
@@ -87,8 +94,8 @@ describe('createDecalPattern', () => {
 
     it('should verify grid preset dimensions', () => {
       createDecalPattern({ symbol: 'grid' }, '#000');
-      expect(mockCanvas.width).toBe(6);
-      expect(mockCanvas.height).toBe(6);
+      expect(mockCanvas.width).toBe(12);
+      expect(mockCanvas.height).toBe(12);
     });
 
     it('should verify rect preset dimensions and symbol size', () => {
@@ -112,9 +119,12 @@ describe('createDecalPattern', () => {
 
         expect(mockCanvas.getContext).toHaveBeenCalled();
 
-        if (preset === 'grid' || preset === 'crosshatch') {
+        if (preset === 'crosshatch') {
           expect(mockCanvas.width).toBe(6);
           expect(mockCanvas.height).toBe(6);
+        } else if (preset === 'grid') {
+          expect(mockCanvas.width).toBe(12);
+          expect(mockCanvas.height).toBe(12);
         } else if (preset.startsWith('diagonal')) {
           expect(mockCanvas.width).toBe(6);
           expect(mockCanvas.height).toBe(9);

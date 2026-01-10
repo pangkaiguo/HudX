@@ -4,7 +4,7 @@ import type { DecalObject } from '../types';
 const DECAL_PRESETS: Record<string, Partial<DecalObject>> = {
   'diagonal': { symbol: 'line', dashArrayX: [1, 0], dashArrayY: [1, 0.5], rotation: Math.PI / 4, symbolSize: 0.5 },
   'diagonal-reverse': { symbol: 'line', dashArrayX: [1, 0], dashArrayY: [1, 0.5], rotation: -Math.PI / 4, symbolSize: 0.5 },
-  'grid': { symbol: 'cross', dashArrayX: [1, 0], dashArrayY: [1, 0], rotation: 0, symbolSize: 0.5 },
+  'grid': { symbol: 'cross', dashArrayX: [1, 1], dashArrayY: [1, 1], rotation: 0, symbolSize: 0.5 },
   'crosshatch': { symbol: 'cross', dashArrayX: [1, 0], dashArrayY: [1, 0], rotation: Math.PI / 4, symbolSize: 0.5 },
   'checkerboard': { symbol: 'rect', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
   'dots': { symbol: 'circle', dashArrayX: [1, 0.5], dashArrayY: [1, 0.5], rotation: 0, symbolSize: 0.5 },
@@ -155,6 +155,8 @@ export function createDecalPattern(
   const pattern = pCtx.createPattern(canvas, 'repeat');
   if (pattern) {
     (pattern as any)._canvas = canvas;
+    // Store rotation for SVG painter or other renderers
+    (pattern as any)._rotation = decal.rotation || 0;
 
     if (decal.rotation && typeof DOMMatrix !== 'undefined') {
       const matrix = new DOMMatrix().rotateSelf(decal.rotation * 180 / Math.PI);

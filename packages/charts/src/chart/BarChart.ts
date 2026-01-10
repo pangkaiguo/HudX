@@ -1,6 +1,6 @@
 import Chart from '../Chart';
 import { createLinearScale, createOrdinalScale, calculateDomain } from '../util/coordinate';
-import { Rect, createDecalPattern, Z_SERIES } from 'HudX/core';
+import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class BarChart extends Chart {
@@ -16,7 +16,7 @@ export default class BarChart extends Chart {
 
     this._activeBars.forEach((bar, key) => {
       const [sIdx] = key.split('-').map(Number);
-      
+
       if (hovered) {
         if (sIdx === seriesIndex) {
           // Highlight target series
@@ -177,6 +177,26 @@ export default class BarChart extends Chart {
       const groupInnerWidth = groupCount * barWidthPerSeries + (groupCount - 1) * gapWidth;
 
       this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, { x: xScale, y: yScale });
+
+      // Setup Axis Pointer (Guide Line)
+      let axisPointerLine: Line | null = null;
+
+      // Default to 'shadow' or 'none' for BarChart unless 'line' is explicitly requested
+      const axisPointerType = option.tooltip?.axisPointer?.type;
+
+      if (this._tooltip && option.tooltip?.trigger === 'axis' && axisPointerType === 'line') {
+        axisPointerLine = new Line({
+          shape: { x1: 0, y1: 0, x2: 0, y2: 0 },
+          style: {
+            stroke: option.tooltip?.axisPointer?.lineStyle?.color || 'rgba(0,0,0,0.3)',
+            lineWidth: option.tooltip?.axisPointer?.lineStyle?.width || 1,
+            lineDash: option.tooltip?.axisPointer?.lineStyle?.type === 'solid' ? undefined : (option.tooltip?.axisPointer?.lineStyle?.type === 'dashed' ? [4, 4] : [4, 4])
+          },
+          z: Z_AXIS + 1,
+          invisible: true
+        });
+        this._root.add(axisPointerLine);
+      }
 
       if (option.legend?.show !== false) {
         const items = (series as any[])
@@ -398,6 +418,26 @@ export default class BarChart extends Chart {
                 const mx = evt?.offsetX ?? (barX + barWidth / 2);
                 const my = evt?.offsetY ?? (barY + barHeight / 2);
                 this._tooltip!.show(mx, my, content, params, rect.attr('shape'));
+
+                // Update Axis Pointer
+                if (axisPointerLine) {
+                  if (isHorizontal) {
+                    axisPointerLine.attr('shape', {
+                      x1: plotX,
+                      y1: barY + barHeight / 2,
+                      x2: plotX + plotWidth,
+                      y2: barY + barHeight / 2
+                    });
+                  } else {
+                    axisPointerLine.attr('shape', {
+                      x1: barX + barWidth / 2,
+                      y1: plotY,
+                      x2: barX + barWidth / 2,
+                      y2: plotY + plotHeight
+                    });
+                  }
+                  axisPointerLine.attr('invisible', false);
+                }
               },
               () => {
                 const emphasis = seriesItem.emphasis || {};
@@ -411,6 +451,9 @@ export default class BarChart extends Chart {
                   rect.attr('style', { opacity: 1 });
                 }
                 this._tooltip!.hide();
+                if (axisPointerLine) {
+                  axisPointerLine.attr('invisible', true);
+                }
               }
             );
 
@@ -453,6 +496,26 @@ export default class BarChart extends Chart {
                   }
                 }
                 this._tooltip.show(mx, my, content, params, rect.attr('shape'));
+
+                // Update Axis Pointer
+                if (axisPointerLine) {
+                  if (isHorizontal) {
+                    axisPointerLine.attr('shape', {
+                      x1: plotX,
+                      y1: barY + barHeight / 2,
+                      x2: plotX + plotWidth,
+                      y2: barY + barHeight / 2
+                    });
+                  } else {
+                    axisPointerLine.attr('shape', {
+                      x1: barX + barWidth / 2,
+                      y1: plotY,
+                      x2: barX + barWidth / 2,
+                      y2: plotY + plotHeight
+                    });
+                  }
+                  axisPointerLine.attr('invisible', false);
+                }
               }
             });
           }

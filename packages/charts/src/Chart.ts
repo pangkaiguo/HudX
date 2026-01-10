@@ -371,7 +371,7 @@ export default class Chart {
               style: {
                 stroke: xAxis.splitLine.lineStyle?.color || '#eee',
                 lineWidth: xAxis.splitLine.lineStyle?.width || 1,
-                lineDash: xAxis.splitLine.lineStyle?.type === 'dashed' || !xAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
+                lineDash: xAxis.splitLine.lineStyle?.type === 'solid' ? undefined : (xAxis.splitLine.lineStyle?.type === 'dashed' || !xAxis.splitLine.lineStyle?.type ? [4, 4] : undefined)
               },
               z: Z_AXIS - 0.5,
             });
@@ -553,7 +553,7 @@ export default class Chart {
               style: {
                 stroke: yAxis.splitLine.lineStyle?.color || '#eee',
                 lineWidth: yAxis.splitLine.lineStyle?.width || 1,
-                lineDash: yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
+                lineDash: yAxis.splitLine.lineStyle?.type === 'solid' ? undefined : (yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined)
               },
               z: Z_AXIS - 0.5,
             });
@@ -574,7 +574,7 @@ export default class Chart {
               style: {
                 stroke: yAxis.splitLine.lineStyle?.color || '#eee',
                 lineWidth: yAxis.splitLine.lineStyle?.width || 1,
-                lineDash: yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
+                lineDash: yAxis.splitLine.lineStyle?.type === 'solid' ? undefined : (yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined)
               },
               z: Z_AXIS - 0.5, // Below axis line
             });

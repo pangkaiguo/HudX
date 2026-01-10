@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import Chart from '../Chart';
+import PieChart from '../chart/PieChart';
+import BarChart from '../chart/BarChart';
 import { ChartOption } from '../types';
 
 // Mock Canvas
@@ -27,16 +29,36 @@ beforeAll(() => {
     strokeRect: vi.fn(),
     clearRect: vi.fn(),
     setTransform: vi.fn(),
+    drawImage: vi.fn(), // Mock drawImage for Image shape
+    font: '', // Add font property
+    textBaseline: 'alphabetic',
+    textAlign: 'start',
+    fillStyle: '#000',
+    strokeStyle: '#000',
+    lineWidth: 1,
+    shadowColor: '',
+    shadowBlur: 0,
+    shadowOffsetX: 0,
+    shadowOffsetY: 0,
+    globalAlpha: 1,
   } as unknown as CanvasRenderingContext2D;
 
-  vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
-    if (tag === 'canvas') {
-      const canvas = document.createElementNS('http://www.w3.org/1999/xhtml', 'canvas') as HTMLCanvasElement;
-      canvas.getContext = vi.fn(() => mockContext) as any;
-      return canvas;
-    }
-    return document.createElementNS('http://www.w3.org/1999/xhtml', tag) as HTMLElement;
+  // Mock HTMLCanvasElement.prototype.getContext
+  // We need to cast to any because TS might complain about read-only or type mismatch
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    value: vi.fn((contextId: string) => {
+      if (contextId === '2d') {
+        return mockContext;
+      }
+      return null;
+    }),
+    writable: true
   });
+
+  // Remove the spy on createElement as we are mocking prototype now
+  // vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
+  //   return document.createElementNS('http://www.w3.org/1999/xhtml', tag) as HTMLElement;
+  // });
 });
 
 class TestChart extends Chart {
@@ -215,16 +237,13 @@ describe('Chart', () => {
       }
 
       const chart = new InteractiveChart(document.createElement('div'));
-      
-      // We spy on the method to ensure it exists and can be called,
-      // although checking internal state (opacity) would require mocking series/elements
-      // which is complex in this unit test.
-      // So we just verify the method is callable.
+
+      // We spy on the method to ensure it exists and can be called
       const spy = vi.spyOn(chart as any, '_onLegendHover');
-      
+
       chart.onLegendHover('Series 1', true);
       expect(spy).toHaveBeenCalledWith('Series 1', true);
-      
+
       chart.onLegendHover('Series 1', false);
       expect(spy).toHaveBeenCalledWith('Series 1', false);
     });
@@ -401,9 +420,121 @@ describe('Chart', () => {
       expect(html).toContain('display: block;');
 
       // Check if defaults are overridden
-      // The default value style is 'font-weight:bold;white-space:nowrap;'
-      // Since we overrode 'value', it should not contain the default style
       expect(html).not.toContain('font-weight:bold;white-space:nowrap;');
+    });
+  });
+
+  describe('SVG Render Mode', () => {
+    it('should not render broken image tags for shapes without valid image source', () => {
+      const dom = document.createElement('div');
+      // Use PieChart to have actual rendering logic
+      const chart = new PieChart(dom);
+      chart.setRenderMode('svg');
+
+      chart.setOption({
+        animation: false, // Disable animation for sync rendering check
+        series: [{
+          type: 'pie',
+          data: [
+            { value: 1048, name: 'Search Engine' },
+            { value: 735, name: 'Direct' }
+          ]
+        }]
+      });
+
+      // Force render synchronously
+      (chart as any)._render();
+
+      // Get SVG content
+      const svg = chart.getDom().querySelector('svg');
+      expect(svg).not.toBeNull();
+
+      // Check for image tags
+      // In a normal pie chart without patterns/images, there should be no <image> tags
+      const images = svg?.querySelectorAll('image');
+      expect(images?.length).toBe(0);
+
+      // Verify sectors are rendered (paths)
+      const paths = svg?.querySelectorAll('path');
+      expect(paths?.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Axis Pointer', () => {
+    it('should create axis pointer line when configured in BarChart', () => {
+      const dom = document.createElement('div');
+      const chart = new BarChart(dom);
+
+      chart.setOption({
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'line',
+            lineStyle: {
+              color: 'red',
+              width: 2,
+              type: 'dashed'
+            }
+          }
+        },
+        xAxis: { type: 'category', data: ['A', 'B'] },
+        yAxis: { type: 'value' },
+        series: [{ type: 'bar', data: [10, 20] }]
+      });
+
+      // Force render
+      (chart as any)._render();
+
+      // Check if line exists in root
+      const rootGroup = (chart as any)._root;
+      const elements = rootGroup.children() || [];
+
+      // Find the axis pointer line
+      const pointerLine = elements.find((el: any) =>
+        el.constructor.name === 'Line' &&
+        el.style.stroke === 'red' &&
+        el.z > 0 // Should have high Z
+      );
+
+      expect(pointerLine).toBeDefined();
+      expect(pointerLine.style.lineWidth).toBe(2);
+      expect(pointerLine.style.lineDash).toEqual([4, 4]);
+      expect(pointerLine.invisible).toBe(true); // Should be initially invisible
+    });
+
+    it('should NOT create axis pointer line by default in BarChart', () => {
+      const dom = document.createElement('div');
+      const chart = new BarChart(dom);
+
+      chart.setOption({
+        tooltip: {
+          trigger: 'axis'
+          // No axisPointer config
+        },
+        xAxis: { type: 'category', data: ['A', 'B'] },
+        yAxis: { type: 'value' },
+        series: [{ type: 'bar', data: [10, 20] }]
+      });
+
+      (chart as any)._render();
+
+      const rootGroup = (chart as any)._root;
+      const elements = rootGroup.children() || [];
+
+      // Look for any line that looks like an axis pointer (high Z index, typical style)
+
+      const pointerLine = elements.find((el: any) =>
+        el.constructor.name === 'Line' &&
+        el.style.stroke === 'rgba(0,0,0,0.3)' && // Default pointer color
+        el.invisible === true // Pointer starts invisible
+      );
+
+      // This might be flaky if other lines match, but given the specific combination created in code:
+      // In BarChart.ts:
+      // if (... axisPointerType === 'line') { ... }
+      // So if not configured, it shouldn't exist.
+
+      expect(pointerLine).toBeUndefined();
     });
   });
 });

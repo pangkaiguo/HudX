@@ -37,6 +37,13 @@ export default class Text extends ChartElement {
     return this._textFragments;
   }
 
+  getTextLines(): { fragments: any[], width: number, height: number }[] | null {
+    if (!this._textLines || this.isDirty()) {
+      this._parseText(this.style.rich);
+    }
+    return this._textLines;
+  }
+
   getTotalWidth(): number {
     return this._totalWidth;
   }

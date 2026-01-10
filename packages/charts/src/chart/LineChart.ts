@@ -1,8 +1,8 @@
 import Chart from '../Chart';
 import { createLinearScale, createOrdinalScale, calculateDomain } from '../util/coordinate';
 import {
-  Polyline, Circle, Text, Rect, createDecalPattern,
-  type Point, Z_SERIES, Z_LABEL
+  Polyline, Circle, Text, Rect, Line, createDecalPattern,
+  type Point, Z_SERIES, Z_LABEL, Z_AXIS
 } from 'HudX/core';
 
 export default class LineChart extends Chart {
@@ -101,6 +101,20 @@ export default class LineChart extends Chart {
           silent: false,
           cursor: 'crosshair'
         });
+
+        // Axis Pointer Line
+        const axisPointerLine = new Line({
+          shape: { x1: 0, y1: plotY, x2: 0, y2: plotY + plotHeight },
+          style: {
+            stroke: 'rgba(0,0,0,0.3)',
+            lineWidth: 1,
+            lineDash: [4, 4]
+          },
+          z: Z_AXIS + 1,
+          invisible: true
+        });
+        this._root.add(axisPointerLine);
+
         const domain = xAxis?.type === 'category' && Array.isArray(xAxis?.data) ? xAxis.data : xDomain;
         let lastX = -1;
         let lastY = -1;
@@ -112,23 +126,45 @@ export default class LineChart extends Chart {
 
           if (mx < plotX || mx > plotX + plotWidth || my < plotY || my > plotY + plotHeight) {
             this._tooltip!.hide();
+            axisPointerLine.attr('invisible', true);
             return;
           }
           let idx = 0;
           let name: any = '';
+          let currentX = mx;
+
           if (xAxis?.type === 'category') {
             const label = (xScale as any).invert(mx);
             idx = domain.indexOf(label);
             name = label;
+            // Snap to band center
+            if (idx >= 0) {
+              currentX = xScale(label);
+            }
           } else {
             const xv = (xScale as any).invert(mx);
             idx = Math.max(0, Math.min(Math.round((xv - xDomain[0]) / ((xDomain[1] - xDomain[0]) || 1)), domain.length - 1));
             name = xv;
+            // Snap to data point? Or keep raw for value axis?
+            // Usually value axis snaps to data point x
+            if (idx >= 0 && idx < data.length) {
+              // Assuming data is sorted/linear for simple line chart
+              // currentX = xScale(xv); 
+            }
+            // For value axis, just use mouse X usually, or snap to nearest data x
+            currentX = mx;
           }
+
           if (idx < 0 || idx >= domain.length) {
             this._tooltip!.hide();
+            axisPointerLine.attr('invisible', true);
             return;
           }
+
+          // Show Axis Pointer
+          axisPointerLine.attr('shape', { x1: currentX, x2: currentX });
+          axisPointerLine.attr('invisible', false);
+
           const paramsList: any[] = [];
           series.forEach((s, sIndex) => {
             if (s.type !== 'line' || s.show === false) return;
@@ -174,7 +210,10 @@ export default class LineChart extends Chart {
             this._tooltip!.show(mx + 12, my - 16, content, paramsList);
           }
         });
-        (interact as any).on('mouseout', () => this._tooltip!.hide());
+        (interact as any).on('mouseout', () => {
+          this._tooltip!.hide();
+          axisPointerLine.attr('invisible', true);
+        });
         this._root.add(interact as any);
       }
 

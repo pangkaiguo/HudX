@@ -78,6 +78,12 @@ export interface TooltipOption {
   show?: boolean;
   /** Trigger type */
   trigger?: 'item' | 'axis' | 'none';
+  /** Axis pointer configuration */
+  axisPointer?: {
+    type?: 'line' | 'shadow' | 'none';
+    lineStyle?: LineStyleOption;
+    shadowStyle?: ItemStyleOption;
+  };
   /** Content formatter */
   formatter?: string | ((params: any) => string);
   /** Background color */
