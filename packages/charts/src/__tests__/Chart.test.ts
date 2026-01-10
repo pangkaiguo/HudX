@@ -1,7 +1,8 @@
-import { describe, it, expect, vi, beforeAll } from 'vitest';
+import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
 import Chart from '../Chart';
 import PieChart from '../chart/PieChart';
 import BarChart from '../chart/BarChart';
+import LineChart from '../chart/LineChart';
 import { ChartOption } from '../types';
 
 // Mock Canvas
@@ -535,6 +536,70 @@ describe('Chart', () => {
       // So if not configured, it shouldn't exist.
 
       expect(pointerLine).toBeUndefined();
+    });
+  });
+
+  describe('Axis Label Interval', () => {
+    let container: HTMLElement;
+
+    beforeEach(() => {
+      container = document.createElement('div');
+      Object.defineProperty(container, 'clientWidth', { value: 800 });
+      Object.defineProperty(container, 'clientHeight', { value: 600 });
+    });
+
+    it('should filter labels with interval number', () => {
+      const chart = new LineChart(container);
+      const option: ChartOption = {
+        animation: false,
+        xAxis: {
+          type: 'category',
+          data: ['A', 'B', 'C', 'D', 'E'],
+          axisLabel: {
+            interval: 1 // Show every 2nd label (index 0, 2, 4) -> A, C, E
+          }
+        },
+        yAxis: { type: 'value' },
+        series: [{ type: 'line', data: [10, 20, 30, 40, 50] }]
+      };
+      chart.setOption(option);
+
+      // Access root children to find Text nodes
+      const root = (chart as any)._root;
+      const children = root.children();
+
+      const textNodes = children.filter((child: any) => child.constructor.name === 'Text');
+
+      // Filter for X-axis labels
+      const xLabels = textNodes.filter((node: any) => ['A', 'B', 'C', 'D', 'E'].includes(node.shape?.text));
+
+      expect(xLabels.length).toBe(3);
+      expect(xLabels.map((n: any) => n.shape.text)).toEqual(['A', 'C', 'E']);
+    });
+
+    it('should filter labels with interval function', () => {
+      const chart = new LineChart(container);
+      const option: ChartOption = {
+        animation: false,
+        xAxis: {
+          type: 'category',
+          data: ['A', 'B', 'C', 'D', 'E'],
+          axisLabel: {
+            interval: (index: number) => index % 5 === 0 // Show 0, 5... -> Only 'A' (index 0)
+          }
+        },
+        yAxis: { type: 'value' },
+        series: [{ type: 'line', data: [10, 20, 30, 40, 50] }]
+      };
+      chart.setOption(option);
+
+      const root = (chart as any)._root;
+      const children = root.children();
+      const textNodes = children.filter((child: any) => child.constructor.name === 'Text');
+      const xLabels = textNodes.filter((node: any) => ['A', 'B', 'C', 'D', 'E'].includes(node.shape?.text));
+
+      expect(xLabels.length).toBe(1);
+      expect(xLabels[0].shape.text).toBe('A');
     });
   });
 });

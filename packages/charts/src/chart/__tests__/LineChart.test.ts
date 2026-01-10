@@ -57,18 +57,42 @@ describe('LineChart', () => {
     expect(chart).toBeDefined();
   });
 
-  it('should render lines', () => {
+  it('should support smooth, areaStyle and symbol', () => {
     const chart = new LineChart(container);
     const option: ChartOption = {
+      animation: false,
       xAxis: { type: 'category', data: ['A', 'B'] },
       yAxis: { type: 'value' },
       series: [
-        { type: 'line', data: [10, 20] }
+        { 
+          type: 'line', 
+          data: [10, 20],
+          smooth: true,
+          areaStyle: { opacity: 0.5 },
+          symbol: 'rect',
+          symbolSize: 10
+        }
       ]
     };
     chart.setOption(option);
 
-    // Check if no error
-    expect(chart).toBeDefined();
+    const activeLines = (chart as any)._activeLines;
+    expect(activeLines.size).toBe(1);
+    
+    const seriesItem = activeLines.get(0);
+    expect(seriesItem).toBeDefined();
+    
+    // Check if line is Path (smooth) instead of Polyline
+    // We imported Polyline and Path in source, but here we can check constructor name or type
+    expect(seriesItem.line.constructor.name).toBe('Path');
+    
+    // Check area existence
+    expect(seriesItem.area).toBeDefined();
+    expect(seriesItem.area.constructor.name).toBe('Path');
+    
+    // Check symbols
+    expect(seriesItem.symbols.length).toBe(2);
+    // Rect symbol should be created
+    expect(seriesItem.symbols[0].constructor.name).toBe('Rect');
   });
 });

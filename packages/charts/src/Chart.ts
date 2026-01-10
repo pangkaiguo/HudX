@@ -323,6 +323,17 @@ export default class Chart {
     return { x, y, width, height };
   }
 
+  protected _shouldShowLabel(interval: any, index: number, label: string): boolean {
+    if (interval === undefined || interval === 'auto') return true;
+    if (typeof interval === 'number') {
+      return index % (interval + 1) === 0;
+    }
+    if (typeof interval === 'function') {
+      return interval(index, label);
+    }
+    return true;
+  }
+
   protected _renderAxes(
     xAxis: any,
     yAxis: any,
@@ -351,9 +362,10 @@ export default class Chart {
 
       if (xAxis?.splitLine?.show) {
         if (xAxis?.data && xAxis.data.length > 0) {
+          const xRange = xAxis.inverse ? [plotX + width, plotX] : [plotX, plotX + width];
           const xScale = scales?.x || (xAxis.type === 'category'
-            ? createOrdinalScale(xAxis.data, [plotX, plotX + width])
-            : createLinearScale([0, xAxis.data.length - 1], [plotX, plotX + width]));
+            ? createOrdinalScale(xAxis.data, xRange)
+            : createLinearScale([0, xAxis.data.length - 1], xRange));
 
           const interval = xAxis.splitLine?.interval ?? 0;
 
@@ -381,9 +393,10 @@ export default class Chart {
       }
 
       if (xAxis?.data && xAxis.data.length > 0) {
+        const xRange = xAxis.inverse ? [plotX + width, plotX] : [plotX, plotX + width];
         const xScale = scales?.x || (xAxis.type === 'category'
-          ? createOrdinalScale(xAxis.data, [plotX, plotX + width])
-          : createLinearScale([0, xAxis.data.length - 1], [plotX, plotX + width]));
+          ? createOrdinalScale(xAxis.data, xRange)
+          : createLinearScale([0, xAxis.data.length - 1], xRange));
 
         const axisLabel = xAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
@@ -392,8 +405,11 @@ export default class Chart {
         const fontSize = axisLabel.fontSize || 12;
         const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
+        const interval = axisLabel.interval;
 
         xAxis.data.forEach((label: any, index: number) => {
+          if (!this._shouldShowLabel(interval, index, String(label))) return;
+
           const x = xAxis.type === 'category' ? xScale(label) : xScale(index);
           let labelText = String(label);
 
@@ -457,10 +473,12 @@ export default class Chart {
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
         const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
+        const interval = axisLabel.interval;
 
         ticks.forEach((tick, index) => {
           const x = scales.x!(tick);
           if (x < plotX - 0.1 || x > plotX + width + 0.1) return;
+          if (!this._shouldShowLabel(interval, index, String(tick))) return;
 
           let labelText = formatAxisLabel(tick);
 
@@ -584,7 +602,8 @@ export default class Chart {
       }
 
       if (yAxis?.data && yAxis.data.length > 0) {
-        const yScale = scales?.y || createOrdinalScale(yAxis.data, [plotY + height, plotY]);
+        const yRange = yAxis.inverse ? [plotY, plotY + height] : [plotY + height, plotY];
+        const yScale = scales?.y || createOrdinalScale(yAxis.data, yRange);
         const axisLabel = yAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
@@ -592,8 +611,11 @@ export default class Chart {
         const fontSize = axisLabel.fontSize || 12;
         const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
+        const interval = axisLabel.interval;
 
         yAxis.data.forEach((label: any, index: number) => {
+          if (!this._shouldShowLabel(interval, index, String(label))) return;
+
           const y = yScale(label);
           let labelText = String(label);
 
@@ -655,10 +677,12 @@ export default class Chart {
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
         const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
+        const interval = axisLabel.interval;
 
         ticks.forEach((tick, index) => {
           const y = scales.y!(tick);
           if (y < plotY - 0.1 || y > plotY + height + 0.1) return;
+          if (!this._shouldShowLabel(interval, index, String(tick))) return;
 
           let labelText = formatAxisLabel(tick);
 

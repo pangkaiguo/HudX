@@ -1,12 +1,14 @@
 import Chart from '../Chart';
 import { createLinearScale, createOrdinalScale, calculateDomain } from '../util/coordinate';
 import {
-  Polyline, Circle, Text, Rect, Line, createDecalPattern,
+  Polyline, Circle, Text, Rect, Line, createDecalPattern, Path, ChartElement,
   type Point, Z_SERIES, Z_LABEL, Z_AXIS
 } from 'HudX/core';
+import { getSmoothPath, getSmoothAreaPath } from '../util/curve';
+import { createSymbol } from '../util/symbol';
 
 export default class LineChart extends Chart {
-  private _activeLines: Map<number, { line: Polyline, symbols: Circle[] }> = new Map();
+  private _activeLines: Map<number, { line: Polyline | Path, symbols: ChartElement[], area?: Path }> = new Map();
 
   protected _onLegendHover(name: string, hovered: boolean): void {
     const seriesIndex = (this._option.series || []).findIndex((s, i) => {
@@ -22,15 +24,18 @@ export default class LineChart extends Chart {
           // Highlight
           item.line.attr('style', { opacity: 1, lineWidth: (this._option.series?.[idx].lineStyle?.width || 2) + 1 });
           item.symbols.forEach(s => s.attr('style', { opacity: 1 }));
+          if (item.area) item.area.attr('style', { opacity: this._option.series?.[idx].areaStyle?.opacity || 0.5 });
         } else {
           // Dim
           item.line.attr('style', { opacity: 0.1 });
           item.symbols.forEach(s => s.attr('style', { opacity: 0.1 }));
+          if (item.area) item.area.attr('style', { opacity: 0.1 });
         }
       } else {
         // Restore
         item.line.attr('style', { opacity: 1, lineWidth: this._option.series?.[idx].lineStyle?.width || 2 });
-        item.symbols.forEach(s => s.attr('style', { opacity: 1 })); // Or original opacity? Symbols usually 1 or 0.8
+        item.symbols.forEach(s => s.attr('style', { opacity: 1 }));
+        if (item.area) item.area.attr('style', { opacity: this._option.series?.[idx].areaStyle?.opacity || 0.5 });
       }
     });
   }
@@ -89,11 +94,14 @@ export default class LineChart extends Chart {
       const yPad = (yMax - yMin) * 0.1;
       const yDomain = [yMin - yPad, yMax + yPad];
 
-      const xScale = xAxis?.type === 'category'
-        ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
-        : createLinearScale(xDomain, [plotX, plotX + plotWidth]);
+      const xRange = xAxis?.inverse ? [plotX + plotWidth, plotX] : [plotX, plotX + plotWidth];
+      const yRange = yAxis?.inverse ? [plotY, plotY + plotHeight] : [plotY + plotHeight, plotY];
 
-      const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
+      const xScale = xAxis?.type === 'category'
+        ? createOrdinalScale(xDomain, xRange)
+        : createLinearScale(xDomain, xRange);
+
+      const yScale = createLinearScale(yDomain, yRange);
 
       this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, { x: xScale, y: yScale });
 
@@ -267,54 +275,154 @@ export default class LineChart extends Chart {
 
         if (points.length === 0) return;
 
-        const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-        console.info(pathData);
+        const isSmooth = seriesItem.smooth;
+        let line: Polyline | Path;
+        let area: Path | undefined;
 
-        const line = new Polyline({
-          shape: {
-            points: [],
-          },
-          style: {
-            stroke: lineColor,
-            lineWidth: seriesItem.lineStyle?.width || 2,
-            fill: 'none',
-          },
-          z: Z_SERIES,
-        });
+        // Render Area
+        if (seriesItem.areaStyle) {
+          const areaColor = seriesItem.areaStyle.color || lineColor;
+          const opacity = seriesItem.areaStyle.opacity || 0.5;
+
+          // Calculate baseline for area
+          // Default to the bottom of the chart (min value of domain)
+          // This prevents the area from extending to y=0 if 0 is far off-chart
+          const domain = yScale.domain();
+          const y0 = yScale(domain[0]);
+
+          let areaPathData = '';
+          const tension = typeof isSmooth === 'number' ? isSmooth : 0.5;
+          if (isSmooth) {
+            areaPathData = getSmoothAreaPath(points, y0, tension);
+          } else {
+            // Simple polygon path
+            areaPathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+            areaPathData += ` L ${points[points.length - 1].x} ${y0} L ${points[0].x} ${y0} Z`;
+          }
+
+          area = new Path({
+            shape: { d: areaPathData },
+            style: {
+              fill: areaColor,
+              stroke: 'none',
+              opacity: 0, // Start invisible for animation
+            },
+            z: Z_SERIES - 1
+          });
+          this._root.add(area);
+        }
+
+        // Render Line
+        if (isSmooth) {
+          const tension = typeof isSmooth === 'number' ? isSmooth : 0.5;
+          const d = getSmoothPath(points, tension);
+          line = new Path({
+            shape: { d },
+            style: {
+              stroke: lineColor,
+              lineWidth: seriesItem.lineStyle?.width || 2,
+              fill: 'none',
+              opacity: 1
+            },
+            z: Z_SERIES
+          });
+        } else {
+          line = new Polyline({
+            shape: {
+              points: [],
+            },
+            style: {
+              stroke: lineColor,
+              lineWidth: seriesItem.lineStyle?.width || 2,
+              fill: 'none',
+            },
+            z: Z_SERIES,
+          });
+        }
 
         this._root.add(line);
+
         if (!this._activeLines.has(seriesIndex)) {
-          this._activeLines.set(seriesIndex, { line, symbols: [] });
+          this._activeLines.set(seriesIndex, { line, symbols: [], area });
         } else {
-          this._activeLines.get(seriesIndex)!.line = line;
+          const item = this._activeLines.get(seriesIndex)!;
+          item.line = line;
+          item.area = area;
+          // Clear old symbols if any, they will be re-added below
+          // Actually we are re-rendering, so old symbols are gone with this._root.clear() implicitly if we cleared root?
+          // Wait, this._root is NOT cleared. But this._activeLines.clear() was called?
+          // No, this._activeLines.clear() clears the map, but doesn't remove elements from root.
+          // The base Chart._render() calls this._root.clear()! So we are safe.
+          item.symbols = [];
         }
 
         if (this._shouldAnimateFor(seriesName)) {
           const duration = this._getAnimationDuration();
           const easing = this._getAnimationEasing();
-          const shape = line.attr('shape');
-          this._animator.animate(
-            { t: 0 },
-            't',
-            1,
-            {
-              duration,
-              easing,
-              onUpdate: (target: any, percent: number) => {
-                const visiblePoints = Math.ceil(points.length * percent);
-                shape.points = points.slice(0, visiblePoints);
-                line.markRedraw();
+
+          if (line instanceof Polyline) {
+            const shape = line.attr('shape');
+            this._animator.animate(
+              { t: 0 },
+              't',
+              1,
+              {
+                duration,
+                easing,
+                onUpdate: (target: any, percent: number) => {
+                  const visiblePoints = Math.ceil(points.length * percent);
+                  shape.points = points.slice(0, visiblePoints);
+                  line.markRedraw();
+                }
               }
-            }
-          );
+            );
+          } else {
+            // Path animation (Clip or Dash) - simplified to Opacity for now
+            line.attr('style', { opacity: 0 });
+            this._animator.animate(
+              { opacity: 0 },
+              'opacity',
+              1,
+              {
+                duration,
+                easing,
+                onUpdate: (target: any, percent: number) => {
+                  line.attr('style', { opacity: target.opacity });
+                  line.markRedraw();
+                }
+              }
+            );
+          }
+
+          if (area) {
+            this._animator.animate(
+              { opacity: 0 },
+              'opacity',
+              seriesItem.areaStyle?.opacity || 0.5,
+              {
+                duration,
+                easing,
+                onUpdate: (target: any, percent: number) => {
+                  area!.attr('style', { opacity: target.opacity });
+                  area!.markRedraw();
+                }
+              }
+            );
+          }
         } else {
-          line.attr('shape', { points });
+          if (line instanceof Polyline) {
+            line.attr('shape', { points });
+          }
+          if (area) {
+            area.attr('style', { opacity: seriesItem.areaStyle?.opacity || 0.5 });
+          }
         }
 
         if (seriesItem.showSymbol !== false) {
           const itemStyle = seriesItem.itemStyle || {};
           const pointColor = itemStyle.color || lineColor;
-          const pointSize = itemStyle.borderWidth || 4;
+          const pointSize = seriesItem.symbolSize || itemStyle.borderWidth || 4; // Use symbolSize if available
+          const symbolType = seriesItem.symbol || 'circle';
 
           let pointFill: string | CanvasPattern = pointColor;
           const aria = option.aria;
@@ -330,28 +438,42 @@ export default class LineChart extends Chart {
 
           points.forEach((point, pointIndex) => {
             const item = data[pointIndex];
-            const circle = new Circle({
-              shape: {
-                cx: point.x,
-                cy: point.y,
-                r: 0,
-              },
-              style: {
+
+            // Calculate size if it's a function or array
+            let finalSize = 4;
+            if (typeof pointSize === 'number') finalSize = pointSize;
+            else if (Array.isArray(pointSize)) finalSize = pointSize[0];
+            else if (typeof pointSize === 'function') finalSize = (pointSize as any)(item, {});
+
+            const shouldAnimate = this._shouldAnimateFor(seriesName);
+            const initialSize = shouldAnimate ? 0 : finalSize;
+
+            const symbol = createSymbol(
+              symbolType,
+              point.x,
+              point.y,
+              initialSize,
+              {
                 fill: pointFill,
                 stroke: '#fff',
                 lineWidth: 2,
               },
-              z: Z_SERIES + 1,
-              silent: false,
-              cursor: this._tooltip ? 'pointer' : 'default',
-            });
+              Z_SERIES + 1
+            );
 
-            this._root.add(circle);
-            this._activeLines.get(seriesIndex)?.symbols.push(circle);
+            if (!symbol) return;
+
+            (symbol as any).cursor = this._tooltip ? 'pointer' : 'default';
+
+            this._root.add(symbol);
+            this._activeLines.get(seriesIndex)?.symbols.push(symbol);
 
             if (this._tooltip) {
-              circle.on('mouseover', () => {
-                circle.attr('shape', { r: pointSize + 3 });
+              symbol.on('mouseover', () => {
+                if (symbolType === 'circle') {
+                  symbol.attr('shape', { r: finalSize + 3 });
+                }
+                // TODO: scale logic for other shapes
 
                 const itemName = (typeof item === 'object' && item.name) ? item.name : (xAxis?.data?.[pointIndex] || '');
                 const itemValue = this._getDataValue(item);
@@ -370,7 +492,7 @@ export default class LineChart extends Chart {
 
                 const content = this._generateTooltipContent(params);
 
-                const r = pointSize + 3;
+                const r = finalSize + 3;
                 const targetRect = {
                   x: point.x - r,
                   y: point.y - r,
@@ -381,13 +503,15 @@ export default class LineChart extends Chart {
                 this._tooltip!.show(point.x, point.y, content, params, targetRect);
               });
 
-              circle.on('mouseout', () => {
-                circle.attr('shape', { r: pointSize });
+              symbol.on('mouseout', () => {
+                if (symbolType === 'circle') {
+                  symbol.attr('shape', { r: finalSize });
+                }
                 this._tooltip!.hide();
               });
             }
 
-            if (this._shouldAnimateFor(seriesName)) {
+            if (shouldAnimate) {
               const lineDuration = this._getAnimationDuration();
               const delay = (pointIndex / points.length) * lineDuration;
 
@@ -400,14 +524,17 @@ export default class LineChart extends Chart {
                   delay,
                   easing: 'cubicOut',
                   onUpdate: (_target: any, percent: number) => {
-                    const r = pointSize * percent;
-                    circle.attr('shape', { r });
-                    circle.markRedraw();
+                    const currentSize = finalSize * percent;
+                    if (symbolType === 'circle') {
+                      symbol.attr('shape', { r: currentSize });
+                    } else if (symbol instanceof Rect) {
+                      const half = currentSize / 2;
+                      symbol.attr('shape', { x: point.x - half, y: point.y - half, width: currentSize, height: currentSize });
+                    }
+                    symbol.markRedraw();
                   }
                 }
               );
-            } else {
-              circle.attr('shape', { cx: point.x, cy: point.y, r: pointSize });
             }
           });
         }

@@ -57,12 +57,14 @@ describe('PieChart', () => {
     expect(chart).toBeDefined();
   });
 
-  it('should render pie sectors', () => {
+  it('should support roseType', () => {
     const chart = new PieChart(container);
     const option: ChartOption = {
+      animation: false, // Disable animation to get final values immediately
       series: [
         {
           type: 'pie',
+          roseType: 'radius',
           data: [
             { name: 'A', value: 10 },
             { name: 'B', value: 20 }
@@ -71,7 +73,16 @@ describe('PieChart', () => {
       ]
     };
     chart.setOption(option);
-
-    expect(chart).toBeDefined();
+    
+    const activeSectors = (chart as any)._activeSectors;
+    expect(activeSectors.size).toBe(2);
+    
+    // In rose chart, angles should be equal (total 360 / 2 = 180 deg per sector)
+    const sectors = Array.from(activeSectors.values()) as any[];
+    const angle1 = sectors[0].shape.endAngle - sectors[0].shape.startAngle;
+    const angle2 = sectors[1].shape.endAngle - sectors[1].shape.startAngle;
+    
+    expect(Math.abs(angle1 - angle2)).toBeLessThan(0.001);
+    expect(Math.abs(angle1 - Math.PI)).toBeLessThan(0.001);
   });
 });

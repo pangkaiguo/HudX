@@ -177,8 +177,10 @@ export interface TextStyle {
 export interface LegendOption {
   /** Show legend */
   show?: boolean;
+  z?: number;
+  zlevel?: number;
   /** Legend data items */
-  data?: string[];
+  data?: string[] | { name: string; icon?: string; textStyle?: TextStyle }[];
   /** Left position */
   left?: string | number;
   /** Top position */
@@ -187,6 +189,8 @@ export interface LegendOption {
   right?: string | number;
   /** Bottom position */
   bottom?: string | number;
+  width?: string | number;
+  height?: string | number;
   /** Layout orientation */
   orient?: 'horizontal' | 'vertical';
   /** Render mode */
@@ -199,10 +203,47 @@ export interface LegendOption {
   itemMaxWidth?: number;
   /** Text alignment */
   align?: 'left' | 'center' | 'right';
+  padding?: number | number[];
+  itemGap?: number;
+  itemWidth?: number;
+  itemHeight?: number;
+  symbolKeepAspect?: boolean;
+  selectedMode?: boolean | 'single' | 'multiple';
+  inactiveColor?: string;
+  selected?: { [name: string]: boolean };
+  textStyle?: TextStyle;
+  tooltip?: TooltipOption;
+  icon?: string;
+  backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  borderRadius?: number | number[];
+  shadowBlur?: number;
+  shadowColor?: string;
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
+  scrollDataIndex?: number;
+  pageButtonItemGap?: number;
+  pageButtonGap?: number;
+  pageButtonPosition?: 'start' | 'end';
+  pageFormatter?: string | Function;
+  pageIcons?: {
+    horizontal?: string[];
+    vertical?: string[];
+  };
+  pageIconColor?: string;
+  pageIconInactiveColor?: string;
+  pageIconSize?: number | number[];
+  pageTextStyle?: TextStyle;
+  animation?: boolean;
+  animationDurationUpdate?: number;
   [key: string]: any;
 }
 
 export interface GridOption {
+  show?: boolean;
+  z?: number;
+  zlevel?: number;
   /** Left margin */
   left?: string | number;
   /** Right margin */
@@ -211,8 +252,18 @@ export interface GridOption {
   top?: string | number;
   /** Bottom margin */
   bottom?: string | number;
+  width?: string | number;
+  height?: string | number;
   /** Whether grid area contains label */
   containLabel?: boolean;
+  backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  shadowBlur?: number;
+  shadowColor?: string;
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
+  tooltip?: any; // Grid specific tooltip config
   [key: string]: any;
 }
 
@@ -223,21 +274,69 @@ export interface AxisOption {
   data?: any[];
   /** Whether to show axis */
   show?: boolean;
+  gridIndex?: number;
   /** Axis position */
   position?: 'top' | 'bottom' | 'left' | 'right';
+  offset?: number;
   /** Axis name */
   name?: string;
+  nameLocation?: 'start' | 'middle' | 'center' | 'end';
+  nameTextStyle?: TextStyle;
+  nameGap?: number;
+  nameRotate?: number;
+  inverse?: boolean;
+  boundaryGap?: boolean | [string | number, string | number];
   /** Axis label configuration */
   axisLabel?: AxisLabelOption;
   /** Axis line configuration */
   axisLine?: AxisLineOption;
+  /** Axis tick configuration */
+  axisTick?: AxisTickOption;
+  /** Minor tick configuration */
+  minorTick?: AxisTickOption;
   /** Split line configuration */
   splitLine?: SplitLineOption;
+  /** Minor split line configuration */
+  minorSplitLine?: SplitLineOption;
+  /** Split area configuration */
+  splitArea?: SplitAreaOption;
   /** Min value */
   min?: number | 'dataMin' | ((value: { min: number, max: number }) => number);
   /** Max value */
   max?: number | 'dataMax' | ((value: { min: number, max: number }) => number);
+  scale?: boolean;
+  splitNumber?: number;
+  minInterval?: number;
+  maxInterval?: number;
+  interval?: number;
+  logBase?: number;
+  silent?: boolean;
+  triggerEvent?: boolean;
+  z?: number;
+  zlevel?: number;
   [key: string]: any;
+}
+
+export interface AxisTickOption {
+  show?: boolean;
+  alignWithLabel?: boolean;
+  interval?: number | Function;
+  inside?: boolean;
+  length?: number;
+  lineStyle?: LineStyleOption;
+}
+
+export interface SplitAreaOption {
+  show?: boolean;
+  interval?: number | Function;
+  areaStyle?: {
+    color?: string[];
+    shadowBlur?: number;
+    shadowColor?: string;
+    shadowOffsetX?: number;
+    shadowOffsetY?: number;
+    opacity?: number;
+  };
 }
 
 export interface AxisLabelOption {
@@ -248,6 +347,7 @@ export interface AxisLabelOption {
   width?: number;
   overflow?: 'break' | 'breakAll' | 'truncate' | 'none';
   lineHeight?: number;
+  interval?: number | 'auto' | ((index: number, value: string) => boolean);
   formatter?: string | ((value: any, index: number) => string);
   [key: string]: any;
 }
@@ -272,16 +372,76 @@ export interface LineStyleOption {
 
 export interface SeriesOption {
   type?: string;
+  id?: string;
   name?: string;
+  color?: string;
+  z?: number;
+  zlevel?: number;
   data?: any[];
   stack?: string;
+  cursor?: string;
+
+  // Bar specific
+  barWidth?: string | number;
+  barMaxWidth?: string | number;
+  barMinHeight?: number;
   barGap?: string | number;
   barCategoryGap?: string | number;
+  showBackground?: boolean;
+  backgroundStyle?: ItemStyleOption;
+
+  // Line specific
+  smooth?: boolean | number;
+  symbol?: string | 'none' | 'circle' | 'rect' | 'roundRect' | 'triangle' | 'diamond' | 'pin' | 'arrow';
+  symbolSize?: number | number[] | ((value: any, params: any) => number | number[]);
+  symbolRotate?: number;
+  symbolKeepAspect?: boolean;
+  symbolOffset?: [string | number, string | number];
+  showSymbol?: boolean;
+  connectNulls?: boolean;
+  step?: boolean | 'start' | 'middle' | 'end';
+  lineStyle?: LineStyleOption;
+  areaStyle?: AreaStyleOption;
+
+  // Pie specific
+  radius?: number | string | (number | string)[];
+  center?: (number | string)[];
+  roseType?: boolean | 'radius' | 'area';
+  avoidLabelOverlap?: boolean;
+  stillShowZeroSum?: boolean;
+  startAngle?: number;
+  endAngle?: number;
+  minAngle?: number;
   itemStyle?: ItemStyleOption;
   label?: LabelOption;
+  labelLine?: LabelLineOption;
   emphasis?: EmphasisOption;
   show?: boolean;
+
+  // Scatter specific
+  // Reuses symbol, symbolSize etc.
+
   [key: string]: any;
+}
+
+export interface AreaStyleOption {
+  color?: string | any; // Gradient support
+  origin?: 'auto' | 'start' | 'end';
+  shadowBlur?: number;
+  shadowColor?: string;
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
+  opacity?: number;
+}
+
+export interface LabelLineOption {
+  show?: boolean;
+  showAbove?: boolean;
+  length?: number;
+  length2?: number;
+  smooth?: boolean | number;
+  minTurnAngle?: number;
+  lineStyle?: LineStyleOption;
 }
 
 export interface ItemStyleOption {

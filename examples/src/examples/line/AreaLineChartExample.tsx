@@ -1,21 +1,48 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
 import { ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const AreaLineChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
-  const [showGrid, setShowGrid] = React.useState(true);
-  const [gridTop, setGridTop] = React.useState(60);
-  const [splitNumber, setSplitNumber] = React.useState(5);
-  const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
+  const [showGrid, setShowGrid] = useState(true);
+  const [gridTop, setGridTop] = useState(60);
+  const [splitNumber, setSplitNumber] = useState(5);
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [isSmooth, setIsSmooth] = useState(true);
+
+  // Generate more data points (e.g. 100)
+  const generateData = (count: number) => {
+    const data: string[] = [];
+    const valuesA: number[] = [];
+    const valuesB: number[] = [];
+    const valuesC: number[] = [];
+
+    let baseValue = Math.random() * 100;
+    let date = new Date(2023, 0, 1);
+
+    for (let i = 0; i < count; i++) {
+      date.setDate(date.getDate() + 1);
+      data.push([date.getMonth() + 1, date.getDate()].join('/'));
+
+      baseValue = baseValue + Math.random() * 20 - 10;
+      valuesA.push(Math.abs(baseValue) + 50);
+      valuesB.push(Math.abs(baseValue) + 20 + Math.random() * 20);
+      valuesC.push(Math.abs(baseValue) + 80 + Math.random() * 20);
+    }
+
+    return { category: data, valuesA, valuesB, valuesC };
+  };
+
+  const initialData = useMemo(() => generateData(30), []);
+  const [chartData, setChartData] = useState(initialData);
 
   const option: ChartOption = {
     title: {
-      text: 'Stack Line Chart with Animation',
-      subtext: 'Feature Demonstration',
+      text: 'Area Line Chart (Large Dataset)',
+      subtext: '30 Data Points with Area Style',
       left: 'center'
     },
     tooltip: {
@@ -30,14 +57,14 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
       icon: 'rect'
     },
     grid: {
-      left: 70,
+      left: 50,
       right: 40,
       top: gridTop,
       bottom: 60
     },
     xAxis: {
       type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      data: chartData.category,
       show: true,
       splitLine: {
         show: showGrid,
@@ -45,6 +72,10 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
           color: '#eee',
           type: 'dashed'
         }
+      },
+      axisLabel: {
+        // Show fewer labels to avoid clutter
+        interval: (index: number) => index % 5 === 0
       }
     },
     yAxis: {
@@ -62,61 +93,50 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
       {
         name: 'Series A',
         type: 'line',
-        data: [120, 200, 150, 80, 70, 110, 130],
+        data: chartData.valuesA,
         itemStyle: { color: themeObj.seriesColors?.[0] },
         lineStyle: { width: 2 },
-        showSymbol: true,
-        symbol: 'circle'
+        showSymbol: false,
+        smooth: isSmooth,
+        areaStyle: { opacity: 0.3 }
       },
       {
         name: 'Series B',
         type: 'line',
-        data: [100, 150, 120, 110, 90, 140, 120],
+        data: chartData.valuesB,
         itemStyle: { color: themeObj.seriesColors?.[1] },
         lineStyle: { width: 2 },
-        showSymbol: true,
-        symbol: 'rect',
-        symbolSize: 8
+        showSymbol: false,
+        smooth: isSmooth,
+        areaStyle: { opacity: 0.3 }
       },
       {
         name: 'Series C',
         type: 'line',
-        data: [80, 120, 100, 140, 110, 100, 90],
+        data: chartData.valuesC,
         itemStyle: { color: themeObj.seriesColors?.[2] },
         lineStyle: { width: 2 },
-        showSymbol: true,
-        symbol: 'triangle',
-        symbolSize: 10
+        showSymbol: false,
+        smooth: isSmooth,
+        areaStyle: { opacity: 0.3 }
       }
     ],
     animation: true,
-    animationDuration: 600,
+    animationDuration: 1000,
     animationEasing: 'cubicOut'
   };
 
   const handleUpdateSeries = () => {
-    const chartInstance = chartRef.current?.getChartInstance();
-    if (chartInstance) {
-      // Simulate new data for all 3 series
-      const newDataA = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
-      const newDataB = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
-      const newDataC = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
-
-      chartInstance.setOption({
-        series: [
-          { data: newDataA },
-          { data: newDataB },
-          { data: newDataC }
-        ]
-      });
-    }
+    const newData = generateData(30);
+    setChartData(newData);
+    // Directly updating state will trigger re-render and HChart will update via props
   };
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Stack Line Chart</h2>
+      <h2 style={{ marginBottom: 10 }}>Area Line Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Features: Smooth animations on load, Interactive legend (click to toggle), Hover tooltips with data details
+        Features: Large dataset (30 points), Area fill, Smooth curves, Symbol hidden by default
       </p>
       <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -129,6 +149,15 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
             <option value="canvas">Canvas</option>
             <option value="svg">SVG</option>
           </select>
+        </label>
+
+        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={isSmooth}
+            onChange={(e) => setIsSmooth(e.target.checked)}
+          />
+          Smooth
         </label>
 
         <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -188,11 +217,11 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
             fontSize: 14
           }}
         >
-          Update Data (via getChartInstance)
+          Update Data (Random 30 points)
         </button>
       </div>
     </div>
   );
 };
 
-export default StackLineExample;
+export default AreaLineChartExample;

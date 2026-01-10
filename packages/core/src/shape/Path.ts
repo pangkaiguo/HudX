@@ -107,10 +107,10 @@ export default class Path extends ChartElement {
       }
     }
 
-    if (this.style.fill) {
+    if (this.style.fill && this.style.fill !== 'none') {
       ctx.fill(path2d);
     }
-    if (this.style.stroke) {
+    if (this.style.stroke && this.style.stroke !== 'none') {
       ctx.stroke(path2d);
     }
 

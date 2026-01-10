@@ -1,19 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { HChart } from 'HudX/charts';
-import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager, Theme } from 'HudX/core';
-import type { RenderMode } from 'HudX/core';
+import { HChart } from 'hudx';
+import type { ChartOption, HChartRef } from 'hudx';
+import { ThemeManager, Theme } from 'hudx';
+import type { RenderMode } from 'hudx';
 
 export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [roseType, setRoseType] = useState<boolean | 'radius' | 'area'>(false);
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
     title: {
       text: 'Pie Chart',
-      subtext: 'Basic Example',
+      subtext: roseType ? 'Nightingale Rose Chart' : 'Basic Example',
       left: 'center',
       top: 20
     },
@@ -45,8 +46,9 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
       {
         name: 'Distribution',
         type: 'pie',
-        radius: 200,
+        radius: roseType ? [30, 200] : 200,
         center: ['50%', '55%'],
+        roseType: roseType,
         data: [
           { name: 'Direct', value: 335, itemStyle: { color: themeObj.seriesColors?.[0] } },
           { name: 'Email', value: 310, itemStyle: { color: themeObj.seriesColors?.[1] } },
@@ -55,7 +57,8 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
           { name: 'Search', value: 148, itemStyle: { color: themeObj.seriesColors?.[4] } }
         ],
         itemStyle: {
-          opacity: 0.8
+          opacity: 0.8,
+          borderRadius: roseType ? 5 : 0
         },
         emphasis: {
           scale: true,
@@ -117,6 +120,24 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
             onChange={(e) => setIsDecal(e.target.checked)}
           />
           Decal Patterns
+        </label>
+        
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Rose Type:</span>
+          <select
+            value={String(roseType)}
+            onChange={(e) => {
+               const val = e.target.value;
+               if (val === 'false') setRoseType(false);
+               else if (val === 'true') setRoseType(true); // default 'radius' usually but let's see logic
+               else setRoseType(val as any);
+            }}
+            style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+          >
+            <option value="false">None</option>
+            <option value="radius">Radius</option>
+            <option value="area">Area</option>
+          </select>
         </label>
       </div>
       <HChart

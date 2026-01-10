@@ -102,13 +102,16 @@ export default class BarChart extends Chart {
       const xDomain = calculateDomain(xAxis || {}, xDataForDomain, true);
       const yDomain = calculateDomain(yAxis || {}, yDataForDomain, false);
 
+      const xRange = xAxis?.inverse ? [plotX + plotWidth, plotX] : [plotX, plotX + plotWidth];
+      const yRange = yAxis?.inverse ? [plotY, plotY + plotHeight] : [plotY + plotHeight, plotY];
+
       const xScale = xAxis?.type === 'category'
-        ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
-        : createLinearScale(xDomain, [plotX, plotX + plotWidth]);
+        ? createOrdinalScale(xDomain, xRange)
+        : createLinearScale(xDomain, xRange);
 
       const yScale = yAxis?.type === 'category'
-        ? createOrdinalScale(yDomain, [plotY, plotY + plotHeight])
-        : createLinearScale(yDomain, [plotY + plotHeight, plotY]);
+        ? createOrdinalScale(yDomain, yRange)
+        : createLinearScale(yDomain, yRange);
 
       const barSeries = series.filter(s => s.type === 'bar' && s.show !== false);
       const seriesCount = barSeries.length || 1;
@@ -143,14 +146,21 @@ export default class BarChart extends Chart {
       const barCategoryGapStr = firstSeries.barCategoryGap ?? '20%';
       const barGapStr = firstSeries.barGap ?? '30%';
 
-      const parsePercent = (val: string | number) => {
+      const parsePercent = (val: string | number, total: number) => {
+        if (typeof val === 'string' && val.endsWith('%')) {
+          return parseFloat(val) / 100 * total;
+        }
+        return Number(val);
+      };
+
+      const parseGapPercent = (val: string | number) => {
         if (typeof val === 'string' && val.endsWith('%')) {
           return parseFloat(val) / 100;
         }
         return 0;
       };
 
-      const categoryGapPercent = parsePercent(barCategoryGapStr);
+      const categoryGapPercent = parseGapPercent(barCategoryGapStr);
       const availableWidth = categoryWidth * (1 - categoryGapPercent);
 
       let barWidthPerSeries: number;
@@ -158,20 +168,45 @@ export default class BarChart extends Chart {
 
       const groupCount = stackGroups;
 
-      if (typeof barGapStr === 'string' && barGapStr.endsWith('%')) {
-        const gapPercent = parsePercent(barGapStr);
-        barWidthPerSeries = availableWidth / (groupCount + (groupCount - 1) * gapPercent);
-        gapWidth = barWidthPerSeries * gapPercent;
-      } else {
-        gapWidth = parseFloat(String(barGapStr));
-        if (isNaN(gapWidth)) gapWidth = 0;
+      // Explicit barWidth check
+      const explicitBarWidth = firstSeries.barWidth;
 
-        const totalGapWidth = (groupCount - 1) * gapWidth;
-        if (totalGapWidth >= availableWidth) {
-          barWidthPerSeries = 0;
+      if (explicitBarWidth !== undefined) {
+        barWidthPerSeries = parsePercent(explicitBarWidth, categoryWidth);
+        // If barWidth is fixed, we recalculate gap if needed or just center them
+        // For ECharts compatibility, barGap is relative to barWidth usually
+        if (typeof barGapStr === 'string' && barGapStr.endsWith('%')) {
+          const gapPercent = parseFloat(barGapStr) / 100;
+          gapWidth = barWidthPerSeries * gapPercent;
         } else {
-          barWidthPerSeries = (availableWidth - totalGapWidth) / groupCount;
+          gapWidth = parseFloat(String(barGapStr)) || 0;
         }
+      } else {
+        // Auto calculate
+        if (typeof barGapStr === 'string' && barGapStr.endsWith('%')) {
+          const gapPercent = parseGapPercent(barGapStr);
+          barWidthPerSeries = availableWidth / (groupCount + (groupCount - 1) * gapPercent);
+          gapWidth = barWidthPerSeries * gapPercent;
+        } else {
+          gapWidth = parseFloat(String(barGapStr));
+          if (isNaN(gapWidth)) gapWidth = 0;
+
+          const totalGapWidth = (groupCount - 1) * gapWidth;
+          if (totalGapWidth >= availableWidth) {
+            barWidthPerSeries = 0;
+          } else {
+            barWidthPerSeries = (availableWidth - totalGapWidth) / groupCount;
+          }
+        }
+      }
+
+      // Max/Min Width/Height constraints
+      if (firstSeries.barMaxWidth !== undefined) {
+        const maxW = parsePercent(firstSeries.barMaxWidth, categoryWidth);
+        if (barWidthPerSeries > maxW) barWidthPerSeries = maxW;
+      }
+      if (firstSeries.barMinWidth !== undefined) { // Although not standard ECharts, good to have
+        // ...
       }
 
       const groupInnerWidth = groupCount * barWidthPerSeries + (groupCount - 1) * gapWidth;
@@ -304,6 +339,43 @@ export default class BarChart extends Chart {
           }
 
           const itemStyle = seriesItem.itemStyle || {};
+
+          // Draw Background if enabled
+          if (seriesItem.showBackground) {
+            const bgStyle = seriesItem.backgroundStyle || {};
+            const bgRect = new Rect({
+              shape: {
+                x: isHorizontal ? plotX : barX,
+                y: isHorizontal ? barY : plotY,
+                width: isHorizontal ? plotWidth : barWidth,
+                height: isHorizontal ? barHeight : plotHeight
+              },
+              style: {
+                fill: bgStyle.color || 'rgba(180, 180, 180, 0.2)',
+                stroke: bgStyle.borderColor,
+                lineWidth: bgStyle.borderWidth,
+                opacity: bgStyle.opacity
+              },
+              z: Z_SERIES - 1, // Behind bars
+              silent: true
+            });
+            // Only add background once per category stack group (simplify to once per series per category for now)
+            // But wait, if stacked, we might draw multiple backgrounds.
+            // Usually showBackground is for non-stacked. If stacked, it's ambiguous.
+            // Let's assume per-bar background.
+            // Optimization: Use a map to check if background already drawn for this category/stack position?
+            // Or just draw it.
+            // Since we iterate series -> data, if we have multiple series in same stack group (stacked),
+            // we should only draw background once for the group?
+            // ECharts draws background for the "axis column", not per series.
+            // But here seriesItem has showBackground.
+            // Let's check if we are the first item in the stack to draw?
+            // Simplified: just draw it. If multiple series have it, multiple backgrounds (alpha blending issues).
+            // Better: Check if baseValue == 0 (first in stack)?
+            if (Math.abs(baseValue) < 1e-9) {
+              this._root.add(bgRect);
+            }
+          }
 
           let fillStyle: string | CanvasPattern = barColor;
           const aria = option.aria;

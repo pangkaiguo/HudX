@@ -117,6 +117,18 @@ export default class PieChart extends Chart {
 
       const labelLayoutList: any[] = [];
 
+      // Pre-calculate max value for roseType
+      let maxValue = 0;
+      if (seriesItem.roseType) {
+        maxValue = data.reduce((max: number, item: any) => {
+          let v = 0;
+          if (typeof item === 'number') v = item;
+          else if (Array.isArray(item)) v = item[0] || 0;
+          else if (typeof item === 'object' && item !== null) v = item.value;
+          return Math.max(max, v);
+        }, 0);
+      }
+
       data.forEach((item: ChartData, index: number) => {
         let value = 0;
         if (typeof item === 'number') value = item;
@@ -124,8 +136,29 @@ export default class PieChart extends Chart {
         else if (typeof item === 'object' && item !== null) value = item.value;
 
         if (typeof value !== 'number') return;
+
         const percent = value / total;
-        const angle = percent * totalAngle;
+
+        let angle: number;
+        let itemR = r;
+
+        if (seriesItem.roseType) {
+          // Rose chart: equal angles, radius depends on value
+          angle = totalAngle / data.length;
+
+          if (maxValue > 0) {
+            if (seriesItem.roseType === 'area') {
+              // Radius proportional to sqrt(value) -> Area proportional to value
+              itemR = r0 + (r - r0) * Math.sqrt(value / maxValue);
+            } else {
+              // Radius proportional to value
+              itemR = r0 + (r - r0) * (value / maxValue);
+            }
+          }
+        } else {
+          angle = percent * totalAngle;
+        }
+
         let itemName = `item-${index + 1}`;
         if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
           itemName = item.name;
@@ -174,7 +207,7 @@ export default class PieChart extends Chart {
           shape: {
             cx,
             cy,
-            r,
+            r: itemR,
             r0,
             startAngle: initialStart,
             endAngle: initialEnd,
@@ -191,7 +224,7 @@ export default class PieChart extends Chart {
           z: Z_SERIES,
           cursor: (this._tooltip || seriesItem.emphasis) ? 'pointer' : 'default',
         });
-        (sector as any).__baseR = r;
+        (sector as any).__baseR = itemR;
         // Fix: Save initial style immediately to prevent capturing modified style (e.g. opacity) later
         (sector as any).__initialStyle = { ...sector.style };
 
@@ -368,9 +401,9 @@ export default class PieChart extends Chart {
         currentAngle += angle;
       });
 
-      this._layoutLabels(labelLayoutList, cx, cy, r, r0);
-
       this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
+
+      this._layoutLabels(labelLayoutList, cx, cy, r, r0);
 
       this._renderer.flush();
     } catch (e) {

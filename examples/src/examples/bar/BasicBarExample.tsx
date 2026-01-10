@@ -10,6 +10,10 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(5);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [barWidth, setBarWidth] = useState<number | 'auto'>('auto');
+  const [showBackground, setShowBackground] = useState(false);
+  const [inverse, setInverse] = useState(false);
+
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
@@ -54,6 +58,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
       type: 'category',
       data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       show: true,
+      inverse: inverse,
       splitLine: {
         show: showGrid,
         lineStyle: {
@@ -78,6 +83,11 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         name: 'Weekly Data',
         type: 'bar',
         data: [120, 200, 150, 80, 70, 110, 130],
+        barWidth: barWidth === 'auto' ? undefined : barWidth,
+        showBackground: showBackground,
+        backgroundStyle: {
+          color: 'rgba(180, 180, 180, 0.2)'
+        },
         itemStyle: { color: themeObj.seriesColors?.[0], opacity: 0.8, borderWidth: 0 }
       }
     ],
@@ -131,6 +141,40 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
           />
           Show Grid
         </label>
+
+        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={showBackground}
+            onChange={(e) => setShowBackground(e.target.checked)}
+          />
+          Background
+        </label>
+
+        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={inverse}
+            onChange={(e) => setInverse(e.target.checked)}
+          />
+          Inverse X
+        </label>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>Bar Width: {barWidth}</span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="5"
+            value={barWidth === 'auto' ? 0 : barWidth}
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              setBarWidth(val === 0 ? 'auto' : val);
+            }}
+            style={{ width: 100 }}
+          />
+        </div>
 
         {showGrid && (
           <>
