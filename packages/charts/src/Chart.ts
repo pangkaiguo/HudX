@@ -42,61 +42,40 @@ export default class Chart {
     return this._renderer.getRenderMode();
   }
 
-  /** 
-   * Set render mode 
+  /**
+   * Set render mode
    */
   setRenderMode(renderMode: RenderMode): void {
     this._renderer.setRenderMode(renderMode);
     this._render();
   }
 
-  /** 
-   * Get theme 
-   */
   getTheme(): Theme {
     return this._renderer.getTheme();
   }
 
-  /** 
-   * Set theme 
-   */
   setTheme(theme: Theme): void {
     this._renderer.setTheme(theme);
     this._render();
   }
 
-  /**
-   * Get theme configuration
-   */
   getThemeConfig(): ThemeConfig {
     return this._renderer.getThemeConfig();
   }
 
-  /** 
-   * Get locale 
-   */
   getLocale(): Locale {
     return this._renderer.getLocale();
   }
 
-  /** 
-   * Set locale 
-   */
   setLocale(locale: Locale): void {
     this._renderer.setLocale(locale);
     this._render();
   }
 
-  /** 
-   * Get translated text 
-   */
   t(key: string, defaultValue?: string): string {
     return this._renderer.t(key, defaultValue);
   }
 
-  /** 
-   * Initialize chart 
-   */
   protected _init(): void {
     this._isMounted = true;
     this.resize();
@@ -107,13 +86,9 @@ export default class Chart {
       formatter: typeof tooltipOpt?.formatter === 'function' ? tooltipOpt.formatter : undefined
     });
     this._tooltip.setContainer(this.getDom());
-    // this._root.add(this._tooltip); // Tooltip is now DOM-based
     this.setOption(this._option);
   }
 
-  /**
-   * Mount chart to DOM
-   */
   mount(): this {
     if (!this._isMounted) {
       this._isMounted = true;
@@ -123,9 +98,6 @@ export default class Chart {
     return this;
   }
 
-  /**
-   * Unmount chart from DOM
-   */
   unmount(): this {
     if (this._isMounted) {
       this._isMounted = false;
@@ -134,12 +106,10 @@ export default class Chart {
     return this;
   }
 
-  /**
-   * Check if chart is mounted
-   */
   isMounted(): boolean {
     return this._isMounted;
   }
+
 
   /** 
    * Set chart option with advanced options 
@@ -233,23 +203,16 @@ export default class Chart {
     return merged;
   }
 
-  /** 
-   * Get chart option 
-   */
   getOption(): ChartOption {
     return { ...this._option };
   }
 
-  /** 
-   * Resize chart 
-   */
   resize(width?: number, height?: number): void {
     this._renderer.resize(width, height);
     this._width = this._renderer.getWidth();
     this._height = this._renderer.getHeight();
     if (this._tooltip) {
       // Tooltip handles resize via container dimensions
-      // this._tooltip.setContainer(this.getDom());
     }
     if (this._legend) {
       this._legend.setContainer(this._width, this._height);
@@ -260,30 +223,18 @@ export default class Chart {
     this._render();
   }
 
-  /** 
-   * Get data URL 
-   */
   getDataURL(opts: DataURLOpts = {}): string {
     return this._renderer.getDataURL(opts);
   }
 
-  /** 
-   * Get width 
-   */
   getWidth(): number {
     return this._width;
   }
 
-  /** 
-   * Get height 
-   */
   getHeight(): number {
     return this._height;
   }
 
-  /**
-   * Pause animations
-   */
   pauseAnimation(): void {
     if (this._animationId !== null) {
       cancelAnimationFrame(this._animationId);
@@ -292,9 +243,6 @@ export default class Chart {
     this._animator.pauseAll();
   }
 
-  /**
-   * Resume animations
-   */
   resumeAnimation(): void {
     if (!this._animationId && this._isMounted) {
       this._scheduleRender();
@@ -302,25 +250,16 @@ export default class Chart {
     this._animator.resumeAll();
   }
 
-  /**
-   * Stop all animations
-   */
   stopAnimation(): void {
     this.pauseAnimation();
     this._renderScheduled = false;
     this._animator.stopAll();
   }
 
-  /**
-   * Get the animator instance for custom animations
-   */
   getAnimator(): Animator {
     return this._animator;
   }
 
-  /**
-   * Check if animation is enabled
-   */
   protected _isAnimationEnabled(): boolean {
     return this._option.animation !== false;
   }
@@ -359,9 +298,6 @@ export default class Chart {
     this._suppressAnimationOnce = false;
   }
 
-  /**
-   * Get animation duration
-   */
   protected _getAnimationDuration(isUpdate: boolean = false): number {
     if (isUpdate) {
       return this._option.animationDurationUpdate || 300;
@@ -369,9 +305,6 @@ export default class Chart {
     return this._option.animationDuration || 1000;
   }
 
-  /**
-   * Get animation easing function
-   */
   protected _getAnimationEasing(isUpdate: boolean = false): string {
     if (isUpdate) {
       return this._option.animationEasingUpdate || 'cubicOut';
@@ -379,9 +312,6 @@ export default class Chart {
     return this._option.animationEasing || 'cubicOut';
   }
 
-  /**
-   * Calculate grid rect
-   */
   protected _calculateGrid(option: ChartOption): { x: number, y: number, width: number, height: number } {
     const grid = option.grid || {};
     const x = this._parseSize(grid.left, 60);
@@ -393,9 +323,6 @@ export default class Chart {
     return { x, y, width, height };
   }
 
-  /**
-   * Render axes
-   */
   protected _renderAxes(
     xAxis: any,
     yAxis: any,
@@ -407,7 +334,6 @@ export default class Chart {
   ): void {
     // X axis
     if (xAxis?.show !== false) {
-      // Axis line
       const xAxisLine = new Line({
         shape: {
           x1: plotX,
@@ -423,7 +349,6 @@ export default class Chart {
       });
       this._root.add(xAxisLine);
 
-      // Split line (vertical grid)
       if (xAxis?.splitLine?.show) {
         if (xAxis?.data && xAxis.data.length > 0) {
           const xScale = scales?.x || (xAxis.type === 'category'
@@ -435,9 +360,6 @@ export default class Chart {
           xAxis.data.forEach((label: any, index: number) => {
             if (typeof interval === 'number' && interval > 0 && index % (interval + 1) !== 0) return;
 
-            // For category, split line usually at ticks (not center), but ordinal scale returns center.
-            // Adjust logic if needed. ECharts draws splitLine at interval boundaries for category.
-            // For simplicity, we draw at tick position for now.
             const x = xAxis.type === 'category' ? xScale(label) : xScale(index);
             const line = new Line({
               shape: {
@@ -451,14 +373,13 @@ export default class Chart {
                 lineWidth: xAxis.splitLine.lineStyle?.width || 1,
                 lineDash: xAxis.splitLine.lineStyle?.type === 'dashed' || !xAxis.splitLine.lineStyle?.type ? [4, 4] : undefined
               },
-              z: Z_AXIS - 0.5, // Below axis line
+              z: Z_AXIS - 0.5,
             });
             this._root.add(line);
           });
         }
       }
 
-      // Axis labels
       if (xAxis?.data && xAxis.data.length > 0) {
         const xScale = scales?.x || (xAxis.type === 'category'
           ? createOrdinalScale(xAxis.data, [plotX, plotX + width])
@@ -525,7 +446,6 @@ export default class Chart {
           this._root.add(text);
         });
       } else if (xAxis?.type === 'value' && scales?.x) {
-        // Value X Axis Labels using scales
         const domain = scales.x.domain();
         const tickCount = xAxis.splitNumber ?? 5;
         const axisLabel = xAxis.axisLabel || {};
@@ -612,7 +532,6 @@ export default class Chart {
       });
       this._root.add(yAxisLine);
 
-      // Split line (horizontal grid)
       if (yAxis?.splitLine?.show) {
         if (scales?.y && yAxis.type === 'value') {
           const domain = scales.y.domain();
@@ -664,9 +583,7 @@ export default class Chart {
         }
       }
 
-      // Y Axis labels (Added logic)
       if (yAxis?.data && yAxis.data.length > 0) {
-        // Category Y Axis
         const yScale = scales?.y || createOrdinalScale(yAxis.data, [plotY + height, plotY]);
         const axisLabel = yAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
@@ -706,7 +623,6 @@ export default class Chart {
               y: y,
               rotation: rotate * Math.PI / 180
             };
-            // Adjust align if needed
           }
 
           const text = new Text({
@@ -728,7 +644,6 @@ export default class Chart {
           this._root.add(text);
         });
       } else if (yAxis?.type === 'value' && scales?.y) {
-        // Value Y Axis Labels using scales
         const domain = scales.y.domain();
         const tickCount = yAxis.splitNumber ?? 5;
         const axisLabel = yAxis.axisLabel || {};
@@ -797,16 +712,11 @@ export default class Chart {
     }
   }
 
-  /**
-   * Helper to wrap text
-   */
   private _wrapText(text: string, width: number, fontSize: number = 12, fontFamily: string = 'sans-serif', overflow: string = 'break'): string {
     if (!width || width <= 0) return text;
     if (overflow === 'none') return text;
 
-    // Create temporary canvas for measuring
-    // Note: In Node environment this might fail if not mocked, but we are in browser env mainly.
-    // For tests, we might need a mock.
+    // Check for browser environment
     if (typeof document === 'undefined') return text;
 
     const canvas = document.createElement('canvas');
@@ -845,22 +755,12 @@ export default class Chart {
     return result;
   }
 
-  /**
-   * Render chart (to be implemented by subclasses) 
-   */
   protected _render(): void {
     this._root.removeAll();
     this._mountTitle();
-    // Tooltip is DOM based now
-    // if (this._tooltip) {
-    //   this._root.add(this._tooltip);
-    // }
     // To be implemented by subclasses 
   }
 
-  /**
-   * Debounced render for performance
-   */
   protected _scheduleRender(): void {
     if (this._renderScheduled) {
       return;
@@ -875,23 +775,14 @@ export default class Chart {
     });
   }
 
-  /** 
-   * Add event listener 
-   */
   on(event: string, handler: (event: ChartEvent) => void): void {
     this._renderer.on(event, handler);
   }
 
-  /** 
-   * Remove event listener 
-   */
   off(event?: string, handler?: (event: ChartEvent) => void): void {
     this._renderer.off(event, handler);
   }
 
-  /**
-   * Add one-time event listener
-   */
   once(event: string, handler: (event: ChartEvent) => void): void {
     const onceHandler = (e: ChartEvent) => {
       handler(e);
@@ -900,17 +791,17 @@ export default class Chart {
     this.on(event, onceHandler);
   }
 
-  /**
-   * Trigger custom event
-   */
   trigger(eventName: string, data?: any): void {
-    const event = new CustomEvent(eventName, { detail: data });
-    this._renderer.getDom().dispatchEvent(event);
+    // Trigger internal event system (for chart.on)
+    this._renderer.trigger(eventName, data);
+
+    // Also dispatch to DOM for external listeners
+    if (typeof CustomEvent !== 'undefined') {
+      const event = new CustomEvent(eventName, { detail: data });
+      this._renderer.getDom().dispatchEvent(event);
+    }
   }
 
-  /** 
-   * Dispose chart 
-   */
   dispose(): void {
     if (this._legend) {
       this._legend.dispose();
@@ -925,39 +816,24 @@ export default class Chart {
     this._animator.stopAll();
   }
 
-  /** 
-   * Clear chart (remove all elements) 
-   */
   clear(): this {
     this._root.removeAll();
     this._option = {};
     return this;
   }
 
-  /** 
-   * Check if chart is disposed 
-   */
   isDisposed(): boolean {
     return this._renderer.isDisposed();
   }
 
-  /** 
-   * Get container DOM element 
-   */
   getDom(): HTMLElement {
     return this._renderer.getDom();
   }
 
-  /** 
-   * Get Renderer instance 
-   */
   getRenderer(): Renderer {
     return this._renderer;
   }
 
-  /**
-   * Get chart state
-   */
   getState(): {
     width: number;
     height: number;
@@ -978,9 +854,6 @@ export default class Chart {
     };
   }
 
-  /**
-   * Batch update options
-   */
   batchUpdate(callback: (chart: this) => void): this {
     const originalOption = { ...this._option };
     callback(this);
@@ -993,25 +866,16 @@ export default class Chart {
     return this;
   }
 
-  /**
-   * Convert coordinates from pixel to chart domain
-   */
   convertFromPixel(coord: [number, number]): [number, number] {
     // Base implementation - to be overridden by subclasses
     return coord;
   }
 
-  /**
-   * Convert coordinates from chart domain to pixel
-   */
   convertToPixel(coord: [number, number]): [number, number] {
     // Base implementation - to be overridden by subclasses
     return coord;
   }
 
-  /**
-   * Show loading animation
-   */
   showLoading(loadingOpts?: {
     text?: string;
     color?: string;
@@ -1032,23 +896,14 @@ export default class Chart {
     this.trigger('loading', opts);
   }
 
-  /**
-   * Hide loading animation
-   */
   hideLoading(): void {
     this.trigger('loading', { show: false });
   }
 
-  /**
-   * Get bounding rectangle of chart
-   */
   getBoundingRect(): DOMRect {
     return this._renderer.getDom().getBoundingClientRect();
   }
 
-  /**
-   * Make chart responsive
-   */
   makeResponsive(): this {
     const resizeObserver = new ResizeObserver(() => {
       this.resize();
@@ -1062,9 +917,6 @@ export default class Chart {
     return this;
   }
 
-  /**
-   * Stop responsive behavior
-   */
   stopResponsive(): this {
     if ((this as any)._resizeObserver) {
       (this as any)._resizeObserver.disconnect();
@@ -1073,9 +925,6 @@ export default class Chart {
     return this;
   }
 
-  /** 
-   * Parse size (number or string like '10%') 
-   */
   protected _parseSize(size: string | number | undefined, defaultSize: number): number {
     if (size === undefined) {
       return defaultSize;
@@ -1092,18 +941,12 @@ export default class Chart {
     return parseFloat(size) || defaultSize;
   }
 
-  /** 
-   * Get series color 
-   */
   protected _getSeriesColor(index: number): string {
     const config = this._renderer.getThemeConfig();
     const colors = config.seriesColors || [];
     return colors[index % colors.length];
   }
 
-  /**
-   * Get series color with opacity
-   */
   protected _getSeriesColorWithOpacity(index: number, opacity: number = 1): string {
     const color = this._getSeriesColor(index);
 
@@ -1115,9 +958,6 @@ export default class Chart {
     return color;
   }
 
-  /**
-   * Format number with locale
-   */
   protected _formatNumber(value: number, precision: number = 2): string {
     return value.toLocaleString(this.getLocale(), {
       minimumFractionDigits: precision,
@@ -1125,9 +965,6 @@ export default class Chart {
     });
   }
 
-  /**
-   * Format date with locale
-   */
   protected _formatDate(date: Date, format: string = 'short'): string {
     return date.toLocaleDateString(this.getLocale(), {
       dateStyle: format as any
@@ -1146,9 +983,6 @@ export default class Chart {
       .replace(/\{d\}/g, String(d));
   }
 
-  /**
-   * Mount legend helper
-   */
   protected _mountLegend(items: any[]): void {
     const option = this._option;
     if (option.legend?.show === false) return;
@@ -1223,9 +1057,6 @@ export default class Chart {
     this._root.add(legend);
   }
 
-  /**
-   * Mount title helper
-   */
   protected _mountTitle(): void {
     const option = this._option;
     if (option.title?.show === false) return;
@@ -1241,16 +1072,10 @@ export default class Chart {
     this._root.add(this._title);
   }
 
-  /**
-   * Handle legend hover event
-   */
   protected _onLegendHover(name: string, hovered: boolean): void {
     // To be implemented by subclasses
   }
 
-  /**
-   * Get data value helper
-   */
   protected _getDataValue(item: any): number | undefined {
     if (typeof item === 'number') return item;
     if (Array.isArray(item)) return item[1]; // Assume [x, y]
@@ -1261,16 +1086,10 @@ export default class Chart {
     return undefined;
   }
 
-  /**
-   * Get tooltip marker
-   */
   protected _getTooltipMarker(color: string): string {
     return `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${color};"></span>`;
   }
 
-  /**
-   * Generate tooltip content helper
-   */
   protected _generateTooltipContent(params: any): string {
     const formatter = this._option.tooltip?.formatter;
 
@@ -1284,7 +1103,6 @@ export default class Chart {
       if (!Array.isArray(params)) {
         return this._formatTooltip(formatter, params);
       }
-      // If array, fallback to default for now as string template loop is complex
     }
 
     // Unified HTML generator for both Single and Multi items
@@ -1294,9 +1112,6 @@ export default class Chart {
     let html = '';
 
     // 1. Generate Header Title
-    // Logic:
-    // - Pie: Header = Series Name (e.g. "Access Source")
-    // - Others (Line/Bar/Scatter): Header = Category/Data Name (e.g. "Mon" or "Item A")
     let headerTitle = '';
     const firstParam = paramsList[0];
     if (firstParam.seriesType === 'pie') {
@@ -1311,9 +1126,6 @@ export default class Chart {
 
     // 2. Generate Items
     paramsList.forEach(param => {
-      // Logic for Row Label:
-      // - Pie: Row = Data Name (e.g. "Search Engine")
-      // - Others: Row = Series Name (e.g. "Series A")
       let rowLabel = '';
       if (param.seriesType === 'pie') {
         rowLabel = param.name;
@@ -1330,36 +1142,72 @@ export default class Chart {
   private _generateSingleItemHtml(param: any, titleOverride?: string): string {
     const color = param.color;
     const value = param.value;
-    const displayValue = Array.isArray(value) ? value.join(', ') : this._formatNumber(Number(value));
-    const percent = param.percent !== undefined ? ` (${param.percent.toFixed(2)}%)` : '';
 
+    // Format value safely
+    let displayValue = '';
+    if (Array.isArray(value)) {
+      displayValue = value.join(', ');
+    } else if (typeof value === 'number') {
+      displayValue = this._formatNumber(value);
+    } else if (value !== undefined && value !== null) {
+      displayValue = String(value);
+    } else {
+      displayValue = '-';
+    }
+
+    const percent = param.percent !== undefined ? ` (${param.percent.toFixed(2)}%)` : '';
     const marker = param.marker || (color ? this._getTooltipMarker(color) : '');
 
-    const title = titleOverride !== undefined ? titleOverride : (param.componentType === 'series' ? (param.seriesName || param.name) : (param.name || param.seriesName));
+    // Determine title
+    const title = titleOverride !== undefined
+      ? titleOverride
+      : (param.componentType === 'series'
+        ? (param.seriesName || param.name)
+        : (param.name || param.seriesName));
 
-    // Check layout option
+    // Default styles
+    const defaultStyles = {
+      // Containers
+      row: 'display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#fff;line-height:20px;min-width:120px;',
+      blockContainer: 'font-size:12px;color:#fff;line-height:20px;min-width:120px;margin-bottom:8px;',
+      labelContainer: 'display:flex;align-items:center;',
+
+      // Elements
+      label: 'margin-right:16px;',
+      value: 'font-weight:bold;white-space:nowrap;',
+
+      // Rich specific
+      richRow: 'display:flex;justify-content:space-between;margin-top:2px;',
+      richLabel: 'color:#ccc;margin-right:16px;',
+      richValue: 'font-weight:bold;'
+    };
+
+    // Merge with user config
+    const customStyles = this._option.tooltip?.htmlStyles || {};
+    const styles = { ...defaultStyles, ...customStyles };
+
+    // Check layout configuration
     const layout = this._option.tooltip?.layout || 'horizontal';
-
-    // Check if data has extra info for 'rich' layout
     const dataItem = param.data;
-    const isRich = layout === 'rich' || (typeof dataItem === 'object' && dataItem.detail);
 
+    // Determine if we should use rich layout (either configured or data has details)
+    const isRich = layout === 'rich' || (typeof dataItem === 'object' && dataItem?.detail);
+
+    // 1. Rich Layout
     if (isRich && typeof dataItem === 'object' && dataItem.detail) {
-      // Complex/Rich Layout
       let detailHtml = '';
       if (Array.isArray(dataItem.detail)) {
-        dataItem.detail.forEach((item: { label: string, value: string }) => {
-          detailHtml += `
-             <div style="display:flex;justify-content:space-between;margin-top:2px;">
-               <span style="color:#ccc;margin-right:16px;">${item.label}</span>
-               <span style="font-weight:bold;">${item.value}</span>
-             </div>
-           `;
-        });
+        detailHtml = dataItem.detail.map((item: { label: string, value: string }) => `
+          <div style="${styles.richRow}">
+            <span style="${styles.richLabel}">${item.label}</span>
+            <span style="${styles.richValue}">${item.value}</span>
+          </div>
+        `).join('');
       }
+
       return `
-        <div style="font-size:12px;color:#fff;line-height:20px;min-width:120px;margin-bottom:8px;">
-          <div style="display:flex;align-items:center;margin-bottom:4px;">
+        <div style="${styles.blockContainer}">
+          <div style="${styles.labelContainer}margin-bottom:4px;">
             ${marker}
             <span style="font-weight:bold;">${title}</span>
           </div>
@@ -1368,29 +1216,31 @@ export default class Chart {
           </div>
         </div>
       `;
-    } else if (layout === 'vertical') {
-      // Basic/Vertical Layout
+    }
+
+    // 2. Vertical Layout (Block style but with single value)
+    if (layout === 'vertical') {
       return `
-        <div style="font-size:12px;color:#fff;line-height:20px;min-width:120px;margin-bottom:8px;">
-          <div style="display:flex;align-items:center;">
+        <div style="${styles.blockContainer}">
+          <div style="${styles.labelContainer}">
             ${marker}
             <span>${title}</span>
           </div>
           <div style="padding-left: 14px;font-weight:bold;">
-            ${displayValue}${percent ? ' ' + percent : ''}
+            ${displayValue}${percent}
           </div>
         </div>
       `;
     }
 
-    // Default Horizontal Layout
+    // 3. Default Horizontal Layout
     return `
-      <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#fff;line-height:20px;min-width:120px;">
-        <div style="display:flex;align-items:center;">
+      <div style="${styles.row}">
+        <div style="${styles.labelContainer}">
           ${marker}
-          <span style="margin-right:16px;">${title}</span>
+          <span style="${styles.label}">${title}</span>
         </div>
-        <span style="font-weight:bold;white-space:nowrap;">${displayValue}${percent ? ' ' + percent : ''}</span>
+        <span style="${styles.value}">${displayValue}${percent}</span>
       </div>
     `;
   }

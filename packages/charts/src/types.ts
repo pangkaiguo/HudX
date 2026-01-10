@@ -120,6 +120,25 @@ export interface TooltipOption {
   order?: 'seriesAsc' | 'seriesDesc' | 'valueAsc' | 'valueDesc';
   /** Layout mode */
   layout?: 'horizontal' | 'vertical' | 'rich';
+  /** Custom CSS styles for generated HTML elements */
+  htmlStyles?: {
+    /** Style for the container of a single item row */
+    row?: string;
+    /** Style for the container block in vertical/rich layout */
+    blockContainer?: string;
+    /** Style for the label container (marker + title) */
+    labelContainer?: string;
+    /** Style for the label text */
+    label?: string;
+    /** Style for the value text */
+    value?: string;
+    /** Style for rich layout row */
+    richRow?: string;
+    /** Style for rich layout label */
+    richLabel?: string;
+    /** Style for rich layout value */
+    richValue?: string;
+  };
   [key: string]: any;
 }
 
