@@ -1,6 +1,6 @@
 import Chart from '../Chart';
 import { createLinearScale, createOrdinalScale, calculateDomain } from '../util/coordinate';
-import { Circle } from 'HudX/core';
+import { Circle, Z_SERIES } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class ScatterChart extends Chart {
@@ -22,7 +22,6 @@ export default class ScatterChart extends Chart {
       const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
       const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
 
-      // Collect data for domain calculation
       let data: any[] = [];
       series.forEach(s => {
         if (s.type === 'scatter' && s.show !== false) {
@@ -83,7 +82,6 @@ export default class ScatterChart extends Chart {
 
           let cx: number, cy: number;
 
-          // Calculate X position
           if (xAxis?.type === 'category') {
             if (typeof xVal === 'number' && xAxis.data && xAxis.data[xVal] !== undefined) {
               const cat = xAxis.data[xVal];
@@ -95,7 +93,6 @@ export default class ScatterChart extends Chart {
             cx = xScale(xVal);
           }
 
-          // Calculate Y position
           if (yAxis?.type === 'category') {
             if (typeof yVal === 'number' && yAxis.data && yAxis.data[yVal] !== undefined) {
               const cat = yAxis.data[yVal];
@@ -108,17 +105,21 @@ export default class ScatterChart extends Chart {
           }
 
           if (isNaN(cx) || isNaN(cy)) {
-            // console.warn('[ScatterChart] Invalid position for item:', item, { cx, cy, xVal, yVal, xAxisType: xAxis?.type, yAxisType: yAxis?.type });
             return;
           }
 
           const circle = new Circle({
-            shape: { cx, cy, r: 0 },
-            style: { fill: color, opacity: 0.8 },
-            z: 2, // Z_SERIES
-            cursor: this._tooltip ? 'pointer' : 'default',
+            shape: {
+              cx,
+              cy,
+              r: symbolSize / 2,
+            },
+            style: {
+              fill: color,
+              opacity: 0.8,
+            },
+            z: Z_SERIES,
           });
-
           this._root.add(circle);
 
           if (this._tooltip) {
@@ -131,11 +132,13 @@ export default class ScatterChart extends Chart {
                 componentType: 'series',
                 seriesType: 'scatter',
                 seriesIndex,
-                seriesName: s.name,
+                seriesName: s.name || this.t('series.name', 'Series') + '-' + (seriesIndex + 1),
                 name: itemName,
                 dataIndex: index,
                 data: item,
-                value: [xVal, yVal]
+                value: [xVal, yVal],
+                color: color,
+                marker: this._getTooltipMarker(color)
               };
               const content = this._generateTooltipContent(params);
 
@@ -159,10 +162,11 @@ export default class ScatterChart extends Chart {
             });
           }
 
-          // Animation
           if (this._isAnimationEnabled()) {
             const delay = index * 50 + seriesIndex * 100;
             const duration = this._getAnimationDuration() / 2;
+
+            circle.shape.r = 0;
 
             this._animator.animate(
               circle.shape,
@@ -171,14 +175,20 @@ export default class ScatterChart extends Chart {
               {
                 duration,
                 delay,
-                easing: 'elasticOut'
+                easing: 'elasticOut',
+                onUpdate: () => circle.markRedraw()
               }
-            ).start();
+            );
           } else {
             circle.shape.r = symbolSize / 2;
+            circle.markRedraw();
           }
+
+          circle.markRedraw();
         });
       });
+
+      this._renderer.flush();
     } catch (e) {
       console.error('[ScatterChart] Render error:', e);
     }

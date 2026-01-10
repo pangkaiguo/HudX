@@ -20,7 +20,7 @@ export const AdvancedPieExample = () => {
     tooltip: {
       show: true,
       trigger: 'item',
-      formatter: '{b}\n{c} ({d}%)'
+      // formatter: '{b}\n{c} ({d}%)'
     },
     aria: {
       enabled: true,

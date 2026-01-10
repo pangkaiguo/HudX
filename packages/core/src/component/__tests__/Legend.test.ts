@@ -152,10 +152,9 @@ describe('Legend', () => {
     const row = htmlEl.querySelector('tr');
     expect(row).not.toBeNull();
 
-    // Simulate click
     row?.click();
 
-    expect(onSelect).toHaveBeenCalledWith('A', false); // Initially selected, click toggles to unselected
+    expect(onSelect).toHaveBeenCalledWith('A', false);
     expect(legend.isSelected('A')).toBe(false);
 
     row?.click();
@@ -233,7 +232,6 @@ describe('Legend', () => {
     const thead = htmlEl.querySelector('thead');
     expect(thead).not.toBeNull();
     const headers = thead?.querySelectorAll('th');
-    // 1 empty icon column + 2 data columns
     expect(headers?.length).toBe(3);
     expect(headers?.[1].innerHTML).toBe('Col1');
     expect(headers?.[2].innerHTML).toBe('Col2');
@@ -251,7 +249,6 @@ describe('Legend', () => {
     const htmlEl = (legend as any)._htmlEl as HTMLElement;
     const row = htmlEl.querySelector('tbody tr') || htmlEl.querySelector('tr');
     const cells = row?.querySelectorAll('td');
-    // 1 icon column + 2 data columns
     expect(cells?.length).toBe(3);
     expect(cells?.[1].innerHTML).toBe('A');
     expect(cells?.[2].innerHTML).toBe('Value');
@@ -270,11 +267,9 @@ describe('Legend', () => {
     const htmlEl = (legend as any)._htmlEl as HTMLElement;
     const row = htmlEl.querySelector('tr');
 
-    // Simulate mouseover
     row?.dispatchEvent(new MouseEvent('mouseover'));
     expect(onHover).toHaveBeenCalledWith('A', true);
 
-    // Simulate mouseout
     row?.dispatchEvent(new MouseEvent('mouseout'));
     expect(onHover).toHaveBeenCalledWith('A', false);
   });
@@ -336,7 +331,7 @@ describe('Legend', () => {
     const children = legendCanvas.children();
     const icon = children.find(c => c instanceof Rect && c.style.fill === 'red') as Rect;
 
-    expect(icon.shape.x).toBe(22); // 10 (container) + 12 (item)
+    expect(icon.shape.x).toBe(22);
   });
 
   it('should pass data to formatter in HTML mode', () => {

@@ -227,7 +227,9 @@ export default class Bar3DChart extends Chart {
                   name: itemName,
                   dataIndex: index,
                   data: item,
-                  value: yVal
+                  value: yVal,
+                  color: typeof barColor === 'string' ? barColor : undefined,
+                  marker: typeof barColor === 'string' ? this._getTooltipMarker(barColor) : undefined
                 };
                 const content = this._generateTooltipContent(params);
 

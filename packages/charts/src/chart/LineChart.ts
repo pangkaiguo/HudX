@@ -99,27 +99,49 @@ export default class LineChart extends Chart {
             this._tooltip!.hide();
             return;
           }
-          const lines: string[] = [];
-          series.forEach((s) => {
+          const paramsList: any[] = [];
+          series.forEach((s, sIndex) => {
             if (s.type !== 'line' || s.show === false) return;
             const item = (s.data || [])[idx];
             if (item === undefined) return;
 
-            const val = this._getDataValue(item);
+            let val = this._getDataValue(item);
+
+            // Fallback for single value array [120] which is common in some chart libraries
+            if (val === undefined && Array.isArray(item) && item.length === 1 && typeof item[0] === 'number') {
+              val = item[0];
+            }
+
             if (typeof val === 'number') {
-              const seriesName = s.name ? s.name + '\n' : '';
-              lines.push(`${seriesName}${name ? name + ': ' : ''}${val}`);
+              const seriesName = s.name || '';
+              const color = s.itemStyle?.color || s.color || this._getSeriesColor(sIndex);
+
+              paramsList.push({
+                componentType: 'series',
+                seriesType: 'line',
+                seriesIndex: sIndex,
+                seriesName: seriesName,
+                name: name,
+                dataIndex: idx,
+                data: item,
+                value: val,
+                color: typeof color === 'string' ? color : undefined,
+                marker: typeof color === 'string' ? this._getTooltipMarker(color) : undefined
+              });
             }
           });
-          if (lines.length === 0) {
+
+          if (paramsList.length === 0) {
             this._tooltip!.hide();
             return;
           }
 
+          const content = this._generateTooltipContent(paramsList);
+
           if (!this._tooltip!.isVisible()) {
-            this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
+            this._tooltip!.show(mx + 12, my - 16, content, paramsList);
           } else {
-            this._tooltip!.show(mx + 12, my - 16, lines.join('\n'));
+            this._tooltip!.show(mx + 12, my - 16, content, paramsList);
           }
         });
         (interact as any).on('mouseout', () => this._tooltip!.hide());
@@ -264,7 +286,8 @@ export default class LineChart extends Chart {
                   name: itemName,
                   dataIndex: pointIndex,
                   data: item,
-                  value: itemValue
+                  value: itemValue,
+                  color: typeof pointFill === 'string' ? pointFill : undefined
                 };
 
                 const content = this._generateTooltipContent(params);

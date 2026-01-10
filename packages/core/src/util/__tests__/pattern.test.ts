@@ -16,7 +16,9 @@ const mockContext = {
   translate: vi.fn(),
   rotate: vi.fn(),
   arc: vi.fn(),
-  createPattern: vi.fn().mockReturnValue({}),
+  createPattern: vi.fn().mockReturnValue({
+    setTransform: vi.fn(),
+  }),
 } as unknown as CanvasRenderingContext2D;
 
 const mockCanvas = {

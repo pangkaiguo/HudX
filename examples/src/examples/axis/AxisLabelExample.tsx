@@ -10,7 +10,7 @@ export const AxisLabelExample = () => {
   const [width, setWidth] = useState(60);
   const [overflow, setOverflow] = useState<'break' | 'truncate' | 'none'>('break');
 
-  const [yRotate, setYRotate] = useState(0);
+  const [yRotate, setYRotate] = useState(-45);
   const [yWidth, setYWidth] = useState(60);
   const [yOverflow, setYOverflow] = useState<'break' | 'truncate' | 'none'>('break');
 
@@ -25,7 +25,7 @@ export const AxisLabelExample = () => {
       trigger: 'axis'
     },
     grid: {
-      bottom: 100, // More space for rotated labels
+      bottom: 100,
       top: 80
     },
     xAxis: {
@@ -43,7 +43,7 @@ export const AxisLabelExample = () => {
         rotate: rotate,
         width: width,
         overflow: overflow,
-        interval: 0 // Show all
+        interval: 0
       }
     },
     yAxis: {
@@ -69,7 +69,7 @@ export const AxisLabelExample = () => {
       trigger: 'axis'
     },
     grid: {
-      left: 150, // More space for Y labels
+      left: 150,
       top: 80,
       right: 40,
       bottom: 40
@@ -146,6 +146,7 @@ export const AxisLabelExample = () => {
     },
     series: [
       {
+        name: 'Scatter Data',
         type: 'scatter',
         symbolSize: 20,
         data: [

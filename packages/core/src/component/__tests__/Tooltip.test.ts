@@ -1,126 +1,231 @@
-import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
-import Tooltip from '../Tooltip';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import Tooltip, { TooltipOption } from '../Tooltip';
 
 describe('Tooltip', () => {
-  beforeAll(() => {
-    // Mock requestAnimationFrame
-    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
-      return setTimeout(callback, 0);
-    });
-    vi.stubGlobal('cancelAnimationFrame', (id: number) => {
-      clearTimeout(id);
+  let container: HTMLElement;
+  let tooltip: Tooltip;
+
+  beforeEach(() => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    container.getBoundingClientRect = () => ({
+      left: 0,
+      top: 0,
+      width: 500,
+      height: 500,
+      right: 500,
+      bottom: 500,
+      x: 0,
+      y: 0,
+      toJSON: () => { }
     });
   });
 
-  it('should initialize correctly', () => {
-    const tooltip = new Tooltip();
-    expect(tooltip.isVisible()).toBe(false);
+  afterEach(() => {
+    if (tooltip) {
+      tooltip.dispose();
+    }
+    if (container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
   });
 
-  it('should show content correctly', () => {
-    const tooltip = new Tooltip();
-    const container = document.createElement('div');
-    // Mock getComputedStyle for container
-    container.style.position = 'relative';
-    tooltip.setContainer(container);
-
-    tooltip.show(100, 100, 'Test Content');
-
-    expect(tooltip.isVisible()).toBe(true);
-
-    // Verify DOM element existence and styles
+  it('should initialize with default options', () => {
+    tooltip = new Tooltip();
     const el = (tooltip as any)._el as HTMLElement;
     expect(el).toBeDefined();
-    expect(el.style.display).toBe('block');
-    // Check content
-    expect(el.innerHTML).toBe('Test Content');
-    // Check position (default offset 15)
-    // left = 100 + 15 = 115
-    // But it depends on container rect. Mock container rect?
-    // In happy-dom/jsdom, getBoundingClientRect usually returns 0,0,0,0 unless mocked.
+    expect(el.style.position).toBe('absolute');
+    expect(el.style.display).toBe('none');
+    expect(el.style.backgroundColor).toBe('rgba(50, 50, 50, 0.7)');
   });
 
-  it('should handle positioning logic (confine)', () => {
-    const tooltip = new Tooltip({ confine: true });
-    const container = document.createElement('div');
+  it('should apply custom styling options', () => {
+    const options: TooltipOption = {
+      backgroundColor: '#ff0000',
+      borderColor: '#00ff00',
+      borderWidth: 2,
+      padding: [10, 20],
+      textStyle: {
+        color: '#0000ff',
+        fontSize: 16,
+        fontFamily: 'Arial'
+      },
+      className: 'custom-tooltip',
+      extraCssText: 'box-shadow: none;'
+    };
 
-    // Mock container size
-    vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({
-      width: 100,
-      height: 100,
-      left: 0,
-      top: 0,
-      right: 100,
-      bottom: 100,
-      x: 0,
-      y: 0,
-      toJSON: () => { }
+    tooltip = new Tooltip(options);
+    const el = (tooltip as any)._el as HTMLElement;
+
+    expect(el.style.backgroundColor).toBe('#ff0000');
+    expect(el.style.borderColor).toBe('#00ff00');
+    expect(el.style.borderWidth).toBe('2px');
+    expect(el.style.padding).toBe('10px 20px');
+    expect(el.style.color).toBe('#0000ff');
+    expect(el.style.fontSize).toBe('16px');
+    expect(el.style.fontFamily).toBe('Arial');
+    expect(el.className).toBe('custom-tooltip');
+    expect(el.style.boxShadow).toBe('none');
+  });
+
+  it('should update styling via setOption', () => {
+    tooltip = new Tooltip();
+    const el = (tooltip as any)._el as HTMLElement;
+
+    tooltip.setOption({
+      backgroundColor: '#000000'
     });
 
-    tooltip.setContainer(container);
-
-    // Mock tooltip element size
-    const el = (tooltip as any)._el as HTMLElement;
-    vi.spyOn(el, 'offsetWidth', 'get').mockReturnValue(50);
-    vi.spyOn(el, 'offsetHeight', 'get').mockReturnValue(20);
-
-    // Try to show at right edge (90, 50). Tooltip width 50.
-    // 90 + 15 (offset) + 50 = 155 > 100 (container width)
-    // Should flip left?
-    // Logic in Tooltip.ts:
-    // if (left + elWidth > viewWidth) left = x - elWidth - 15;
-
-    tooltip.show(90, 50, 'Long Content');
-
-    const leftStyle = parseFloat(el.style.left);
-    // Expected: 90 - 50 - 15 = 25
-    expect(leftStyle).toBe(25);
+    expect(el.style.backgroundColor).toBe('#000000');
   });
 
-  it('should optimize rendering when content is same', () => {
-    const tooltip = new Tooltip();
-    const container = document.createElement('div');
-    vi.spyOn(container, 'getBoundingClientRect').mockReturnValue({
-      width: 800,
-      height: 600,
-      left: 0,
-      top: 0,
-      right: 800,
-      bottom: 600,
-      x: 0,
-      y: 0,
-      toJSON: () => { }
+  it('should handle showContent option', () => {
+    tooltip = new Tooltip({ showContent: false });
+    tooltip.setContainer(container);
+    vi.useFakeTimers();
+
+    tooltip.show(100, 100, 'Content');
+    vi.runAllTimers();
+
+    expect(tooltip.isVisible()).toBe(false);
+
+    tooltip.setOption({ showContent: true });
+    tooltip.show(100, 100, 'Content');
+    vi.runAllTimers();
+    expect(tooltip.isVisible()).toBe(true);
+
+    vi.useRealTimers();
+  });
+
+  it('should handle showDelay and hideDelay', () => {
+    tooltip = new Tooltip({
+      showDelay: 100,
+      hideDelay: 200
     });
     tooltip.setContainer(container);
+    vi.useFakeTimers();
 
-    // First show
-    tooltip.show(100, 100, 'Same Content');
-    const el = (tooltip as any)._el as HTMLElement;
-    const initialHTML = el.innerHTML;
+    tooltip.show(100, 100, 'Content');
+    expect(tooltip.isVisible()).toBe(false);
 
-    // Second show with same content, different position
-    tooltip.show(200, 200, 'Same Content');
+    vi.advanceTimersByTime(50);
+    expect(tooltip.isVisible()).toBe(false);
 
-    // HTML should remain same (optimization check logic isn't explicitly exposed but we can verify behavior)
-    expect(el.innerHTML).toBe(initialHTML);
-
-    const left = parseFloat(el.style.left);
-    const top = parseFloat(el.style.top);
-
-    // 200 + 15 = 215
-    expect(left).toBe(215);
-    expect(top).toBe(215);
-  });
-
-  it('should hide correctly', () => {
-    const tooltip = new Tooltip();
-    const container = document.createElement('div');
-    tooltip.setContainer(container);
-
-    tooltip.show(100, 100, 'Test');
+    vi.advanceTimersByTime(60);
     expect(tooltip.isVisible()).toBe(true);
 
     tooltip.hide();
+    expect(tooltip.isVisible()).toBe(true);
+
+    vi.advanceTimersByTime(100);
+    expect(tooltip.isVisible()).toBe(true);
+
+    vi.advanceTimersByTime(110);
     expect(tooltip.isVisible()).toBe(false);
+
+    vi.useRealTimers();
+  });
+
+  it('should apply transitionDuration', () => {
+    tooltip = new Tooltip({
+      transitionDuration: 0.5
+    });
+    const el = (tooltip as any)._el as HTMLElement;
+    expect(el.style.transition).toContain('0.5s');
+  });
+
+  it('should show and hide content', () => {
+    tooltip = new Tooltip();
+    tooltip.setContainer(container);
+
+    vi.useFakeTimers();
+
+    tooltip.show(100, 100, 'Test Content');
+    vi.runAllTimers();
+
+    const el = (tooltip as any)._el as HTMLElement;
+    expect(el.style.display).toBe('block'); // show sets display block then visibility visible
+    expect(el.style.visibility).toBe('visible');
+    expect(el.innerHTML).toBe('Test Content');
+    expect(tooltip.isVisible()).toBe(true);
+
+    tooltip.hide();
+    expect(el.style.display).toBe('none');
+    expect(tooltip.isVisible()).toBe(false);
+
+    vi.useRealTimers();
+  });
+
+  it('should handle positioning', () => {
+    tooltip = new Tooltip();
+    tooltip.setContainer(container);
+    vi.useFakeTimers();
+
+    const el = (tooltip as any)._el as HTMLElement;
+    Object.defineProperty(el, 'offsetWidth', { configurable: true, value: 100 });
+    Object.defineProperty(el, 'offsetHeight', { configurable: true, value: 50 });
+
+    tooltip.show(100, 100, 'Content');
+    vi.runAllTimers();
+
+    expect(el.style.left).toBe('115px');
+    expect(el.style.top).toBe('115px');
+
+    vi.useRealTimers();
+  });
+
+  it('should support custom position function', () => {
+    tooltip = new Tooltip({
+      position: (point) => {
+        return [point[0] + 50, point[1] + 50];
+      }
+    });
+    tooltip.setContainer(container);
+    vi.useFakeTimers();
+
+    tooltip.show(100, 100, 'Content');
+    vi.runAllTimers();
+
+    const el = (tooltip as any)._el as HTMLElement;
+    expect(el.style.left).toBe('150px');
+    expect(el.style.top).toBe('150px');
+
+    vi.useRealTimers();
+  });
+
+  it('should confine tooltip within container', () => {
+    tooltip = new Tooltip({
+      confine: true
+    });
+    tooltip.setContainer(container);
+    vi.useFakeTimers();
+
+    const el = (tooltip as any)._el as HTMLElement;
+    Object.defineProperty(el, 'offsetWidth', { configurable: true, value: 100 });
+    Object.defineProperty(el, 'offsetHeight', { configurable: true, value: 50 });
+
+    tooltip.show(450, 100, 'Content');
+    vi.runAllTimers();
+
+    expect(el.style.left).toBe('335px');
+
+    vi.useRealTimers();
+  });
+
+  it('should handle enterable option (pointer-events)', () => {
+    tooltip = new Tooltip({ enterable: true });
+    const el = (tooltip as any)._el as HTMLElement;
+    expect(el.style.pointerEvents).toBe('auto');
+
+    tooltip.setOption({ enterable: false });
+    expect(el.style.pointerEvents).toBe('none');
+  });
+
+  it('should append to body if configured', () => {
+    tooltip = new Tooltip({ appendToBody: true });
+    tooltip.setContainer(container);
+
+    const el = (tooltip as any)._el as HTMLElement;
+    expect(el.parentNode).toBe(document.body);
   });
 });

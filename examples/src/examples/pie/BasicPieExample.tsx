@@ -19,8 +19,7 @@ export const BasicPieExample = () => {
     },
     tooltip: {
       show: true,
-      trigger: 'item',
-      formatter: '{b}\n{c} ({d}%)'
+      trigger: 'item'
     },
     legend: {
       show: true,

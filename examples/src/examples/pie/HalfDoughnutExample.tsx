@@ -19,8 +19,7 @@ export const HalfDoughnutExample = () => {
     },
     tooltip: {
       show: true,
-      trigger: 'item',
-      formatter: '{b}: {c} ({d}%)'
+      trigger: 'item'
     },
     aria: {
       enabled: true,

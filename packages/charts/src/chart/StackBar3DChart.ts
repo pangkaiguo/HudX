@@ -309,7 +309,9 @@ export default class StackBar3DChart extends Chart {
                 name: itemName,
                 dataIndex: index,
                 data: item,
-                value: yVal
+                value: yVal,
+                color: typeof barColor === 'string' ? barColor : undefined,
+                marker: typeof barColor === 'string' ? this._getTooltipMarker(barColor) : undefined
               };
               const content = this._generateTooltipContent(params);
               const mx = evt?.offsetX ?? (barX + barWidth / 2);

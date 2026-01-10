@@ -16,7 +16,7 @@ export const RichTextPieExample = () => {
     tooltip: {
       show: true,
       trigger: 'item',
-      formatter: '{b}\n{c} ({d}%)'
+      // formatter: '{b}\n{c} ({d}%)'
     },
     legend: {
       show: true,

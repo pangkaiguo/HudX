@@ -227,7 +227,9 @@ export default class PieChart extends Chart {
                   dataIndex: index,
                   data: item,
                   value: itemValue,
-                  percent: percent * 100
+                  percent: percent * 100,
+                  color: color,
+                  marker: this._getTooltipMarker(color)
                 };
 
                 const content = this._generateTooltipContent(params);
@@ -283,7 +285,9 @@ export default class PieChart extends Chart {
               dataIndex: index,
               data: item,
               value: itemValue,
-              percent: partPercent
+              percent: partPercent,
+              color: color,
+              marker: this._getTooltipMarker(color)
             };
             const content = this._generateTooltipContent(params);
 

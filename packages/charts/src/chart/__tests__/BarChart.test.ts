@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import BarChart from '../BarChart';
 import { ChartOption } from '../../types';
 
@@ -26,23 +26,16 @@ const mockContext = {
   strokeRect: vi.fn(),
   clearRect: vi.fn(),
   setTransform: vi.fn(),
+  font: '',
 } as unknown as CanvasRenderingContext2D;
 
 // We don't stub global document/window aggressively to keep happy-dom functionality
 // We only patch what we need
-const originalCreateElement = document.createElement.bind(document);
-vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
-  if (tag === 'canvas') {
-    const canvas = originalCreateElement('canvas');
-    canvas.getContext = vi.fn(() => mockContext) as any;
-    // Mock getBoundingClientRect
-    canvas.getBoundingClientRect = () => ({ left: 0, top: 0, width: 800, height: 600 } as DOMRect);
-    // Mock width/height props if needed, but happy-dom might handle it
-    Object.defineProperty(canvas, 'width', { value: 800, writable: true });
-    Object.defineProperty(canvas, 'height', { value: 600, writable: true });
-    return canvas;
-  }
-  return originalCreateElement(tag);
+beforeAll(() => {
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    value: () => mockContext,
+    writable: true
+  });
 });
 
 // Mock requestAnimationFrame if not present (happy-dom might have it or not)

@@ -40,6 +40,8 @@ export default class Tooltip {
   private _visible: boolean = false;
   private _hideTimer: any = null;
   private _showTimer: any = null;
+  private _lastWidth: number = 0;
+  private _lastHeight: number = 0;
 
   constructor(option: TooltipOption = {}) {
     this._option = {
@@ -47,10 +49,11 @@ export default class Tooltip {
       backgroundColor: 'rgba(50, 50, 50, 0.7)',
       borderColor: '#333',
       borderWidth: 0,
-      padding: 5,
+      padding: [10, 10, 10, 10],
       textStyle: {
         color: '#fff',
-        fontSize: 14
+        fontSize: 12,
+        lineHeight: 20
       },
       transitionDuration: 0.4,
       confine: true,
@@ -73,9 +76,9 @@ export default class Tooltip {
     s.whiteSpace = 'nowrap';
     s.zIndex = '9999999';
     s.boxShadow = 'rgba(0, 0, 0, 0.2) 1px 2px 10px';
+    s.boxSizing = 'border-box';
     s.pointerEvents = this._option.enterable ? 'auto' : 'none';
 
-    // Initial transition
     s.transition = `left ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s, top ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s`;
 
     this.updateStyle();
@@ -100,11 +103,14 @@ export default class Tooltip {
     s.fontSize = (opt.textStyle?.fontSize || 14) + 'px';
     s.fontFamily = opt.textStyle?.fontFamily || 'sans-serif';
 
-    // Apply other textStyle properties
     if (opt.textStyle) {
       Object.keys(opt.textStyle).forEach(key => {
         if (key !== 'color' && key !== 'fontSize' && key !== 'fontFamily') {
-          (s as any)[key] = opt.textStyle![key];
+          let val = opt.textStyle![key];
+          if (key === 'lineHeight' && typeof val === 'number') {
+            val = val + 'px';
+          }
+          (s as any)[key] = val;
         }
       });
     }
@@ -128,22 +134,22 @@ export default class Tooltip {
   }
 
   setContainer(container: HTMLElement): void {
-    if (this._option.appendToBody) {
-      this._container = document.body;
-    } else {
-      this._container = container;
-      // Ensure container is positioned so absolute tooltip works relative to it
+    this._container = container;
+
+    if (!this._option.appendToBody) {
       const style = window.getComputedStyle(container);
       if (style.position === 'static') {
         container.style.position = 'relative';
       }
     }
 
-    if (this._el.parentNode !== this._container) {
+    const parent = this._option.appendToBody ? document.body : this._container;
+
+    if (this._el.parentNode !== parent) {
       if (this._el.parentNode) {
         this._el.parentNode.removeChild(this._el);
       }
-      this._container.appendChild(this._el);
+      parent.appendChild(this._el);
     }
   }
 
@@ -155,13 +161,36 @@ export default class Tooltip {
 
     const show = () => {
       this._updateContent(content);
-      this._updatePosition(x, y, params, targetRect);
+
+      const originalDisplay = this._el.style.display;
+      const originalVisibility = this._el.style.visibility;
+
       this._el.style.display = 'block';
-      // Force reflow for transition?
-      // requestAnimationFrame(() => {
-      //   this._el.style.opacity = '1';
-      // });
+      this._el.style.visibility = 'hidden';
+
+      const currentWidth = this._el.offsetWidth;
+      const currentHeight = this._el.offsetHeight;
+
+      const sizeChanged = currentWidth !== this._lastWidth || currentHeight !== this._lastHeight;
+      this._lastWidth = currentWidth;
+      this._lastHeight = currentHeight;
+
+      if (sizeChanged) {
+        this._el.style.transition = 'none';
+      } else {
+        this._el.style.transition = `left ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s, top ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s`;
+      }
+
+      this._updatePosition(x, y, params, targetRect);
+
+      this._el.style.visibility = 'visible';
       this._visible = true;
+
+      if (sizeChanged) {
+        requestAnimationFrame(() => {
+          this._el.style.transition = `left ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s, top ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s`;
+        });
+      }
     };
 
     if (this._option.showDelay && this._option.showDelay > 0) {
@@ -208,15 +237,12 @@ export default class Tooltip {
           customPosition = true;
         }
       } else if (typeof pos === 'string') {
-        // Support 'top', 'left', 'right', 'bottom', 'inside' relative to targetRect if available
-        // Or '10% 10%'
         const parts = pos.split(' ');
         if (parts.length === 2) {
           left = this._parsePercent(parts[0], viewWidth);
           top = this._parsePercent(parts[1], viewHeight);
           customPosition = true;
         } else if (targetRect) {
-          // Relative to target element
           if (pos === 'top') {
             left = targetRect.x + targetRect.width / 2 - elWidth / 2;
             top = targetRect.y - elHeight - 5;
@@ -243,49 +269,25 @@ export default class Tooltip {
     }
 
     if (!customPosition) {
-      // Default mouse offset
       const offset = 15;
       left += offset;
       top += offset;
     }
 
     if (this._option.appendToBody) {
-      // If appended to body, x/y are likely client coordinates (from event)
-      // We need to adjust for scroll
       const scrollX = window.scrollX || document.documentElement.scrollLeft;
       const scrollY = window.scrollY || document.documentElement.scrollTop;
-
-      // But x/y passed to show() are usually relative to chart container (offsetX/Y)
-      // So we need to convert them to page coordinates
-      // NOTE: If customPosition was used (absolute coords in chart), we need to add chart offset
+      const chartRect = this._container!.getBoundingClientRect();
 
       if (customPosition) {
-        // left/top are relative to chart container (0,0 is top-left of chart)
-        left += containerRect.left + scrollX;
-        top += containerRect.top + scrollY;
+        left += chartRect.left + scrollX;
+        top += chartRect.top + scrollY;
       } else {
-        // left/top are based on x/y which are already chart-relative, plus offset
-        // We need to shift by container position
-        left = left + containerRect.left + scrollX - x + x; // (x is already in left)
-        // Simplified: left is relative to chart. To make it relative to page:
-        // left_page = left_chart + container_left + scroll
-
-        // Wait, 'left' calculated above:
-        // If default: left = x + offset. x is relative to chart.
-        // So left is relative to chart.
-        // Correct formula:
-        left += containerRect.left + scrollX - x; // Remove x? No.
-        // left (chart relative) = x + offset
-        // left (page) = left (chart relative) + container_left + scroll
-        // BUT, I modified 'left' in place.
-        // Let's reset logic for appendToBody
-
-        // Re-calculate page coordinates cleanly
         const chartRelativeLeft = customPosition ? left : (x + 15);
         const chartRelativeTop = customPosition ? top : (y + 15);
 
-        left = chartRelativeLeft + containerRect.left + scrollX;
-        top = chartRelativeTop + containerRect.top + scrollY;
+        left = chartRelativeLeft + chartRect.left + scrollX;
+        top = chartRelativeTop + chartRect.top + scrollY;
       }
 
       viewWidth = document.documentElement.clientWidth;
@@ -293,31 +295,26 @@ export default class Tooltip {
     }
 
     if (this._option.confine) {
-      // Right edge
       if (left + elWidth > (this._option.appendToBody ? viewWidth + window.scrollX : viewWidth)) {
-        left = (this._option.appendToBody ? (x + containerRect.left + window.scrollX) : x) - elWidth - 15;
-        // If custom position, we might not want to flip?
-        // ECharts confine tries to keep it inside.
+        const chartRect = this._container!.getBoundingClientRect();
+        left = (this._option.appendToBody ? (x + chartRect.left + window.scrollX) : x) - elWidth - 15;
         if (customPosition && Array.isArray(pos)) {
-          // If fixed position, don't flip, just clamp?
           left = Math.min(left, (this._option.appendToBody ? viewWidth + window.scrollX : viewWidth) - elWidth);
         }
       }
 
-      // Bottom edge
       if (top + elHeight > (this._option.appendToBody ? viewHeight + window.scrollY : viewHeight)) {
-        top = (this._option.appendToBody ? (y + containerRect.top + window.scrollY) : y) - elHeight - 15;
+        const chartRect = this._container!.getBoundingClientRect();
+        top = (this._option.appendToBody ? (y + chartRect.top + window.scrollY) : y) - elHeight - 15;
         if (customPosition && Array.isArray(pos)) {
           top = Math.min(top, (this._option.appendToBody ? viewHeight + window.scrollY : viewHeight) - elHeight);
         }
       }
 
-      // Left edge
       if (left < (this._option.appendToBody ? window.scrollX : 0)) {
         left = (this._option.appendToBody ? window.scrollX : 0) + 10;
       }
 
-      // Top edge
       if (top < (this._option.appendToBody ? window.scrollY : 0)) {
         top = (this._option.appendToBody ? window.scrollY : 0) + 10;
       }

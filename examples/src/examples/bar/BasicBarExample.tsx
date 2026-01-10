@@ -22,8 +22,7 @@ export const BasicBarExample = () => {
     },
     tooltip: {
       show: true,
-      trigger: 'item',
-      formatter: '{b}\n{c}'
+      trigger: 'item'
     },
     aria: {
       enabled: true,

@@ -362,7 +362,9 @@ export default class BarChart extends Chart {
                   name: itemName,
                   dataIndex: index,
                   data: item,
-                  value: itemValue
+                  value: itemValue,
+                  color: typeof barColor === 'string' ? barColor : undefined,
+                  marker: typeof barColor === 'string' ? this._getTooltipMarker(barColor) : undefined
                 };
                 const content = this._generateTooltipContent(params);
 
@@ -397,7 +399,9 @@ export default class BarChart extends Chart {
                 name: itemName,
                 dataIndex: index,
                 data: item,
-                value: itemValue
+                value: itemValue,
+                color: typeof barColor === 'string' ? barColor : undefined,
+                marker: typeof barColor === 'string' ? this._getTooltipMarker(barColor) : undefined
               };
               const content = this._generateTooltipContent(params);
 

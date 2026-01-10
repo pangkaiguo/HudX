@@ -21,8 +21,7 @@ export const BasicLineExample = () => {
     },
     tooltip: {
       show: true,
-      trigger: 'axis',
-      formatter: '{b}\n{c}'
+      trigger: 'axis'
     },
     legend: {
       show: true,

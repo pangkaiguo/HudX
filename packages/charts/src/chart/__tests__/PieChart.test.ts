@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import PieChart from '../PieChart';
 import { ChartOption } from '../../types';
 
@@ -25,19 +25,14 @@ const mockContext = {
   strokeRect: vi.fn(),
   clearRect: vi.fn(),
   setTransform: vi.fn(),
+  font: '',
 } as unknown as CanvasRenderingContext2D;
 
-const originalCreateElement = document.createElement.bind(document);
-vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
-  if (tag === 'canvas') {
-    const canvas = originalCreateElement('canvas');
-    canvas.getContext = vi.fn(() => mockContext) as any;
-    canvas.getBoundingClientRect = () => ({ left: 0, top: 0, width: 800, height: 600 } as DOMRect);
-    Object.defineProperty(canvas, 'width', { value: 800, writable: true });
-    Object.defineProperty(canvas, 'height', { value: 600, writable: true });
-    return canvas;
-  }
-  return originalCreateElement(tag);
+beforeAll(() => {
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    value: () => mockContext,
+    writable: true
+  });
 });
 
 if (!window.requestAnimationFrame) {
@@ -66,17 +61,17 @@ describe('PieChart', () => {
     const chart = new PieChart(container);
     const option: ChartOption = {
       series: [
-        { 
-          type: 'pie', 
+        {
+          type: 'pie',
           data: [
-            { name: 'A', value: 10 }, 
+            { name: 'A', value: 10 },
             { name: 'B', value: 20 }
-          ] 
+          ]
         }
       ]
     };
     chart.setOption(option);
-    
+
     expect(chart).toBeDefined();
   });
 });

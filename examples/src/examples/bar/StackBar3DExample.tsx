@@ -24,7 +24,7 @@ export const StackBar3DExample = () => {
     tooltip: {
       show: true,
       trigger: 'item',
-      formatter: '{b}\n{c}'
+      // formatter: '{b}\n{c}'
     },
     legend: {
       show: true,

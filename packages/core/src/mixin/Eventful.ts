@@ -49,7 +49,7 @@ export default class Eventful {
   /**
    * Trigger event
    */
-  trigger(event: string, eventData?: EventData): this {
+  trigger(event: string, eventData?: Record<string, any>): this {
     const handlers = this._handlers.get(event);
     if (handlers) {
       const data: EventData = {

@@ -118,6 +118,8 @@ export interface TooltipOption {
   renderMode?: 'html' | 'richText';
   /** Order */
   order?: 'seriesAsc' | 'seriesDesc' | 'valueAsc' | 'valueDesc';
+  /** Layout mode */
+  layout?: 'horizontal' | 'vertical' | 'rich';
   [key: string]: any;
 }
 

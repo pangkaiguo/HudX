@@ -1262,20 +1262,136 @@ export default class Chart {
   }
 
   /**
+   * Get tooltip marker
+   */
+  protected _getTooltipMarker(color: string): string {
+    return `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${color};"></span>`;
+  }
+
+  /**
    * Generate tooltip content helper
    */
   protected _generateTooltipContent(params: any): string {
     const formatter = this._option.tooltip?.formatter;
+
+    // Support ECharts-like formatter function
     if (typeof formatter === 'function') {
       return formatter(params);
-    } else if (typeof formatter === 'string') {
-      return this._formatTooltip(formatter, params);
-    } else {
-      const seriesName = params.seriesName ? params.seriesName + '\n' : '';
-      const name = params.name ? params.name + ': ' : '';
-      const value = params.value;
-      const percent = params.percent !== undefined ? ` (${params.percent.toFixed(1)}%)` : '';
-      return `${seriesName}${name}${value}${percent}`;
     }
+
+    // Support ECharts-like string template (basic support)
+    if (typeof formatter === 'string') {
+      if (!Array.isArray(params)) {
+        return this._formatTooltip(formatter, params);
+      }
+      // If array, fallback to default for now as string template loop is complex
+    }
+
+    // Unified HTML generator for both Single and Multi items
+    const paramsList = Array.isArray(params) ? params : [params];
+    if (paramsList.length === 0) return '';
+
+    let html = '';
+
+    // 1. Generate Header Title
+    // Logic:
+    // - Pie: Header = Series Name (e.g. "Access Source")
+    // - Others (Line/Bar/Scatter): Header = Category/Data Name (e.g. "Mon" or "Item A")
+    let headerTitle = '';
+    const firstParam = paramsList[0];
+    if (firstParam.seriesType === 'pie') {
+      headerTitle = firstParam.seriesName;
+    } else {
+      headerTitle = firstParam.name;
+    }
+
+    if (headerTitle) {
+      html += `<div style="margin-bottom:8px;font-weight:bold;color:#fff;">${headerTitle}</div>`;
+    }
+
+    // 2. Generate Items
+    paramsList.forEach(param => {
+      // Logic for Row Label:
+      // - Pie: Row = Data Name (e.g. "Search Engine")
+      // - Others: Row = Series Name (e.g. "Series A")
+      let rowLabel = '';
+      if (param.seriesType === 'pie') {
+        rowLabel = param.name;
+      } else {
+        rowLabel = param.seriesName || param.name;
+      }
+
+      html += this._generateSingleItemHtml(param, rowLabel);
+    });
+
+    return html;
+  }
+
+  private _generateSingleItemHtml(param: any, titleOverride?: string): string {
+    const color = param.color;
+    const value = param.value;
+    const displayValue = Array.isArray(value) ? value.join(', ') : this._formatNumber(Number(value));
+    const percent = param.percent !== undefined ? ` (${param.percent.toFixed(2)}%)` : '';
+
+    const marker = param.marker || (color ? this._getTooltipMarker(color) : '');
+
+    const title = titleOverride !== undefined ? titleOverride : (param.componentType === 'series' ? (param.seriesName || param.name) : (param.name || param.seriesName));
+
+    // Check layout option
+    const layout = this._option.tooltip?.layout || 'horizontal';
+
+    // Check if data has extra info for 'rich' layout
+    const dataItem = param.data;
+    const isRich = layout === 'rich' || (typeof dataItem === 'object' && dataItem.detail);
+
+    if (isRich && typeof dataItem === 'object' && dataItem.detail) {
+      // Complex/Rich Layout
+      let detailHtml = '';
+      if (Array.isArray(dataItem.detail)) {
+        dataItem.detail.forEach((item: { label: string, value: string }) => {
+          detailHtml += `
+             <div style="display:flex;justify-content:space-between;margin-top:2px;">
+               <span style="color:#ccc;margin-right:16px;">${item.label}</span>
+               <span style="font-weight:bold;">${item.value}</span>
+             </div>
+           `;
+        });
+      }
+      return `
+        <div style="font-size:12px;color:#fff;line-height:20px;min-width:120px;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;margin-bottom:4px;">
+            ${marker}
+            <span style="font-weight:bold;">${title}</span>
+          </div>
+          <div style="padding-left: 14px;">
+            ${detailHtml}
+          </div>
+        </div>
+      `;
+    } else if (layout === 'vertical') {
+      // Basic/Vertical Layout
+      return `
+        <div style="font-size:12px;color:#fff;line-height:20px;min-width:120px;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;">
+            ${marker}
+            <span>${title}</span>
+          </div>
+          <div style="padding-left: 14px;font-weight:bold;">
+            ${displayValue}${percent ? ' ' + percent : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // Default Horizontal Layout
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#fff;line-height:20px;min-width:120px;">
+        <div style="display:flex;align-items:center;">
+          ${marker}
+          <span style="margin-right:16px;">${title}</span>
+        </div>
+        <span style="font-weight:bold;white-space:nowrap;">${displayValue}${percent ? ' ' + percent : ''}</span>
+      </div>
+    `;
   }
 }

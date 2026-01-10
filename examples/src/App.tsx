@@ -13,8 +13,8 @@ const AdvancedBarChartExample = lazy(() => import('./examples/bar/AdvancedBarExa
 const BasicBarExample = lazy(() => import('./examples/bar/BasicBarExample'));
 const StackBarExample = lazy(() => import('./examples/bar/StackBarExample'));
 const StackHorizontalBarExample = lazy(() => import('./examples/bar/StackHorizontalBarExample'));
-// const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
-// const StackBar3DExample = lazy(() => import('./examples/bar/StackBar3DExample'));
+const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
+const StackBar3DExample = lazy(() => import('./examples/bar/StackBar3DExample'));
 
 // Line charts
 const AdvancedLineChartExample = lazy(() => import('./examples/line/AdvancedLineExample'));
@@ -27,6 +27,9 @@ const BasicPieExample = lazy(() => import('./examples/pie/BasicPieExample'));
 const DoughnutExample = lazy(() => import('./examples/pie/DoughnutExample'));
 const HalfDoughnutExample = lazy(() => import('./examples/pie/HalfDoughnutExample'));
 const RichTextPieExample = lazy(() => import('./examples/pie/RichTextPieExample'));
+
+// Scatter charts
+const ScatterChartExample = lazy(() => import('./examples/scatter/ScatterChartExample'));
 
 // Axis charts
 const AxisLabelExample = lazy(() => import('./examples/axis/AxisLabelExample'));
@@ -52,8 +55,8 @@ const chartExamples = [
       { id: 'stack-bar', name: 'Stack Bar', component: StackBarExample },
       { id: 'stack-horizontal-bar', name: 'Stack Horizontal Bar', component: StackHorizontalBarExample },
       { id: 'advanced-bar', name: 'Advanced Bar', component: AdvancedBarChartExample },
-      // { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
-      // { id: 'stack-bar-3d', name: 'Stack Bar 3D', component: StackBar3DExample },
+      { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
+      { id: 'stack-bar-3d', name: 'Stack Bar 3D', component: StackBar3DExample },
     ]
   },
   {
@@ -65,6 +68,12 @@ const chartExamples = [
       { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
       { id: 'advanced-doughnut', name: 'Advanced Doughnut', component: AdvancedDoughnutExample },
       { id: 'half-doughnut', name: 'Half Doughnut', component: HalfDoughnutExample },
+    ]
+  },
+  {
+    category: 'Scatter Charts',
+    items: [
+      { id: 'scatter-chart', name: 'Scatter Chart', component: ScatterChartExample },
     ]
   }
 ];
