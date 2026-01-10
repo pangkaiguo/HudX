@@ -1,11 +1,8 @@
-import React from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { Theme } from 'HudX/core';
 
-export const RichTextPieExample = () => {
-  const theme = ThemeManager.getTheme('light');
-
+export const RichTextPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const option: ChartOption = {
     title: {
       text: 'Rich Text Pie',
@@ -96,7 +93,7 @@ export const RichTextPieExample = () => {
         Demonstrating rich text labels and auto-colored label lines.
       </p>
       <div style={{ height: 500, border: '1px solid #eee' }}>
-        <HChart option={option} style={{ width: '100%', height: '600px' }} />
+        <HChart option={option} theme={theme} style={{ width: '100%', height: '600px' }} />
       </div>
     </div>
   );

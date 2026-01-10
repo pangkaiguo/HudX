@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const StackLineExample = () => {
-  const theme = ThemeManager.getTheme('light');
+export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
+  const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
   const [showGrid, setShowGrid] = React.useState(true);
   const [gridTop, setGridTop] = React.useState(60);
@@ -63,7 +63,7 @@ export const StackLineExample = () => {
         name: 'Series A',
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: theme.seriesColors?.[0] },
+        itemStyle: { color: themeObj.seriesColors?.[0] },
         lineStyle: { width: 2 },
         showSymbol: true
       },
@@ -71,7 +71,7 @@ export const StackLineExample = () => {
         name: 'Series B',
         type: 'line',
         data: [100, 150, 120, 110, 90, 140, 120],
-        itemStyle: { color: theme.seriesColors?.[1] },
+        itemStyle: { color: themeObj.seriesColors?.[1] },
         lineStyle: { width: 2 },
         showSymbol: true
       },
@@ -79,7 +79,7 @@ export const StackLineExample = () => {
         name: 'Series C',
         type: 'line',
         data: [80, 120, 100, 140, 110, 100, 90],
-        itemStyle: { color: theme.seriesColors?.[2] },
+        itemStyle: { color: themeObj.seriesColors?.[2] },
         lineStyle: { width: 2 },
         showSymbol: true
       }
@@ -166,6 +166,7 @@ export const StackLineExample = () => {
       <HChart
         ref={chartRef}
         option={option}
+        theme={theme}
         renderMode={renderMode}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />

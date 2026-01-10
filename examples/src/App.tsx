@@ -137,6 +137,7 @@ const NavButton = ({ example, activeExample, setActiveExample }: { example: any,
 
 const App = memo(function App() {
   const [activeExample, setActiveExample] = useState('basic-line');
+  const [theme, setTheme] = useState<'Light' | 'Dark'>('Light');
 
   const ActiveComponent = useMemo(
     () => allExamples.find(e => e.id === activeExample)?.component || AdvancedPieChartExample,
@@ -144,19 +145,32 @@ const App = memo(function App() {
   );
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div style={{ display: 'flex', height: '100vh', backgroundColor: theme === 'Dark' ? '#1a1a1a' : '#fff' }}>
       <nav
         aria-label="Examples navigation"
         style={{
           width: 280,
-          borderRight: '1px solid #e0e0e0',
+          borderRight: `1px solid ${theme === 'Dark' ? '#333' : '#e0e0e0'}`,
           padding: 20,
           overflowY: 'auto',
-          backgroundColor: '#f5f5f5'
+          backgroundColor: theme === 'Dark' ? '#222' : '#f5f5f5',
+          color: theme === 'Dark' ? '#eee' : '#333'
         }}
       >
-        <h1 style={{ fontSize: 20, marginBottom: 10, color: '#333' }}>HudX Examples</h1>
-        <p style={{ fontSize: 12, color: '#999', marginBottom: 20 }}>Interactive Charts & Animations</p>
+        <h1 style={{ fontSize: 20, marginBottom: 10, color: theme === 'Dark' ? '#fff' : '#333' }}>HudX Examples</h1>
+        <p style={{ fontSize: 12, color: theme === 'Dark' ? '#888' : '#999', marginBottom: 20 }}>Interactive Charts & Animations</p>
+
+        <div style={{ marginBottom: 20, padding: '10px 0', borderBottom: `1px solid ${theme === 'Dark' ? '#333' : '#e0e0e0'}` }}>
+          <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: 14, color: theme === 'Dark' ? '#eee' : '#333' }}>
+            <input
+              type="checkbox"
+              checked={theme === 'Dark'}
+              onChange={(e) => setTheme(e.target.checked ? 'Dark' : 'Light')}
+              style={{ marginRight: 8 }}
+            />
+            Dark Mode
+          </label>
+        </div>
 
         {chartExamples.map(category => (
           <React.Fragment key={category.category}>
@@ -185,7 +199,13 @@ const App = memo(function App() {
       <main
         role="main"
         aria-label="Example content"
-        style={{ flex: 1, padding: 40, overflowY: 'auto', backgroundColor: '#fff' }}
+        style={{
+          flex: 1,
+          padding: 40,
+          overflowY: 'auto',
+          backgroundColor: theme === 'Dark' ? '#1a1a1a' : '#fff',
+          color: theme === 'Dark' ? '#eee' : '#333'
+        }}
       >
         <Suspense fallback={
           <div style={{
@@ -201,7 +221,7 @@ const App = memo(function App() {
           </div>
         }>
           <div style={{ contain: 'layout style paint' }}>
-            <ActiveComponent />
+            <ActiveComponent theme={theme} />
           </div>
         </Suspense>
       </main>

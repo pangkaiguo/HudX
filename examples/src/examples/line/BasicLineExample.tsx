@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const BasicLineExample = () => {
-  const theme = ThemeManager.getTheme('light');
+export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
+  const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
   const [showGrid, setShowGrid] = React.useState(false);
   const [gridTop, setGridTop] = React.useState(40);
@@ -64,12 +64,12 @@ export const BasicLineExample = () => {
         name: 'Weekly Data',
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
-        itemStyle: { color: theme.seriesColors?.[0] },
+        itemStyle: { color: themeObj.seriesColors?.[0] },
         lineStyle: { width: 2 },
         showSymbol: true,
         emphasis: {
           scale: true,
-          itemStyle: { color: theme.seriesColors?.[3] }
+          itemStyle: { color: themeObj.seriesColors?.[3] }
         }
       }
     ],
@@ -148,6 +148,7 @@ export const BasicLineExample = () => {
       <HChart
         ref={chartRef}
         option={option}
+        theme={theme}
         renderMode={renderMode}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />

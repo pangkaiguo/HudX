@@ -92,7 +92,8 @@ export class ThemeManager {
    * Get theme configuration
    */
   static getTheme(theme: Theme): ThemeConfig {
-    const config = ThemeManager._themes.get(theme);
+    const normalizedTheme = typeof theme === 'string' ? theme.toLowerCase() as Theme : theme;
+    const config = ThemeManager._themes.get(normalizedTheme);
     if (config) return config;
     return ThemeManager._themes.get('light')!;
   }

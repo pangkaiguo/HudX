@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Rect, Circle, Text } from 'HudX/core';
+import { Renderer, Rect, Circle, Text, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const ThemeExample = () => {
+export const ThemeExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
-  const [themeName, setThemeName] = useState<'light' | 'dark'>('light');
+  const [themeName, setThemeName] = useState<'light' | 'dark'>(theme as 'light' | 'dark');
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+
+  useEffect(() => {
+    setThemeName(theme as 'light' | 'dark');
+  }, [theme]);
 
   useEffect(() => {
     if (!containerRef.current) return;

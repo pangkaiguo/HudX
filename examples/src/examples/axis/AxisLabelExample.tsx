@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { Theme } from 'HudX/core';
 
-export const AxisLabelExample = () => {
+export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);
 
   const [rotate, setRotate] = useState(45);
@@ -199,7 +199,7 @@ export const AxisLabelExample = () => {
       </div>
 
       <div style={{ width: '100%', height: 400, border: '1px solid #eee', borderRadius: 8, marginBottom: 40 }}>
-        <HChart ref={chartRef} option={option} theme="light" />
+        <HChart ref={chartRef} option={option} theme={theme} />
       </div>
 
       <div style={{ marginBottom: 20 }}>
@@ -239,7 +239,7 @@ export const AxisLabelExample = () => {
       </div>
 
       <div style={{ width: '100%', height: 400, border: '1px solid #eee', borderRadius: 8, marginBottom: 40 }}>
-        <HChart option={yOption} theme="light" />
+        <HChart option={yOption} theme={theme} />
       </div>
 
       <div style={{ marginBottom: 20 }}>
@@ -247,7 +247,7 @@ export const AxisLabelExample = () => {
       </div>
 
       <div style={{ width: '100%', height: 400, border: '1px solid #eee', borderRadius: 8 }}>
-        <HChart option={xyOption} theme="light" />
+        <HChart option={xyOption} theme={theme} />
       </div>
     </div>
   );

@@ -1,17 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const AdvancedBarExample = () => {
+export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [barGap, setBarGap] = useState<number | string>(30); // Use number for percent, or could be string for px
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
   const [splitNumber, setSplitNumber] = useState(5);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
-  const theme = ThemeManager.getTheme('light');
+  const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
@@ -30,11 +30,11 @@ export const AdvancedBarExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'rect', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'circle', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'triangle', symbolSize: 0.3, color: theme.decalColor },
-          { symbol: 'diagonal', color: theme.decalColor },
-          { symbol: 'diagonal-reverse', color: theme.decalColor }
+          { symbol: 'rect', symbolSize: 0.3, color: themeObj.decalColor },
+          { symbol: 'circle', symbolSize: 0.3, color: themeObj.decalColor },
+          { symbol: 'triangle', symbolSize: 0.3, color: themeObj.decalColor },
+          { symbol: 'diagonal', color: themeObj.decalColor },
+          { symbol: 'diagonal-reverse', color: themeObj.decalColor }
         ]
       }
     },
@@ -80,21 +80,21 @@ export const AdvancedBarExample = () => {
         name: 'Product A',
         type: 'bar',
         data: [320, 332, 301, 334],
-        itemStyle: { color: theme.seriesColors?.[0], borderWidth: 0 },
+        itemStyle: { color: themeObj.seriesColors?.[0], borderWidth: 0 },
         barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
       },
       {
         name: 'Product B',
         type: 'bar',
         data: [220, 182, 191, 234],
-        itemStyle: { color: theme.seriesColors?.[1], borderWidth: 0 },
+        itemStyle: { color: themeObj.seriesColors?.[1], borderWidth: 0 },
         barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
       },
       {
         name: 'Product C',
         type: 'bar',
         data: [150, 232, 201, 154],
-        itemStyle: { color: theme.seriesColors?.[2], borderWidth: 0 },
+        itemStyle: { color: themeObj.seriesColors?.[2], borderWidth: 0 },
         barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
       }
     ],
@@ -223,6 +223,7 @@ export const AdvancedBarExample = () => {
       <HChart
         ref={chartRef}
         option={option}
+        theme={theme}
         renderMode={renderMode}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />

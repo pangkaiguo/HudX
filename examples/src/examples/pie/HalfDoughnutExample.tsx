@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const HalfDoughnutExample = () => {
+export const HalfDoughnutExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
-  const theme = ThemeManager.getTheme('light');
+  const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
@@ -26,11 +26,11 @@ export const HalfDoughnutExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'diagonal', color: theme.decalColor },
-          { symbol: 'dots', color: theme.decalColor },
-          { symbol: 'diagonal-reverse', color: theme.decalColor },
-          { symbol: 'checkerboard', color: theme.decalColor },
-          { symbol: 'crosshatch', color: theme.decalColor }
+          { symbol: 'diagonal', color: themeObj.decalColor },
+          { symbol: 'dots', color: themeObj.decalColor },
+          { symbol: 'diagonal-reverse', color: themeObj.decalColor },
+          { symbol: 'checkerboard', color: themeObj.decalColor },
+          { symbol: 'crosshatch', color: themeObj.decalColor }
         ]
       }
     },
@@ -60,7 +60,7 @@ export const HalfDoughnutExample = () => {
           itemStyle: {
             shadowBlur: 10,
             shadowOffsetX: 0,
-            shadowColor: theme.shadowColor
+            shadowColor: themeObj.shadowColor
           },
           label: {
             show: true,
@@ -134,6 +134,7 @@ export const HalfDoughnutExample = () => {
       <HChart
         ref={chartRef}
         option={option}
+        theme={theme}
         renderMode={renderMode}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />

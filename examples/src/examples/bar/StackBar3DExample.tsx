@@ -1,12 +1,12 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const StackBar3DExample = () => {
+export const StackBar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);
-  const theme = ThemeManager.getTheme('light');
+  const themeObj = ThemeManager.getTheme(theme);
 
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
@@ -44,11 +44,11 @@ export const StackBar3DExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'diagonal', color: theme.decalColor },
-          { symbol: 'dots', color: theme.decalColor },
-          { symbol: 'diagonal-reverse', color: theme.decalColor },
-          { symbol: 'checkerboard', color: theme.decalColor },
-          { symbol: 'crosshatch', color: theme.decalColor }
+          { symbol: 'diagonal', color: themeObj.decalColor },
+          { symbol: 'dots', color: themeObj.decalColor },
+          { symbol: 'diagonal-reverse', color: themeObj.decalColor },
+          { symbol: 'checkerboard', color: themeObj.decalColor },
+          { symbol: 'crosshatch', color: themeObj.decalColor }
         ]
       }
     },
@@ -96,7 +96,7 @@ export const StackBar3DExample = () => {
       }
     ],
     animation: true
-  }), [isDecal, showGrid, gridTop, splitNumber, theme]);
+  }), [isDecal, showGrid, gridTop, splitNumber, themeObj]);
 
   const handleUpdateSeries = () => {
     const chartInstance = chartRef.current?.getChartInstance();
@@ -184,6 +184,7 @@ export const StackBar3DExample = () => {
       <HChart
         ref={chartRef}
         option={option}
+        theme={theme}
         renderMode={renderMode}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />

@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const AdvancedPieExample = () => {
+export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
-  const theme = ThemeManager.getTheme('light');
+  const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
@@ -27,18 +27,18 @@ export const AdvancedPieExample = () => {
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'diagonal', color: theme.decalColor },
-          { symbol: 'dots', color: theme.decalColor },
-          { symbol: 'diagonal-reverse', color: theme.decalColor },
-          { symbol: 'checkerboard', color: theme.decalColor },
-          { symbol: 'crosshatch', color: theme.decalColor },
-          { symbol: 'rect', color: theme.decalColor },
-          { symbol: 'circle', color: theme.decalColor },
-          { symbol: 'triangle', color: theme.decalColor },
-          { symbol: 'cross', color: theme.decalColor },
-          { symbol: 'pin', color: theme.decalColor },
-          { symbol: 'pentagon', color: theme.decalColor },
-          { symbol: 'arrow', color: theme.decalColor }
+          { symbol: 'diagonal', color: themeObj.decalColor },
+          { symbol: 'dots', color: themeObj.decalColor },
+          { symbol: 'diagonal-reverse', color: themeObj.decalColor },
+          { symbol: 'checkerboard', color: themeObj.decalColor },
+          { symbol: 'crosshatch', color: themeObj.decalColor },
+          { symbol: 'rect', color: themeObj.decalColor },
+          { symbol: 'circle', color: themeObj.decalColor },
+          { symbol: 'triangle', color: themeObj.decalColor },
+          { symbol: 'cross', color: themeObj.decalColor },
+          { symbol: 'pin', color: themeObj.decalColor },
+          { symbol: 'pentagon', color: themeObj.decalColor },
+          { symbol: 'arrow', color: themeObj.decalColor }
         ]
       }
     },
@@ -151,6 +151,7 @@ export const AdvancedPieExample = () => {
       <HChart
         ref={chartRef}
         option={option}
+        theme={theme}
         renderMode={renderMode}
         style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
       />

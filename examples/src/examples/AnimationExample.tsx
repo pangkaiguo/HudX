@@ -1,25 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Rect, Animation, Easing, ThemeManager } from 'HudX/core';
+import { Renderer, Circle, Rect, Animation, Easing, ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const AnimationExample = () => {
+export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const renderer = Renderer.init(containerRef.current, renderMode, 'light', 'en');
-    const theme = ThemeManager.getTheme('light');
+    const renderer = Renderer.init(containerRef.current, renderMode, theme, 'en');
+    const themeObj = ThemeManager.getTheme(theme);
 
     const circle = new Circle({
       shape: { cx: 100, cy: 100, r: 30 },
-      style: { fill: theme.seriesColors?.[0] }
+      style: { fill: themeObj.seriesColors?.[0] }
     });
 
     const rect = new Rect({
       shape: { x: 300, y: 100, width: 60, height: 60 },
-      style: { fill: theme.seriesColors?.[1] }
+      style: { fill: themeObj.seriesColors?.[1] }
     });
 
     renderer.add(circle);
@@ -72,7 +72,7 @@ export const AnimationExample = () => {
     renderer.flush();
 
     return () => renderer.dispose();
-  }, [renderMode]);
+  }, [renderMode, theme]);
 
   return (
     <div>

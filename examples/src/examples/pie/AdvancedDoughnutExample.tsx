@@ -2,7 +2,9 @@ import React, { useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
 
-export const AdvancedDoughnutExample = () => {
+import { Theme } from 'HudX/core';
+
+export const AdvancedDoughnutExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const portionRef = useRef<HChartRef>(null);
   const progressRef = useRef<HChartRef>(null);
   const darkRef = useRef<HChartRef>(null);
@@ -548,6 +550,7 @@ export const AdvancedDoughnutExample = () => {
           <HChart
             ref={portionRef}
             option={portionOption}
+            theme={theme}
             style={chartStyle}
           />
         </div>
@@ -555,6 +558,7 @@ export const AdvancedDoughnutExample = () => {
           <HChart
             ref={progressRef}
             option={progressOption}
+            theme={theme}
             style={chartStyle}
           />
         </div>
@@ -562,6 +566,7 @@ export const AdvancedDoughnutExample = () => {
           <HChart
             ref={darkRef}
             option={darkOption}
+            theme={theme}
             style={chartStyle}
           />
         </div>
@@ -569,6 +574,7 @@ export const AdvancedDoughnutExample = () => {
           <HChart
             ref={nestedRef}
             option={nestedOption}
+            theme={theme}
             style={chartStyle}
           />
         </div>
@@ -576,6 +582,7 @@ export const AdvancedDoughnutExample = () => {
           <HChart
             ref={rightLegendRef}
             option={rightLegendOption}
+            theme={theme}
             style={chartStyle}
           />
         </div>
@@ -583,6 +590,7 @@ export const AdvancedDoughnutExample = () => {
           <HChart
             ref={leftLegendRef}
             option={leftLegendOption}
+            theme={theme}
             style={chartStyle}
           />
         </div>
@@ -590,6 +598,7 @@ export const AdvancedDoughnutExample = () => {
           <HChart
             ref={bottomLegendRef}
             option={bottomLegendOption}
+            theme={theme}
             style={chartStyle}
           />
         </div>
@@ -597,6 +606,7 @@ export const AdvancedDoughnutExample = () => {
           <HChart
             ref={topLegendRef}
             option={topLegendOption}
+            theme={theme}
             style={chartStyle}
           />
         </div>

@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Rect, Line, Polyline, Polygon, getUnit32RandomValues } from 'HudX/core';
+import { Renderer, Circle, Rect, Line, Polyline, Polygon, getUnit32RandomValues, Theme } from 'HudX/core';
 
 type ShapeType = 'circle' | 'rect' | 'line' | 'polyline' | 'polygon';
 
-export const PerformanceExample = () => {
+export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(1000);
   const [renderTime, setRenderTime] = useState(0);
   const [mode, setMode] = useState<'canvas' | 'svg'>('canvas');
   const [shapeType, setShapeType] = useState<ShapeType>('circle');
+  const normalizedTheme = (theme || 'light').toLowerCase();
 
   useEffect(() => {
     if (!containerRef.current) return;
 
     const startTime = performance.now();
-    const renderer = Renderer.init(containerRef.current, mode, 'light', 'en');
+    const renderer = Renderer.init(containerRef.current, mode, theme, 'en');
 
     const width = 800;
     const height = 600;
@@ -77,7 +78,7 @@ export const PerformanceExample = () => {
     setRenderTime(Math.round(endTime - startTime));
 
     return () => renderer.dispose();
-  }, [count, mode, shapeType]);
+  }, [count, mode, shapeType, theme]);
 
   return (
     <div>
@@ -114,7 +115,13 @@ export const PerformanceExample = () => {
         </label>
       </div>
 
-      <div style={{ marginBottom: 20, padding: 16, backgroundColor: '#f5f5f5', borderRadius: 8 }}>
+      <div style={{
+        marginBottom: 20,
+        padding: 16,
+        backgroundColor: normalizedTheme === 'dark' ? '#333' : '#f5f5f5',
+        color: normalizedTheme === 'dark' ? '#eee' : 'inherit',
+        borderRadius: 8
+      }}>
         <strong>Render Time:</strong> {renderTime}ms | <strong>Elements:</strong> {count} | <strong>Mode:</strong> {mode.toUpperCase()} | <strong>Shape:</strong> {shapeType.charAt(0).toUpperCase() + shapeType.slice(1)}
       </div>
 

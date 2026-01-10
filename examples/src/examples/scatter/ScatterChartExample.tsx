@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
 import { HChart } from 'HudX/charts';
 import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-const ScatterChartExample = () => {
+const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);
-  const theme = ThemeManager.getTheme('light');
+  const themeObj = ThemeManager.getTheme(theme);
   const [showGrid, setShowGrid] = React.useState(true);
   const [gridTop, setGridTop] = React.useState(80);
   const [splitNumber, setSplitNumber] = React.useState(5);
@@ -67,7 +67,7 @@ const ScatterChartExample = () => {
           [12.0, 10.84], [7.0, 4.82], [5.0, 5.68]
         ],
         itemStyle: {
-          color: theme.seriesColors?.[0]
+          color: themeObj.seriesColors?.[0]
         }
       },
       {
@@ -80,7 +80,7 @@ const ScatterChartExample = () => {
           [12.0, 9.13], [7.0, 7.26], [5.0, 4.74]
         ],
         itemStyle: {
-          color: theme.seriesColors?.[1]
+          color: themeObj.seriesColors?.[1]
         }
       }
     ],
@@ -163,7 +163,7 @@ const ScatterChartExample = () => {
       <div style={{
         width: '100%',
         height: 500,
-        backgroundColor: '#fff',
+        backgroundColor: 'transparent',
         borderRadius: 8,
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         padding: 20,
@@ -172,6 +172,7 @@ const ScatterChartExample = () => {
         <HChart
           ref={chartRef}
           option={option}
+          theme={theme}
           renderMode={renderMode}
           style={{ width: '100%', height: '100%' }}
         />

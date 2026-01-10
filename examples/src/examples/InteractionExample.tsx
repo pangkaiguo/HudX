@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Text, ThemeManager } from 'HudX/core';
+import { Renderer, Circle, Text, ThemeManager, Theme } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const InteractionExample = () => {
+export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [clickCount, setClickCount] = useState(0);
   const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
@@ -10,23 +10,24 @@ export const InteractionExample = () => {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const renderer = Renderer.init(containerRef.current, renderMode, 'light', 'en');
-    const theme = ThemeManager.getTheme('light');
+    const renderer = Renderer.init(containerRef.current, renderMode, theme, 'en');
+    const themeObj = ThemeManager.getTheme(theme);
+    const normalizedTheme = (theme || 'light').toLowerCase();
 
     const circles = [];
     for (let i = 0; i < 5; i++) {
       const circle = new Circle({
         shape: { cx: 100 + i * 130, cy: 150, r: 40 },
-        style: { fill: theme.seriesColors?.[0], opacity: 0.7 },
+        style: { fill: themeObj.seriesColors?.[0], opacity: 0.7 },
         cursor: 'pointer'
       });
 
       circle.on('click', () => {
-        circle.attr({ style: { fill: theme.seriesColors?.[3], opacity: 1 } });
+        circle.attr({ style: { fill: themeObj.seriesColors?.[3], opacity: 1 } });
         setClickCount(prev => prev + 1);
         renderer.flush();
         setTimeout(() => {
-          circle.attr({ style: { fill: theme.seriesColors?.[0], opacity: 0.7 } });
+          circle.attr({ style: { fill: themeObj.seriesColors?.[0], opacity: 0.7 } });
           renderer.flush();
         }, 300);
       });
@@ -47,14 +48,14 @@ export const InteractionExample = () => {
 
     renderer.add(new Text({
       shape: { text: 'Click circles to interact', x: 400, y: 50 },
-      style: { textAlign: 'center', fill: '#333', fontSize: 16, fontWeight: 'bold' }
+      style: { textAlign: 'center', fill: normalizedTheme === 'dark' ? '#eee' : '#333', fontSize: 16, fontWeight: 'bold' }
     }));
 
     renderer.resize(800, 300);
     renderer.flush();
 
     return () => renderer.dispose();
-  }, [renderMode]);
+  }, [renderMode, theme]);
 
   return (
     <div>
