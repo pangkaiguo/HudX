@@ -4,9 +4,36 @@ import { Circle, Z_SERIES } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class ScatterChart extends Chart {
+  private _activeScatters: Map<number, Circle[]> = new Map();
+
+  protected _onLegendHover(name: string, hovered: boolean): void {
+    const seriesIndex = (this._option.series || []).findIndex((s: any, i: number) => {
+      const sName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
+      return sName === name;
+    });
+
+    if (seriesIndex === -1) return;
+
+    this._activeScatters.forEach((circles, idx) => {
+      if (hovered) {
+        if (idx === seriesIndex) {
+          // Highlight
+          circles.forEach(c => c.attr('style', { opacity: 1 }));
+        } else {
+          // Dim
+          circles.forEach(c => c.attr('style', { opacity: 0.1 }));
+        }
+      } else {
+        // Restore
+        circles.forEach(c => c.attr('style', { opacity: 0.8 })); // Default opacity for scatter is often 0.8
+      }
+    });
+  }
+
   protected _render(): void {
     try {
       super._render();
+      this._activeScatters.clear();
 
       const option = this._option;
       const series = option.series || [];
@@ -121,6 +148,11 @@ export default class ScatterChart extends Chart {
             z: Z_SERIES,
           });
           this._root.add(circle);
+
+          if (!this._activeScatters.has(seriesIndex)) {
+            this._activeScatters.set(seriesIndex, []);
+          }
+          this._activeScatters.get(seriesIndex)!.push(circle);
 
           if (this._tooltip) {
             circle.on('mouseover', (evt: any) => {

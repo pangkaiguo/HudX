@@ -6,6 +6,33 @@ import { EventHelper } from '../util/EventHelper';
 export default class BarChart extends Chart {
   private _activeBars: Map<string, Rect> = new Map();
 
+  protected _onLegendHover(name: string, hovered: boolean): void {
+    const seriesIndex = (this._option.series || []).findIndex((s, i) => {
+      const sName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
+      return sName === name;
+    });
+
+    if (seriesIndex === -1) return;
+
+    this._activeBars.forEach((bar, key) => {
+      const [sIdx] = key.split('-').map(Number);
+      
+      if (hovered) {
+        if (sIdx === seriesIndex) {
+          // Highlight target series
+          bar.attr('style', { opacity: 1 });
+          // Optional: Add scale effect or brightness
+        } else {
+          // Dim others
+          bar.attr('style', { opacity: 0.1 });
+        }
+      } else {
+        // Restore all
+        bar.attr('style', { opacity: 1 });
+      }
+    });
+  }
+
   protected _render(): void {
     try {
       super._render();

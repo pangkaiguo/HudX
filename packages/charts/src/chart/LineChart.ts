@@ -6,9 +6,39 @@ import {
 } from 'HudX/core';
 
 export default class LineChart extends Chart {
+  private _activeLines: Map<number, { line: Polyline, symbols: Circle[] }> = new Map();
+
+  protected _onLegendHover(name: string, hovered: boolean): void {
+    const seriesIndex = (this._option.series || []).findIndex((s, i) => {
+      const sName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
+      return sName === name;
+    });
+
+    if (seriesIndex === -1) return;
+
+    this._activeLines.forEach((item, idx) => {
+      if (hovered) {
+        if (idx === seriesIndex) {
+          // Highlight
+          item.line.attr('style', { opacity: 1, lineWidth: (this._option.series?.[idx].lineStyle?.width || 2) + 1 });
+          item.symbols.forEach(s => s.attr('style', { opacity: 1 }));
+        } else {
+          // Dim
+          item.line.attr('style', { opacity: 0.1 });
+          item.symbols.forEach(s => s.attr('style', { opacity: 0.1 }));
+        }
+      } else {
+        // Restore
+        item.line.attr('style', { opacity: 1, lineWidth: this._option.series?.[idx].lineStyle?.width || 2 });
+        item.symbols.forEach(s => s.attr('style', { opacity: 1 })); // Or original opacity? Symbols usually 1 or 0.8
+      }
+    });
+  }
+
   protected _render(): void {
     try {
       super._render();
+      this._activeLines.clear();
 
       const option = this._option;
       const series = option.series || [];
@@ -211,6 +241,11 @@ export default class LineChart extends Chart {
         });
 
         this._root.add(line);
+        if (!this._activeLines.has(seriesIndex)) {
+          this._activeLines.set(seriesIndex, { line, symbols: [] });
+        } else {
+          this._activeLines.get(seriesIndex)!.line = line;
+        }
 
         if (this._shouldAnimateFor(seriesName)) {
           const duration = this._getAnimationDuration();
@@ -270,6 +305,7 @@ export default class LineChart extends Chart {
             });
 
             this._root.add(circle);
+            this._activeLines.get(seriesIndex)?.symbols.push(circle);
 
             if (this._tooltip) {
               circle.on('mouseover', () => {
