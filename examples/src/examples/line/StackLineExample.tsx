@@ -4,20 +4,19 @@ import type { ChartOption, HChartRef } from 'HudX/charts';
 import { ThemeManager } from 'HudX/core';
 import type { RenderMode } from 'HudX/core';
 
-export const AdvancedLineExample = () => {
+export const StackLineExample = () => {
   const theme = ThemeManager.getTheme('light');
   const chartRef = useRef<HChartRef>(null);
-  const [showGrid, setShowGrid] = React.useState(false);
-  const [gridTop, setGridTop] = React.useState(80);
+  const [showGrid, setShowGrid] = React.useState(true);
+  const [gridTop, setGridTop] = React.useState(60);
   const [splitNumber, setSplitNumber] = React.useState(5);
   const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
 
   const option: ChartOption = {
     title: {
-      text: 'Advanced Line Chart with Animation',
+      text: 'Stack Line Chart with Animation',
       subtext: 'Feature Demonstration',
-      left: 'center',
-      top: 20
+      left: 'center'
     },
     tooltip: {
       show: true,
@@ -110,7 +109,7 @@ export const AdvancedLineExample = () => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Advanced Line Chart</h2>
+      <h2 style={{ marginBottom: 10 }}>Stack Line Chart</h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Smooth animations on load, Interactive legend (click to toggle), Hover tooltips with data details
       </p>
@@ -190,4 +189,4 @@ export const AdvancedLineExample = () => {
   );
 };
 
-export default AdvancedLineExample;
+export default StackLineExample;

@@ -17,7 +17,7 @@ const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
 const StackBar3DExample = lazy(() => import('./examples/bar/StackBar3DExample'));
 
 // Line charts
-const AdvancedLineChartExample = lazy(() => import('./examples/line/AdvancedLineExample'));
+const StackLineChartExample = lazy(() => import('./examples/line/StackLineExample'));
 const BasicLineExample = lazy(() => import('./examples/line/BasicLineExample'));
 
 // Pie charts
@@ -45,7 +45,7 @@ const chartExamples = [
     category: 'Line Charts',
     items: [
       { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
-      { id: 'advanced-line', name: 'Advanced Line', component: AdvancedLineChartExample },
+      { id: 'stack-line', name: 'Stack Line', component: StackLineChartExample },
     ]
   },
   {

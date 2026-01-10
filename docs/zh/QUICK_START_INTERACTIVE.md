@@ -355,7 +355,7 @@ circle.on('mouseover', () => {
 查看以下文件获取完整示例：
 
 - `examples/src/examples/FullFeatureDemo.tsx` - 完整功能演示
-- `examples/src/examples/AdvancedLineChart.tsx` - 高级折线图
+- `examples/src/examples/StackLineChart.tsx` - 堆叠折线图
 - `examples/src/examples/AdvancedBarChart.tsx` - 高级柱状图
 - `examples/src/examples/AdvancedPieChart.tsx` - 高级饼图
 - `examples/src/examples/InteractiveDashboard.tsx` - 交互式仪表板
