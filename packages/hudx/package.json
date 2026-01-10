@@ -1,0 +1,36 @@
+{
+  "name": "hudx",
+  "version": "1.0.0",
+  "description": "Unified HudX package including core and charts",
+  "type": "module",
+  "main": "./dist/hudx.cjs",
+  "module": "./dist/hudx.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/hudx.js",
+      "require": "./dist/hudx.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build && sed -i '' \"s|../../core/src/index.ts|HudX/core|g\" dist/packages/hudx/src/index.d.ts && sed -i '' \"s|../../charts/src/index.ts|HudX/charts|g\" dist/packages/hudx/src/index.d.ts && mv dist/packages/hudx/src/index.d.ts dist/index.d.ts && rm -rf dist/packages",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "HudX/charts": "workspace:*",
+    "HudX/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.10",
+    "vite-plugin-dts": "^3.6.4",
+    "typescript": "^5.3.3"
+  }
+}

@@ -34,6 +34,9 @@ const ScatterChartExample = lazy(() => import('./examples/scatter/ScatterChartEx
 // Axis charts
 const AxisLabelExample = lazy(() => import('./examples/axis/AxisLabelExample'));
 
+// Bundle example
+const BundleExample = lazy(() => import('./examples/BundleExample').then(m => ({ default: m.BundleExample })));
+
 const chartExamples = [
   {
     category: 'Axis',
@@ -75,6 +78,12 @@ const chartExamples = [
     items: [
       { id: 'scatter-chart', name: 'Scatter Chart', component: ScatterChartExample },
     ]
+  },
+  {
+    category: 'Bundle',
+    items: [
+      { id: 'bundle-test', name: 'Unified Bundle', component: BundleExample },
+    ]
   }
 ];
 
@@ -86,8 +95,8 @@ const featureExamples = [
   { id: 'performance', name: 'Performance', component: PerformanceExample }
 ];
 
-const allExamples = [
-  ...chartExamples.flatMap(c => c.items),
+const allExamples: any[] = [
+  ...chartExamples.flatMap((c: any) => c.items),
   ...featureExamples
 ];
 
@@ -136,7 +145,7 @@ const NavButton = ({ example, activeExample, setActiveExample }: { example: any,
 );
 
 const App = memo(function App() {
-  const [activeExample, setActiveExample] = useState('basic-line');
+  const [activeExample, setActiveExample] = useState('axis-label');
   const [theme, setTheme] = useState<'Light' | 'Dark'>('Light');
 
   const ActiveComponent = useMemo(

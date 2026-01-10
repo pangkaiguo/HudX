@@ -33,6 +33,9 @@ export default class ScatterChart extends Chart {
   protected _render(): void {
     try {
       super._render();
+      if (!this._activeScatters) {
+        this._activeScatters = new Map();
+      }
       this._activeScatters.clear();
 
       const option = this._option;

@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "../..",
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "HudX/core": ["../core/src/index.ts"],
+      "HudX/charts": ["../charts/src/index.ts"]
+    }
+  },
+  "include": ["src", "../core/src", "../charts/src"],
+  "exclude": ["node_modules", "dist"]
+}

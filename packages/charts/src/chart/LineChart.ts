@@ -38,6 +38,9 @@ export default class LineChart extends Chart {
   protected _render(): void {
     try {
       super._render();
+      if (!this._activeLines) {
+        this._activeLines = new Map();
+      }
       this._activeLines.clear();
 
       const option = this._option;

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "hudx": "workspace:*",
     "HudX/core": "workspace:*",
     "HudX/charts": "workspace:*",
     "react": "^18.2.0",
