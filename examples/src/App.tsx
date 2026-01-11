@@ -40,12 +40,6 @@ const BundleExample = lazy(() => import('./examples/BundleExample').then(m => ({
 
 const chartExamples = [
   {
-    category: 'Axis',
-    items: [
-      { id: 'axis-label', name: 'Axis Label', component: AxisLabelExample },
-    ]
-  },
-  {
     category: 'Line Charts',
     items: [
       { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
@@ -79,6 +73,12 @@ const chartExamples = [
     category: 'Scatter Charts',
     items: [
       { id: 'scatter-chart', name: 'Scatter Chart', component: ScatterChartExample },
+    ]
+  },
+  {
+    category: 'Axis',
+    items: [
+      { id: 'axis-label', name: 'Axis Label', component: AxisLabelExample },
     ]
   },
   {
@@ -147,7 +147,7 @@ const NavButton = ({ example, activeExample, setActiveExample }: { example: any,
 );
 
 const App = memo(function App() {
-  const [activeExample, setActiveExample] = useState('axis-label');
+  const [activeExample, setActiveExample] = useState('basic-line');
   const [theme, setTheme] = useState<'Light' | 'Dark'>('Light');
 
   const ActiveComponent = useMemo(
@@ -169,8 +169,6 @@ const App = memo(function App() {
         }}
       >
         <h1 style={{ fontSize: 20, marginBottom: 10, color: theme === 'Dark' ? '#fff' : '#333' }}>HudX Examples</h1>
-        <p style={{ fontSize: 12, color: theme === 'Dark' ? '#888' : '#999', marginBottom: 20 }}>Interactive Charts & Animations</p>
-
         <div style={{ marginBottom: 20, padding: '10px 0', borderBottom: `1px solid ${theme === 'Dark' ? '#333' : '#e0e0e0'}` }}>
           <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: 14, color: theme === 'Dark' ? '#eee' : '#333' }}>
             <input
