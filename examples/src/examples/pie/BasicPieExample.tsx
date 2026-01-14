@@ -65,7 +65,8 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
           scaleSize: 1.03,
           itemStyle: {
             opacity: 1
-          }
+          },
+          focus: 'self'
         },
         label: {
           show: true,
@@ -121,16 +122,16 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
           />
           Decal Patterns
         </label>
-        
+
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Rose Type:</span>
           <select
             value={String(roseType)}
             onChange={(e) => {
-               const val = e.target.value;
-               if (val === 'false') setRoseType(false);
-               else if (val === 'true') setRoseType(true); // default 'radius' usually but let's see logic
-               else setRoseType(val as any);
+              const val = e.target.value;
+              if (val === 'false') setRoseType(false);
+              else if (val === 'true') setRoseType(true); // default 'radius' usually but let's see logic
+              else setRoseType(val as any);
             }}
             style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
           >
