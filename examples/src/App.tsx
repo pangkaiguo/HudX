@@ -476,7 +476,7 @@ const ModernApp = ({ theme, setTheme, setMode }: { theme: Theme, setTheme: (t: T
 };
 
 export default function App() {
-  const [mode, setMode] = useState<'classic' | 'modern'>('modern');
+  const [mode, setMode] = useState<'classic' | 'modern'>('classic');
   const [theme, setTheme] = useState<Theme>('light');
 
   // Sync theme string case for compatibility

@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { HChart } from 'hudx';
-import type { ChartOption, HChartRef } from 'hudx';
-import { ThemeManager, Theme } from 'hudx';
-import type { RenderMode } from 'hudx';
+import { HChart } from 'HudX/charts';
+import type { ChartOption, HChartRef } from 'HudX/charts';
+import { ThemeManager, Theme } from 'HudX/core';
+import type { RenderMode } from 'HudX/core';
 
 export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
@@ -71,7 +71,8 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
         label: {
           show: true,
           position: 'outside',
-          formatter: '{b}'
+          formatter: '{b}',
+          showOnHover: true,
         }
       }
     ],

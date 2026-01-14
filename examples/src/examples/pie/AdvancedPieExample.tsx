@@ -44,9 +44,9 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
     },
     legend: {
       show: true,
-      orient: 'vertical',
-      left: 'left',
-      top: 'middle',
+      orient: 'horizontal',
+      right: 'left',
+      bottom: 'bottom',
       icon: 'rect',
       // Demonstrating conflict/interaction between width, height and itemWidth
       width: 400,      // Limits the total width. With itemWidth 140, only 1 column fits (2nd column would overflow 200px)
@@ -85,7 +85,8 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
         label: {
           show: true,
           position: 'outside',
-          formatter: '{b}'
+          formatter: '{b}',
+          showOnHover: true,
         }
       }
     ],

@@ -6,13 +6,13 @@ import {
   Renderer,
   HChart,
   type ChartOption
-} from 'hudx';
+} from 'HudX';
 
-// This example demonstrates importing everything from the unified 'hudx' package
+// This example demonstrates importing everything from the unified 'HudX' package
 export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
   const coreRef = useRef<HTMLDivElement>(null);
 
-  // Example 1: Using HChart component from hudx package
+  // Example 1: Using HChart component from HudX package
   const barOption: ChartOption = {
     padding: [40, 40, 40, 40],
     grid: {
@@ -103,7 +103,7 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
       <p>This example demonstrates importing both Charts and Core components from the single <code>hudx</code> package.</p>
 
       <div style={{ marginBottom: 40 }}>
-        <h2>1. HChart Component imported from 'hudx'</h2>
+        <h2>1. HChart Component imported from 'HudX'</h2>
         <div style={{ border: '1px solid #ccc', display: 'inline-block' }}>
           <HChart
             option={barOption}
@@ -115,7 +115,7 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
       </div>
 
       <div>
-        <h2>2. Core Shapes (Rect, Circle) imported from 'hudx'</h2>
+        <h2>2. Core Shapes (Rect, Circle) imported from 'HudX'</h2>
         <div ref={coreRef} style={{ border: '1px solid #ccc', display: 'inline-block', height: 200, width: 600 }} />
       </div>
     </div>

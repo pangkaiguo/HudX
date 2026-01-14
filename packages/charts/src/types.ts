@@ -456,6 +456,7 @@ export interface ItemStyleOption {
 
 export interface LabelOption {
   show?: boolean;
+  showOnHover?: boolean;
   position?: 'top' | 'left' | 'right' | 'bottom' | 'inside' | 'insideLeft' | 'insideRight' | 'insideTop' | 'insideBottom' | 'insideTopLeft' | 'insideBottomLeft' | 'insideTopRight' | 'insideBottomRight' | 'outside' | 'center';
   color?: string;
   fontSize?: number;

@@ -21,7 +21,7 @@ export const Codebox: React.FC<CodeboxProps> = ({ initialCode, onBack, title, th
   const chartContainerRef = React.useRef<HTMLDivElement>(null);
 
   const getTsCode = (jsCode: string) => {
-    return `import type { ChartOption } from 'hudx';
+    return `import type { ChartOption } from 'HudX';
 
 const ${jsCode.replace('option =', 'option: ChartOption =')}`;
   };

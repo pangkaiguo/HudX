@@ -3,412 +3,516 @@ import type { SeriesOption, ChartData, EmphasisOption } from '../types';
 import { Sector, Text, Polyline, createDecalPattern, Z_SERIES, Z_LABEL } from 'HudX/core';
 import { EventHelper } from '../util/EventHelper';
 
+// TODO: Define a proper interface for the extended Sector to avoid 'any' casting throughout the file.
+// Currently relying on monkey-patching properties like __initialStyle, __label, etc.
+
 export default class PieChart extends Chart {
   private _activeSectors: Map<string, Sector> = new Map();
   private _centerLabel: Text | null = null;
   private _restoreTimeout: any = null;
+  private _prevRoseType: boolean | string = false;
 
   protected _render(): void {
     try {
-      if (this._legend) {
-        this._root.remove(this._legend);
-      }
+      const oldSectors = this._resetChartState();
 
-      if (this._centerLabel) {
-        this._root.remove(this._centerLabel);
-        this._centerLabel = null;
-      }
+      const { seriesItem, data } = this._getValidSeriesAndData();
+      if (!seriesItem || !data) return;
 
-      if (!this._activeSectors) {
-        this._activeSectors = new Map();
-      }
+      const total = this._calculateTotal(data);
 
-      const oldSectors = this._activeSectors;
-      this._activeSectors = new Map();
+      this._renderLegendIfNeeded(data, seriesItem, total);
 
-      this._root.removeAll();
-      this._mountTitle();
+      if (total === 0) return;
 
-      const option = this._option;
-      const series = option.series || [];
-
-      if (series.length === 0) {
-        return;
-      }
-
-      const seriesItem = series[0];
-      if (!seriesItem.type || !['pie', 'doughnut', 'half-doughnut'].includes(seriesItem.type)) {
-        return;
-      }
-
-      const data = seriesItem.data || [];
-      if (data.length === 0) {
-        return;
-      }
-
-      const center = this._getCenter(seriesItem);
-      const [r0, r] = this._getRadius(seriesItem);
-      const cx = center[0];
-      const cy = center[1];
-
-      const total = this._calculateTotal(data as any[]);
-
-      if (total === 0) {
-        if (option.legend?.show !== false) {
-          const items = (data as any[]).map((it: any, i: number) => ({
-            name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
-            color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
-            textColor: this.getThemeConfig().legendTextColor
-          }));
-          this._mountLegend(items);
-        }
-        return;
-      }
-
-      const computeAngles = (seriesItem: any) => {
-        let startAngle: number;
-        const degToRad = (deg: number) => deg * Math.PI / 180;
-        if (seriesItem.startAngle !== undefined) {
-          startAngle = degToRad(seriesItem.startAngle);
-        } else if (seriesItem.type === 'half-doughnut') {
-          startAngle = -Math.PI;
-        } else {
-          startAngle = -Math.PI / 2;
-        }
-
-        let endAngle: number;
-        if (seriesItem.endAngle !== undefined) {
-          endAngle = degToRad(seriesItem.endAngle);
-        } else if (seriesItem.type === 'half-doughnut') {
-          endAngle = 0;
-        } else {
-          endAngle = startAngle + Math.PI * 2;
-        }
-
-        return { startAngle, endAngle };
-      }
-
-      const { startAngle, endAngle } = computeAngles(seriesItem);
-
+      const { cx, cy, r0, r } = this._getGeometry(seriesItem);
+      const { startAngle, endAngle } = this._computeGlobalAngles(seriesItem);
       const totalAngle = endAngle - startAngle;
-      let currentAngle = startAngle;
+      const maxValue = this._getMaxValueForRoseType(seriesItem, data);
 
-      if (option.legend?.show !== false) {
-        const items = (data as any[]).map((it: any, i: number) => {
-          let value = 0;
-          if (typeof it === 'number') value = it;
-          else if (Array.isArray(it)) value = it[0] || 0;
-          else if (typeof it === 'object' && it !== null) value = it.value;
+      // Check if we switched to Rose Type
+      const currentRoseType = seriesItem.roseType;
+      // const isSwitchingToRose = !!currentRoseType && !this._prevRoseType;
+      this._prevRoseType = currentRoseType || false;
 
-          const percent = total > 0 ? (value / total) : 0;
+      // Always try to reuse old sectors for smooth transition
+      const sectorsToUse = oldSectors;
 
-          return {
-            name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
-            color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
-            icon: option.legend?.icon || 'circle',
-            textColor: this.getThemeConfig().legendTextColor,
-            value,
-            percent,
-            data: it
-          };
-        });
-        this._mountLegend(items);
-      }
-
-      const labelLayoutList: any[] = [];
-
-      // Pre-calculate max value for roseType
-      let maxValue = 0;
-      if (seriesItem.roseType) {
-        maxValue = data.reduce((max: number, item: any) => {
-          let v = 0;
-          if (typeof item === 'number') v = item;
-          else if (Array.isArray(item)) v = item[0] || 0;
-          else if (typeof item === 'object' && item !== null) v = item.value;
-          return Math.max(max, v);
-        }, 0);
-      }
-
-      data.forEach((item: ChartData, index: number) => {
-        let value = 0;
-        if (typeof item === 'number') value = item;
-        else if (Array.isArray(item)) value = item[0] || 0;
-        else if (typeof item === 'object' && item !== null) value = item.value;
-
-        if (typeof value !== 'number') return;
-
-        const percent = value / total;
-
-        let angle: number;
-        let itemR = r;
-
-        if (seriesItem.roseType) {
-          // Rose chart: equal angles, radius depends on value
-          angle = totalAngle / data.length;
-
-          if (maxValue > 0) {
-            if (seriesItem.roseType === 'area') {
-              // Radius proportional to sqrt(value) -> Area proportional to value
-              itemR = r0 + (r - r0) * Math.sqrt(value / maxValue);
-            } else {
-              // Radius proportional to value
-              itemR = r0 + (r - r0) * (value / maxValue);
-            }
-          }
-        } else {
-          angle = percent * totalAngle;
-        }
-
-        let itemName = `item-${index + 1}`;
-        if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
-          itemName = item.name;
-        }
-        if (this._legend && !this._legendSelected.has(itemName)) {
-          return;
-        }
-
-        const itemStyle = seriesItem.itemStyle || {};
-        let color: string;
-        if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.itemStyle?.color) {
-          color = item.itemStyle.color;
-        } else {
-          color = itemStyle.color || this._getSeriesColor(index);
-        }
-
-        let fillStyle: string | CanvasPattern = color;
-        const aria = option.aria;
-        if (aria?.enabled && aria?.decal?.show) {
-          const decals = aria.decal.decals || [];
-          const decal = decals[index % decals.length] || { symbol: 'circle' };
-
-          const pattern = createDecalPattern(decal, color);
-          if (pattern) {
-            fillStyle = pattern;
-          }
-        }
-
-        const targetStart = currentAngle;
-        const targetEnd = currentAngle + angle;
-
-        let initialStart = targetStart;
-        let initialEnd = targetStart;
-
-        const oldSector = oldSectors.get(itemName);
-        if (oldSector) {
-          initialStart = oldSector.shape.startAngle;
-          initialEnd = oldSector.shape.endAngle;
-        } else if (oldSectors.size > 0) {
-        }
-
-        const sector = new Sector({
-          name: itemName,
-          data: item,
-          dataIndex: index,
-          shape: {
-            cx,
-            cy,
-            r: itemR,
-            r0,
-            startAngle: initialStart,
-            endAngle: initialEnd,
-            anticlockwise: false,
-          },
-          style: {
-            fill: fillStyle,
-            stroke: seriesItem.itemStyle?.borderColor || '#fff',
-            lineWidth: seriesItem.itemStyle?.borderWidth ?? 0,
-          },
-          transform: {
-            x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy
-          },
-          z: Z_SERIES,
-          cursor: (this._tooltip || seriesItem.emphasis) ? 'pointer' : 'default',
-        });
-        (sector as any).__baseR = itemR;
-        // Fix: Save initial style immediately to prevent capturing modified style (e.g. opacity) later
-        (sector as any).__initialStyle = { ...sector.style };
-
-        this._root.add(sector);
-        this._activeSectors.set(itemName, sector);
-
-        if (this._tooltip || seriesItem.emphasis) {
-          const emphasis = seriesItem.emphasis;
-
-          EventHelper.bindHoverEvents(
-            sector,
-            (evt: any) => {
-              if (this._restoreTimeout) {
-                clearTimeout(this._restoreTimeout);
-                this._restoreTimeout = null;
-              }
-
-              this._applyEmphasisAnimation(sector, emphasis, true, r);
-
-              if (this._tooltip) {
-                let itemName = '';
-                if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
-                  itemName = item.name;
-                }
-                const itemValue = value;
-
-                const params = {
-                  componentType: 'series',
-                  seriesType: 'pie',
-                  seriesIndex: 0,
-                  seriesName: seriesItem.name,
-                  name: itemName,
-                  dataIndex: index,
-                  data: item,
-                  value: itemValue,
-                  percent: percent * 100,
-                  color: color,
-                  marker: this._getTooltipMarker(color)
-                };
-
-                const content = this._generateTooltipContent(params);
-
-                const mx = evt?.offsetX ?? cx;
-                const my = evt?.offsetY ?? cy;
-                this._tooltip.show(mx, my, content, params);
-              }
-
-              const seriesType = seriesItem.type || 'pie';
-              if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
-                this._showDynamicCenterLabel(seriesItem, item, value, percent, cx, cy, emphasis);
-              }
-            },
-            () => {
-              // Delay restore to prevent flickering when moving between sectors
-              this._restoreTimeout = setTimeout(() => {
-                this._applyEmphasisAnimation(sector, emphasis, false, r);
-
-                if (this._tooltip) {
-                  this._tooltip.hide();
-                }
-
-                if (this._centerLabel) {
-                  this._root.remove(this._centerLabel);
-                  this._centerLabel = null;
-                }
-
-                this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
-                this._restoreTimeout = null;
-              }, 50);
-            }
-          );
-
-          sector.on('mousemove', (evt: any) => {
-
-            const mx = evt?.offsetX ?? cx;
-            const my = evt?.offsetY ?? cy;
-            const currentEnd = sector.shape.endAngle;
-            const partPercent = (currentEnd - sector.shape.startAngle) / (Math.PI * 2) * 100;
-            let itemName = '';
-            if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
-              itemName = item.name;
-            }
-            const itemValue = value;
-
-            const params = {
-              componentType: 'series',
-              seriesType: 'pie',
-              seriesIndex: 0,
-              seriesName: seriesItem.name,
-              name: itemName,
-              dataIndex: index,
-              data: item,
-              value: itemValue,
-              percent: partPercent,
-              color: color,
-              marker: this._getTooltipMarker(color)
-            };
-            const content = this._generateTooltipContent(params);
-
-            if (this._tooltip) {
-              if (!this._tooltip.isVisible()) {
-                this._applyEmphasisAnimation(sector, emphasis, true, r);
-              }
-              this._tooltip.show(mx, my, content, params);
-            }
-          });
-        }
-
-        if (this._shouldAnimateFor(itemName) || oldSector) {
-          const isUpdate = oldSectors.size > 0;
-          const delay = isUpdate ? 0 : index * 200;
-          const duration = this._getAnimationDuration(isUpdate);
-          const easing = this._getAnimationEasing(isUpdate);
-
-          this._animator.animate(
-            sector.attr('shape'),
-            'startAngle',
-            targetStart,
-            {
-              duration,
-              delay,
-              easing,
-              onUpdate: () => sector.markRedraw()
-            }
-          ).start();
-
-          this._animator.animate(
-            sector.attr('shape'),
-            'endAngle',
-            targetEnd,
-            {
-              duration,
-              delay,
-              easing,
-              onUpdate: () => sector.markRedraw()
-            }
-          ).start();
-        } else {
-          sector.attr('shape', {
-            startAngle: targetStart,
-            endAngle: targetEnd
-          });
-        }
-
-        if (seriesItem.label?.show !== false) {
-          const labelAngle = targetStart + angle / 2;
-          const isOutside = seriesItem.label?.position === 'outside' || seriesItem.label?.position === undefined;
-
-          let labelText: string;
-          const formatter = seriesItem.label?.formatter;
-          if (formatter) {
-            labelText = this._formatLabel(formatter, {
-              name: (item as any).name || '',
-              value,
-              percent: (percent * 100).toFixed(0),
-              data: item
-            });
-          } else {
-            labelText = (item as any).name || '';
-          }
-
-          labelLayoutList.push({
-            text: labelText,
-            angle: labelAngle,
-            sector,
-            isOutside,
-            item,
-            color: seriesItem.label?.color || (isOutside ? '#333' : '#fff'),
-            itemColor: color,
-            seriesItem
-          });
-        }
-
-        currentAngle += angle;
+      const labelLayoutList = this._createSectorsAndPrepareLabels({
+        data,
+        seriesItem,
+        total,
+        totalAngle,
+        startAngle,
+        cx,
+        cy,
+        r,
+        r0,
+        maxValue,
+        oldSectors: sectorsToUse
       });
 
       this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
-
       this._layoutLabels(labelLayoutList, cx, cy, r, r0);
 
       this._renderer.flush();
     } catch (e) {
       console.error('[PieChart] Render error:', e);
     }
+  }
+
+  // --- Render Helpers ---
+
+  private _resetChartState(): Map<string, Sector> {
+    if (this._legend) {
+      this._root.remove(this._legend);
+    }
+    if (this._centerLabel) {
+      this._root.remove(this._centerLabel);
+      this._centerLabel = null;
+    }
+
+    const oldSectors = this._activeSectors || new Map();
+    this._activeSectors = new Map();
+    this._root.removeAll();
+    this._mountTitle();
+
+    return oldSectors;
+  }
+
+  private _getValidSeriesAndData() {
+    const option = this._option;
+    const series = option.series || [];
+    if (series.length === 0) return { seriesItem: null, data: null };
+
+    const seriesItem = series[0];
+    if (!seriesItem.type || !['pie', 'doughnut', 'half-doughnut'].includes(seriesItem.type)) {
+      return { seriesItem: null, data: null };
+    }
+
+    const data = seriesItem.data || [];
+    if (data.length === 0) return { seriesItem: null, data: null };
+
+    return { seriesItem, data: data as any[] };
+  }
+
+  private _getGeometry(seriesItem: SeriesOption) {
+    const center = this._getCenter(seriesItem);
+    const [r0, r] = this._getRadius(seriesItem);
+    return { cx: center[0], cy: center[1], r0, r };
+  }
+
+  private _renderLegendIfNeeded(data: any[], seriesItem: any, total: number): void {
+    if (this._option.legend?.show === false) return;
+
+    // TODO: Extract Legend item creation logic to a separate mapper
+    const items = data.map((it: any, i: number) => {
+      let value = 0;
+      if (typeof it === 'number') value = it;
+      else if (Array.isArray(it)) value = it[0] || 0;
+      else if (typeof it === 'object' && it !== null) value = it.value;
+
+      const percent = total > 0 ? (value / total) : 0;
+
+      return {
+        name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
+        color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
+        icon: this._option.legend?.icon || 'circle',
+        textColor: this.getThemeConfig().legendTextColor,
+        value,
+        percent,
+        data: it
+      };
+    });
+
+    this._mountLegend(items);
+  }
+
+  private _getMaxValueForRoseType(seriesItem: any, data: any[]): number {
+    if (!seriesItem.roseType) return 0;
+    return data.reduce((max: number, item: any) => {
+      let v = 0;
+      if (typeof item === 'number') v = item;
+      else if (Array.isArray(item)) v = item[0] || 0;
+      else if (typeof item === 'object' && item !== null) v = item.value;
+      return Math.max(max, v);
+    }, 0);
+  }
+
+  private _computeGlobalAngles(seriesItem: any) {
+    const degToRad = (deg: number) => deg * Math.PI / 180;
+    let startAngle: number;
+
+    if (seriesItem.startAngle !== undefined) {
+      startAngle = degToRad(seriesItem.startAngle);
+    } else if (seriesItem.type === 'half-doughnut') {
+      startAngle = -Math.PI;
+    } else {
+      startAngle = -Math.PI / 2;
+    }
+
+    let endAngle: number;
+    if (seriesItem.endAngle !== undefined) {
+      endAngle = degToRad(seriesItem.endAngle);
+    } else if (seriesItem.type === 'half-doughnut') {
+      endAngle = 0;
+    } else {
+      endAngle = startAngle + Math.PI * 2;
+    }
+
+    return { startAngle, endAngle };
+  }
+
+  private _createSectorsAndPrepareLabels(params: {
+    data: any[],
+    seriesItem: any,
+    total: number,
+    totalAngle: number,
+    startAngle: number,
+    cx: number,
+    cy: number,
+    r: number,
+    r0: number,
+    maxValue: number,
+    oldSectors: Map<string, Sector>
+  }): any[] {
+    const { data, seriesItem, total, totalAngle, startAngle, cx, cy, r, r0, maxValue, oldSectors } = params;
+    const labelLayoutList: any[] = [];
+    let currentAngle = startAngle;
+
+    data.forEach((item: ChartData, index: number) => {
+      const value = this._getDataValue(item);
+      if (typeof value !== 'number') return;
+
+      const percent = total > 0 ? value / total : 0;
+      const { angle, itemR } = this._calculateSectorGeometry(seriesItem, value, percent, totalAngle, data.length, r, r0, maxValue);
+
+      let itemName = `item-${index + 1}`;
+      if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+        itemName = item.name;
+      }
+
+      // Skip if filtered by legend
+      if (this._legend && !this._legendSelected.has(itemName)) {
+        return;
+      }
+
+      const targetStart = currentAngle;
+      const targetEnd = currentAngle + angle;
+
+      // Animation Logic
+      let initialStart = targetStart;
+      let initialEnd = targetStart;
+      let initialR = itemR;
+      let initialR0 = r0;
+
+      const oldSector = oldSectors.get(itemName);
+      if (oldSector) {
+        initialStart = oldSector.shape.startAngle;
+        initialEnd = oldSector.shape.endAngle;
+        // Also animate radius if roseType changes
+        initialR = oldSector.shape.r;
+        initialR0 = oldSector.shape.r0;
+      }
+
+      const sector = this._createSector({
+        item, index, itemName, seriesItem, cx, cy, itemR, r0,
+        currentAngle: initialStart,
+        angle: initialEnd - initialStart
+      });
+
+      // Override radius for initial state if animating
+      if (oldSector) {
+        sector.shape.r = initialR;
+        sector.shape.r0 = initialR0;
+      } else {
+        // Entry animation (grow from 0 angle)
+        // initialStart = targetStart;
+        // initialEnd = targetStart;
+        // Already set above.
+        // For Rose Chart, we also want to animate radius from r0 (or 0) to targetR?
+        // ECharts roseType animation: sectors grow out.
+        // Current logic: animate startAngle/endAngle.
+        // If roseType, radius is variable.
+        if (seriesItem.roseType) {
+          sector.shape.r = r0; // Start from inner radius
+        }
+      }
+
+      this._root.add(sector);
+      this._activeSectors.set(itemName, sector);
+
+      // Animate
+      const shouldAnimate = this._shouldAnimateFor(itemName);
+      if (shouldAnimate) {
+        const delay = oldSector ? 0 : index * 100; // Staggered entry
+        const duration = seriesItem.animationDuration || 1000;
+        const easing = seriesItem.animationEasing || 'cubicOut';
+
+        // Check if angles need animation
+        if (Math.abs(initialStart - targetStart) > 0.001 || Math.abs(initialEnd - targetEnd) > 0.001) {
+          this._animator.animate(sector.shape, 'startAngle', targetStart, { duration, delay, easing, onUpdate: () => sector.markRedraw() }).start();
+          this._animator.animate(sector.shape, 'endAngle', targetEnd, { duration, delay, easing, onUpdate: () => sector.markRedraw() }).start();
+        } else {
+          sector.shape.startAngle = targetStart;
+          sector.shape.endAngle = targetEnd;
+        }
+
+        // Check if radius needs animation (Rose Chart or Resize)
+        if (seriesItem.roseType || Math.abs(initialR - itemR) > 0.1) {
+          this._animator.animate(sector.shape, 'r', itemR, { duration, delay, easing, onUpdate: () => sector.markRedraw() }).start();
+        }
+
+        // Check if inner radius needs animation
+        if (Math.abs(sector.shape.r0 - r0) > 0.1) {
+          this._animator.animate(sector.shape, 'r0', r0, { duration, delay, easing, onUpdate: () => sector.markRedraw() }).start();
+        }
+      } else {
+        sector.shape.startAngle = targetStart;
+        sector.shape.endAngle = targetEnd;
+        sector.shape.r = itemR;
+        sector.shape.r0 = r0;
+      }
+
+      // Bind Events
+      const handlers = this._bindSectorEvents(sector, seriesItem, item, index, value, percent, cx, cy, r, r0, total);
+
+      // Prepare Label
+      const labelConfig = this._prepareLabelConfig({
+        seriesItem, item, value, percent, currentAngle: targetStart, angle: targetEnd - targetStart, sector, handlers, color: sector.style.fill as string
+      });
+
+      if (labelConfig) {
+        labelLayoutList.push(labelConfig);
+      }
+
+      currentAngle += angle;
+    });
+
+    return labelLayoutList;
+  }
+
+  private _calculateSectorGeometry(seriesItem: any, value: number, percent: number, totalAngle: number, dataLength: number, r: number, r0: number, maxValue: number) {
+    let angle: number;
+    let itemR = r;
+
+    if (seriesItem.roseType) {
+      angle = totalAngle / dataLength;
+      if (maxValue > 0) {
+        if (seriesItem.roseType === 'area') {
+          itemR = r0 + (r - r0) * Math.sqrt(value / maxValue);
+        } else {
+          itemR = r0 + (r - r0) * (value / maxValue);
+        }
+      }
+    } else {
+      angle = percent * totalAngle;
+    }
+    return { angle, itemR };
+  }
+
+  private _createSector(params: {
+    item: any, index: number, itemName: string, seriesItem: any,
+    cx: number, cy: number, itemR: number, r0: number, currentAngle: number, angle: number
+  }) {
+    const { item, index, itemName, seriesItem, cx, cy, itemR, r0, currentAngle, angle } = params;
+
+    const itemStyle = seriesItem.itemStyle || {};
+    let color: string;
+    if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.itemStyle?.color) {
+      color = item.itemStyle.color;
+    } else {
+      color = itemStyle.color || this._getSeriesColor(index);
+    }
+
+    let fillStyle: string | CanvasPattern = color;
+    const aria = this._option.aria;
+    if (aria?.enabled && aria?.decal?.show) {
+      const decals = aria.decal.decals || [];
+      const decal = decals[index % decals.length] || { symbol: 'circle' };
+      const pattern = createDecalPattern(decal, color);
+      if (pattern) {
+        fillStyle = pattern;
+      }
+    }
+
+    const sector = new Sector({
+      name: itemName,
+      data: item,
+      dataIndex: index,
+      shape: {
+        cx, cy, r: itemR, r0,
+        startAngle: currentAngle,
+        endAngle: currentAngle + angle,
+        anticlockwise: false,
+      },
+      style: {
+        fill: fillStyle,
+        stroke: seriesItem.itemStyle?.borderColor || '#fff',
+        lineWidth: seriesItem.itemStyle?.borderWidth ?? 0,
+      },
+      transform: {
+        x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy
+      },
+      z: Z_SERIES,
+      cursor: (this._tooltip || seriesItem.emphasis) ? 'pointer' : 'default',
+    });
+
+    // TODO: Replace these monkey-patched properties with a proper storage or extended class
+    (sector as any).__baseR = itemR;
+    (sector as any).__initialStyle = { ...sector.style };
+    (sector as any).__seriesItem = seriesItem;
+
+    return sector;
+  }
+
+  private _bindSectorEvents(sector: Sector, seriesItem: any, item: any, index: number, value: number, percent: number, cx: number, cy: number, r: number, r0: number, total: number) {
+    if (!this._tooltip && !seriesItem.emphasis) return undefined;
+
+    const emphasis = seriesItem.emphasis;
+
+    const onMouseOver = (evt: any) => {
+      if (this._restoreTimeout) {
+        clearTimeout(this._restoreTimeout);
+        this._restoreTimeout = null;
+      }
+
+      this._applyEmphasisAnimation(sector, emphasis, true, r);
+
+      if (this._tooltip) {
+        const params = this._createTooltipParams(seriesItem, item, index, value, percent, sector.style.fill as string);
+        const content = this._generateTooltipContent(params);
+        const mx = evt?.offsetX ?? cx;
+        const my = evt?.offsetY ?? cy;
+        this._tooltip.show(mx, my, content, params);
+      }
+
+      const seriesType = seriesItem.type || 'pie';
+      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+        this._showDynamicCenterLabel(seriesItem, item, value, percent, cx, cy, emphasis);
+      }
+    };
+
+    const onMouseOut = () => {
+      // Delay restore to prevent flickering when moving between sectors
+      this._restoreTimeout = setTimeout(() => {
+        this._applyEmphasisAnimation(sector, emphasis, false, r);
+
+        if (this._tooltip) {
+          this._tooltip.hide();
+        }
+
+        if (this._centerLabel) {
+          this._root.remove(this._centerLabel);
+          this._centerLabel = null;
+        }
+
+        this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
+        this._restoreTimeout = null;
+      }, 50);
+    };
+
+    EventHelper.bindHoverEvents(sector, onMouseOver, onMouseOut);
+
+    sector.on('mousemove', (evt: any) => {
+      const mx = evt?.offsetX ?? cx;
+      const my = evt?.offsetY ?? cy;
+      const currentEnd = sector.shape.endAngle;
+      // Calculate percent based on angle for tooltip dynamic update? 
+      // Or just use static percent? Original code calculated partPercent.
+      const partPercent = (currentEnd - sector.shape.startAngle) / (Math.PI * 2) * 100;
+
+      const params = this._createTooltipParams(seriesItem, item, index, value, partPercent / 100, sector.style.fill as string);
+      const content = this._generateTooltipContent(params);
+
+      // Check if we need to ensure emphasis is applied (e.g. if onMouseOver missed or tooltip blocked it)
+      const label = (sector as any).__label;
+      const showOnHover = seriesItem?.label?.showOnHover;
+      const needsEmphasis = showOnHover && label && (label.invisible || (label.style.opacity as number) < 1);
+
+      if (this._tooltip) {
+        if (!this._tooltip.isVisible() || needsEmphasis) {
+          this._applyEmphasisAnimation(sector, emphasis, true, r);
+        }
+        this._tooltip.show(mx, my, content, params);
+      } else if (needsEmphasis) {
+        this._applyEmphasisAnimation(sector, emphasis, true, r);
+      }
+    });
+
+    return { onMouseOver, onMouseOut };
+  }
+
+  private _prepareLabelConfig(params: {
+    seriesItem: any, item: any, value: number, percent: number,
+    currentAngle: number, angle: number, sector: Sector, handlers: any, color: string
+  }) {
+    const { seriesItem, item, value, percent, currentAngle, angle, sector, handlers, color } = params;
+
+    const showOnHover = seriesItem.label?.showOnHover;
+    const shouldCreate = seriesItem.label?.show !== false || seriesItem.emphasis?.label?.show === true || showOnHover === true;
+
+    if (!shouldCreate) return null;
+
+    const labelAngle = currentAngle + angle / 2;
+    const isOutside = seriesItem.label?.position === 'outside' || seriesItem.label?.position === undefined;
+
+    let labelText: string;
+    const formatter = seriesItem.label?.formatter;
+    if (formatter) {
+      labelText = this._formatLabel(formatter, {
+        name: (item as any).name || '',
+        value,
+        percent: (percent * 100).toFixed(0),
+        data: item
+      });
+    } else {
+      labelText = (item as any).name || '';
+    }
+
+    const isVisible = seriesItem.label?.show !== false && !showOnHover;
+
+    return {
+      text: labelText,
+      angle: labelAngle,
+      sector,
+      isOutside,
+      item,
+      color: seriesItem.label?.color || (isOutside ? '#333' : '#fff'),
+      itemColor: color,
+      seriesItem,
+      handlers,
+      isVisible
+    };
+  }
+
+  // --- Logic Helpers ---
+
+  protected _getDataValue(item: ChartData): number {
+    if (typeof item === 'number') return item;
+    if (Array.isArray(item)) return item[0] || 0;
+    if (typeof item === 'object' && item !== null) return item.value;
+    return 0;
+  }
+
+  private _createTooltipParams(seriesItem: any, item: any, index: number, value: number, percent: number, color: string) {
+    let itemName = '';
+    if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+      itemName = item.name;
+    }
+    return {
+      componentType: 'series',
+      seriesType: 'pie',
+      seriesIndex: 0,
+      seriesName: seriesItem.name,
+      name: itemName,
+      dataIndex: index,
+      data: item,
+      value: value,
+      percent: percent * 100,
+      color: color,
+      marker: this._getTooltipMarker(color)
+    };
   }
 
   private _calculateTotal(data: any[]): number {
@@ -420,17 +524,12 @@ export default class PieChart extends Chart {
       if (this._legend && !this._legendSelected.has(itemName)) {
         return sum;
       }
-      let value: number = 0;
-      if (typeof item === 'number') {
-        value = item;
-      } else if (Array.isArray(item)) {
-        value = item[0] || 0;
-      } else if (typeof item === 'object' && item !== null) {
-        value = item.value;
-      }
-      return sum + (typeof value === 'number' ? value : 0);
+      const value = this._getDataValue(item);
+      return sum + value;
     }, 0);
   }
+
+  // --- Center Label ---
 
   private _showDynamicCenterLabel(seriesItem: any, item: any, value: number, percent: number, cx: number, cy: number, emphasis: any): void {
     if (this._centerLabel) {
@@ -441,7 +540,6 @@ export default class PieChart extends Chart {
     if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
       itemName = item.name;
     }
-    const itemValue = value;
 
     let textContent = itemName;
     let rich = emphasis?.label?.rich || seriesItem.label?.rich;
@@ -453,40 +551,32 @@ export default class PieChart extends Chart {
       textBaseline: 'middle'
     };
 
-    // Merge emphasis label style
     if (emphasis?.label) {
       style = { ...style, ...emphasis.label };
     }
 
-    // Ensure rich style falls back to centerLabel.rich if not defined in emphasis/label
     if (!rich) {
       rich = seriesItem.centerLabel?.rich;
     }
 
-    // Use formatter if available
     if (emphasis?.label?.formatter) {
       textContent = this._formatLabel(emphasis.label.formatter, {
         name: itemName,
-        value: itemValue,
+        value,
         percent: percent * 100,
         data: item
       });
     } else if (seriesItem.centerLabel?.formatter) {
-      // Reuse centerLabel formatter for generic template
       textContent = this._formatLabel(seriesItem.centerLabel.formatter, {
         name: itemName,
-        value: itemValue,
+        value,
         percent: percent * 100,
         data: item
       });
     }
 
     this._centerLabel = new Text({
-      shape: {
-        x: cx,
-        y: cy,
-        text: textContent
-      },
+      shape: { x: cx, y: cy, text: textContent },
       style: { ...style, rich },
       z: Z_LABEL + 1
     });
@@ -543,8 +633,6 @@ export default class PieChart extends Chart {
     }
   }
 
-
-
   private _formatLabel(formatter: string | Function, params: { name: string, value: number, percent: string | number, data?: any }): string {
     if (typeof formatter === 'function') {
       return formatter(params);
@@ -571,6 +659,8 @@ export default class PieChart extends Chart {
     return '';
   }
 
+  // --- Layout & Rendering of Labels ---
+
   private _layoutLabels(labels: any[], cx: number, cy: number, r: number, r0: number): void {
     const leftLabels: any[] = [];
     const rightLabels: any[] = [];
@@ -582,7 +672,6 @@ export default class PieChart extends Chart {
       if (normalizedAngle < -Math.PI) normalizedAngle += Math.PI * 2;
 
       const isRight = normalizedAngle >= -Math.PI / 2 && normalizedAngle <= Math.PI / 2;
-
       const anchorR = r;
       const anchorX = cx + Math.cos(angle) * anchorR;
       const anchorY = cy + Math.sin(angle) * anchorR;
@@ -610,6 +699,7 @@ export default class PieChart extends Chart {
   private _adjustLabelPositions(labels: any[], cx: number, cy: number, r: number, dir: 1 | -1): void {
     if (labels.length === 0) return;
 
+    // TODO: Make these configurable via options
     const labelHeight = 14;
     const minGap = 5;
     const labelLineLen1 = 15;
@@ -618,11 +708,11 @@ export default class PieChart extends Chart {
     labels.forEach(label => {
       const angle = label.angle;
       const targetR = r + labelLineLen1;
-      let y = cy + Math.sin(angle) * targetR;
-      label.y = y;
+      label.y = cy + Math.sin(angle) * targetR;
       label.x = cx + Math.cos(angle) * targetR;
     });
 
+    // Resolve overlapping
     for (let i = 1; i < labels.length; i++) {
       const prev = labels[i - 1];
       const curr = labels[i];
@@ -636,9 +726,9 @@ export default class PieChart extends Chart {
       let dy = label.y - cy;
       if (Math.abs(dy) > r2) dy = (dy > 0 ? 1 : -1) * r2;
 
+      // Calculate elbow point
       let dx = Math.sqrt(Math.abs(r2 * r2 - dy * dy));
       let elbowX = cx + (dir * dx);
-
       const elbowY = label.y;
 
       const textX = elbowX + (dir * labelLineLen2);
@@ -664,13 +754,20 @@ export default class PieChart extends Chart {
           borderColor: seriesItem.label?.borderColor,
           borderWidth: seriesItem.label?.borderWidth,
           borderRadius: seriesItem.label?.borderRadius,
-          padding: seriesItem.label?.padding
+          padding: seriesItem.label?.padding,
+          opacity: label.isVisible ? 1 : 0
         },
         z: Z_LABEL,
-        silent: true
+        silent: false,
+        invisible: !label.isVisible
       });
       this._root.add(text);
       (label.sector as any).__label = text;
+      (text as any).__initialStyle = { ...text.style };
+
+      if (label.handlers) {
+        EventHelper.bindHoverEvents(text, label.handlers.onMouseOver, label.handlers.onMouseOut);
+      }
 
       if (seriesItem.labelLine?.show !== false) {
         const linePoints = [
@@ -683,12 +780,20 @@ export default class PieChart extends Chart {
           style: {
             stroke: seriesItem.labelLine?.lineStyle?.color || label.itemColor || label.color,
             lineWidth: seriesItem.labelLine?.lineStyle?.width || 1,
-            fill: 'none'
+            fill: 'none',
+            opacity: label.isVisible ? 1 : 0
           },
           z: Z_LABEL,
-          silent: true
+          silent: false,
+          invisible: !label.isVisible
         });
         this._root.add(line);
+        (label.sector as any).__labelLine = line;
+        (line as any).__initialStyle = { ...line.style };
+
+        if (label.handlers) {
+          EventHelper.bindHoverEvents(line, label.handlers.onMouseOver, label.handlers.onMouseOut);
+        }
       }
     });
   }
@@ -708,6 +813,9 @@ export default class PieChart extends Chart {
       labelY = cy + Math.sin(angle) * finalLabelRadius;
     }
 
+    const showOnHover = seriesItem.label?.showOnHover;
+    const isVisible = seriesItem.label?.show !== false && !showOnHover;
+
     const text = new Text({
       shape: {
         x: labelX,
@@ -720,15 +828,23 @@ export default class PieChart extends Chart {
         fill: label.color,
         textAlign: 'center',
         textBaseline: 'middle',
-        rich: seriesItem.label?.rich
+        rich: seriesItem.label?.rich,
+        opacity: isVisible ? 1 : 0
       },
       z: Z_LABEL,
-      silent: true
+      silent: false,
+      invisible: !isVisible
     });
     this._root.add(text);
     (label.sector as any).__label = text;
+    (text as any).__initialStyle = { ...text.style };
+
+    if (label.handlers) {
+      EventHelper.bindHoverEvents(text, label.handlers.onMouseOver, label.handlers.onMouseOut);
+    }
   }
 
+  // --- Geometry Helpers ---
 
   private _getCenter(seriesItem: SeriesOption): [number, number] {
     const center = (seriesItem as any).center;
@@ -739,59 +855,6 @@ export default class PieChart extends Chart {
       ];
     }
     return [this._width / 2, this._height / 2];
-  }
-
-  protected _onLegendHover(name: string, hovered: boolean): void {
-    const series = this._option.series || [];
-    if (series.length === 0) return;
-    const seriesItem = series[0];
-    const emphasis = seriesItem.emphasis;
-    const [r0, r] = this._getRadius(seriesItem);
-    const sector = this._activeSectors.get(name);
-
-    if (!sector) return;
-
-    const cx = sector.shape.cx;
-    const cy = sector.shape.cy;
-
-    if (hovered) {
-      if (this._restoreTimeout) {
-        clearTimeout(this._restoreTimeout);
-        this._restoreTimeout = null;
-      }
-
-      this._applyEmphasisAnimation(sector, emphasis, true, r);
-
-      const seriesType = seriesItem.type || 'pie';
-      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
-        const item = (sector as any).data;
-        const total = this._calculateTotal(seriesItem.data || []);
-        const value = this._getDataValue(item) || 0;
-        const percent = total > 0 ? value / total : 0;
-
-        this._showDynamicCenterLabel(seriesItem, item, value, percent, cx, cy, emphasis);
-      }
-    } else {
-      this._applyEmphasisAnimation(sector, emphasis, false, r);
-
-      const seriesType = seriesItem.type || 'pie';
-      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
-        if (this._restoreTimeout) {
-          clearTimeout(this._restoreTimeout);
-        }
-
-        this._restoreTimeout = setTimeout(() => {
-          if (this._centerLabel) {
-            this._root.remove(this._centerLabel);
-            this._centerLabel = null;
-          }
-
-          const total = this._calculateTotal(seriesItem.data || []);
-          this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
-          this._restoreTimeout = null;
-        }, 50);
-      }
-    }
   }
 
   private _getRadius(seriesItem: SeriesOption): [number, number] {
@@ -834,172 +897,340 @@ export default class PieChart extends Chart {
     return parseFloat(value as string) || 0;
   }
 
+  // --- Interaction & Animation ---
+
+  protected _onLegendHover(name: string, hovered: boolean): void {
+    const series = this._option.series || [];
+    if (series.length === 0) return;
+    const seriesItem = series[0];
+    const emphasis = seriesItem.emphasis;
+    const [r0, r] = this._getRadius(seriesItem);
+    const sector = this._activeSectors.get(name);
+
+    if (!sector) return;
+
+    const cx = sector.shape.cx;
+    const cy = sector.shape.cy;
+
+    if (hovered) {
+      if (this._restoreTimeout) {
+        clearTimeout(this._restoreTimeout);
+        this._restoreTimeout = null;
+      }
+
+      // Stop any ongoing animations to prevent conflict/glitch
+      this._animator.stopAll();
+
+      this._applyEmphasisAnimation(sector, emphasis, true, r);
+
+      const seriesType = seriesItem.type || 'pie';
+      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+        const item = (sector as any).data;
+        const total = this._calculateTotal(seriesItem.data || []);
+        const value = this._getDataValue(item) || 0;
+        const percent = total > 0 ? value / total : 0;
+
+        this._showDynamicCenterLabel(seriesItem, item, value, percent, cx, cy, emphasis);
+      }
+    } else {
+      this._applyEmphasisAnimation(sector, emphasis, false, r);
+
+      const seriesType = seriesItem.type || 'pie';
+      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+        if (this._restoreTimeout) {
+          clearTimeout(this._restoreTimeout);
+        }
+
+        this._restoreTimeout = setTimeout(() => {
+          if (this._centerLabel) {
+            this._root.remove(this._centerLabel);
+            this._centerLabel = null;
+          }
+
+          const total = this._calculateTotal(seriesItem.data || []);
+          this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
+          this._restoreTimeout = null;
+        }, 50);
+      }
+    }
+  }
+
   private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number): void {
     if (isEnter) {
-      this._activeSectors.forEach((s) => {
-        if (s !== sector) {
-          // Check focus policy
-          const focus = emphasis?.focus || 'none';
-          if (focus === 'self') {
-            this._animator.animate(s.style, 'opacity', 0.2, { duration: 200 }).start();
-            if ((s as any).__label) {
-              this._animator.animate(((s as any).__label).style, 'opacity', 0.2, { duration: 200 }).start();
-            }
-          }
-
-          // Reset other properties (scale, radius, style) that might be stuck due to cancelled restore
-          const sBaseR = (s as any).__baseR;
-          if (sBaseR !== undefined) {
-            this._animator.animate(s.shape, 'r', sBaseR, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
-          }
-          if (s.transform) {
-            this._animator.animate(s.transform, 'scaleX', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
-            this._animator.animate(s.transform, 'scaleY', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
-          }
-
-          const init = (s as any).__initialStyle;
-          if (init) {
-            const targetStyle: Record<string, unknown> = {};
-            if (init.shadowBlur !== undefined) targetStyle.shadowBlur = init.shadowBlur; else targetStyle.shadowBlur = 0;
-            if (init.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = init.shadowOffsetX; else targetStyle.shadowOffsetX = 0;
-            if (init.shadowOffsetY !== undefined) targetStyle.shadowOffsetY = init.shadowOffsetY; else targetStyle.shadowOffsetY = 0;
-            if (init.shadowColor !== undefined) targetStyle.shadowColor = init.shadowColor; else targetStyle.shadowColor = 'transparent';
-            if (init.fill !== undefined) targetStyle.fill = init.fill;
-            if (init.stroke !== undefined) targetStyle.stroke = init.stroke;
-            if (init.lineWidth !== undefined) targetStyle.lineWidth = init.lineWidth;
-
-            Object.keys(targetStyle).forEach(key => {
-              const value = targetStyle[key];
-              if (typeof value === 'number') {
-                this._animator.animate(s.style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
-              } else {
-                (s.style as any)[key] = value;
-                s.markRedraw();
-              }
-            });
-          }
-        }
-      });
+      this._applyEnterEmphasis(sector, emphasis, baseR);
     } else {
-      this._activeSectors.forEach((s) => {
-        this._animator.animate(s.style, 'opacity', 1, { duration: 200 }).start();
-        if ((s as any).__label) {
-          this._animator.animate(((s as any).__label).style, 'opacity', 1, { duration: 200 }).start();
-        }
-      });
+      this._applyLeaveEmphasis(sector);
     }
+  }
 
+  private _applyEnterEmphasis(sector: Sector, emphasis: EmphasisOption | undefined, baseR?: number) {
+    const seriesItem = (sector as any).__seriesItem;
+    const showOnHover = seriesItem?.label?.showOnHover;
+    const focus = emphasis?.focus || 'none';
+
+    // 1. Handle OTHER sectors (dimming)
+    this._activeSectors.forEach((s) => {
+      if (s !== sector) {
+        let sectorTargetOpacity = (s as any).__initialStyle?.opacity ?? 1;
+
+        if (focus === 'self') {
+          sectorTargetOpacity = 0.2;
+          this._animator.animate(s.style, 'opacity', 0.2, { duration: 200 }).start();
+        }
+
+        // Handle Label & Line
+        this._animateLabelAndLineOpacity(s, focus, showOnHover, false);
+
+        // Reset other properties
+        const sBaseR = (s as any).__baseR;
+        if (sBaseR !== undefined) {
+          this._animator.animate(s.shape, 'r', sBaseR, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+        }
+        if (s.transform) {
+          this._animator.animate(s.transform, 'scaleX', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+          this._animator.animate(s.transform, 'scaleY', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+        }
+        this._restoreSectorStyle(s);
+      }
+    });
+
+    // 2. Handle CURRENT sector (highlighting)
     if (emphasis?.itemStyle) {
-      const style = sector.style as Record<string, unknown>;
-      const emphasisStyle = emphasis.itemStyle;
-
-      if (!(sector as any).__initialStyle) {
-        (sector as any).__initialStyle = { ...style };
-      }
-
-      const targetStyle: Record<string, unknown> = {};
-
-      if (isEnter) {
-        if (emphasisStyle.shadowBlur !== undefined) targetStyle.shadowBlur = emphasisStyle.shadowBlur;
-        if (emphasisStyle.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = emphasisStyle.shadowOffsetX;
-        if (emphasisStyle.shadowOffsetY !== undefined) targetStyle.shadowOffsetY = emphasisStyle.shadowOffsetY;
-        if (emphasisStyle.shadowColor !== undefined) targetStyle.shadowColor = emphasisStyle.shadowColor;
-        if (emphasisStyle.color !== undefined) targetStyle.fill = emphasisStyle.color;
-        if (emphasisStyle.borderColor !== undefined) targetStyle.stroke = emphasisStyle.borderColor;
-        if (emphasisStyle.borderWidth !== undefined) targetStyle.lineWidth = emphasisStyle.borderWidth;
-
-        targetStyle.opacity = 1;
-      } else {
-        const init = (sector as any).__initialStyle;
-        if (init.shadowBlur !== undefined) targetStyle.shadowBlur = init.shadowBlur; else targetStyle.shadowBlur = 0;
-        if (init.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = init.shadowOffsetX; else targetStyle.shadowOffsetX = 0;
-        if (init.shadowOffsetY !== undefined) targetStyle.shadowOffsetY = init.shadowOffsetY; else targetStyle.shadowOffsetY = 0;
-        if (init.shadowColor !== undefined) targetStyle.shadowColor = init.shadowColor; else targetStyle.shadowColor = 'transparent';
-        if (init.fill !== undefined) targetStyle.fill = init.fill;
-        if (init.stroke !== undefined) targetStyle.stroke = init.stroke;
-        if (init.lineWidth !== undefined) targetStyle.lineWidth = init.lineWidth;
-
-        targetStyle.opacity = init.opacity !== undefined ? init.opacity : 1;
-      }
-
-      Object.keys(targetStyle).forEach(key => {
-        const value = targetStyle[key];
-        if (typeof value === 'number') {
-          this._animator.animate(
-            style,
-            key,
-            value,
-            { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-          ).start();
-        } else {
-          style[key] = value;
-          sector.markRedraw();
-        }
-      });
+      this._applyEmphasisStyle(sector, emphasis.itemStyle);
     } else {
-      const initialOpacity = (sector as any).__initialOpacity ?? 1;
-      this._animator.animate(
-        sector.style as Record<string, unknown>,
-        'opacity',
-        isEnter ? 1 : initialOpacity,
-        { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-      ).start();
+      // Default opacity restore
+      this._animator.animate(sector.style, 'opacity', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
     }
 
-    if (emphasis?.scale && baseR !== undefined) {
-      const scaleSize = emphasis.scaleSize || 1.1;
-      const targetR = isEnter ? baseR * scaleSize : baseR;
-
-      this._animator.animate(
-        sector.shape as unknown as Record<string, unknown>,
-        'r',
-        targetR,
-        { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-      ).start();
-    } else if (emphasis?.scale) {
-      const scaleSize = isEnter ? (emphasis.scaleSize || 1.1) : 1;
-
-      this._animator.animate(
-        sector.transform || {},
-        'scaleX',
-        scaleSize,
-        { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-      ).start();
-
-      this._animator.animate(
-        sector.transform || {},
-        'scaleY',
-        scaleSize,
-        { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }
-      ).start();
+    // Scale animation
+    if (emphasis?.scale) {
+      this._applyScaleAnimation(sector, emphasis, true, baseR);
     }
 
+    // Label animation
+    this._animateCurrentLabel(sector, emphasis, showOnHover);
+  }
+
+  private _applyLeaveEmphasis(sector: Sector): void {
+    // Restore ALL sectors
+    this._activeSectors.forEach((s) => {
+      const initOpacity = (s as any).__initialStyle?.opacity ?? 1;
+      this._animator.animate(s.style, 'opacity', initOpacity, { duration: 200 }).start();
+
+      // Restore Label & Line
+      this._restoreLabelAndLine(s);
+    });
+
+    // Restore Scale
+    this._applyScaleAnimation(sector, undefined, false, (sector as any).__baseR);
+
+    // Restore Style
+    this._restoreSectorStyle(sector);
+  }
+
+  private _animateLabelAndLineOpacity(sector: Sector, focus: string, showOnHover: boolean | undefined, isCurrent: boolean) {
     const label = (sector as any).__label;
-    if (label && emphasis?.label) {
-      if (isEnter) {
-        if (emphasis.label.show !== undefined) {
-          label.invisible = !emphasis.label.show;
-          label.style.opacity = emphasis.label.show ? 1 : 0;
-        }
-        if (emphasis.label.fontSize !== undefined) {
-          label.style.fontSize = emphasis.label.fontSize;
-        }
-        if (emphasis.label.fontWeight !== undefined) {
-          label.style.fontWeight = emphasis.label.fontWeight;
-        }
-        if (emphasis.label.color !== undefined) {
-          label.style.fill = emphasis.label.color;
-        }
-      } else {
-        const seriesItem = this._option.series?.[0];
-        if (seriesItem?.label) {
-          label.invisible = !seriesItem.label.show;
-          label.style.opacity = seriesItem.label.show ? 1 : 0;
-          label.style.fontSize = seriesItem.label.fontSize || 12;
-          label.style.fontWeight = seriesItem.label.fontWeight || 'normal';
+    const labelLine = (sector as any).__labelLine;
+
+    if (label) {
+      const initLabelOpacity = label.__initialStyle?.opacity ?? 1;
+      let targetOpacity = initLabelOpacity;
+
+      if (!isCurrent) {
+        if (focus === 'self') {
+          targetOpacity = showOnHover ? 0 : 0.2;
+        } else if (showOnHover) {
+          targetOpacity = 0;
         }
       }
-      label.markRedraw();
+
+      this._animator.animate(label.style, 'opacity', targetOpacity, {
+        duration: 200,
+        onUpdate: () => label.markRedraw(),
+        onComplete: () => {
+          if (targetOpacity === 0) label.invisible = true;
+        }
+      }).start();
+    }
+
+    if (labelLine) {
+      const initLineOpacity = labelLine.__initialStyle?.opacity ?? 1;
+      let targetOpacity = initLineOpacity;
+
+      if (!isCurrent) {
+        if (focus === 'self') {
+          targetOpacity = showOnHover ? 0 : 0.2;
+        } else if (showOnHover) {
+          targetOpacity = 0;
+        }
+      }
+
+      this._animator.animate(labelLine.style, 'opacity', targetOpacity, {
+        duration: 200,
+        onUpdate: () => labelLine.markRedraw(),
+        onComplete: () => {
+          if (targetOpacity === 0) labelLine.invisible = true;
+        }
+      }).start();
+    }
+  }
+
+  private _restoreLabelAndLine(sector: Sector) {
+    const label = (sector as any).__label;
+    const labelLine = (sector as any).__labelLine;
+
+    if (label) {
+      const initLabelOpacity = label.__initialStyle?.opacity ?? 1;
+      this._animator.animate(label.style, 'opacity', initLabelOpacity, {
+        duration: 200,
+        onUpdate: () => label.markRedraw(),
+        onComplete: () => {
+          if (initLabelOpacity === 0) label.invisible = true;
+        }
+      }).start();
+    }
+
+    if (labelLine) {
+      const initLineOpacity = labelLine.__initialStyle?.opacity ?? 1;
+      this._animator.animate(labelLine.style, 'opacity', initLineOpacity, {
+        duration: 200,
+        onUpdate: () => labelLine.markRedraw(),
+        onComplete: () => {
+          if (initLineOpacity === 0) labelLine.invisible = true;
+        }
+      }).start();
+    }
+  }
+
+  private _animateCurrentLabel(sector: Sector, emphasis: EmphasisOption | undefined, showOnHover: boolean | undefined) {
+    const label = (sector as any).__label;
+    const labelLine = (sector as any).__labelLine;
+    if (!label) return;
+
+    const empLabel = emphasis?.label || {};
+
+    // Fallback logic: if showOnHover is undefined, try to retrieve it from sector
+    let finalShowOnHover = showOnHover;
+    if (finalShowOnHover === undefined) {
+      finalShowOnHover = (sector as any).__seriesItem?.label?.showOnHover;
+    }
+
+    if (empLabel.show !== undefined) {
+      label.invisible = !empLabel.show;
+      label.style.opacity = empLabel.show ? 1 : 0;
+    } else if (finalShowOnHover) {
+      label.invisible = false;
+      this._animator.animate(label.style, 'opacity', 1, {
+        duration: 200,
+        onUpdate: () => label.markRedraw()
+      }).start();
+    } else {
+      if (!label.invisible && (label.style.opacity as number) < 1) {
+        this._animator.animate(label.style, 'opacity', 1, {
+          duration: 200,
+          onUpdate: () => label.markRedraw()
+        }).start();
+      }
+    }
+
+    // Apply styles
+    if (empLabel.fontSize !== undefined) label.style.fontSize = empLabel.fontSize;
+    if (empLabel.fontWeight !== undefined) label.style.fontWeight = empLabel.fontWeight;
+    if (empLabel.color !== undefined) {
+      label.style.fill = empLabel.color;
+      if (labelLine) labelLine.style.stroke = empLabel.color;
+    }
+
+    // Ensure labelLine matches
+    if (labelLine) {
+      if (labelLine.invisible || (labelLine.style.opacity as number) < 1) {
+        labelLine.invisible = false;
+        this._animator.animate(labelLine.style, 'opacity', 1, {
+          duration: 200,
+          onUpdate: () => labelLine.markRedraw()
+        }).start();
+      }
+    }
+
+    label.markRedraw();
+    if (labelLine) labelLine.markRedraw();
+  }
+
+  private _applyEmphasisStyle(sector: Sector, emphasisStyle: any) {
+    const style = sector.style as any;
+    // Save initial style if not present (though should be done at creation)
+    if (!(sector as any).__initialStyle) {
+      (sector as any).__initialStyle = { ...style };
+    }
+
+    const targetStyle: Record<string, unknown> = {};
+    if (emphasisStyle.shadowBlur !== undefined) targetStyle.shadowBlur = emphasisStyle.shadowBlur;
+    if (emphasisStyle.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = emphasisStyle.shadowOffsetX;
+    if (emphasisStyle.shadowOffsetY !== undefined) targetStyle.shadowOffsetY = emphasisStyle.shadowOffsetY;
+    if (emphasisStyle.shadowColor !== undefined) targetStyle.shadowColor = emphasisStyle.shadowColor;
+    if (emphasisStyle.color !== undefined) targetStyle.fill = emphasisStyle.color;
+    if (emphasisStyle.borderColor !== undefined) targetStyle.stroke = emphasisStyle.borderColor;
+    if (emphasisStyle.borderWidth !== undefined) targetStyle.lineWidth = emphasisStyle.borderWidth;
+    targetStyle.opacity = 1;
+
+    Object.keys(targetStyle).forEach(key => {
+      const value = targetStyle[key];
+      if (typeof value === 'number') {
+        this._animator.animate(style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+      } else {
+        style[key] = value;
+        sector.markRedraw();
+      }
+    });
+  }
+
+  private _restoreSectorStyle(sector: Sector) {
+    const init = (sector as any).__initialStyle;
+    if (!init) return;
+
+    const style = sector.style as any;
+    const targetStyle: Record<string, unknown> = {};
+
+    // Explicitly restore key properties
+    targetStyle.shadowBlur = init.shadowBlur ?? 0;
+    targetStyle.shadowOffsetX = init.shadowOffsetX ?? 0;
+    targetStyle.shadowOffsetY = init.shadowOffsetY ?? 0;
+    targetStyle.shadowColor = init.shadowColor ?? 'transparent';
+    if (init.fill !== undefined) targetStyle.fill = init.fill;
+    if (init.stroke !== undefined) targetStyle.stroke = init.stroke;
+    if (init.lineWidth !== undefined) targetStyle.lineWidth = init.lineWidth;
+
+    Object.keys(targetStyle).forEach(key => {
+      const value = targetStyle[key];
+      if (typeof value === 'number') {
+        this._animator.animate(style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+      } else {
+        style[key] = value;
+        sector.markRedraw();
+      }
+    });
+  }
+
+  private _applyScaleAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number) {
+    if (isEnter && emphasis && baseR !== undefined) {
+      const scaleSize = emphasis.scaleSize || 1.1;
+      const targetR = baseR * scaleSize;
+      this._animator.animate(sector.shape, 'r', targetR, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+    } else if (isEnter && emphasis) {
+      // Transform scale fallback
+      const scaleSize = emphasis.scaleSize || 1.1;
+      this._animator.animate(sector.transform || {}, 'scaleX', scaleSize, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+      this._animator.animate(sector.transform || {}, 'scaleY', scaleSize, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+    } else {
+      // Restore
+      // If baseR is provided, restore radius
+      if (baseR !== undefined) {
+        this._animator.animate(sector.shape, 'r', baseR, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+      } else {
+        // Restore transform scale
+        this._animator.animate(sector.transform || {}, 'scaleX', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+        this._animator.animate(sector.transform || {}, 'scaleY', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+      }
     }
   }
 }

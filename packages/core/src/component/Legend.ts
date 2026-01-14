@@ -466,7 +466,7 @@ export default class Legend extends Group {
         this.markRedraw();
       });
 
-      (interactRect as any).on('mouseout', () => {
+      (interactRect as any).on('mouseout', (e: any) => {
         interactRect.attr('style', { fill: 'transparent' });
         if (this._option.onHover) {
           this._option.onHover(item.name, false);
