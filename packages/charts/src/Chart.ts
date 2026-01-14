@@ -1000,11 +1000,14 @@ export default class Chart {
     const b = params.name ?? '';
     const c = params.value ?? '';
     const d = params.percent ?? '';
+    const marker = params.marker ?? '';
     return String(template)
       .replace(/\{a\}/g, String(a))
       .replace(/\{b\}/g, String(b))
       .replace(/\{c\}/g, String(c))
-      .replace(/\{d\}/g, String(d));
+      .replace(/\{d\}/g, String(d))
+      .replace(/\{marker\}/g, String(marker))
+      .replace(/\{icon\}/g, String(marker));
   }
 
   protected _mountLegend(items: any[]): void {
@@ -1111,7 +1114,7 @@ export default class Chart {
   }
 
   protected _getTooltipMarker(color: string): string {
-    return `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:${color};"></span>`;
+    return `<span style="display:inline-block;margin-right:4px;border-radius:4px;width:10px;height:10px;background-color:${color};"></span>`;
   }
 
   protected _generateTooltipContent(params: any): string {

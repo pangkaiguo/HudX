@@ -128,6 +128,31 @@ export default class PieChart extends Chart {
     this._mountLegend(items);
   }
 
+  // --- Helper to get icon shape from Legend style ---
+  private _getIconShape(type: string | undefined): string {
+    if (type === 'rect') return 'border-radius:2px;';
+    if (type === 'circle') return 'border-radius:50%;';
+    if (type === 'line') return 'height:2px;margin-top:4px;'; // simplified
+    // Default to Legend's default behavior if not specified, but here we return CSS for tooltip
+    return 'border-radius:50%;';
+  }
+
+  protected _getTooltipMarker(color: string): string {
+    // Try to sync with legend icon
+    const legendIcon = this._option.legend?.icon || 'circle';
+    let borderRadius = '50%'; // Default circle
+    let sizeStyle = 'width:10px;height:10px;';
+
+    if (legendIcon === 'rect') {
+      borderRadius = '2px';
+    } else if (legendIcon === 'line') {
+      borderRadius = '0';
+      sizeStyle = 'width:12px;height:2px;margin-top:4px;'; // Center vertically roughly
+    }
+
+    return `<span style="display:inline-block;margin-right:4px;${sizeStyle}border-radius:${borderRadius};background-color:${color};"></span>`;
+  }
+
   private _getMaxValueForRoseType(seriesItem: any, data: any[]): number {
     if (!seriesItem.roseType) return 0;
     return data.reduce((max: number, item: any) => {
@@ -239,6 +264,16 @@ export default class PieChart extends Chart {
         }
       }
 
+      // Important: if we have entry animation, we should probably hide label initially?
+      // Or just let it layout normally. 
+      // The issue is likely that label layout uses current sector shape.
+      // If sector shape is animating (e.g. radius is small), label might be placed incorrectly.
+      // But we calculate label position in _layoutLabels later, using 'r' and 'r0' passed to it,
+      // NOT sector.shape.r.
+      // Wait, _layoutLabels uses passed 'r', which is the FINAL radius.
+      // So labels are calculated for the final position.
+      // But the sector is animating.
+
       this._root.add(sector);
       this._activeSectors.set(itemName, sector);
 
@@ -246,7 +281,7 @@ export default class PieChart extends Chart {
       const shouldAnimate = this._shouldAnimateFor(itemName);
       if (shouldAnimate) {
         const delay = oldSector ? 0 : index * 100; // Staggered entry
-        const duration = seriesItem.animationDuration || 1000;
+        const duration = seriesItem.animationDuration || 500;
         const easing = seriesItem.animationEasing || 'cubicOut';
 
         // Check if angles need animation
@@ -283,6 +318,16 @@ export default class PieChart extends Chart {
       });
 
       if (labelConfig) {
+        // Fix: Initially hide label if entry animation is active
+        if (shouldAnimate && !oldSector) {
+          labelConfig.isVisible = false;
+          // We can fade it in after animation or just let it appear? 
+          // For now, let's just make it invisible if it's entry animation, 
+          // and then fade in? 
+          // Better approach: animate opacity from 0 to 1
+          labelConfig.opacity = 0;
+          labelConfig.fadeIn = true;
+        }
         labelLayoutList.push(labelConfig);
       }
 
@@ -482,7 +527,9 @@ export default class PieChart extends Chart {
       itemColor: color,
       seriesItem,
       handlers,
-      isVisible
+      isVisible,
+      opacity: isVisible ? 1 : 0,
+      fadeIn: false
     };
   }
 
@@ -755,15 +802,24 @@ export default class PieChart extends Chart {
           borderWidth: seriesItem.label?.borderWidth,
           borderRadius: seriesItem.label?.borderRadius,
           padding: seriesItem.label?.padding,
-          opacity: label.isVisible ? 1 : 0
+          opacity: label.opacity // Use calculated opacity
         },
         z: Z_LABEL,
         silent: false,
-        invisible: !label.isVisible
+        invisible: !label.isVisible && !label.fadeIn // Keep visible if fading in
       });
       this._root.add(text);
       (label.sector as any).__label = text;
       (text as any).__initialStyle = { ...text.style };
+
+      if (label.fadeIn) {
+        // Animate fade in
+        this._animator.animate(text.style, 'opacity', 1, {
+          duration: seriesItem.animationDuration || 500,
+          delay: 100, // Small delay to let sector expand a bit
+          onUpdate: () => text.markRedraw()
+        }).start();
+      }
 
       if (label.handlers) {
         EventHelper.bindHoverEvents(text, label.handlers.onMouseOver, label.handlers.onMouseOut);
@@ -781,15 +837,23 @@ export default class PieChart extends Chart {
             stroke: seriesItem.labelLine?.lineStyle?.color || label.itemColor || label.color,
             lineWidth: seriesItem.labelLine?.lineStyle?.width || 1,
             fill: 'none',
-            opacity: label.isVisible ? 1 : 0
+            opacity: label.opacity // Use calculated opacity
           },
           z: Z_LABEL,
           silent: false,
-          invisible: !label.isVisible
+          invisible: !label.isVisible && !label.fadeIn
         });
         this._root.add(line);
         (label.sector as any).__labelLine = line;
         (line as any).__initialStyle = { ...line.style };
+
+        if (label.fadeIn) {
+          this._animator.animate(line.style, 'opacity', 1, {
+            duration: seriesItem.animationDuration || 500,
+            delay: 100,
+            onUpdate: () => line.markRedraw()
+          }).start();
+        }
 
         if (label.handlers) {
           EventHelper.bindHoverEvents(line, label.handlers.onMouseOver, label.handlers.onMouseOut);

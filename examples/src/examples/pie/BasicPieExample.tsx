@@ -71,7 +71,7 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
         label: {
           show: true,
           position: 'outside',
-          formatter: '{b}',
+          formatter: '{b}\n{c} ({d}%)',
           showOnHover: true,
         }
       }
