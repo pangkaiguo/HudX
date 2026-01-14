@@ -20,7 +20,7 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
     tooltip: {
       show: true,
       trigger: 'item',
-      // formatter: '{b}\n{c} ({d}%)'
+      formatter: '{marker} {b} <br/> {c} ({d}%)'
     },
     aria: {
       enabled: true,

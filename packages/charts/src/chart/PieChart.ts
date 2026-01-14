@@ -459,30 +459,41 @@ export default class PieChart extends Chart {
 
     EventHelper.bindHoverEvents(sector, onMouseOver, onMouseOut);
 
+    let rafId: number | null = null;
     sector.on('mousemove', (evt: any) => {
+      // Throttle tooltip updates to prevent flickering and performance issues
+      if (rafId) {
+        return;
+      }
+
       const mx = evt?.offsetX ?? cx;
       const my = evt?.offsetY ?? cy;
-      const currentEnd = sector.shape.endAngle;
-      // Calculate percent based on angle for tooltip dynamic update? 
-      // Or just use static percent? Original code calculated partPercent.
-      const partPercent = (currentEnd - sector.shape.startAngle) / (Math.PI * 2) * 100;
 
-      const params = this._createTooltipParams(seriesItem, item, index, value, partPercent / 100, sector.style.fill as string);
-      const content = this._generateTooltipContent(params);
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
 
-      // Check if we need to ensure emphasis is applied (e.g. if onMouseOver missed or tooltip blocked it)
-      const label = (sector as any).__label;
-      const showOnHover = seriesItem?.label?.showOnHover;
-      const needsEmphasis = showOnHover && label && (label.invisible || (label.style.opacity as number) < 1);
+        const currentEnd = sector.shape.endAngle;
+        // Calculate percent based on angle for tooltip dynamic update? 
+        // Or just use static percent? Original code calculated partPercent.
+        const partPercent = (currentEnd - sector.shape.startAngle) / (Math.PI * 2) * 100;
 
-      if (this._tooltip) {
-        if (!this._tooltip.isVisible() || needsEmphasis) {
+        const params = this._createTooltipParams(seriesItem, item, index, value, partPercent / 100, sector.style.fill as string);
+        const content = this._generateTooltipContent(params);
+
+        // Check if we need to ensure emphasis is applied (e.g. if onMouseOver missed or tooltip blocked it)
+        const label = (sector as any).__label;
+        const showOnHover = seriesItem?.label?.showOnHover;
+        const needsEmphasis = showOnHover && label && (label.invisible || (label.style.opacity as number) < 1);
+
+        if (this._tooltip) {
+          if (!this._tooltip.isVisible() || needsEmphasis) {
+            this._applyEmphasisAnimation(sector, emphasis, true, r);
+          }
+          this._tooltip.show(mx, my, content, params);
+        } else if (needsEmphasis) {
           this._applyEmphasisAnimation(sector, emphasis, true, r);
         }
-        this._tooltip.show(mx, my, content, params);
-      } else if (needsEmphasis) {
-        this._applyEmphasisAnimation(sector, emphasis, true, r);
-      }
+      });
     });
 
     return { onMouseOver, onMouseOut };

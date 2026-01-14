@@ -20,7 +20,25 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
     },
     tooltip: {
       show: true,
-      trigger: 'item'
+      trigger: 'item',
+      backgroundColor: '#fff',
+      borderColor: '#ccc',
+      borderWidth: 1,
+      textStyle: {
+        color: '#333'
+      },
+      // Use HTML table structure for better alignment
+      formatter: (params: any) => {
+        return `
+          <div style="display:flex;align-items:center;">
+            ${params.marker}
+            <span style="font-weight:bold;margin-left:4px;">${params.name}</span>
+          </div>
+          <div style="padding-left:18px;">
+            ${params.value} <span style="color:#666">(${params.percent}%)</span>
+          </div>
+        `;
+      }
     },
     legend: {
       show: true,
