@@ -37,18 +37,29 @@ export default class CanvasPainter implements IPainter {
   resize(width?: number, height?: number): void {
     const dpr = window.devicePixelRatio || 1;
 
-    this._width = width ?? this._dom.clientWidth;
-    this._height = height ?? this._dom.clientHeight;
+    if (width === undefined || height === undefined) {
+      const rect = this._dom.getBoundingClientRect();
+      this._width = width ?? rect.width;
+      this._height = height ?? rect.height;
+    } else {
+      this._width = width;
+      this._height = height;
+    }
 
     // Set canvas size considering device pixel ratio for crisp rendering
-    this._canvas.width = this._width * dpr;
-    this._canvas.height = this._height * dpr;
+    // Use Math.round to ensure integer values for canvas dimensions to avoid rendering artifacts
+    this._canvas.width = Math.round(this._width * dpr);
+    this._canvas.height = Math.round(this._height * dpr);
     this._canvas.style.width = `${this._width}px`;
     this._canvas.style.height = `${this._height}px`;
 
     // Reset transform and scale context to match device pixel ratio
     this._ctx.setTransform(1, 0, 0, 1, 0, 0);
     this._ctx.scale(dpr, dpr);
+    
+    // Ensure image smoothing is enabled (high quality)
+    this._ctx.imageSmoothingEnabled = true;
+    (this._ctx as any).imageSmoothingQuality = 'high';
 
     this.markDirty();
   }
@@ -167,9 +178,12 @@ export default class CanvasPainter implements IPainter {
    * Handle resize
    */
   private _resize(): void {
-    const width = this._dom.clientWidth;
-    const height = this._dom.clientHeight;
-    if (width !== this._width || height !== this._height) {
+    const rect = this._dom.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    
+    // Check if size changed (with tolerance for float precision)
+    if (Math.abs(width - this._width) > 0.1 || Math.abs(height - this._height) > 0.1) {
       this.resize(width, height);
     }
   }
