@@ -319,7 +319,7 @@ export default class PieChart extends Chart {
 
       if (labelConfig) {
         // Fix: Initially hide label if entry animation is active
-        if (shouldAnimate && !oldSector) {
+        if (shouldAnimate && !oldSector && labelConfig.isVisible) {
           labelConfig.isVisible = false;
           // We can fade it in after animation or just let it appear? 
           // For now, let's just make it invisible if it's entry animation, 
@@ -821,7 +821,10 @@ export default class PieChart extends Chart {
       });
       this._root.add(text);
       (label.sector as any).__label = text;
-      (text as any).__initialStyle = { ...text.style };
+      (text as any).__initialStyle = {
+        ...text.style,
+        opacity: label.fadeIn ? 1 : text.style.opacity
+      };
 
       if (label.fadeIn) {
         // Animate fade in
@@ -856,7 +859,10 @@ export default class PieChart extends Chart {
         });
         this._root.add(line);
         (label.sector as any).__labelLine = line;
-        (line as any).__initialStyle = { ...line.style };
+        (line as any).__initialStyle = {
+          ...line.style,
+          opacity: label.fadeIn ? 1 : line.style.opacity
+        };
 
         if (label.fadeIn) {
           this._animator.animate(line.style, 'opacity', 1, {

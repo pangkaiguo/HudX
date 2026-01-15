@@ -3,7 +3,7 @@ import Chart from '../Chart';
 import PieChart from '../chart/PieChart';
 import BarChart from '../chart/BarChart';
 import LineChart from '../chart/LineChart';
-import { ChartOption } from '../types';
+import type { ChartOption } from '../types';
 
 // Mock Canvas
 beforeAll(() => {

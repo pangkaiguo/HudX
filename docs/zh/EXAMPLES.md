@@ -505,7 +505,7 @@ function LazyUpdateExample() {
 
 ```typescript
 import Chart from 'HudX/charts/Chart';
-import { ChartOption } from 'HudX/charts/types';
+import type { ChartOption } from 'HudX/charts/types';
 import { Rect, Text } from 'HudX/core';
 
 export default class CustomChart extends Chart {

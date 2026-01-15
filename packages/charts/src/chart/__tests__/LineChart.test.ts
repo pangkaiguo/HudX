@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import LineChart from '../LineChart';
-import { ChartOption } from '../../types';
+import type { ChartOption } from '../../types';
 
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),
@@ -36,17 +36,17 @@ beforeAll(() => {
 
   // Mock Path2D for happy-dom environment
   vi.stubGlobal('Path2D', class Path2D {
-    constructor(d?: string | Path2D) {}
-    addPath(path: Path2D, transform?: DOMMatrix2DInit) {}
-    closePath() {}
-    moveTo(x: number, y: number) {}
-    lineTo(x: number, y: number) {}
-    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number) {}
-    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) {}
-    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean) {}
-    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {}
-    ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean) {}
-    rect(x: number, y: number, w: number, h: number) {}
+    constructor(d?: string | Path2D) { }
+    addPath(path: Path2D, transform?: DOMMatrix2DInit) { }
+    closePath() { }
+    moveTo(x: number, y: number) { }
+    lineTo(x: number, y: number) { }
+    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number) { }
+    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) { }
+    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean) { }
+    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) { }
+    ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean) { }
+    rect(x: number, y: number, w: number, h: number) { }
   });
 });
 
@@ -79,8 +79,8 @@ describe('LineChart', () => {
       xAxis: { type: 'category', data: ['A', 'B'] },
       yAxis: { type: 'value' },
       series: [
-        { 
-          type: 'line', 
+        {
+          type: 'line',
           data: [10, 20],
           smooth: true,
           areaStyle: { opacity: 0.5 },
@@ -93,18 +93,18 @@ describe('LineChart', () => {
 
     const activeLines = (chart as any)._activeLines;
     expect(activeLines.size).toBe(1);
-    
+
     const seriesItem = activeLines.get(0);
     expect(seriesItem).toBeDefined();
-    
+
     // Check if line is Path (smooth) instead of Polyline
     // We imported Polyline and Path in source, but here we can check constructor name or type
     expect(seriesItem.line.constructor.name).toBe('Path');
-    
+
     // Check area existence
     expect(seriesItem.area).toBeDefined();
     expect(seriesItem.area.constructor.name).toBe('Path');
-    
+
     // Check symbols
     expect(seriesItem.symbols.length).toBe(2);
     // Rect symbol should be created

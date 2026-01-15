@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import BarChart from '../BarChart';
-import { ChartOption } from '../../types';
+import type { ChartOption } from '../../types';
 
 // Mock canvas and context
 const mockContext = {

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import ScatterChart from '../ScatterChart';
-import { ChartOption } from '../../types';
+import type { ChartOption } from '../../types';
 import { Group, Circle } from 'HudX/core';
 
 const mockContext = {
