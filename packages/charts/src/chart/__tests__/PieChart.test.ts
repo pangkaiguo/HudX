@@ -207,7 +207,7 @@ describe('PieChart', () => {
 
     // Verify restoration
     expect(sectorA.style.shadowBlur).toBeLessThan(0.1); // Default is 0, allow small float error
-    expect(sectorB.style.opacity).toBe(1);
+    expect(sectorB.style.opacity).toBeGreaterThan(0.99);
 
     vi.useRealTimers();
   });

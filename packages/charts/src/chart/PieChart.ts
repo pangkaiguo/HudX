@@ -286,8 +286,8 @@ export default class PieChart extends Chart {
 
         // Check if angles need animation
         if (Math.abs(initialStart - targetStart) > 0.001 || Math.abs(initialEnd - targetEnd) > 0.001) {
-          this._animator.animate(sector.shape, 'startAngle', targetStart, { duration, delay, easing, onUpdate: () => sector.markRedraw() }).start();
-          this._animator.animate(sector.shape, 'endAngle', targetEnd, { duration, delay, easing, onUpdate: () => sector.markRedraw() }).start();
+          this._animator.animate(sector.shape, 'startAngle', targetStart, { duration, delay, easing, onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+          this._animator.animate(sector.shape, 'endAngle', targetEnd, { duration, delay, easing, onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
         } else {
           sector.shape.startAngle = targetStart;
           sector.shape.endAngle = targetEnd;
@@ -295,12 +295,12 @@ export default class PieChart extends Chart {
 
         // Check if radius needs animation (Rose Chart or Resize)
         if (seriesItem.roseType || Math.abs(initialR - itemR) > 0.1) {
-          this._animator.animate(sector.shape, 'r', itemR, { duration, delay, easing, onUpdate: () => sector.markRedraw() }).start();
+          this._animator.animate(sector.shape, 'r', itemR, { duration, delay, easing, onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
         }
 
         // Check if inner radius needs animation
         if (Math.abs(sector.shape.r0 - r0) > 0.1) {
-          this._animator.animate(sector.shape, 'r0', r0, { duration, delay, easing, onUpdate: () => sector.markRedraw() }).start();
+          this._animator.animate(sector.shape, 'r0', r0, { duration, delay, easing, onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
         }
       } else {
         sector.shape.startAngle = targetStart;
@@ -831,7 +831,7 @@ export default class PieChart extends Chart {
         this._animator.animate(text.style, 'opacity', 1, {
           duration: seriesItem.animationDuration || 500,
           delay: 100, // Small delay to let sector expand a bit
-          onUpdate: () => text.markRedraw()
+          onUpdate: () => { text.markRedraw(); this._renderer.refresh(); }
         }).start();
       }
 
@@ -868,7 +868,7 @@ export default class PieChart extends Chart {
           this._animator.animate(line.style, 'opacity', 1, {
             duration: seriesItem.animationDuration || 500,
             delay: 100,
-            onUpdate: () => line.markRedraw()
+            onUpdate: () => { line.markRedraw(); this._renderer.refresh(); }
           }).start();
         }
 
@@ -1056,7 +1056,7 @@ export default class PieChart extends Chart {
 
         if (focus === 'self') {
           sectorTargetOpacity = 0.2;
-          this._animator.animate(s.style, 'opacity', 0.2, { duration: 200 }).start();
+          this._animator.animate(s.style, 'opacity', 0.2, { duration: 200, onUpdate: () => { s.markRedraw(); this._renderer.refresh(); } }).start();
         }
 
         // Handle Label & Line
@@ -1065,38 +1065,47 @@ export default class PieChart extends Chart {
         // Reset other properties
         const sBaseR = (s as any).__baseR;
         if (sBaseR !== undefined) {
-          this._animator.animate(s.shape, 'r', sBaseR, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+          this._animator.animate(s.shape, 'r', sBaseR, { duration: 200, easing: 'cubicOut', onUpdate: () => { s.markRedraw(); this._renderer.refresh(); } }).start();
         }
         if (s.transform) {
-          this._animator.animate(s.transform, 'scaleX', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
-          this._animator.animate(s.transform, 'scaleY', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => s.markRedraw() }).start();
+          this._animator.animate(s.transform, 'scaleX', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => { s.markRedraw(); this._renderer.refresh(); } }).start();
+          this._animator.animate(s.transform, 'scaleY', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => { s.markRedraw(); this._renderer.refresh(); } }).start();
         }
         this._restoreSectorStyle(s);
       }
     });
 
-    // 2. Handle CURRENT sector (highlighting)
-    if (emphasis?.itemStyle) {
-      this._applyEmphasisStyle(sector, emphasis.itemStyle);
-    } else {
-      // Default opacity restore
-      this._animator.animate(sector.style, 'opacity', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+    // Check for font changes
+    if (emphasis?.label?.fontSize || emphasis?.label?.fontWeight || emphasis?.label?.color) {
+      // Font changes cannot be animated smoothly in canvas usually, just set them?
+      // Or animate fill color
+      if (emphasis.label.color) {
+        // this._animator.animate(label.style, 'fill', emphasis.label.color, { duration: 200, onUpdate: () => label.markRedraw() }).start();
+        // Color animation is complex, let's just set it for now or implement color tweening later
+        // But we can animate opacity
+      }
     }
 
-    // Scale animation
-    if (emphasis?.scale) {
-      this._applyScaleAnimation(sector, emphasis, true, baseR);
-    }
+    // Scale animation (handled in _applyScaleAnimation)
+    this._applyScaleAnimation(sector, emphasis, true, (sector as any).__baseR);
 
     // Label animation
     this._animateCurrentLabel(sector, emphasis, showOnHover);
+
+    // Style animation (shadow, etc)
+    const emphasisStyle = emphasis?.itemStyle || {};
+    this._applyEmphasisStyle(sector, emphasisStyle);
   }
 
   private _applyLeaveEmphasis(sector: Sector): void {
     // Restore ALL sectors
     this._activeSectors.forEach((s) => {
       const initOpacity = (s as any).__initialStyle?.opacity ?? 1;
-      this._animator.animate(s.style, 'opacity', initOpacity, { duration: 200 }).start();
+      this._animator.animate(s.style, 'opacity', initOpacity, {
+        duration: 300,
+        easing: 'cubicOut',
+        onUpdate: () => { s.markRedraw(); this._renderer.refresh(); }
+      }).start();
 
       // Restore Label & Line
       this._restoreLabelAndLine(s);
@@ -1127,7 +1136,7 @@ export default class PieChart extends Chart {
 
       this._animator.animate(label.style, 'opacity', targetOpacity, {
         duration: 200,
-        onUpdate: () => label.markRedraw(),
+        onUpdate: () => { label.markRedraw(); this._renderer.refresh(); },
         onComplete: () => {
           if (targetOpacity === 0) label.invisible = true;
         }
@@ -1148,7 +1157,7 @@ export default class PieChart extends Chart {
 
       this._animator.animate(labelLine.style, 'opacity', targetOpacity, {
         duration: 200,
-        onUpdate: () => labelLine.markRedraw(),
+        onUpdate: () => { labelLine.markRedraw(); this._renderer.refresh(); },
         onComplete: () => {
           if (targetOpacity === 0) labelLine.invisible = true;
         }
@@ -1163,8 +1172,9 @@ export default class PieChart extends Chart {
     if (label) {
       const initLabelOpacity = label.__initialStyle?.opacity ?? 1;
       this._animator.animate(label.style, 'opacity', initLabelOpacity, {
-        duration: 200,
-        onUpdate: () => label.markRedraw(),
+        duration: 300,
+        easing: 'cubicOut',
+        onUpdate: () => { label.markRedraw(); this._renderer.refresh(); },
         onComplete: () => {
           if (initLabelOpacity === 0) label.invisible = true;
         }
@@ -1174,8 +1184,9 @@ export default class PieChart extends Chart {
     if (labelLine) {
       const initLineOpacity = labelLine.__initialStyle?.opacity ?? 1;
       this._animator.animate(labelLine.style, 'opacity', initLineOpacity, {
-        duration: 200,
-        onUpdate: () => labelLine.markRedraw(),
+        duration: 300,
+        easing: 'cubicOut',
+        onUpdate: () => { labelLine.markRedraw(); this._renderer.refresh(); },
         onComplete: () => {
           if (initLineOpacity === 0) labelLine.invisible = true;
         }
@@ -1203,13 +1214,13 @@ export default class PieChart extends Chart {
       label.invisible = false;
       this._animator.animate(label.style, 'opacity', 1, {
         duration: 200,
-        onUpdate: () => label.markRedraw()
+        onUpdate: () => { label.markRedraw(); this._renderer.refresh(); }
       }).start();
     } else {
       if (!label.invisible && (label.style.opacity as number) < 1) {
         this._animator.animate(label.style, 'opacity', 1, {
           duration: 200,
-          onUpdate: () => label.markRedraw()
+          onUpdate: () => { label.markRedraw(); this._renderer.refresh(); }
         }).start();
       }
     }
@@ -1228,7 +1239,7 @@ export default class PieChart extends Chart {
         labelLine.invisible = false;
         this._animator.animate(labelLine.style, 'opacity', 1, {
           duration: 200,
-          onUpdate: () => labelLine.markRedraw()
+          onUpdate: () => { labelLine.markRedraw(); this._renderer.refresh(); }
         }).start();
       }
     }
@@ -1257,10 +1268,11 @@ export default class PieChart extends Chart {
     Object.keys(targetStyle).forEach(key => {
       const value = targetStyle[key];
       if (typeof value === 'number') {
-        this._animator.animate(style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+        this._animator.animate(style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
       } else {
         style[key] = value;
         sector.markRedraw();
+        this._renderer.refresh();
       }
     });
   }
@@ -1284,10 +1296,11 @@ export default class PieChart extends Chart {
     Object.keys(targetStyle).forEach(key => {
       const value = targetStyle[key];
       if (typeof value === 'number') {
-        this._animator.animate(style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+        this._animator.animate(style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
       } else {
         style[key] = value;
         sector.markRedraw();
+        this._renderer.refresh();
       }
     });
   }
@@ -1296,21 +1309,21 @@ export default class PieChart extends Chart {
     if (isEnter && emphasis && baseR !== undefined) {
       const scaleSize = emphasis.scaleSize || 1.1;
       const targetR = baseR * scaleSize;
-      this._animator.animate(sector.shape, 'r', targetR, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+      this._animator.animate(sector.shape, 'r', targetR, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
     } else if (isEnter && emphasis) {
       // Transform scale fallback
       const scaleSize = emphasis.scaleSize || 1.1;
-      this._animator.animate(sector.transform || {}, 'scaleX', scaleSize, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
-      this._animator.animate(sector.transform || {}, 'scaleY', scaleSize, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+      this._animator.animate(sector.transform || {}, 'scaleX', scaleSize, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+      this._animator.animate(sector.transform || {}, 'scaleY', scaleSize, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
     } else {
       // Restore
       // If baseR is provided, restore radius
       if (baseR !== undefined) {
-        this._animator.animate(sector.shape, 'r', baseR, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+        this._animator.animate(sector.shape, 'r', baseR, { duration: 300, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
       } else {
         // Restore transform scale
-        this._animator.animate(sector.transform || {}, 'scaleX', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
-        this._animator.animate(sector.transform || {}, 'scaleY', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => sector.markRedraw() }).start();
+        this._animator.animate(sector.transform || {}, 'scaleX', 1, { duration: 300, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+        this._animator.animate(sector.transform || {}, 'scaleY', 1, { duration: 300, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
       }
     }
   }
