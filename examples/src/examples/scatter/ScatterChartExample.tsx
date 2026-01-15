@@ -10,10 +10,7 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = React.useState(true);
   const [gridTop, setGridTop] = React.useState(80);
   const [splitNumber, setSplitNumber] = React.useState(5);
-  const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
 
-  const option: ChartOption = {
-    title: {
       text: 'Scatter Chart',
       subtext: 'Data Distribution',
       left: 'center',
@@ -40,12 +37,11 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: '#eee',
           type: 'dashed'
         }
       }
     },
-    yAxis: {
+          type: 'dashed'
       type: 'value',
       name: 'Y Axis',
       splitNumber: splitNumber,
@@ -56,8 +52,7 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }
       }
     },
-    series: [
-      {
+          color: '#eee'
         name: 'Group A',
         type: 'scatter',
         symbolSize: 12,
@@ -152,19 +147,6 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
             type="range"
             min="2"
             max="10"
-            step="1"
-            value={splitNumber}
-            onChange={(e) => setSplitNumber(Number(e.target.value))}
-            style={{ width: 100 }}
-          />
-        </div>
-      </div>
-
-      <div style={{
-        width: '100%',
-        height: 500,
-        backgroundColor: 'transparent',
-        borderRadius: 8,
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         padding: 20,
         boxSizing: 'border-box'
@@ -176,26 +158,3 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
           renderMode={renderMode}
           style={{ width: '100%', height: '100%' }}
         />
-      </div>
-
-      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
-        <button
-          onClick={handleUpdateSeries}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: '#5470c6',
-            color: 'white',
-            border: 'none',
-            borderRadius: 4,
-            cursor: 'pointer',
-            fontSize: 14
-          }}
-        >
-          Update Data (via getChartInstance)
-        </button>
-      </div>
-    </div>
-  );
-};
-
-export default ScatterChartExample;

@@ -68,9 +68,29 @@ export default class Line extends ChartElement {
     this.applyStyle(ctx);
 
     const shape = this.shape;
+    let x1 = shape.x1;
+    let y1 = shape.y1;
+    let x2 = shape.x2;
+    let y2 = shape.y2;
+
+    // Crisp rendering optimization for straight lines
+    const lineWidth = this.style.lineWidth || 1;
+    if (lineWidth % 2 !== 0) {
+      if (Math.abs(x1 - x2) < 0.01) {
+        // Vertical line
+        x1 = Math.floor(x1) + 0.5;
+        x2 = x1;
+      }
+      if (Math.abs(y1 - y2) < 0.01) {
+        // Horizontal line
+        y1 = Math.floor(y1) + 0.5;
+        y2 = y1;
+      }
+    }
+
     ctx.beginPath();
-    ctx.moveTo(shape.x1, shape.y1);
-    ctx.lineTo(shape.x2, shape.y2);
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
 
     if (this.style.stroke && this.style.lineWidth !== 0) {
       ctx.stroke();

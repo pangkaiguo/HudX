@@ -51,14 +51,27 @@ export default class Rect extends ChartElement {
     this.applyStyle(ctx);
 
     const shape = this.shape;
+    let x = shape.x;
+    let y = shape.y;
+    let width = shape.width;
+    let height = shape.height;
+
+    // Crisp rendering optimization
+    // Only apply if there is a stroke and it's an odd width
+    // This aligns the stroke to the pixel grid
+    if (this.style.stroke && (this.style.lineWidth || 1) % 2 !== 0) {
+      x = Math.floor(x) + 0.5;
+      y = Math.floor(y) + 0.5;
+      width = Math.floor(width);
+      height = Math.floor(height);
+    }
+
     ctx.beginPath();
 
     if (shape.r && shape.r > 0) {
       // Rounded rectangle
-      const x = shape.x;
-      const y = shape.y;
-      const w = shape.width;
-      const h = shape.height;
+      const w = width;
+      const h = height;
       const r = Math.min(shape.r, w / 2, h / 2);
 
       ctx.moveTo(x + r, y);
@@ -72,7 +85,7 @@ export default class Rect extends ChartElement {
       ctx.arc(x + r, y + r, r, Math.PI, -Math.PI / 2, false);
       ctx.closePath();
     } else {
-      ctx.rect(shape.x, shape.y, shape.width, shape.height);
+      ctx.rect(x, y, width, height);
     }
 
     if (this.style.fill) {

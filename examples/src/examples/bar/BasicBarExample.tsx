@@ -9,14 +9,10 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(5);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
-  const [barWidth, setBarWidth] = useState<number | 'auto'>('auto');
   const [showBackground, setShowBackground] = useState(false);
   const [inverse, setInverse] = useState(false);
 
   const themeObj = ThemeManager.getTheme(theme);
-  const chartRef = useRef<HChartRef>(null);
-
   const option: ChartOption = {
     title: {
       text: 'Bar Chart',
@@ -63,15 +59,11 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         show: showGrid,
         lineStyle: {
           color: '#eee',
-          type: 'dashed'
-        }
-      }
     },
     yAxis: {
-      type: 'value',
       show: true,
       splitNumber: splitNumber,
-      splitLine: {
+          type: 'dashed'
         show: showGrid,
         lineStyle: {
           color: '#eee'
@@ -82,8 +74,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
       {
         name: 'Weekly Data',
         type: 'bar',
-        data: [120, 200, 150, 80, 70, 110, 130],
-        barWidth: barWidth === 'auto' ? undefined : barWidth,
+          color: '#eee'
         showBackground: showBackground,
         backgroundStyle: {
           color: 'rgba(180, 180, 180, 0.2)'
@@ -199,31 +190,6 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
-              />
-            </div>
-          </>
-        )}
-      </div>
-      <HChart
-        ref={chartRef}
-        option={option}
-        theme={theme}
-        renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
-      />
-      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
-        <button
-          onClick={handleUpdateSeries}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: '#5470c6',
-            color: 'white',
-            border: 'none',
-            borderRadius: 4,
-            cursor: 'pointer',
-            fontSize: 14
-          }}
-        >
           Update Data (via getChartInstance)
         </button>
       </div>
