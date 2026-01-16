@@ -4,13 +4,13 @@ This document provides detailed information about the core API and chart compone
 
 ## Table of Contents
 
-- [Core Engine (`HudX/core`)](#core-engine-hudxcore)
+- [Core Engine (`hux-core`)](#core-engine-hudxcore)
   - [Renderer](#renderer)
   - [ChartElement](#chartelement)
   - [Shape](#shape)
   - [Animation](#animation)
   - [Utils](#utils)
-- [Chart Library (`HudX/charts`)](#chart-library-hudxcharts)
+- [Chart Library (`hux-charts`)](#chart-library-hudxcharts)
   - [Chart Base Class](#chart)
   - [Specific Charts](#specific-charts)
   - [React Component (`HChart`)](#hchart)
@@ -18,7 +18,7 @@ This document provides detailed information about the core API and chart compone
 
 ---
 
-## Core Engine (`HudX/core`)
+## Core Engine (`hux-core`)
 
 The core engine provides low-level rendering capabilities, supporting both Canvas and SVG modes.
 
@@ -27,7 +27,7 @@ The core engine provides low-level rendering capabilities, supporting both Canva
 The entry point for rendering, managing Painter and Storage.
 
 ```typescript
-import { Renderer } from 'HudX/core';
+import { Renderer } from 'hux-core';
 
 // Initialize renderer
 const renderer = Renderer.init(
@@ -58,7 +58,7 @@ renderer.dispose();
 Base class for all graphical elements.
 
 ```typescript
-import { ChartElement } from 'HudX/core';
+import { ChartElement } from 'hux-core';
 
 const element = new ChartElement({
   zlevel: 0,       // Layer index
@@ -98,7 +98,7 @@ Built-in basic shapes.
 Animation system support.
 
 ```typescript
-import { Animation, Easing } from 'HudX/core';
+import { Animation, Easing } from 'hux-core';
 
 const anim = new Animation(
   target: object,    // Target object
@@ -125,7 +125,7 @@ Utility functions.
 
 ---
 
-## Chart Library (`HudX/charts`)
+## Chart Library (`hux-charts`)
 
 High-level chart components built on the core engine, designed to be compatible with ECharts API.
 
@@ -147,7 +147,7 @@ Base class for charts, encapsulating common coordinate systems, legends, tooltip
 React component wrapper, recommended for React projects.
 
 ```tsx
-import { HChart } from 'HudX/charts';
+import { HChart } from 'hux-charts';
 
 <HChart
   option={option}           // ECharts-style configuration

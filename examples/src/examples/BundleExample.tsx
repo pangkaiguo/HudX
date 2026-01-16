@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
-import { Rect, Circle, Group, Renderer, HChart, type ChartOption } from "HudX";
+import { Rect, Circle, Group, Renderer, HChart, type ChartOption } from "hudx";
 
-// This example demonstrates importing everything from the unified 'HudX' package
+// This example demonstrates importing everything from the unified 'hudx' package
 export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
   const coreRef = useRef<HTMLDivElement>(null);
 
-  // Example 1: Using HChart component from HudX package
+  // Example 1: Using HChart component from hudx package
   const barOption: ChartOption = {
     padding: [40, 40, 40, 40],
     grid: {
@@ -101,7 +101,7 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
       </p>
 
       <div style={{ marginBottom: 40 }}>
-        <h2>1. HChart Component imported from 'HudX'</h2>
+        <h2>1. HChart Component imported from 'hudx'</h2>
         <div style={{ border: "1px solid #ccc", display: "inline-block" }}>
           <HChart
             option={barOption}
@@ -113,7 +113,7 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
       </div>
 
       <div>
-        <h2>2. Core Shapes (Rect, Circle) imported from 'HudX'</h2>
+        <h2>2. Core Shapes (Rect, Circle) imported from 'hudx'</h2>
         <div
           ref={coreRef}
           style={{

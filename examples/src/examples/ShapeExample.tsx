@@ -9,8 +9,8 @@ import {
   Text,
   ThemeManager,
   Theme,
-} from "HudX/core";
-import type { RenderMode } from "HudX/core";
+} from "hux-core";
+import type { RenderMode } from "hux-core";
 
 export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -159,7 +159,7 @@ export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
         </label>
       </div>
       <p style={{ marginBottom: 20, color: "#666" }}>
-        Demonstrates basic shapes from HudX/core
+        Demonstrates basic shapes from hux-core
       </p>
       <div
         ref={containerRef}

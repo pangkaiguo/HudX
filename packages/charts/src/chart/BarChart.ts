@@ -4,7 +4,7 @@ import {
   createOrdinalScale,
   calculateDomain,
 } from "../util/coordinate";
-import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from "HudX/core";
+import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from "hux-core";
 import { EventHelper } from "../util/EventHelper";
 
 export default class BarChart extends Chart {

@@ -1,6 +1,6 @@
-import { HChart } from "HudX/charts";
-import type { ChartOption } from "HudX/charts";
-import { Theme } from "HudX/core";
+import { HChart } from "hux-charts";
+import type { ChartOption } from "hux-charts";
+import { Theme } from "hux-core";
 
 export const RichTextPieExample = ({ theme = "light" }: { theme?: Theme }) => {
   const option: ChartOption = {

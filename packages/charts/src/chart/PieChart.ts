@@ -7,7 +7,7 @@ import {
   createDecalPattern,
   Z_SERIES,
   Z_LABEL,
-} from "HudX/core";
+} from "hux-core";
 import { EventHelper } from "../util/EventHelper";
 
 // TODO: Define a proper interface for the extended Sector to avoid 'any' casting throughout the file.

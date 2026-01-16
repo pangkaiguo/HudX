@@ -4,7 +4,7 @@ import {
   createOrdinalScale,
   calculateDomain,
 } from "../util/coordinate";
-import { Circle, Z_SERIES } from "HudX/core";
+import { Circle, Z_SERIES } from "hux-core";
 import { EventHelper } from "../util/EventHelper";
 
 export default class ScatterChart extends Chart {

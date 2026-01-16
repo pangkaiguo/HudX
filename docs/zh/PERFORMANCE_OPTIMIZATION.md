@@ -40,7 +40,7 @@ renderer.flush(); // 一次性渲染所有元素
 ### 对象池复用
 
 ```typescript
-import { ObjectPool } from "HudX/core";
+import { ObjectPool } from "hux-core";
 
 const pool = new ObjectPool(
   () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),

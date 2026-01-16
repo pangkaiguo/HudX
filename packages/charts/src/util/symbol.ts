@@ -1,4 +1,4 @@
-import { ChartElement, Circle, Rect, Polygon, Path } from "HudX/core";
+import { ChartElement, Circle, Rect, Polygon, Path } from "hux-core";
 
 export type SymbolType =
   | "circle"

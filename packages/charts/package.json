@@ -1,7 +1,7 @@
 {
-  "name": "HudX/charts",
+  "name": "hudx-charts",
   "version": "1.0.0",
-  "description": "Chart library built on top of HudX core",
+  "description": "Chart library built on top of hudx core",
   "type": "module",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -15,10 +15,11 @@
     "build": "tsc --build",
     "dev": "tsc --watch",
     "test": "vitest --environment happy-dom --coverage.enabled=true",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore",
     "clean": "tsc --build --clean && rm -rf dist"
   },
   "dependencies": {
-    "HudX/core": "workspace:*",
+    "hux-core": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

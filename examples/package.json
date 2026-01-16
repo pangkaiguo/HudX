@@ -1,17 +1,18 @@
 {
-  "name": "HudX/examples",
+  "name": "hudx/examples",
   "version": "1.0.0",
   "description": "HudX examples and performance tests",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\" --ignore-path ../.prettierignore"
   },
   "dependencies": {
     "hudx": "workspace:*",
-    "HudX/core": "workspace:*",
-    "HudX/charts": "workspace:*",
+    "hux-core": "workspace:*",
+    "hux-charts": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

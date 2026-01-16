@@ -14,7 +14,7 @@ import {
   Legend,
   Animation,
   Easing,
-} from "HudX/core";
+} from "hux-core";
 
 // Initialize renderer
 const renderer = Renderer.init(container, "canvas", "light", "en");

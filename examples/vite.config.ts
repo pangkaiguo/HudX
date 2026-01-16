@@ -22,14 +22,14 @@ export default defineConfig({
             }
             return "vendor";
           }
-          if (id.includes("HudX/core")) {
-            if (id.includes("shape/")) return "HudX-shapes";
-            if (id.includes("animation/")) return "HudX-animation";
-            if (id.includes("component/")) return "HudX-components";
-            return "HudX-core";
+          if (id.includes("hux-core")) {
+            if (id.includes("shape/")) return "hudx-shapes";
+            if (id.includes("animation/")) return "hudx-animation";
+            if (id.includes("component/")) return "hudx-components";
+            return "hudx-core";
           }
-          if (id.includes("HudX/charts")) {
-            return "HudX-charts";
+          if (id.includes("hux-charts")) {
+            return "hudx-charts";
           }
         },
         chunkFileNames: "assets/[name]-[hash].js",
@@ -44,8 +44,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "HudX/core": path.resolve(__dirname, "../packages/core/src"),
-      "HudX/charts": path.resolve(__dirname, "../packages/charts/src"),
+      "hux-core": path.resolve(__dirname, "../packages/core/src"),
+      "hux-charts": path.resolve(__dirname, "../packages/charts/src"),
     },
   },
   optimizeDeps: {

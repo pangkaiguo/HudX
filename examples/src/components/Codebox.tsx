@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { HChart } from "HudX/charts";
-import type { ChartOption } from "HudX/charts";
-import { ThemeManager, Theme } from "HudX/core";
+import { HChart } from "hux-charts";
+import type { ChartOption } from "hux-charts";
+import { ThemeManager, Theme } from "hux-core";
 import { CodeEditor } from "./CodeEditor";
 
 interface CodeboxProps {
@@ -27,7 +27,7 @@ export const Codebox: React.FC<CodeboxProps> = ({
   const chartContainerRef = React.useRef<HTMLDivElement>(null);
 
   const getTsCode = (jsCode: string) => {
-    return `import type { ChartOption } from 'HudX';
+    return `import type { ChartOption } from 'hudx';
 
 const ${jsCode.replace("option =", "option: ChartOption =")}`;
   };
@@ -357,7 +357,7 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
           </div>
           <CodeEditor
             code={activeTab === "TS" ? getTsCode(code) : code}
-            onChange={activeTab === "TS" ? () => {} : setCode}
+            onChange={activeTab === "TS" ? () => { } : setCode}
             theme={theme === "dark" ? "dark" : "light"}
           />
           {error && (

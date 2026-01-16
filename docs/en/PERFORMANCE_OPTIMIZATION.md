@@ -40,7 +40,7 @@ renderer.flush(); // Render all elements at once
 ### Object Pool Reuse
 
 ```typescript
-import { ObjectPool } from "HudX/core";
+import { ObjectPool } from "hux-core";
 
 const pool = new ObjectPool(
   () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import { HChart } from "HudX/charts";
-import type { ChartOption, HChartRef } from "HudX/charts";
-import { Theme } from "HudX/core";
+import { HChart } from "hux-charts";
+import type { ChartOption, HChartRef } from "hux-charts";
+import { Theme } from "hux-core";
 
 export const AxisLabelExample = ({ theme = "light" }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);

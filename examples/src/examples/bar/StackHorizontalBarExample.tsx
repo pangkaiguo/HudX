@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import { HChart } from "HudX/charts";
-import type { ChartOption, HChartRef } from "HudX/charts";
-import { ThemeManager, Theme } from "HudX/core";
-import type { RenderMode } from "HudX/core";
+import { HChart } from "hux-charts";
+import type { ChartOption, HChartRef } from "hux-charts";
+import { ThemeManager, Theme } from "hux-core";
+import type { RenderMode } from "hux-core";
 
 export const StackHorizontalBarExample = ({
   theme = "light",

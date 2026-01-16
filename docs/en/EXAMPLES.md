@@ -6,7 +6,7 @@
 
 ```tsx
 import React from "react";
-import { HChart } from "HudX/charts";
+import { HChart } from "hux-charts";
 
 function LineChartExample() {
   const option = {
@@ -43,7 +43,7 @@ function LineChartExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "HudX/charts";
+import { HChart } from "hux-charts";
 
 function BarChartExample() {
   const option = {
@@ -76,7 +76,7 @@ function BarChartExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "HudX/charts";
+import { HChart } from "hux-charts";
 
 function PieChartExample() {
   const option = {
@@ -109,7 +109,7 @@ function PieChartExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "HudX/charts";
+import { HChart } from "hux-charts";
 
 function ScatterChartExample() {
   const option = {
@@ -150,7 +150,7 @@ function ScatterChartExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "HudX/charts";
+import { HChart } from "hux-charts";
 
 function MultiSeriesExample() {
   const option = {
@@ -183,7 +183,7 @@ function MultiSeriesExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "HudX/charts";
+import { HChart } from "hux-charts";
 
 function ConfigurationExample() {
   const option = {
@@ -223,7 +223,7 @@ function ConfigurationExample() {
 ### Using Core API
 
 ```typescript
-import { Renderer, Circle, Rect, Group } from "HudX/core";
+import { Renderer, Circle, Rect, Group } from "hux-core";
 
 // Initialize renderer
 const renderer = Renderer.init("#container", "canvas", "light", "en");
@@ -287,7 +287,7 @@ circle.animate("shape", { r: 100 }, 500);
 
 ```tsx
 import React, { useState } from "react";
-import { HChart } from "HudX/charts";
+import { HChart } from "hux-charts";
 
 function RenderingModeExample() {
   const [renderMode, setRenderMode] = useState<"canvas" | "svg">("canvas");

@@ -1,7 +1,7 @@
 {
-  "name": "HudX/core",
+  "name": "hux-core",
   "version": "1.0.0",
-  "description": "Core rendering engine for HudX charts",
+  "description": "Core rendering engine for hudx charts",
   "type": "module",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -15,6 +15,7 @@
     "build": "tsc --build",
     "dev": "tsc --watch",
     "test": "vitest --environment happy-dom --coverage.enabled=true",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore",
     "clean": "tsc --build --clean && rm -rf dist"
   },
   "devDependencies": {

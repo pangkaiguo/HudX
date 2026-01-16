@@ -5,14 +5,14 @@ import { resolve } from "path";
 export default defineConfig({
   resolve: {
     alias: {
-      "HudX/core": resolve(__dirname, "../core/src/index.ts"),
-      "HudX/charts": resolve(__dirname, "../charts/src/index.ts"),
+      "hux-core": resolve(__dirname, "../core/src/index.ts"),
+      "hux-charts": resolve(__dirname, "../charts/src/index.ts"),
     },
   },
   build: {
     lib: {
       entry: resolve(__dirname, "src/index.ts"),
-      name: "HudX",
+      name: "hudx",
       fileName: (format) => {
         if (format === "es") return "hudx.js";
         if (format === "cjs") return "hudx.cjs";
@@ -30,7 +30,7 @@ export default defineConfig({
       },
     },
     emptyOutDir: true,
-    sourcemap: true,
+    sourcemap: false,
   },
   plugins: [
     dts({

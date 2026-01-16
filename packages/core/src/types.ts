@@ -1,5 +1,5 @@
 /**
- * Core type definitions for HudX rendering engine
+ * Core type definitions for hudx rendering engine
  */
 
 export interface Point {
@@ -401,14 +401,14 @@ export interface ElementWithParent {
 
 export interface DecalObject {
   symbol?:
-    | "circle"
-    | "rect"
-    | "triangle"
-    | "diamond"
-    | "pin"
-    | "arrow"
-    | "none"
-    | string;
+  | "circle"
+  | "rect"
+  | "triangle"
+  | "diamond"
+  | "pin"
+  | "arrow"
+  | "none"
+  | string;
   symbolSize?: number;
   symbolKeepAspect?: boolean;
   color?: string;

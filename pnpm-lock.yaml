@@ -17,21 +17,24 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.18
         version: 18.3.7(@types/react@18.3.27)
+      prettier:
+        specifier: ^3.8.0
+        version: 3.8.0
       typescript:
         specifier: ^5.3.3
         version: 5.9.3
 
   examples:
     dependencies:
-      HudX/charts:
-        specifier: workspace:*
-        version: link:../packages/charts
-      HudX/core:
-        specifier: workspace:*
-        version: link:../packages/core
       hudx:
         specifier: workspace:*
         version: link:../packages/hudx
+      hudx/charts:
+        specifier: workspace:*
+        version: link:../packages/charts
+      hudx/core:
+        specifier: workspace:*
+        version: link:../packages/core
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -57,7 +60,7 @@ importers:
 
   packages/charts:
     dependencies:
-      HudX/core:
+      hudx/core:
         specifier: workspace:*
         version: link:../core
       react:
@@ -103,10 +106,10 @@ importers:
 
   packages/hudx:
     dependencies:
-      HudX/charts:
+      hudx/charts:
         specifier: workspace:*
         version: link:../charts
-      HudX/core:
+      hudx/core:
         specifier: workspace:*
         version: link:../core
       react:
@@ -1831,6 +1834,12 @@ packages:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
+    dev: true
+
+  /prettier@3.8.0:
+    resolution: {integrity: sha512-yEPsovQfpxYfgWNhCfECjG5AQaO+K3dp6XERmOepyPDVqcJm+bjyCVO3pmU+nAPe0N5dDvekfGezt/EIiRe1TA==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /punycode@2.3.1:

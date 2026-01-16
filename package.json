@@ -1,5 +1,5 @@
 {
-  "name": "HudX",
+  "name": "hudx",
   "version": "1.0.0",
   "description": "A high-performance charting library built with React and TypeScript",
   "private": true,
@@ -12,12 +12,14 @@
     "dev:examples": "pnpm --filter HudX/examples dev",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
+    "format": "pnpm -r run format",
     "clean": "tsc --build --clean && pnpm -r clean"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
+    "prettier": "^3.8.0",
     "typescript": "^5.3.3"
   },
   "engines": {

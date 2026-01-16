@@ -12,7 +12,7 @@ import React, {
   useImperativeHandle,
 } from "react";
 import type { ChartOption, ChartEvent } from "../types";
-import type { RenderMode, Theme, Locale } from "HudX/core";
+import type { RenderMode, Theme, Locale } from "hux-core";
 import Chart from "../Chart";
 import LineChart from "../chart/LineChart";
 import BarChart from "../chart/BarChart";

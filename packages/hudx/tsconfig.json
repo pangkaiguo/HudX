@@ -6,8 +6,8 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "HudX/core": ["../core/src/index.ts"],
-      "HudX/charts": ["../charts/src/index.ts"]
+      "hux-core": ["../core/src/index.ts"],
+      "hux-charts": ["../charts/src/index.ts"]
     }
   },
   "include": ["src", "../core/src", "../charts/src"],

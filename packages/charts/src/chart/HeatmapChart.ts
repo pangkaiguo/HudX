@@ -3,7 +3,7 @@
  */
 
 import Chart from "../Chart";
-import { Rect } from "HudX/core";
+import { Rect } from "hux-core";
 import { EventHelper } from "../util/EventHelper";
 
 export default class HeatmapChart extends Chart {

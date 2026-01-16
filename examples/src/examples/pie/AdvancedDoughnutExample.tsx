@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
-import { HChart } from "HudX/charts";
-import type { ChartOption, HChartRef } from "HudX/charts";
+import { HChart } from "hux-charts";
+import type { ChartOption, HChartRef } from "hux-charts";
 
-import { Theme } from "HudX/core";
+import { Theme } from "hux-core";
 
 export const AdvancedDoughnutExample = ({
   theme = "light",

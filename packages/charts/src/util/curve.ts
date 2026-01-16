@@ -1,4 +1,4 @@
-import { Point } from "HudX/core";
+import { Point } from "hux-core";
 
 /**
  * Calculate smooth line path data using Catmull-Rom spline algorithm (Centripetal or Uniform)

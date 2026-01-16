@@ -17,7 +17,7 @@ import {
   Z_SERIES,
   Z_LABEL,
   Z_AXIS,
-} from "HudX/core";
+} from "hux-core";
 import { getSmoothPath, getSmoothAreaPath } from "../util/curve";
 import { createSymbol } from "../util/symbol";
 
