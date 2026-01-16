@@ -1,8 +1,13 @@
 export const getUnit32RandomValues = () => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return Math.random();
   }
-  const crypto = (window as any).crypto || (window as any).webkitCrypto || (window as any).mozCrypto || (window as any).oCrypto || (window as any).msCrypto;
+  const crypto =
+    (window as any).crypto ||
+    (window as any).webkitCrypto ||
+    (window as any).mozCrypto ||
+    (window as any).oCrypto ||
+    (window as any).msCrypto;
   if (!crypto || !crypto.getRandomValues) {
     return Math.random();
   }
@@ -12,9 +17,9 @@ export const getUnit32RandomValues = () => {
 };
 
 export const uuidV4 = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
     const r = (getUnit32RandomValues() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 };

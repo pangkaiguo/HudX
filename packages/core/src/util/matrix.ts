@@ -16,8 +16,12 @@ export interface Matrix {
  */
 export const createIdentityMatrix = (): Matrix => {
   return {
-    a: 1, b: 0, c: 0,
-    d: 1, e: 0, f: 0
+    a: 1,
+    b: 0,
+    c: 0,
+    d: 1,
+    e: 0,
+    f: 0,
   };
 };
 
@@ -31,17 +35,21 @@ export const multiplyMatrix = (m1: Matrix, m2: Matrix): Matrix => {
     c: m1.a * m2.c + m1.c * m2.d,
     d: m1.b * m2.c + m1.d * m2.d,
     e: m1.a * m2.e + m1.c * m2.f + m1.e,
-    f: m1.b * m2.e + m1.d * m2.f + m1.f
+    f: m1.b * m2.e + m1.d * m2.f + m1.f,
   };
 };
 
 /**
  * Apply matrix to point
  */
-export const applyMatrix = (matrix: Matrix, x: number, y: number): [number, number] => {
+export const applyMatrix = (
+  matrix: Matrix,
+  x: number,
+  y: number,
+): [number, number] => {
   return [
     matrix.a * x + matrix.c * y + matrix.e,
-    matrix.b * x + matrix.d * y + matrix.f
+    matrix.b * x + matrix.d * y + matrix.f,
   ];
 };
 
@@ -50,8 +58,12 @@ export const applyMatrix = (matrix: Matrix, x: number, y: number): [number, numb
  */
 export const createTranslateMatrix = (tx: number, ty: number): Matrix => {
   return {
-    a: 1, b: 0, c: 0,
-    d: 1, e: tx, f: ty
+    a: 1,
+    b: 0,
+    c: 0,
+    d: 1,
+    e: tx,
+    f: ty,
   };
 };
 
@@ -60,8 +72,12 @@ export const createTranslateMatrix = (tx: number, ty: number): Matrix => {
  */
 export const createScaleMatrix = (sx: number, sy: number): Matrix => {
   return {
-    a: sx, b: 0, c: 0,
-    d: sy, e: 0, f: 0
+    a: sx,
+    b: 0,
+    c: 0,
+    d: sy,
+    e: 0,
+    f: 0,
   };
 };
 
@@ -72,8 +88,12 @@ export const createRotateMatrix = (angle: number): Matrix => {
   const cos = Math.cos(angle);
   const sin = Math.sin(angle);
   return {
-    a: cos, b: sin, c: -sin,
-    d: cos, e: 0, f: 0
+    a: cos,
+    b: sin,
+    c: -sin,
+    d: cos,
+    e: 0,
+    f: 0,
   };
 };
 
@@ -92,7 +112,7 @@ export const invertMatrix = (matrix: Matrix): Matrix | null => {
     c: -matrix.c * invDet,
     d: matrix.a * invDet,
     e: (matrix.c * matrix.f - matrix.d * matrix.e) * invDet,
-    f: (matrix.b * matrix.e - matrix.a * matrix.f) * invDet
+    f: (matrix.b * matrix.e - matrix.a * matrix.f) * invDet,
   };
 };
 
@@ -126,7 +146,7 @@ export const translate = (m: Matrix, tx: number, ty: number): Matrix => {
     c: m.c,
     d: m.d,
     e: m.a * tx + m.c * ty + m.e,
-    f: m.b * tx + m.d * ty + m.f
+    f: m.b * tx + m.d * ty + m.f,
   };
 };
 
@@ -140,7 +160,7 @@ export const scale = (m: Matrix, sx: number, sy: number): Matrix => {
     c: m.c * sy,
     d: m.d * sy,
     e: m.e,
-    f: m.f
+    f: m.f,
   };
 };
 
@@ -156,6 +176,6 @@ export const rotate = (m: Matrix, angle: number): Matrix => {
     c: m.a * -sin + m.c * cos,
     d: m.b * -sin + m.d * cos,
     e: m.e,
-    f: m.f
+    f: m.f,
   };
 };

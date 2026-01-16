@@ -38,7 +38,7 @@ Color and opacity transitions are automatically handled using `lerp` (linear int
 The `EventHelper` utility simplifies binding hover interactions while handling cleanups.
 
 ```typescript
-import { EventHelper } from '../util/EventHelper';
+import { EventHelper } from "../util/EventHelper";
 
 EventHelper.bindHoverEvents(
   element,
@@ -47,7 +47,7 @@ EventHelper.bindHoverEvents(
   },
   (evt) => {
     // onMouseOut: animate scale down, hide tooltip
-  }
+  },
 );
 ```
 
@@ -64,11 +64,9 @@ EventHelper.bindHoverEvents(
 The core animation engine (`Animator`) supports complex transitions.
 
 ```typescript
-import { Animation, Easing } from 'HudX/core';
+import { Animation, Easing } from "HudX/core";
 
-const anim = new Animation(
-  target, 'x', 100, 500, 0, Easing.cubicOut
-);
+const anim = new Animation(target, "x", 100, 500, 0, Easing.cubicOut);
 anim.start();
 ```
 

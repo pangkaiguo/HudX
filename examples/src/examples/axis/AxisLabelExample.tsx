@@ -1,161 +1,161 @@
-import React, { useRef, useState } from 'react';
-import { HChart } from 'HudX/charts';
-import type { ChartOption, HChartRef } from 'HudX/charts';
-import { Theme } from 'HudX/core';
+import React, { useRef, useState } from "react";
+import { HChart } from "HudX/charts";
+import type { ChartOption, HChartRef } from "HudX/charts";
+import { Theme } from "HudX/core";
 
-export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const AxisLabelExample = ({ theme = "light" }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);
 
   const [rotate, setRotate] = useState(45);
   const [width, setWidth] = useState(60);
-  const [overflow, setOverflow] = useState<'break' | 'truncate' | 'none'>('break');
+  const [overflow, setOverflow] = useState<"break" | "truncate" | "none">(
+    "break",
+  );
 
   const [yRotate, setYRotate] = useState(-45);
   const [yWidth, setYWidth] = useState(60);
-  const [yOverflow, setYOverflow] = useState<'break' | 'truncate' | 'none'>('break');
+  const [yOverflow, setYOverflow] = useState<"break" | "truncate" | "none">(
+    "break",
+  );
 
   const option: ChartOption = {
-    title: {
-      text: 'X Axis Label Configuration',
-      subtext: 'Rotation and Wrapping',
-      left: 'center',
-      top: 20
-    },
     tooltip: {
-      trigger: 'axis'
+      trigger: "axis",
     },
     grid: {
       bottom: 100,
-      top: 80
+      top: 80,
     },
     xAxis: {
-      type: 'category',
+      type: "category",
       data: [
-        'Long Label One',
-        'Long Label Two',
-        'Long Label Three',
-        'Very Long Label Four',
-        'Super Long Label Five',
-        'Extremely Long Label Six',
-        'Just A Normal Label'
+        "Long Label One",
+        "Long Label Two",
+        "Long Label Three",
+        "Very Long Label Four",
+        "Super Long Label Five",
+        "Extremely Long Label Six",
+        "Just A Normal Label",
       ],
       axisLabel: {
         rotate: rotate,
         width: width,
         overflow: overflow,
-        interval: 0
-      }
+        interval: 0,
+      },
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
     series: [
       {
         data: [120, 200, 150, 80, 70, 110, 130],
-        type: 'bar',
-        itemStyle: { color: '#5470c6' }
-      }
-    ]
+        type: "bar",
+        itemStyle: { color: "#5470c6" },
+      },
+    ],
   };
 
   const yOption: ChartOption = {
-    title: {
-      text: 'Y Axis Label Configuration',
-      subtext: 'Horizontal Bar',
-      left: 'center',
-      top: 20
-    },
     tooltip: {
-      trigger: 'axis'
+      trigger: "axis",
     },
     grid: {
       left: 150,
       top: 80,
       right: 40,
-      bottom: 40
+      bottom: 40,
     },
     xAxis: {
-      type: 'value'
+      type: "value",
     },
     yAxis: {
-      type: 'category',
+      type: "category",
       data: [
-        'Long Label One',
-        'Long Label Two',
-        'Long Label Three',
-        'Very Long Label Four',
-        'Super Long Label Five',
-        'Extremely Long Label Six',
-        'Just A Normal Label'
+        "Long Label One",
+        "Long Label Two",
+        "Long Label Three",
+        "Very Long Label Four",
+        "Super Long Label Five",
+        "Extremely Long Label Six",
+        "Just A Normal Label",
       ],
       axisLabel: {
         rotate: yRotate,
         width: yWidth,
         overflow: yOverflow,
-        interval: 0
-      }
+        interval: 0,
+      },
     },
     series: [
       {
         data: [120, 200, 150, 80, 70, 110, 130],
-        type: 'bar',
-        itemStyle: { color: '#91cc75' }
-      }
-    ]
+        type: "bar",
+        itemStyle: { color: "#91cc75" },
+      },
+    ],
   };
 
   const xyOption: ChartOption = {
-    title: {
-      text: 'Both Axes Label Configuration',
-      subtext: 'Scatter on Category Grid',
-      left: 'center',
-      top: 20
-    },
     tooltip: {
-      trigger: 'item'
+      trigger: "item",
     },
     grid: {
       left: 150,
       bottom: 100,
       right: 40,
-      top: 80
+      top: 80,
     },
     xAxis: {
-      type: 'category',
+      type: "category",
       data: [
-        'X Label A', 'X Label B Long', 'X Label C Very Long', 'X Label D', 'X Label E'
+        "X Label A",
+        "X Label B Long",
+        "X Label C Very Long",
+        "X Label D",
+        "X Label E",
       ],
       axisLabel: {
         rotate: rotate,
         width: width,
         overflow: overflow,
-        interval: 0
-      }
+        interval: 0,
+      },
     },
     yAxis: {
-      type: 'category',
+      type: "category",
       data: [
-        'Y Label 1', 'Y Label 2 Long', 'Y Label 3', 'Y Label 4 Very Long', 'Y Label 5'
+        "Y Label 1",
+        "Y Label 2 Long",
+        "Y Label 3",
+        "Y Label 4 Very Long",
+        "Y Label 5",
       ],
       axisLabel: {
         rotate: yRotate,
         width: yWidth,
         overflow: yOverflow,
-        interval: 0
-      }
+        interval: 0,
+      },
     },
     series: [
       {
-        name: 'Scatter Data',
-        type: 'scatter',
+        name: "Scatter Data",
+        type: "scatter",
         symbolSize: 20,
         data: [
-          [0, 0], [1, 1], [2, 2], [3, 3], [4, 4],
-          [0, 4], [4, 0], [2, 2]
+          [0, 0],
+          [1, 1],
+          [2, 2],
+          [3, 3],
+          [4, 4],
+          [0, 4],
+          [4, 0],
+          [2, 2],
         ],
-        itemStyle: { color: '#fac858' }
-      }
-    ]
+        itemStyle: { color: "#fac858" },
+      },
+    ],
   };
 
   return (
@@ -164,31 +164,47 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
       <div style={{ marginBottom: 20 }}>
         <h3 style={{ fontSize: 16, marginBottom: 10 }}>X Axis Settings</h3>
-        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Rotate:
             <input
               type="number"
               value={rotate}
-              onChange={e => setRotate(Number(e.target.value))}
-              style={{ padding: '4px 8px', width: 60, borderRadius: 4, border: '1px solid #ddd' }}
+              onChange={(e) => setRotate(Number(e.target.value))}
+              style={{
+                padding: "4px 8px",
+                width: 60,
+                borderRadius: 4,
+                border: "1px solid #ddd",
+              }}
             />
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Width:
             <input
               type="number"
               value={width}
-              onChange={e => setWidth(Number(e.target.value))}
-              style={{ padding: '4px 8px', width: 60, borderRadius: 4, border: '1px solid #ddd' }}
+              onChange={(e) => setWidth(Number(e.target.value))}
+              style={{
+                padding: "4px 8px",
+                width: 60,
+                borderRadius: 4,
+                border: "1px solid #ddd",
+              }}
             />
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Overflow:
             <select
               value={overflow}
-              onChange={e => setOverflow(e.target.value as 'break' | 'truncate' | 'none')}
-              style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+              onChange={(e) =>
+                setOverflow(e.target.value as "break" | "truncate" | "none")
+              }
+              style={{
+                padding: "4px 8px",
+                borderRadius: 4,
+                border: "1px solid #ddd",
+              }}
             >
               <option value="break">Break</option>
               <option value="truncate">Truncate</option>
@@ -198,37 +214,61 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
         </div>
       </div>
 
-      <div style={{ width: '100%', height: 400, border: '1px solid #eee', borderRadius: 8, marginBottom: 40 }}>
+      <div
+        style={{
+          width: "100%",
+          height: 400,
+          border: "1px solid #eee",
+          borderRadius: 8,
+          marginBottom: 40,
+        }}
+      >
         <HChart ref={chartRef} option={option} theme={theme} />
       </div>
 
       <div style={{ marginBottom: 20 }}>
         <h3 style={{ fontSize: 16, marginBottom: 10 }}>Y Axis Settings</h3>
-        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Rotate:
             <input
               type="number"
               value={yRotate}
-              onChange={e => setYRotate(Number(e.target.value))}
-              style={{ padding: '4px 8px', width: 60, borderRadius: 4, border: '1px solid #ddd' }}
+              onChange={(e) => setYRotate(Number(e.target.value))}
+              style={{
+                padding: "4px 8px",
+                width: 60,
+                borderRadius: 4,
+                border: "1px solid #ddd",
+              }}
             />
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Width:
             <input
               type="number"
               value={yWidth}
-              onChange={e => setYWidth(Number(e.target.value))}
-              style={{ padding: '4px 8px', width: 60, borderRadius: 4, border: '1px solid #ddd' }}
+              onChange={(e) => setYWidth(Number(e.target.value))}
+              style={{
+                padding: "4px 8px",
+                width: 60,
+                borderRadius: 4,
+                border: "1px solid #ddd",
+              }}
             />
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
             Overflow:
             <select
               value={yOverflow}
-              onChange={e => setYOverflow(e.target.value as 'break' | 'truncate' | 'none')}
-              style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+              onChange={(e) =>
+                setYOverflow(e.target.value as "break" | "truncate" | "none")
+              }
+              style={{
+                padding: "4px 8px",
+                borderRadius: 4,
+                border: "1px solid #ddd",
+              }}
             >
               <option value="break">Break</option>
               <option value="truncate">Truncate</option>
@@ -238,15 +278,32 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
         </div>
       </div>
 
-      <div style={{ width: '100%', height: 400, border: '1px solid #eee', borderRadius: 8, marginBottom: 40 }}>
+      <div
+        style={{
+          width: "100%",
+          height: 400,
+          border: "1px solid #eee",
+          borderRadius: 8,
+          marginBottom: 40,
+        }}
+      >
         <HChart option={yOption} theme={theme} />
       </div>
 
       <div style={{ marginBottom: 20 }}>
-        <h3 style={{ fontSize: 16, marginBottom: 10 }}>Combined Axis Settings (Uses both X and Y settings above)</h3>
+        <h3 style={{ fontSize: 16, marginBottom: 10 }}>
+          Combined Axis Settings (Uses both X and Y settings above)
+        </h3>
       </div>
 
-      <div style={{ width: '100%', height: 400, border: '1px solid #eee', borderRadius: 8 }}>
+      <div
+        style={{
+          width: "100%",
+          height: 400,
+          border: "1px solid #eee",
+          borderRadius: 8,
+        }}
+      >
         <HChart option={xyOption} theme={theme} />
       </div>
     </div>

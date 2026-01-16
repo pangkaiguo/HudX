@@ -2,8 +2,8 @@
  * Polygon - Polygon shape element
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect, Point } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect, Point } from "../types";
 
 export interface PolygonShape {
   points: Point[] | number[][];
@@ -12,7 +12,9 @@ export interface PolygonShape {
 export default class Polygon extends ChartElement {
   shape: PolygonShape;
 
-  constructor(opts: ElementOption & { shape: PolygonShape } = { shape: { points: [] } }) {
+  constructor(
+    opts: ElementOption & { shape: PolygonShape } = { shape: { points: [] } },
+  ) {
     super(opts);
     this.shape = opts.shape || { points: [] };
   }
@@ -22,7 +24,7 @@ export default class Polygon extends ChartElement {
     if (!points || points.length === 0) return [];
 
     if (Array.isArray(points[0])) {
-      return (points as number[][]).map(p => ({ x: p[0], y: p[1] }));
+      return (points as number[][]).map((p) => ({ x: p[0], y: p[1] }));
     }
     return points as Point[];
   }
@@ -66,8 +68,8 @@ export default class Polygon extends ChartElement {
       const xj = points[j].x;
       const yj = points[j].y;
 
-      const intersect = ((yi > y) !== (yj > y)) &&
-        (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+      const intersect =
+        yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
       if (intersect) {
         inside = !inside;
       }

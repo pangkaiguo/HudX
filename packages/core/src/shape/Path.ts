@@ -2,8 +2,8 @@
  * Path - Path shape element (SVG-like path commands)
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect } from "../types";
 
 export interface PathShape {
   d: string; // Path data string (SVG path format)
@@ -13,9 +13,11 @@ export interface PathShape {
 export default class Path extends ChartElement {
   shape: PathShape;
 
-  constructor(opts: ElementOption & { shape: PathShape } = { shape: { d: '' } }) {
+  constructor(
+    opts: ElementOption & { shape: PathShape } = { shape: { d: "" } },
+  ) {
     super(opts);
-    this.shape = opts.shape || { d: '' };
+    this.shape = opts.shape || { d: "" };
   }
 
   getBoundingRect(): BoundingRect {
@@ -24,8 +26,11 @@ export default class Path extends ChartElement {
     }
 
     try {
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', this.shape.d);
+      const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
+      path.setAttribute("d", this.shape.d);
 
       // Note: getBBox might return 0 if not attached to DOM in some environments
       // but it's the most reliable way without writing a full path parser
@@ -36,11 +41,11 @@ export default class Path extends ChartElement {
       // we might need a backup. For now, we assume this works or returns 0.
 
       // To ensure it works, we might need to append to a hidden SVG
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      svg.style.position = 'absolute';
-      svg.style.visibility = 'hidden';
-      svg.style.width = '0';
-      svg.style.height = '0';
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.style.position = "absolute";
+      svg.style.visibility = "hidden";
+      svg.style.width = "0";
+      svg.style.height = "0";
       svg.appendChild(path);
       document.body.appendChild(svg);
 
@@ -52,7 +57,7 @@ export default class Path extends ChartElement {
         x: bbox.x,
         y: bbox.y,
         width: bbox.width,
-        height: bbox.height
+        height: bbox.height,
       };
     } catch (e) {
       console.error(e);
@@ -78,8 +83,8 @@ export default class Path extends ChartElement {
     }
 
     // Use a temporary canvas for checking
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
     if (!ctx) return false;
 
     return ctx.isPointInPath(path2d, x, y);
@@ -101,20 +106,19 @@ export default class Path extends ChartElement {
         path2d = new Path2D(this.shape.d);
         this.shape.path = path2d;
       } catch (e) {
-        console.error(e, 'Invalid path data:', this.shape.d);
+        console.error(e, "Invalid path data:", this.shape.d);
         ctx.restore();
         return;
       }
     }
 
-    if (this.style.fill && this.style.fill !== 'none') {
+    if (this.style.fill && this.style.fill !== "none") {
       ctx.fill(path2d);
     }
-    if (this.style.stroke && this.style.stroke !== 'none') {
+    if (this.style.stroke && this.style.stroke !== "none") {
       ctx.stroke(path2d);
     }
 
     ctx.restore();
   }
 }
-

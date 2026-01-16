@@ -9,10 +9,10 @@
 
 ```typescript
 // Canvas mode (recommended for large data)
-const renderer = Renderer.init(dom, 'canvas', 'light');
+const renderer = Renderer.init(dom, "canvas", "light");
 
 // SVG mode (recommended for interaction)
-const renderer = Renderer.init(dom, 'svg', 'light');
+const renderer = Renderer.init(dom, "svg", "light");
 ```
 
 ### Dirty Flag Mechanism
@@ -21,7 +21,7 @@ Only redraw elements that need updating:
 
 ```typescript
 element.markRedraw(); // Mark as needing redraw
-element.isDirty();    // Check if needs redraw
+element.isDirty(); // Check if needs redraw
 ```
 
 ### Batch Updates
@@ -40,11 +40,11 @@ renderer.flush(); // Render all elements at once
 ### Object Pool Reuse
 
 ```typescript
-import { ObjectPool } from 'HudX/core';
+import { ObjectPool } from "HudX/core";
 
 const pool = new ObjectPool(
   () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),
-  (circle) => circle.attr('shape', { cx: 0, cy: 0, r: 0 })
+  (circle) => circle.attr("shape", { cx: 0, cy: 0, r: 0 }),
 );
 
 const circle = pool.acquire();
@@ -56,7 +56,7 @@ pool.release(circle);
 
 ```typescript
 renderer.dispose(); // Release all resources
-element.remove();   // Remove element
+element.remove(); // Remove element
 ```
 
 ## 3. Data Processing Optimization
@@ -83,14 +83,7 @@ Only render elements in visible area.
 Animation system has built-in optimization, automatically uses RAF:
 
 ```typescript
-const animation = new Animation(
-  target,
-  'cx',
-  500,
-  1000,
-  0,
-  Easing.cubicOut
-);
+const animation = new Animation(target, "cx", 500, 1000, 0, Easing.cubicOut);
 animation.start();
 ```
 
@@ -106,7 +99,7 @@ animation.start();
 Use event bubbling to reduce listener count:
 
 ```typescript
-renderer.on('click', (event) => {
+renderer.on("click", (event) => {
   const target = event.target;
   // Handle click event
 });
@@ -117,7 +110,7 @@ renderer.on('click', (event) => {
 ```typescript
 function debounce(fn: Function, delay: number) {
   let timer: any;
-  return function(...args: any[]) {
+  return function (...args: any[]) {
     clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delay);
   };
@@ -166,9 +159,9 @@ console.log(`Time: ${end - start}ms`);
 
 ## Performance Benchmarks
 
-| Scenario | Canvas | SVG |
-|----------|--------|-----|
-| 1000 elements | ~50ms | ~200ms |
-| 10000 elements | ~500ms | Not recommended |
-| Animation 60fps | Supported | Supported |
-| Interactive response | Requires event handling | Native support |
+| Scenario             | Canvas                  | SVG             |
+| -------------------- | ----------------------- | --------------- |
+| 1000 elements        | ~50ms                   | ~200ms          |
+| 10000 elements       | ~500ms                  | Not recommended |
+| Animation 60fps      | Supported               | Supported       |
+| Interactive response | Requires event handling | Native support  |

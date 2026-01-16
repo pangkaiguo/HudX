@@ -2,8 +2,8 @@
  * Storage - Manages graphical elements (Model layer)
  */
 
-import ChartElement from './ChartElement';
-import Group from './Group';
+import ChartElement from "./ChartElement";
+import Group from "./Group";
 
 export default class Storage {
   private _roots: Group[] = [];
@@ -63,7 +63,10 @@ export default class Storage {
   /**
    * Iterate all elements
    */
-  iterate<T>(callback: (element: ChartElement) => T | void, includeRoot: boolean = false): T | void {
+  iterate<T>(
+    callback: (element: ChartElement) => T | void,
+    includeRoot: boolean = false,
+  ): T | void {
     for (const root of this._roots) {
       if (includeRoot) {
         const result = callback(root);
@@ -120,11 +123,11 @@ export default class Storage {
           return a.z - b.z;
         });
 
-        children.forEach(child => traverse(child));
+        children.forEach((child) => traverse(child));
       }
     };
 
-    sortedRoots.forEach(root => traverse(root));
+    sortedRoots.forEach((root) => traverse(root));
 
     return list;
   }
@@ -161,4 +164,3 @@ export default class Storage {
     }
   }
 }
-

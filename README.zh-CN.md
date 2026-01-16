@@ -71,29 +71,31 @@ pnpm dev:examples
 ### React 组件
 
 ```tsx
-import React from 'react';
-import { HChart } from 'HudX/charts';
+import React from "react";
+import { HChart } from "HudX/charts";
 
 function App() {
   const option = {
-    title: { text: '销售数据' },
+    title: { text: "销售数据" },
     tooltip: { show: true },
-    legend: { data: ['销售额'] },
+    legend: { data: ["销售额"] },
     xAxis: {
-      type: 'category',
-      data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+      type: "category",
+      data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
     },
-    yAxis: { type: 'value' },
-    series: [{
-      name: '销售额',
-      type: 'bar',
-      data: [120, 200, 150, 80, 70, 110, 130],
-      itemStyle: { color: '#5470c6' },
-      emphasis: {
-        scale: true,
-        focus: 'series'
-      }
-    }]
+    yAxis: { type: "value" },
+    series: [
+      {
+        name: "销售额",
+        type: "bar",
+        data: [120, 200, 150, 80, 70, 110, 130],
+        itemStyle: { color: "#5470c6" },
+        emphasis: {
+          scale: true,
+          focus: "series",
+        },
+      },
+    ],
   };
 
   return (
@@ -111,26 +113,26 @@ function App() {
 ### 核心 API (底层)
 
 ```typescript
-import { Renderer, Circle, Animation, Easing } from 'HudX/core';
+import { Renderer, Circle, Animation, Easing } from "HudX/core";
 
 // 初始化
-const renderer = Renderer.init(document.getElementById('container'));
+const renderer = Renderer.init(document.getElementById("container"));
 
 // 添加元素
 const circle = new Circle({
   shape: { cx: 100, cy: 100, r: 50 },
-  style: { fill: 'red' }
+  style: { fill: "red" },
 });
 renderer.add(circle);
 
 // 动画
 const anim = new Animation(
   circle.shape,
-  'r',
+  "r",
   100, // 结束值
   1000, // 持续时间
-  0,    // 延迟
-  Easing.elasticOut
+  0, // 延迟
+  Easing.elasticOut,
 );
 anim.start();
 ```

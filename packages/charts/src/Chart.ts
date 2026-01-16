@@ -1,14 +1,32 @@
-/** 
-  * Chart - Base chart class 
-  */
+/**
+ * Chart - Base chart class
+ */
 
 import {
-  Renderer, Group, Animator, Tooltip, Legend, Title, Line, Text,
-  type RenderMode, type Theme, type Locale, type DataURLOpts, type ThemeConfig,
-  toRgbaWithOpacity, Z_AXIS
-} from 'HudX/core';
-import type { ChartOption, ChartEvent } from './types';
-import { createLinearScale, createOrdinalScale, calculateNiceTicks, formatAxisLabel, type Scale } from './util/coordinate';
+  Renderer,
+  Group,
+  Animator,
+  Tooltip,
+  Legend,
+  Title,
+  Line,
+  Text,
+  type RenderMode,
+  type Theme,
+  type Locale,
+  type DataURLOpts,
+  type ThemeConfig,
+  toRgbaWithOpacity,
+  Z_AXIS,
+} from "HudX/core";
+import type { ChartOption, ChartEvent } from "./types";
+import {
+  createLinearScale,
+  createOrdinalScale,
+  calculateNiceTicks,
+  formatAxisLabel,
+  type Scale,
+} from "./util/coordinate";
 
 export default class Chart {
   protected _renderer: Renderer;
@@ -28,15 +46,21 @@ export default class Chart {
   protected _suppressAnimationOnce: boolean = false;
   protected _animateOnlyFor?: Set<string>;
 
-  constructor(dom: HTMLElement, option: ChartOption = {}, renderMode: RenderMode = 'canvas', theme: Theme = 'light', locale: Locale = 'en') {
+  constructor(
+    dom: HTMLElement,
+    option: ChartOption = {},
+    renderMode: RenderMode = "canvas",
+    theme: Theme = "light",
+    locale: Locale = "en",
+  ) {
     this._renderer = Renderer.init(dom, renderMode, theme, locale);
     this._option = option;
     this._root = this._renderer.getRoot();
     this._init();
   }
 
-  /** 
-   * Get render mode 
+  /**
+   * Get render mode
    */
   getRenderMode(): RenderMode {
     return this._renderer.getRenderMode();
@@ -83,7 +107,10 @@ export default class Chart {
     this._tooltip = new Tooltip({
       ...tooltipOpt,
       show: tooltipOpt?.show !== false,
-      formatter: typeof tooltipOpt?.formatter === 'function' ? tooltipOpt.formatter : undefined
+      formatter:
+        typeof tooltipOpt?.formatter === "function"
+          ? tooltipOpt.formatter
+          : undefined,
     });
     this._tooltip.setContainer(this.getDom());
     this.setOption(this._option);
@@ -110,52 +137,53 @@ export default class Chart {
     return this._isMounted;
   }
 
-
-  /** 
-   * Set chart option with advanced options 
+  /**
+   * Set chart option with advanced options
    */
   setOption(
     option: ChartOption,
-    notMerge?: boolean | {
-      notMerge?: boolean;
-      lazyUpdate?: boolean;
-      silent?: boolean;
-    },
-    lazyUpdate?: boolean
+    notMerge?:
+      | boolean
+      | {
+          notMerge?: boolean;
+          lazyUpdate?: boolean;
+          silent?: boolean;
+        },
+    lazyUpdate?: boolean,
   ): this {
-    // Handle parameter overloading 
+    // Handle parameter overloading
     let opts = {
       notMerge: false,
       lazyUpdate: false,
-      silent: false
+      silent: false,
     };
 
-    if (typeof notMerge === 'object') {
+    if (typeof notMerge === "object") {
       opts = { ...opts, ...notMerge };
-    } else if (typeof notMerge === 'boolean') {
+    } else if (typeof notMerge === "boolean") {
       opts.notMerge = notMerge;
     }
 
-    if (typeof lazyUpdate === 'boolean') {
+    if (typeof lazyUpdate === "boolean") {
       opts.lazyUpdate = lazyUpdate;
     }
 
-    // Merge option 
+    // Merge option
     if (opts.notMerge) {
       this._option = option;
     } else {
       this._option = this._mergeOption(this._option, option);
     }
 
-    // Emit event if not silent 
+    // Emit event if not silent
     if (!opts.silent) {
-      const event = new CustomEvent('optionchanged', {
-        detail: { option: this._option }
+      const event = new CustomEvent("optionchanged", {
+        detail: { option: this._option },
       });
       this._renderer.getDom().dispatchEvent(event);
     }
 
-    // Render immediately if not lazy update 
+    // Render immediately if not lazy update
     if (!opts.lazyUpdate) {
       this._render();
     }
@@ -166,7 +194,10 @@ export default class Chart {
   /**
    * Merge options (support partial update for series)
    */
-  protected _mergeOption(oldOpt: ChartOption, newOpt: ChartOption): ChartOption {
+  protected _mergeOption(
+    oldOpt: ChartOption,
+    newOpt: ChartOption,
+  ): ChartOption {
     const merged = { ...oldOpt };
 
     // Iterate over new option keys
@@ -175,7 +206,7 @@ export default class Chart {
       const newVal = newOpt[k];
       const oldVal = oldOpt[k];
 
-      if (k === 'series' && Array.isArray(newVal)) {
+      if (k === "series" && Array.isArray(newVal)) {
         // Merge series by index
         const mergedSeries = [...(Array.isArray(oldVal) ? oldVal : [])];
         newVal.forEach((s, i) => {
@@ -187,9 +218,17 @@ export default class Chart {
           }
         });
         merged.series = mergedSeries;
-      } else if (typeof newVal === 'object' && newVal !== null && !Array.isArray(newVal)) {
+      } else if (
+        typeof newVal === "object" &&
+        newVal !== null &&
+        !Array.isArray(newVal)
+      ) {
         // Shallow merge object properties (like tooltip, legend, etc.)
-        if (typeof oldVal === 'object' && oldVal !== null && !Array.isArray(oldVal)) {
+        if (
+          typeof oldVal === "object" &&
+          oldVal !== null &&
+          !Array.isArray(oldVal)
+        ) {
           merged[k] = { ...oldVal, ...newVal } as any;
         } else {
           merged[k] = newVal as any;
@@ -307,12 +346,17 @@ export default class Chart {
 
   protected _getAnimationEasing(isUpdate: boolean = false): string {
     if (isUpdate) {
-      return this._option.animationEasingUpdate || 'cubicOut';
+      return this._option.animationEasingUpdate || "cubicOut";
     }
-    return this._option.animationEasing || 'cubicOut';
+    return this._option.animationEasing || "cubicOut";
   }
 
-  protected _calculateGrid(option: ChartOption): { x: number, y: number, width: number, height: number } {
+  protected _calculateGrid(option: ChartOption): {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } {
     const grid = option.grid || {};
     const x = this._parseSize(grid.left, 60);
     const y = this._parseSize(grid.top, 60);
@@ -323,12 +367,16 @@ export default class Chart {
     return { x, y, width, height };
   }
 
-  protected _shouldShowLabel(interval: any, index: number, label: string): boolean {
-    if (interval === undefined || interval === 'auto') return true;
-    if (typeof interval === 'number') {
+  protected _shouldShowLabel(
+    interval: any,
+    index: number,
+    label: string,
+  ): boolean {
+    if (interval === undefined || interval === "auto") return true;
+    if (typeof interval === "number") {
       return index % (interval + 1) === 0;
     }
-    if (typeof interval === 'function') {
+    if (typeof interval === "function") {
       return interval(index, label);
     }
     return true;
@@ -341,7 +389,7 @@ export default class Chart {
     plotY: number,
     width: number,
     height: number,
-    scales?: { x?: Scale, y?: Scale }
+    scales?: { x?: Scale; y?: Scale },
   ): void {
     // X axis
     if (xAxis?.show !== false) {
@@ -362,17 +410,26 @@ export default class Chart {
 
       if (xAxis?.splitLine?.show) {
         if (xAxis?.data && xAxis.data.length > 0) {
-          const xRange = xAxis.inverse ? [plotX + width, plotX] : [plotX, plotX + width];
-          const xScale = scales?.x || (xAxis.type === 'category'
-            ? createOrdinalScale(xAxis.data, xRange)
-            : createLinearScale([0, xAxis.data.length - 1], xRange));
+          const xRange = xAxis.inverse
+            ? [plotX + width, plotX]
+            : [plotX, plotX + width];
+          const xScale =
+            scales?.x ||
+            (xAxis.type === "category"
+              ? createOrdinalScale(xAxis.data, xRange)
+              : createLinearScale([0, xAxis.data.length - 1], xRange));
 
           const interval = xAxis.splitLine?.interval ?? 0;
 
           xAxis.data.forEach((label: any, index: number) => {
-            if (typeof interval === 'number' && interval > 0 && index % (interval + 1) !== 0) return;
+            if (
+              typeof interval === "number" &&
+              interval > 0 &&
+              index % (interval + 1) !== 0
+            )
+              return;
 
-            const x = xAxis.type === 'category' ? xScale(label) : xScale(index);
+            const x = xAxis.type === "category" ? xScale(label) : xScale(index);
             const line = new Line({
               shape: {
                 x1: x,
@@ -381,9 +438,15 @@ export default class Chart {
                 y2: plotY + height,
               },
               style: {
-                stroke: xAxis.splitLine.lineStyle?.color || '#eee',
+                stroke: xAxis.splitLine.lineStyle?.color || "#eee",
                 lineWidth: xAxis.splitLine.lineStyle?.width || 1,
-                lineDash: xAxis.splitLine.lineStyle?.type === 'solid' ? undefined : (xAxis.splitLine.lineStyle?.type === 'dashed' || !xAxis.splitLine.lineStyle?.type ? [4, 4] : undefined)
+                lineDash:
+                  xAxis.splitLine.lineStyle?.type === "solid"
+                    ? undefined
+                    : xAxis.splitLine.lineStyle?.type === "dashed" ||
+                        !xAxis.splitLine.lineStyle?.type
+                      ? [4, 4]
+                      : undefined,
               },
               z: Z_AXIS - 0.5,
             });
@@ -393,53 +456,63 @@ export default class Chart {
       }
 
       if (xAxis?.data && xAxis.data.length > 0) {
-        const xRange = xAxis.inverse ? [plotX + width, plotX] : [plotX, plotX + width];
-        const xScale = scales?.x || (xAxis.type === 'category'
-          ? createOrdinalScale(xAxis.data, xRange)
-          : createLinearScale([0, xAxis.data.length - 1], xRange));
+        const xRange = xAxis.inverse
+          ? [plotX + width, plotX]
+          : [plotX, plotX + width];
+        const xScale =
+          scales?.x ||
+          (xAxis.type === "category"
+            ? createOrdinalScale(xAxis.data, xRange)
+            : createLinearScale([0, xAxis.data.length - 1], xRange));
 
         const axisLabel = xAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
-        const overflow = axisLabel.overflow || 'break';
+        const overflow = axisLabel.overflow || "break";
         const fontSize = axisLabel.fontSize || 12;
-        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const fontFamily = this.getThemeConfig().fontFamily || "sans-serif";
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
         const interval = axisLabel.interval;
 
         xAxis.data.forEach((label: any, index: number) => {
           if (!this._shouldShowLabel(interval, index, String(label))) return;
 
-          const x = xAxis.type === 'category' ? xScale(label) : xScale(index);
+          const x = xAxis.type === "category" ? xScale(label) : xScale(index);
           let labelText = String(label);
 
           if (axisLabel.formatter) {
-            if (typeof axisLabel.formatter === 'string') {
-              labelText = axisLabel.formatter.replace('{value}', labelText);
-            } else if (typeof axisLabel.formatter === 'function') {
+            if (typeof axisLabel.formatter === "string") {
+              labelText = axisLabel.formatter.replace("{value}", labelText);
+            } else if (typeof axisLabel.formatter === "function") {
               labelText = axisLabel.formatter(label, index);
             }
           }
 
           if (maxWidth) {
-            labelText = this._wrapText(labelText, maxWidth, fontSize, fontFamily, overflow);
+            labelText = this._wrapText(
+              labelText,
+              maxWidth,
+              fontSize,
+              fontFamily,
+              overflow,
+            );
           }
 
-          let textAlign: any = 'center';
-          let textBaseline: any = 'top';
+          let textAlign: any = "center";
+          let textBaseline: any = "top";
           let transform: any = undefined;
           let shapeX = x;
           let shapeY = plotY + height + 10; // Default gap
 
           if (rotate) {
-            textAlign = rotate > 0 ? 'left' : 'right';
-            textBaseline = 'middle';
+            textAlign = rotate > 0 ? "left" : "right";
+            textBaseline = "middle";
             shapeX = 0;
             shapeY = 0;
             transform = {
               x: x,
               y: plotY + height + 10,
-              rotation: rotate * Math.PI / 180
+              rotation: (rotate * Math.PI) / 180,
             };
           }
 
@@ -454,22 +527,22 @@ export default class Chart {
               fill: color,
               textAlign,
               textBaseline,
-              fontFamily
+              fontFamily,
             },
             z: Z_AXIS,
-            transform
+            transform,
           });
           this._root.add(text);
         });
-      } else if (xAxis?.type === 'value' && scales?.x) {
+      } else if (xAxis?.type === "value" && scales?.x) {
         const domain = scales.x.domain();
         const tickCount = xAxis.splitNumber ?? 5;
         const axisLabel = xAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
-        const overflow = axisLabel.overflow || 'break';
+        const overflow = axisLabel.overflow || "break";
         const fontSize = axisLabel.fontSize || 12;
-        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const fontFamily = this.getThemeConfig().fontFamily || "sans-serif";
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
         const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
@@ -483,32 +556,38 @@ export default class Chart {
           let labelText = formatAxisLabel(tick);
 
           if (axisLabel.formatter) {
-            if (typeof axisLabel.formatter === 'string') {
-              labelText = axisLabel.formatter.replace('{value}', labelText);
-            } else if (typeof axisLabel.formatter === 'function') {
+            if (typeof axisLabel.formatter === "string") {
+              labelText = axisLabel.formatter.replace("{value}", labelText);
+            } else if (typeof axisLabel.formatter === "function") {
               labelText = axisLabel.formatter(tick, index);
             }
           }
 
           if (maxWidth) {
-            labelText = this._wrapText(labelText, maxWidth, fontSize, fontFamily, overflow);
+            labelText = this._wrapText(
+              labelText,
+              maxWidth,
+              fontSize,
+              fontFamily,
+              overflow,
+            );
           }
 
-          let textAlign: any = 'center';
-          let textBaseline: any = 'top';
+          let textAlign: any = "center";
+          let textBaseline: any = "top";
           let transform: any = undefined;
           let shapeX = x;
           let shapeY = plotY + height + 10;
 
           if (rotate) {
-            textAlign = rotate > 0 ? 'left' : 'right';
-            textBaseline = 'middle';
+            textAlign = rotate > 0 ? "left" : "right";
+            textBaseline = "middle";
             shapeX = 0;
             shapeY = 0;
             transform = {
               x: x,
               y: plotY + height + 10,
-              rotation: rotate * Math.PI / 180
+              rotation: (rotate * Math.PI) / 180,
             };
           }
 
@@ -523,10 +602,10 @@ export default class Chart {
               fill: color,
               textAlign,
               textBaseline,
-              fontFamily
+              fontFamily,
             },
             z: Z_AXIS,
-            transform
+            transform,
           });
           this._root.add(text);
         });
@@ -551,12 +630,12 @@ export default class Chart {
       this._root.add(yAxisLine);
 
       if (yAxis?.splitLine?.show) {
-        if (scales?.y && yAxis.type === 'value') {
+        if (scales?.y && yAxis.type === "value") {
           const domain = scales.y.domain();
           const tickCount = yAxis.splitNumber ?? 5;
           const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
 
-          ticks.forEach(tick => {
+          ticks.forEach((tick) => {
             const y = scales.y!(tick);
             // Skip if out of range
             if (y < plotY - 0.1 || y > plotY + height + 0.1) return;
@@ -569,9 +648,15 @@ export default class Chart {
                 y2: y,
               },
               style: {
-                stroke: yAxis.splitLine.lineStyle?.color || '#eee',
+                stroke: yAxis.splitLine.lineStyle?.color || "#eee",
                 lineWidth: yAxis.splitLine.lineStyle?.width || 1,
-                lineDash: yAxis.splitLine.lineStyle?.type === 'solid' ? undefined : (yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined)
+                lineDash:
+                  yAxis.splitLine.lineStyle?.type === "solid"
+                    ? undefined
+                    : yAxis.splitLine.lineStyle?.type === "dashed" ||
+                        !yAxis.splitLine.lineStyle?.type
+                      ? [4, 4]
+                      : undefined,
               },
               z: Z_AXIS - 0.5,
             });
@@ -590,9 +675,15 @@ export default class Chart {
                 y2: y,
               },
               style: {
-                stroke: yAxis.splitLine.lineStyle?.color || '#eee',
+                stroke: yAxis.splitLine.lineStyle?.color || "#eee",
                 lineWidth: yAxis.splitLine.lineStyle?.width || 1,
-                lineDash: yAxis.splitLine.lineStyle?.type === 'solid' ? undefined : (yAxis.splitLine.lineStyle?.type === 'dashed' || !yAxis.splitLine.lineStyle?.type ? [4, 4] : undefined)
+                lineDash:
+                  yAxis.splitLine.lineStyle?.type === "solid"
+                    ? undefined
+                    : yAxis.splitLine.lineStyle?.type === "dashed" ||
+                        !yAxis.splitLine.lineStyle?.type
+                      ? [4, 4]
+                      : undefined,
               },
               z: Z_AXIS - 0.5, // Below axis line
             });
@@ -602,14 +693,16 @@ export default class Chart {
       }
 
       if (yAxis?.data && yAxis.data.length > 0) {
-        const yRange = yAxis.inverse ? [plotY, plotY + height] : [plotY + height, plotY];
+        const yRange = yAxis.inverse
+          ? [plotY, plotY + height]
+          : [plotY + height, plotY];
         const yScale = scales?.y || createOrdinalScale(yAxis.data, yRange);
         const axisLabel = yAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
-        const overflow = axisLabel.overflow || 'break';
+        const overflow = axisLabel.overflow || "break";
         const fontSize = axisLabel.fontSize || 12;
-        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const fontFamily = this.getThemeConfig().fontFamily || "sans-serif";
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
         const interval = axisLabel.interval;
 
@@ -620,19 +713,25 @@ export default class Chart {
           let labelText = String(label);
 
           if (axisLabel.formatter) {
-            if (typeof axisLabel.formatter === 'string') {
-              labelText = axisLabel.formatter.replace('{value}', labelText);
-            } else if (typeof axisLabel.formatter === 'function') {
+            if (typeof axisLabel.formatter === "string") {
+              labelText = axisLabel.formatter.replace("{value}", labelText);
+            } else if (typeof axisLabel.formatter === "function") {
               labelText = axisLabel.formatter(label, index);
             }
           }
 
           if (maxWidth) {
-            labelText = this._wrapText(labelText, maxWidth, fontSize, fontFamily, overflow);
+            labelText = this._wrapText(
+              labelText,
+              maxWidth,
+              fontSize,
+              fontFamily,
+              overflow,
+            );
           }
 
-          let textAlign: any = 'right';
-          let textBaseline: any = 'middle';
+          let textAlign: any = "right";
+          let textBaseline: any = "middle";
           let transform: any = undefined;
           let shapeX = plotX - 10;
           let shapeY = y;
@@ -643,7 +742,7 @@ export default class Chart {
             transform = {
               x: plotX - 10,
               y: y,
-              rotation: rotate * Math.PI / 180
+              rotation: (rotate * Math.PI) / 180,
             };
           }
 
@@ -658,22 +757,22 @@ export default class Chart {
               fill: color,
               textAlign,
               textBaseline,
-              fontFamily
+              fontFamily,
             },
             z: Z_AXIS,
-            transform
+            transform,
           });
           this._root.add(text);
         });
-      } else if (yAxis?.type === 'value' && scales?.y) {
+      } else if (yAxis?.type === "value" && scales?.y) {
         const domain = scales.y.domain();
         const tickCount = yAxis.splitNumber ?? 5;
         const axisLabel = yAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
-        const overflow = axisLabel.overflow || 'break';
+        const overflow = axisLabel.overflow || "break";
         const fontSize = axisLabel.fontSize || 12;
-        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const fontFamily = this.getThemeConfig().fontFamily || "sans-serif";
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
         const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
@@ -687,19 +786,25 @@ export default class Chart {
           let labelText = formatAxisLabel(tick);
 
           if (axisLabel.formatter) {
-            if (typeof axisLabel.formatter === 'string') {
-              labelText = axisLabel.formatter.replace('{value}', labelText);
-            } else if (typeof axisLabel.formatter === 'function') {
+            if (typeof axisLabel.formatter === "string") {
+              labelText = axisLabel.formatter.replace("{value}", labelText);
+            } else if (typeof axisLabel.formatter === "function") {
               labelText = axisLabel.formatter(tick, index);
             }
           }
 
           if (maxWidth) {
-            labelText = this._wrapText(labelText, maxWidth, fontSize, fontFamily, overflow);
+            labelText = this._wrapText(
+              labelText,
+              maxWidth,
+              fontSize,
+              fontFamily,
+              overflow,
+            );
           }
 
-          let textAlign: any = 'right';
-          let textBaseline: any = 'middle';
+          let textAlign: any = "right";
+          let textBaseline: any = "middle";
           let transform: any = undefined;
           let shapeX = plotX - 10;
           let shapeY = y;
@@ -710,7 +815,7 @@ export default class Chart {
             transform = {
               x: plotX - 10,
               y: y,
-              rotation: rotate * Math.PI / 180
+              rotation: (rotate * Math.PI) / 180,
             };
           }
 
@@ -725,10 +830,10 @@ export default class Chart {
               fill: color,
               textAlign,
               textBaseline,
-              fontFamily
+              fontFamily,
             },
             z: Z_AXIS,
-            transform
+            transform,
           });
           this._root.add(text);
         });
@@ -736,40 +841,46 @@ export default class Chart {
     }
   }
 
-  private _wrapText(text: string, width: number, fontSize: number = 12, fontFamily: string = 'sans-serif', overflow: string = 'break'): string {
+  private _wrapText(
+    text: string,
+    width: number,
+    fontSize: number = 12,
+    fontFamily: string = "sans-serif",
+    overflow: string = "break",
+  ): string {
     if (!width || width <= 0) return text;
-    if (overflow === 'none') return text;
+    if (overflow === "none") return text;
 
     // Check for browser environment
-    if (typeof document === 'undefined') return text;
+    if (typeof document === "undefined") return text;
 
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
     if (!ctx) return text;
 
     ctx.font = `${fontSize}px ${fontFamily}`;
 
-    if (overflow === 'truncate') {
+    if (overflow === "truncate") {
       if (ctx.measureText(text).width <= width) return text;
       let len = text.length;
       while (len > 0) {
-        const sub = text.substring(0, len) + '...';
+        const sub = text.substring(0, len) + "...";
         if (ctx.measureText(sub).width <= width) return sub;
         len--;
       }
-      return '...';
+      return "...";
     }
 
     // Break
-    let line = '';
-    let result = '';
+    let line = "";
+    let result = "";
 
     for (let i = 0; i < text.length; i++) {
       const char = text[i];
       const testLine = line + char;
       const metrics = ctx.measureText(testLine);
       if (metrics.width > width && i > 0) {
-        result += line + '\n';
+        result += line + "\n";
         line = char;
       } else {
         line = testLine;
@@ -782,7 +893,7 @@ export default class Chart {
   protected _render(): void {
     this._root.removeAll();
     this._mountTitle();
-    // To be implemented by subclasses 
+    // To be implemented by subclasses
   }
 
   protected _scheduleRender(): void {
@@ -820,7 +931,7 @@ export default class Chart {
     this._renderer.trigger(eventName, data);
 
     // Also dispatch to DOM for external listeners
-    if (typeof CustomEvent !== 'undefined') {
+    if (typeof CustomEvent !== "undefined") {
       const event = new CustomEvent(eventName, { detail: data });
       this._renderer.getDom().dispatchEvent(event);
     }
@@ -874,7 +985,7 @@ export default class Chart {
       isDisposed: this.isDisposed(),
       renderMode: this.getRenderMode(),
       theme: this.getTheme(),
-      locale: this.getLocale()
+      locale: this.getLocale(),
     };
   }
 
@@ -909,19 +1020,19 @@ export default class Chart {
   }): void {
     // Implementation depends on Renderer capabilities
     const opts = {
-      text: loadingOpts?.text || this.t('data.loading', 'Loading...'),
-      color: loadingOpts?.color || '#5470c6',
-      textColor: loadingOpts?.textColor || '#333',
-      maskColor: loadingOpts?.maskColor || 'rgba(255, 255, 255, 0.8)',
-      zlevel: loadingOpts?.zlevel || 9999
+      text: loadingOpts?.text || this.t("data.loading", "Loading..."),
+      color: loadingOpts?.color || "#5470c6",
+      textColor: loadingOpts?.textColor || "#333",
+      maskColor: loadingOpts?.maskColor || "rgba(255, 255, 255, 0.8)",
+      zlevel: loadingOpts?.zlevel || 9999,
     };
 
     // Dispatch loading event
-    this.trigger('loading', opts);
+    this.trigger("loading", opts);
   }
 
   hideLoading(): void {
-    this.trigger('loading', { show: false });
+    this.trigger("loading", { show: false });
   }
 
   getBoundingRect(): DOMRect {
@@ -949,16 +1060,19 @@ export default class Chart {
     return this;
   }
 
-  protected _parseSize(size: string | number | undefined, defaultSize: number): number {
+  protected _parseSize(
+    size: string | number | undefined,
+    defaultSize: number,
+  ): number {
     if (size === undefined) {
       return defaultSize;
     }
-    if (typeof size === 'number') {
+    if (typeof size === "number") {
       return size;
     }
-    if (typeof size === 'string' && size.endsWith('%')) {
+    if (typeof size === "string" && size.endsWith("%")) {
       const percent = parseFloat(size) / 100;
-      return size.includes('left') || size.includes('right')
+      return size.includes("left") || size.includes("right")
         ? this._width * percent
         : this._height * percent;
     }
@@ -971,11 +1085,14 @@ export default class Chart {
     return colors[index % colors.length];
   }
 
-  protected _getSeriesColorWithOpacity(index: number, opacity: number = 1): string {
+  protected _getSeriesColorWithOpacity(
+    index: number,
+    opacity: number = 1,
+  ): string {
     const color = this._getSeriesColor(index);
 
     // Convert hex to rgba
-    if (color.startsWith('#')) {
+    if (color.startsWith("#")) {
       return toRgbaWithOpacity(color, opacity);
     }
 
@@ -985,22 +1102,22 @@ export default class Chart {
   protected _formatNumber(value: number, precision: number = 2): string {
     return value.toLocaleString(this.getLocale(), {
       minimumFractionDigits: precision,
-      maximumFractionDigits: precision
+      maximumFractionDigits: precision,
     });
   }
 
-  protected _formatDate(date: Date, format: string = 'short'): string {
+  protected _formatDate(date: Date, format: string = "short"): string {
     return date.toLocaleDateString(this.getLocale(), {
-      dateStyle: format as any
+      dateStyle: format as any,
     });
   }
 
   protected _formatTooltip(template: string, params: any): string {
-    const a = params.seriesName ?? '';
-    const b = params.name ?? '';
-    const c = params.value ?? '';
-    const d = params.percent ?? '';
-    const marker = params.marker ?? '';
+    const a = params.seriesName ?? "";
+    const b = params.name ?? "";
+    const c = params.value ?? "";
+    const d = params.percent ?? "";
+    const marker = params.marker ?? "";
     return String(template)
       .replace(/\{a\}/g, String(a))
       .replace(/\{b\}/g, String(b))
@@ -1025,14 +1142,14 @@ export default class Chart {
     const posBottom = (option.legend as any)?.bottom;
 
     const legend = new Legend({
-      orient: option.legend?.orient ?? 'vertical',
-      x: posLeft ?? posRight ?? 'left',
-      y: posTop ?? posBottom ?? 'top',
+      orient: option.legend?.orient ?? "vertical",
+      x: posLeft ?? posRight ?? "left",
+      y: posTop ?? posBottom ?? "top",
       right: posRight,
       bottom: posBottom,
       width: option.legend?.width,
       height: option.legend?.height,
-      selectedMode: option.legend?.selectedMode ?? 'multiple',
+      selectedMode: option.legend?.selectedMode ?? "multiple",
       renderMode: option.legend?.renderMode,
       formatter: option.legend?.formatter,
       tableHead: option.legend?.tableHead,
@@ -1043,7 +1160,7 @@ export default class Chart {
           const currentSelected = this._legend.getSelected();
           this._legendSelected = new Set(currentSelected);
 
-          if (option.legend?.selectedMode === 'single') {
+          if (option.legend?.selectedMode === "single") {
             if (currentSelected.length === 1) {
               this.beginAnimateShow(currentSelected[0]);
             }
@@ -1066,7 +1183,7 @@ export default class Chart {
       },
       onHover: (name: string, hovered: boolean) => {
         this._onLegendHover(name, hovered);
-      }
+      },
     } as any);
 
     legend.setContainer(this._width, this._height);
@@ -1074,7 +1191,7 @@ export default class Chart {
 
     // Init default selection if not initialized
     if (!this._hasInitLegend) {
-      items.forEach(item => this._legendSelected.add(item.name));
+      items.forEach((item) => this._legendSelected.add(item.name));
       this._hasInitLegend = true;
     }
 
@@ -1104,10 +1221,10 @@ export default class Chart {
   }
 
   protected _getDataValue(item: any): number | undefined {
-    if (typeof item === 'number') return item;
+    if (typeof item === "number") return item;
     if (Array.isArray(item)) return item[1]; // Assume [x, y]
-    if (typeof item === 'object' && item !== null) {
-      if (typeof item.value === 'number') return item.value;
+    if (typeof item === "object" && item !== null) {
+      if (typeof item.value === "number") return item.value;
       if (Array.isArray(item.value)) return item.value[1];
     }
     return undefined;
@@ -1121,12 +1238,12 @@ export default class Chart {
     const formatter = this._option.tooltip?.formatter;
 
     // Support ECharts-like formatter function
-    if (typeof formatter === 'function') {
+    if (typeof formatter === "function") {
       return formatter(params);
     }
 
     // Support ECharts-like string template (basic support)
-    if (typeof formatter === 'string') {
+    if (typeof formatter === "string") {
       if (!Array.isArray(params)) {
         return this._formatTooltip(formatter, params);
       }
@@ -1134,14 +1251,14 @@ export default class Chart {
 
     // Unified HTML generator for both Single and Multi items
     const paramsList = Array.isArray(params) ? params : [params];
-    if (paramsList.length === 0) return '';
+    if (paramsList.length === 0) return "";
 
-    let html = '';
+    let html = "";
 
     // 1. Generate Header Title
-    let headerTitle = '';
+    let headerTitle = "";
     const firstParam = paramsList[0];
-    if (firstParam.seriesType === 'pie') {
+    if (firstParam.seriesType === "pie") {
       headerTitle = firstParam.seriesName;
     } else {
       headerTitle = firstParam.name;
@@ -1152,9 +1269,9 @@ export default class Chart {
     }
 
     // 2. Generate Items
-    paramsList.forEach(param => {
-      let rowLabel = '';
-      if (param.seriesType === 'pie') {
+    paramsList.forEach((param) => {
+      let rowLabel = "";
+      if (param.seriesType === "pie") {
         rowLabel = param.name;
       } else {
         rowLabel = param.seriesName || param.name;
@@ -1171,42 +1288,45 @@ export default class Chart {
     const value = param.value;
 
     // Format value safely
-    let displayValue = '';
+    let displayValue = "";
     if (Array.isArray(value)) {
-      displayValue = value.join(', ');
-    } else if (typeof value === 'number') {
+      displayValue = value.join(", ");
+    } else if (typeof value === "number") {
       displayValue = this._formatNumber(value);
     } else if (value !== undefined && value !== null) {
       displayValue = String(value);
     } else {
-      displayValue = '-';
+      displayValue = "-";
     }
 
-    const percent = param.percent !== undefined ? ` (${param.percent.toFixed(2)}%)` : '';
-    const marker = param.marker || (color ? this._getTooltipMarker(color) : '');
+    const percent =
+      param.percent !== undefined ? ` (${param.percent.toFixed(2)}%)` : "";
+    const marker = param.marker || (color ? this._getTooltipMarker(color) : "");
 
     // Determine title
-    const title = titleOverride !== undefined
-      ? titleOverride
-      : (param.componentType === 'series'
-        ? (param.seriesName || param.name)
-        : (param.name || param.seriesName));
+    const title =
+      titleOverride !== undefined
+        ? titleOverride
+        : param.componentType === "series"
+          ? param.seriesName || param.name
+          : param.name || param.seriesName;
 
     // Default styles
     const defaultStyles = {
       // Containers
-      row: 'display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#fff;line-height:20px;min-width:120px;',
-      blockContainer: 'font-size:12px;color:#fff;line-height:20px;min-width:120px;margin-bottom:8px;',
-      labelContainer: 'display:flex;align-items:center;',
+      row: "display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#fff;line-height:20px;min-width:120px;",
+      blockContainer:
+        "font-size:12px;color:#fff;line-height:20px;min-width:120px;margin-bottom:8px;",
+      labelContainer: "display:flex;align-items:center;",
 
       // Elements
-      label: 'margin-right:16px;',
-      value: 'font-weight:bold;white-space:nowrap;',
+      label: "margin-right:16px;",
+      value: "font-weight:bold;white-space:nowrap;",
 
       // Rich specific
-      richRow: 'display:flex;justify-content:space-between;margin-top:2px;',
-      richLabel: 'color:#ccc;margin-right:16px;',
-      richValue: 'font-weight:bold;'
+      richRow: "display:flex;justify-content:space-between;margin-top:2px;",
+      richLabel: "color:#ccc;margin-right:16px;",
+      richValue: "font-weight:bold;",
     };
 
     // Merge with user config
@@ -1214,22 +1334,27 @@ export default class Chart {
     const styles = { ...defaultStyles, ...customStyles };
 
     // Check layout configuration
-    const layout = this._option.tooltip?.layout || 'horizontal';
+    const layout = this._option.tooltip?.layout || "horizontal";
     const dataItem = param.data;
 
     // Determine if we should use rich layout (either configured or data has details)
-    const isRich = layout === 'rich' || (typeof dataItem === 'object' && dataItem?.detail);
+    const isRich =
+      layout === "rich" || (typeof dataItem === "object" && dataItem?.detail);
 
     // 1. Rich Layout
-    if (isRich && typeof dataItem === 'object' && dataItem.detail) {
-      let detailHtml = '';
+    if (isRich && typeof dataItem === "object" && dataItem.detail) {
+      let detailHtml = "";
       if (Array.isArray(dataItem.detail)) {
-        detailHtml = dataItem.detail.map((item: { label: string, value: string }) => `
+        detailHtml = dataItem.detail
+          .map(
+            (item: { label: string; value: string }) => `
           <div style="${styles.richRow}">
             <span style="${styles.richLabel}">${item.label}</span>
             <span style="${styles.richValue}">${item.value}</span>
           </div>
-        `).join('');
+        `,
+          )
+          .join("");
       }
 
       return `
@@ -1246,7 +1371,7 @@ export default class Chart {
     }
 
     // 2. Vertical Layout (Block style but with single value)
-    if (layout === 'vertical') {
+    if (layout === "vertical") {
       return `
         <div style="${styles.blockContainer}">
           <div style="${styles.labelContainer}">

@@ -5,158 +5,142 @@
 ### 1. Line Chart
 
 ```tsx
-import React from 'react';
-import { HChart } from 'HudX/charts';
+import React from "react";
+import { HChart } from "HudX/charts";
 
 function LineChartExample() {
   const option = {
     title: {
-      text: 'Line Chart Example'
+      text: "Line Chart Example",
     },
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
-    series: [{
-      type: 'line',
-      data: [120, 200, 150, 80, 70, 110, 130],
-      lineStyle: {
-        color: '#5470c6',
-        width: 2
+    series: [
+      {
+        type: "line",
+        data: [120, 200, 150, 80, 70, 110, 130],
+        lineStyle: {
+          color: "#5470c6",
+          width: 2,
+        },
+        itemStyle: {
+          color: "#5470c6",
+        },
       },
-      itemStyle: {
-        color: '#5470c6'
-      }
-    }]
+    ],
   };
 
-  return (
-    <HChart
-      option={option}
-      width={800}
-      height={400}
-    />
-  );
+  return <HChart option={option} width={800} height={400} />;
 }
 ```
 
 ### 2. Bar Chart
 
 ```tsx
-import React from 'react';
-import { HChart } from 'HudX/charts';
+import React from "react";
+import { HChart } from "HudX/charts";
 
 function BarChartExample() {
   const option = {
     title: {
-      text: 'Bar Chart Example'
+      text: "Bar Chart Example",
     },
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
-    series: [{
-      type: 'bar',
-      data: [120, 200, 150, 80, 70, 110, 130],
-      itemStyle: {
-        color: '#91cc75'
-      }
-    }]
+    series: [
+      {
+        type: "bar",
+        data: [120, 200, 150, 80, 70, 110, 130],
+        itemStyle: {
+          color: "#91cc75",
+        },
+      },
+    ],
   };
 
-  return (
-    <HChart
-      option={option}
-      width={800}
-      height={400}
-    />
-  );
+  return <HChart option={option} width={800} height={400} />;
 }
 ```
 
 ### 3. Pie Chart
 
 ```tsx
-import React from 'react';
-import { HChart } from 'HudX/charts';
+import React from "react";
+import { HChart } from "HudX/charts";
 
 function PieChartExample() {
   const option = {
     title: {
-      text: 'Pie Chart Example'
+      text: "Pie Chart Example",
     },
-    series: [{
-      type: 'pie',
-      data: [
-        { name: 'A', value: 335 },
-        { name: 'B', value: 310 },
-        { name: 'C', value: 234 },
-        { name: 'D', value: 135 },
-        { name: 'E', value: 154 }
-      ],
-      label: {
-        show: true,
-        formatter: (params: any) => `${params.name}: ${params.percent}%`
-      }
-    }]
+    series: [
+      {
+        type: "pie",
+        data: [
+          { name: "A", value: 335 },
+          { name: "B", value: 310 },
+          { name: "C", value: 234 },
+          { name: "D", value: 135 },
+          { name: "E", value: 154 },
+        ],
+        label: {
+          show: true,
+          formatter: (params: any) => `${params.name}: ${params.percent}%`,
+        },
+      },
+    ],
   };
 
-  return (
-    <HChart
-      option={option}
-      width={600}
-      height={400}
-    />
-  );
+  return <HChart option={option} width={600} height={400} />;
 }
 ```
 
 ### 4. Scatter Chart
 
 ```tsx
-import React from 'react';
-import { HChart } from 'HudX/charts';
+import React from "react";
+import { HChart } from "HudX/charts";
 
 function ScatterChartExample() {
   const option = {
     title: {
-      text: 'Scatter Chart Example'
+      text: "Scatter Chart Example",
     },
     xAxis: {
-      type: 'value'
+      type: "value",
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
-    series: [{
-      type: 'scatter',
-      data: [
-        { name: 10, value: 20 },
-        { name: 20, value: 30 },
-        { name: 30, value: 40 },
-        { name: 40, value: 50 },
-        { name: 50, value: 60 }
-      ],
-      itemStyle: {
-        color: '#ee6666',
-        opacity: 0.8
-      }
-    }]
+    series: [
+      {
+        type: "scatter",
+        data: [
+          { name: 10, value: 20 },
+          { name: 20, value: 30 },
+          { name: 30, value: 40 },
+          { name: 40, value: 50 },
+          { name: 50, value: 60 },
+        ],
+        itemStyle: {
+          color: "#ee6666",
+          opacity: 0.8,
+        },
+      },
+    ],
   };
 
-  return (
-    <HChart
-      option={option}
-      width={800}
-      height={400}
-    />
-  );
+  return <HChart option={option} width={800} height={400} />;
 }
 ```
 
@@ -165,61 +149,57 @@ function ScatterChartExample() {
 ### Multi-Series Chart
 
 ```tsx
-import React from 'react';
-import { HChart } from 'HudX/charts';
+import React from "react";
+import { HChart } from "HudX/charts";
 
 function MultiSeriesExample() {
   const option = {
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
     series: [
       {
-        type: 'line',
-        name: 'Series 1',
-        data: [120, 200, 150, 80, 70, 110, 130]
+        type: "line",
+        name: "Series 1",
+        data: [120, 200, 150, 80, 70, 110, 130],
       },
       {
-        type: 'bar',
-        name: 'Series 2',
-        data: [80, 120, 100, 60, 50, 90, 110]
-      }
-    ]
+        type: "bar",
+        name: "Series 2",
+        data: [80, 120, 100, 60, 50, 90, 110],
+      },
+    ],
   };
 
-  return (
-    <HChart
-      option={option}
-      width={800}
-      height={400}
-    />
-  );
+  return <HChart option={option} width={800} height={400} />;
 }
 ```
 
 ### Theme and Locale Configuration
 
 ```tsx
-import React from 'react';
-import { HChart } from 'HudX/charts';
+import React from "react";
+import { HChart } from "HudX/charts";
 
 function ConfigurationExample() {
   const option = {
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
-    series: [{
-      type: 'line',
-      data: [120, 200, 150, 80, 70, 110, 130]
-    }]
+    series: [
+      {
+        type: "line",
+        data: [120, 200, 150, 80, 70, 110, 130],
+      },
+    ],
   };
 
   return (
@@ -232,8 +212,8 @@ function ConfigurationExample() {
       locale="en"
       onEvents={{
         click: (event) => {
-          console.log('Element clicked:', event);
-        }
+          console.log("Element clicked:", event);
+        },
       }}
     />
   );
@@ -243,46 +223,46 @@ function ConfigurationExample() {
 ### Using Core API
 
 ```typescript
-import { Renderer, Circle, Rect, Group } from 'HudX/core';
+import { Renderer, Circle, Rect, Group } from "HudX/core";
 
 // Initialize renderer
-const renderer = Renderer.init('#container', 'canvas', 'light', 'en');
+const renderer = Renderer.init("#container", "canvas", "light", "en");
 
 // Create a group
 const group = new Group({
-  id: 'my-group'
+  id: "my-group",
 });
 
 // Add circle
 const circle = new Circle({
-  id: 'circle1',
+  id: "circle1",
   shape: {
     cx: 100,
     cy: 100,
-    r: 50
+    r: 50,
   },
   style: {
-    fill: '#ff0000',
-    stroke: '#000000',
-    lineWidth: 2
-  }
+    fill: "#ff0000",
+    stroke: "#000000",
+    lineWidth: 2,
+  },
 });
 
 // Add rectangle
 const rect = new Rect({
-  id: 'rect1',
+  id: "rect1",
   shape: {
     x: 200,
     y: 200,
     width: 100,
     height: 100,
-    r: [5, 5, 0, 0] // rounded corners
+    r: [5, 5, 0, 0], // rounded corners
   },
   style: {
-    fill: '#00ff00',
-    stroke: '#0000ff',
-    lineWidth: 1
-  }
+    fill: "#00ff00",
+    stroke: "#0000ff",
+    lineWidth: 1,
+  },
 });
 
 // Add elements to group
@@ -293,44 +273,46 @@ group.add(rect);
 renderer.add(group);
 
 // Event handling
-circle.on('click', (event) => {
-  console.log('Circle clicked!');
-  circle.attr('style', { fill: '#ffff00' });
+circle.on("click", (event) => {
+  console.log("Circle clicked!");
+  circle.attr("style", { fill: "#ffff00" });
   renderer.refresh();
 });
 
 // Animation
-circle.animate('shape', { r: 100 }, 500);
+circle.animate("shape", { r: 100 }, 500);
 ```
 
 ### Rendering Mode Switching
 
 ```tsx
-import React, { useState } from 'react';
-import { HChart } from 'HudX/charts';
+import React, { useState } from "react";
+import { HChart } from "HudX/charts";
 
 function RenderingModeExample() {
-  const [renderMode, setRenderMode] = useState<'canvas' | 'svg'>('canvas');
+  const [renderMode, setRenderMode] = useState<"canvas" | "svg">("canvas");
 
   const option = {
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
-    series: [{
-      type: 'line',
-      data: [120, 200, 150, 80, 70, 110, 130]
-    }]
+    series: [
+      {
+        type: "line",
+        data: [120, 200, 150, 80, 70, 110, 130],
+      },
+    ],
   };
 
   return (
     <div>
       <div>
-        <button onClick={() => setRenderMode('canvas')}>Canvas Mode</button>
-        <button onClick={() => setRenderMode('svg')}>SVG Mode</button>
+        <button onClick={() => setRenderMode("canvas")}>Canvas Mode</button>
+        <button onClick={() => setRenderMode("svg")}>SVG Mode</button>
       </div>
       <HChart
         option={option}

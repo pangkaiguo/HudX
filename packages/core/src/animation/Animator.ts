@@ -2,7 +2,7 @@
  * Animator - Manages multiple animations
  */
 
-import Animation, { type EasingFunction } from './Animation';
+import Animation, { type EasingFunction } from "./Animation";
 
 export interface AnimatorOption {
   duration?: number;
@@ -22,7 +22,7 @@ export default class Animator {
     target: any,
     property: string,
     endValue: number,
-    options: AnimatorOption = {}
+    options: AnimatorOption = {},
   ): Animation {
     const animation = new Animation(
       target,
@@ -32,7 +32,7 @@ export default class Animator {
       options.delay,
       options.easing,
       options.onUpdate,
-      options.onComplete
+      options.onComplete,
     );
 
     this._animations.push(animation);
@@ -88,4 +88,3 @@ export default class Animator {
     return this._animations.length;
   }
 }
-

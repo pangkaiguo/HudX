@@ -2,14 +2,14 @@
  * Sector - Sector shape element (pie slice)
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect } from "../types";
 
 export interface SectorShape {
   cx: number;
   cy: number;
   r0: number; // Inner radius
-  r: number;  // Outer radius
+  r: number; // Outer radius
   startAngle: number;
   endAngle: number;
   anticlockwise?: boolean;
@@ -99,13 +99,34 @@ export default class Sector extends ChartElement {
 
     if (shape.r0 > 0) {
       // Draw donut sector
-      ctx.arc(shape.cx, shape.cy, shape.r0, shape.startAngle, shape.endAngle, shape.anticlockwise || false);
-      ctx.arc(shape.cx, shape.cy, shape.r, shape.endAngle, shape.startAngle, !shape.anticlockwise);
+      ctx.arc(
+        shape.cx,
+        shape.cy,
+        shape.r0,
+        shape.startAngle,
+        shape.endAngle,
+        shape.anticlockwise || false,
+      );
+      ctx.arc(
+        shape.cx,
+        shape.cy,
+        shape.r,
+        shape.endAngle,
+        shape.startAngle,
+        !shape.anticlockwise,
+      );
       ctx.closePath();
     } else {
       // Draw pie sector
       ctx.moveTo(shape.cx, shape.cy);
-      ctx.arc(shape.cx, shape.cy, shape.r, shape.startAngle, shape.endAngle, shape.anticlockwise || false);
+      ctx.arc(
+        shape.cx,
+        shape.cy,
+        shape.r,
+        shape.startAngle,
+        shape.endAngle,
+        shape.anticlockwise || false,
+      );
       ctx.closePath();
     }
 
@@ -119,4 +140,3 @@ export default class Sector extends ChartElement {
     ctx.restore();
   }
 }
-

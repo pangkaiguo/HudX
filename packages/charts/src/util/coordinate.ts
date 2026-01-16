@@ -2,7 +2,7 @@
  * Coordinate system utilities
  */
 
-import type { AxisOption, ChartData, Coordinate } from '../types';
+import type { AxisOption, ChartData, Coordinate } from "../types";
 
 export interface Scale {
   (value: any): number;
@@ -112,7 +112,11 @@ export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
 /**
  * Calculate nice scale domain
  */
-export const niceDomain = (min: number, max: number, tickCount: number = 5): number[] => {
+export const niceDomain = (
+  min: number,
+  max: number,
+  tickCount: number = 5,
+): number[] => {
   if (min === max) {
     if (min === 0) return [0, 10];
     return [min > 0 ? 0 : min * 1.2, min > 0 ? min * 1.2 : 0];
@@ -138,7 +142,7 @@ export const niceDomain = (min: number, max: number, tickCount: number = 5): num
 
   return [
     Math.floor(min / stepSize) * stepSize,
-    Math.ceil(max / stepSize) * stepSize
+    Math.ceil(max / stepSize) * stepSize,
   ];
 };
 
@@ -148,17 +152,20 @@ export const niceDomain = (min: number, max: number, tickCount: number = 5): num
 export const calculateDomain = (
   axis: AxisOption,
   data: any[],
-  isXAxis: boolean = true
+  isXAxis: boolean = true,
 ): any[] => {
-  if (axis.type === 'category') {
+  if (axis.type === "category") {
     if (axis.data && axis.data.length > 0) {
       return axis.data;
     }
     // Extract categories from data
     const categories = new Set<any>();
     data.forEach((item) => {
-      if (typeof item === 'object' && item !== null) {
-        const value = isXAxis ? (item.name ?? (Array.isArray(item.value) ? item.value[0] : item.value)) : item.value;
+      if (typeof item === "object" && item !== null) {
+        const value = isXAxis
+          ? (item.name ??
+            (Array.isArray(item.value) ? item.value[0] : item.value))
+          : item.value;
         if (value !== undefined) {
           categories.add(value);
         }
@@ -167,28 +174,34 @@ export const calculateDomain = (
       }
     });
     return Array.from(categories);
-  } else if (axis.type === 'value') {
+  } else if (axis.type === "value") {
     const values: number[] = [];
     data.forEach((item) => {
-      if (typeof item === 'number') {
+      if (typeof item === "number") {
         values.push(item);
       } else if (Array.isArray(item)) {
         const idx = isXAxis ? 0 : 1;
         const v = item[idx];
-        if (typeof v === 'number') values.push(v);
-      } else if (typeof item === 'object' && item !== null) {
+        if (typeof v === "number") values.push(v);
+      } else if (typeof item === "object" && item !== null) {
         if (isXAxis) {
-          if (typeof item.name === 'number') {
+          if (typeof item.name === "number") {
             values.push(item.name);
-          } else if (Array.isArray(item.value) && typeof item.value[0] === 'number') {
+          } else if (
+            Array.isArray(item.value) &&
+            typeof item.value[0] === "number"
+          ) {
             values.push(item.value[0]);
-          } else if (typeof item.value === 'number') {
+          } else if (typeof item.value === "number") {
             values.push(item.value);
           }
         } else {
-          if (typeof item.value === 'number') {
+          if (typeof item.value === "number") {
             values.push(item.value);
-          } else if (Array.isArray(item.value) && typeof item.value[1] === 'number') {
+          } else if (
+            Array.isArray(item.value) &&
+            typeof item.value[1] === "number"
+          ) {
             values.push(item.value[1]);
           }
         }
@@ -199,8 +212,14 @@ export const calculateDomain = (
       return [0, 100];
     }
 
-    let min = axis.min !== 'dataMin' && typeof axis.min === 'number' ? axis.min : Math.min(...values);
-    let max = axis.max !== 'dataMax' && typeof axis.max === 'number' ? axis.max : Math.max(...values);
+    let min =
+      axis.min !== "dataMin" && typeof axis.min === "number"
+        ? axis.min
+        : Math.min(...values);
+    let max =
+      axis.max !== "dataMax" && typeof axis.max === "number"
+        ? axis.max
+        : Math.max(...values);
 
     // If scale is not enabled, include zero
     if (!axis.scale) {
@@ -216,15 +235,23 @@ export const calculateDomain = (
     // Add padding otherwise
     const padding = (max - min) * 0.1;
     return [
-      axis.min !== undefined && axis.min !== 'dataMin' ? axis.min : min - padding,
-      axis.max !== undefined && axis.max !== 'dataMax' ? axis.max : max + padding
+      axis.min !== undefined && axis.min !== "dataMin"
+        ? axis.min
+        : min - padding,
+      axis.max !== undefined && axis.max !== "dataMax"
+        ? axis.max
+        : max + padding,
     ];
   }
 
   return [0, 100];
 };
 
-export const calculateNiceTicks = (min: number, max: number, tickCount: number = 5): number[] => {
+export const calculateNiceTicks = (
+  min: number,
+  max: number,
+  tickCount: number = 5,
+): number[] => {
   const domain = niceDomain(min, max, tickCount);
   const step = (domain[1] - domain[0]) / tickCount;
   const ticks = [];
@@ -234,15 +261,18 @@ export const calculateNiceTicks = (min: number, max: number, tickCount: number =
   return ticks;
 };
 
-export const formatAxisLabel = (value: number, precision: number = 0): string => {
+export const formatAxisLabel = (
+  value: number,
+  precision: number = 0,
+): string => {
   if (value >= 1000000000) {
-    return (value / 1000000000).toFixed(precision) + 'B';
+    return (value / 1000000000).toFixed(precision) + "B";
   }
   if (value >= 1000000) {
-    return (value / 1000000).toFixed(precision) + 'M';
+    return (value / 1000000).toFixed(precision) + "M";
   }
   if (value >= 1000) {
-    return (value / 1000).toFixed(precision) + 'K';
+    return (value / 1000).toFixed(precision) + "K";
   }
   return value.toFixed(precision);
 };
@@ -253,21 +283,24 @@ export const formatAxisLabel = (value: number, precision: number = 0): string =>
 export const dataToCoordinate = (
   data: ChartData,
   xScale: Scale,
-  yScale: Scale
+  yScale: Scale,
 ): Coordinate => {
   let name: any = 0;
   let value: any = 0;
 
-  if (typeof data === 'number') {
+  if (typeof data === "number") {
     value = data;
   } else if (Array.isArray(data)) {
     value = data[0];
-  } else if (typeof data === 'object' && data !== null) {
+  } else if (typeof data === "object" && data !== null) {
     name = data.name;
     value = data.value;
   }
 
-  const x = typeof name === 'number' ? xScale(name) : xScale(name || 0);
-  const y = typeof value === 'number' ? yScale(value) : yScale(Array.isArray(value) ? value[0] : 0);
+  const x = typeof name === "number" ? xScale(name) : xScale(name || 0);
+  const y =
+    typeof value === "number"
+      ? yScale(value)
+      : yScale(Array.isArray(value) ? value[0] : 0);
   return { x, y };
 };

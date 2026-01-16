@@ -2,8 +2,8 @@
  * Rect - Rectangle shape element
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect } from "../types";
 
 export interface RectShape {
   x: number;
@@ -16,7 +16,11 @@ export interface RectShape {
 export default class Rect extends ChartElement {
   shape: RectShape;
 
-  constructor(opts: ElementOption & { shape: RectShape } = { shape: { x: 0, y: 0, width: 0, height: 0 } }) {
+  constructor(
+    opts: ElementOption & { shape: RectShape } = {
+      shape: { x: 0, y: 0, width: 0, height: 0 },
+    },
+  ) {
     super(opts);
     this.shape = opts.shape || { x: 0, y: 0, width: 0, height: 0 };
   }
@@ -37,8 +41,12 @@ export default class Rect extends ChartElement {
     const [lx, ly] = local;
 
     const shape = this.shape;
-    return lx >= shape.x && lx <= shape.x + shape.width &&
-           ly >= shape.y && ly <= shape.y + shape.height;
+    return (
+      lx >= shape.x &&
+      lx <= shape.x + shape.width &&
+      ly >= shape.y &&
+      ly <= shape.y + shape.height
+    );
   }
 
   render(ctx: CanvasRenderingContext2D): void {
@@ -98,4 +106,3 @@ export default class Rect extends ChartElement {
     ctx.restore();
   }
 }
-

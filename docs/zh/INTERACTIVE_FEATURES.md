@@ -38,7 +38,7 @@ series: [{
 `EventHelper` 工具简化了绑定悬停交互并处理清理工作的过程。
 
 ```typescript
-import { EventHelper } from '../util/EventHelper';
+import { EventHelper } from "../util/EventHelper";
 
 EventHelper.bindHoverEvents(
   element,
@@ -47,7 +47,7 @@ EventHelper.bindHoverEvents(
   },
   (evt) => {
     // onMouseOut: 缩小动画，隐藏 Tooltip
-  }
+  },
 );
 ```
 
@@ -64,11 +64,9 @@ EventHelper.bindHoverEvents(
 核心动画引擎 (`Animator`) 支持复杂的过渡效果。
 
 ```typescript
-import { Animation, Easing } from 'HudX/core';
+import { Animation, Easing } from "HudX/core";
 
-const anim = new Animation(
-  target, 'x', 100, 500, 0, Easing.cubicOut
-);
+const anim = new Animation(target, "x", 100, 500, 0, Easing.cubicOut);
 anim.start();
 ```
 

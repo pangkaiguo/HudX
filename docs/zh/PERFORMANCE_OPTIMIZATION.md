@@ -9,10 +9,10 @@
 
 ```typescript
 // Canvas 模式（推荐用于大数据量）
-const renderer = Renderer.init(dom, 'canvas', 'light');
+const renderer = Renderer.init(dom, "canvas", "light");
 
 // SVG 模式（推荐用于交互）
-const renderer = Renderer.init(dom, 'svg', 'light');
+const renderer = Renderer.init(dom, "svg", "light");
 ```
 
 ### 脏标记机制
@@ -21,7 +21,7 @@ const renderer = Renderer.init(dom, 'svg', 'light');
 
 ```typescript
 element.markRedraw(); // 标记为需要重绘
-element.isDirty();    // 检查是否需要重绘
+element.isDirty(); // 检查是否需要重绘
 ```
 
 ### 批量更新
@@ -40,11 +40,11 @@ renderer.flush(); // 一次性渲染所有元素
 ### 对象池复用
 
 ```typescript
-import { ObjectPool } from 'HudX/core';
+import { ObjectPool } from "HudX/core";
 
 const pool = new ObjectPool(
   () => new Circle({ shape: { cx: 0, cy: 0, r: 0 } }),
-  (circle) => circle.attr('shape', { cx: 0, cy: 0, r: 0 })
+  (circle) => circle.attr("shape", { cx: 0, cy: 0, r: 0 }),
 );
 
 const circle = pool.acquire();
@@ -56,7 +56,7 @@ pool.release(circle);
 
 ```typescript
 renderer.dispose(); // 释放所有资源
-element.remove();   // 移除元素
+element.remove(); // 移除元素
 ```
 
 ## 3. 数据处理优化
@@ -83,14 +83,7 @@ function sampleData(data: number[], sampleSize: number): number[] {
 动画系统已内置优化，自动使用 RAF：
 
 ```typescript
-const animation = new Animation(
-  target,
-  'cx',
-  500,
-  1000,
-  0,
-  Easing.cubicOut
-);
+const animation = new Animation(target, "cx", 500, 1000, 0, Easing.cubicOut);
 animation.start();
 ```
 
@@ -106,7 +99,7 @@ animation.start();
 使用事件冒泡减少监听器数量：
 
 ```typescript
-renderer.on('click', (event) => {
+renderer.on("click", (event) => {
   const target = event.target;
   // 处理点击事件
 });
@@ -117,7 +110,7 @@ renderer.on('click', (event) => {
 ```typescript
 function debounce(fn: Function, delay: number) {
   let timer: any;
-  return function(...args: any[]) {
+  return function (...args: any[]) {
     clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delay);
   };
@@ -166,9 +159,9 @@ console.log(`耗时: ${end - start}ms`);
 
 ## 性能基准
 
-| 场景 | Canvas | SVG |
-|------|--------|-----|
-| 1000 元素 | ~50ms | ~200ms |
-| 10000 元素 | ~500ms | 不推荐 |
-| 动画 60fps | 支持 | 支持 |
-| 交互响应 | 需要事件处理 | 原生支持 |
+| 场景       | Canvas       | SVG      |
+| ---------- | ------------ | -------- |
+| 1000 元素  | ~50ms        | ~200ms   |
+| 10000 元素 | ~500ms       | 不推荐   |
+| 动画 60fps | 支持         | 支持     |
+| 交互响应   | 需要事件处理 | 原生支持 |

@@ -1,16 +1,20 @@
-import { Point } from 'HudX/core';
+import { Point } from "HudX/core";
 
 /**
  * Calculate smooth line path data using Catmull-Rom spline algorithm (Centripetal or Uniform)
  * converted to Cubic Bezier for rendering.
  * This matches ECharts style smoothness.
- * 
+ *
  * @param points Data points
  * @param tension Tension factor (0-1). 0 is straight lines, 1 is very loose. Default is 0.5.
  * @param close Whether to close the path
  */
-export function getSmoothPath(points: Point[], tension: number = 0.5, close: boolean = false): string {
-  if (points.length < 2) return '';
+export function getSmoothPath(
+  points: Point[],
+  tension: number = 0.5,
+  close: boolean = false,
+): string {
+  if (points.length < 2) return "";
 
   // ECharts default tension is 0.5, but we need to scale it for our bezier logic
   // Typically, Catmull-Rom to Bezier factor is 1/6 (approx 0.166)
@@ -24,7 +28,7 @@ export function getSmoothPath(points: Point[], tension: number = 0.5, close: boo
   // If only 2 points, straight line
   if (size === 2) {
     path += ` L ${points[1].x} ${points[1].y}`;
-    if (close) path += ' Z';
+    if (close) path += " Z";
     return path;
   }
 
@@ -49,7 +53,7 @@ export function getSmoothPath(points: Point[], tension: number = 0.5, close: boo
     // If smooth=0, straight line.
     // If smooth=1, full catmull-rom.
     // Standard Catmull-Rom has tension implicitly.
-    // 
+    //
     // ECharts logic (simplified):
     // cp1 = p1 + (p2 - p0) * tension
     // cp2 = p2 - (p3 - p1) * tension
@@ -77,7 +81,7 @@ export function getSmoothPath(points: Point[], tension: number = 0.5, close: boo
   }
 
   if (close) {
-    path += ' Z';
+    path += " Z";
   }
 
   return path;
@@ -86,8 +90,12 @@ export function getSmoothPath(points: Point[], tension: number = 0.5, close: boo
 /**
  * Generate smooth area path
  */
-export function getSmoothAreaPath(points: Point[], y0: number, tension: number = 0.5): string {
-  if (points.length < 2) return '';
+export function getSmoothAreaPath(
+  points: Point[],
+  y0: number,
+  tension: number = 0.5,
+): string {
+  if (points.length < 2) return "";
 
   let path = getSmoothPath(points, tension, false);
 

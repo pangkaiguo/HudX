@@ -2,8 +2,8 @@
  * Arc - Arc shape element
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect } from "../types";
 
 export interface ArcShape {
   cx: number;
@@ -95,7 +95,7 @@ export default class Arc extends ChartElement {
       shape.r,
       shape.startAngle,
       shape.endAngle,
-      shape.anticlockwise || false
+      shape.anticlockwise || false,
     );
 
     if (this.style.fill) {
@@ -108,4 +108,3 @@ export default class Arc extends ChartElement {
     ctx.restore();
   }
 }
-

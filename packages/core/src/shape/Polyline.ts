@@ -2,8 +2,8 @@
  * Polyline - Polyline shape element
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect, Point } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect, Point } from "../types";
 
 export interface PolylineShape {
   points: Point[] | number[][];
@@ -12,7 +12,9 @@ export interface PolylineShape {
 export default class Polyline extends ChartElement {
   shape: PolylineShape;
 
-  constructor(opts: ElementOption & { shape: PolylineShape } = { shape: { points: [] } }) {
+  constructor(
+    opts: ElementOption & { shape: PolylineShape } = { shape: { points: [] } },
+  ) {
     super(opts);
     this.shape = opts.shape || { points: [] };
   }
@@ -49,7 +51,7 @@ export default class Polyline extends ChartElement {
     if (!points || points.length === 0) return [];
 
     if (Array.isArray(points[0])) {
-      return (points as number[][]).map(p => ({ x: p[0], y: p[1] }));
+      return (points as number[][]).map((p) => ({ x: p[0], y: p[1] }));
     }
     return points as Point[];
   }
@@ -75,7 +77,10 @@ export default class Polyline extends ChartElement {
         continue;
       }
 
-      const t = Math.max(0, Math.min(1, ((x - p1.x) * dx + (y - p1.y) * dy) / length2));
+      const t = Math.max(
+        0,
+        Math.min(1, ((x - p1.x) * dx + (y - p1.y) * dy) / length2),
+      );
       const projX = p1.x + t * dx;
       const projY = p1.y + t * dy;
       const dist2 = (x - projX) * (x - projX) + (y - projY) * (y - projY);
@@ -111,4 +116,3 @@ export default class Polyline extends ChartElement {
     ctx.restore();
   }
 }
-

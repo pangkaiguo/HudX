@@ -2,9 +2,9 @@
  * HeatmapChart - Heatmap chart implementation
  */
 
-import Chart from '../Chart';
-import { Rect } from 'HudX/core';
-import { EventHelper } from '../util/EventHelper';
+import Chart from "../Chart";
+import { Rect } from "HudX/core";
+import { EventHelper } from "../util/EventHelper";
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {
@@ -23,7 +23,7 @@ export default class HeatmapChart extends Chart {
     const chartHeight = this._height - top - bottom;
 
     series.forEach((s: any) => {
-      if (s.type !== 'heatmap') return;
+      if (s.type !== "heatmap") return;
 
       const data = s.data || [];
       const cellWidth = chartWidth / (s.xAxisData?.length || 10);
@@ -38,45 +38,48 @@ export default class HeatmapChart extends Chart {
 
           const rect = new Rect({
             shape: { x, y, width: cellWidth, height: cellHeight },
-            style: { fill: color, stroke: '#fff', lineWidth: 1, opacity: 0 }, // Start with opacity 0 for animation
-            cursor: this._tooltip ? 'pointer' : 'default',
+            style: { fill: color, stroke: "#fff", lineWidth: 1, opacity: 0 }, // Start with opacity 0 for animation
+            cursor: this._tooltip ? "pointer" : "default",
           });
 
           this._root.add(rect);
 
           // Tooltip
           if (this._tooltip) {
-            rect.on('mouseover', (evt: any) => {
+            rect.on("mouseover", (evt: any) => {
               // Highlight
-              rect.attr('style', { stroke: '#333', lineWidth: 2 });
+              rect.attr("style", { stroke: "#333", lineWidth: 2 });
 
               const xName = s.xAxisData?.[colIndex] || colIndex;
               const yName = s.yAxisData?.[rowIndex] || rowIndex;
 
               const params = {
-                componentType: 'series',
-                seriesType: 'heatmap',
+                componentType: "series",
+                seriesType: "heatmap",
                 seriesName: s.name,
                 dataIndex: [rowIndex, colIndex],
                 value: value,
-                name: `${xName}, ${yName}`
+                name: `${xName}, ${yName}`,
               };
 
               const content = this._generateTooltipContent(params);
 
               const targetRect = {
-                x, y, width: cellWidth, height: cellHeight
+                x,
+                y,
+                width: cellWidth,
+                height: cellHeight,
               };
 
-              const mx = evt?.offsetX ?? (x + cellWidth / 2);
-              const my = evt?.offsetY ?? (y + cellHeight / 2);
+              const mx = evt?.offsetX ?? x + cellWidth / 2;
+              const my = evt?.offsetY ?? y + cellHeight / 2;
 
               this._tooltip!.show(mx, my, content, params, targetRect);
             });
 
-            rect.on('mouseout', () => {
+            rect.on("mouseout", () => {
               // Restore
-              rect.attr('style', { stroke: '#fff', lineWidth: 1 });
+              rect.attr("style", { stroke: "#fff", lineWidth: 1 });
               this._tooltip!.hide();
             });
           }
@@ -86,24 +89,24 @@ export default class HeatmapChart extends Chart {
             const delay = (rowIndex + colIndex) * 20; // Staggered animation delay based on position
             const duration = this._getAnimationDuration() / 3; // Shorter duration for cells
 
-            this._animator.animate(
-              rect.attr('style'),
-              'opacity',
-              1,
-              {
-                duration,
-                delay,
-                easing: 'cubicOut',
-                onUpdate: (target: any, percent: number) => {
-                  // Animate opacity for fade-in effect
-                  target.opacity = percent;
-                  rect.markRedraw();
-                }
-              }
-            );
+            this._animator.animate(rect.attr("style"), "opacity", 1, {
+              duration,
+              delay,
+              easing: "cubicOut",
+              onUpdate: (target: any, percent: number) => {
+                // Animate opacity for fade-in effect
+                target.opacity = percent;
+                rect.markRedraw();
+              },
+            });
           } else {
             // Set final opacity if animation is disabled
-            rect.attr('style', { fill: color, stroke: '#fff', lineWidth: 1, opacity: 1 });
+            rect.attr("style", {
+              fill: color,
+              stroke: "#fff",
+              lineWidth: 1,
+              opacity: 1,
+            });
           }
         });
       });
@@ -111,9 +114,9 @@ export default class HeatmapChart extends Chart {
   }
 
   private _getHeatmapColor(intensity: number): string {
-    if (intensity < 0.25) return '#313695';
-    if (intensity < 0.5) return '#4575b4';
-    if (intensity < 0.75) return '#fee090';
-    return '#d73027';
+    if (intensity < 0.25) return "#313695";
+    if (intensity < 0.5) return "#4575b4";
+    if (intensity < 0.75) return "#fee090";
+    return "#d73027";
   }
 }

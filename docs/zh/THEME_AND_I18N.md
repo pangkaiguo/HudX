@@ -15,19 +15,19 @@ HudX 支持 Light 和 Dark 两种主题，以及多语言国际化。
 
 ```typescript
 interface ThemeConfig {
-  backgroundColor: string;        // 背景色
-  textColor: string;              // 文本颜色
-  borderColor: string;            // 边框颜色
-  gridColor: string;              // 网格颜色
-  axisLineColor: string;          // 坐标轴线颜色
-  axisLabelColor: string;         // 坐标轴标签颜色
-  seriesColors: string[];         // 系列颜色数组
+  backgroundColor: string; // 背景色
+  textColor: string; // 文本颜色
+  borderColor: string; // 边框颜色
+  gridColor: string; // 网格颜色
+  axisLineColor: string; // 坐标轴线颜色
+  axisLabelColor: string; // 坐标轴标签颜色
+  seriesColors: string[]; // 系列颜色数组
   tooltipBackgroundColor: string; // 提示框背景色
-  tooltipTextColor: string;       // 提示框文本颜色
-  legendTextColor: string;        // 图例文本颜色
-  fontFamily?: string;            // 字体
-  fontSize?: number;              // 字号
-  token?: ThemeToken;             // 主题 Token (原始值)
+  tooltipTextColor: string; // 提示框文本颜色
+  legendTextColor: string; // 图例文本颜色
+  fontFamily?: string; // 字体
+  fontSize?: number; // 字号
+  token?: ThemeToken; // 主题 Token (原始值)
 }
 ```
 
@@ -58,17 +58,17 @@ interface ThemeToken {
 你可以通过 `ThemeManager` 注册或更新 Token，系统会自动将其映射到主题配置中。
 
 ```typescript
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager } from "HudX/core";
 
 // 1. 注册/更新 Token
-ThemeManager.registerToken('light', {
-  colorText: '#000000',           // 更深的黑色
-  colorBackground: '#f0f0f0',     // 浅灰色背景
-  seriesColors: ['#ff0000', '#00ff00', '#0000ff'] // 自定义色板
+ThemeManager.registerToken("light", {
+  colorText: "#000000", // 更深的黑色
+  colorBackground: "#f0f0f0", // 浅灰色背景
+  seriesColors: ["#ff0000", "#00ff00", "#0000ff"], // 自定义色板
 });
 
 // 2. 在代码中访问
-const theme = ThemeManager.getTheme('light');
+const theme = ThemeManager.getTheme("light");
 const colors = theme.seriesColors; // 包含更新后的颜色
 const bgColor = theme.backgroundColor; // 包含更新后的背景色
 ```
@@ -80,13 +80,13 @@ const bgColor = theme.backgroundColor; // 包含更新后的背景色
 #### 在 Renderer 中使用
 
 ```typescript
-import { Renderer, Circle } from 'HudX/core';
+import { Renderer, Circle } from "HudX/core";
 
 // 创建时指定主题
-const renderer = Renderer.init('#container', 'canvas', 'dark');
+const renderer = Renderer.init("#container", "canvas", "dark");
 
 // 切换主题
-renderer.setTheme('light');
+renderer.setTheme("light");
 
 // 获取当前主题
 const theme = renderer.getTheme();
@@ -98,13 +98,13 @@ const themeConfig = renderer.getThemeConfig();
 #### 在 Chart 中使用
 
 ```typescript
-import { LineChart } from 'HudX/charts';
+import { LineChart } from "HudX/charts";
 
 // 创建时指定主题
-const chart = new LineChart(dom, option, 'canvas', 'dark');
+const chart = new LineChart(dom, option, "canvas", "dark");
 
 // 切换主题
-chart.setTheme('light');
+chart.setTheme("light");
 
 // 获取当前主题
 const theme = chart.getTheme();
@@ -113,37 +113,32 @@ const theme = chart.getTheme();
 #### 在 React 组件中使用
 
 ```tsx
-import { HChart } from 'HudX/charts';
+import { HChart } from "HudX/charts";
 
-<HChart
-  option={option}
-  theme="dark"
-  width={800}
-  height={400}
-/>
+<HChart option={option} theme="dark" width={800} height={400} />;
 ```
 
 ### 自定义主题
 
 ```typescript
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager } from "HudX/core";
 
 // 注册自定义主题
-ThemeManager.registerTheme('custom', {
-  backgroundColor: '#f0f0f0',
-  textColor: '#333333',
-  borderColor: '#cccccc',
-  gridColor: '#e6e6e6',
-  axisLineColor: '#333333',
-  axisLabelColor: '#666666',
-  seriesColors: ['#ff0000', '#00ff00', '#0000ff'],
-  tooltipBackgroundColor: 'rgba(50, 50, 50, 0.9)',
-  tooltipTextColor: '#ffffff',
-  legendTextColor: '#333333',
+ThemeManager.registerTheme("custom", {
+  backgroundColor: "#f0f0f0",
+  textColor: "#333333",
+  borderColor: "#cccccc",
+  gridColor: "#e6e6e6",
+  axisLineColor: "#333333",
+  axisLabelColor: "#666666",
+  seriesColors: ["#ff0000", "#00ff00", "#0000ff"],
+  tooltipBackgroundColor: "rgba(50, 50, 50, 0.9)",
+  tooltipTextColor: "#ffffff",
+  legendTextColor: "#333333",
 });
 
 // 使用自定义主题
-const renderer = Renderer.init('#container', 'canvas', 'custom');
+const renderer = Renderer.init("#container", "canvas", "custom");
 ```
 
 ## 多语言支持
@@ -173,69 +168,64 @@ const renderer = Renderer.init('#container', 'canvas', 'custom');
 #### 在 Renderer 中使用
 
 ```typescript
-import { Renderer } from 'HudX/core';
+import { Renderer } from "HudX/core";
 
 // 创建时指定语言
-const renderer = Renderer.init('#container', 'canvas', 'light', 'zh-CN');
+const renderer = Renderer.init("#container", "canvas", "light", "zh-CN");
 
 // 切换语言
-renderer.setLocale('en');
+renderer.setLocale("en");
 
 // 获取当前语言
 const locale = renderer.getLocale();
 
 // 获取翻译文本
-const text = renderer.t('chart.title', 'Chart');
+const text = renderer.t("chart.title", "Chart");
 ```
 
 #### 在 Chart 中使用
 
 ```typescript
-import { LineChart } from 'HudX/charts';
+import { LineChart } from "HudX/charts";
 
 // 创建时指定语言
-const chart = new LineChart(dom, option, 'canvas', 'light', 'zh-CN');
+const chart = new LineChart(dom, option, "canvas", "light", "zh-CN");
 
 // 切换语言
-chart.setLocale('en');
+chart.setLocale("en");
 
 // 获取翻译文本
-const text = chart.t('chart.title', 'Chart');
+const text = chart.t("chart.title", "Chart");
 ```
 
 #### 在 React 组件中使用
 
 ```tsx
-import { HChart } from 'HudX/charts';
+import { HChart } from "HudX/charts";
 
-<HChart
-  option={option}
-  locale="zh-CN"
-  width={800}
-  height={400}
-/>
+<HChart option={option} locale="zh-CN" width={800} height={400} />;
 ```
 
 ### 自定义语言
 
 ```typescript
-import { LocaleManager } from 'HudX/core';
+import { LocaleManager } from "HudX/core";
 
 // 注册自定义语言
-LocaleManager.registerLocale('custom', {
-  'chart.title': 'Custom Chart',
-  'chart.legend': 'Custom Legend',
-  'chart.tooltip': 'Custom Tooltip',
-  'axis.x': 'Custom X Axis',
-  'axis.y': 'Custom Y Axis',
-  'series.name': 'Custom Series',
-  'data.empty': 'No Custom Data',
-  'data.loading': 'Loading Custom...',
-  'data.error': 'Custom Error',
+LocaleManager.registerLocale("custom", {
+  "chart.title": "Custom Chart",
+  "chart.legend": "Custom Legend",
+  "chart.tooltip": "Custom Tooltip",
+  "axis.x": "Custom X Axis",
+  "axis.y": "Custom Y Axis",
+  "series.name": "Custom Series",
+  "data.empty": "No Custom Data",
+  "data.loading": "Loading Custom...",
+  "data.error": "Custom Error",
 });
 
 // 使用自定义语言
-const renderer = Renderer.init('#container', 'canvas', 'light', 'custom');
+const renderer = Renderer.init("#container", "canvas", "light", "custom");
 ```
 
 ### 语言回退机制
@@ -249,45 +239,45 @@ const renderer = Renderer.init('#container', 'canvas', 'light', 'custom');
 ### 完整示例
 
 ```typescript
-import { Renderer, Circle } from 'HudX/core';
+import { Renderer, Circle } from "HudX/core";
 
 // 创建带主题和语言的渲染器
 const renderer = Renderer.init(
-  '#container',
-  'canvas',  // 渲染模式
-  'dark',    // 主题
-  'zh-CN'    // 语言
+  "#container",
+  "canvas", // 渲染模式
+  "dark", // 主题
+  "zh-CN", // 语言
 );
 
 // 使用主题配置
 const themeConfig = renderer.getThemeConfig();
 const circle = new Circle({
   shape: { cx: 100, cy: 100, r: 50 },
-  style: { fill: themeConfig.seriesColors[0] }
+  style: { fill: themeConfig.seriesColors[0] },
 });
 renderer.add(circle);
 
 // 使用翻译
-const title = renderer.t('chart.title', 'Chart');
+const title = renderer.t("chart.title", "Chart");
 ```
 
 ### React 组件完整示例
 
 ```tsx
-import { HChart } from 'HudX/charts';
-import { useState } from 'react';
+import { HChart } from "HudX/charts";
+import { useState } from "react";
 
 function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const [locale, setLocale] = useState<'en' | 'zh-CN'>('en');
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [locale, setLocale] = useState<"en" | "zh-CN">("en");
 
   return (
     <div>
       <div>
-        <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+        <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
           Toggle Theme
         </button>
-        <button onClick={() => setLocale(locale === 'en' ? 'zh-CN' : 'en')}>
+        <button onClick={() => setLocale(locale === "en" ? "zh-CN" : "en")}>
           Toggle Language
         </button>
       </div>

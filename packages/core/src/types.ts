@@ -46,9 +46,9 @@ export interface Style {
   /** Font weight */
   fontWeight?: string | number;
   /** Text alignment */
-  textAlign?: 'left' | 'center' | 'right';
+  textAlign?: "left" | "center" | "right";
   /** Text baseline */
-  textBaseline?: 'top' | 'middle' | 'bottom' | 'alphabetic';
+  textBaseline?: "top" | "middle" | "bottom" | "alphabetic";
   /** Background color */
   backgroundColor?: string;
   /** Border color */
@@ -156,17 +156,17 @@ export interface AnimationOption {
 /**
  * Rendering mode
  */
-export type RenderMode = 'canvas' | 'svg';
+export type RenderMode = "canvas" | "svg";
 
 /**
  * Theme mode
  */
-export type Theme = 'light' | 'dark' | string;
+export type Theme = "light" | "dark" | string;
 
 /**
  * Locale
  */
-export type Locale = 'en' | 'zh' | 'zh-CN' | 'zh-TW';
+export type Locale = "en" | "zh" | "zh-CN" | "zh-TW";
 
 /**
  * Theme Token
@@ -231,9 +231,23 @@ export interface RenderingContext {
   closePath(): void;
   moveTo(x: number, y: number): void;
   lineTo(x: number, y: number): void;
-  arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+  arc(
+    x: number,
+    y: number,
+    radius: number,
+    startAngle: number,
+    endAngle: number,
+    anticlockwise?: boolean,
+  ): void;
   arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
-  bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+  bezierCurveTo(
+    cp1x: number,
+    cp1y: number,
+    cp2x: number,
+    cp2y: number,
+    x: number,
+    y: number,
+  ): void;
   quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
   rect(x: number, y: number, width: number, height: number): void;
   fill(): void;
@@ -241,8 +255,22 @@ export interface RenderingContext {
   fillText(text: string, x: number, y: number): void;
   strokeText(text: string, x: number, y: number): void;
   clip(): void;
-  transform(a: number, b: number, c: number, d: number, e: number, f: number): void;
-  setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+  transform(
+    a: number,
+    b: number,
+    c: number,
+    d: number,
+    e: number,
+    f: number,
+  ): void;
+  setTransform(
+    a: number,
+    b: number,
+    c: number,
+    d: number,
+    e: number,
+    f: number,
+  ): void;
   translate(x: number, y: number): void;
   rotate(angle: number): void;
   scale(x: number, y: number): void;
@@ -279,9 +307,23 @@ export interface CanvasRenderingContext2D {
   closePath(): void;
   moveTo(x: number, y: number): void;
   lineTo(x: number, y: number): void;
-  arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+  arc(
+    x: number,
+    y: number,
+    radius: number,
+    startAngle: number,
+    endAngle: number,
+    anticlockwise?: boolean,
+  ): void;
   arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
-  bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+  bezierCurveTo(
+    cp1x: number,
+    cp1y: number,
+    cp2x: number,
+    cp2y: number,
+    x: number,
+    y: number,
+  ): void;
   quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
   rect(x: number, y: number, width: number, height: number): void;
   fill(): void;
@@ -289,8 +331,22 @@ export interface CanvasRenderingContext2D {
   fillText(text: string, x: number, y: number): void;
   strokeText(text: string, x: number, y: number): void;
   clip(): void;
-  transform(a: number, b: number, c: number, d: number, e: number, f: number): void;
-  setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+  transform(
+    a: number,
+    b: number,
+    c: number,
+    d: number,
+    e: number,
+    f: number,
+  ): void;
+  setTransform(
+    a: number,
+    b: number,
+    c: number,
+    d: number,
+    e: number,
+    f: number,
+  ): void;
   translate(x: number, y: number): void;
   rotate(angle: number): void;
   scale(x: number, y: number): void;
@@ -330,7 +386,7 @@ export interface ResizeOpts {
  * Data URL export options
  */
 export interface DataURLOpts {
-  type?: 'png' | 'jpg' | 'svg';
+  type?: "png" | "jpg" | "svg";
   pixelRatio?: number;
   backgroundColor?: string;
   excludeComponents?: string[];
@@ -344,7 +400,15 @@ export interface ElementWithParent {
 }
 
 export interface DecalObject {
-  symbol?: 'circle' | 'rect' | 'triangle' | 'diamond' | 'pin' | 'arrow' | 'none' | string;
+  symbol?:
+    | "circle"
+    | "rect"
+    | "triangle"
+    | "diamond"
+    | "pin"
+    | "arrow"
+    | "none"
+    | string;
   symbolSize?: number;
   symbolKeepAspect?: boolean;
   color?: string;
@@ -388,6 +452,6 @@ export interface TitleOption {
   /** Subtitle text style */
   subtextStyle?: Partial<Style>;
   /** Horizontal alignment of title text */
-  textAlign?: 'auto' | 'left' | 'right' | 'center';
+  textAlign?: "auto" | "left" | "right" | "center";
   [key: string]: any;
 }

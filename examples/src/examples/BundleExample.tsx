@@ -1,12 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import {
-  Rect,
-  Circle,
-  Group,
-  Renderer,
-  HChart,
-  type ChartOption
-} from 'HudX';
+import React, { useRef, useEffect } from "react";
+import { Rect, Circle, Group, Renderer, HChart, type ChartOption } from "HudX";
 
 // This example demonstrates importing everything from the unified 'HudX' package
 export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
@@ -22,23 +15,25 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
       bottom: 60,
     },
     xAxis: {
-      type: 'category',
-      data: ['A', 'B', 'C', 'D', 'E'],
-      show: true
+      type: "category",
+      data: ["A", "B", "C", "D", "E"],
+      show: true,
     },
     yAxis: {
-      type: 'value',
-      show: true
+      type: "value",
+      show: true,
     },
-    series: [{
-      type: 'bar',
-      name: 'Sales',
-      data: [120, 200, 150, 80, 70],
-      itemStyle: { color: '#5470c6' }
-    }],
+    series: [
+      {
+        type: "bar",
+        name: "Sales",
+        data: [120, 200, 150, 80, 70],
+        itemStyle: { color: "#5470c6" },
+      },
+    ],
     tooltip: {
-      show: true
-    }
+      show: true,
+    },
   };
 
   // Example 2: Using Core components directly from hudx package
@@ -46,7 +41,7 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
     if (!coreRef.current) return;
 
     // Initialize renderer directly
-    const renderer = new Renderer(coreRef.current, 'canvas');
+    const renderer = new Renderer(coreRef.current, "canvas");
     renderer.resize(600, 200);
 
     // Create some shapes
@@ -55,36 +50,36 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
         x: 50,
         y: 50,
         width: 100,
-        height: 100
+        height: 100,
       },
       style: {
-        fill: '#4f46e5',
-        stroke: '#312e81',
-        lineWidth: 2
-      }
+        fill: "#4f46e5",
+        stroke: "#312e81",
+        lineWidth: 2,
+      },
     });
 
     const circle = new Circle({
       shape: {
         cx: 250,
         cy: 100,
-        r: 50
+        r: 50,
       },
       style: {
-        fill: '#ec4899',
-        stroke: '#831843',
-        lineWidth: 2
-      }
+        fill: "#ec4899",
+        stroke: "#831843",
+        lineWidth: 2,
+      },
     });
 
     // Add interactivity
-    rect.on('mouseenter', () => {
-      rect.attr('style', { fill: '#6366f1' });
+    rect.on("mouseenter", () => {
+      rect.attr("style", { fill: "#6366f1" });
       renderer.refresh();
     });
 
-    rect.on('mouseleave', () => {
-      rect.attr('style', { fill: '#4f46e5' });
+    rect.on("mouseleave", () => {
+      rect.attr("style", { fill: "#4f46e5" });
       renderer.refresh();
     });
 
@@ -100,11 +95,14 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
   return (
     <div style={{ padding: 20 }}>
       <h1>Unified Bundle Example</h1>
-      <p>This example demonstrates importing both Charts and Core components from the single <code>hudx</code> package.</p>
+      <p>
+        This example demonstrates importing both Charts and Core components from
+        the single <code>hudx</code> package.
+      </p>
 
       <div style={{ marginBottom: 40 }}>
         <h2>1. HChart Component imported from 'HudX'</h2>
-        <div style={{ border: '1px solid #ccc', display: 'inline-block' }}>
+        <div style={{ border: "1px solid #ccc", display: "inline-block" }}>
           <HChart
             option={barOption}
             width={600}
@@ -116,7 +114,15 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
 
       <div>
         <h2>2. Core Shapes (Rect, Circle) imported from 'HudX'</h2>
-        <div ref={coreRef} style={{ border: '1px solid #ccc', display: 'inline-block', height: 200, width: 600 }} />
+        <div
+          ref={coreRef}
+          style={{
+            border: "1px solid #ccc",
+            display: "inline-block",
+            height: 200,
+            width: 600,
+          }}
+        />
       </div>
     </div>
   );

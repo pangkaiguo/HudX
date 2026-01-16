@@ -1,7 +1,14 @@
-import Chart from '../Chart';
-import type { SeriesOption, ChartData, EmphasisOption } from '../types';
-import { Sector, Text, Polyline, createDecalPattern, Z_SERIES, Z_LABEL } from 'HudX/core';
-import { EventHelper } from '../util/EventHelper';
+import Chart from "../Chart";
+import type { SeriesOption, ChartData, EmphasisOption } from "../types";
+import {
+  Sector,
+  Text,
+  Polyline,
+  createDecalPattern,
+  Z_SERIES,
+  Z_LABEL,
+} from "HudX/core";
+import { EventHelper } from "../util/EventHelper";
 
 // TODO: Define a proper interface for the extended Sector to avoid 'any' casting throughout the file.
 // Currently relying on monkey-patching properties like __initialStyle, __label, etc.
@@ -49,7 +56,7 @@ export default class PieChart extends Chart {
         r,
         r0,
         maxValue,
-        oldSectors: sectorsToUse
+        oldSectors: sectorsToUse,
       });
 
       this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
@@ -57,7 +64,7 @@ export default class PieChart extends Chart {
 
       this._renderer.flush();
     } catch (e) {
-      console.error('[PieChart] Render error:', e);
+      console.error("[PieChart] Render error:", e);
     }
   }
 
@@ -86,7 +93,10 @@ export default class PieChart extends Chart {
     if (series.length === 0) return { seriesItem: null, data: null };
 
     const seriesItem = series[0];
-    if (!seriesItem.type || !['pie', 'doughnut', 'half-doughnut'].includes(seriesItem.type)) {
+    if (
+      !seriesItem.type ||
+      !["pie", "doughnut", "half-doughnut"].includes(seriesItem.type)
+    ) {
       return { seriesItem: null, data: null };
     }
 
@@ -102,26 +112,33 @@ export default class PieChart extends Chart {
     return { cx: center[0], cy: center[1], r0, r };
   }
 
-  private _renderLegendIfNeeded(data: any[], seriesItem: any, total: number): void {
+  private _renderLegendIfNeeded(
+    data: any[],
+    seriesItem: any,
+    total: number,
+  ): void {
     if (this._option.legend?.show === false) return;
 
     // TODO: Extract Legend item creation logic to a separate mapper
     const items = data.map((it: any, i: number) => {
       let value = 0;
-      if (typeof it === 'number') value = it;
+      if (typeof it === "number") value = it;
       else if (Array.isArray(it)) value = it[0] || 0;
-      else if (typeof it === 'object' && it !== null) value = it.value;
+      else if (typeof it === "object" && it !== null) value = it.value;
 
-      const percent = total > 0 ? (value / total) : 0;
+      const percent = total > 0 ? value / total : 0;
 
       return {
-        name: (typeof it === 'object' && it.name) ? it.name : `item-${i + 1}`,
-        color: (typeof it === 'object' && it.itemStyle?.color) || seriesItem.itemStyle?.color || this._getSeriesColor(i),
-        icon: this._option.legend?.icon || 'circle',
+        name: typeof it === "object" && it.name ? it.name : `item-${i + 1}`,
+        color:
+          (typeof it === "object" && it.itemStyle?.color) ||
+          seriesItem.itemStyle?.color ||
+          this._getSeriesColor(i),
+        icon: this._option.legend?.icon || "circle",
         textColor: this.getThemeConfig().legendTextColor,
         value,
         percent,
-        data: it
+        data: it,
       };
     });
 
@@ -130,24 +147,24 @@ export default class PieChart extends Chart {
 
   // --- Helper to get icon shape from Legend style ---
   private _getIconShape(type: string | undefined): string {
-    if (type === 'rect') return 'border-radius:2px;';
-    if (type === 'circle') return 'border-radius:50%;';
-    if (type === 'line') return 'height:2px;margin-top:4px;'; // simplified
+    if (type === "rect") return "border-radius:2px;";
+    if (type === "circle") return "border-radius:50%;";
+    if (type === "line") return "height:2px;margin-top:4px;"; // simplified
     // Default to Legend's default behavior if not specified, but here we return CSS for tooltip
-    return 'border-radius:50%;';
+    return "border-radius:50%;";
   }
 
   protected _getTooltipMarker(color: string): string {
     // Try to sync with legend icon
-    const legendIcon = this._option.legend?.icon || 'circle';
-    let borderRadius = '50%'; // Default circle
-    let sizeStyle = 'width:10px;height:10px;';
+    const legendIcon = this._option.legend?.icon || "circle";
+    let borderRadius = "50%"; // Default circle
+    let sizeStyle = "width:10px;height:10px;";
 
-    if (legendIcon === 'rect') {
-      borderRadius = '2px';
-    } else if (legendIcon === 'line') {
-      borderRadius = '0';
-      sizeStyle = 'width:12px;height:2px;margin-top:4px;'; // Center vertically roughly
+    if (legendIcon === "rect") {
+      borderRadius = "2px";
+    } else if (legendIcon === "line") {
+      borderRadius = "0";
+      sizeStyle = "width:12px;height:2px;margin-top:4px;"; // Center vertically roughly
     }
 
     return `<span style="display:inline-block;margin-right:4px;${sizeStyle}border-radius:${borderRadius};background-color:${color};"></span>`;
@@ -157,20 +174,20 @@ export default class PieChart extends Chart {
     if (!seriesItem.roseType) return 0;
     return data.reduce((max: number, item: any) => {
       let v = 0;
-      if (typeof item === 'number') v = item;
+      if (typeof item === "number") v = item;
       else if (Array.isArray(item)) v = item[0] || 0;
-      else if (typeof item === 'object' && item !== null) v = item.value;
+      else if (typeof item === "object" && item !== null) v = item.value;
       return Math.max(max, v);
     }, 0);
   }
 
   private _computeGlobalAngles(seriesItem: any) {
-    const degToRad = (deg: number) => deg * Math.PI / 180;
+    const degToRad = (deg: number) => (deg * Math.PI) / 180;
     let startAngle: number;
 
     if (seriesItem.startAngle !== undefined) {
       startAngle = degToRad(seriesItem.startAngle);
-    } else if (seriesItem.type === 'half-doughnut') {
+    } else if (seriesItem.type === "half-doughnut") {
       startAngle = -Math.PI;
     } else {
       startAngle = -Math.PI / 2;
@@ -179,7 +196,7 @@ export default class PieChart extends Chart {
     let endAngle: number;
     if (seriesItem.endAngle !== undefined) {
       endAngle = degToRad(seriesItem.endAngle);
-    } else if (seriesItem.type === 'half-doughnut') {
+    } else if (seriesItem.type === "half-doughnut") {
       endAngle = 0;
     } else {
       endAngle = startAngle + Math.PI * 2;
@@ -189,31 +206,57 @@ export default class PieChart extends Chart {
   }
 
   private _createSectorsAndPrepareLabels(params: {
-    data: any[],
-    seriesItem: any,
-    total: number,
-    totalAngle: number,
-    startAngle: number,
-    cx: number,
-    cy: number,
-    r: number,
-    r0: number,
-    maxValue: number,
-    oldSectors: Map<string, Sector>
+    data: any[];
+    seriesItem: any;
+    total: number;
+    totalAngle: number;
+    startAngle: number;
+    cx: number;
+    cy: number;
+    r: number;
+    r0: number;
+    maxValue: number;
+    oldSectors: Map<string, Sector>;
   }): any[] {
-    const { data, seriesItem, total, totalAngle, startAngle, cx, cy, r, r0, maxValue, oldSectors } = params;
+    const {
+      data,
+      seriesItem,
+      total,
+      totalAngle,
+      startAngle,
+      cx,
+      cy,
+      r,
+      r0,
+      maxValue,
+      oldSectors,
+    } = params;
     const labelLayoutList: any[] = [];
     let currentAngle = startAngle;
 
     data.forEach((item: ChartData, index: number) => {
       const value = this._getDataValue(item);
-      if (typeof value !== 'number') return;
+      if (typeof value !== "number") return;
 
       const percent = total > 0 ? value / total : 0;
-      const { angle, itemR } = this._calculateSectorGeometry(seriesItem, value, percent, totalAngle, data.length, r, r0, maxValue);
+      const { angle, itemR } = this._calculateSectorGeometry(
+        seriesItem,
+        value,
+        percent,
+        totalAngle,
+        data.length,
+        r,
+        r0,
+        maxValue,
+      );
 
       let itemName = `item-${index + 1}`;
-      if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+      if (
+        typeof item === "object" &&
+        item !== null &&
+        !Array.isArray(item) &&
+        item.name
+      ) {
         itemName = item.name;
       }
 
@@ -241,9 +284,16 @@ export default class PieChart extends Chart {
       }
 
       const sector = this._createSector({
-        item, index, itemName, seriesItem, cx, cy, itemR, r0,
+        item,
+        index,
+        itemName,
+        seriesItem,
+        cx,
+        cy,
+        itemR,
+        r0,
         currentAngle: initialStart,
-        angle: initialEnd - initialStart
+        angle: initialEnd - initialStart,
       });
 
       // Override radius for initial state if animating
@@ -265,7 +315,7 @@ export default class PieChart extends Chart {
       }
 
       // Important: if we have entry animation, we should probably hide label initially?
-      // Or just let it layout normally. 
+      // Or just let it layout normally.
       // The issue is likely that label layout uses current sector shape.
       // If sector shape is animating (e.g. radius is small), label might be placed incorrectly.
       // But we calculate label position in _layoutLabels later, using 'r' and 'r0' passed to it,
@@ -282,12 +332,35 @@ export default class PieChart extends Chart {
       if (shouldAnimate) {
         const delay = oldSector ? 0 : index * 100; // Staggered entry
         const duration = seriesItem.animationDuration || 500;
-        const easing = seriesItem.animationEasing || 'cubicOut';
+        const easing = seriesItem.animationEasing || "cubicOut";
 
         // Check if angles need animation
-        if (Math.abs(initialStart - targetStart) > 0.001 || Math.abs(initialEnd - targetEnd) > 0.001) {
-          this._animator.animate(sector.shape, 'startAngle', targetStart, { duration, delay, easing, onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
-          this._animator.animate(sector.shape, 'endAngle', targetEnd, { duration, delay, easing, onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+        if (
+          Math.abs(initialStart - targetStart) > 0.001 ||
+          Math.abs(initialEnd - targetEnd) > 0.001
+        ) {
+          this._animator
+            .animate(sector.shape, "startAngle", targetStart, {
+              duration,
+              delay,
+              easing,
+              onUpdate: () => {
+                sector.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
+          this._animator
+            .animate(sector.shape, "endAngle", targetEnd, {
+              duration,
+              delay,
+              easing,
+              onUpdate: () => {
+                sector.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
         } else {
           sector.shape.startAngle = targetStart;
           sector.shape.endAngle = targetEnd;
@@ -295,12 +368,32 @@ export default class PieChart extends Chart {
 
         // Check if radius needs animation (Rose Chart or Resize)
         if (seriesItem.roseType || Math.abs(initialR - itemR) > 0.1) {
-          this._animator.animate(sector.shape, 'r', itemR, { duration, delay, easing, onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+          this._animator
+            .animate(sector.shape, "r", itemR, {
+              duration,
+              delay,
+              easing,
+              onUpdate: () => {
+                sector.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
         }
 
         // Check if inner radius needs animation
         if (Math.abs(sector.shape.r0 - r0) > 0.1) {
-          this._animator.animate(sector.shape, 'r0', r0, { duration, delay, easing, onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+          this._animator
+            .animate(sector.shape, "r0", r0, {
+              duration,
+              delay,
+              easing,
+              onUpdate: () => {
+                sector.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
         }
       } else {
         sector.shape.startAngle = targetStart;
@@ -310,20 +403,40 @@ export default class PieChart extends Chart {
       }
 
       // Bind Events
-      const handlers = this._bindSectorEvents(sector, seriesItem, item, index, value, percent, cx, cy, r, r0, total);
+      const handlers = this._bindSectorEvents(
+        sector,
+        seriesItem,
+        item,
+        index,
+        value,
+        percent,
+        cx,
+        cy,
+        r,
+        r0,
+        total,
+      );
 
       // Prepare Label
       const labelConfig = this._prepareLabelConfig({
-        seriesItem, item, value, percent, currentAngle: targetStart, angle: targetEnd - targetStart, sector, handlers, color: sector.style.fill as string
+        seriesItem,
+        item,
+        value,
+        percent,
+        currentAngle: targetStart,
+        angle: targetEnd - targetStart,
+        sector,
+        handlers,
+        color: sector.style.fill as string,
       });
 
       if (labelConfig) {
         // Fix: Initially hide label if entry animation is active
         if (shouldAnimate && !oldSector && labelConfig.isVisible) {
           labelConfig.isVisible = false;
-          // We can fade it in after animation or just let it appear? 
-          // For now, let's just make it invisible if it's entry animation, 
-          // and then fade in? 
+          // We can fade it in after animation or just let it appear?
+          // For now, let's just make it invisible if it's entry animation,
+          // and then fade in?
           // Better approach: animate opacity from 0 to 1
           labelConfig.opacity = 0;
           labelConfig.fadeIn = true;
@@ -337,14 +450,23 @@ export default class PieChart extends Chart {
     return labelLayoutList;
   }
 
-  private _calculateSectorGeometry(seriesItem: any, value: number, percent: number, totalAngle: number, dataLength: number, r: number, r0: number, maxValue: number) {
+  private _calculateSectorGeometry(
+    seriesItem: any,
+    value: number,
+    percent: number,
+    totalAngle: number,
+    dataLength: number,
+    r: number,
+    r0: number,
+    maxValue: number,
+  ) {
     let angle: number;
     let itemR = r;
 
     if (seriesItem.roseType) {
       angle = totalAngle / dataLength;
       if (maxValue > 0) {
-        if (seriesItem.roseType === 'area') {
+        if (seriesItem.roseType === "area") {
           itemR = r0 + (r - r0) * Math.sqrt(value / maxValue);
         } else {
           itemR = r0 + (r - r0) * (value / maxValue);
@@ -357,14 +479,38 @@ export default class PieChart extends Chart {
   }
 
   private _createSector(params: {
-    item: any, index: number, itemName: string, seriesItem: any,
-    cx: number, cy: number, itemR: number, r0: number, currentAngle: number, angle: number
+    item: any;
+    index: number;
+    itemName: string;
+    seriesItem: any;
+    cx: number;
+    cy: number;
+    itemR: number;
+    r0: number;
+    currentAngle: number;
+    angle: number;
   }) {
-    const { item, index, itemName, seriesItem, cx, cy, itemR, r0, currentAngle, angle } = params;
+    const {
+      item,
+      index,
+      itemName,
+      seriesItem,
+      cx,
+      cy,
+      itemR,
+      r0,
+      currentAngle,
+      angle,
+    } = params;
 
     const itemStyle = seriesItem.itemStyle || {};
     let color: string;
-    if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.itemStyle?.color) {
+    if (
+      typeof item === "object" &&
+      item !== null &&
+      !Array.isArray(item) &&
+      item.itemStyle?.color
+    ) {
       color = item.itemStyle.color;
     } else {
       color = itemStyle.color || this._getSeriesColor(index);
@@ -374,7 +520,7 @@ export default class PieChart extends Chart {
     const aria = this._option.aria;
     if (aria?.enabled && aria?.decal?.show) {
       const decals = aria.decal.decals || [];
-      const decal = decals[index % decals.length] || { symbol: 'circle' };
+      const decal = decals[index % decals.length] || { symbol: "circle" };
       const pattern = createDecalPattern(decal, color);
       if (pattern) {
         fillStyle = pattern;
@@ -386,21 +532,29 @@ export default class PieChart extends Chart {
       data: item,
       dataIndex: index,
       shape: {
-        cx, cy, r: itemR, r0,
+        cx,
+        cy,
+        r: itemR,
+        r0,
         startAngle: currentAngle,
         endAngle: currentAngle + angle,
         anticlockwise: false,
       },
       style: {
         fill: fillStyle,
-        stroke: seriesItem.itemStyle?.borderColor || '#fff',
+        stroke: seriesItem.itemStyle?.borderColor || "#fff",
         lineWidth: seriesItem.itemStyle?.borderWidth ?? 0,
       },
       transform: {
-        x: 0, y: 0, scaleX: 1, scaleY: 1, originX: cx, originY: cy
+        x: 0,
+        y: 0,
+        scaleX: 1,
+        scaleY: 1,
+        originX: cx,
+        originY: cy,
       },
       z: Z_SERIES,
-      cursor: (this._tooltip || seriesItem.emphasis) ? 'pointer' : 'default',
+      cursor: this._tooltip || seriesItem.emphasis ? "pointer" : "default",
     });
 
     // TODO: Replace these monkey-patched properties with a proper storage or extended class
@@ -411,7 +565,19 @@ export default class PieChart extends Chart {
     return sector;
   }
 
-  private _bindSectorEvents(sector: Sector, seriesItem: any, item: any, index: number, value: number, percent: number, cx: number, cy: number, r: number, r0: number, total: number) {
+  private _bindSectorEvents(
+    sector: Sector,
+    seriesItem: any,
+    item: any,
+    index: number,
+    value: number,
+    percent: number,
+    cx: number,
+    cy: number,
+    r: number,
+    r0: number,
+    total: number,
+  ) {
     if (!this._tooltip && !seriesItem.emphasis) return undefined;
 
     const emphasis = seriesItem.emphasis;
@@ -425,16 +591,31 @@ export default class PieChart extends Chart {
       this._applyEmphasisAnimation(sector, emphasis, true, r);
 
       if (this._tooltip) {
-        const params = this._createTooltipParams(seriesItem, item, index, value, percent, sector.style.fill as string);
+        const params = this._createTooltipParams(
+          seriesItem,
+          item,
+          index,
+          value,
+          percent,
+          sector.style.fill as string,
+        );
         const content = this._generateTooltipContent(params);
         const mx = evt?.offsetX ?? cx;
         const my = evt?.offsetY ?? cy;
         this._tooltip.show(mx, my, content, params);
       }
 
-      const seriesType = seriesItem.type || 'pie';
-      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
-        this._showDynamicCenterLabel(seriesItem, item, value, percent, cx, cy, emphasis);
+      const seriesType = seriesItem.type || "pie";
+      if (["doughnut", "half-doughnut"].includes(seriesType) && r0 > 0) {
+        this._showDynamicCenterLabel(
+          seriesItem,
+          item,
+          value,
+          percent,
+          cx,
+          cy,
+          emphasis,
+        );
       }
     };
 
@@ -460,7 +641,7 @@ export default class PieChart extends Chart {
     EventHelper.bindHoverEvents(sector, onMouseOver, onMouseOut);
 
     let rafId: number | null = null;
-    sector.on('mousemove', (evt: any) => {
+    sector.on("mousemove", (evt: any) => {
       // Throttle tooltip updates to prevent flickering and performance issues
       if (rafId) {
         return;
@@ -473,17 +654,28 @@ export default class PieChart extends Chart {
         rafId = null;
 
         const currentEnd = sector.shape.endAngle;
-        // Calculate percent based on angle for tooltip dynamic update? 
+        // Calculate percent based on angle for tooltip dynamic update?
         // Or just use static percent? Original code calculated partPercent.
-        const partPercent = (currentEnd - sector.shape.startAngle) / (Math.PI * 2) * 100;
+        const partPercent =
+          ((currentEnd - sector.shape.startAngle) / (Math.PI * 2)) * 100;
 
-        const params = this._createTooltipParams(seriesItem, item, index, value, partPercent / 100, sector.style.fill as string);
+        const params = this._createTooltipParams(
+          seriesItem,
+          item,
+          index,
+          value,
+          partPercent / 100,
+          sector.style.fill as string,
+        );
         const content = this._generateTooltipContent(params);
 
         // Check if we need to ensure emphasis is applied (e.g. if onMouseOver missed or tooltip blocked it)
         const label = (sector as any).__label;
         const showOnHover = seriesItem?.label?.showOnHover;
-        const needsEmphasis = showOnHover && label && (label.invisible || (label.style.opacity as number) < 1);
+        const needsEmphasis =
+          showOnHover &&
+          label &&
+          (label.invisible || (label.style.opacity as number) < 1);
 
         if (this._tooltip) {
           if (!this._tooltip.isVisible() || needsEmphasis) {
@@ -500,30 +692,52 @@ export default class PieChart extends Chart {
   }
 
   private _prepareLabelConfig(params: {
-    seriesItem: any, item: any, value: number, percent: number,
-    currentAngle: number, angle: number, sector: Sector, handlers: any, color: string
+    seriesItem: any;
+    item: any;
+    value: number;
+    percent: number;
+    currentAngle: number;
+    angle: number;
+    sector: Sector;
+    handlers: any;
+    color: string;
   }) {
-    const { seriesItem, item, value, percent, currentAngle, angle, sector, handlers, color } = params;
+    const {
+      seriesItem,
+      item,
+      value,
+      percent,
+      currentAngle,
+      angle,
+      sector,
+      handlers,
+      color,
+    } = params;
 
     const showOnHover = seriesItem.label?.showOnHover;
-    const shouldCreate = seriesItem.label?.show !== false || seriesItem.emphasis?.label?.show === true || showOnHover === true;
+    const shouldCreate =
+      seriesItem.label?.show !== false ||
+      seriesItem.emphasis?.label?.show === true ||
+      showOnHover === true;
 
     if (!shouldCreate) return null;
 
     const labelAngle = currentAngle + angle / 2;
-    const isOutside = seriesItem.label?.position === 'outside' || seriesItem.label?.position === undefined;
+    const isOutside =
+      seriesItem.label?.position === "outside" ||
+      seriesItem.label?.position === undefined;
 
     let labelText: string;
     const formatter = seriesItem.label?.formatter;
     if (formatter) {
       labelText = this._formatLabel(formatter, {
-        name: (item as any).name || '',
+        name: (item as any).name || "",
         value,
         percent: (percent * 100).toFixed(0),
-        data: item
+        data: item,
       });
     } else {
-      labelText = (item as any).name || '';
+      labelText = (item as any).name || "";
     }
 
     const isVisible = seriesItem.label?.show !== false && !showOnHover;
@@ -534,33 +748,45 @@ export default class PieChart extends Chart {
       sector,
       isOutside,
       item,
-      color: seriesItem.label?.color || (isOutside ? '#333' : '#fff'),
+      color: seriesItem.label?.color || (isOutside ? "#333" : "#fff"),
       itemColor: color,
       seriesItem,
       handlers,
       isVisible,
       opacity: isVisible ? 1 : 0,
-      fadeIn: false
+      fadeIn: false,
     };
   }
 
   // --- Logic Helpers ---
 
   protected _getDataValue(item: ChartData): number {
-    if (typeof item === 'number') return item;
+    if (typeof item === "number") return item;
     if (Array.isArray(item)) return item[0] || 0;
-    if (typeof item === 'object' && item !== null) return item.value;
+    if (typeof item === "object" && item !== null) return item.value;
     return 0;
   }
 
-  private _createTooltipParams(seriesItem: any, item: any, index: number, value: number, percent: number, color: string) {
-    let itemName = '';
-    if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+  private _createTooltipParams(
+    seriesItem: any,
+    item: any,
+    index: number,
+    value: number,
+    percent: number,
+    color: string,
+  ) {
+    let itemName = "";
+    if (
+      typeof item === "object" &&
+      item !== null &&
+      !Array.isArray(item) &&
+      item.name
+    ) {
       itemName = item.name;
     }
     return {
-      componentType: 'series',
-      seriesType: 'pie',
+      componentType: "series",
+      seriesType: "pie",
       seriesIndex: 0,
       seriesName: seriesItem.name,
       name: itemName,
@@ -569,14 +795,19 @@ export default class PieChart extends Chart {
       value: value,
       percent: percent * 100,
       color: color,
-      marker: this._getTooltipMarker(color)
+      marker: this._getTooltipMarker(color),
     };
   }
 
   private _calculateTotal(data: any[]): number {
     return data.reduce((sum: number, item: ChartData, index: number) => {
       let itemName = `item-${index + 1}`;
-      if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+      if (
+        typeof item === "object" &&
+        item !== null &&
+        !Array.isArray(item) &&
+        item.name
+      ) {
         itemName = item.name;
       }
       if (this._legend && !this._legendSelected.has(itemName)) {
@@ -589,24 +820,37 @@ export default class PieChart extends Chart {
 
   // --- Center Label ---
 
-  private _showDynamicCenterLabel(seriesItem: any, item: any, value: number, percent: number, cx: number, cy: number, emphasis: any): void {
+  private _showDynamicCenterLabel(
+    seriesItem: any,
+    item: any,
+    value: number,
+    percent: number,
+    cx: number,
+    cy: number,
+    emphasis: any,
+  ): void {
     if (this._centerLabel) {
       this._root.remove(this._centerLabel);
     }
 
-    let itemName = '';
-    if (typeof item === 'object' && item !== null && !Array.isArray(item) && item.name) {
+    let itemName = "";
+    if (
+      typeof item === "object" &&
+      item !== null &&
+      !Array.isArray(item) &&
+      item.name
+    ) {
       itemName = item.name;
     }
 
     let textContent = itemName;
     let rich = emphasis?.label?.rich || seriesItem.label?.rich;
     let style: any = {
-      fill: emphasis?.label?.color || seriesItem.label?.color || '#333',
+      fill: emphasis?.label?.color || seriesItem.label?.color || "#333",
       fontSize: emphasis?.label?.fontSize || 20,
-      fontWeight: emphasis?.label?.fontWeight || 'bold',
-      textAlign: 'center',
-      textBaseline: 'middle'
+      fontWeight: emphasis?.label?.fontWeight || "bold",
+      textAlign: "center",
+      textBaseline: "middle",
     };
 
     if (emphasis?.label) {
@@ -622,61 +866,72 @@ export default class PieChart extends Chart {
         name: itemName,
         value,
         percent: percent * 100,
-        data: item
+        data: item,
       });
     } else if (seriesItem.centerLabel?.formatter) {
       textContent = this._formatLabel(seriesItem.centerLabel.formatter, {
         name: itemName,
         value,
         percent: percent * 100,
-        data: item
+        data: item,
       });
     }
 
     this._centerLabel = new Text({
       shape: { x: cx, y: cy, text: textContent },
       style: { ...style, rich },
-      z: Z_LABEL + 1
+      z: Z_LABEL + 1,
     });
     this._root.add(this._centerLabel);
   }
 
-  private _renderStaticCenterLabel(seriesItem: any, cx: number, cy: number, r0: number, total: number): void {
+  private _renderStaticCenterLabel(
+    seriesItem: any,
+    cx: number,
+    cy: number,
+    r0: number,
+    total: number,
+  ): void {
     const centerLabelConfig = seriesItem.centerLabel || {};
     if (centerLabelConfig.show === false || r0 <= 0) return;
     if (this._centerLabel) return;
 
-    let textContent = '';
+    let textContent = "";
     let rich = centerLabelConfig.rich || seriesItem.label?.rich;
     const style = {
-      fill: seriesItem.label?.color || '#333',
+      fill: seriesItem.label?.color || "#333",
       fontSize: 20,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      textBaseline: 'middle',
-      ...centerLabelConfig.style
+      fontWeight: "bold",
+      textAlign: "center",
+      textBaseline: "middle",
+      ...centerLabelConfig.style,
     };
 
-    if (centerLabelConfig.type === 'percentage') {
+    if (centerLabelConfig.type === "percentage") {
       const data = seriesItem.data || [];
       if (data.length > 0) {
-        const firstVal = (data[0].value || data[0]);
-        const percent = (firstVal / total * 100).toFixed(0);
-        const defaultFormatter = '{d}%';
+        const firstVal = data[0].value || data[0];
+        const percent = ((firstVal / total) * 100).toFixed(0);
+        const defaultFormatter = "{d}%";
         const fmt = centerLabelConfig.formatter || defaultFormatter;
-        textContent = this._formatLabel(fmt, { name: data[0].name || '', value: firstVal, percent, data: data[0] });
+        textContent = this._formatLabel(fmt, {
+          name: data[0].name || "",
+          value: firstVal,
+          percent,
+          data: data[0],
+        });
 
         if (!centerLabelConfig.style?.backgroundColor) {
-          style.backgroundColor = '#eee';
+          style.backgroundColor = "#eee";
           style.borderRadius = 20;
           style.padding = [5, 15];
         }
       }
     } else {
       const fmt = centerLabelConfig.formatter;
-      if (typeof fmt === 'string') {
+      if (typeof fmt === "string") {
         textContent = fmt;
-      } else if (typeof fmt === 'function') {
+      } else if (typeof fmt === "function") {
         textContent = fmt({ total });
       }
     }
@@ -685,17 +940,25 @@ export default class PieChart extends Chart {
       this._centerLabel = new Text({
         shape: { x: cx, y: cy, text: textContent },
         style: { ...style, rich },
-        z: Z_LABEL
+        z: Z_LABEL,
       });
       this._root.add(this._centerLabel);
     }
   }
 
-  private _formatLabel(formatter: string | Function, params: { name: string, value: number, percent: string | number, data?: any }): string {
-    if (typeof formatter === 'function') {
+  private _formatLabel(
+    formatter: string | Function,
+    params: {
+      name: string;
+      value: number;
+      percent: string | number;
+      data?: any;
+    },
+  ): string {
+    if (typeof formatter === "function") {
       return formatter(params);
     }
-    if (typeof formatter === 'string') {
+    if (typeof formatter === "string") {
       let result = formatter
         .replace(/\{b\}/g, params.name)
         .replace(/\{c\}/g, String(params.value))
@@ -704,32 +967,42 @@ export default class PieChart extends Chart {
         .replace(/\{value\}/g, String(params.value))
         .replace(/\{percent\}/g, String(params.percent));
 
-      if (params.data && typeof params.data === 'object') {
-        Object.keys(params.data).forEach(key => {
+      if (params.data && typeof params.data === "object") {
+        Object.keys(params.data).forEach((key) => {
           const val = params.data[key];
-          if (typeof val === 'string' || typeof val === 'number') {
-            result = result.replace(new RegExp(`\\{${key}\\}`, 'g'), String(val));
+          if (typeof val === "string" || typeof val === "number") {
+            result = result.replace(
+              new RegExp(`\\{${key}\\}`, "g"),
+              String(val),
+            );
           }
         });
       }
       return result;
     }
-    return '';
+    return "";
   }
 
   // --- Layout & Rendering of Labels ---
 
-  private _layoutLabels(labels: any[], cx: number, cy: number, r: number, r0: number): void {
+  private _layoutLabels(
+    labels: any[],
+    cx: number,
+    cy: number,
+    r: number,
+    r0: number,
+  ): void {
     const leftLabels: any[] = [];
     const rightLabels: any[] = [];
 
-    labels.forEach(label => {
+    labels.forEach((label) => {
       const angle = label.angle;
       let normalizedAngle = angle % (Math.PI * 2);
       if (normalizedAngle > Math.PI) normalizedAngle -= Math.PI * 2;
       if (normalizedAngle < -Math.PI) normalizedAngle += Math.PI * 2;
 
-      const isRight = normalizedAngle >= -Math.PI / 2 && normalizedAngle <= Math.PI / 2;
+      const isRight =
+        normalizedAngle >= -Math.PI / 2 && normalizedAngle <= Math.PI / 2;
       const anchorR = r;
       const anchorX = cx + Math.cos(angle) * anchorR;
       const anchorY = cy + Math.sin(angle) * anchorR;
@@ -754,7 +1027,13 @@ export default class PieChart extends Chart {
     this._adjustLabelPositions(leftLabels, cx, cy, r, -1);
   }
 
-  private _adjustLabelPositions(labels: any[], cx: number, cy: number, r: number, dir: 1 | -1): void {
+  private _adjustLabelPositions(
+    labels: any[],
+    cx: number,
+    cy: number,
+    r: number,
+    dir: 1 | -1,
+  ): void {
     if (labels.length === 0) return;
 
     // TODO: Make these configurable via options
@@ -763,7 +1042,7 @@ export default class PieChart extends Chart {
     const labelLineLen1 = 15;
     const labelLineLen2 = 15;
 
-    labels.forEach(label => {
+    labels.forEach((label) => {
       const angle = label.angle;
       const targetR = r + labelLineLen1;
       label.y = cy + Math.sin(angle) * targetR;
@@ -779,17 +1058,17 @@ export default class PieChart extends Chart {
       }
     }
 
-    labels.forEach(label => {
+    labels.forEach((label) => {
       const r2 = r + labelLineLen1;
       let dy = label.y - cy;
       if (Math.abs(dy) > r2) dy = (dy > 0 ? 1 : -1) * r2;
 
       // Calculate elbow point
       let dx = Math.sqrt(Math.abs(r2 * r2 - dy * dy));
-      let elbowX = cx + (dir * dx);
+      let elbowX = cx + dir * dx;
       const elbowY = label.y;
 
-      const textX = elbowX + (dir * labelLineLen2);
+      const textX = elbowX + dir * labelLineLen2;
       const textY = elbowY;
 
       const seriesItem = label.seriesItem;
@@ -797,91 +1076,118 @@ export default class PieChart extends Chart {
 
       const text = new Text({
         shape: {
-          x: textX + (dir * 5),
+          x: textX + dir * 5,
           y: textY,
           text: label.text,
         },
         style: {
           fontSize: seriesItem.label?.fontSize || 12,
-          fontWeight: seriesItem.label?.fontWeight || 'normal',
+          fontWeight: seriesItem.label?.fontWeight || "normal",
           fill: label.color,
-          textAlign: dir === 1 ? 'left' : 'right',
-          textBaseline: 'middle',
+          textAlign: dir === 1 ? "left" : "right",
+          textBaseline: "middle",
           rich: rich,
           backgroundColor: seriesItem.label?.backgroundColor,
           borderColor: seriesItem.label?.borderColor,
           borderWidth: seriesItem.label?.borderWidth,
           borderRadius: seriesItem.label?.borderRadius,
           padding: seriesItem.label?.padding,
-          opacity: label.opacity // Use calculated opacity
+          opacity: label.opacity, // Use calculated opacity
         },
         z: Z_LABEL,
         silent: false,
-        invisible: !label.isVisible && !label.fadeIn // Keep visible if fading in
+        invisible: !label.isVisible && !label.fadeIn, // Keep visible if fading in
       });
       this._root.add(text);
       (label.sector as any).__label = text;
       (text as any).__initialStyle = {
         ...text.style,
-        opacity: label.fadeIn ? 1 : text.style.opacity
+        opacity: label.fadeIn ? 1 : text.style.opacity,
       };
 
       if (label.fadeIn) {
         // Animate fade in
-        this._animator.animate(text.style, 'opacity', 1, {
-          duration: seriesItem.animationDuration || 500,
-          delay: 100, // Small delay to let sector expand a bit
-          onUpdate: () => { text.markRedraw(); this._renderer.refresh(); }
-        }).start();
+        this._animator
+          .animate(text.style, "opacity", 1, {
+            duration: seriesItem.animationDuration || 500,
+            delay: 100, // Small delay to let sector expand a bit
+            onUpdate: () => {
+              text.markRedraw();
+              this._renderer.refresh();
+            },
+          })
+          .start();
       }
 
       if (label.handlers) {
-        EventHelper.bindHoverEvents(text, label.handlers.onMouseOver, label.handlers.onMouseOut);
+        EventHelper.bindHoverEvents(
+          text,
+          label.handlers.onMouseOver,
+          label.handlers.onMouseOut,
+        );
       }
 
       if (seriesItem.labelLine?.show !== false) {
         const linePoints = [
           [label.anchor.x, label.anchor.y],
           [elbowX, elbowY],
-          [textX, textY]
+          [textX, textY],
         ];
         const line = new Polyline({
           shape: { points: linePoints },
           style: {
-            stroke: seriesItem.labelLine?.lineStyle?.color || label.itemColor || label.color,
+            stroke:
+              seriesItem.labelLine?.lineStyle?.color ||
+              label.itemColor ||
+              label.color,
             lineWidth: seriesItem.labelLine?.lineStyle?.width || 1,
-            fill: 'none',
-            opacity: label.opacity // Use calculated opacity
+            fill: "none",
+            opacity: label.opacity, // Use calculated opacity
           },
           z: Z_LABEL,
           silent: false,
-          invisible: !label.isVisible && !label.fadeIn
+          invisible: !label.isVisible && !label.fadeIn,
         });
         this._root.add(line);
         (label.sector as any).__labelLine = line;
         (line as any).__initialStyle = {
           ...line.style,
-          opacity: label.fadeIn ? 1 : line.style.opacity
+          opacity: label.fadeIn ? 1 : line.style.opacity,
         };
 
         if (label.fadeIn) {
-          this._animator.animate(line.style, 'opacity', 1, {
-            duration: seriesItem.animationDuration || 500,
-            delay: 100,
-            onUpdate: () => { line.markRedraw(); this._renderer.refresh(); }
-          }).start();
+          this._animator
+            .animate(line.style, "opacity", 1, {
+              duration: seriesItem.animationDuration || 500,
+              delay: 100,
+              onUpdate: () => {
+                line.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
         }
 
         if (label.handlers) {
-          EventHelper.bindHoverEvents(line, label.handlers.onMouseOver, label.handlers.onMouseOut);
+          EventHelper.bindHoverEvents(
+            line,
+            label.handlers.onMouseOver,
+            label.handlers.onMouseOut,
+          );
         }
       }
     });
   }
 
-  private _renderSingleLabel(label: any, cx: number, cy: number, r: number, r0: number): void {
+  private _renderSingleLabel(
+    label: any,
+    cx: number,
+    cy: number,
+    r: number,
+    r0: number,
+  ): void {
     const seriesItem = label.seriesItem;
-    const isCenter = seriesItem.label?.position === 'center';
+    const isCenter = seriesItem.label?.position === "center";
     const angle = label.angle;
 
     let labelX, labelY;
@@ -905,23 +1211,27 @@ export default class PieChart extends Chart {
       },
       style: {
         fontSize: seriesItem.label?.fontSize || 12,
-        fontWeight: seriesItem.label?.fontWeight || 'normal',
+        fontWeight: seriesItem.label?.fontWeight || "normal",
         fill: label.color,
-        textAlign: 'center',
-        textBaseline: 'middle',
+        textAlign: "center",
+        textBaseline: "middle",
         rich: seriesItem.label?.rich,
-        opacity: isVisible ? 1 : 0
+        opacity: isVisible ? 1 : 0,
       },
       z: Z_LABEL,
       silent: false,
-      invisible: !isVisible
+      invisible: !isVisible,
     });
     this._root.add(text);
     (label.sector as any).__label = text;
     (text as any).__initialStyle = { ...text.style };
 
     if (label.handlers) {
-      EventHelper.bindHoverEvents(text, label.handlers.onMouseOver, label.handlers.onMouseOut);
+      EventHelper.bindHoverEvents(
+        text,
+        label.handlers.onMouseOver,
+        label.handlers.onMouseOut,
+      );
     }
   }
 
@@ -931,8 +1241,12 @@ export default class PieChart extends Chart {
     const center = (seriesItem as any).center;
     if (Array.isArray(center)) {
       return [
-        typeof center[0] === 'string' ? this._parsePercent(center[0], this._width) : center[0],
-        typeof center[1] === 'string' ? this._parsePercent(center[1], this._height) : center[1],
+        typeof center[0] === "string"
+          ? this._parsePercent(center[0], this._width)
+          : center[0],
+        typeof center[1] === "string"
+          ? this._parsePercent(center[1], this._height)
+          : center[1],
       ];
     }
     return [this._width / 2, this._height / 2];
@@ -945,35 +1259,41 @@ export default class PieChart extends Chart {
     if (Array.isArray(radius)) {
       return [
         this._parsePercent(radius[0], maxRadius),
-        this._parsePercent(radius[1], maxRadius)
+        this._parsePercent(radius[1], maxRadius),
       ];
     }
 
-    if (typeof radius === 'string') {
+    if (typeof radius === "string") {
       const outer = this._parsePercent(radius, maxRadius);
-      if (seriesItem.type === 'doughnut' || seriesItem.type === 'half-doughnut') {
+      if (
+        seriesItem.type === "doughnut" ||
+        seriesItem.type === "half-doughnut"
+      ) {
         return [outer * 0.5, outer];
       }
       return [0, outer];
     }
-    if (typeof radius === 'number') {
-      if (seriesItem.type === 'doughnut' || seriesItem.type === 'half-doughnut') {
+    if (typeof radius === "number") {
+      if (
+        seriesItem.type === "doughnut" ||
+        seriesItem.type === "half-doughnut"
+      ) {
         return [radius * 0.5, radius];
       }
       return [0, radius];
     }
-    if (seriesItem.type === 'doughnut' || seriesItem.type === 'half-doughnut') {
+    if (seriesItem.type === "doughnut" || seriesItem.type === "half-doughnut") {
       return [maxRadius * 0.4, maxRadius * 0.8];
     }
     return [0, maxRadius * 0.8];
   }
 
   private _parsePercent(value: string | number, base: number): number {
-    if (typeof value === 'number') {
+    if (typeof value === "number") {
       return value;
     }
-    if (typeof value === 'string' && value.endsWith('%')) {
-      return parseFloat(value) / 100 * base;
+    if (typeof value === "string" && value.endsWith("%")) {
+      return (parseFloat(value) / 100) * base;
     }
     return parseFloat(value as string) || 0;
   }
@@ -1004,20 +1324,28 @@ export default class PieChart extends Chart {
 
       this._applyEmphasisAnimation(sector, emphasis, true, r);
 
-      const seriesType = seriesItem.type || 'pie';
-      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+      const seriesType = seriesItem.type || "pie";
+      if (["doughnut", "half-doughnut"].includes(seriesType) && r0 > 0) {
         const item = (sector as any).data;
         const total = this._calculateTotal(seriesItem.data || []);
         const value = this._getDataValue(item) || 0;
         const percent = total > 0 ? value / total : 0;
 
-        this._showDynamicCenterLabel(seriesItem, item, value, percent, cx, cy, emphasis);
+        this._showDynamicCenterLabel(
+          seriesItem,
+          item,
+          value,
+          percent,
+          cx,
+          cy,
+          emphasis,
+        );
       }
     } else {
       this._applyEmphasisAnimation(sector, emphasis, false, r);
 
-      const seriesType = seriesItem.type || 'pie';
-      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+      const seriesType = seriesItem.type || "pie";
+      if (["doughnut", "half-doughnut"].includes(seriesType) && r0 > 0) {
         if (this._restoreTimeout) {
           clearTimeout(this._restoreTimeout);
         }
@@ -1036,7 +1364,12 @@ export default class PieChart extends Chart {
     }
   }
 
-  private _applyEmphasisAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number): void {
+  private _applyEmphasisAnimation(
+    sector: Sector,
+    emphasis: EmphasisOption | undefined,
+    isEnter: boolean,
+    baseR?: number,
+  ): void {
     if (isEnter) {
       this._applyEnterEmphasis(sector, emphasis, baseR);
     } else {
@@ -1044,19 +1377,31 @@ export default class PieChart extends Chart {
     }
   }
 
-  private _applyEnterEmphasis(sector: Sector, emphasis: EmphasisOption | undefined, baseR?: number) {
+  private _applyEnterEmphasis(
+    sector: Sector,
+    emphasis: EmphasisOption | undefined,
+    baseR?: number,
+  ) {
     const seriesItem = (sector as any).__seriesItem;
     const showOnHover = seriesItem?.label?.showOnHover;
-    const focus = emphasis?.focus || 'none';
+    const focus = emphasis?.focus || "none";
 
     // 1. Handle OTHER sectors (dimming)
     this._activeSectors.forEach((s) => {
       if (s !== sector) {
         let sectorTargetOpacity = (s as any).__initialStyle?.opacity ?? 1;
 
-        if (focus === 'self') {
+        if (focus === "self") {
           sectorTargetOpacity = 0.2;
-          this._animator.animate(s.style, 'opacity', 0.2, { duration: 200, onUpdate: () => { s.markRedraw(); this._renderer.refresh(); } }).start();
+          this._animator
+            .animate(s.style, "opacity", 0.2, {
+              duration: 200,
+              onUpdate: () => {
+                s.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
         }
 
         // Handle Label & Line
@@ -1065,18 +1410,49 @@ export default class PieChart extends Chart {
         // Reset other properties
         const sBaseR = (s as any).__baseR;
         if (sBaseR !== undefined) {
-          this._animator.animate(s.shape, 'r', sBaseR, { duration: 200, easing: 'cubicOut', onUpdate: () => { s.markRedraw(); this._renderer.refresh(); } }).start();
+          this._animator
+            .animate(s.shape, "r", sBaseR, {
+              duration: 200,
+              easing: "cubicOut",
+              onUpdate: () => {
+                s.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
         }
         if (s.transform) {
-          this._animator.animate(s.transform, 'scaleX', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => { s.markRedraw(); this._renderer.refresh(); } }).start();
-          this._animator.animate(s.transform, 'scaleY', 1, { duration: 200, easing: 'cubicOut', onUpdate: () => { s.markRedraw(); this._renderer.refresh(); } }).start();
+          this._animator
+            .animate(s.transform, "scaleX", 1, {
+              duration: 200,
+              easing: "cubicOut",
+              onUpdate: () => {
+                s.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
+          this._animator
+            .animate(s.transform, "scaleY", 1, {
+              duration: 200,
+              easing: "cubicOut",
+              onUpdate: () => {
+                s.markRedraw();
+                this._renderer.refresh();
+              },
+            })
+            .start();
         }
         this._restoreSectorStyle(s);
       }
     });
 
     // Check for font changes
-    if (emphasis?.label?.fontSize || emphasis?.label?.fontWeight || emphasis?.label?.color) {
+    if (
+      emphasis?.label?.fontSize ||
+      emphasis?.label?.fontWeight ||
+      emphasis?.label?.color
+    ) {
       // Font changes cannot be animated smoothly in canvas usually, just set them?
       // Or animate fill color
       if (emphasis.label.color) {
@@ -1101,24 +1477,39 @@ export default class PieChart extends Chart {
     // Restore ALL sectors
     this._activeSectors.forEach((s) => {
       const initOpacity = (s as any).__initialStyle?.opacity ?? 1;
-      this._animator.animate(s.style, 'opacity', initOpacity, {
-        duration: 300,
-        easing: 'cubicOut',
-        onUpdate: () => { s.markRedraw(); this._renderer.refresh(); }
-      }).start();
+      this._animator
+        .animate(s.style, "opacity", initOpacity, {
+          duration: 300,
+          easing: "cubicOut",
+          onUpdate: () => {
+            s.markRedraw();
+            this._renderer.refresh();
+          },
+        })
+        .start();
 
       // Restore Label & Line
       this._restoreLabelAndLine(s);
     });
 
     // Restore Scale
-    this._applyScaleAnimation(sector, undefined, false, (sector as any).__baseR);
+    this._applyScaleAnimation(
+      sector,
+      undefined,
+      false,
+      (sector as any).__baseR,
+    );
 
     // Restore Style
     this._restoreSectorStyle(sector);
   }
 
-  private _animateLabelAndLineOpacity(sector: Sector, focus: string, showOnHover: boolean | undefined, isCurrent: boolean) {
+  private _animateLabelAndLineOpacity(
+    sector: Sector,
+    focus: string,
+    showOnHover: boolean | undefined,
+    isCurrent: boolean,
+  ) {
     const label = (sector as any).__label;
     const labelLine = (sector as any).__labelLine;
 
@@ -1127,20 +1518,25 @@ export default class PieChart extends Chart {
       let targetOpacity = initLabelOpacity;
 
       if (!isCurrent) {
-        if (focus === 'self') {
+        if (focus === "self") {
           targetOpacity = showOnHover ? 0 : 0.2;
         } else if (showOnHover) {
           targetOpacity = 0;
         }
       }
 
-      this._animator.animate(label.style, 'opacity', targetOpacity, {
-        duration: 200,
-        onUpdate: () => { label.markRedraw(); this._renderer.refresh(); },
-        onComplete: () => {
-          if (targetOpacity === 0) label.invisible = true;
-        }
-      }).start();
+      this._animator
+        .animate(label.style, "opacity", targetOpacity, {
+          duration: 200,
+          onUpdate: () => {
+            label.markRedraw();
+            this._renderer.refresh();
+          },
+          onComplete: () => {
+            if (targetOpacity === 0) label.invisible = true;
+          },
+        })
+        .start();
     }
 
     if (labelLine) {
@@ -1148,20 +1544,25 @@ export default class PieChart extends Chart {
       let targetOpacity = initLineOpacity;
 
       if (!isCurrent) {
-        if (focus === 'self') {
+        if (focus === "self") {
           targetOpacity = showOnHover ? 0 : 0.2;
         } else if (showOnHover) {
           targetOpacity = 0;
         }
       }
 
-      this._animator.animate(labelLine.style, 'opacity', targetOpacity, {
-        duration: 200,
-        onUpdate: () => { labelLine.markRedraw(); this._renderer.refresh(); },
-        onComplete: () => {
-          if (targetOpacity === 0) labelLine.invisible = true;
-        }
-      }).start();
+      this._animator
+        .animate(labelLine.style, "opacity", targetOpacity, {
+          duration: 200,
+          onUpdate: () => {
+            labelLine.markRedraw();
+            this._renderer.refresh();
+          },
+          onComplete: () => {
+            if (targetOpacity === 0) labelLine.invisible = true;
+          },
+        })
+        .start();
     }
   }
 
@@ -1171,30 +1572,44 @@ export default class PieChart extends Chart {
 
     if (label) {
       const initLabelOpacity = label.__initialStyle?.opacity ?? 1;
-      this._animator.animate(label.style, 'opacity', initLabelOpacity, {
-        duration: 300,
-        easing: 'cubicOut',
-        onUpdate: () => { label.markRedraw(); this._renderer.refresh(); },
-        onComplete: () => {
-          if (initLabelOpacity === 0) label.invisible = true;
-        }
-      }).start();
+      this._animator
+        .animate(label.style, "opacity", initLabelOpacity, {
+          duration: 300,
+          easing: "cubicOut",
+          onUpdate: () => {
+            label.markRedraw();
+            this._renderer.refresh();
+          },
+          onComplete: () => {
+            if (initLabelOpacity === 0) label.invisible = true;
+          },
+        })
+        .start();
     }
 
     if (labelLine) {
       const initLineOpacity = labelLine.__initialStyle?.opacity ?? 1;
-      this._animator.animate(labelLine.style, 'opacity', initLineOpacity, {
-        duration: 300,
-        easing: 'cubicOut',
-        onUpdate: () => { labelLine.markRedraw(); this._renderer.refresh(); },
-        onComplete: () => {
-          if (initLineOpacity === 0) labelLine.invisible = true;
-        }
-      }).start();
+      this._animator
+        .animate(labelLine.style, "opacity", initLineOpacity, {
+          duration: 300,
+          easing: "cubicOut",
+          onUpdate: () => {
+            labelLine.markRedraw();
+            this._renderer.refresh();
+          },
+          onComplete: () => {
+            if (initLineOpacity === 0) labelLine.invisible = true;
+          },
+        })
+        .start();
     }
   }
 
-  private _animateCurrentLabel(sector: Sector, emphasis: EmphasisOption | undefined, showOnHover: boolean | undefined) {
+  private _animateCurrentLabel(
+    sector: Sector,
+    emphasis: EmphasisOption | undefined,
+    showOnHover: boolean | undefined,
+  ) {
     const label = (sector as any).__label;
     const labelLine = (sector as any).__labelLine;
     if (!label) return;
@@ -1212,22 +1627,34 @@ export default class PieChart extends Chart {
       label.style.opacity = empLabel.show ? 1 : 0;
     } else if (finalShowOnHover) {
       label.invisible = false;
-      this._animator.animate(label.style, 'opacity', 1, {
-        duration: 200,
-        onUpdate: () => { label.markRedraw(); this._renderer.refresh(); }
-      }).start();
+      this._animator
+        .animate(label.style, "opacity", 1, {
+          duration: 200,
+          onUpdate: () => {
+            label.markRedraw();
+            this._renderer.refresh();
+          },
+        })
+        .start();
     } else {
       if (!label.invisible && (label.style.opacity as number) < 1) {
-        this._animator.animate(label.style, 'opacity', 1, {
-          duration: 200,
-          onUpdate: () => { label.markRedraw(); this._renderer.refresh(); }
-        }).start();
+        this._animator
+          .animate(label.style, "opacity", 1, {
+            duration: 200,
+            onUpdate: () => {
+              label.markRedraw();
+              this._renderer.refresh();
+            },
+          })
+          .start();
       }
     }
 
     // Apply styles
-    if (empLabel.fontSize !== undefined) label.style.fontSize = empLabel.fontSize;
-    if (empLabel.fontWeight !== undefined) label.style.fontWeight = empLabel.fontWeight;
+    if (empLabel.fontSize !== undefined)
+      label.style.fontSize = empLabel.fontSize;
+    if (empLabel.fontWeight !== undefined)
+      label.style.fontWeight = empLabel.fontWeight;
     if (empLabel.color !== undefined) {
       label.style.fill = empLabel.color;
       if (labelLine) labelLine.style.stroke = empLabel.color;
@@ -1237,10 +1664,15 @@ export default class PieChart extends Chart {
     if (labelLine) {
       if (labelLine.invisible || (labelLine.style.opacity as number) < 1) {
         labelLine.invisible = false;
-        this._animator.animate(labelLine.style, 'opacity', 1, {
-          duration: 200,
-          onUpdate: () => { labelLine.markRedraw(); this._renderer.refresh(); }
-        }).start();
+        this._animator
+          .animate(labelLine.style, "opacity", 1, {
+            duration: 200,
+            onUpdate: () => {
+              labelLine.markRedraw();
+              this._renderer.refresh();
+            },
+          })
+          .start();
       }
     }
 
@@ -1256,19 +1688,35 @@ export default class PieChart extends Chart {
     }
 
     const targetStyle: Record<string, unknown> = {};
-    if (emphasisStyle.shadowBlur !== undefined) targetStyle.shadowBlur = emphasisStyle.shadowBlur;
-    if (emphasisStyle.shadowOffsetX !== undefined) targetStyle.shadowOffsetX = emphasisStyle.shadowOffsetX;
-    if (emphasisStyle.shadowOffsetY !== undefined) targetStyle.shadowOffsetY = emphasisStyle.shadowOffsetY;
-    if (emphasisStyle.shadowColor !== undefined) targetStyle.shadowColor = emphasisStyle.shadowColor;
-    if (emphasisStyle.color !== undefined) targetStyle.fill = emphasisStyle.color;
-    if (emphasisStyle.borderColor !== undefined) targetStyle.stroke = emphasisStyle.borderColor;
-    if (emphasisStyle.borderWidth !== undefined) targetStyle.lineWidth = emphasisStyle.borderWidth;
+    if (emphasisStyle.shadowBlur !== undefined)
+      targetStyle.shadowBlur = emphasisStyle.shadowBlur;
+    if (emphasisStyle.shadowOffsetX !== undefined)
+      targetStyle.shadowOffsetX = emphasisStyle.shadowOffsetX;
+    if (emphasisStyle.shadowOffsetY !== undefined)
+      targetStyle.shadowOffsetY = emphasisStyle.shadowOffsetY;
+    if (emphasisStyle.shadowColor !== undefined)
+      targetStyle.shadowColor = emphasisStyle.shadowColor;
+    if (emphasisStyle.color !== undefined)
+      targetStyle.fill = emphasisStyle.color;
+    if (emphasisStyle.borderColor !== undefined)
+      targetStyle.stroke = emphasisStyle.borderColor;
+    if (emphasisStyle.borderWidth !== undefined)
+      targetStyle.lineWidth = emphasisStyle.borderWidth;
     targetStyle.opacity = 1;
 
-    Object.keys(targetStyle).forEach(key => {
+    Object.keys(targetStyle).forEach((key) => {
       const value = targetStyle[key];
-      if (typeof value === 'number') {
-        this._animator.animate(style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+      if (typeof value === "number") {
+        this._animator
+          .animate(style, key, value, {
+            duration: 200,
+            easing: "cubicOut",
+            onUpdate: () => {
+              sector.markRedraw();
+              this._renderer.refresh();
+            },
+          })
+          .start();
       } else {
         style[key] = value;
         sector.markRedraw();
@@ -1288,15 +1736,24 @@ export default class PieChart extends Chart {
     targetStyle.shadowBlur = init.shadowBlur ?? 0;
     targetStyle.shadowOffsetX = init.shadowOffsetX ?? 0;
     targetStyle.shadowOffsetY = init.shadowOffsetY ?? 0;
-    targetStyle.shadowColor = init.shadowColor ?? 'transparent';
+    targetStyle.shadowColor = init.shadowColor ?? "transparent";
     if (init.fill !== undefined) targetStyle.fill = init.fill;
     if (init.stroke !== undefined) targetStyle.stroke = init.stroke;
     if (init.lineWidth !== undefined) targetStyle.lineWidth = init.lineWidth;
 
-    Object.keys(targetStyle).forEach(key => {
+    Object.keys(targetStyle).forEach((key) => {
       const value = targetStyle[key];
-      if (typeof value === 'number') {
-        this._animator.animate(style, key, value, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+      if (typeof value === "number") {
+        this._animator
+          .animate(style, key, value, {
+            duration: 200,
+            easing: "cubicOut",
+            onUpdate: () => {
+              sector.markRedraw();
+              this._renderer.refresh();
+            },
+          })
+          .start();
       } else {
         style[key] = value;
         sector.markRedraw();
@@ -1305,25 +1762,84 @@ export default class PieChart extends Chart {
     });
   }
 
-  private _applyScaleAnimation(sector: Sector, emphasis: EmphasisOption | undefined, isEnter: boolean, baseR?: number) {
+  private _applyScaleAnimation(
+    sector: Sector,
+    emphasis: EmphasisOption | undefined,
+    isEnter: boolean,
+    baseR?: number,
+  ) {
     if (isEnter && emphasis && baseR !== undefined) {
       const scaleSize = emphasis.scaleSize || 1.1;
       const targetR = baseR * scaleSize;
-      this._animator.animate(sector.shape, 'r', targetR, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+      this._animator
+        .animate(sector.shape, "r", targetR, {
+          duration: 200,
+          easing: "cubicOut",
+          onUpdate: () => {
+            sector.markRedraw();
+            this._renderer.refresh();
+          },
+        })
+        .start();
     } else if (isEnter && emphasis) {
       // Transform scale fallback
       const scaleSize = emphasis.scaleSize || 1.1;
-      this._animator.animate(sector.transform || {}, 'scaleX', scaleSize, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
-      this._animator.animate(sector.transform || {}, 'scaleY', scaleSize, { duration: 200, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+      this._animator
+        .animate(sector.transform || {}, "scaleX", scaleSize, {
+          duration: 200,
+          easing: "cubicOut",
+          onUpdate: () => {
+            sector.markRedraw();
+            this._renderer.refresh();
+          },
+        })
+        .start();
+      this._animator
+        .animate(sector.transform || {}, "scaleY", scaleSize, {
+          duration: 200,
+          easing: "cubicOut",
+          onUpdate: () => {
+            sector.markRedraw();
+            this._renderer.refresh();
+          },
+        })
+        .start();
     } else {
       // Restore
       // If baseR is provided, restore radius
       if (baseR !== undefined) {
-        this._animator.animate(sector.shape, 'r', baseR, { duration: 300, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+        this._animator
+          .animate(sector.shape, "r", baseR, {
+            duration: 300,
+            easing: "cubicOut",
+            onUpdate: () => {
+              sector.markRedraw();
+              this._renderer.refresh();
+            },
+          })
+          .start();
       } else {
         // Restore transform scale
-        this._animator.animate(sector.transform || {}, 'scaleX', 1, { duration: 300, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
-        this._animator.animate(sector.transform || {}, 'scaleY', 1, { duration: 300, easing: 'cubicOut', onUpdate: () => { sector.markRedraw(); this._renderer.refresh(); } }).start();
+        this._animator
+          .animate(sector.transform || {}, "scaleX", 1, {
+            duration: 300,
+            easing: "cubicOut",
+            onUpdate: () => {
+              sector.markRedraw();
+              this._renderer.refresh();
+            },
+          })
+          .start();
+        this._animator
+          .animate(sector.transform || {}, "scaleY", 1, {
+            duration: 300,
+            easing: "cubicOut",
+            onUpdate: () => {
+              sector.markRedraw();
+              this._renderer.refresh();
+            },
+          })
+          .start();
       }
     }
   }

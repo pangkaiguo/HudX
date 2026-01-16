@@ -1,185 +1,177 @@
-import React, { useState, useRef } from 'react';
-import { HChart } from 'HudX/charts';
-import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager, Theme } from 'HudX/core';
-import type { RenderMode } from 'HudX/core';
+import React, { useState, useRef } from "react";
+import { HChart } from "HudX/charts";
+import type { ChartOption, HChartRef } from "HudX/charts";
+import { ThemeManager, Theme } from "HudX/core";
+import type { RenderMode } from "HudX/core";
 
-export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const StackBarExample = ({ theme = "light" }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(5);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
-    title: {
-      text: 'Stack Bar Chart',
-      subtext: 'Data Accumulation',
-      left: 'center',
-      top: 20
-    },
     tooltip: {
       show: true,
-      trigger: 'axis',
+      trigger: "axis",
       axisPointer: {
-        type: 'shadow'
-      }
+        type: "shadow",
+      },
     },
     legend: {
       show: true,
-      orient: 'vertical',
-      left: 'left',
-      top: 'middle'
+      orient: "vertical",
+      left: "left",
+      top: "middle",
     },
     grid: {
-      left: '15%',
-      right: '4%',
-      bottom: '3%',
+      left: "15%",
+      right: "4%",
+      bottom: "3%",
       top: gridTop,
-      containLabel: true
+      containLabel: true,
     },
     aria: {
       enabled: true,
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'diagonal', color: themeObj.decalColor },
-          { symbol: 'dots', color: themeObj.decalColor },
-          { symbol: 'diagonal-reverse', color: themeObj.decalColor },
-          { symbol: 'checkerboard', color: themeObj.decalColor },
-          { symbol: 'crosshatch', color: themeObj.decalColor }
-        ]
-      }
+          { symbol: "diagonal", color: themeObj.decalColor },
+          { symbol: "dots", color: themeObj.decalColor },
+          { symbol: "diagonal-reverse", color: themeObj.decalColor },
+          { symbol: "checkerboard", color: themeObj.decalColor },
+          { symbol: "crosshatch", color: themeObj.decalColor },
+        ],
+      },
     },
     xAxis: [
       {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        type: "category",
+        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         show: true,
         splitLine: {
           show: showGrid,
           lineStyle: {
-            color: '#eee',
-            type: 'dashed'
-          }
-        }
-      }
+            color: "#eee",
+            type: "dashed",
+          },
+        },
+      },
     ],
     yAxis: [
       {
-        type: 'value',
+        type: "value",
         show: true,
         splitNumber: splitNumber,
         splitLine: {
           show: showGrid,
           lineStyle: {
-            color: '#eee'
-          }
-        }
-      }
+            color: "#eee",
+          },
+        },
+      },
     ],
     series: [
       {
-        name: 'Direct',
-        type: 'bar',
-        stack: 'total',
+        name: "Direct",
+        type: "bar",
+        stack: "total",
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         data: [320, 332, 301, 334, 390, 330, 320],
-        itemStyle: { borderWidth: 0 }
+        itemStyle: { borderWidth: 0 },
       },
       {
-        name: 'Email',
-        type: 'bar',
-        stack: 'total',
+        name: "Email",
+        type: "bar",
+        stack: "total",
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         data: [120, 132, 101, 134, 90, 230, 210],
-        itemStyle: { borderWidth: 0 }
+        itemStyle: { borderWidth: 0 },
       },
       {
-        name: 'Union Ads',
-        type: 'bar',
-        stack: 'total',
+        name: "Union Ads",
+        type: "bar",
+        stack: "total",
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         data: [220, 182, 191, 234, 290, 330, 310],
-        itemStyle: { borderWidth: 0 }
+        itemStyle: { borderWidth: 0 },
       },
       {
-        name: 'Video Ads',
-        type: 'bar',
-        stack: 'total',
+        name: "Video Ads",
+        type: "bar",
+        stack: "total",
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         data: [150, 232, 201, 154, 190, 330, 410],
-        itemStyle: { borderWidth: 0 }
+        itemStyle: { borderWidth: 0 },
       },
       {
-        name: 'Search Engine',
-        type: 'bar',
+        name: "Search Engine",
+        type: "bar",
         data: [862, 1018, 964, 1026, 1679, 1600, 1570],
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         markLine: {
           lineStyle: {
-            type: 'dashed'
+            type: "dashed",
           },
-          data: [
-            [{ type: 'min' }, { type: 'max' }]
-          ]
+          data: [[{ type: "min" }, { type: "max" }]],
         },
-        itemStyle: { borderWidth: 0 }
+        itemStyle: { borderWidth: 0 },
       },
       {
-        name: 'Baidu',
-        type: 'bar',
+        name: "Baidu",
+        type: "bar",
         barWidth: 5,
-        stack: 'search',
+        stack: "search",
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         data: [620, 732, 701, 734, 1090, 1130, 1120],
-        itemStyle: { borderWidth: 0 }
+        itemStyle: { borderWidth: 0 },
       },
       {
-        name: 'Google',
-        type: 'bar',
-        stack: 'search',
+        name: "Google",
+        type: "bar",
+        stack: "search",
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         data: [120, 132, 101, 134, 290, 230, 220],
-        itemStyle: { borderWidth: 0 }
+        itemStyle: { borderWidth: 0 },
       },
       {
-        name: 'Bing',
-        type: 'bar',
-        stack: 'search',
+        name: "Bing",
+        type: "bar",
+        stack: "search",
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         data: [60, 72, 71, 74, 190, 130, 110],
-        itemStyle: { borderWidth: 0 }
+        itemStyle: { borderWidth: 0 },
       },
       {
-        name: 'Others',
-        type: 'bar',
-        stack: 'search',
+        name: "Others",
+        type: "bar",
+        stack: "search",
         emphasis: {
-          focus: 'series'
+          focus: "series",
         },
         data: [62, 82, 91, 84, 109, 110, 120],
-        itemStyle: { borderWidth: 0 }
-      }
-    ]
+        itemStyle: { borderWidth: 0 },
+      },
+    ],
   };
 
   const handleUpdateSeries = () => {
@@ -189,12 +181,15 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
       const newSeriesData = [];
 
       for (let i = 0; i < seriesCount; i++) {
-        const newData = Array.from({ length: 7 }, () => Math.floor(Math.random() * 300) + 50);
+        const newData = Array.from(
+          { length: 7 },
+          () => Math.floor(Math.random() * 300) + 50,
+        );
         newSeriesData.push({ data: newData });
       }
 
       chartInstance.setOption({
-        series: newSeriesData
+        series: newSeriesData,
       });
     }
   };
@@ -202,22 +197,42 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Stack Bar Chart</h2>
-      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>Hover over bars to see values</p>
+      <p style={{ marginBottom: 20, color: "#666", fontSize: 14 }}>
+        Hover over bars to see values
+      </p>
 
-      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div
+        style={{
+          marginBottom: 20,
+          display: "flex",
+          gap: 20,
+          alignItems: "center",
+        }}
+      >
+        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
-            style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+            style={{
+              padding: "4px 8px",
+              borderRadius: 4,
+              border: "1px solid #ddd",
+            }}
           >
             <option value="canvas">Canvas</option>
             <option value="svg">SVG</option>
           </select>
         </label>
 
-        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <label
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
           <input
             type="checkbox"
             checked={isDecal}
@@ -226,7 +241,14 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
           Decal Patterns
         </label>
 
-        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <label
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
           <input
             type="checkbox"
             checked={showGrid}
@@ -237,7 +259,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
         {showGrid && (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span>Grid Top: {gridTop}</span>
               <input
                 type="range"
@@ -248,7 +270,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 style={{ width: 100 }}
               />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span>Y Split: {splitNumber}</span>
               <input
                 type="range"
@@ -269,20 +291,25 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         option={option}
         theme={theme}
         renderMode={renderMode}
-        style={{ width: '100%', height: '600px', border: '1px solid #e0e0e0', borderRadius: 8 }}
+        style={{
+          width: "100%",
+          height: "600px",
+          border: "1px solid #e0e0e0",
+          borderRadius: 8,
+        }}
       />
 
-      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
+      <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
         <button
           onClick={handleUpdateSeries}
           style={{
-            padding: '8px 16px',
-            backgroundColor: '#5470c6',
-            color: 'white',
-            border: 'none',
+            padding: "8px 16px",
+            backgroundColor: "#5470c6",
+            color: "white",
+            border: "none",
             borderRadius: 4,
-            cursor: 'pointer',
-            fontSize: 14
+            cursor: "pointer",
+            fontSize: 14,
           }}
         >
           Update Data (via getChartInstance)

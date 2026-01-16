@@ -15,19 +15,19 @@ Each theme includes the following configuration items:
 
 ```typescript
 interface ThemeConfig {
-  backgroundColor: string;        // Background color
-  textColor: string;              // Text color
-  borderColor: string;            // Border color
-  gridColor: string;              // Grid color
-  axisLineColor: string;          // Axis line color
-  axisLabelColor: string;         // Axis label color
-  seriesColors: string[];         // Series color array
+  backgroundColor: string; // Background color
+  textColor: string; // Text color
+  borderColor: string; // Border color
+  gridColor: string; // Grid color
+  axisLineColor: string; // Axis line color
+  axisLabelColor: string; // Axis label color
+  seriesColors: string[]; // Series color array
   tooltipBackgroundColor: string; // Tooltip background color
-  tooltipTextColor: string;       // Tooltip text color
-  legendTextColor: string;        // Legend text color
-  fontFamily?: string;            // Font family
-  fontSize?: number;              // Font size
-  token?: ThemeToken;             // Theme token (raw values)
+  tooltipTextColor: string; // Tooltip text color
+  legendTextColor: string; // Legend text color
+  fontFamily?: string; // Font family
+  fontSize?: number; // Font size
+  token?: ThemeToken; // Theme token (raw values)
 }
 ```
 
@@ -58,17 +58,17 @@ interface ThemeToken {
 You can access theme tokens via `ThemeManager` or directly from the theme configuration.
 
 ```typescript
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager } from "HudX/core";
 
 // 1. Register/Update Tokens
-ThemeManager.registerToken('light', {
-  colorText: '#000000',           // Darker text
-  colorBackground: '#f0f0f0',     // Light gray background
-  seriesColors: ['#ff0000', '#00ff00', '#0000ff'] // Custom palette
+ThemeManager.registerToken("light", {
+  colorText: "#000000", // Darker text
+  colorBackground: "#f0f0f0", // Light gray background
+  seriesColors: ["#ff0000", "#00ff00", "#0000ff"], // Custom palette
 });
 
 // 2. Access Tokens in Code
-const theme = ThemeManager.getTheme('light');
+const theme = ThemeManager.getTheme("light");
 const colors = theme.seriesColors; // Contains updated colors
 const bgColor = theme.backgroundColor; // Contains updated background
 ```
@@ -80,13 +80,13 @@ This is particularly useful when you want to align chart colors with your design
 #### In Renderer
 
 ```typescript
-import { Renderer, Circle } from 'HudX/core';
+import { Renderer, Circle } from "HudX/core";
 
 // Specify theme when creating
-const renderer = Renderer.init('#container', 'canvas', 'dark');
+const renderer = Renderer.init("#container", "canvas", "dark");
 
 // Switch theme
-renderer.setTheme('light');
+renderer.setTheme("light");
 
 // Get current theme
 const theme = renderer.getTheme();
@@ -98,13 +98,13 @@ const themeConfig = renderer.getThemeConfig();
 #### In Chart
 
 ```typescript
-import { LineChart } from 'HudX/charts';
+import { LineChart } from "HudX/charts";
 
 // Specify theme when creating
-const chart = new LineChart(dom, option, 'canvas', 'dark');
+const chart = new LineChart(dom, option, "canvas", "dark");
 
 // Switch theme
-chart.setTheme('light');
+chart.setTheme("light");
 
 // Get current theme
 const theme = chart.getTheme();
@@ -113,37 +113,32 @@ const theme = chart.getTheme();
 #### In React Component
 
 ```tsx
-import { HChart } from 'HudX/charts';
+import { HChart } from "HudX/charts";
 
-<HChart
-  option={option}
-  theme="dark"
-  width={800}
-  height={400}
-/>
+<HChart option={option} theme="dark" width={800} height={400} />;
 ```
 
 ### Custom Themes
 
 ```typescript
-import { ThemeManager } from 'HudX/core';
+import { ThemeManager } from "HudX/core";
 
 // Register custom theme
-ThemeManager.registerTheme('custom', {
-  backgroundColor: '#f0f0f0',
-  textColor: '#333333',
-  borderColor: '#cccccc',
-  gridColor: '#e6e6e6',
-  axisLineColor: '#333333',
-  axisLabelColor: '#666666',
-  seriesColors: ['#ff0000', '#00ff00', '#0000ff'],
-  tooltipBackgroundColor: 'rgba(50, 50, 50, 0.9)',
-  tooltipTextColor: '#ffffff',
-  legendTextColor: '#333333',
+ThemeManager.registerTheme("custom", {
+  backgroundColor: "#f0f0f0",
+  textColor: "#333333",
+  borderColor: "#cccccc",
+  gridColor: "#e6e6e6",
+  axisLineColor: "#333333",
+  axisLabelColor: "#666666",
+  seriesColors: ["#ff0000", "#00ff00", "#0000ff"],
+  tooltipBackgroundColor: "rgba(50, 50, 50, 0.9)",
+  tooltipTextColor: "#ffffff",
+  legendTextColor: "#333333",
 });
 
 // Use custom theme
-const renderer = Renderer.init('#container', 'canvas', 'custom');
+const renderer = Renderer.init("#container", "canvas", "custom");
 ```
 
 ### ThemeManager
@@ -168,13 +163,13 @@ HudX supports multiple languages with the ability to add custom languages.
 #### In Renderer
 
 ```typescript
-import { Renderer, Circle } from 'HudX/core';
+import { Renderer, Circle } from "HudX/core";
 
 // Specify locale when creating
-const renderer = Renderer.init('#container', 'canvas', 'light', 'zh-CN');
+const renderer = Renderer.init("#container", "canvas", "light", "zh-CN");
 
 // Switch locale
-renderer.setLocale('en');
+renderer.setLocale("en");
 
 // Get current locale
 const locale = renderer.getLocale();
@@ -186,13 +181,13 @@ const messages = renderer.getLocaleMessages();
 #### In Chart
 
 ```typescript
-import { LineChart } from 'HudX/charts';
+import { LineChart } from "HudX/charts";
 
 // Specify locale when creating
-const chart = new LineChart(dom, option, 'canvas', 'light', 'zh-CN');
+const chart = new LineChart(dom, option, "canvas", "light", "zh-CN");
 
 // Switch locale
-chart.setLocale('en');
+chart.setLocale("en");
 
 // Get current locale
 const locale = chart.getLocale();
@@ -201,33 +196,29 @@ const locale = chart.getLocale();
 #### In React Component
 
 ```tsx
-import { HChart } from 'HudX/charts';
+import { HChart } from "HudX/charts";
 
-<HChart
-  option={option}
-  locale="en"
-  width={800}
-  height={400}
-/>
+<HChart option={option} locale="en" width={800} height={400} />;
 ```
 
 ### Adding Custom Language
 
 ```typescript
-import { LocaleManager } from 'HudX/core';
+import { LocaleManager } from "HudX/core";
 
 // Register custom language
-LocaleManager.registerLocale('custom', {
-  '': { // component messages
-    'button.ok': 'OK',
-    'button.cancel': 'Cancel',
-    'title.default': 'Default Title',
+LocaleManager.registerLocale("custom", {
+  "": {
+    // component messages
+    "button.ok": "OK",
+    "button.cancel": "Cancel",
+    "title.default": "Default Title",
     // ... more messages
-  }
+  },
 });
 
 // Use custom language
-const renderer = Renderer.init('#container', 'canvas', 'light', 'custom');
+const renderer = Renderer.init("#container", "canvas", "light", "custom");
 ```
 
 ### LocaleManager
@@ -242,28 +233,23 @@ const renderer = Renderer.init('#container', 'canvas', 'light', 'custom');
 ### Dynamic Theme Switching
 
 ```tsx
-import React, { useState } from 'react';
-import { HChart } from 'HudX/charts';
+import React, { useState } from "react";
+import { HChart } from "HudX/charts";
 
 function ThemeSwitcher() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
 
   const option = {
-    xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed'] },
-    yAxis: { type: 'value' },
-    series: [{ type: 'line', data: [120, 200, 150] }]
+    xAxis: { type: "category", data: ["Mon", "Tue", "Wed"] },
+    yAxis: { type: "value" },
+    series: [{ type: "line", data: [120, 200, 150] }],
   };
 
   return (
     <div>
-      <button onClick={() => setTheme('light')}>Light Theme</button>
-      <button onClick={() => setTheme('dark')}>Dark Theme</button>
-      <HChart
-        option={option}
-        theme={theme}
-        width={800}
-        height={400}
-      />
+      <button onClick={() => setTheme("light")}>Light Theme</button>
+      <button onClick={() => setTheme("dark")}>Dark Theme</button>
+      <HChart option={option} theme={theme} width={800} height={400} />
     </div>
   );
 }
@@ -272,16 +258,16 @@ function ThemeSwitcher() {
 ### Dynamic Language Switching
 
 ```tsx
-import React, { useState } from 'react';
-import { HChart } from 'HudX/charts';
+import React, { useState } from "react";
+import { HChart } from "HudX/charts";
 
 function LocaleSwitcher() {
-  const [locale, setLocale] = useState('en');
+  const [locale, setLocale] = useState("en");
 
   const option = {
-    xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed'] },
-    yAxis: { type: 'value' },
-    series: [{ type: 'line', data: [120, 200, 150] }]
+    xAxis: { type: "category", data: ["Mon", "Tue", "Wed"] },
+    yAxis: { type: "value" },
+    series: [{ type: "line", data: [120, 200, 150] }],
   };
 
   return (
@@ -290,12 +276,7 @@ function LocaleSwitcher() {
         <option value="en">English</option>
         <option value="zh-CN">简体中文</option>
       </select>
-      <HChart
-        option={option}
-        locale={locale}
-        width={800}
-        height={400}
-      />
+      <HChart option={option} locale={locale} width={800} height={400} />
     </div>
   );
 }
@@ -304,18 +285,22 @@ function LocaleSwitcher() {
 ### System Theme Detection
 
 ```typescript
-import { Renderer } from 'HudX/core';
+import { Renderer } from "HudX/core";
 
 // Detect system theme preference
-const darkModePreferred = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const theme = darkModePreferred ? 'dark' : 'light';
+const darkModePreferred = window.matchMedia(
+  "(prefers-color-scheme: dark)",
+).matches;
+const theme = darkModePreferred ? "dark" : "light";
 
-const renderer = Renderer.init('#container', 'canvas', theme);
+const renderer = Renderer.init("#container", "canvas", theme);
 
 // Listen for theme changes
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-  renderer.setTheme(e.matches ? 'dark' : 'light');
-});
+window
+  .matchMedia("(prefers-color-scheme: dark)")
+  .addEventListener("change", (e) => {
+    renderer.setTheme(e.matches ? "dark" : "light");
+  });
 ```
 
 ## Theme Color Palette

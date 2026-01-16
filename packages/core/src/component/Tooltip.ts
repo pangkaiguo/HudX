@@ -4,7 +4,7 @@
 
 export interface TooltipOption {
   show?: boolean;
-  trigger?: 'item' | 'axis' | 'none';
+  trigger?: "item" | "axis" | "none";
   formatter?: string | ((params: any) => string);
   backgroundColor?: string;
   borderColor?: string;
@@ -21,15 +21,24 @@ export interface TooltipOption {
   appendToBody?: boolean;
   confine?: boolean;
   transitionDuration?: number;
-  position?: string | number[] | ((point: number[], params: any, dom: HTMLElement, rect: any, size: any) => number[]);
+  position?:
+    | string
+    | number[]
+    | ((
+        point: number[],
+        params: any,
+        dom: HTMLElement,
+        rect: any,
+        size: any,
+      ) => number[]);
   showContent?: boolean;
   alwaysShowContent?: boolean;
-  triggerOn?: 'mousemove' | 'click' | 'mousemove|click' | 'none';
+  triggerOn?: "mousemove" | "click" | "mousemove|click" | "none";
   showDelay?: number;
   hideDelay?: number;
   enterable?: boolean;
-  renderMode?: 'html' | 'richText';
-  order?: 'seriesAsc' | 'seriesDesc' | 'valueAsc' | 'valueDesc';
+  renderMode?: "html" | "richText";
+  order?: "seriesAsc" | "seriesDesc" | "valueAsc" | "valueDesc";
   [key: string]: any;
 }
 
@@ -46,38 +55,38 @@ export default class Tooltip {
   constructor(option: TooltipOption = {}) {
     this._option = {
       show: true,
-      backgroundColor: 'rgba(50, 50, 50, 0.7)',
-      borderColor: '#333',
+      backgroundColor: "rgba(50, 50, 50, 0.7)",
+      borderColor: "#333",
       borderWidth: 0,
       padding: [10, 10, 10, 10],
       textStyle: {
-        color: '#fff',
+        color: "#fff",
         fontSize: 12,
-        lineHeight: 20
+        lineHeight: 20,
       },
       transitionDuration: 0.4,
       confine: true,
       showContent: true,
-      triggerOn: 'mousemove|click',
+      triggerOn: "mousemove|click",
       enterable: false,
-      renderMode: 'html',
-      ...option
+      renderMode: "html",
+      ...option,
     };
 
-    this._el = document.createElement('div');
+    this._el = document.createElement("div");
     this._initStyle();
   }
 
   private _initStyle(): void {
     const s = this._el.style;
-    s.position = 'absolute';
-    s.display = 'none';
-    s.borderStyle = 'solid';
-    s.whiteSpace = 'nowrap';
-    s.zIndex = '9999999';
-    s.boxShadow = 'rgba(0, 0, 0, 0.2) 1px 2px 10px';
-    s.boxSizing = 'border-box';
-    s.pointerEvents = this._option.enterable ? 'auto' : 'none';
+    s.position = "absolute";
+    s.display = "none";
+    s.borderStyle = "solid";
+    s.whiteSpace = "nowrap";
+    s.zIndex = "9999999";
+    s.boxShadow = "rgba(0, 0, 0, 0.2) 1px 2px 10px";
+    s.boxSizing = "border-box";
+    s.pointerEvents = this._option.enterable ? "auto" : "none";
 
     s.transition = `left ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s, top ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s`;
 
@@ -88,34 +97,34 @@ export default class Tooltip {
     const opt = this._option;
     const s = this._el.style;
 
-    s.backgroundColor = opt.backgroundColor || 'rgba(50, 50, 50, 0.7)';
-    s.borderColor = opt.borderColor || '#333';
-    s.borderWidth = (opt.borderWidth || 0) + 'px';
+    s.backgroundColor = opt.backgroundColor || "rgba(50, 50, 50, 0.7)";
+    s.borderColor = opt.borderColor || "#333";
+    s.borderWidth = (opt.borderWidth || 0) + "px";
 
     const padding = opt.padding;
     if (Array.isArray(padding)) {
-      s.padding = padding.map(p => p + 'px').join(' ');
+      s.padding = padding.map((p) => p + "px").join(" ");
     } else {
-      s.padding = (padding || 5) + 'px';
+      s.padding = (padding || 5) + "px";
     }
 
-    s.color = opt.textStyle?.color || '#fff';
-    s.fontSize = (opt.textStyle?.fontSize || 14) + 'px';
-    s.fontFamily = opt.textStyle?.fontFamily || 'sans-serif';
+    s.color = opt.textStyle?.color || "#fff";
+    s.fontSize = (opt.textStyle?.fontSize || 14) + "px";
+    s.fontFamily = opt.textStyle?.fontFamily || "sans-serif";
 
     if (opt.textStyle) {
-      Object.keys(opt.textStyle).forEach(key => {
-        if (key !== 'color' && key !== 'fontSize' && key !== 'fontFamily') {
+      Object.keys(opt.textStyle).forEach((key) => {
+        if (key !== "color" && key !== "fontSize" && key !== "fontFamily") {
           let val = opt.textStyle![key];
-          if (key === 'lineHeight' && typeof val === 'number') {
-            val = val + 'px';
+          if (key === "lineHeight" && typeof val === "number") {
+            val = val + "px";
           }
           (s as any)[key] = val;
         }
       });
     }
 
-    s.borderRadius = '4px';
+    s.borderRadius = "4px";
 
     if (opt.extraCssText) {
       this._el.style.cssText += opt.extraCssText;
@@ -125,7 +134,7 @@ export default class Tooltip {
       this._el.className = opt.className;
     }
 
-    s.pointerEvents = opt.enterable ? 'auto' : 'none';
+    s.pointerEvents = opt.enterable ? "auto" : "none";
   }
 
   setOption(option: TooltipOption): void {
@@ -138,8 +147,8 @@ export default class Tooltip {
 
     if (!this._option.appendToBody) {
       const style = window.getComputedStyle(container);
-      if (style.position === 'static') {
-        container.style.position = 'relative';
+      if (style.position === "static") {
+        container.style.position = "relative";
       }
     }
 
@@ -153,7 +162,13 @@ export default class Tooltip {
     }
   }
 
-  show(x: number, y: number, content: string | HTMLElement, params?: any, targetRect?: any): void {
+  show(
+    x: number,
+    y: number,
+    content: string | HTMLElement,
+    params?: any,
+    targetRect?: any,
+  ): void {
     if (!this._option.showContent || !this._container) return;
 
     if (this._showTimer) clearTimeout(this._showTimer);
@@ -165,25 +180,26 @@ export default class Tooltip {
       const originalDisplay = this._el.style.display;
       const originalVisibility = this._el.style.visibility;
 
-      this._el.style.display = 'block';
-      this._el.style.visibility = 'hidden';
+      this._el.style.display = "block";
+      this._el.style.visibility = "hidden";
 
       const currentWidth = this._el.offsetWidth;
       const currentHeight = this._el.offsetHeight;
 
-      const sizeChanged = currentWidth !== this._lastWidth || currentHeight !== this._lastHeight;
+      const sizeChanged =
+        currentWidth !== this._lastWidth || currentHeight !== this._lastHeight;
       this._lastWidth = currentWidth;
       this._lastHeight = currentHeight;
 
       if (sizeChanged) {
-        this._el.style.transition = 'none';
+        this._el.style.transition = "none";
       } else {
         this._el.style.transition = `left ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s, top ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s`;
       }
 
       this._updatePosition(x, y, params, targetRect);
 
-      this._el.style.visibility = 'visible';
+      this._el.style.visibility = "visible";
       this._visible = true;
 
       if (sizeChanged) {
@@ -201,15 +217,20 @@ export default class Tooltip {
   }
 
   private _updateContent(content: string | HTMLElement): void {
-    if (typeof content === 'string') {
+    if (typeof content === "string") {
       this._el.innerHTML = content;
     } else {
-      this._el.innerHTML = '';
+      this._el.innerHTML = "";
       this._el.appendChild(content);
     }
   }
 
-  private _updatePosition(x: number, y: number, params?: any, targetRect?: any): void {
+  private _updatePosition(
+    x: number,
+    y: number,
+    params?: any,
+    targetRect?: any,
+  ): void {
     const elWidth = this._el.offsetWidth;
     const elHeight = this._el.offsetHeight;
     const containerRect = this._container!.getBoundingClientRect();
@@ -228,38 +249,41 @@ export default class Tooltip {
         left = this._parsePercent(pos[0], viewWidth);
         top = this._parsePercent(pos[1], viewHeight);
         customPosition = true;
-      } else if (typeof pos === 'function') {
-        const size = { contentSize: [elWidth, elHeight], viewSize: [viewWidth, viewHeight] };
+      } else if (typeof pos === "function") {
+        const size = {
+          contentSize: [elWidth, elHeight],
+          viewSize: [viewWidth, viewHeight],
+        };
         const result = pos([x, y], params, this._el, targetRect, size);
         if (Array.isArray(result)) {
           left = this._parsePercent(result[0], viewWidth);
           top = this._parsePercent(result[1], viewHeight);
           customPosition = true;
         }
-      } else if (typeof pos === 'string') {
-        const parts = pos.split(' ');
+      } else if (typeof pos === "string") {
+        const parts = pos.split(" ");
         if (parts.length === 2) {
           left = this._parsePercent(parts[0], viewWidth);
           top = this._parsePercent(parts[1], viewHeight);
           customPosition = true;
         } else if (targetRect) {
-          if (pos === 'top') {
+          if (pos === "top") {
             left = targetRect.x + targetRect.width / 2 - elWidth / 2;
             top = targetRect.y - elHeight - 5;
             customPosition = true;
-          } else if (pos === 'bottom') {
+          } else if (pos === "bottom") {
             left = targetRect.x + targetRect.width / 2 - elWidth / 2;
             top = targetRect.y + targetRect.height + 5;
             customPosition = true;
-          } else if (pos === 'left') {
+          } else if (pos === "left") {
             left = targetRect.x - elWidth - 5;
             top = targetRect.y + targetRect.height / 2 - elHeight / 2;
             customPosition = true;
-          } else if (pos === 'right') {
+          } else if (pos === "right") {
             left = targetRect.x + targetRect.width + 5;
             top = targetRect.y + targetRect.height / 2 - elHeight / 2;
             customPosition = true;
-          } else if (pos === 'inside') {
+          } else if (pos === "inside") {
             left = targetRect.x + targetRect.width / 2 - elWidth / 2;
             top = targetRect.y + targetRect.height / 2 - elHeight / 2;
             customPosition = true;
@@ -283,8 +307,8 @@ export default class Tooltip {
         left += chartRect.left + scrollX;
         top += chartRect.top + scrollY;
       } else {
-        const chartRelativeLeft = customPosition ? left : (x + 15);
-        const chartRelativeTop = customPosition ? top : (y + 15);
+        const chartRelativeLeft = customPosition ? left : x + 15;
+        const chartRelativeTop = customPosition ? top : y + 15;
 
         left = chartRelativeLeft + chartRect.left + scrollX;
         top = chartRelativeTop + chartRect.top + scrollY;
@@ -295,19 +319,43 @@ export default class Tooltip {
     }
 
     if (this._option.confine) {
-      if (left + elWidth > (this._option.appendToBody ? viewWidth + window.scrollX : viewWidth)) {
+      if (
+        left + elWidth >
+        (this._option.appendToBody ? viewWidth + window.scrollX : viewWidth)
+      ) {
         const chartRect = this._container!.getBoundingClientRect();
-        left = (this._option.appendToBody ? (x + chartRect.left + window.scrollX) : x) - elWidth - 15;
+        left =
+          (this._option.appendToBody
+            ? x + chartRect.left + window.scrollX
+            : x) -
+          elWidth -
+          15;
         if (customPosition && Array.isArray(pos)) {
-          left = Math.min(left, (this._option.appendToBody ? viewWidth + window.scrollX : viewWidth) - elWidth);
+          left = Math.min(
+            left,
+            (this._option.appendToBody
+              ? viewWidth + window.scrollX
+              : viewWidth) - elWidth,
+          );
         }
       }
 
-      if (top + elHeight > (this._option.appendToBody ? viewHeight + window.scrollY : viewHeight)) {
+      if (
+        top + elHeight >
+        (this._option.appendToBody ? viewHeight + window.scrollY : viewHeight)
+      ) {
         const chartRect = this._container!.getBoundingClientRect();
-        top = (this._option.appendToBody ? (y + chartRect.top + window.scrollY) : y) - elHeight - 15;
+        top =
+          (this._option.appendToBody ? y + chartRect.top + window.scrollY : y) -
+          elHeight -
+          15;
         if (customPosition && Array.isArray(pos)) {
-          top = Math.min(top, (this._option.appendToBody ? viewHeight + window.scrollY : viewHeight) - elHeight);
+          top = Math.min(
+            top,
+            (this._option.appendToBody
+              ? viewHeight + window.scrollY
+              : viewHeight) - elHeight,
+          );
         }
       }
 
@@ -320,14 +368,14 @@ export default class Tooltip {
       }
     }
 
-    this._el.style.left = left + 'px';
-    this._el.style.top = top + 'px';
+    this._el.style.left = left + "px";
+    this._el.style.top = top + "px";
   }
 
   private _parsePercent(value: number | string, total: number): number {
-    if (typeof value === 'string') {
-      if (value.endsWith('%')) {
-        return parseFloat(value) / 100 * total;
+    if (typeof value === "string") {
+      if (value.endsWith("%")) {
+        return (parseFloat(value) / 100) * total;
       }
       return parseFloat(value);
     }
@@ -340,7 +388,7 @@ export default class Tooltip {
     if (this._showTimer) clearTimeout(this._showTimer);
 
     const hide = () => {
-      this._el.style.display = 'none';
+      this._el.style.display = "none";
       this._visible = false;
     };
 

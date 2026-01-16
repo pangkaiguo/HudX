@@ -51,7 +51,7 @@ export default class BatchUpdater {
       try {
         update();
       } catch (error) {
-        console.error('Error in batch update:', error);
+        console.error("Error in batch update:", error);
       }
     }
   }
@@ -80,4 +80,3 @@ export default class BatchUpdater {
     this._isScheduled = false;
   }
 }
-

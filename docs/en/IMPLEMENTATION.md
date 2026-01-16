@@ -40,13 +40,13 @@ Renderer is the main rendering engine responsible for coordinating all modules:
 
 ```typescript
 class Renderer {
-  private _storage: Storage;      // Element storage
-  private _painter: IPainter;     // Painter (Canvas or SVG)
-  private _handler: Handler;      // Event handler
-  private _root: Group;           // Root group
+  private _storage: Storage; // Element storage
+  private _painter: IPainter; // Painter (Canvas or SVG)
+  private _handler: Handler; // Event handler
+  private _root: Group; // Root group
   private _renderMode: RenderMode; // Rendering mode
-  private _theme: Theme;          // Theme
-  private _locale: Locale;        // Language
+  private _theme: Theme; // Theme
+  private _locale: Locale; // Language
 }
 ```
 
@@ -63,12 +63,12 @@ All graphic elements inherit from Element:
 
 ```typescript
 class Element extends Eventful {
-  id: string;                      // Unique identifier
-  zlevel: number;                  // Z-level
-  z: number;                       // Order within z-level
-  style: Style;                    // Style
-  shape: Record<string, any>;      // Shape properties
-  transform: Transform;            // Transformation
+  id: string; // Unique identifier
+  zlevel: number; // Z-level
+  z: number; // Order within z-level
+  style: Style; // Style
+  shape: Record<string, any>; // Shape properties
+  transform: Transform; // Transformation
 }
 ```
 
@@ -85,8 +85,8 @@ Storage manages all graphic elements:
 
 ```typescript
 class Storage {
-  private _roots: Group[];                    // Root groups
-  private _elements: Map<string, Element>;   // Element mapping
+  private _roots: Group[]; // Root groups
+  private _elements: Map<string, Element>; // Element mapping
 }
 ```
 
@@ -188,7 +188,7 @@ class Group extends Element {
 Elements are marked dirty when properties change, and only dirty elements are redrawn:
 
 ```typescript
-element.attr('style', { fill: '#ff0000' });
+element.attr("style", { fill: "#ff0000" });
 element.markRedraw();
 renderer.refresh();
 ```
@@ -199,8 +199,8 @@ Events bubble up through the element hierarchy:
 
 ```typescript
 group.add(circle);
-circle.on('click', () => console.log('Circle clicked'));
-group.on('click', () => console.log('Group clicked'));
+circle.on("click", () => console.log("Circle clicked"));
+group.on("click", () => console.log("Group clicked"));
 // Clicking circle triggers both events
 ```
 
@@ -209,8 +209,8 @@ group.on('click', () => console.log('Group clicked'));
 Multiple changes are batched for a single render:
 
 ```typescript
-element1.attr('style', { fill: '#ff0000' });
-element2.attr('style', { fill: '#00ff00' });
+element1.attr("style", { fill: "#ff0000" });
+element2.attr("style", { fill: "#00ff00" });
 // Both changes rendered in single frame
 renderer.refresh();
 ```
@@ -223,7 +223,7 @@ Transformations are applied through matrix multiplication:
 const transform = [
   [cos, sin, 0],
   [-sin, cos, 0],
-  [x, y, 1]
+  [x, y, 1],
 ];
 ```
 
@@ -266,11 +266,15 @@ const transform = [
 ### Property-based Animation
 
 ```typescript
-element.animate('shape', { r: 100 }, {
-  duration: 1000,
-  easing: 'cubic-in-out',
-  onfinish: () => console.log('done')
-});
+element.animate(
+  "shape",
+  { r: 100 },
+  {
+    duration: 1000,
+    easing: "cubic-in-out",
+    onfinish: () => console.log("done"),
+  },
+);
 ```
 
 ### Easing Functions
@@ -326,14 +330,14 @@ ctx.scale(dpr, dpr);
 ### Theme System
 
 ```typescript
-renderer.setTheme('dark');
+renderer.setTheme("dark");
 const colors = renderer.getThemeConfig();
 ```
 
 ### Localization
 
 ```typescript
-renderer.setLocale('zh-CN');
+renderer.setLocale("zh-CN");
 const messages = renderer.getLocaleMessages();
 ```
 

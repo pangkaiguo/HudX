@@ -71,29 +71,31 @@ pnpm dev:examples
 ### React Component
 
 ```tsx
-import React from 'react';
-import { HChart } from 'HudX/charts';
+import React from "react";
+import { HChart } from "HudX/charts";
 
 function App() {
   const option = {
-    title: { text: 'Sales Data' },
+    title: { text: "Sales Data" },
     tooltip: { show: true },
-    legend: { data: ['Sales'] },
+    legend: { data: ["Sales"] },
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     },
-    yAxis: { type: 'value' },
-    series: [{
-      name: 'Sales',
-      type: 'bar',
-      data: [120, 200, 150, 80, 70, 110, 130],
-      itemStyle: { color: '#5470c6' },
-      emphasis: {
-        scale: true,
-        focus: 'series'
-      }
-    }]
+    yAxis: { type: "value" },
+    series: [
+      {
+        name: "Sales",
+        type: "bar",
+        data: [120, 200, 150, 80, 70, 110, 130],
+        itemStyle: { color: "#5470c6" },
+        emphasis: {
+          scale: true,
+          focus: "series",
+        },
+      },
+    ],
   };
 
   return (
@@ -111,26 +113,26 @@ function App() {
 ### Core API (Low-level)
 
 ```typescript
-import { Renderer, Circle, Animation, Easing } from 'HudX/core';
+import { Renderer, Circle, Animation, Easing } from "HudX/core";
 
 // Initialize
-const renderer = Renderer.init(document.getElementById('container'));
+const renderer = Renderer.init(document.getElementById("container"));
 
 // Add Element
 const circle = new Circle({
   shape: { cx: 100, cy: 100, r: 50 },
-  style: { fill: 'red' }
+  style: { fill: "red" },
 });
 renderer.add(circle);
 
 // Animate
 const anim = new Animation(
   circle.shape,
-  'r',
+  "r",
   100, // end value
   1000, // duration
-  0,    // delay
-  Easing.elasticOut
+  0, // delay
+  Easing.elasticOut,
 );
 anim.start();
 ```

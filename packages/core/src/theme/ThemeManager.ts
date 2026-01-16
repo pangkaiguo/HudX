@@ -2,7 +2,7 @@
  * ThemeManager - Manages theme configuration
  */
 
-import type { Theme, ThemeConfig, ThemeToken } from '../types';
+import type { Theme, ThemeConfig, ThemeToken } from "../types";
 
 export class ThemeManager {
   private static _themes: Map<Theme, ThemeConfig> = new Map();
@@ -11,49 +11,63 @@ export class ThemeManager {
   static {
     // Default Light Token
     const lightToken: ThemeToken = {
-      colorText: '#333333',
-      colorBackground: '#ffffff',
-      colorBorder: '#cccccc',
-      colorGrid: '#e6e6e6',
-      colorAxisLine: '#e0e0e0',
-      colorAxisLabel: '#999999',
-      colorTooltipBackground: 'rgba(50, 50, 50, 0.9)',
-      colorTooltipText: '#ffffff',
-      colorLegendText: '#333333',
-      colorShadow: 'rgba(0, 0, 0, 0.6)',
-      colorMask: 'rgba(255, 255, 255, 0.8)',
-      colorDecal: 'rgba(0, 0, 0, 0.2)',
-      fontFamily: 'sans-serif',
+      colorText: "#333333",
+      colorBackground: "#ffffff",
+      colorBorder: "#cccccc",
+      colorGrid: "#e6e6e6",
+      colorAxisLine: "#e0e0e0",
+      colorAxisLabel: "#999999",
+      colorTooltipBackground: "rgba(50, 50, 50, 0.9)",
+      colorTooltipText: "#ffffff",
+      colorLegendText: "#333333",
+      colorShadow: "rgba(0, 0, 0, 0.6)",
+      colorMask: "rgba(255, 255, 255, 0.8)",
+      colorDecal: "rgba(0, 0, 0, 0.2)",
+      fontFamily: "sans-serif",
       fontSize: 12,
       seriesColors: [
-        '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
-        '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'
-      ]
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc",
+      ],
     };
-    ThemeManager.registerToken('light', lightToken);
+    ThemeManager.registerToken("light", lightToken);
 
     // Default Dark Token
     const darkToken: ThemeToken = {
-      colorText: '#e0e0e0',
-      colorBackground: '#1e1e1e',
-      colorBorder: '#444444',
-      colorGrid: '#2d2d2d',
-      colorAxisLine: '#888888',
-      colorAxisLabel: '#aaaaaa',
-      colorTooltipBackground: 'rgba(200, 200, 200, 0.9)',
-      colorTooltipText: '#1e1e1e',
-      colorLegendText: '#e0e0e0',
-      colorShadow: 'rgba(0, 0, 0, 0.6)',
-      colorMask: 'rgba(255, 255, 255, 0.8)',
-      colorDecal: 'rgba(0, 0, 0, 0.2)',
-      fontFamily: 'sans-serif',
+      colorText: "#e0e0e0",
+      colorBackground: "#1e1e1e",
+      colorBorder: "#444444",
+      colorGrid: "#2d2d2d",
+      colorAxisLine: "#888888",
+      colorAxisLabel: "#aaaaaa",
+      colorTooltipBackground: "rgba(200, 200, 200, 0.9)",
+      colorTooltipText: "#1e1e1e",
+      colorLegendText: "#e0e0e0",
+      colorShadow: "rgba(0, 0, 0, 0.6)",
+      colorMask: "rgba(255, 255, 255, 0.8)",
+      colorDecal: "rgba(0, 0, 0, 0.2)",
+      fontFamily: "sans-serif",
       fontSize: 12,
       seriesColors: [
-        '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de',
-        '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'
-      ]
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc",
+      ],
     };
-    ThemeManager.registerToken('dark', darkToken);
+    ThemeManager.registerToken("dark", darkToken);
   }
 
   /**
@@ -82,7 +96,7 @@ export class ThemeManager {
       legendTextColor: String(newToken.colorLegendText),
       fontFamily: String(newToken.fontFamily),
       fontSize: Number(newToken.fontSize),
-      token: newToken
+      token: newToken,
     };
 
     ThemeManager.registerTheme(theme, config);
@@ -92,10 +106,11 @@ export class ThemeManager {
    * Get theme configuration
    */
   static getTheme(theme: Theme): ThemeConfig {
-    const normalizedTheme = typeof theme === 'string' ? theme.toLowerCase() as Theme : theme;
+    const normalizedTheme =
+      typeof theme === "string" ? (theme.toLowerCase() as Theme) : theme;
     const config = ThemeManager._themes.get(normalizedTheme);
     if (config) return config;
-    return ThemeManager._themes.get('light')!;
+    return ThemeManager._themes.get("light")!;
   }
 
   /**
@@ -112,4 +127,3 @@ export class ThemeManager {
     return Array.from(ThemeManager._themes.keys());
   }
 }
-

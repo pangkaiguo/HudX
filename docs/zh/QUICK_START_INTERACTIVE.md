@@ -5,10 +5,19 @@
 ### 1. 基础设置
 
 ```typescript
-import { Renderer, Polyline, Circle, Text, Tooltip, Legend, Animation, Easing } from 'HudX/core';
+import {
+  Renderer,
+  Polyline,
+  Circle,
+  Text,
+  Tooltip,
+  Legend,
+  Animation,
+  Easing,
+} from "HudX/core";
 
 // 初始化渲染器
-const renderer = Renderer.init(container, 'canvas', 'light', 'en');
+const renderer = Renderer.init(container, "canvas", "light", "en");
 const width = 800;
 const height = 400;
 
@@ -17,7 +26,7 @@ const tooltip = new Tooltip();
 renderer.add(tooltip);
 
 // 创建 Legend
-const legend = new Legend({ x: 20, y: 20, orient: 'horizontal' });
+const legend = new Legend({ x: 20, y: 20, orient: "horizontal" });
 renderer.add(legend);
 ```
 
@@ -26,29 +35,33 @@ renderer.add(legend);
 ```typescript
 // 数据
 const data = [120, 200, 150, 80, 70, 110, 130];
-const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const maxValue = Math.max(...data);
 
 // 计算坐标
 const points = data.map((value, index) => ({
-  x: 100 + (index * 100),
+  x: 100 + index * 100,
   y: 300 - (value / maxValue) * 200,
   value,
-  label: labels[index]
+  label: labels[index],
 }));
 
 // 绘制线
-renderer.add(new Polyline({
-  shape: { points: points.map(p => [p.x, p.y]) },
-  style: { stroke: '#5470c6', lineWidth: 2 }
-}));
+renderer.add(
+  new Polyline({
+    shape: { points: points.map((p) => [p.x, p.y]) },
+    style: { stroke: "#5470c6", lineWidth: 2 },
+  }),
+);
 
 // 绘制数据点
 points.forEach((point) => {
-  renderer.add(new Circle({
-    shape: { cx: point.x, cy: point.y, r: 4 },
-    style: { fill: '#5470c6', stroke: '#fff', lineWidth: 2 }
-  }));
+  renderer.add(
+    new Circle({
+      shape: { cx: point.x, cy: point.y, r: 4 },
+      style: { fill: "#5470c6", stroke: "#fff", lineWidth: 2 },
+    }),
+  );
 });
 ```
 
@@ -58,23 +71,27 @@ points.forEach((point) => {
 // 为每个数据点添加交互
 points.forEach((point, index) => {
   const circle = renderer.getRoot().children[index];
-  
+
   // Hover 效果
-  circle.on('mouseover', () => {
-    circle.attr('shape', { r: 7 });
-    tooltip.show(point.x + 10, point.y - 30, `${labels[index]}\n${point.value}`);
+  circle.on("mouseover", () => {
+    circle.attr("shape", { r: 7 });
+    tooltip.show(
+      point.x + 10,
+      point.y - 30,
+      `${labels[index]}\n${point.value}`,
+    );
     renderer.flush();
   });
-  
-  circle.on('mouseout', () => {
-    circle.attr('shape', { r: 4 });
+
+  circle.on("mouseout", () => {
+    circle.attr("shape", { r: 4 });
     tooltip.hide();
     renderer.flush();
   });
-  
+
   // 点击效果
-  circle.on('click', () => {
-    console.log('Clicked:', labels[index], point.value);
+  circle.on("click", () => {
+    console.log("Clicked:", labels[index], point.value);
   });
 });
 ```
@@ -85,13 +102,13 @@ points.forEach((point, index) => {
 // 为线条添加淡入动画
 const line = renderer.getRoot().children[0];
 const lineAnim = new Animation(
-  line.attr('style'),
-  'opacity',
+  line.attr("style"),
+  "opacity",
   1,
   800,
   0,
   Easing.cubicOut,
-  () => renderer.flush()
+  () => renderer.flush(),
 );
 lineAnim.start();
 
@@ -99,13 +116,13 @@ lineAnim.start();
 points.forEach((point, index) => {
   const circle = renderer.getRoot().children[index + 1];
   const pointAnim = new Animation(
-    circle.attr('shape'),
-    'r',
+    circle.attr("shape"),
+    "r",
     4,
     600,
     index * 100,
     Easing.elasticOut,
-    () => renderer.flush()
+    () => renderer.flush(),
   );
   pointAnim.start();
 });
@@ -115,14 +132,12 @@ points.forEach((point, index) => {
 
 ```typescript
 // 设置图例项
-legend.setItems([
-  { name: 'Series A', color: '#5470c6' }
-]);
+legend.setItems([{ name: "Series A", color: "#5470c6" }]);
 
 // 处理图例选择
 legend.onSelect = (name, selected) => {
   // 切换系列显示/隐藏
-  console.log(`${name}: ${selected ? 'shown' : 'hidden'}`);
+  console.log(`${name}: ${selected ? "shown" : "hidden"}`);
 };
 ```
 
@@ -134,39 +149,50 @@ legend.onSelect = (name, selected) => {
 
 ```typescript
 const seriesData = [
-  { name: 'Series A', color: '#5470c6', data: [120, 200, 150, 80, 70, 110, 130] },
-  { name: 'Series B', color: '#91cc75', data: [100, 150, 120, 110, 90, 140, 120] }
+  {
+    name: "Series A",
+    color: "#5470c6",
+    data: [120, 200, 150, 80, 70, 110, 130],
+  },
+  {
+    name: "Series B",
+    color: "#91cc75",
+    data: [100, 150, 120, 110, 90, 140, 120],
+  },
 ];
 
 seriesData.forEach((series, seriesIndex) => {
   const points = series.data.map((value, index) => ({
-    x: 100 + (index * 100),
+    x: 100 + index * 100,
     y: 300 - (value / maxValue) * 200,
     value,
-    label: labels[index]
+    label: labels[index],
   }));
-  
+
   // 绘制线
-  renderer.add(new Polyline({
-    shape: { points: points.map(p => [p.x, p.y]) },
-    style: { stroke: series.color, lineWidth: 2, opacity: 0 }
-  }));
-  
+  renderer.add(
+    new Polyline({
+      shape: { points: points.map((p) => [p.x, p.y]) },
+      style: { stroke: series.color, lineWidth: 2, opacity: 0 },
+    }),
+  );
+
   // 动画
-  const line = renderer.getRoot().children[renderer.getRoot().children.length - 1];
+  const line =
+    renderer.getRoot().children[renderer.getRoot().children.length - 1];
   const anim = new Animation(
-    line.attr('style'),
-    'opacity',
+    line.attr("style"),
+    "opacity",
     1,
     800,
-    seriesIndex * 200,  // 错开延迟
-    Easing.cubicOut
+    seriesIndex * 200, // 错开延迟
+    Easing.cubicOut,
   );
   anim.start();
 });
 
 // 设置图例
-legend.setItems(seriesData.map(s => ({ name: s.name, color: s.color })));
+legend.setItems(seriesData.map((s) => ({ name: s.name, color: s.color })));
 ```
 
 ### 创建柱状图
@@ -176,21 +202,26 @@ const barWidth = 60;
 const barHeight = (value / maxValue) * 200;
 
 const bar = new Rect({
-  shape: { x: 100 + index * 100, y: 300 - barHeight, width: barWidth, height: 0 },
-  style: { fill: '#5470c6' }
+  shape: {
+    x: 100 + index * 100,
+    y: 300 - barHeight,
+    width: barWidth,
+    height: 0,
+  },
+  style: { fill: "#5470c6" },
 });
 
 renderer.add(bar);
 
 // 动画
 const barAnim = new Animation(
-  bar.attr('shape'),
-  'height',
+  bar.attr("shape"),
+  "height",
   barHeight,
   800,
   index * 100,
   Easing.cubicOut,
-  () => renderer.flush()
+  () => renderer.flush(),
 );
 barAnim.start();
 ```
@@ -199,27 +230,27 @@ barAnim.start();
 
 ## 缓动函数速查表
 
-| 函数 | 效果 | 用途 |
-|------|------|------|
-| `linear` | 匀速 | 简单动画 |
-| `quadraticOut` | 快速减速 | 一般动画 |
-| `cubicOut` | 平滑减速 | 推荐使用 |
-| `elasticOut` | 弹性反弹 | 强调效果 |
-| `cubicInOut` | 平滑加减速 | 往返动画 |
+| 函数           | 效果       | 用途     |
+| -------------- | ---------- | -------- |
+| `linear`       | 匀速       | 简单动画 |
+| `quadraticOut` | 快速减速   | 一般动画 |
+| `cubicOut`     | 平滑减速   | 推荐使用 |
+| `elasticOut`   | 弹性反弹   | 强调效果 |
+| `cubicInOut`   | 平滑加减速 | 往返动画 |
 
 ---
 
 ## 事件类型速查表
 
-| 事件 | 触发条件 |
-|------|---------|
-| `mouseover` | 鼠标进入元素 |
-| `mouseout` | 鼠标离开元素 |
-| `click` | 点击元素 |
-| `dblclick` | 双击元素 |
-| `touchstart` | 触摸开始 |
-| `touchmove` | 触摸移动 |
-| `touchend` | 触摸结束 |
+| 事件         | 触发条件     |
+| ------------ | ------------ |
+| `mouseover`  | 鼠标进入元素 |
+| `mouseout`   | 鼠标离开元素 |
+| `click`      | 点击元素     |
+| `dblclick`   | 双击元素     |
+| `touchstart` | 触摸开始     |
+| `touchmove`  | 触摸移动     |
+| `touchend`   | 触摸结束     |
 
 ---
 
@@ -233,7 +264,7 @@ barAnim.start();
 // anim.start();  // 注释掉
 
 // 方法 2: 设置 duration 为 0
-const anim = new Animation(target, 'property', value, 0);
+const anim = new Animation(target, "property", value, 0);
 anim.start();
 ```
 
@@ -243,11 +274,11 @@ anim.start();
 // 修改 duration 参数
 const anim = new Animation(
   target,
-  'property',
+  "property",
   value,
-  2000,  // 改为 2000ms (原来 1000ms)
+  2000, // 改为 2000ms (原来 1000ms)
   0,
-  Easing.cubicOut
+  Easing.cubicOut,
 );
 ```
 
@@ -256,17 +287,10 @@ const anim = new Animation(
 ```typescript
 const customEasing = (t: number) => {
   // t 从 0 到 1
-  return t * t * (3 - 2 * t);  // smoothstep
+  return t * t * (3 - 2 * t); // smoothstep
 };
 
-const anim = new Animation(
-  target,
-  'property',
-  value,
-  1000,
-  0,
-  customEasing
-);
+const anim = new Animation(target, "property", value, 1000, 0, customEasing);
 ```
 
 ### Q: 如何处理多个动画？
@@ -278,11 +302,11 @@ const animations: Animation[] = [];
 for (let i = 0; i < 10; i++) {
   const anim = new Animation(
     targets[i],
-    'property',
+    "property",
     value,
     1000,
-    i * 100,  // 错开延迟
-    Easing.cubicOut
+    i * 100, // 错开延迟
+    Easing.cubicOut,
   );
   anim.start();
   animations.push(anim);
@@ -290,7 +314,7 @@ for (let i = 0; i < 10; i++) {
 
 // 清理
 return () => {
-  animations.forEach(anim => anim.stop());
+  animations.forEach((anim) => anim.stop());
 };
 ```
 
@@ -303,13 +327,20 @@ return () => {
 ```typescript
 // ✅ 好
 seriesData.forEach((series, index) => {
-  const anim = new Animation(target, 'property', value, 1000, index * 200, easing);
+  const anim = new Animation(
+    target,
+    "property",
+    value,
+    1000,
+    index * 200,
+    easing,
+  );
   anim.start();
 });
 
 // ❌ 差
 seriesData.forEach((series) => {
-  const anim = new Animation(target, 'property', value, 1000, 0, easing);
+  const anim = new Animation(target, "property", value, 1000, 0, easing);
   anim.start();
 });
 ```
@@ -321,7 +352,7 @@ seriesData.forEach((series) => {
 useEffect(() => {
   // ... 创建动画
   return () => {
-    animations.forEach(anim => anim.stop());
+    animations.forEach((anim) => anim.stop());
     renderer.dispose();
   };
 }, []);
@@ -334,15 +365,15 @@ useEffect(() => {
 
 ```typescript
 // ✅ 好
-circle.on('mouseover', () => {
-  circle.attr('shape', { r: 7 });
+circle.on("mouseover", () => {
+  circle.attr("shape", { r: 7 });
   tooltip.show(x, y, content);
-  renderer.flush();  // 立即重绘
+  renderer.flush(); // 立即重绘
 });
 
 // ❌ 差
-circle.on('mouseover', () => {
-  circle.attr('shape', { r: 7 });
+circle.on("mouseover", () => {
+  circle.attr("shape", { r: 7 });
   tooltip.show(x, y, content);
   // 等待下一帧重绘
 });

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 import {
   createIdentityMatrix,
   multiplyMatrix,
@@ -9,27 +9,27 @@ import {
   invertMatrix,
   translate,
   scale,
-  rotate
-} from '../matrix';
+  rotate,
+} from "../matrix";
 
-describe('matrix', () => {
-  it('should create identity matrix', () => {
+describe("matrix", () => {
+  it("should create identity matrix", () => {
     const m = createIdentityMatrix();
     expect(m).toEqual({ a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
   });
 
-  it('should create translation matrix', () => {
+  it("should create translation matrix", () => {
     const m = createTranslateMatrix(10, 20);
     expect(m).toEqual({ a: 1, b: 0, c: 0, d: 1, e: 10, f: 20 });
   });
 
-  it('should apply matrix to point', () => {
+  it("should apply matrix to point", () => {
     const m = createTranslateMatrix(10, 20);
     const p = applyMatrix(m, 5, 5);
     expect(p).toEqual([15, 25]);
   });
 
-  it('should multiply matrices', () => {
+  it("should multiply matrices", () => {
     const t = createTranslateMatrix(10, 20);
     const s = createScaleMatrix(2, 2);
     // Scale then Translate: T * S * P -> T * (S * P)
@@ -41,7 +41,7 @@ describe('matrix', () => {
     expect(p).toEqual([20, 30]); // (5*2)+10, (5*2)+20
   });
 
-  it('should invert matrix', () => {
+  it("should invert matrix", () => {
     const t = createTranslateMatrix(10, 20);
     const inv = invertMatrix(t);
     expect(inv).not.toBeNull();
@@ -51,13 +51,13 @@ describe('matrix', () => {
     }
   });
 
-  it('should handle non-invertible matrix', () => {
+  it("should handle non-invertible matrix", () => {
     const m = { a: 0, b: 0, c: 0, d: 0, e: 0, f: 0 };
     const inv = invertMatrix(m);
     expect(inv).toBeNull();
   });
 
-  it('should transform existing matrix', () => {
+  it("should transform existing matrix", () => {
     let m = createIdentityMatrix();
     m = translate(m, 10, 20);
     expect(m.e).toBe(10);
@@ -73,7 +73,7 @@ describe('matrix', () => {
     // a: m.a, b: m.b...
     // e: m.a * tx + m.c * ty + m.e
     // This looks like post-multiplication (m * T)?
-    // m * T = 
+    // m * T =
     // [a c e]   [1 0 tx]   [a  c  a*tx + c*ty + e]
     // [b d f] * [0 1 ty] = [b  d  b*tx + d*ty + f]
     // [0 0 1]   [0 0 1 ]   [0  0  1              ]
@@ -95,7 +95,7 @@ describe('matrix', () => {
     // c: m.c * sy
     // e: m.e
     // Yes, this is m * S.
-    
+
     // So:
     // 1. m = I
     // 2. m = translate(m, 10, 20) -> m = I * T = T. (Translate 10, 20)
@@ -106,12 +106,12 @@ describe('matrix', () => {
     // S * P -> (0,0). T * (0,0) -> (10, 20).
     // Point (5, 5).
     // S * P -> (10, 10). T * (10, 10) -> (20, 30).
-    
+
     // Let's check my previous manual calc logic.
     // T * S matrix multiplication in `multiplyMatrix` function (m1 * m2).
     // multiplyMatrix(T, S) -> T * S.
     // My manual trace of `translate` and `scale` helpers also produces T * S.
-    
+
     const p = applyMatrix(m, 5, 5);
     expect(p).toEqual([20, 30]);
   });

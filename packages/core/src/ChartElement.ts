@@ -3,8 +3,8 @@
  * ChartElement - Base class for all graphical elements (inspired by ZRender)
  */
 
-import Eventful from './mixin/Eventful';
-import type { ElementOption, Style, Transform, BoundingRect } from './types';
+import Eventful from "./mixin/Eventful";
+import type { ElementOption, Style, Transform, BoundingRect } from "./types";
 import {
   Matrix,
   createIdentityMatrix,
@@ -13,9 +13,9 @@ import {
   rotate,
   multiplyMatrix,
   invertMatrix,
-  applyMatrix
-} from './util/matrix';
-import { getUnit32RandomValues } from './util/random';
+  applyMatrix,
+} from "./util/matrix";
+import { getUnit32RandomValues } from "./util/random";
 
 class ChartElement extends Eventful {
   /** Unique ID */
@@ -33,7 +33,7 @@ class ChartElement extends Eventful {
   /** Whether the element is invisible */
   invisible: boolean = false;
   /** Mouse cursor style */
-  cursor: string = 'default';
+  cursor: string = "default";
   /** Whether the element is draggable */
   draggable: boolean = false;
   /** Whether to render progressively */
@@ -58,7 +58,7 @@ class ChartElement extends Eventful {
     this.z = opts.z ?? 0;
     this.silent = opts.silent ?? false;
     this.invisible = opts.invisible ?? false;
-    this.cursor = opts.cursor || 'default';
+    this.cursor = opts.cursor || "default";
     this.draggable = opts.draggable ?? false;
     this.progressive = opts.progressive ?? false;
 
@@ -76,19 +76,26 @@ class ChartElement extends Eventful {
     }
   }
 
-  attr(key: string | Record<string, unknown> | Record<string, any>, value?: unknown): any {
-    if (typeof key === 'string' && value === undefined && arguments.length === 1) {
-      if (key === 'style') {
+  attr(
+    key: string | Record<string, unknown> | Record<string, any>,
+    value?: unknown,
+  ): any {
+    if (
+      typeof key === "string" &&
+      value === undefined &&
+      arguments.length === 1
+    ) {
+      if (key === "style") {
         return this.style;
-      } else if (key === 'shape') {
+      } else if (key === "shape") {
         return this.shape;
-      } else if (key === 'transform') {
+      } else if (key === "transform") {
         return this.transform;
       }
       return (this as Record<string, unknown>)[key];
     }
 
-    if (typeof key === 'string') {
+    if (typeof key === "string") {
       this._setAttr(key, value);
     } else {
       for (const k in key) {
@@ -100,13 +107,23 @@ class ChartElement extends Eventful {
   }
 
   private _setAttr(key: string, value: unknown): void {
-    if (key === 'style' && typeof value === 'object' && value !== null) {
+    if (key === "style" && typeof value === "object" && value !== null) {
       this.style = { ...this.style, ...(value as Record<string, unknown>) };
-    } else if (key === 'shape' && typeof value === 'object' && value !== null) {
-      this.shape = { ...(this.shape as Record<string, unknown>), ...(value as Record<string, unknown>) };
-    } else if (key === 'transform' && typeof value === 'object' && value !== null) {
-      this.transform = { ...this.transform, ...(value as Record<string, unknown>) };
-    } else if (key === 'invisible') {
+    } else if (key === "shape" && typeof value === "object" && value !== null) {
+      this.shape = {
+        ...(this.shape as Record<string, unknown>),
+        ...(value as Record<string, unknown>),
+      };
+    } else if (
+      key === "transform" &&
+      typeof value === "object" &&
+      value !== null
+    ) {
+      this.transform = {
+        ...this.transform,
+        ...(value as Record<string, unknown>),
+      };
+    } else if (key === "invisible") {
       this.invisible = Boolean(value);
     } else {
       (this as Record<string, unknown>)[key] = value;
@@ -115,7 +132,7 @@ class ChartElement extends Eventful {
 
   markRedraw(): void {
     this._dirty = true;
-    this.trigger('dirty');
+    this.trigger("dirty");
     // Propagate dirty flag to parent
     const parent = (this as any).__parent;
     if (parent && parent.markRedraw) {
@@ -144,8 +161,12 @@ class ChartElement extends Eventful {
     const rect = this.getBoundingRect();
 
     // Simple bounding box check
-    return lx >= rect.x && lx <= rect.x + rect.width &&
-      ly >= rect.y && ly <= rect.y + rect.height;
+    return (
+      lx >= rect.x &&
+      lx <= rect.x + rect.width &&
+      ly >= rect.y &&
+      ly <= rect.y + rect.height
+    );
   }
 
   render(ctx: CanvasRenderingContext2D): void {

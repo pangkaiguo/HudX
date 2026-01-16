@@ -2,8 +2,8 @@
  * Line - Line shape element
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect, Point } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect, Point } from "../types";
 
 export interface LineShape {
   x1: number;
@@ -15,7 +15,11 @@ export interface LineShape {
 export default class Line extends ChartElement {
   shape: LineShape;
 
-  constructor(opts: ElementOption & { shape: LineShape } = { shape: { x1: 0, y1: 0, x2: 0, y2: 0 } }) {
+  constructor(
+    opts: ElementOption & { shape: LineShape } = {
+      shape: { x1: 0, y1: 0, x2: 0, y2: 0 },
+    },
+  ) {
     super(opts);
     this.shape = opts.shape || { x1: 0, y1: 0, x2: 0, y2: 0 };
   }
@@ -50,7 +54,10 @@ export default class Line extends ChartElement {
       return false;
     }
 
-    const t = Math.max(0, Math.min(1, ((x - shape.x1) * dx + (y - shape.y1) * dy) / length2));
+    const t = Math.max(
+      0,
+      Math.min(1, ((x - shape.x1) * dx + (y - shape.y1) * dy) / length2),
+    );
     const projX = shape.x1 + t * dx;
     const projY = shape.y1 + t * dy;
     const dist2 = (x - projX) * (x - projX) + (y - projY) * (y - projY);
@@ -99,4 +106,3 @@ export default class Line extends ChartElement {
     ctx.restore();
   }
 }
-

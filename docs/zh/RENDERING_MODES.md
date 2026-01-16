@@ -54,16 +54,16 @@ HudX 支持两种渲染模式：**Canvas** 和 **SVG**。
 ### 在 Renderer 中使用
 
 ```typescript
-import { Renderer, Circle, Rect } from 'HudX/core';
+import { Renderer, Circle, Rect } from "HudX/core";
 
 // Canvas 模式
-const renderer = Renderer.init('#container', 'canvas');
+const renderer = Renderer.init("#container", "canvas");
 
 // SVG 模式
-const rendererSVG = Renderer.init('#container', 'svg');
+const rendererSVG = Renderer.init("#container", "svg");
 
 // 切换渲染模式
-renderer.setRenderMode('svg');
+renderer.setRenderMode("svg");
 ```
 
 ### 在 React 组件中使用
@@ -91,16 +91,16 @@ import { HChart } from 'HudX/charts';
 ### 在 Chart 类中使用
 
 ```typescript
-import { LineChart } from 'HudX/charts';
+import { LineChart } from "HudX/charts";
 
 // Canvas 模式
-const chart = new LineChart(dom, option, 'canvas');
+const chart = new LineChart(dom, option, "canvas");
 
 // SVG 模式
-const chartSVG = new LineChart(dom, option, 'svg');
+const chartSVG = new LineChart(dom, option, "svg");
 
 // 切换模式
-chart.setRenderMode('svg');
+chart.setRenderMode("svg");
 ```
 
 ## 实现细节

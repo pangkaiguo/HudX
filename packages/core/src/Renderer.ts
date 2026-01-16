@@ -3,16 +3,24 @@
  * High-performance rendering engine supporting Canvas and SVG modes
  */
 
-import Storage from './Storage';
-import Handler from './Handler';
-import ChartElement from './ChartElement';
-import Group from './Group';
-import type { EventData, EventCallback, RenderMode, Theme, Locale, ThemeConfig, DataURLOpts } from './types';
-import IPainter from './painter/IPainter';
-import CanvasPainter from './painter/CanvasPainter';
-import SVGPainter from './painter/SVGPainter';
-import { ThemeManager } from './theme/ThemeManager';
-import { LocaleManager } from './i18n/LocaleManager';
+import Storage from "./Storage";
+import Handler from "./Handler";
+import ChartElement from "./ChartElement";
+import Group from "./Group";
+import type {
+  EventData,
+  EventCallback,
+  RenderMode,
+  Theme,
+  Locale,
+  ThemeConfig,
+  DataURLOpts,
+} from "./types";
+import IPainter from "./painter/IPainter";
+import CanvasPainter from "./painter/CanvasPainter";
+import SVGPainter from "./painter/SVGPainter";
+import { ThemeManager } from "./theme/ThemeManager";
+import { LocaleManager } from "./i18n/LocaleManager";
 
 export default class Renderer {
   private _dom: HTMLElement;
@@ -25,7 +33,12 @@ export default class Renderer {
   private _locale: Locale;
   private _disposed: boolean = false;
 
-  constructor(dom: HTMLElement, renderMode: RenderMode = 'canvas', theme: Theme = 'light', locale: Locale = 'en') {
+  constructor(
+    dom: HTMLElement,
+    renderMode: RenderMode = "canvas",
+    theme: Theme = "light",
+    locale: Locale = "en",
+  ) {
     this._dom = dom;
     this._storage = new Storage();
     this._root = new Group();
@@ -35,7 +48,7 @@ export default class Renderer {
     this._locale = locale;
 
     // Create painter based on render mode
-    if (renderMode === 'svg') {
+    if (renderMode === "svg") {
       this._painter = new SVGPainter(dom, this._storage);
     } else {
       this._painter = new CanvasPainter(dom, this._storage);
@@ -47,7 +60,7 @@ export default class Renderer {
     this._applyTheme();
 
     // Listen to storage changes
-    this._root.on('dirty', () => {
+    this._root.on("dirty", () => {
       this._painter.markDirty();
     });
   }
@@ -55,9 +68,14 @@ export default class Renderer {
   /**
    * Initialize Renderer instance
    */
-  static init(dom: HTMLElement | string, renderMode: RenderMode = 'canvas', theme: Theme = 'light', locale: Locale = 'en'): Renderer {
+  static init(
+    dom: HTMLElement | string,
+    renderMode: RenderMode = "canvas",
+    theme: Theme = "light",
+    locale: Locale = "en",
+  ): Renderer {
     let element: HTMLElement;
-    if (typeof dom === 'string') {
+    if (typeof dom === "string") {
       const found = document.querySelector(dom) as HTMLElement;
       if (!found) {
         throw new Error(`Element not found: ${dom}`);
@@ -90,7 +108,7 @@ export default class Renderer {
 
     // Create new painter
     this._renderMode = renderMode;
-    if (renderMode === 'svg') {
+    if (renderMode === "svg") {
       this._painter = new SVGPainter(this._dom, this._storage);
     } else {
       this._painter = new CanvasPainter(this._dom, this._storage);
@@ -176,7 +194,7 @@ export default class Renderer {
    * Set background color
    */
   setBackgroundColor(color: string): this {
-    if (this._renderMode === 'canvas') {
+    if (this._renderMode === "canvas") {
       const canvas = this._painter.getCanvas?.();
       if (canvas) {
         canvas.style.backgroundColor = color;
@@ -321,7 +339,7 @@ export default class Renderer {
   private _applyTheme(): void {
     const themeConfig = ThemeManager.getTheme(this._theme);
 
-    if (this._renderMode === 'canvas') {
+    if (this._renderMode === "canvas") {
       const canvas = this._painter.getCanvas?.();
       if (canvas) {
         canvas.style.backgroundColor = themeConfig.backgroundColor;

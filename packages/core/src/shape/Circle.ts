@@ -2,8 +2,8 @@
  * Circle - Circle shape element
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect } from "../types";
 
 export interface CircleShape {
   cx: number;
@@ -14,7 +14,11 @@ export interface CircleShape {
 export default class Circle extends ChartElement {
   shape: CircleShape;
 
-  constructor(opts: ElementOption & { shape: CircleShape } = { shape: { cx: 0, cy: 0, r: 0 } }) {
+  constructor(
+    opts: ElementOption & { shape: CircleShape } = {
+      shape: { cx: 0, cy: 0, r: 0 },
+    },
+  ) {
     super(opts);
     this.shape = opts.shape || { cx: 0, cy: 0, r: 0 };
   }
@@ -63,4 +67,3 @@ export default class Circle extends ChartElement {
     ctx.restore();
   }
 }
-

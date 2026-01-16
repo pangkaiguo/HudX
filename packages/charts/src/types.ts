@@ -2,10 +2,10 @@
  * Chart type definitions
  */
 
-import type { DecalObject } from 'HudX/core';
+import type { DecalObject } from "HudX/core";
 export type { DecalObject };
 
-// Re-export Scale from coordinate to avoid duplication if it was there, 
+// Re-export Scale from coordinate to avoid duplication if it was there,
 // but wait, coordinate imports types. Circular?
 // Let's remove Scale from here if it causes conflict, or keep it and fix index.ts.
 // The error was "Module './types' has already exported a member named 'Scale'".
@@ -77,10 +77,10 @@ export interface TooltipOption {
   /** Show tooltip */
   show?: boolean;
   /** Trigger type */
-  trigger?: 'item' | 'axis' | 'none';
+  trigger?: "item" | "axis" | "none";
   /** Axis pointer configuration */
   axisPointer?: {
-    type?: 'line' | 'shadow' | 'none';
+    type?: "line" | "shadow" | "none";
     lineStyle?: LineStyleOption;
     shadowStyle?: ItemStyleOption;
   };
@@ -107,13 +107,22 @@ export interface TooltipOption {
   /** Transition duration */
   transitionDuration?: number;
   /** Position configuration */
-  position?: string | number[] | ((point: number[], params: any, dom: HTMLElement, rect: any, size: any) => number[]);
+  position?:
+    | string
+    | number[]
+    | ((
+        point: number[],
+        params: any,
+        dom: HTMLElement,
+        rect: any,
+        size: any,
+      ) => number[]);
   /** Show content */
   showContent?: boolean;
   /** Always show content */
   alwaysShowContent?: boolean;
   /** Trigger on */
-  triggerOn?: 'mousemove' | 'click' | 'mousemove|click' | 'none';
+  triggerOn?: "mousemove" | "click" | "mousemove|click" | "none";
   /** Show delay */
   showDelay?: number;
   /** Hide delay */
@@ -121,11 +130,11 @@ export interface TooltipOption {
   /** Enterable */
   enterable?: boolean;
   /** Render mode */
-  renderMode?: 'html' | 'richText';
+  renderMode?: "html" | "richText";
   /** Order */
-  order?: 'seriesAsc' | 'seriesDesc' | 'valueAsc' | 'valueDesc';
+  order?: "seriesAsc" | "seriesDesc" | "valueAsc" | "valueDesc";
   /** Layout mode */
-  layout?: 'horizontal' | 'vertical' | 'rich';
+  layout?: "horizontal" | "vertical" | "rich";
   /** Custom CSS styles for generated HTML elements */
   htmlStyles?: {
     /** Style for the container of a single item row */
@@ -150,12 +159,12 @@ export interface TooltipOption {
 
 export interface TextStyle {
   color?: string;
-  fontStyle?: 'normal' | 'italic' | 'oblique';
-  fontWeight?: 'normal' | 'bold' | 'bolder' | 'lighter' | number;
+  fontStyle?: "normal" | "italic" | "oblique";
+  fontWeight?: "normal" | "bold" | "bolder" | "lighter" | number;
   fontFamily?: string;
   fontSize?: number;
-  align?: 'left' | 'center' | 'right';
-  verticalAlign?: 'top' | 'middle' | 'bottom';
+  align?: "left" | "center" | "right";
+  verticalAlign?: "top" | "middle" | "bottom";
   lineHeight?: number;
   width?: number;
   height?: number;
@@ -165,7 +174,7 @@ export interface TextStyle {
   textShadowBlur?: number;
   textShadowOffsetX?: number;
   textShadowOffsetY?: number;
-  overflow?: 'truncate' | 'break' | 'breakAll';
+  overflow?: "truncate" | "break" | "breakAll";
   ellipsis?: string;
   backgroundColor?: string;
   borderColor?: string;
@@ -192,9 +201,9 @@ export interface LegendOption {
   width?: string | number;
   height?: string | number;
   /** Layout orientation */
-  orient?: 'horizontal' | 'vertical';
+  orient?: "horizontal" | "vertical";
   /** Render mode */
-  renderMode?: 'canvas' | 'html';
+  renderMode?: "canvas" | "html";
   /** Custom formatter */
   formatter?: string | ((name: string, item: any) => string | string[]);
   /** Table header for html mode */
@@ -202,13 +211,13 @@ export interface LegendOption {
   /** Item max width */
   itemMaxWidth?: number;
   /** Text alignment */
-  align?: 'left' | 'center' | 'right';
+  align?: "left" | "center" | "right";
   padding?: number | number[];
   itemGap?: number;
   itemWidth?: number;
   itemHeight?: number;
   symbolKeepAspect?: boolean;
-  selectedMode?: boolean | 'single' | 'multiple';
+  selectedMode?: boolean | "single" | "multiple";
   inactiveColor?: string;
   selected?: { [name: string]: boolean };
   textStyle?: TextStyle;
@@ -225,7 +234,7 @@ export interface LegendOption {
   scrollDataIndex?: number;
   pageButtonItemGap?: number;
   pageButtonGap?: number;
-  pageButtonPosition?: 'start' | 'end';
+  pageButtonPosition?: "start" | "end";
   pageFormatter?: string | Function;
   pageIcons?: {
     horizontal?: string[];
@@ -269,18 +278,18 @@ export interface GridOption {
 
 export interface AxisOption {
   /** Axis type */
-  type?: 'value' | 'category' | 'time' | 'log';
+  type?: "value" | "category" | "time" | "log";
   /** Axis data (for category axis) */
   data?: any[];
   /** Whether to show axis */
   show?: boolean;
   gridIndex?: number;
   /** Axis position */
-  position?: 'top' | 'bottom' | 'left' | 'right';
+  position?: "top" | "bottom" | "left" | "right";
   offset?: number;
   /** Axis name */
   name?: string;
-  nameLocation?: 'start' | 'middle' | 'center' | 'end';
+  nameLocation?: "start" | "middle" | "center" | "end";
   nameTextStyle?: TextStyle;
   nameGap?: number;
   nameRotate?: number;
@@ -301,9 +310,9 @@ export interface AxisOption {
   /** Split area configuration */
   splitArea?: SplitAreaOption;
   /** Min value */
-  min?: number | 'dataMin' | ((value: { min: number, max: number }) => number);
+  min?: number | "dataMin" | ((value: { min: number; max: number }) => number);
   /** Max value */
-  max?: number | 'dataMax' | ((value: { min: number, max: number }) => number);
+  max?: number | "dataMax" | ((value: { min: number; max: number }) => number);
   scale?: boolean;
   splitNumber?: number;
   minInterval?: number;
@@ -345,9 +354,9 @@ export interface AxisLabelOption {
   fontSize?: number;
   rotate?: number;
   width?: number;
-  overflow?: 'break' | 'breakAll' | 'truncate' | 'none';
+  overflow?: "break" | "breakAll" | "truncate" | "none";
   lineHeight?: number;
-  interval?: number | 'auto' | ((index: number, value: string) => boolean);
+  interval?: number | "auto" | ((index: number, value: string) => boolean);
   formatter?: string | ((value: any, index: number) => string);
   [key: string]: any;
 }
@@ -365,7 +374,7 @@ export interface SplitLineOption {
 export interface LineStyleOption {
   color?: string;
   width?: number;
-  type?: 'solid' | 'dashed' | 'dotted';
+  type?: "solid" | "dashed" | "dotted";
   opacity?: number;
   [key: string]: any;
 }
@@ -392,21 +401,33 @@ export interface SeriesOption {
 
   // Line specific
   smooth?: boolean | number;
-  symbol?: string | 'none' | 'circle' | 'rect' | 'roundRect' | 'triangle' | 'diamond' | 'pin' | 'arrow';
-  symbolSize?: number | number[] | ((value: any, params: any) => number | number[]);
+  symbol?:
+    | string
+    | "none"
+    | "circle"
+    | "rect"
+    | "roundRect"
+    | "triangle"
+    | "diamond"
+    | "pin"
+    | "arrow";
+  symbolSize?:
+    | number
+    | number[]
+    | ((value: any, params: any) => number | number[]);
   symbolRotate?: number;
   symbolKeepAspect?: boolean;
   symbolOffset?: [string | number, string | number];
   showSymbol?: boolean;
   connectNulls?: boolean;
-  step?: boolean | 'start' | 'middle' | 'end';
+  step?: boolean | "start" | "middle" | "end";
   lineStyle?: LineStyleOption;
   areaStyle?: AreaStyleOption;
 
   // Pie specific
   radius?: number | string | (number | string)[];
   center?: (number | string)[];
-  roseType?: boolean | 'radius' | 'area';
+  roseType?: boolean | "radius" | "area";
   avoidLabelOverlap?: boolean;
   stillShowZeroSum?: boolean;
   startAngle?: number;
@@ -426,7 +447,7 @@ export interface SeriesOption {
 
 export interface AreaStyleOption {
   color?: string | any; // Gradient support
-  origin?: 'auto' | 'start' | 'end';
+  origin?: "auto" | "start" | "end";
   shadowBlur?: number;
   shadowColor?: string;
   shadowOffsetX?: number;
@@ -448,7 +469,7 @@ export interface ItemStyleOption {
   color?: string;
   borderColor?: string;
   borderWidth?: number;
-  borderType?: 'solid' | 'dashed' | 'dotted';
+  borderType?: "solid" | "dashed" | "dotted";
   opacity?: number;
   borderRadius?: number | number[];
   [key: string]: any;
@@ -457,7 +478,22 @@ export interface ItemStyleOption {
 export interface LabelOption {
   show?: boolean;
   showOnHover?: boolean;
-  position?: 'top' | 'left' | 'right' | 'bottom' | 'inside' | 'insideLeft' | 'insideRight' | 'insideTop' | 'insideBottom' | 'insideTopLeft' | 'insideBottomLeft' | 'insideTopRight' | 'insideBottomRight' | 'outside' | 'center';
+  position?:
+    | "top"
+    | "left"
+    | "right"
+    | "bottom"
+    | "inside"
+    | "insideLeft"
+    | "insideRight"
+    | "insideTop"
+    | "insideBottom"
+    | "insideTopLeft"
+    | "insideBottomLeft"
+    | "insideTopRight"
+    | "insideBottomRight"
+    | "outside"
+    | "center";
   color?: string;
   fontSize?: number;
   formatter?: string | ((params: any) => string);
@@ -469,18 +505,21 @@ export interface EmphasisOption {
   label?: LabelOption;
   scale?: boolean;
   scaleSize?: number;
-  focus?: 'none' | 'self' | 'series';
-  blurScope?: 'coordinateSystem' | 'series' | 'global';
+  focus?: "none" | "self" | "series";
+  blurScope?: "coordinateSystem" | "series" | "global";
   [key: string]: any;
 }
 
-export type ChartData = number | number[] | {
-  name?: string;
-  value: any;
-  itemStyle?: ItemStyleOption;
-  label?: LabelOption;
-  [key: string]: any;
-};
+export type ChartData =
+  | number
+  | number[]
+  | {
+      name?: string;
+      value: any;
+      itemStyle?: ItemStyleOption;
+      label?: LabelOption;
+      [key: string]: any;
+    };
 
 export interface ChartEvent {
   type: string;

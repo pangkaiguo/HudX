@@ -1,6 +1,22 @@
 export interface Example {
   id: string;
-  category: 'line' | 'bar' | 'pie' | 'scatter' | 'map' | 'candlestick' | 'radar' | 'boxplot' | 'heatmap' | 'graph' | 'tree' | 'treemap' | 'sunburst' | 'parallel' | 'other' | 'axis';
+  category:
+    | "line"
+    | "bar"
+    | "pie"
+    | "scatter"
+    | "map"
+    | "candlestick"
+    | "radar"
+    | "boxplot"
+    | "heatmap"
+    | "graph"
+    | "tree"
+    | "treemap"
+    | "sunburst"
+    | "parallel"
+    | "other"
+    | "axis";
   title: string;
   subtitle: string;
   code: string;
@@ -9,10 +25,10 @@ export interface Example {
 export const examples: Example[] = [
   // --- Line Charts ---
   {
-    id: 'basic-line',
-    category: 'line',
-    title: 'Basic Line Chart',
-    subtitle: 'Basic Line Chart',
+    id: "basic-line",
+    category: "line",
+    title: "Basic Line Chart",
+    subtitle: "Basic Line Chart",
     code: `option = {
   title: {
     text: 'Basic Line Chart',
@@ -34,13 +50,13 @@ export const examples: Example[] = [
       type: 'line'
     }
   ]
-};`
+};`,
   },
   {
-    id: 'smooth-line',
-    category: 'line',
-    title: 'Smoothed Line Chart',
-    subtitle: 'Smoothed Line Chart',
+    id: "smooth-line",
+    category: "line",
+    title: "Smoothed Line Chart",
+    subtitle: "Smoothed Line Chart",
     code: `option = {
   title: {
     text: 'Smoothed Line Chart',
@@ -63,13 +79,13 @@ export const examples: Example[] = [
       smooth: true
     }
   ]
-};`
+};`,
   },
   {
-    id: 'area-line',
-    category: 'line',
-    title: 'Basic Area Chart',
-    subtitle: 'Basic Area Chart',
+    id: "area-line",
+    category: "line",
+    title: "Basic Area Chart",
+    subtitle: "Basic Area Chart",
     code: `option = {
   title: {
     text: 'Basic Area Chart',
@@ -93,13 +109,13 @@ export const examples: Example[] = [
       areaStyle: {}
     }
   ]
-};`
+};`,
   },
   {
-    id: 'stack-line',
-    category: 'line',
-    title: 'Stacked Line Chart',
-    subtitle: 'Stacked Line Chart',
+    id: "stack-line",
+    category: "line",
+    title: "Stacked Line Chart",
+    subtitle: "Stacked Line Chart",
     code: `option = {
   title: {
     text: 'Stacked Line Chart'
@@ -156,15 +172,15 @@ export const examples: Example[] = [
       data: [820, 932, 901, 934, 1290, 1330, 1320]
     }
   ]
-};`
+};`,
   },
 
   // --- Bar Charts ---
   {
-    id: 'basic-bar',
-    category: 'bar',
-    title: 'Basic Bar Chart',
-    subtitle: 'Basic Bar Chart',
+    id: "basic-bar",
+    category: "bar",
+    title: "Basic Bar Chart",
+    subtitle: "Basic Bar Chart",
     code: `option = {
   title: {
     text: 'Basic Bar Chart',
@@ -190,13 +206,13 @@ export const examples: Example[] = [
       }
     }
   ]
-};`
+};`,
   },
   {
-    id: 'advanced-bar',
-    category: 'bar',
-    title: 'Advanced Bar Chart',
-    subtitle: 'Advanced Bar Chart',
+    id: "advanced-bar",
+    category: "bar",
+    title: "Advanced Bar Chart",
+    subtitle: "Advanced Bar Chart",
     code: `option = {
   title: {
     text: 'Advanced Bar Chart',
@@ -254,13 +270,13 @@ export const examples: Example[] = [
   animation: true,
   animationDuration: 600,
   animationEasing: 'cubicOut'
-};`
+};`,
   },
   {
-    id: 'bar-3d',
-    category: 'bar',
-    title: '3D Bar Chart',
-    subtitle: '3D Bar Chart',
+    id: "bar-3d",
+    category: "bar",
+    title: "3D Bar Chart",
+    subtitle: "3D Bar Chart",
     code: `option = {
   title: {
     text: '3D Bar Chart',
@@ -309,13 +325,13 @@ export const examples: Example[] = [
     }
   ],
   animation: true
-};`
+};`,
   },
   {
-    id: 'stack-bar-3d',
-    category: 'bar',
-    title: 'Stacked 3D Bar Chart',
-    subtitle: 'Stacked 3D Bar Chart',
+    id: "stack-bar-3d",
+    category: "bar",
+    title: "Stacked 3D Bar Chart",
+    subtitle: "Stacked 3D Bar Chart",
     code: `option = {
   title: {
     text: 'Stacked 3D Bar Chart',
@@ -370,13 +386,13 @@ export const examples: Example[] = [
     }
   ],
   animation: true
-};`
+};`,
   },
   {
-    id: 'stack-bar',
-    category: 'bar',
-    title: 'Stack Bar Chart',
-    subtitle: 'Stack Bar Chart',
+    id: "stack-bar",
+    category: "bar",
+    title: "Stack Bar Chart",
+    subtitle: "Stack Bar Chart",
     code: `option = {
   title: {
     text: 'Stack Bar Chart',
@@ -457,13 +473,13 @@ export const examples: Example[] = [
       }
     }
   ]
-};`
+};`,
   },
   {
-    id: 'stack-horizontal-bar',
-    category: 'bar',
-    title: 'Stacked Horizontal Bar Chart',
-    subtitle: 'Stacked Horizontal Bar Chart',
+    id: "stack-horizontal-bar",
+    category: "bar",
+    title: "Stacked Horizontal Bar Chart",
+    subtitle: "Stacked Horizontal Bar Chart",
     code: `option = {
   title: {
     text: 'Stacked Horizontal Bar',
@@ -539,15 +555,15 @@ export const examples: Example[] = [
     }
   ],
   animation: true
-};`
+};`,
   },
 
   // --- Pie Charts ---
   {
-    id: 'basic-pie',
-    category: 'pie',
-    title: 'Basic Pie Chart',
-    subtitle: 'Basic Pie Chart',
+    id: "basic-pie",
+    category: "pie",
+    title: "Basic Pie Chart",
+    subtitle: "Basic Pie Chart",
     code: `option = {
   title: {
     text: 'Referer of a Website',
@@ -582,13 +598,13 @@ export const examples: Example[] = [
       }
     }
   ]
-};`
+};`,
   },
   {
-    id: 'doughnut',
-    category: 'pie',
-    title: 'Doughnut Chart',
-    subtitle: 'Doughnut Chart',
+    id: "doughnut",
+    category: "pie",
+    title: "Doughnut Chart",
+    subtitle: "Doughnut Chart",
     code: `option = {
   title: {
     text: 'Doughnut Chart',
@@ -668,13 +684,13 @@ export const examples: Example[] = [
     }
   ],
   animation: true
-};`
+};`,
   },
   {
-    id: 'half-doughnut',
-    category: 'pie',
-    title: 'Half Doughnut Chart',
-    subtitle: 'Half Doughnut Chart',
+    id: "half-doughnut",
+    category: "pie",
+    title: "Half Doughnut Chart",
+    subtitle: "Half Doughnut Chart",
     code: `option = {
   title: {
     text: 'Half Doughnut Chart',
@@ -729,13 +745,13 @@ export const examples: Example[] = [
     }
   ],
   animation: true
-};`
+};`,
   },
   {
-    id: 'rich-text-pie',
-    category: 'pie',
-    title: 'Rich Text Pie Chart',
-    subtitle: 'Rich Text Pie Chart',
+    id: "rich-text-pie",
+    category: "pie",
+    title: "Rich Text Pie Chart",
+    subtitle: "Rich Text Pie Chart",
     code: `option = {
   title: {
     text: 'Rich Text Pie',
@@ -813,15 +829,15 @@ export const examples: Example[] = [
     }
   ],
   animation: true
-};`
+};`,
   },
 
   // --- Scatter Charts ---
   {
-    id: 'scatter-chart',
-    category: 'scatter',
-    title: 'Scatter Chart',
-    subtitle: 'Scatter Chart',
+    id: "scatter-chart",
+    category: "scatter",
+    title: "Scatter Chart",
+    subtitle: "Scatter Chart",
     code: `option = {
   title: {
     text: 'Scatter Chart',
@@ -890,15 +906,15 @@ export const examples: Example[] = [
     }
   ],
   animation: true
-};`
+};`,
   },
 
   // --- Axis ---
   {
-    id: 'axis-label',
-    category: 'axis',
-    title: 'Axis Label Configuration',
-    subtitle: 'Axis Label Configuration',
+    id: "axis-label",
+    category: "axis",
+    title: "Axis Label Configuration",
+    subtitle: "Axis Label Configuration",
     code: `option = {
   title: {
     text: 'X Axis Label Configuration',
@@ -941,15 +957,15 @@ export const examples: Example[] = [
       itemStyle: { color: '#5470c6' }
     }
   ]
-};`
+};`,
   },
 
   // --- Bundle ---
   {
-    id: 'bundle-test',
-    category: 'other',
-    title: 'Unified Bundle Example',
-    subtitle: 'Unified Bundle Example',
+    id: "bundle-test",
+    category: "other",
+    title: "Unified Bundle Example",
+    subtitle: "Unified Bundle Example",
     code: `option = {
   title: {
     text: 'Unified Bundle Example',
@@ -980,6 +996,6 @@ export const examples: Example[] = [
   tooltip: {
     show: true
   }
-};`
-  }
+};`,
+  },
 ];

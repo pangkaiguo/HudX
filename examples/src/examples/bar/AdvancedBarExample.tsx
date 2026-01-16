@@ -1,122 +1,121 @@
-import React, { useState, useRef } from 'react';
-import { HChart } from 'HudX/charts';
-import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager, Theme } from 'HudX/core';
-import type { RenderMode } from 'HudX/core';
+import React, { useState, useRef } from "react";
+import { HChart } from "HudX/charts";
+import type { ChartOption, HChartRef } from "HudX/charts";
+import { ThemeManager, Theme } from "HudX/core";
+import type { RenderMode } from "HudX/core";
 
-export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const AdvancedBarExample = ({ theme = "light" }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [barGap, setBarGap] = useState<number | string>(30); // Use number for percent, or could be string for px
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
   const [splitNumber, setSplitNumber] = useState(5);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
-    title: {
-      text: 'Advanced Bar Chart with Animation',
-      subtext: 'Feature Demonstration',
-      left: 'center',
-      top: 20
-    },
     tooltip: {
       show: true,
-      trigger: 'axis' // Ideally we want axis trigger, but item is supported for now
+      trigger: "axis", // Ideally we want axis trigger, but item is supported for now
     },
     aria: {
       enabled: true,
       decal: {
         show: isDecal,
         decals: [
-          { symbol: 'rect', symbolSize: 0.3, color: themeObj.decalColor },
-          { symbol: 'circle', symbolSize: 0.3, color: themeObj.decalColor },
-          { symbol: 'triangle', symbolSize: 0.3, color: themeObj.decalColor },
-          { symbol: 'diagonal', color: themeObj.decalColor },
-          { symbol: 'diagonal-reverse', color: themeObj.decalColor }
-        ]
-      }
+          { symbol: "rect", symbolSize: 0.3, color: themeObj.decalColor },
+          { symbol: "circle", symbolSize: 0.3, color: themeObj.decalColor },
+          { symbol: "triangle", symbolSize: 0.3, color: themeObj.decalColor },
+          { symbol: "diagonal", color: themeObj.decalColor },
+          { symbol: "diagonal-reverse", color: themeObj.decalColor },
+        ],
+      },
     },
     legend: {
       show: true,
-      orient: 'vertical',
-      left: 'right',
+      orient: "vertical",
+      left: "right",
       top: 20,
-      icon: 'rect',
-      selectedMode: 'single'
+      icon: "rect",
+      selectedMode: "single",
     },
     grid: {
       left: 70,
       right: 40,
       top: gridTop,
-      bottom: 60
+      bottom: 60,
     },
     xAxis: {
-      type: 'category',
-      data: ['Q1', 'Q2', 'Q3', 'Q4'],
+      type: "category",
+      data: ["Q1", "Q2", "Q3", "Q4"],
       show: true,
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: '#eee',
-          type: 'dashed'
-        }
-      }
+          color: "#eee",
+          type: "dashed",
+        },
+      },
     },
     yAxis: {
-      type: 'value',
+      type: "value",
       show: true,
       splitNumber: splitNumber,
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: '#eee'
-        }
-      }
+          color: "#eee",
+        },
+      },
     },
     series: [
       {
-        name: 'Product A',
-        type: 'bar',
+        name: "Product A",
+        type: "bar",
         data: [320, 332, 301, 334],
         itemStyle: { color: themeObj.seriesColors?.[0], borderWidth: 0 },
-        barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
+        barGap: typeof barGap === "number" ? `${barGap}%` : barGap,
       },
       {
-        name: 'Product B',
-        type: 'bar',
+        name: "Product B",
+        type: "bar",
         data: [220, 182, 191, 234],
         itemStyle: { color: themeObj.seriesColors?.[1], borderWidth: 0 },
-        barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
+        barGap: typeof barGap === "number" ? `${barGap}%` : barGap,
       },
       {
-        name: 'Product C',
-        type: 'bar',
+        name: "Product C",
+        type: "bar",
         data: [150, 232, 201, 154],
         itemStyle: { color: themeObj.seriesColors?.[2], borderWidth: 0 },
-        barGap: typeof barGap === 'number' ? `${barGap}%` : barGap
-      }
+        barGap: typeof barGap === "number" ? `${barGap}%` : barGap,
+      },
     ],
     animation: true,
     animationDuration: 600,
-    animationEasing: 'cubicOut'
+    animationEasing: "cubicOut",
   };
 
   const handleUpdateSeries = () => {
     const chartInstance = chartRef.current?.getChartInstance();
     if (chartInstance) {
       // Simulate new data for all 3 series
-      const newDataA = Array.from({ length: 4 }, () => Math.floor(Math.random() * 400) + 100);
-      const newDataB = Array.from({ length: 4 }, () => Math.floor(Math.random() * 400) + 100);
-      const newDataC = Array.from({ length: 4 }, () => Math.floor(Math.random() * 400) + 100);
+      const newDataA = Array.from(
+        { length: 4 },
+        () => Math.floor(Math.random() * 400) + 100,
+      );
+      const newDataB = Array.from(
+        { length: 4 },
+        () => Math.floor(Math.random() * 400) + 100,
+      );
+      const newDataC = Array.from(
+        { length: 4 },
+        () => Math.floor(Math.random() * 400) + 100,
+      );
 
       chartInstance.setOption({
-        series: [
-          { data: newDataA },
-          { data: newDataB },
-          { data: newDataC }
-        ]
+        series: [{ data: newDataA }, { data: newDataB }, { data: newDataC }],
       });
     }
   };
@@ -124,23 +123,42 @@ export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Advanced Bar Chart</h2>
-      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Features: Staggered bar animations, Interactive legend, Hover tooltips with values
+      <p style={{ marginBottom: 20, color: "#666", fontSize: 14 }}>
+        Features: Staggered bar animations, Interactive legend, Hover tooltips
+        with values
       </p>
-      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div
+        style={{
+          marginBottom: 20,
+          display: "flex",
+          gap: 20,
+          alignItems: "center",
+        }}
+      >
+        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
-            style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+            style={{
+              padding: "4px 8px",
+              borderRadius: 4,
+              border: "1px solid #ddd",
+            }}
           >
             <option value="canvas">Canvas</option>
             <option value="svg">SVG</option>
           </select>
         </label>
 
-        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <label
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
           <input
             type="checkbox"
             checked={isDecal}
@@ -149,15 +167,17 @@ export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
           Decal Patterns
         </label>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Bar Gap: {typeof barGap === 'number' ? `${barGap}%` : barGap}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span>
+            Bar Gap: {typeof barGap === "number" ? `${barGap}%` : barGap}
+          </span>
           <select
-            value={typeof barGap === 'number' ? 'percent' : 'pixel'}
+            value={typeof barGap === "number" ? "percent" : "pixel"}
             onChange={(e) => {
-              if (e.target.value === 'percent') {
+              if (e.target.value === "percent") {
                 setBarGap(30); // Reset to default percent
               } else {
-                setBarGap('10'); // Default pixel
+                setBarGap("10"); // Default pixel
               }
             }}
             style={{ marginRight: 8 }}
@@ -166,7 +186,7 @@ export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             <option value="pixel">Pixel</option>
           </select>
 
-          {typeof barGap === 'number' ? (
+          {typeof barGap === "number" ? (
             <input
               type="range"
               min="0"
@@ -184,7 +204,14 @@ export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             />
           )}
         </div>
-        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <label
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
           <input
             type="checkbox"
             checked={showGrid}
@@ -194,7 +221,7 @@ export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         </label>
         {showGrid && (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span>Grid Top: {gridTop}</span>
               <input
                 type="range"
@@ -205,7 +232,7 @@ export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 style={{ width: 100 }}
               />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span>Y Split: {splitNumber}</span>
               <input
                 type="range"
@@ -225,25 +252,29 @@ export const AdvancedBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         option={option}
         theme={theme}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
+        style={{
+          border: "1px solid #e0e0e0",
+          borderRadius: 8,
+          height: "600px",
+        }}
       />
-      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
+      <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
         <button
           onClick={handleUpdateSeries}
           style={{
-            padding: '8px 16px',
-            backgroundColor: '#5470c6',
-            color: 'white',
-            border: 'none',
+            padding: "8px 16px",
+            backgroundColor: "#5470c6",
+            color: "white",
+            border: "none",
             borderRadius: 4,
-            cursor: 'pointer',
-            fontSize: 14
+            cursor: "pointer",
+            fontSize: 14,
           }}
         >
           Update Data (via getChartInstance)
         </button>
       </div>
-    </div >
+    </div>
   );
 };
 

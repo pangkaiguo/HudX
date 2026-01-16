@@ -2,12 +2,12 @@
  * SVGPainter - SVG rendering implementation
  */
 
-import Storage from '../Storage';
-import ChartElement from '../ChartElement';
-import Text from '../shape/Text';
-import Group from '../Group';
-import IPainter from './IPainter';
-import type { DataURLOpts } from '../types';
+import Storage from "../Storage";
+import ChartElement from "../ChartElement";
+import Text from "../shape/Text";
+import Group from "../Group";
+import IPainter from "./IPainter";
+import type { DataURLOpts } from "../types";
 
 export default class SVGPainter implements IPainter {
   private _dom: HTMLElement;
@@ -26,16 +26,19 @@ export default class SVGPainter implements IPainter {
     this._storage = storage;
 
     // Create SVG element
-    this._svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    this._svg.style.width = '100%';
-    this._svg.style.height = '100%';
+    this._svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    this._svg.style.width = "100%";
+    this._svg.style.height = "100%";
 
     // Create defs for gradients, patterns, etc.
-    this._defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    this._defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
     this._svg.appendChild(this._defs);
 
     // Create root group
-    this._rootGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    this._rootGroup = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g",
+    );
     this._svg.appendChild(this._rootGroup);
 
     this._dom.appendChild(this._svg);
@@ -50,9 +53,9 @@ export default class SVGPainter implements IPainter {
     this._width = width ?? this._dom.clientWidth;
     this._height = height ?? this._dom.clientHeight;
 
-    this._svg.setAttribute('width', String(this._width));
-    this._svg.setAttribute('height', String(this._height));
-    this._svg.setAttribute('viewBox', `0 0 ${this._width} ${this._height}`);
+    this._svg.setAttribute("width", String(this._width));
+    this._svg.setAttribute("height", String(this._height));
+    this._svg.setAttribute("viewBox", `0 0 ${this._width} ${this._height}`);
 
     this.markDirty();
   }
@@ -127,7 +130,7 @@ export default class SVGPainter implements IPainter {
           }
           element.clearDirty();
         } catch (error) {
-          console.error('Error rendering element:', error, element);
+          console.error("Error rendering element:", error, element);
         }
       }
     }
@@ -140,7 +143,7 @@ export default class SVGPainter implements IPainter {
    */
   private _renderElement(element: ChartElement): SVGElement | null {
     // Create group for element
-    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
     // Apply transform
     const transform = element.transform;
@@ -152,17 +155,21 @@ export default class SVGPainter implements IPainter {
       }
 
       if (transform.scaleX !== undefined || transform.scaleY !== undefined) {
-        transforms.push(`scale(${transform.scaleX ?? 1}, ${transform.scaleY ?? 1})`);
+        transforms.push(
+          `scale(${transform.scaleX ?? 1}, ${transform.scaleY ?? 1})`,
+        );
       }
 
       if (transform.rotation) {
         const originX = transform.originX ?? 0;
         const originY = transform.originY ?? 0;
-        transforms.push(`rotate(${(transform.rotation * 180) / Math.PI} ${originX} ${originY})`);
+        transforms.push(
+          `rotate(${(transform.rotation * 180) / Math.PI} ${originX} ${originY})`,
+        );
       }
 
       if (transforms.length > 0) {
-        group.setAttribute('transform', transforms.join(' '));
+        group.setAttribute("transform", transforms.join(" "));
       }
     }
 
@@ -170,32 +177,32 @@ export default class SVGPainter implements IPainter {
     const style = element.style;
     if (style) {
       if (style.fill) {
-        if (typeof style.fill === 'string') {
-          group.setAttribute('fill', style.fill);
+        if (typeof style.fill === "string") {
+          group.setAttribute("fill", style.fill);
         } else if ((style.fill as any)._canvas) {
           const patternId = this._createSVGPattern(style.fill as any);
-          group.setAttribute('fill', `url(#${patternId})`);
+          group.setAttribute("fill", `url(#${patternId})`);
         } else {
-          group.setAttribute('fill', 'none');
+          group.setAttribute("fill", "none");
         }
       } else {
-        group.setAttribute('fill', 'none');
+        group.setAttribute("fill", "none");
       }
 
-      if (style.stroke && typeof style.stroke === 'string') {
-        group.setAttribute('stroke', style.stroke);
+      if (style.stroke && typeof style.stroke === "string") {
+        group.setAttribute("stroke", style.stroke);
       }
 
       if (style.lineWidth !== undefined) {
-        group.setAttribute('stroke-width', String(style.lineWidth));
+        group.setAttribute("stroke-width", String(style.lineWidth));
       }
 
       if (style.opacity !== undefined) {
-        group.setAttribute('opacity', String(style.opacity));
+        group.setAttribute("opacity", String(style.opacity));
       }
 
       if (style.lineDash) {
-        group.setAttribute('stroke-dasharray', style.lineDash.join(' '));
+        group.setAttribute("stroke-dasharray", style.lineDash.join(" "));
       }
     }
 
@@ -232,7 +239,7 @@ export default class SVGPainter implements IPainter {
    * Get data URL
    */
   getDataURL(opts: DataURLOpts = {}): string {
-    const type = opts.type || 'png';
+    const type = opts.type || "png";
     const pixelRatio = opts.pixelRatio || window.devicePixelRatio || 1;
     const backgroundColor = opts.backgroundColor;
 
@@ -243,22 +250,24 @@ export default class SVGPainter implements IPainter {
     // Add background color if needed
     if (backgroundColor) {
       const style = `style="background-color: ${backgroundColor}"`;
-      svgString = svgString.replace('<svg', `<svg ${style}`);
+      svgString = svgString.replace("<svg", `<svg ${style}`);
     }
 
-    if (type === 'svg') {
-      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    if (type === "svg") {
+      const blob = new Blob([svgString], {
+        type: "image/svg+xml;charset=utf-8",
+      });
       return URL.createObjectURL(blob);
     }
 
     // Convert to image
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = this._width * pixelRatio;
     canvas.height = this._height * pixelRatio;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
     if (!ctx) {
-      return '';
+      return "";
     }
 
     if (backgroundColor) {
@@ -267,17 +276,19 @@ export default class SVGPainter implements IPainter {
     }
 
     const img = new Image();
-    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const svgBlob = new Blob([svgString], {
+      type: "image/svg+xml;charset=utf-8",
+    });
     const url = URL.createObjectURL(svgBlob);
 
-    // TODO 
+    // TODO
     console.info(img, url);
 
     // Note: This is asynchronous in nature but we need synchronous return.
     // In a real implementation we might want to return a Promise or handle this differently.
     // For now, we'll return a placeholder or handle it if the image loads immediately (which it won't).
     // A better approach for SVG to PNG conversion usually involves async operations.
-    // Given the constraints, we might want to just return the SVG string for now or 
+    // Given the constraints, we might want to just return the SVG string for now or
     // reconsider the interface if async is needed.
 
     // However, since the interface expects a string, let's return the SVG data URL if type is not supported properly synchronously
@@ -286,11 +297,14 @@ export default class SVGPainter implements IPainter {
     // Actually, let's return a data URL of the SVG itself if we can't do canvas conversion synchronously.
     // But wait, the user might expect a PNG data URL.
 
-    // Let's implement a basic synchronous SVG data URL return for now as a fallback or 
+    // Let's implement a basic synchronous SVG data URL return for now as a fallback or
     // acknowledge that SVG->PNG is typically async.
 
     // For the purpose of this exercise, let's return the SVG data URL.
-    return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+    return (
+      "data:image/svg+xml;base64," +
+      btoa(unescape(encodeURIComponent(svgString)))
+    );
   }
 
   /**
@@ -298,9 +312,12 @@ export default class SVGPainter implements IPainter {
    */
   private _createShapeElement(element: ChartElement): SVGElement | null {
     const shape = element.shape;
-    if (!shape || typeof shape !== 'object') {
+    if (!shape || typeof shape !== "object") {
       if (element instanceof Group) {
-        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        const group = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "g",
+        );
         return group;
       }
       return null;
@@ -308,60 +325,117 @@ export default class SVGPainter implements IPainter {
 
     const shapeObj = shape as Record<string, unknown>;
 
-    if ('cx' in shapeObj && 'cy' in shapeObj && 'r' in shapeObj && !('startAngle' in shapeObj)) {
-      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circle.setAttribute('cx', String(shapeObj.cx));
-      circle.setAttribute('cy', String(shapeObj.cy));
-      circle.setAttribute('r', String(shapeObj.r));
+    if (
+      "cx" in shapeObj &&
+      "cy" in shapeObj &&
+      "r" in shapeObj &&
+      !("startAngle" in shapeObj)
+    ) {
+      const circle = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "circle",
+      );
+      circle.setAttribute("cx", String(shapeObj.cx));
+      circle.setAttribute("cy", String(shapeObj.cy));
+      circle.setAttribute("r", String(shapeObj.r));
       return circle;
-    } else if ('cx' in shapeObj && 'cy' in shapeObj && 'r' in shapeObj && 'startAngle' in shapeObj && 'endAngle' in shapeObj) {
-      if ('r0' in shapeObj) {
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    } else if (
+      "cx" in shapeObj &&
+      "cy" in shapeObj &&
+      "r" in shapeObj &&
+      "startAngle" in shapeObj &&
+      "endAngle" in shapeObj
+    ) {
+      if ("r0" in shapeObj) {
+        const path = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path",
+        );
         const d = this._createSectorPath(shapeObj);
-        path.setAttribute('d', d);
+        path.setAttribute("d", d);
         return path;
       } else {
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const path = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path",
+        );
         const d = this._createArcPath(shapeObj);
-        path.setAttribute('d', d);
+        path.setAttribute("d", d);
         return path;
       }
-    } else if ('x' in shapeObj && 'y' in shapeObj && 'width' in shapeObj && 'height' in shapeObj && !('text' in shapeObj)) {
-      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      rect.setAttribute('x', String(shapeObj.x));
-      rect.setAttribute('y', String(shapeObj.y));
-      rect.setAttribute('width', String(shapeObj.width));
-      rect.setAttribute('height', String(shapeObj.height));
+    } else if (
+      "x" in shapeObj &&
+      "y" in shapeObj &&
+      "width" in shapeObj &&
+      "height" in shapeObj &&
+      !("text" in shapeObj)
+    ) {
+      const rect = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect",
+      );
+      rect.setAttribute("x", String(shapeObj.x));
+      rect.setAttribute("y", String(shapeObj.y));
+      rect.setAttribute("width", String(shapeObj.width));
+      rect.setAttribute("height", String(shapeObj.height));
       if (shapeObj.r) {
-        rect.setAttribute('rx', String(shapeObj.r));
-        rect.setAttribute('ry', String(shapeObj.r));
+        rect.setAttribute("rx", String(shapeObj.r));
+        rect.setAttribute("ry", String(shapeObj.r));
       }
       return rect;
-    } else if ('x1' in shapeObj && 'y1' in shapeObj && 'x2' in shapeObj && 'y2' in shapeObj && !('cpx1' in shapeObj)) {
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', String(shapeObj.x1));
-      line.setAttribute('y1', String(shapeObj.y1));
-      line.setAttribute('x2', String(shapeObj.x2));
-      line.setAttribute('y2', String(shapeObj.y2));
+    } else if (
+      "x1" in shapeObj &&
+      "y1" in shapeObj &&
+      "x2" in shapeObj &&
+      "y2" in shapeObj &&
+      !("cpx1" in shapeObj)
+    ) {
+      const line = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line",
+      );
+      line.setAttribute("x1", String(shapeObj.x1));
+      line.setAttribute("y1", String(shapeObj.y1));
+      line.setAttribute("x2", String(shapeObj.x2));
+      line.setAttribute("y2", String(shapeObj.y2));
       return line;
-    } else if ('points' in shapeObj && Array.isArray(shapeObj.points)) {
+    } else if ("points" in shapeObj && Array.isArray(shapeObj.points)) {
       let points: string;
       if (Array.isArray(shapeObj.points[0])) {
-        points = (shapeObj.points as number[][]).map(p => `${p[0]},${p[1]}`).join(' ');
+        points = (shapeObj.points as number[][])
+          .map((p) => `${p[0]},${p[1]}`)
+          .join(" ");
       } else {
-        points = (shapeObj.points as Array<{ x: number; y: number }>).map((p) => `${p.x},${p.y}`).join(' ');
+        points = (shapeObj.points as Array<{ x: number; y: number }>)
+          .map((p) => `${p.x},${p.y}`)
+          .join(" ");
       }
-      const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-      poly.setAttribute('points', points);
+      const poly = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "polyline",
+      );
+      poly.setAttribute("points", points);
       return poly;
-    } else if ('d' in shapeObj) {
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', String(shapeObj.d));
+    } else if ("d" in shapeObj) {
+      const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
+      path.setAttribute("d", String(shapeObj.d));
       return path;
-    } else if ('x1' in shapeObj && 'y1' in shapeObj && 'x2' in shapeObj && 'y2' in shapeObj && 'cpx1' in shapeObj) {
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    } else if (
+      "x1" in shapeObj &&
+      "y1" in shapeObj &&
+      "x2" in shapeObj &&
+      "y2" in shapeObj &&
+      "cpx1" in shapeObj
+    ) {
+      const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
       const d = this._createBezierPath(shapeObj);
-      path.setAttribute('d', d);
+      path.setAttribute("d", d);
       return path;
     } else if (element instanceof Text) {
       // Use bounding rect logic for consistent alignment (especially for rich text)
@@ -369,30 +443,33 @@ export default class SVGPainter implements IPainter {
       const lines = element.getTextLines();
       const style = element.style;
 
-      const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
       // 1. Draw background for the whole text block
       if (style.backgroundColor || (style.borderColor && style.borderWidth)) {
-        const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        bgRect.setAttribute('x', String(rect.x));
-        bgRect.setAttribute('y', String(rect.y));
-        bgRect.setAttribute('width', String(rect.width));
-        bgRect.setAttribute('height', String(rect.height));
+        const bgRect = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "rect",
+        );
+        bgRect.setAttribute("x", String(rect.x));
+        bgRect.setAttribute("y", String(rect.y));
+        bgRect.setAttribute("width", String(rect.width));
+        bgRect.setAttribute("height", String(rect.height));
 
         if (style.backgroundColor) {
-          bgRect.setAttribute('fill', style.backgroundColor);
+          bgRect.setAttribute("fill", style.backgroundColor);
         } else {
-          bgRect.setAttribute('fill', 'none');
+          bgRect.setAttribute("fill", "none");
         }
 
         if (style.borderColor && style.borderWidth) {
-          bgRect.setAttribute('stroke', style.borderColor);
-          bgRect.setAttribute('stroke-width', String(style.borderWidth));
+          bgRect.setAttribute("stroke", style.borderColor);
+          bgRect.setAttribute("stroke-width", String(style.borderWidth));
         }
 
         if (style.borderRadius) {
-          bgRect.setAttribute('rx', String(style.borderRadius));
-          bgRect.setAttribute('ry', String(style.borderRadius));
+          bgRect.setAttribute("rx", String(style.borderRadius));
+          bgRect.setAttribute("ry", String(style.borderRadius));
         }
         group.appendChild(bgRect);
       }
@@ -401,19 +478,19 @@ export default class SVGPainter implements IPainter {
       const startX = rect.x + element.getPaddingLeft(style.padding);
       const startY = rect.y + element.getPaddingTop(style.padding);
       const totalWidth = element.getTotalWidth();
-      const textAlign = style.textAlign || 'left';
+      const textAlign = style.textAlign || "left";
 
       let currentY = startY;
 
       if (lines) {
-        lines.forEach(line => {
+        lines.forEach((line) => {
           const { fragments, width, height } = line;
 
           let lineStartX = startX;
-          if (textAlign === 'center') {
+          if (textAlign === "center") {
             lineStartX += (totalWidth - width) / 2;
-          } else if (textAlign === 'right') {
-            lineStartX += (totalWidth - width);
+          } else if (textAlign === "right") {
+            lineStartX += totalWidth - width;
           }
 
           let currentX = lineStartX;
@@ -425,53 +502,67 @@ export default class SVGPainter implements IPainter {
             const fragHeight = frag.height;
 
             // Fragment background/border
-            if (fStyle.backgroundColor || (fStyle.borderColor && fStyle.borderWidth)) {
-              const fragRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            if (
+              fStyle.backgroundColor ||
+              (fStyle.borderColor && fStyle.borderWidth)
+            ) {
+              const fragRect = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "rect",
+              );
               // Center vertically
               const fy = centerY - fragHeight / 2;
-              fragRect.setAttribute('x', String(currentX));
-              fragRect.setAttribute('y', String(fy));
-              fragRect.setAttribute('width', String(fragWidth));
-              fragRect.setAttribute('height', String(fragHeight));
+              fragRect.setAttribute("x", String(currentX));
+              fragRect.setAttribute("y", String(fy));
+              fragRect.setAttribute("width", String(fragWidth));
+              fragRect.setAttribute("height", String(fragHeight));
 
               if (fStyle.backgroundColor) {
-                fragRect.setAttribute('fill', fStyle.backgroundColor);
+                fragRect.setAttribute("fill", fStyle.backgroundColor);
               } else {
-                fragRect.setAttribute('fill', 'none');
+                fragRect.setAttribute("fill", "none");
               }
 
               if (fStyle.borderColor && fStyle.borderWidth) {
-                fragRect.setAttribute('stroke', fStyle.borderColor);
-                fragRect.setAttribute('stroke-width', String(fStyle.borderWidth));
+                fragRect.setAttribute("stroke", fStyle.borderColor);
+                fragRect.setAttribute(
+                  "stroke-width",
+                  String(fStyle.borderWidth),
+                );
               }
 
               if (fStyle.borderRadius) {
-                fragRect.setAttribute('rx', String(fStyle.borderRadius));
-                fragRect.setAttribute('ry', String(fStyle.borderRadius));
+                fragRect.setAttribute("rx", String(fStyle.borderRadius));
+                fragRect.setAttribute("ry", String(fStyle.borderRadius));
               }
               group.appendChild(fragRect);
             }
 
             // Text Content
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            const text = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "text",
+            );
             const contentX = currentX + element.getPaddingLeft(fStyle.padding);
 
-            text.setAttribute('x', String(contentX));
-            text.setAttribute('y', String(centerY));
-            text.setAttribute('dominant-baseline', 'middle');
-            text.setAttribute('text-anchor', 'start');
+            text.setAttribute("x", String(contentX));
+            text.setAttribute("y", String(centerY));
+            text.setAttribute("dominant-baseline", "middle");
+            text.setAttribute("text-anchor", "start");
             text.textContent = frag.text;
 
             // Apply fragment styles
             const fontSize = fStyle.fontSize || style.fontSize || 12;
-            const fontFamily = fStyle.fontFamily || style.fontFamily || 'sans-serif';
-            const fontWeight = fStyle.fontWeight || style.fontWeight || 'normal';
-            const color = fStyle.color || style.fill || '#000';
+            const fontFamily =
+              fStyle.fontFamily || style.fontFamily || "sans-serif";
+            const fontWeight =
+              fStyle.fontWeight || style.fontWeight || "normal";
+            const color = fStyle.color || style.fill || "#000";
 
-            text.setAttribute('font-size', String(fontSize));
-            text.setAttribute('font-family', fontFamily);
-            text.setAttribute('font-weight', String(fontWeight));
-            text.setAttribute('fill', color);
+            text.setAttribute("font-size", String(fontSize));
+            text.setAttribute("font-family", fontFamily);
+            text.setAttribute("font-weight", String(fontWeight));
+            text.setAttribute("fill", color);
 
             group.appendChild(text);
 
@@ -483,42 +574,60 @@ export default class SVGPainter implements IPainter {
       }
 
       return group;
-    } else if ('x' in shapeObj && 'y' in shapeObj && 'text' in shapeObj) {
-      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('x', String(shapeObj.x));
-      text.setAttribute('y', String(shapeObj.y));
+    } else if ("x" in shapeObj && "y" in shapeObj && "text" in shapeObj) {
+      const text = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "text",
+      );
+      text.setAttribute("x", String(shapeObj.x));
+      text.setAttribute("y", String(shapeObj.y));
       text.textContent = String(shapeObj.text);
 
       const style = element.style;
       if (style) {
         if (style.fontSize) {
-          text.setAttribute('font-size', String(style.fontSize));
+          text.setAttribute("font-size", String(style.fontSize));
         }
         if (style.fontFamily) {
-          text.setAttribute('font-family', style.fontFamily);
+          text.setAttribute("font-family", style.fontFamily);
         }
         if (style.textAlign) {
-          text.setAttribute('text-anchor', style.textAlign === 'center' ? 'middle' : (style.textAlign as string));
+          text.setAttribute(
+            "text-anchor",
+            style.textAlign === "center"
+              ? "middle"
+              : (style.textAlign as string),
+          );
         }
       }
       return text;
-    } else if ('image' in shapeObj && shapeObj.image) {
+    } else if ("image" in shapeObj && shapeObj.image) {
       const img = shapeObj.image as unknown;
       // Strict check to ensure it's a valid image source
-      if (!(img instanceof HTMLImageElement || img instanceof HTMLCanvasElement || img instanceof HTMLVideoElement || (typeof ImageBitmap !== 'undefined' && img instanceof ImageBitmap))) {
+      if (
+        !(
+          img instanceof HTMLImageElement ||
+          img instanceof HTMLCanvasElement ||
+          img instanceof HTMLVideoElement ||
+          (typeof ImageBitmap !== "undefined" && img instanceof ImageBitmap)
+        )
+      ) {
         return null;
       }
 
-      const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      image.setAttribute('x', String(shapeObj.x));
-      image.setAttribute('y', String(shapeObj.y));
-      image.setAttribute('width', String(shapeObj.width));
-      image.setAttribute('height', String(shapeObj.height));
+      const image = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "image",
+      );
+      image.setAttribute("x", String(shapeObj.x));
+      image.setAttribute("y", String(shapeObj.y));
+      image.setAttribute("width", String(shapeObj.width));
+      image.setAttribute("height", String(shapeObj.height));
 
       if (img instanceof HTMLImageElement) {
-        image.setAttribute('href', (img as HTMLImageElement).src);
+        image.setAttribute("href", (img as HTMLImageElement).src);
       } else if (img instanceof HTMLCanvasElement) {
-        image.setAttribute('href', (img as HTMLCanvasElement).toDataURL());
+        image.setAttribute("href", (img as HTMLCanvasElement).toDataURL());
       }
       return image;
     }
@@ -590,7 +699,7 @@ export default class SVGPainter implements IPainter {
     const cpx1 = shape.cpx1;
     const cpy1 = shape.cpy1;
 
-    if ('cpx2' in shape && shape.cpx2 !== undefined) {
+    if ("cpx2" in shape && shape.cpx2 !== undefined) {
       const cpx2 = shape.cpx2;
       const cpy2 = shape.cpy2;
       return `M ${x1} ${y1} C ${cpx1} ${cpy1}, ${cpx2} ${cpy2}, ${x2} ${y2}`;
@@ -602,27 +711,41 @@ export default class SVGPainter implements IPainter {
   /**
    * Create SVG pattern from canvas
    */
-  private _createSVGPattern(patternObj: CanvasPattern & { _canvas: HTMLCanvasElement; _rotation?: number }): string {
+  private _createSVGPattern(
+    patternObj: CanvasPattern & {
+      _canvas: HTMLCanvasElement;
+      _rotation?: number;
+    },
+  ): string {
     const canvas = patternObj._canvas;
     const rotation = patternObj._rotation || 0;
 
     const id = `pattern_${Math.random().toString(36).substr(2, 9)}`;
-    const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
-    pattern.setAttribute('id', id);
-    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-    pattern.setAttribute('width', String(canvas.width));
-    pattern.setAttribute('height', String(canvas.height));
+    const pattern = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "pattern",
+    );
+    pattern.setAttribute("id", id);
+    pattern.setAttribute("patternUnits", "userSpaceOnUse");
+    pattern.setAttribute("width", String(canvas.width));
+    pattern.setAttribute("height", String(canvas.height));
 
     if (rotation) {
-      pattern.setAttribute('patternTransform', `rotate(${rotation * 180 / Math.PI})`);
+      pattern.setAttribute(
+        "patternTransform",
+        `rotate(${(rotation * 180) / Math.PI})`,
+      );
     }
 
-    const image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-    image.setAttribute('href', canvas.toDataURL());
-    image.setAttribute('x', '0');
-    image.setAttribute('y', '0');
-    image.setAttribute('width', String(canvas.width));
-    image.setAttribute('height', String(canvas.height));
+    const image = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "image",
+    );
+    image.setAttribute("href", canvas.toDataURL());
+    image.setAttribute("x", "0");
+    image.setAttribute("y", "0");
+    image.setAttribute("width", String(canvas.width));
+    image.setAttribute("height", String(canvas.height));
 
     pattern.appendChild(image);
     this._defs.appendChild(pattern);
@@ -661,7 +784,7 @@ export default class SVGPainter implements IPainter {
       resizeObserver.observe(this._dom);
     } else {
       // Fallback for browsers without ResizeObserver
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         this._resize();
       });
     }

@@ -40,13 +40,13 @@ Renderer 是主渲染引擎，负责协调各个模块：
 
 ```typescript
 class Renderer {
-  private _storage: Storage;    // 元素存储
-  private _painter: IPainter;   // 绘制器（Canvas 或 SVG）
-  private _handler: Handler;    // 事件处理器
-  private _root: Group;         // 根组
+  private _storage: Storage; // 元素存储
+  private _painter: IPainter; // 绘制器（Canvas 或 SVG）
+  private _handler: Handler; // 事件处理器
+  private _root: Group; // 根组
   private _renderMode: RenderMode; // 渲染模式
-  private _theme: Theme;         // 主题
-  private _locale: Locale;      // 语言
+  private _theme: Theme; // 主题
+  private _locale: Locale; // 语言
 }
 ```
 
@@ -63,12 +63,12 @@ class Renderer {
 
 ```typescript
 class Element extends Eventful {
-  id: string;                    // 唯一标识
-  zlevel: number;                // 层级
-  z: number;                      // 同层级内的顺序
-  style: Style;                  // 样式
-  shape: Record<string, any>;    // 形状属性
-  transform: Transform;          // 变换
+  id: string; // 唯一标识
+  zlevel: number; // 层级
+  z: number; // 同层级内的顺序
+  style: Style; // 样式
+  shape: Record<string, any>; // 形状属性
+  transform: Transform; // 变换
 }
 ```
 
@@ -85,7 +85,7 @@ Storage 管理所有图形元素：
 
 ```typescript
 class Storage {
-  private _roots: Group[];              // 根组列表
+  private _roots: Group[]; // 根组列表
   private _elements: Map<string, Element>; // 元素映射
 }
 ```
@@ -167,7 +167,7 @@ class Group extends Element {
 
 ```typescript
 class ShapeElement extends Element {
-  shape: ShapeType;  // 形状属性
+  shape: ShapeType; // 形状属性
 
   getBoundingRect(): BoundingRect {
     // 计算边界矩形
@@ -196,7 +196,7 @@ class Circle extends Element {
       x: this.shape.cx - this.shape.r,
       y: this.shape.cy - this.shape.r,
       width: this.shape.r * 2,
-      height: this.shape.r * 2
+      height: this.shape.r * 2,
     };
   }
 
@@ -296,23 +296,23 @@ class LineChart extends Chart {
     const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
     // 3. 转换数据点
-    const points = data.map(item => ({
+    const points = data.map((item) => ({
       x: xScale(item.name),
-      y: yScale(item.value)
+      y: yScale(item.value),
     }));
 
     // 4. 创建折线
     const polyline = new Polyline({
       shape: { points },
-      style: { stroke: color, lineWidth: 2 }
+      style: { stroke: color, lineWidth: 2 },
     });
     this._root.add(polyline);
 
     // 5. 创建数据点
-    points.forEach(point => {
+    points.forEach((point) => {
       const circle = new Circle({
         shape: { cx: point.x, cy: point.y, r: 4 },
-        style: { fill: color }
+        style: { fill: color },
       });
       this._root.add(circle);
     });
@@ -348,16 +348,16 @@ class Animation {
 
 ```typescript
 // 线性
-linear: (t) => t
+linear: (t) => t;
 
 // 二次缓动
-quadraticOut: (t) => t * (2 - t)
+quadraticOut: (t) => t * (2 - t);
 
 // 三次缓动
 cubicOut: (t) => {
   t -= 1;
   return t * t * t + 1;
-}
+};
 ```
 
 ## 性能优化
@@ -372,7 +372,7 @@ class Element {
 
   markRedraw() {
     this._dirty = true;
-    this.trigger('dirty');
+    this.trigger("dirty");
   }
 
   clearDirty() {
@@ -445,7 +445,7 @@ const HChart: React.FC<HChartProps> = ({ option, ... }) => {
   useEffect(() => {
     // 创建图表实例
     chartRef.current = new ChartClass(containerRef.current, option);
-    
+
     return () => {
       chartRef.current?.dispose();
     };
@@ -494,10 +494,10 @@ interface EventData {
   type: string;
   target?: Element;
   topTarget?: Element;
-  rX: number;       // 画布坐标 X
-  rY: number;       // 画布坐标 Y
-  offsetX: number;  // 相对坐标 X
-  offsetY: number;  // 相对坐标 Y
+  rX: number; // 画布坐标 X
+  rY: number; // 画布坐标 Y
+  offsetX: number; // 相对坐标 X
+  offsetY: number; // 相对坐标 Y
 }
 ```
 

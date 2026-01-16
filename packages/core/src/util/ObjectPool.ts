@@ -12,7 +12,7 @@ export default class ObjectPool<T> {
   constructor(
     createFn: () => T,
     resetFn?: (obj: T) => void,
-    maxSize: number = 100
+    maxSize: number = 100,
   ) {
     this._createFn = createFn;
     this._resetFn = resetFn;
@@ -56,4 +56,3 @@ export default class ObjectPool<T> {
     return this._pool.length;
   }
 }
-

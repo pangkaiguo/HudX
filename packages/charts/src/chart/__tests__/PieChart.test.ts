@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
-import PieChart from '../PieChart';
-import type { ChartOption } from '../../types';
+import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
+import PieChart from "../PieChart";
+import type { ChartOption } from "../../types";
 
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),
@@ -25,67 +25,93 @@ const mockContext = {
   strokeRect: vi.fn(),
   clearRect: vi.fn(),
   setTransform: vi.fn(),
-  font: '',
+  font: "",
 } as unknown as CanvasRenderingContext2D;
 
 beforeAll(() => {
-  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+  Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
     value: () => mockContext,
-    writable: true
+    writable: true,
   });
 
   // Mock Path2D for happy-dom environment
-  vi.stubGlobal('Path2D', class Path2D {
-    constructor(d?: string | Path2D) { }
-    addPath(path: Path2D, transform?: DOMMatrix2DInit) { }
-    closePath() { }
-    moveTo(x: number, y: number) { }
-    lineTo(x: number, y: number) { }
-    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number) { }
-    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) { }
-    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, counterclockwise?: boolean) { }
-    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) { }
-    ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, counterclockwise?: boolean) { }
-    rect(x: number, y: number, w: number, h: number) { }
-  });
+  vi.stubGlobal(
+    "Path2D",
+    class Path2D {
+      constructor(d?: string | Path2D) {}
+      addPath(path: Path2D, transform?: DOMMatrix2DInit) {}
+      closePath() {}
+      moveTo(x: number, y: number) {}
+      lineTo(x: number, y: number) {}
+      bezierCurveTo(
+        cp1x: number,
+        cp1y: number,
+        cp2x: number,
+        cp2y: number,
+        x: number,
+        y: number,
+      ) {}
+      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) {}
+      arc(
+        x: number,
+        y: number,
+        radius: number,
+        startAngle: number,
+        endAngle: number,
+        counterclockwise?: boolean,
+      ) {}
+      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {}
+      ellipse(
+        x: number,
+        y: number,
+        radiusX: number,
+        radiusY: number,
+        rotation: number,
+        startAngle: number,
+        endAngle: number,
+        counterclockwise?: boolean,
+      ) {}
+      rect(x: number, y: number, w: number, h: number) {}
+    },
+  );
 });
 
 if (!window.requestAnimationFrame) {
-  vi.stubGlobal('requestAnimationFrame', (cb: any) => setTimeout(cb, 16));
+  vi.stubGlobal("requestAnimationFrame", (cb: any) => setTimeout(cb, 16));
 }
 if (!window.cancelAnimationFrame) {
-  vi.stubGlobal('cancelAnimationFrame', (id: any) => clearTimeout(id));
+  vi.stubGlobal("cancelAnimationFrame", (id: any) => clearTimeout(id));
 }
-vi.stubGlobal('devicePixelRatio', 1);
+vi.stubGlobal("devicePixelRatio", 1);
 
-describe('PieChart', () => {
+describe("PieChart", () => {
   let container: HTMLElement;
 
   beforeEach(() => {
-    container = document.createElement('div');
-    Object.defineProperty(container, 'clientWidth', { value: 800 });
-    Object.defineProperty(container, 'clientHeight', { value: 600 });
+    container = document.createElement("div");
+    Object.defineProperty(container, "clientWidth", { value: 800 });
+    Object.defineProperty(container, "clientHeight", { value: 600 });
   });
 
-  it('should initialize correctly', () => {
+  it("should initialize correctly", () => {
     const chart = new PieChart(container);
     expect(chart).toBeDefined();
   });
 
-  it('should support roseType', () => {
+  it("should support roseType", () => {
     const chart = new PieChart(container);
     const option: ChartOption = {
       animation: false, // Disable animation to get final values immediately
       series: [
         {
-          type: 'pie',
-          roseType: 'radius',
+          type: "pie",
+          roseType: "radius",
           data: [
-            { name: 'A', value: 10 },
-            { name: 'B', value: 20 }
-          ]
-        }
-      ]
+            { name: "A", value: 10 },
+            { name: "B", value: 20 },
+          ],
+        },
+      ],
     };
     chart.setOption(option);
 
@@ -101,35 +127,39 @@ describe('PieChart', () => {
     expect(Math.abs(angle1 - Math.PI)).toBeLessThan(0.001);
   });
 
-  it('should sync polyline opacity with label opacity when focus is self', () => {
+  it("should sync polyline opacity with label opacity when focus is self", () => {
     vi.useFakeTimers();
     const chart = new PieChart(container);
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' }
-        ],
-        emphasis: {
-          focus: 'self'
+      series: [
+        {
+          type: "pie",
+          data: [
+            { value: 1048, name: "Search Engine" },
+            { value: 735, name: "Direct" },
+            { value: 580, name: "Email" },
+          ],
+          emphasis: {
+            focus: "self",
+          },
+          label: {
+            show: true,
+            position: "outside",
+          },
+          labelLine: {
+            show: true,
+          },
         },
-        label: {
-          show: true,
-          position: 'outside'
-        },
-        labelLine: {
-          show: true
-        }
-      }]
+      ],
     });
 
     const sectors = Array.from((chart as any)._activeSectors.values());
     expect(sectors.length).toBe(3);
 
-    const searchEngineSector = sectors.find((s: any) => s.name === 'Search Engine') as any;
-    const directSector = sectors.find((s: any) => s.name === 'Direct') as any;
+    const searchEngineSector = sectors.find(
+      (s: any) => s.name === "Search Engine",
+    ) as any;
+    const directSector = sectors.find((s: any) => s.name === "Direct") as any;
 
     expect(searchEngineSector).toBeDefined();
     expect(directSector).toBeDefined();
@@ -137,7 +167,7 @@ describe('PieChart', () => {
     expect(directSector.__labelLine).toBeDefined();
 
     // Trigger hover on 'Search Engine'
-    (chart as any)._onLegendHover('Search Engine', true);
+    (chart as any)._onLegendHover("Search Engine", true);
 
     // Fast forward animation
     vi.advanceTimersByTime(250);
@@ -150,7 +180,7 @@ describe('PieChart', () => {
     expect(directSector.__labelLine.style.opacity).toBeCloseTo(0.2);
 
     // Mouse out
-    (chart as any)._onLegendHover('Search Engine', false);
+    (chart as any)._onLegendHover("Search Engine", false);
     vi.advanceTimersByTime(350); // Increased from 250 to 350 to match new 300ms animation duration
 
     // Check restoration
@@ -161,38 +191,40 @@ describe('PieChart', () => {
     vi.useRealTimers();
   });
 
-  it('should highlight sector when hovering outside label', () => {
+  it("should highlight sector when hovering outside label", () => {
     vi.useFakeTimers();
     const chart = new PieChart(container);
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [
-          { value: 1048, name: 'A' },
-          { value: 735, name: 'B' }
-        ],
-        emphasis: {
-          focus: 'self',
-          itemStyle: {
-            shadowBlur: 10
-          }
+      series: [
+        {
+          type: "pie",
+          data: [
+            { value: 1048, name: "A" },
+            { value: 735, name: "B" },
+          ],
+          emphasis: {
+            focus: "self",
+            itemStyle: {
+              shadowBlur: 10,
+            },
+          },
+          label: {
+            show: true,
+            position: "outside",
+          },
         },
-        label: {
-          show: true,
-          position: 'outside'
-        }
-      }]
+      ],
     });
 
     const sectors = Array.from((chart as any)._activeSectors.values());
-    const sectorA = sectors.find((s: any) => s.name === 'A') as any;
-    const sectorB = sectors.find((s: any) => s.name === 'B') as any;
+    const sectorA = sectors.find((s: any) => s.name === "A") as any;
+    const sectorB = sectors.find((s: any) => s.name === "B") as any;
     const labelA = sectorA.__label;
 
     expect(labelA).toBeDefined();
 
     // Trigger mouseover on label A
-    labelA.trigger('mouseover');
+    labelA.trigger("mouseover");
 
     vi.advanceTimersByTime(250);
 
@@ -202,7 +234,7 @@ describe('PieChart', () => {
     expect(sectorB.style.opacity).toBe(0.2);
 
     // Trigger mouseout on label A
-    labelA.trigger('mouseout');
+    labelA.trigger("mouseout");
     vi.advanceTimersByTime(300); // 50ms delay + 200ms animation + buffer
 
     // Verify restoration
@@ -212,24 +244,24 @@ describe('PieChart', () => {
     vi.useRealTimers();
   });
 
-  it('should show label on hover when label.show is false but emphasis.label.show is true', () => {
+  it("should show label on hover when label.show is false but emphasis.label.show is true", () => {
     vi.useFakeTimers();
     const chart = new PieChart(container);
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [
-          { value: 1048, name: 'Search Engine' }
-        ],
-        label: {
-          show: false
-        },
-        emphasis: {
+      series: [
+        {
+          type: "pie",
+          data: [{ value: 1048, name: "Search Engine" }],
           label: {
-            show: true
-          }
-        }
-      }]
+            show: false,
+          },
+          emphasis: {
+            label: {
+              show: true,
+            },
+          },
+        },
+      ],
     });
 
     const sectors = Array.from((chart as any)._activeSectors.values());
@@ -243,7 +275,7 @@ describe('PieChart', () => {
     expect(label.style.opacity).toBe(0);
 
     // Hover
-    (chart as any)._onLegendHover('Search Engine', true);
+    (chart as any)._onLegendHover("Search Engine", true);
     vi.advanceTimersByTime(350); // Increased for smoother animation
 
     // Should be visible
@@ -251,7 +283,7 @@ describe('PieChart', () => {
     expect(label.style.opacity).toBe(1);
 
     // Mouse out
-    (chart as any)._onLegendHover('Search Engine', false);
+    (chart as any)._onLegendHover("Search Engine", false);
     vi.advanceTimersByTime(350); // Increased for restoration animation
 
     // Should be invisible again
@@ -261,25 +293,25 @@ describe('PieChart', () => {
     vi.useRealTimers();
   });
 
-  it('should support showOnHover configuration', () => {
+  it("should support showOnHover configuration", () => {
     vi.useFakeTimers();
     const chart = new PieChart(container);
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [
-          { value: 1048, name: 'Search Engine' }
-        ],
-        label: {
-          show: true,
-          showOnHover: true // New config
-        },
-        emphasis: {
+      series: [
+        {
+          type: "pie",
+          data: [{ value: 1048, name: "Search Engine" }],
           label: {
-            show: true
-          }
-        }
-      }]
+            show: true,
+            showOnHover: true, // New config
+          },
+          emphasis: {
+            label: {
+              show: true,
+            },
+          },
+        },
+      ],
     });
 
     const sectors = Array.from((chart as any)._activeSectors.values());
@@ -292,7 +324,7 @@ describe('PieChart', () => {
     expect(label.style.opacity).toBe(0);
 
     // Hover
-    (chart as any)._onLegendHover('Search Engine', true);
+    (chart as any)._onLegendHover("Search Engine", true);
     vi.advanceTimersByTime(350);
 
     // Should be visible
@@ -306,7 +338,7 @@ describe('PieChart', () => {
     expect(labelLine.style.opacity).toBe(1);
 
     // Mouse out
-    (chart as any)._onLegendHover('Search Engine', false);
+    (chart as any)._onLegendHover("Search Engine", false);
     vi.advanceTimersByTime(350);
 
     // Should be invisible again (restored to initial state)
@@ -320,26 +352,28 @@ describe('PieChart', () => {
     vi.useRealTimers();
   });
 
-  it('should handle legend hover interactions correctly with showOnHover', () => {
+  it("should handle legend hover interactions correctly with showOnHover", () => {
     vi.useFakeTimers();
     const chart = new PieChart(container);
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [
-          { value: 100, name: 'A' },
-          { value: 200, name: 'B' }
-        ],
-        label: {
-          show: true,
-          showOnHover: true
-        }
-      }]
+      series: [
+        {
+          type: "pie",
+          data: [
+            { value: 100, name: "A" },
+            { value: 200, name: "B" },
+          ],
+          label: {
+            show: true,
+            showOnHover: true,
+          },
+        },
+      ],
     });
 
     const sectors = Array.from((chart as any)._activeSectors.values());
-    const sectorA = sectors.find((s: any) => s.name === 'A') as any;
-    const sectorB = sectors.find((s: any) => s.name === 'B') as any;
+    const sectorA = sectors.find((s: any) => s.name === "A") as any;
+    const sectorB = sectors.find((s: any) => s.name === "B") as any;
 
     const labelA = sectorA.__label;
     const labelB = sectorB.__label;
@@ -351,7 +385,7 @@ describe('PieChart', () => {
     expect(labelB.style.opacity).toBe(0);
 
     // 1. Hover Legend A
-    (chart as any)._onLegendHover('A', true);
+    (chart as any)._onLegendHover("A", true);
     vi.advanceTimersByTime(350);
 
     // A should show, B remains hidden
@@ -363,10 +397,10 @@ describe('PieChart', () => {
     // 2. Switch directly to Legend B (Mouse out A, Mouse over B effectively)
     // In real interaction: MouseOut A -> MouseOver B
     // Case: MouseOut A starts restore (delay 50ms)
-    (chart as any)._onLegendHover('A', false);
+    (chart as any)._onLegendHover("A", false);
 
     // Immediate MouseOver B (before A's restore timeout fires)
-    (chart as any)._onLegendHover('B', true);
+    (chart as any)._onLegendHover("B", true);
 
     // We expect A's restore timeout to be cancelled or overridden,
     // and A should fade out while B fades in.
@@ -390,20 +424,22 @@ describe('PieChart', () => {
     vi.useRealTimers();
   });
 
-  it('should transition from pie to rose chart correctly', () => {
+  it("should transition from pie to rose chart correctly", () => {
     const chart = new PieChart(container);
 
     // 1. Basic Pie
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [
-          { value: 100, name: 'A' },
-          { value: 50, name: 'B' }
-        ],
-        radius: 100,
-        roseType: false
-      }]
+      series: [
+        {
+          type: "pie",
+          data: [
+            { value: 100, name: "A" },
+            { value: 50, name: "B" },
+          ],
+          radius: 100,
+          roseType: false,
+        },
+      ],
     });
 
     let sectors = Array.from((chart as any)._activeSectors.values()) as any[];
@@ -413,15 +449,17 @@ describe('PieChart', () => {
 
     // 2. Switch to Rose
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [
-          { value: 100, name: 'A' },
-          { value: 50, name: 'B' }
-        ],
-        radius: [20, 100],
-        roseType: 'radius'
-      }]
+      series: [
+        {
+          type: "pie",
+          data: [
+            { value: 100, name: "A" },
+            { value: 50, name: "B" },
+          ],
+          radius: [20, 100],
+          roseType: "radius",
+        },
+      ],
     });
 
     sectors = Array.from((chart as any)._activeSectors.values()) as any[];
@@ -441,36 +479,40 @@ describe('PieChart', () => {
     // Let's force animation off for this test to check geometry calculation
     chart.setOption({
       animation: false,
-      series: [{
-        type: 'pie',
-        data: [
-          { value: 100, name: 'A' },
-          { value: 50, name: 'B' }
-        ],
-        radius: [20, 100],
-        roseType: 'radius'
-      }]
+      series: [
+        {
+          type: "pie",
+          data: [
+            { value: 100, name: "A" },
+            { value: 50, name: "B" },
+          ],
+          radius: [20, 100],
+          roseType: "radius",
+        },
+      ],
     });
 
     sectors = Array.from((chart as any)._activeSectors.values()) as any[];
-    const sectorA = sectors.find((s: any) => s.name === 'A');
-    const sectorB = sectors.find((s: any) => s.name === 'B');
+    const sectorA = sectors.find((s: any) => s.name === "A");
+    const sectorB = sectors.find((s: any) => s.name === "B");
 
     expect(sectorA.shape.r).toBe(100);
     expect(sectorB.shape.r).toBe(60);
     expect(sectorA.shape.r).not.toBe(sectorB.shape.r);
   });
 
-  it('should force entry animation (ignore old sectors) when switching to roseType', () => {
+  it("should force entry animation (ignore old sectors) when switching to roseType", () => {
     const chart = new PieChart(container);
 
     // 1. Initial Pie
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [{ value: 100, name: 'A' }],
-        roseType: false
-      }]
+      series: [
+        {
+          type: "pie",
+          data: [{ value: 100, name: "A" }],
+          roseType: false,
+        },
+      ],
     });
 
     let sectors = Array.from((chart as any)._activeSectors.values()) as any[];
@@ -478,15 +520,17 @@ describe('PieChart', () => {
     const oldSector = sectors[0];
 
     // Spy on _createSectorsAndPrepareLabels to check if oldSectors passed is empty
-    const spy = vi.spyOn(chart as any, '_createSectorsAndPrepareLabels');
+    const spy = vi.spyOn(chart as any, "_createSectorsAndPrepareLabels");
 
     // 2. Switch to Rose
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [{ value: 100, name: 'A' }],
-        roseType: 'radius'
-      }]
+      series: [
+        {
+          type: "pie",
+          data: [{ value: 100, name: "A" }],
+          roseType: "radius",
+        },
+      ],
     });
 
     // Verify spy was called
@@ -501,38 +545,40 @@ describe('PieChart', () => {
 
     // 3. Update Data (stay in Rose)
     chart.setOption({
-      series: [{
-        type: 'pie',
-        data: [{ value: 200, name: 'A' }],
-        roseType: 'radius'
-      }]
+      series: [
+        {
+          type: "pie",
+          data: [{ value: 200, name: "A" }],
+          roseType: "radius",
+        },
+      ],
     });
 
     const secondCallArgs = spy.mock.lastCall?.[0] as any;
     // Should NOT be empty (should transition)
     expect(secondCallArgs.oldSectors.size).toBeGreaterThan(0);
-    expect(secondCallArgs.oldSectors.has('A')).toBe(true);
+    expect(secondCallArgs.oldSectors.has("A")).toBe(true);
   });
 
-  describe('Option Merge', () => {
-    it('should merge series correctly', () => {
+  describe("Option Merge", () => {
+    it("should merge series correctly", () => {
       const oldOpt = {
         series: [
           {
-            type: 'pie',
+            type: "pie",
             roseType: false,
-            radius: 200
-          }
-        ]
+            radius: 200,
+          },
+        ],
       };
 
       const newOpt = {
         series: [
           {
-            roseType: 'radius',
-            radius: [30, 200]
-          }
-        ]
+            roseType: "radius",
+            radius: [30, 200],
+          },
+        ],
       };
 
       const merged = { ...oldOpt };
@@ -542,7 +588,7 @@ describe('PieChart', () => {
         const newVal = (newOpt as any)[k];
         const oldVal = (oldOpt as any)[k];
 
-        if (k === 'series' && Array.isArray(newVal)) {
+        if (k === "series" && Array.isArray(newVal)) {
           const mergedSeries = [...(Array.isArray(oldVal) ? oldVal : [])];
           newVal.forEach((s, i) => {
             if (mergedSeries[i]) {
@@ -555,7 +601,7 @@ describe('PieChart', () => {
         }
       }
 
-      expect(merged.series[0].roseType).toBe('radius');
+      expect(merged.series[0].roseType).toBe("radius");
       expect(merged.series[0].radius).toEqual([30, 200]);
     });
   });

@@ -54,16 +54,16 @@ HudX supports two rendering modes: **Canvas** and **SVG**.
 ### Using Renderer
 
 ```typescript
-import { Renderer, Circle, Rect } from 'HudX/core';
+import { Renderer, Circle, Rect } from "HudX/core";
 
 // Canvas mode
-const renderer = Renderer.init('#container', 'canvas');
+const renderer = Renderer.init("#container", "canvas");
 
 // SVG mode
-const rendererSVG = Renderer.init('#container', 'svg');
+const rendererSVG = Renderer.init("#container", "svg");
 
 // Switch rendering mode
-renderer.setRenderMode('svg');
+renderer.setRenderMode("svg");
 ```
 
 ### Using React Component
@@ -91,16 +91,16 @@ import { HChart } from 'HudX/charts';
 ### Using Chart Class
 
 ```typescript
-import { LineChart } from 'HudX/charts';
+import { LineChart } from "HudX/charts";
 
 // Canvas mode
-const chart = new LineChart(dom, option, 'canvas');
+const chart = new LineChart(dom, option, "canvas");
 
 // SVG mode
-const chartSVG = new LineChart(dom, option, 'svg');
+const chartSVG = new LineChart(dom, option, "svg");
 
 // Switch mode
-chart.setRenderMode('svg');
+chart.setRenderMode("svg");
 ```
 
 ## Implementation Details
@@ -187,14 +187,14 @@ To switch from Canvas to SVG:
 
 ```typescript
 // Before - Canvas only
-const renderer = Renderer.init('#container', 'canvas');
+const renderer = Renderer.init("#container", "canvas");
 
 // After - Can switch between modes
-const renderer = Renderer.init('#container', 'canvas');
+const renderer = Renderer.init("#container", "canvas");
 
 // User action to switch to SVG
-document.getElementById('svg-button').addEventListener('click', () => {
-  renderer.setRenderMode('svg');
+document.getElementById("svg-button").addEventListener("click", () => {
+  renderer.setRenderMode("svg");
 });
 ```
 

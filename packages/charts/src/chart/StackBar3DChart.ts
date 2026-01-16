@@ -1,7 +1,20 @@
-import Chart from '../Chart';
-import { createLinearScale, createOrdinalScale, calculateDomain, niceDomain } from '../util/coordinate';
-import { Rect, Polygon, Group, lighten, darken, createDecalPattern, Z_SERIES } from 'HudX/core';
-import { EventHelper } from '../util/EventHelper';
+import Chart from "../Chart";
+import {
+  createLinearScale,
+  createOrdinalScale,
+  calculateDomain,
+  niceDomain,
+} from "../util/coordinate";
+import {
+  Rect,
+  Polygon,
+  Group,
+  lighten,
+  darken,
+  createDecalPattern,
+  Z_SERIES,
+} from "HudX/core";
+import { EventHelper } from "../util/EventHelper";
 
 export default class StackBar3DChart extends Chart {
   private _activeGroups: Map<string, Group> = new Map();
@@ -20,27 +33,39 @@ export default class StackBar3DChart extends Chart {
       const series = option.series || [];
       if (series.length === 0) return;
 
-      const { x: plotX, y: plotY, width: plotWidth, height: plotHeight } = this._calculateGrid(option);
+      const {
+        x: plotX,
+        y: plotY,
+        width: plotWidth,
+        height: plotHeight,
+      } = this._calculateGrid(option);
 
-      const xAxis = Array.isArray(option.xAxis) ? option.xAxis[0] : option.xAxis;
-      const yAxis = Array.isArray(option.yAxis) ? option.yAxis[0] : option.yAxis;
+      const xAxis = Array.isArray(option.xAxis)
+        ? option.xAxis[0]
+        : option.xAxis;
+      const yAxis = Array.isArray(option.yAxis)
+        ? option.yAxis[0]
+        : option.yAxis;
 
       // Filter stack bar series
-      const barSeries = series.filter(s => s.type === 'stackBar3D' && s.show !== false);
+      const barSeries = series.filter(
+        (s) => s.type === "stackBar3D" && s.show !== false,
+      );
       if (barSeries.length === 0) return;
 
       // 1. Calculate Data for Domain
       // We need to know x-axis labels/indices first
       let xData: any[] = [];
-      if (xAxis?.type === 'category') {
+      if (xAxis?.type === "category") {
         if (xAxis.data) {
           xData = xAxis.data;
         } else {
           // Collect from series
           const categories = new Set<string>();
-          barSeries.forEach(s => {
+          barSeries.forEach((s) => {
             (s.data || []).forEach((item: any) => {
-              if (typeof item === 'object' && item.name) categories.add(item.name);
+              if (typeof item === "object" && item.name)
+                categories.add(item.name);
             });
           });
           xData = Array.from(categories);
@@ -48,7 +73,7 @@ export default class StackBar3DChart extends Chart {
       } else {
         // Assuming linear x, we collect x values
         const xValues = new Set<number>();
-        barSeries.forEach(s => {
+        barSeries.forEach((s) => {
           (s.data || []).forEach((item: any) => {
             // item is [x, y]
             if (Array.isArray(item)) xValues.add(item[0]);
@@ -62,14 +87,15 @@ export default class StackBar3DChart extends Chart {
       const stackSumNeg = new Map<string | number, number>();
 
       // We need to iterate series to calculate stack sums for domain
-      barSeries.forEach(s => {
+      barSeries.forEach((s) => {
         (s.data || []).forEach((item: any, index: number) => {
           let xKey: string | number;
           let yVal: number;
 
-          if (xAxis?.type === 'category') {
+          if (xAxis?.type === "category") {
             xKey = xData[index] ?? index; // Use label or index
-            if (typeof item === 'object' && item.value !== undefined) yVal = item.value;
+            if (typeof item === "object" && item.value !== undefined)
+              yVal = item.value;
             else yVal = item;
           } else {
             // X is value
@@ -94,15 +120,15 @@ export default class StackBar3DChart extends Chart {
       // If yAxis has min/max set, use them
       const dataMin = yMin;
       const dataMax = yMax;
-      if (yAxis?.min !== undefined && yAxis.min !== 'dataMin') {
-        if (typeof yAxis.min === 'function') {
+      if (yAxis?.min !== undefined && yAxis.min !== "dataMin") {
+        if (typeof yAxis.min === "function") {
           yMin = yAxis.min({ min: dataMin, max: dataMax });
         } else {
           yMin = yAxis.min;
         }
       }
-      if (yAxis?.max !== undefined && yAxis.max !== 'dataMax') {
-        if (typeof yAxis.max === 'function') {
+      if (yAxis?.max !== undefined && yAxis.max !== "dataMax") {
+        if (typeof yAxis.max === "function") {
           yMax = yAxis.max({ min: dataMin, max: dataMax });
         } else {
           yMax = yAxis.max;
@@ -112,36 +138,44 @@ export default class StackBar3DChart extends Chart {
       const yDomain = niceDomain(yMin, yMax);
 
       // X Domain
-      const xDomain = xAxis?.type === 'category' ? xData : [xData[0] || 0, xData[xData.length - 1] || 0];
+      const xDomain =
+        xAxis?.type === "category"
+          ? xData
+          : [xData[0] || 0, xData[xData.length - 1] || 0];
 
       // Scales
-      const xScale = xAxis?.type === 'category'
-        ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
-        : createLinearScale(xDomain, [plotX, plotX + plotWidth]);
+      const xScale =
+        xAxis?.type === "category"
+          ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
+          : createLinearScale(xDomain, [plotX, plotX + plotWidth]);
 
       const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
       // Layout
       const categoryCount = xData.length || 1;
       const categoryWidth = plotWidth / categoryCount;
-      const barCategoryGapStr = barSeries[0].barCategoryGap ?? '20%';
+      const barCategoryGapStr = barSeries[0].barCategoryGap ?? "20%";
       const parsePercent = (val: string | number) => {
-        if (typeof val === 'string' && val.endsWith('%')) return parseFloat(val) / 100;
+        if (typeof val === "string" && val.endsWith("%"))
+          return parseFloat(val) / 100;
         return 0;
       };
       const categoryGapPercent = parsePercent(barCategoryGapStr);
       const barWidth = categoryWidth * (1 - categoryGapPercent); // Single bar width (since stacked)
 
-      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, { x: xScale, y: yScale });
+      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, {
+        x: xScale,
+        y: yScale,
+      });
 
       // Legend
       if (option.legend?.show !== false) {
         const items = barSeries.map((s, i) => ({
-          name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
+          name: s.name || this.t("series.name", "Series") + "-" + (i + 1),
           color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-          icon: option.legend?.icon || 'rect',
+          icon: option.legend?.icon || "rect",
           textColor: this.getThemeConfig().legendTextColor,
-          data: s
+          data: s,
         }));
         this._mountLegend(items);
       }
@@ -157,18 +191,25 @@ export default class StackBar3DChart extends Chart {
       const currentStackNeg = new Map<string | number, number>();
 
       barSeries.forEach((seriesItem, seriesIndex) => {
-        const seriesName = seriesItem.name || this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
+        const seriesName =
+          seriesItem.name ||
+          this.t("series.name", "Series") + "-" + (seriesIndex + 1);
         if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
-        const barColor = seriesItem.itemStyle?.color || seriesItem.color || this._getSeriesColor(seriesIndex);
+        const barColor =
+          seriesItem.itemStyle?.color ||
+          seriesItem.color ||
+          this._getSeriesColor(seriesIndex);
 
         // Handle aria decal
         let fillStyle: string | CanvasPattern = barColor;
         const aria = option.aria;
         if (aria?.enabled && aria?.decal?.show) {
           const decals = aria.decal.decals || [];
-          const decal = decals[seriesIndex % decals.length] || { symbol: 'rect' };
+          const decal = decals[seriesIndex % decals.length] || {
+            symbol: "rect",
+          };
           const pattern = createDecalPattern(decal, barColor);
           if (pattern) {
             fillStyle = pattern;
@@ -183,10 +224,11 @@ export default class StackBar3DChart extends Chart {
           let yVal: number;
           let xVal: any;
 
-          if (xAxis?.type === 'category') {
+          if (xAxis?.type === "category") {
             xKey = xData[index] ?? index;
             xVal = xKey;
-            if (typeof item === 'object' && item.value !== undefined) yVal = item.value;
+            if (typeof item === "object" && item.value !== undefined)
+              yVal = item.value;
             else yVal = item;
           } else {
             xKey = item[0];
@@ -197,7 +239,9 @@ export default class StackBar3DChart extends Chart {
           if (yVal === undefined) return;
 
           const isPositive = yVal >= 0;
-          const prevStackVal = isPositive ? (currentStackPos.get(xKey) || 0) : (currentStackNeg.get(xKey) || 0);
+          const prevStackVal = isPositive
+            ? currentStackPos.get(xKey) || 0
+            : currentStackNeg.get(xKey) || 0;
           const newStackVal = prevStackVal + yVal;
 
           if (isPositive) currentStackPos.set(xKey, newStackVal);
@@ -227,7 +271,7 @@ export default class StackBar3DChart extends Chart {
 
           const rectY = yTop; // yTop is the pixel for the "top" of the bar (higher value)
           // Wait, if positive, yTop is smaller pixel (higher). Correct.
-          // If negative, yTop is larger pixel (lower). 
+          // If negative, yTop is larger pixel (lower).
           // Rect y should be yBottom (0) ?
 
           // Let's stick to: y is top-left.
@@ -249,9 +293,9 @@ export default class StackBar3DChart extends Chart {
               x: barX,
               y: finalY,
               width: barWidth,
-              height: h
+              height: h,
             },
-            style: { fill: fillStyle }
+            style: { fill: fillStyle },
           });
 
           // Top
@@ -261,10 +305,10 @@ export default class StackBar3DChart extends Chart {
                 [barX, finalY],
                 [barX + barWidth, finalY],
                 [barX + barWidth + shiftX, finalY + shiftY],
-                [barX + shiftX, finalY + shiftY]
-              ]
+                [barX + shiftX, finalY + shiftY],
+              ],
             },
-            style: { fill: topColor }
+            style: { fill: topColor },
           });
 
           // Side (Right)
@@ -274,13 +318,13 @@ export default class StackBar3DChart extends Chart {
                 [barX + barWidth, finalY],
                 [barX + barWidth, finalY + h],
                 [barX + barWidth + shiftX, finalY + h + shiftY],
-                [barX + barWidth + shiftX, finalY + shiftY]
-              ]
+                [barX + barWidth + shiftX, finalY + shiftY],
+              ],
             },
-            style: { fill: sideColor }
+            style: { fill: sideColor },
           });
 
-          // Order: Side, Top, Front. 
+          // Order: Side, Top, Front.
           // Note: For stacked, if positive, top bar covers bottom bar's top?
           // No, bottom bar is below.
           // Top face of bottom bar is at `prevStackVal`.
@@ -299,37 +343,41 @@ export default class StackBar3DChart extends Chart {
 
           if (this._tooltip) {
             const handleMouseOver = (evt: any) => {
-              group.attr('opacity', 0.8);
-              const itemName = (typeof item === 'object' && item.name) ? item.name : (xKey || '');
+              group.attr("opacity", 0.8);
+              const itemName =
+                typeof item === "object" && item.name ? item.name : xKey || "";
               const params = {
-                componentType: 'series',
-                seriesType: 'stackBar3D',
+                componentType: "series",
+                seriesType: "stackBar3D",
                 seriesIndex,
                 seriesName,
                 name: itemName,
                 dataIndex: index,
                 data: item,
                 value: yVal,
-                color: typeof barColor === 'string' ? barColor : undefined,
-                marker: typeof barColor === 'string' ? this._getTooltipMarker(barColor) : undefined
+                color: typeof barColor === "string" ? barColor : undefined,
+                marker:
+                  typeof barColor === "string"
+                    ? this._getTooltipMarker(barColor)
+                    : undefined,
               };
               const content = this._generateTooltipContent(params);
-              const mx = evt?.offsetX ?? (barX + barWidth / 2);
-              const my = evt?.offsetY ?? (finalY);
+              const mx = evt?.offsetX ?? barX + barWidth / 2;
+              const my = evt?.offsetY ?? finalY;
 
               // StackBar3D height is tricky, let's estimate
               const targetRect = {
                 x: barX,
                 y: finalY, // finalY is the top of the bar segment?
                 width: barWidth,
-                height: Math.abs(yVal) // Approximate
+                height: Math.abs(yVal), // Approximate
               };
 
               this._tooltip!.show(mx, my, content, params, targetRect);
             };
 
             const handleMouseOut = () => {
-              group.attr('opacity', 1);
+              group.attr("opacity", 1);
               this._tooltip!.hide();
             };
 

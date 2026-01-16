@@ -2,8 +2,8 @@
  * BezierCurve - Bezier curve shape element
  */
 
-import ChartElement from '../ChartElement';
-import type { ElementOption, BoundingRect, Point } from '../types';
+import ChartElement from "../ChartElement";
+import type { ElementOption, BoundingRect, Point } from "../types";
 
 export interface BezierCurveShape {
   x1: number;
@@ -76,8 +76,16 @@ export default class BezierCurve extends ChartElement {
         const mt2 = mt * mt;
         const mt3 = mt2 * mt;
 
-        px = mt3 * shape.x1 + 3 * mt2 * t * shape.cpx1 + 3 * mt * t2 * shape.cpx2 + t3 * shape.x2;
-        py = mt3 * shape.y1 + 3 * mt2 * t * shape.cpy1 + 3 * mt * t2 * shape.cpy2 + t3 * shape.y2;
+        px =
+          mt3 * shape.x1 +
+          3 * mt2 * t * shape.cpx1 +
+          3 * mt * t2 * shape.cpx2 +
+          t3 * shape.x2;
+        py =
+          mt3 * shape.y1 +
+          3 * mt2 * t * shape.cpy1 +
+          3 * mt * t2 * shape.cpy2 +
+          t3 * shape.y2;
       } else {
         // Quadratic bezier
         const t2 = t * t;
@@ -115,7 +123,14 @@ export default class BezierCurve extends ChartElement {
 
     if (shape.cpx2 !== undefined && shape.cpy2 !== undefined) {
       // Cubic bezier
-      ctx.bezierCurveTo(shape.cpx1, shape.cpy1, shape.cpx2, shape.cpy2, shape.x2, shape.y2);
+      ctx.bezierCurveTo(
+        shape.cpx1,
+        shape.cpy1,
+        shape.cpx2,
+        shape.cpy2,
+        shape.x2,
+        shape.y2,
+      );
     } else {
       // Quadratic bezier
       ctx.quadraticCurveTo(shape.cpx1, shape.cpy1, shape.x2, shape.y2);
@@ -128,4 +143,3 @@ export default class BezierCurve extends ChartElement {
     ctx.restore();
   }
 }
-

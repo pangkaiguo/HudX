@@ -3,7 +3,7 @@
  * Unified interface for Canvas and SVG painters
  */
 
-import type { DataURLOpts } from '../types';
+import type { DataURLOpts } from "../types";
 
 export default interface IPainter {
   resize(width?: number, height?: number): void;
@@ -17,4 +17,3 @@ export default interface IPainter {
   getSVG?(): SVGSVGElement;
   getRootGroup?(): SVGGElement;
 }
-

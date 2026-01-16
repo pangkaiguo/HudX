@@ -1,113 +1,113 @@
-import React, { useRef } from 'react';
-import { HChart } from 'HudX/charts';
-import type { ChartOption, HChartRef } from 'HudX/charts';
-import { ThemeManager, Theme } from 'HudX/core';
-import type { RenderMode } from 'HudX/core';
+import React, { useRef } from "react";
+import { HChart } from "HudX/charts";
+import type { ChartOption, HChartRef } from "HudX/charts";
+import { ThemeManager, Theme } from "HudX/core";
+import type { RenderMode } from "HudX/core";
 
-export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const StackLineExample = ({ theme = "light" }: { theme?: Theme }) => {
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
   const [showGrid, setShowGrid] = React.useState(true);
   const [gridTop, setGridTop] = React.useState(60);
   const [splitNumber, setSplitNumber] = React.useState(5);
-  const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = React.useState<RenderMode>("canvas");
 
   const option: ChartOption = {
-    title: {
-      text: 'Stack Line Chart with Animation',
-      subtext: 'Feature Demonstration',
-      left: 'center'
-    },
     tooltip: {
       show: true,
-      trigger: 'axis'
+      trigger: "axis",
     },
     legend: {
       show: true,
-      orient: 'vertical',
-      left: 'right',
+      orient: "vertical",
+      left: "right",
       top: 20,
-      icon: 'rect'
+      icon: "rect",
     },
     grid: {
       left: 70,
       right: 40,
       top: gridTop,
-      bottom: 60
+      bottom: 60,
     },
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      type: "category",
+      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       show: true,
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: '#eee',
-          type: 'dashed'
-        }
-      }
+          color: "#eee",
+          type: "dashed",
+        },
+      },
     },
     yAxis: {
-      type: 'value',
+      type: "value",
       show: true,
       splitNumber: splitNumber,
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: '#eee'
-        }
-      }
+          color: "#eee",
+        },
+      },
     },
     series: [
       {
-        name: 'Series A',
-        type: 'line',
+        name: "Series A",
+        type: "line",
         data: [120, 200, 150, 80, 70, 110, 130],
         itemStyle: { color: themeObj.seriesColors?.[0] },
         lineStyle: { width: 2 },
         showSymbol: true,
-        symbol: 'circle'
+        symbol: "circle",
       },
       {
-        name: 'Series B',
-        type: 'line',
+        name: "Series B",
+        type: "line",
         data: [100, 150, 120, 110, 90, 140, 120],
         itemStyle: { color: themeObj.seriesColors?.[1] },
         lineStyle: { width: 2 },
         showSymbol: true,
-        symbol: 'rect',
-        symbolSize: 8
+        symbol: "rect",
+        symbolSize: 8,
       },
       {
-        name: 'Series C',
-        type: 'line',
+        name: "Series C",
+        type: "line",
         data: [80, 120, 100, 140, 110, 100, 90],
         itemStyle: { color: themeObj.seriesColors?.[2] },
         lineStyle: { width: 2 },
         showSymbol: true,
-        symbol: 'triangle',
-        symbolSize: 10
-      }
+        symbol: "triangle",
+        symbolSize: 10,
+      },
     ],
     animation: true,
     animationDuration: 600,
-    animationEasing: 'cubicOut'
+    animationEasing: "cubicOut",
   };
 
   const handleUpdateSeries = () => {
     const chartInstance = chartRef.current?.getChartInstance();
     if (chartInstance) {
       // Simulate new data for all 3 series
-      const newDataA = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
-      const newDataB = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
-      const newDataC = Array.from({ length: 7 }, () => Math.floor(Math.random() * 200) + 50);
+      const newDataA = Array.from(
+        { length: 7 },
+        () => Math.floor(Math.random() * 200) + 50,
+      );
+      const newDataB = Array.from(
+        { length: 7 },
+        () => Math.floor(Math.random() * 200) + 50,
+      );
+      const newDataC = Array.from(
+        { length: 7 },
+        () => Math.floor(Math.random() * 200) + 50,
+      );
 
       chartInstance.setOption({
-        series: [
-          { data: newDataA },
-          { data: newDataB },
-          { data: newDataC }
-        ]
+        series: [{ data: newDataA }, { data: newDataB }, { data: newDataC }],
       });
     }
   };
@@ -115,23 +115,42 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Stack Line Chart</h2>
-      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Features: Smooth animations on load, Interactive legend (click to toggle), Hover tooltips with data details
+      <p style={{ marginBottom: 20, color: "#666", fontSize: 14 }}>
+        Features: Smooth animations on load, Interactive legend (click to
+        toggle), Hover tooltips with data details
       </p>
-      <div style={{ marginBottom: 20, display: 'flex', gap: 20, alignItems: 'center' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div
+        style={{
+          marginBottom: 20,
+          display: "flex",
+          gap: 20,
+          alignItems: "center",
+        }}
+      >
+        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
-            style={{ padding: '4px 8px', borderRadius: 4, border: '1px solid #ddd' }}
+            style={{
+              padding: "4px 8px",
+              borderRadius: 4,
+              border: "1px solid #ddd",
+            }}
           >
             <option value="canvas">Canvas</option>
             <option value="svg">SVG</option>
           </select>
         </label>
 
-        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <label
+          style={{
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
           <input
             type="checkbox"
             checked={showGrid}
@@ -142,7 +161,7 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
         {showGrid && (
           <>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span>Grid Top: {gridTop}</span>
               <input
                 type="range"
@@ -153,7 +172,7 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 style={{ width: 100 }}
               />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span>Y Split: {splitNumber}</span>
               <input
                 type="range"
@@ -173,19 +192,23 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         option={option}
         theme={theme}
         renderMode={renderMode}
-        style={{ border: '1px solid #e0e0e0', borderRadius: 8, height: '600px' }}
+        style={{
+          border: "1px solid #e0e0e0",
+          borderRadius: 8,
+          height: "600px",
+        }}
       />
-      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
+      <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
         <button
           onClick={handleUpdateSeries}
           style={{
-            padding: '8px 16px',
-            backgroundColor: '#5470c6',
-            color: 'white',
-            border: 'none',
+            padding: "8px 16px",
+            backgroundColor: "#5470c6",
+            color: "white",
+            border: "none",
             borderRadius: 4,
-            cursor: 'pointer',
-            fontSize: 14
+            cursor: "pointer",
+            fontSize: 14,
           }}
         >
           Update Data (via getChartInstance)

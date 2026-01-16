@@ -2,8 +2,8 @@
  * Group - Container for multiple elements
  */
 
-import ChartElement from './ChartElement';
-import type { ElementOption } from './types';
+import ChartElement from "./ChartElement";
+import type { ElementOption } from "./types";
 
 export default class Group extends ChartElement {
   private _children: ChartElement[] = [];
@@ -68,7 +68,7 @@ export default class Group extends ChartElement {
    * Get child by ID
    */
   childOfName(name: string): ChartElement | undefined {
-    return this._children.find(child => child.id === name);
+    return this._children.find((child) => child.id === name);
   }
 
   /**
@@ -88,7 +88,10 @@ export default class Group extends ChartElement {
   /**
    * Traverse children
    */
-  traverse(callback: (child: ChartElement) => void | boolean, includeSelf: boolean = false): void {
+  traverse(
+    callback: (child: ChartElement) => void | boolean,
+    includeSelf: boolean = false,
+  ): void {
     if (includeSelf) {
       const result = callback(this);
       if (result === false) {
@@ -111,7 +114,7 @@ export default class Group extends ChartElement {
   /**
    * Get bounding rect (union of all children)
    */
-  getBoundingRect(): import('./types').BoundingRect {
+  getBoundingRect(): import("./types").BoundingRect {
     if (this._children.length === 0) {
       return { x: 0, y: 0, width: 0, height: 0 };
     }
@@ -182,4 +185,3 @@ export default class Group extends ChartElement {
     ctx.restore();
   }
 }
-
