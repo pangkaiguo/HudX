@@ -1,38 +1,38 @@
-import Chart from "../Chart";
+import Chart from '../Chart';
 import {
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
-} from "../util/coordinate";
-import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from "hux-core";
-import { EventHelper } from "../util/EventHelper";
+} from '../util/coordinate';
+import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from 'hux-core';
+import { EventHelper } from '../util/EventHelper';
 
 export default class BarChart extends Chart {
   private _activeBars: Map<string, Rect> = new Map();
 
   protected _onLegendHover(name: string, hovered: boolean): void {
     const seriesIndex = (this._option.series || []).findIndex((s, i) => {
-      const sName = s.name || this.t("series.name", "Series") + "-" + (i + 1);
+      const sName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
       return sName === name;
     });
 
     if (seriesIndex === -1) return;
 
     this._activeBars.forEach((bar, key) => {
-      const [sIdx] = key.split("-").map(Number);
+      const [sIdx] = key.split('-').map(Number);
 
       if (hovered) {
         if (sIdx === seriesIndex) {
           // Highlight target series
-          bar.attr("style", { opacity: 1 });
+          bar.attr('style', { opacity: 1 });
           // Optional: Add scale effect or brightness
         } else {
           // Dim others
-          bar.attr("style", { opacity: 0.1 });
+          bar.attr('style', { opacity: 0.1 });
         }
       } else {
         // Restore all
-        bar.attr("style", { opacity: 1 });
+        bar.attr('style', { opacity: 1 });
       }
     });
   }
@@ -65,18 +65,18 @@ export default class BarChart extends Chart {
       const yAxis = Array.isArray(option.yAxis)
         ? option.yAxis[0]
         : option.yAxis;
-      const isHorizontal = yAxis?.type === "category";
+      const isHorizontal = yAxis?.type === 'category';
 
       let data: any[] = [];
       series.forEach((s) => {
-        if (s.type === "bar" && s.show !== false) {
+        if (s.type === 'bar' && s.show !== false) {
           data = data.concat(s.data || []);
         }
       });
 
       if (data.length === 0) return;
 
-      const hasStack = series.some((s) => s.type === "bar" && s.stack);
+      const hasStack = series.some((s) => s.type === 'bar' && s.stack);
       let finalData = data;
 
       if (hasStack) {
@@ -86,15 +86,15 @@ export default class BarChart extends Chart {
         > = {};
 
         series.forEach((s) => {
-          if (s.type !== "bar" || s.show === false) return;
+          if (s.type !== 'bar' || s.show === false) return;
           const stackId = s.stack || `__no_stack_${s.name || Math.random()}`;
           const sData = s.data || [];
           sData.forEach((val: any, idx: number) => {
             const value =
-              typeof val === "object" && val !== null && val.value !== undefined
+              typeof val === 'object' && val !== null && val.value !== undefined
                 ? val.value
                 : val;
-            if (typeof value !== "number") return;
+            if (typeof value !== 'number') return;
 
             if (!stackTotals[idx]) stackTotals[idx] = {};
             if (!stackTotals[idx][stackId])
@@ -130,17 +130,17 @@ export default class BarChart extends Chart {
         : [plotY + plotHeight, plotY];
 
       const xScale =
-        xAxis?.type === "category"
+        xAxis?.type === 'category'
           ? createOrdinalScale(xDomain, xRange)
           : createLinearScale(xDomain, xRange);
 
       const yScale =
-        yAxis?.type === "category"
+        yAxis?.type === 'category'
           ? createOrdinalScale(yDomain, yRange)
           : createLinearScale(yDomain, yRange);
 
       const barSeries = series.filter(
-        (s) => s.type === "bar" && s.show !== false,
+        (s) => s.type === 'bar' && s.show !== false,
       );
       const seriesCount = barSeries.length || 1;
       let categoryCount: number;
@@ -148,7 +148,7 @@ export default class BarChart extends Chart {
         categoryCount = Array.isArray(yAxis?.data)
           ? yAxis.data.length
           : yDomain.length;
-      } else if (xAxis?.type === "category") {
+      } else if (xAxis?.type === 'category') {
         categoryCount = Array.isArray(xAxis?.data)
           ? xAxis.data.length
           : xDomain.length;
@@ -158,9 +158,9 @@ export default class BarChart extends Chart {
 
       const stacks: Record<string, any[]> = {};
       series.forEach((s, i) => {
-        if (s.type !== "bar" || s.show === false) return;
+        if (s.type !== 'bar' || s.show === false) return;
         const seriesName =
-          s.name || this.t("series.name", "Series") + "-" + (i + 1);
+          s.name || this.t('series.name', 'Series') + '-' + (i + 1);
         const stackId = s.stack || `__no_stack_${seriesName}`;
 
         if (!stacks[stackId]) {
@@ -177,18 +177,18 @@ export default class BarChart extends Chart {
         categoryCount > 0 ? axisLength / categoryCount : axisLength;
 
       const firstSeries = barSeries[0] || {};
-      const barCategoryGapStr = firstSeries.barCategoryGap ?? "20%";
-      const barGapStr = firstSeries.barGap ?? "30%";
+      const barCategoryGapStr = firstSeries.barCategoryGap ?? '20%';
+      const barGapStr = firstSeries.barGap ?? '30%';
 
       const parsePercent = (val: string | number, total: number) => {
-        if (typeof val === "string" && val.endsWith("%")) {
+        if (typeof val === 'string' && val.endsWith('%')) {
           return (parseFloat(val) / 100) * total;
         }
         return Number(val);
       };
 
       const parseGapPercent = (val: string | number) => {
-        if (typeof val === "string" && val.endsWith("%")) {
+        if (typeof val === 'string' && val.endsWith('%')) {
           return parseFloat(val) / 100;
         }
         return 0;
@@ -209,7 +209,7 @@ export default class BarChart extends Chart {
         barWidthPerSeries = parsePercent(explicitBarWidth, categoryWidth);
         // If barWidth is fixed, we recalculate gap if needed or just center them
         // For ECharts compatibility, barGap is relative to barWidth usually
-        if (typeof barGapStr === "string" && barGapStr.endsWith("%")) {
+        if (typeof barGapStr === 'string' && barGapStr.endsWith('%')) {
           const gapPercent = parseFloat(barGapStr) / 100;
           gapWidth = barWidthPerSeries * gapPercent;
         } else {
@@ -217,7 +217,7 @@ export default class BarChart extends Chart {
         }
       } else {
         // Auto calculate
-        if (typeof barGapStr === "string" && barGapStr.endsWith("%")) {
+        if (typeof barGapStr === 'string' && barGapStr.endsWith('%')) {
           const gapPercent = parseGapPercent(barGapStr);
           barWidthPerSeries =
             availableWidth / (groupCount + (groupCount - 1) * gapPercent);
@@ -261,20 +261,20 @@ export default class BarChart extends Chart {
 
       if (
         this._tooltip &&
-        option.tooltip?.trigger === "axis" &&
-        axisPointerType === "line"
+        option.tooltip?.trigger === 'axis' &&
+        axisPointerType === 'line'
       ) {
         axisPointerLine = new Line({
           shape: { x1: 0, y1: 0, x2: 0, y2: 0 },
           style: {
             stroke:
               option.tooltip?.axisPointer?.lineStyle?.color ||
-              "rgba(0,0,0,0.3)",
+              'rgba(0,0,0,0.3)',
             lineWidth: option.tooltip?.axisPointer?.lineStyle?.width || 1,
             lineDash:
-              option.tooltip?.axisPointer?.lineStyle?.type === "solid"
+              option.tooltip?.axisPointer?.lineStyle?.type === 'solid'
                 ? undefined
-                : option.tooltip?.axisPointer?.lineStyle?.type === "dashed"
+                : option.tooltip?.axisPointer?.lineStyle?.type === 'dashed'
                   ? [4, 4]
                   : [4, 4],
           },
@@ -286,11 +286,11 @@ export default class BarChart extends Chart {
 
       if (option.legend?.show !== false) {
         const items = (series as any[])
-          .filter((s) => s.type === "bar" && s.show !== false)
+          .filter((s) => s.type === 'bar' && s.show !== false)
           .map((s, i) => ({
-            name: s.name || this.t("series.name", "Series") + "-" + (i + 1),
+            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: option.legend?.icon || "rect",
+            icon: option.legend?.icon || 'rect',
             textColor: this.getThemeConfig().legendTextColor,
             data: s,
           }));
@@ -307,7 +307,7 @@ export default class BarChart extends Chart {
       > = {};
 
       series.forEach((seriesItem, seriesIndex) => {
-        if (seriesItem.type !== "bar") {
+        if (seriesItem.type !== 'bar') {
           return;
         }
         if (seriesItem.show === false) {
@@ -315,7 +315,7 @@ export default class BarChart extends Chart {
         }
         const seriesName =
           seriesItem.name ||
-          this.t("series.name", "Series") + "-" + (seriesIndex + 1);
+          this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
         if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
@@ -332,7 +332,7 @@ export default class BarChart extends Chart {
           if (isHorizontal) {
             yVal = yDomain[index];
             if (
-              typeof item === "object" &&
+              typeof item === 'object' &&
               item !== null &&
               item.value !== undefined
             ) {
@@ -342,10 +342,10 @@ export default class BarChart extends Chart {
             } else {
               xVal = item;
             }
-          } else if (xAxis?.type === "category") {
+          } else if (xAxis?.type === 'category') {
             xVal = xDomain[index];
             if (
-              typeof item === "object" &&
+              typeof item === 'object' &&
               item !== null &&
               item.value !== undefined
             ) {
@@ -422,7 +422,7 @@ export default class BarChart extends Chart {
                 height: isHorizontal ? barHeight : plotHeight,
               },
               style: {
-                fill: bgStyle.color || "rgba(180, 180, 180, 0.2)",
+                fill: bgStyle.color || 'rgba(180, 180, 180, 0.2)',
                 stroke: bgStyle.borderColor,
                 lineWidth: bgStyle.borderWidth,
                 opacity: bgStyle.opacity,
@@ -453,7 +453,7 @@ export default class BarChart extends Chart {
           if (aria?.enabled && aria?.decal?.show) {
             const decals = aria.decal.decals || [];
             const decal = decals[seriesIndex % decals.length] || {
-              symbol: "rect",
+              symbol: 'rect',
             };
 
             const pattern = createDecalPattern(decal, barColor);
@@ -504,7 +504,7 @@ export default class BarChart extends Chart {
               lineWidth: itemStyle.borderWidth || 0,
             },
             z: Z_SERIES,
-            cursor: this._tooltip ? "pointer" : "default",
+            cursor: this._tooltip ? 'pointer' : 'default',
           });
           (rect as any).__isPositive = isPositive;
 
@@ -531,39 +531,39 @@ export default class BarChart extends Chart {
                 const emphasis = seriesItem.emphasis || {};
                 const focus = emphasis.focus;
 
-                if (focus === "series") {
+                if (focus === 'series') {
                   this._activeBars.forEach((bar, key) => {
-                    const [sIdx] = key.split("-").map(Number);
+                    const [sIdx] = key.split('-').map(Number);
                     if (sIdx === seriesIndex) {
-                      bar.attr("style", { opacity: 1 });
+                      bar.attr('style', { opacity: 1 });
                     } else {
-                      bar.attr("style", { opacity: 0.2 });
+                      bar.attr('style', { opacity: 0.2 });
                     }
                   });
                 } else {
-                  rect.attr("style", { opacity: 0.8 });
+                  rect.attr('style', { opacity: 0.8 });
                 }
 
                 const itemName =
-                  typeof item === "object" && item.name
+                  typeof item === 'object' && item.name
                     ? item.name
                     : isHorizontal
                       ? yDomain[index]
-                      : xAxis?.data?.[index] || "";
+                      : xAxis?.data?.[index] || '';
                 const itemValue = this._getDataValue(item);
 
                 const params = {
-                  componentType: "series",
-                  seriesType: "bar",
+                  componentType: 'series',
+                  seriesType: 'bar',
                   seriesIndex,
                   seriesName: seriesName,
                   name: itemName,
                   dataIndex: index,
                   data: item,
                   value: itemValue,
-                  color: typeof barColor === "string" ? barColor : undefined,
+                  color: typeof barColor === 'string' ? barColor : undefined,
                   marker:
-                    typeof barColor === "string"
+                    typeof barColor === 'string'
                       ? this._getTooltipMarker(barColor)
                       : undefined,
                 };
@@ -576,68 +576,68 @@ export default class BarChart extends Chart {
                   my,
                   content,
                   params,
-                  rect.attr("shape"),
+                  rect.attr('shape'),
                 );
 
                 // Update Axis Pointer
                 if (axisPointerLine) {
                   if (isHorizontal) {
-                    axisPointerLine.attr("shape", {
+                    axisPointerLine.attr('shape', {
                       x1: plotX,
                       y1: barY + barHeight / 2,
                       x2: plotX + plotWidth,
                       y2: barY + barHeight / 2,
                     });
                   } else {
-                    axisPointerLine.attr("shape", {
+                    axisPointerLine.attr('shape', {
                       x1: barX + barWidth / 2,
                       y1: plotY,
                       x2: barX + barWidth / 2,
                       y2: plotY + plotHeight,
                     });
                   }
-                  axisPointerLine.attr("invisible", false);
+                  axisPointerLine.attr('invisible', false);
                 }
               },
               () => {
                 const emphasis = seriesItem.emphasis || {};
                 const focus = emphasis.focus;
 
-                if (focus === "series") {
+                if (focus === 'series') {
                   this._activeBars.forEach((bar) => {
-                    bar.attr("style", { opacity: 1 });
+                    bar.attr('style', { opacity: 1 });
                   });
                 } else {
-                  rect.attr("style", { opacity: 1 });
+                  rect.attr('style', { opacity: 1 });
                 }
                 this._tooltip!.hide();
                 if (axisPointerLine) {
-                  axisPointerLine.attr("invisible", true);
+                  axisPointerLine.attr('invisible', true);
                 }
               },
             );
 
-            rect.on("mousemove", (evt: any) => {
+            rect.on('mousemove', (evt: any) => {
               const itemName =
-                typeof item === "object" && item.name
+                typeof item === 'object' && item.name
                   ? item.name
                   : isHorizontal
                     ? yDomain[index]
-                    : xAxis?.data?.[index] || "";
+                    : xAxis?.data?.[index] || '';
               const itemValue = this._getDataValue(item);
 
               const params = {
-                componentType: "series",
-                seriesType: "bar",
+                componentType: 'series',
+                seriesType: 'bar',
                 seriesIndex,
                 seriesName: seriesName,
                 name: itemName,
                 dataIndex: index,
                 data: item,
                 value: itemValue,
-                color: typeof barColor === "string" ? barColor : undefined,
+                color: typeof barColor === 'string' ? barColor : undefined,
                 marker:
-                  typeof barColor === "string"
+                  typeof barColor === 'string'
                     ? this._getTooltipMarker(barColor)
                     : undefined,
               };
@@ -650,39 +650,39 @@ export default class BarChart extends Chart {
                 if (!this._tooltip.isVisible()) {
                   const emphasis = seriesItem.emphasis || {};
                   const focus = emphasis.focus;
-                  if (focus === "series") {
+                  if (focus === 'series') {
                     this._activeBars.forEach((bar, key) => {
-                      const [sIdx] = key.split("-").map(Number);
+                      const [sIdx] = key.split('-').map(Number);
                       if (sIdx === seriesIndex) {
-                        bar.attr("style", { opacity: 1 });
+                        bar.attr('style', { opacity: 1 });
                       } else {
-                        bar.attr("style", { opacity: 0.2 });
+                        bar.attr('style', { opacity: 0.2 });
                       }
                     });
                   } else {
-                    rect.attr("style", { opacity: 0.8 });
+                    rect.attr('style', { opacity: 0.8 });
                   }
                 }
-                this._tooltip.show(mx, my, content, params, rect.attr("shape"));
+                this._tooltip.show(mx, my, content, params, rect.attr('shape'));
 
                 // Update Axis Pointer
                 if (axisPointerLine) {
                   if (isHorizontal) {
-                    axisPointerLine.attr("shape", {
+                    axisPointerLine.attr('shape', {
                       x1: plotX,
                       y1: barY + barHeight / 2,
                       x2: plotX + plotWidth,
                       y2: barY + barHeight / 2,
                     });
                   } else {
-                    axisPointerLine.attr("shape", {
+                    axisPointerLine.attr('shape', {
                       x1: barX + barWidth / 2,
                       y1: plotY,
                       x2: barX + barWidth / 2,
                       y2: plotY + plotHeight,
                     });
                   }
-                  axisPointerLine.attr("invisible", false);
+                  axisPointerLine.attr('invisible', false);
                 }
               }
             });
@@ -698,42 +698,42 @@ export default class BarChart extends Chart {
 
             // Animate properties
             this._animator
-              .animate(rect.attr("shape"), "height", barHeight, {
+              .animate(rect.attr('shape'), 'height', barHeight, {
                 duration,
                 delay,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: () => rect.markRedraw(),
               })
               .start();
 
             this._animator
-              .animate(rect.attr("shape"), "y", barY, {
+              .animate(rect.attr('shape'), 'y', barY, {
                 duration,
                 delay,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: () => rect.markRedraw(),
               })
               .start();
 
             this._animator
-              .animate(rect.attr("shape"), "width", barWidth, {
+              .animate(rect.attr('shape'), 'width', barWidth, {
                 duration,
                 delay,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: () => rect.markRedraw(),
               })
               .start();
 
             this._animator
-              .animate(rect.attr("shape"), "x", barX, {
+              .animate(rect.attr('shape'), 'x', barX, {
                 duration,
                 delay,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: () => rect.markRedraw(),
               })
               .start();
           } else {
-            rect.attr("shape", {
+            rect.attr('shape', {
               x: barX,
               y: barY,
               width: barWidth,
@@ -757,17 +757,17 @@ export default class BarChart extends Chart {
             const targetX = isPositive ? initialX : initialX + initialW;
 
             this._animator
-              .animate(bar.shape, "width", 0, {
+              .animate(bar.shape, 'width', 0, {
                 duration: 300,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: () => bar.markRedraw(),
               })
               .start();
 
             this._animator
-              .animate(bar.shape, "x", targetX, {
+              .animate(bar.shape, 'x', targetX, {
                 duration: 300,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: () => bar.markRedraw(),
               })
               .start();
@@ -777,17 +777,17 @@ export default class BarChart extends Chart {
             const targetY = isPositive ? initialY + initialH : initialY;
 
             this._animator
-              .animate(bar.shape, "height", 0, {
+              .animate(bar.shape, 'height', 0, {
                 duration: 300,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: () => bar.markRedraw(),
               })
               .start();
 
             this._animator
-              .animate(bar.shape, "y", targetY, {
+              .animate(bar.shape, 'y', targetY, {
                 duration: 300,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: () => bar.markRedraw(),
               })
               .start();
@@ -797,7 +797,7 @@ export default class BarChart extends Chart {
 
       this._renderer.flush();
     } catch (e) {
-      console.error("[BarChart] Render error:", e);
+      console.error('[BarChart] Render error:', e);
     }
   }
 }

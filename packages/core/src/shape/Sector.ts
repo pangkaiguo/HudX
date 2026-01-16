@@ -2,8 +2,8 @@
  * Sector - Sector shape element (pie slice)
  */
 
-import ChartElement from "../ChartElement";
-import type { ElementOption, BoundingRect } from "../types";
+import ChartElement from '../ChartElement';
+import type { ElementOption, BoundingRect } from '../types';
 
 export interface SectorShape {
   cx: number;

@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Renderer, Rect, Circle, Text, Theme } from "hux-core";
-import type { RenderMode } from "hux-core";
+import React, { useEffect, useRef, useState } from 'react';
+import { Renderer, Rect, Circle, Text, Theme } from 'hux-core';
+import type { RenderMode } from 'hux-core';
 
-export const ThemeExample = ({ theme = "light" }: { theme?: Theme }) => {
+export const ThemeExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
-  const [themeName, setThemeName] = useState<"light" | "dark">(
-    theme as "light" | "dark",
+  const [themeName, setThemeName] = useState<'light' | 'dark'>(
+    theme as 'light' | 'dark',
   );
-  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
-    setThemeName(theme as "light" | "dark");
+    setThemeName(theme as 'light' | 'dark');
   }, [theme]);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export const ThemeExample = ({ theme = "light" }: { theme?: Theme }) => {
       containerRef.current,
       renderMode,
       themeName,
-      "en",
+      'en',
     );
     rendererRef.current = renderer;
 
@@ -33,7 +33,7 @@ export const ThemeExample = ({ theme = "light" }: { theme?: Theme }) => {
         new Rect({
           shape: { x: 50, y: 50, width: 200, height: 100 },
           style: {
-            fill: theme.seriesColors?.[0] || "#5470c6",
+            fill: theme.seriesColors?.[0] || '#5470c6',
             stroke: theme.textColor,
             lineWidth: 2,
           },
@@ -43,7 +43,7 @@ export const ThemeExample = ({ theme = "light" }: { theme?: Theme }) => {
       renderer.add(
         new Circle({
           shape: { cx: 400, cy: 100, r: 50 },
-          style: { fill: theme.seriesColors?.[1] || "#91cc75" },
+          style: { fill: theme.seriesColors?.[1] || '#91cc75' },
         }),
       );
 
@@ -51,10 +51,10 @@ export const ThemeExample = ({ theme = "light" }: { theme?: Theme }) => {
         new Text({
           shape: { text: `Theme: ${themeName}`, x: 400, y: 200 },
           style: {
-            textAlign: "center",
+            textAlign: 'center',
             fill: theme.textColor,
             fontSize: 20,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           },
         }),
       );
@@ -74,48 +74,48 @@ export const ThemeExample = ({ theme = "light" }: { theme?: Theme }) => {
       <div
         style={{
           marginBottom: 20,
-          display: "flex",
+          display: 'flex',
           gap: 20,
-          flexWrap: "wrap",
-          alignItems: "center",
+          flexWrap: 'wrap',
+          alignItems: 'center',
         }}
       >
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10 }}>
           <button
-            onClick={() => setThemeName("light")}
-            aria-label="Switch to light theme"
-            style={{ padding: "8px 16px", cursor: "pointer" }}
+            onClick={() => setThemeName('light')}
+            aria-label='Switch to light theme'
+            style={{ padding: '8px 16px', cursor: 'pointer' }}
           >
             Light
           </button>
           <button
-            onClick={() => setThemeName("dark")}
-            aria-label="Switch to dark theme"
-            style={{ padding: "8px 16px", cursor: "pointer" }}
+            onClick={() => setThemeName('dark')}
+            aria-label='Switch to dark theme'
+            style={{ padding: '8px 16px', cursor: 'pointer' }}
           >
             Dark
           </button>
         </div>
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
             style={{
-              padding: "4px 8px",
+              padding: '4px 8px',
               borderRadius: 4,
-              border: "1px solid #ddd",
+              border: '1px solid #ddd',
             }}
           >
-            <option value="canvas">Canvas</option>
-            <option value="svg">SVG</option>
+            <option value='canvas'>Canvas</option>
+            <option value='svg'>SVG</option>
           </select>
         </label>
       </div>
       <div
         ref={containerRef}
         style={{
-          border: "1px solid #e0e0e0",
+          border: '1px solid #e0e0e0',
           borderRadius: 8,
           width: 800,
           height: 300,

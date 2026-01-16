@@ -1,14 +1,14 @@
-import { ChartElement, Circle, Rect, Polygon, Path } from "hux-core";
+import { ChartElement, Circle, Rect, Polygon, Path } from 'hux-core';
 
 export type SymbolType =
-  | "circle"
-  | "rect"
-  | "roundRect"
-  | "triangle"
-  | "diamond"
-  | "pin"
-  | "arrow"
-  | "none"
+  | 'circle'
+  | 'rect'
+  | 'roundRect'
+  | 'triangle'
+  | 'diamond'
+  | 'pin'
+  | 'arrow'
+  | 'none'
   | string;
 
 export function createSymbol(
@@ -19,12 +19,12 @@ export function createSymbol(
   style: any,
   z: number = 0,
 ): ChartElement | null {
-  if (type === "none") return null;
+  if (type === 'none') return null;
 
   const half = size / 2;
 
   switch (type) {
-    case "rect":
+    case 'rect':
       return new Rect({
         shape: {
           x: x - half,
@@ -36,7 +36,7 @@ export function createSymbol(
         z,
       });
 
-    case "roundRect":
+    case 'roundRect':
       return new Rect({
         shape: {
           x: x - half,
@@ -49,7 +49,7 @@ export function createSymbol(
         z,
       });
 
-    case "triangle":
+    case 'triangle':
       return new Polygon({
         shape: {
           points: [
@@ -62,7 +62,7 @@ export function createSymbol(
         z,
       });
 
-    case "diamond":
+    case 'diamond':
       return new Polygon({
         shape: {
           points: [
@@ -76,7 +76,7 @@ export function createSymbol(
         z,
       });
 
-    case "pin":
+    case 'pin':
       // Simplified pin path
       const pR = size / 2;
       const pY = y - size / 4;
@@ -93,7 +93,7 @@ export function createSymbol(
         z,
       });
 
-    case "arrow":
+    case 'arrow':
       return new Polygon({
         shape: {
           points: [
@@ -107,7 +107,7 @@ export function createSymbol(
         z,
       });
 
-    case "circle":
+    case 'circle':
     default:
       // Check if type starts with 'path://' or 'image://' (not implemented yet)
       return new Circle({

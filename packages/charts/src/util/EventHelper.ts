@@ -4,7 +4,7 @@ export class EventHelper {
     onMouseOver: (evt: any) => void,
     onMouseOut: (evt: any) => void,
   ): void {
-    element.on("mouseover", onMouseOver);
-    element.on("mouseout", onMouseOut);
+    element.on('mouseover', onMouseOver);
+    element.on('mouseout', onMouseOut);
   }
 }

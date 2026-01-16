@@ -1,10 +1,10 @@
-import { describe, it, expect, vi } from "vitest";
-import Group from "../Group";
-import Rect from "../shape/Rect";
-import ChartElement from "../ChartElement";
+import { describe, it, expect, vi } from 'vitest';
+import Group from '../Group';
+import Rect from '../shape/Rect';
+import ChartElement from '../ChartElement';
 
-describe("Group", () => {
-  it("should add and remove children", () => {
+describe('Group', () => {
+  it('should add and remove children', () => {
     const group = new Group();
     const rect = new Rect();
 
@@ -18,13 +18,13 @@ describe("Group", () => {
     expect((rect as any).__parent).toBeUndefined();
   });
 
-  it("should not add self", () => {
+  it('should not add self', () => {
     const group = new Group();
     group.add(group);
     expect(group.children().length).toBe(0);
   });
 
-  it("should handle re-parenting", () => {
+  it('should handle re-parenting', () => {
     const group1 = new Group();
     const group2 = new Group();
     const rect = new Rect();
@@ -38,7 +38,7 @@ describe("Group", () => {
     expect(group2.children().length).toBe(1);
   });
 
-  it("should remove all children", () => {
+  it('should remove all children', () => {
     const group = new Group();
     const r1 = new Rect();
     const r2 = new Rect();
@@ -54,19 +54,19 @@ describe("Group", () => {
     expect((r2 as any).__parent).toBeUndefined();
   });
 
-  it("should find child by name (using id)", () => {
+  it('should find child by name (using id)', () => {
     const group = new Group();
     const rect = new Rect({
-      id: "my-rect",
+      id: 'my-rect',
       shape: { x: 0, y: 0, width: 10, height: 10 },
     });
     group.add(rect);
 
-    expect(group.childOfName("my-rect")).toBe(rect);
-    expect(group.childOfName("non-existent")).toBeUndefined();
+    expect(group.childOfName('my-rect')).toBe(rect);
+    expect(group.childOfName('non-existent')).toBeUndefined();
   });
 
-  it("should traverse children", () => {
+  it('should traverse children', () => {
     const group = new Group();
     const g1 = new Group();
     const r1 = new Rect();
@@ -87,7 +87,7 @@ describe("Group", () => {
     expect(visited.length).toBe(3);
   });
 
-  it("should traverse with includeSelf", () => {
+  it('should traverse with includeSelf', () => {
     const group = new Group();
     const visited: ChartElement[] = [];
     group.traverse((child) => {
@@ -97,7 +97,7 @@ describe("Group", () => {
     expect(visited).toContain(group);
   });
 
-  it("should calculate bounding rect", () => {
+  it('should calculate bounding rect', () => {
     const group = new Group();
     const r1 = new Rect({ shape: { x: 0, y: 0, width: 10, height: 10 } });
     const r2 = new Rect({ shape: { x: 20, y: 20, width: 10, height: 10 } });
@@ -114,7 +114,7 @@ describe("Group", () => {
     });
   });
 
-  it("should return empty rect if no children", () => {
+  it('should return empty rect if no children', () => {
     const group = new Group();
     expect(group.getBoundingRect()).toEqual({
       x: 0,
@@ -124,7 +124,7 @@ describe("Group", () => {
     });
   });
 
-  it("should check containment", () => {
+  it('should check containment', () => {
     const group = new Group();
     const rect = new Rect({ shape: { x: 0, y: 0, width: 100, height: 100 } });
     group.add(rect);
@@ -133,7 +133,7 @@ describe("Group", () => {
     expect(group.contain(150, 150)).toBe(false);
   });
 
-  it("should render children", () => {
+  it('should render children', () => {
     const group = new Group();
     const rect = new Rect();
     rect.render = vi.fn();
@@ -153,7 +153,7 @@ describe("Group", () => {
     expect(ctx.restore).toHaveBeenCalled();
   });
 
-  it("should sort children by z/zlevel before render", () => {
+  it('should sort children by z/zlevel before render', () => {
     const group = new Group();
     const r1 = new Rect({ z: 1, shape: { x: 0, y: 0, width: 0, height: 0 } });
     const r2 = new Rect({ z: 2, shape: { x: 0, y: 0, width: 0, height: 0 } });
@@ -163,9 +163,9 @@ describe("Group", () => {
     });
 
     const renderOrder: string[] = [];
-    r1.render = () => renderOrder.push("r1");
-    r2.render = () => renderOrder.push("r2");
-    r3.render = () => renderOrder.push("r3");
+    r1.render = () => renderOrder.push('r1');
+    r2.render = () => renderOrder.push('r2');
+    r3.render = () => renderOrder.push('r3');
 
     group.add(r2);
     group.add(r3);
@@ -177,6 +177,6 @@ describe("Group", () => {
     } as unknown as CanvasRenderingContext2D;
     group.render(ctx);
 
-    expect(renderOrder).toEqual(["r1", "r2", "r3"]);
+    expect(renderOrder).toEqual(['r1', 'r2', 'r3']);
   });
 });

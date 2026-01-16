@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { HChart } from "hux-charts";
-import type { ChartOption } from "hux-charts";
-import { ThemeManager, Theme } from "hux-core";
-import { CodeEditor } from "./CodeEditor";
+import React, { useState, useEffect, useCallback } from 'react';
+import { HChart } from 'hux-charts';
+import type { ChartOption } from 'hux-charts';
+import { ThemeManager, Theme } from 'hux-core';
+import { CodeEditor } from './CodeEditor';
 
 interface CodeboxProps {
   initialCode: string;
@@ -22,66 +22,66 @@ export const Codebox: React.FC<CodeboxProps> = ({
   const [code, setCode] = useState(initialCode);
   const [option, setOption] = useState<ChartOption>({});
   const [error, setError] = useState<string | null>(null);
-  const [renderMode, setRenderMode] = useState<"canvas" | "svg">("canvas");
-  const [activeTab, setActiveTab] = useState<"JS" | "TS">("JS");
+  const [renderMode, setRenderMode] = useState<'canvas' | 'svg'>('canvas');
+  const [activeTab, setActiveTab] = useState<'JS' | 'TS'>('JS');
   const chartContainerRef = React.useRef<HTMLDivElement>(null);
 
   const getTsCode = (jsCode: string) => {
     return `import type { ChartOption } from 'hudx';
 
-const ${jsCode.replace("option =", "option: ChartOption =")}`;
+const ${jsCode.replace('option =', 'option: ChartOption =')}`;
   };
 
   const handleDownload = () => {
-    const isTs = activeTab === "TS";
+    const isTs = activeTab === 'TS';
     const content = isTs ? getTsCode(code) : code;
-    const blob = new Blob([content], { type: "text/plain" });
+    const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
-    a.download = isTs ? "chart-option.ts" : "chart-option.js";
+    a.download = isTs ? 'chart-option.ts' : 'chart-option.js';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
 
-  const handleScreenshot = (type: "png" | "jpeg" | "svg") => {
+  const handleScreenshot = (type: 'png' | 'jpeg' | 'svg') => {
     if (!chartContainerRef.current) return;
 
-    const canvas = chartContainerRef.current.querySelector("canvas");
-    const svg = chartContainerRef.current.querySelector("svg");
+    const canvas = chartContainerRef.current.querySelector('canvas');
+    const svg = chartContainerRef.current.querySelector('svg');
 
-    let url = "";
+    let url = '';
 
-    if (renderMode === "canvas" && canvas) {
-      if (type === "svg") {
-        alert("Cannot download SVG from Canvas mode");
+    if (renderMode === 'canvas' && canvas) {
+      if (type === 'svg') {
+        alert('Cannot download SVG from Canvas mode');
         return;
       }
       url = canvas.toDataURL(`image/${type}`);
-    } else if (renderMode === "svg" && svg) {
-      if (type !== "svg") {
+    } else if (renderMode === 'svg' && svg) {
+      if (type !== 'svg') {
         // Convert SVG to Canvas for PNG/JPEG export
         const serializer = new XMLSerializer();
         const source = serializer.serializeToString(svg);
         const svgBlob = new Blob([source], {
-          type: "image/svg+xml;charset=utf-8",
+          type: 'image/svg+xml;charset=utf-8',
         });
         const url = URL.createObjectURL(svgBlob);
 
         const img = new Image();
         img.onload = () => {
-          const canvas = document.createElement("canvas");
+          const canvas = document.createElement('canvas');
           canvas.width = svg.clientWidth;
           canvas.height = svg.clientHeight;
-          const ctx = canvas.getContext("2d");
+          const ctx = canvas.getContext('2d');
           if (ctx) {
-            ctx.fillStyle = theme === "dark" ? "#100c2a" : "#fff"; // Add background
+            ctx.fillStyle = theme === 'dark' ? '#100c2a' : '#fff'; // Add background
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0);
 
-            const a = document.createElement("a");
+            const a = document.createElement('a');
             a.href = canvas.toDataURL(`image/${type}`);
             a.download = `chart.${type}`;
             document.body.appendChild(a);
@@ -96,20 +96,20 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
         const serializer = new XMLSerializer();
         const source = serializer.serializeToString(svg);
         const blob = new Blob([source], {
-          type: "image/svg+xml;charset=utf-8",
+          type: 'image/svg+xml;charset=utf-8',
         });
         url = URL.createObjectURL(blob);
       }
     }
 
     if (url) {
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
       a.download = `chart.${type}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      if (type === "svg") URL.revokeObjectURL(url);
+      if (type === 'svg') URL.revokeObjectURL(url);
     }
   };
 
@@ -142,16 +142,16 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
     runCode();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const bgColor = theme === "dark" ? "#100c2a" : "#fff";
-  const textColor = theme === "dark" ? "#fff" : "#333";
-  const borderColor = theme === "dark" ? "#333" : "#e0e0e0";
+  const bgColor = theme === 'dark' ? '#100c2a' : '#fff';
+  const textColor = theme === 'dark' ? '#fff' : '#333';
+  const borderColor = theme === 'dark' ? '#333' : '#e0e0e0';
 
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
         backgroundColor: bgColor,
         color: textColor,
       }}
@@ -161,58 +161,58 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
         style={{
           height: 50,
           borderBottom: `1px solid ${borderColor}`,
-          display: "flex",
-          alignItems: "center",
-          padding: "0 20px",
-          justifyContent: "space-between",
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 20px',
+          justifyContent: 'space-between',
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <button
             onClick={onBack}
             style={{
-              cursor: "pointer",
-              background: "none",
-              border: "none",
+              cursor: 'pointer',
+              background: 'none',
+              border: 'none',
               fontSize: 16,
               color: textColor,
             }}
           >
             ← Back
           </button>
-          <span style={{ fontWeight: "bold" }}>{title || "Chart Example"}</span>
+          <span style={{ fontWeight: 'bold' }}>{title || 'Chart Example'}</span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
           <div
             style={{
-              display: "flex",
+              display: 'flex',
               border: `1px solid ${borderColor}`,
               borderRadius: 4,
-              overflow: "hidden",
+              overflow: 'hidden',
             }}
           >
             <button
-              onClick={() => onThemeChange("light")}
+              onClick={() => onThemeChange('light')}
               style={{
-                padding: "4px 12px",
-                background: theme === "light" ? "#4096ff" : "transparent",
-                color: theme === "light" ? "#fff" : textColor,
-                border: "none",
-                cursor: "pointer",
+                padding: '4px 12px',
+                background: theme === 'light' ? '#4096ff' : 'transparent',
+                color: theme === 'light' ? '#fff' : textColor,
+                border: 'none',
+                cursor: 'pointer',
                 fontSize: 12,
               }}
             >
               Light
             </button>
             <button
-              onClick={() => onThemeChange("dark")}
+              onClick={() => onThemeChange('dark')}
               style={{
-                padding: "4px 12px",
-                background: theme === "dark" ? "#4096ff" : "transparent",
-                color: theme === "dark" ? "#fff" : textColor,
-                border: "none",
-                cursor: "pointer",
+                padding: '4px 12px',
+                background: theme === 'dark' ? '#4096ff' : 'transparent',
+                color: theme === 'dark' ? '#fff' : textColor,
+                border: 'none',
+                cursor: 'pointer',
                 fontSize: 12,
               }}
             >
@@ -221,33 +221,33 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
           </div>
           <div
             style={{
-              display: "flex",
+              display: 'flex',
               border: `1px solid ${borderColor}`,
               borderRadius: 4,
-              overflow: "hidden",
+              overflow: 'hidden',
             }}
           >
             <button
-              onClick={() => setRenderMode("svg")}
+              onClick={() => setRenderMode('svg')}
               style={{
-                padding: "4px 12px",
-                background: renderMode === "svg" ? "#4096ff" : "transparent",
-                color: renderMode === "svg" ? "#fff" : textColor,
-                border: "none",
-                cursor: "pointer",
+                padding: '4px 12px',
+                background: renderMode === 'svg' ? '#4096ff' : 'transparent',
+                color: renderMode === 'svg' ? '#fff' : textColor,
+                border: 'none',
+                cursor: 'pointer',
                 fontSize: 12,
               }}
             >
               SVG
             </button>
             <button
-              onClick={() => setRenderMode("canvas")}
+              onClick={() => setRenderMode('canvas')}
               style={{
-                padding: "4px 12px",
-                background: renderMode === "canvas" ? "#4096ff" : "transparent",
-                color: renderMode === "canvas" ? "#fff" : textColor,
-                border: "none",
-                cursor: "pointer",
+                padding: '4px 12px',
+                background: renderMode === 'canvas' ? '#4096ff' : 'transparent',
+                color: renderMode === 'canvas' ? '#fff' : textColor,
+                border: 'none',
+                cursor: 'pointer',
                 fontSize: 12,
               }}
             >
@@ -258,13 +258,13 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
       </div>
 
       {/* Main Content */}
-      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         {/* Left Pane: Editor */}
         <div
           style={{
-            width: "40%",
-            display: "flex",
-            flexDirection: "column",
+            width: '40%',
+            display: 'flex',
+            flexDirection: 'column',
             borderRight: `1px solid ${borderColor}`,
           }}
         >
@@ -272,47 +272,47 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
             style={{
               height: 40,
               borderBottom: `1px solid ${borderColor}`,
-              display: "flex",
-              alignItems: "center",
-              padding: "0 10px",
-              backgroundColor: theme === "dark" ? "#252526" : "#f0f0f0",
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 10px',
+              backgroundColor: theme === 'dark' ? '#252526' : '#f0f0f0',
             }}
           >
             <button
               style={{
-                padding: "0 15px",
-                height: "100%",
+                padding: '0 15px',
+                height: '100%',
                 background:
-                  activeTab === "JS"
-                    ? theme === "dark"
-                      ? "#1e1e1e"
-                      : "#fff"
-                    : "transparent",
-                border: "none",
+                  activeTab === 'JS'
+                    ? theme === 'dark'
+                      ? '#1e1e1e'
+                      : '#fff'
+                    : 'transparent',
+                border: 'none',
                 color: textColor,
-                cursor: "pointer",
-                fontWeight: activeTab === "JS" ? "bold" : "normal",
+                cursor: 'pointer',
+                fontWeight: activeTab === 'JS' ? 'bold' : 'normal',
               }}
-              onClick={() => setActiveTab("JS")}
+              onClick={() => setActiveTab('JS')}
             >
               JS
             </button>
             <button
               style={{
-                padding: "0 15px",
-                height: "100%",
+                padding: '0 15px',
+                height: '100%',
                 background:
-                  activeTab === "TS"
-                    ? theme === "dark"
-                      ? "#1e1e1e"
-                      : "#fff"
-                    : "transparent",
-                border: "none",
+                  activeTab === 'TS'
+                    ? theme === 'dark'
+                      ? '#1e1e1e'
+                      : '#fff'
+                    : 'transparent',
+                border: 'none',
                 color: textColor,
-                cursor: "pointer",
-                fontWeight: activeTab === "TS" ? "bold" : "normal",
+                cursor: 'pointer',
+                fontWeight: activeTab === 'TS' ? 'bold' : 'normal',
               }}
-              onClick={() => setActiveTab("TS")}
+              onClick={() => setActiveTab('TS')}
             >
               TS
             </button>
@@ -320,15 +320,15 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
             <button
               onClick={runCode}
               style={{
-                padding: "4px 15px",
-                background: "#4096ff",
-                color: "#fff",
-                border: "none",
+                padding: '4px 15px',
+                background: '#4096ff',
+                color: '#fff',
+                border: 'none',
                 borderRadius: 4,
-                cursor: "pointer",
+                cursor: 'pointer',
                 fontSize: 12,
-                opacity: activeTab === "TS" ? 0.5 : 1,
-                pointerEvents: activeTab === "TS" ? "none" : "auto",
+                opacity: activeTab === 'TS' ? 0.5 : 1,
+                pointerEvents: activeTab === 'TS' ? 'none' : 'auto',
               }}
             >
               Run
@@ -341,30 +341,30 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
               }}
               style={{
                 marginLeft: 10,
-                padding: "4px 15px",
-                background: "transparent",
+                padding: '4px 15px',
+                background: 'transparent',
                 border: `1px solid ${borderColor}`,
                 color: textColor,
                 borderRadius: 4,
-                cursor: "pointer",
+                cursor: 'pointer',
                 fontSize: 12,
-                opacity: activeTab === "TS" ? 0.5 : 1,
-                pointerEvents: activeTab === "TS" ? "none" : "auto",
+                opacity: activeTab === 'TS' ? 0.5 : 1,
+                pointerEvents: activeTab === 'TS' ? 'none' : 'auto',
               }}
             >
               Reset
             </button>
           </div>
           <CodeEditor
-            code={activeTab === "TS" ? getTsCode(code) : code}
-            onChange={activeTab === "TS" ? () => {} : setCode}
-            theme={theme === "dark" ? "dark" : "light"}
+            code={activeTab === 'TS' ? getTsCode(code) : code}
+            onChange={activeTab === 'TS' ? () => {} : setCode}
+            theme={theme === 'dark' ? 'dark' : 'light'}
           />
           {error && (
             <div
               style={{
                 padding: 10,
-                color: "red",
+                color: 'red',
                 fontSize: 12,
                 borderTop: `1px solid ${borderColor}`,
               }}
@@ -379,9 +379,9 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
           style={{
             flex: 1,
             padding: 20,
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: theme === "dark" ? "#100c2a" : "#fff",
+            display: 'flex',
+            flexDirection: 'column',
+            backgroundColor: theme === 'dark' ? '#100c2a' : '#fff',
           }}
         >
           <div
@@ -391,22 +391,22 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
               minHeight: 0,
               border: `1px solid ${borderColor}`,
               borderRadius: 8,
-              overflow: "hidden",
+              overflow: 'hidden',
             }}
           >
             <HChart
               option={option}
               theme={theme}
               renderMode={renderMode}
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: '100%', height: '100%' }}
             />
           </div>
           <div
             style={{
               height: 40,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
               gap: 10,
               marginTop: 10,
             }}
@@ -414,68 +414,68 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
             <button
               onClick={handleDownload}
               style={{
-                padding: "5px 10px",
-                background: "none",
+                padding: '5px 10px',
+                background: 'none',
                 border: `1px solid ${borderColor}`,
                 borderRadius: 4,
                 color: textColor,
                 fontSize: 12,
-                cursor: "pointer",
+                cursor: 'pointer',
               }}
             >
               Download Code
             </button>
             <div
               style={{
-                display: "flex",
+                display: 'flex',
                 border: `1px solid ${borderColor}`,
                 borderRadius: 4,
-                overflow: "hidden",
+                overflow: 'hidden',
               }}
             >
               <button
-                onClick={() => handleScreenshot("png")}
+                onClick={() => handleScreenshot('png')}
                 style={{
-                  padding: "5px 10px",
-                  background: "none",
+                  padding: '5px 10px',
+                  background: 'none',
                   borderRight: `1px solid ${borderColor}`,
-                  borderTop: "none",
-                  borderBottom: "none",
-                  borderLeft: "none",
+                  borderTop: 'none',
+                  borderBottom: 'none',
+                  borderLeft: 'none',
                   color: textColor,
                   fontSize: 12,
-                  cursor: "pointer",
+                  cursor: 'pointer',
                 }}
               >
                 PNG
               </button>
               <button
-                onClick={() => handleScreenshot("jpeg")}
+                onClick={() => handleScreenshot('jpeg')}
                 style={{
-                  padding: "5px 10px",
-                  background: "none",
+                  padding: '5px 10px',
+                  background: 'none',
                   borderRight: `1px solid ${borderColor}`,
-                  borderTop: "none",
-                  borderBottom: "none",
-                  borderLeft: "none",
+                  borderTop: 'none',
+                  borderBottom: 'none',
+                  borderLeft: 'none',
                   color: textColor,
                   fontSize: 12,
-                  cursor: "pointer",
+                  cursor: 'pointer',
                 }}
               >
                 JPG
               </button>
               <button
-                onClick={() => handleScreenshot("svg")}
+                onClick={() => handleScreenshot('svg')}
                 style={{
-                  padding: "5px 10px",
-                  background: "none",
-                  border: "none",
+                  padding: '5px 10px',
+                  background: 'none',
+                  border: 'none',
                   color: textColor,
                   fontSize: 12,
-                  cursor: "pointer",
-                  opacity: renderMode === "canvas" ? 0.5 : 1,
-                  pointerEvents: renderMode === "canvas" ? "none" : "auto",
+                  cursor: 'pointer',
+                  opacity: renderMode === 'canvas' ? 0.5 : 1,
+                  pointerEvents: renderMode === 'canvas' ? 'none' : 'auto',
                 }}
               >
                 SVG

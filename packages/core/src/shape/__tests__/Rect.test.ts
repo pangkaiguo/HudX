@@ -1,20 +1,20 @@
-import { describe, it, expect, vi } from "vitest";
-import Rect from "../Rect";
+import { describe, it, expect, vi } from 'vitest';
+import Rect from '../Rect';
 
-describe("Rect", () => {
-  it("should initialize with default values", () => {
+describe('Rect', () => {
+  it('should initialize with default values', () => {
     const rect = new Rect();
     expect(rect.shape).toEqual({ x: 0, y: 0, width: 0, height: 0 });
   });
 
-  it("should initialize with provided values", () => {
+  it('should initialize with provided values', () => {
     const rect = new Rect({
       shape: { x: 10, y: 20, width: 100, height: 50 },
     });
     expect(rect.shape).toEqual({ x: 10, y: 20, width: 100, height: 50 });
   });
 
-  it("should calculate bounding rect correctly", () => {
+  it('should calculate bounding rect correctly', () => {
     const rect = new Rect({
       shape: { x: 10, y: 20, width: 100, height: 50 },
     });
@@ -22,7 +22,7 @@ describe("Rect", () => {
     expect(bbox).toEqual({ x: 10, y: 20, width: 100, height: 50 });
   });
 
-  it("should check containment correctly", () => {
+  it('should check containment correctly', () => {
     const rect = new Rect({
       shape: { x: 10, y: 20, width: 100, height: 50 },
     });
@@ -32,7 +32,7 @@ describe("Rect", () => {
     expect(rect.contain(15, 80)).toBe(false);
   });
 
-  it("should check containment with transform", () => {
+  it('should check containment with transform', () => {
     const rect = new Rect({
       shape: { x: 0, y: 0, width: 100, height: 100 },
       transform: { x: 50, y: 50 },
@@ -41,10 +41,10 @@ describe("Rect", () => {
     expect(rect.contain(10, 10)).toBe(false);
   });
 
-  it("should render standard rect", () => {
+  it('should render standard rect', () => {
     const rect = new Rect({
       shape: { x: 10, y: 10, width: 100, height: 100 },
-      style: { fill: "red", stroke: "blue", lineWidth: 2 },
+      style: { fill: 'red', stroke: 'blue', lineWidth: 2 },
     });
 
     const ctx = {
@@ -68,10 +68,10 @@ describe("Rect", () => {
     expect(ctx.restore).toHaveBeenCalled();
   });
 
-  it("should render rounded rect", () => {
+  it('should render rounded rect', () => {
     const rect = new Rect({
       shape: { x: 10, y: 10, width: 100, height: 100, r: 10 },
-      style: { fill: "red" },
+      style: { fill: 'red' },
     });
 
     const ctx = {
@@ -95,10 +95,10 @@ describe("Rect", () => {
     expect(ctx.fill).toHaveBeenCalled();
   });
 
-  it("should clamp border radius", () => {
+  it('should clamp border radius', () => {
     const rect = new Rect({
       shape: { x: 0, y: 0, width: 100, height: 100, r: 60 },
-      style: { fill: "red" },
+      style: { fill: 'red' },
     });
 
     const ctx = {
@@ -121,7 +121,7 @@ describe("Rect", () => {
     expect(calls[0][2]).toBe(50);
   });
 
-  it("should not render if invisible", () => {
+  it('should not render if invisible', () => {
     const rect = new Rect({
       invisible: true,
       shape: { x: 0, y: 0, width: 0, height: 0 },

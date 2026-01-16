@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from "react";
-import { Rect, Circle, Group, Renderer, HChart, type ChartOption } from "hudx";
+import React, { useRef, useEffect } from 'react';
+import { Rect, Circle, Group, Renderer, HChart, type ChartOption } from 'hudx';
 
 // This example demonstrates importing everything from the unified 'hudx' package
 export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
@@ -15,20 +15,20 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
       bottom: 60,
     },
     xAxis: {
-      type: "category",
-      data: ["A", "B", "C", "D", "E"],
+      type: 'category',
+      data: ['A', 'B', 'C', 'D', 'E'],
       show: true,
     },
     yAxis: {
-      type: "value",
+      type: 'value',
       show: true,
     },
     series: [
       {
-        type: "bar",
-        name: "Sales",
+        type: 'bar',
+        name: 'Sales',
         data: [120, 200, 150, 80, 70],
-        itemStyle: { color: "#5470c6" },
+        itemStyle: { color: '#5470c6' },
       },
     ],
     tooltip: {
@@ -41,7 +41,7 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
     if (!coreRef.current) return;
 
     // Initialize renderer directly
-    const renderer = new Renderer(coreRef.current, "canvas");
+    const renderer = new Renderer(coreRef.current, 'canvas');
     renderer.resize(600, 200);
 
     // Create some shapes
@@ -53,8 +53,8 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
         height: 100,
       },
       style: {
-        fill: "#4f46e5",
-        stroke: "#312e81",
+        fill: '#4f46e5',
+        stroke: '#312e81',
         lineWidth: 2,
       },
     });
@@ -66,20 +66,20 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
         r: 50,
       },
       style: {
-        fill: "#ec4899",
-        stroke: "#831843",
+        fill: '#ec4899',
+        stroke: '#831843',
         lineWidth: 2,
       },
     });
 
     // Add interactivity
-    rect.on("mouseenter", () => {
-      rect.attr("style", { fill: "#6366f1" });
+    rect.on('mouseenter', () => {
+      rect.attr('style', { fill: '#6366f1' });
       renderer.refresh();
     });
 
-    rect.on("mouseleave", () => {
-      rect.attr("style", { fill: "#4f46e5" });
+    rect.on('mouseleave', () => {
+      rect.attr('style', { fill: '#4f46e5' });
       renderer.refresh();
     });
 
@@ -102,12 +102,12 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
 
       <div style={{ marginBottom: 40 }}>
         <h2>1. HChart Component imported from 'hudx'</h2>
-        <div style={{ border: "1px solid #ccc", display: "inline-block" }}>
+        <div style={{ border: '1px solid #ccc', display: 'inline-block' }}>
           <HChart
             option={barOption}
             width={600}
             height={400}
-            theme={theme || "light"}
+            theme={theme || 'light'}
           />
         </div>
       </div>
@@ -117,8 +117,8 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
         <div
           ref={coreRef}
           style={{
-            border: "1px solid #ccc",
-            display: "inline-block",
+            border: '1px solid #ccc',
+            display: 'inline-block',
             height: 200,
             width: 600,
           }}

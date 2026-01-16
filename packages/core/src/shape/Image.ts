@@ -2,8 +2,8 @@
  * Image - Image shape element
  */
 
-import ChartElement from "../ChartElement";
-import type { ElementOption, BoundingRect } from "../types";
+import ChartElement from '../ChartElement';
+import type { ElementOption, BoundingRect } from '../types';
 
 export interface ImageShape {
   x: number;

@@ -1,4 +1,4 @@
-import { Point } from "hux-core";
+import { Point } from 'hux-core';
 
 /**
  * Calculate smooth line path data using Catmull-Rom spline algorithm (Centripetal or Uniform)
@@ -14,7 +14,7 @@ export function getSmoothPath(
   tension: number = 0.5,
   close: boolean = false,
 ): string {
-  if (points.length < 2) return "";
+  if (points.length < 2) return '';
 
   // ECharts default tension is 0.5, but we need to scale it for our bezier logic
   // Typically, Catmull-Rom to Bezier factor is 1/6 (approx 0.166)
@@ -28,7 +28,7 @@ export function getSmoothPath(
   // If only 2 points, straight line
   if (size === 2) {
     path += ` L ${points[1].x} ${points[1].y}`;
-    if (close) path += " Z";
+    if (close) path += ' Z';
     return path;
   }
 
@@ -81,7 +81,7 @@ export function getSmoothPath(
   }
 
   if (close) {
-    path += " Z";
+    path += ' Z';
   }
 
   return path;
@@ -95,7 +95,7 @@ export function getSmoothAreaPath(
   y0: number,
   tension: number = 0.5,
 ): string {
-  if (points.length < 2) return "";
+  if (points.length < 2) return '';
 
   let path = getSmoothPath(points, tension, false);
 

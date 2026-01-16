@@ -1,11 +1,11 @@
-import Chart from "../Chart";
+import Chart from '../Chart';
 import {
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
-} from "../util/coordinate";
-import { Circle, Z_SERIES } from "hux-core";
-import { EventHelper } from "../util/EventHelper";
+} from '../util/coordinate';
+import { Circle, Z_SERIES } from 'hux-core';
+import { EventHelper } from '../util/EventHelper';
 
 export default class ScatterChart extends Chart {
   private _activeScatters: Map<number, Circle[]> = new Map();
@@ -13,7 +13,7 @@ export default class ScatterChart extends Chart {
   protected _onLegendHover(name: string, hovered: boolean): void {
     const seriesIndex = (this._option.series || []).findIndex(
       (s: any, i: number) => {
-        const sName = s.name || this.t("series.name", "Series") + "-" + (i + 1);
+        const sName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
         return sName === name;
       },
     );
@@ -24,14 +24,14 @@ export default class ScatterChart extends Chart {
       if (hovered) {
         if (idx === seriesIndex) {
           // Highlight
-          circles.forEach((c) => c.attr("style", { opacity: 1 }));
+          circles.forEach((c) => c.attr('style', { opacity: 1 }));
         } else {
           // Dim
-          circles.forEach((c) => c.attr("style", { opacity: 0.1 }));
+          circles.forEach((c) => c.attr('style', { opacity: 0.1 }));
         }
       } else {
         // Restore
-        circles.forEach((c) => c.attr("style", { opacity: 0.8 })); // Default opacity for scatter is often 0.8
+        circles.forEach((c) => c.attr('style', { opacity: 0.8 })); // Default opacity for scatter is often 0.8
       }
     });
   }
@@ -50,7 +50,7 @@ export default class ScatterChart extends Chart {
 
       if (!Circle) {
         console.error(
-          "[ScatterChart] Circle class is not defined. Check imports.",
+          '[ScatterChart] Circle class is not defined. Check imports.',
         );
         return;
       }
@@ -71,7 +71,7 @@ export default class ScatterChart extends Chart {
 
       let data: any[] = [];
       series.forEach((s) => {
-        if (s.type === "scatter" && s.show !== false) {
+        if (s.type === 'scatter' && s.show !== false) {
           data = data.concat(s.data || []);
         }
       });
@@ -82,12 +82,12 @@ export default class ScatterChart extends Chart {
       const yDomain = calculateDomain(yAxis || {}, data, false);
 
       const xScale =
-        xAxis?.type === "category"
+        xAxis?.type === 'category'
           ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
           : createLinearScale(xDomain, [plotX, plotX + plotWidth]);
 
       const yScale =
-        yAxis?.type === "category"
+        yAxis?.type === 'category'
           ? createOrdinalScale(yDomain, [plotY + plotHeight, plotY])
           : createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
@@ -97,16 +97,16 @@ export default class ScatterChart extends Chart {
           y: yScale,
         });
       } catch (e) {
-        console.error("[ScatterChart] Error rendering axes:", e);
+        console.error('[ScatterChart] Error rendering axes:', e);
       }
 
       if (option.legend?.show !== false) {
         const items = (series as any[])
-          .filter((s: any) => s.type === "scatter" && s.show !== false)
+          .filter((s: any) => s.type === 'scatter' && s.show !== false)
           .map((s: any, i: number) => ({
-            name: s.name || this.t("series.name", "Series") + "-" + (i + 1),
+            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: option.legend?.icon || "circle",
+            icon: option.legend?.icon || 'circle',
             textColor: this.getThemeConfig().legendTextColor,
             data: s,
           }));
@@ -114,7 +114,7 @@ export default class ScatterChart extends Chart {
       }
 
       series.forEach((s: any, seriesIndex: number) => {
-        if (s.type !== "scatter") return;
+        if (s.type !== 'scatter') return;
 
         const seriesData = s.data || [];
         const color =
@@ -126,7 +126,7 @@ export default class ScatterChart extends Chart {
           if (Array.isArray(item)) {
             xVal = item[0];
             yVal = item[1];
-          } else if (typeof item === "object") {
+          } else if (typeof item === 'object') {
             xVal = item.value?.[0];
             yVal = item.value?.[1];
           }
@@ -135,9 +135,9 @@ export default class ScatterChart extends Chart {
 
           let cx: number, cy: number;
 
-          if (xAxis?.type === "category") {
+          if (xAxis?.type === 'category') {
             if (
-              typeof xVal === "number" &&
+              typeof xVal === 'number' &&
               xAxis.data &&
               xAxis.data[xVal] !== undefined
             ) {
@@ -150,9 +150,9 @@ export default class ScatterChart extends Chart {
             cx = xScale(xVal);
           }
 
-          if (yAxis?.type === "category") {
+          if (yAxis?.type === 'category') {
             if (
-              typeof yVal === "number" &&
+              typeof yVal === 'number' &&
               yAxis.data &&
               yAxis.data[yVal] !== undefined
             ) {
@@ -189,19 +189,19 @@ export default class ScatterChart extends Chart {
           this._activeScatters.get(seriesIndex)!.push(circle);
 
           if (this._tooltip) {
-            circle.on("mouseover", (evt: any) => {
-              circle.attr("shape", { r: symbolSize / 2 + 3 });
-              circle.attr("style", { opacity: 1 });
+            circle.on('mouseover', (evt: any) => {
+              circle.attr('shape', { r: symbolSize / 2 + 3 });
+              circle.attr('style', { opacity: 1 });
 
               const itemName =
-                typeof item === "object" && item.name ? item.name : "";
+                typeof item === 'object' && item.name ? item.name : '';
               const params = {
-                componentType: "series",
-                seriesType: "scatter",
+                componentType: 'series',
+                seriesType: 'scatter',
                 seriesIndex,
                 seriesName:
                   s.name ||
-                  this.t("series.name", "Series") + "-" + (seriesIndex + 1),
+                  this.t('series.name', 'Series') + '-' + (seriesIndex + 1),
                 name: itemName,
                 dataIndex: index,
                 data: item,
@@ -224,9 +224,9 @@ export default class ScatterChart extends Chart {
               this._tooltip!.show(mx, my, content, params, targetRect);
             });
 
-            circle.on("mouseout", () => {
-              circle.attr("shape", { r: symbolSize / 2 });
-              circle.attr("style", { opacity: 0.8 });
+            circle.on('mouseout', () => {
+              circle.attr('shape', { r: symbolSize / 2 });
+              circle.attr('style', { opacity: 0.8 });
               this._tooltip!.hide();
             });
           }
@@ -237,10 +237,10 @@ export default class ScatterChart extends Chart {
 
             circle.shape.r = 0;
 
-            this._animator.animate(circle.shape, "r", symbolSize / 2, {
+            this._animator.animate(circle.shape, 'r', symbolSize / 2, {
               duration,
               delay,
-              easing: "elasticOut",
+              easing: 'elasticOut',
               onUpdate: () => circle.markRedraw(),
             });
           } else {
@@ -254,7 +254,7 @@ export default class ScatterChart extends Chart {
 
       this._renderer.flush();
     } catch (e) {
-      console.error("[ScatterChart] Render error:", e);
+      console.error('[ScatterChart] Render error:', e);
     }
   }
 }

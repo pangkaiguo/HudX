@@ -1,10 +1,10 @@
-import React, { useRef, useState, useMemo } from "react";
-import { HChart } from "hux-charts";
-import type { ChartOption, HChartRef } from "hux-charts";
-import { ThemeManager, Theme } from "hux-core";
-import type { RenderMode } from "hux-core";
+import React, { useRef, useState, useMemo } from 'react';
+import { HChart } from 'hux-charts';
+import type { ChartOption, HChartRef } from 'hux-charts';
+import { ThemeManager, Theme } from 'hux-core';
+import type { RenderMode } from 'hux-core';
 
-export const StackBar3DExample = ({ theme = "light" }: { theme?: Theme }) => {
+export const StackBar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);
   const themeObj = ThemeManager.getTheme(theme);
 
@@ -12,21 +12,21 @@ export const StackBar3DExample = ({ theme = "light" }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(5);
-  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   const option = useMemo<ChartOption>(
     () => ({
       tooltip: {
         show: true,
-        trigger: "item",
+        trigger: 'item',
         // formatter: '{b}\n{c}'
       },
       legend: {
         show: true,
-        orient: "vertical",
-        left: "right",
+        orient: 'vertical',
+        left: 'right',
         top: 20,
-        icon: "rect",
+        icon: 'rect',
       },
       grid: {
         left: 60,
@@ -39,55 +39,55 @@ export const StackBar3DExample = ({ theme = "light" }: { theme?: Theme }) => {
         decal: {
           show: isDecal,
           decals: [
-            { symbol: "diagonal", color: themeObj.decalColor },
-            { symbol: "dots", color: themeObj.decalColor },
-            { symbol: "diagonal-reverse", color: themeObj.decalColor },
-            { symbol: "checkerboard", color: themeObj.decalColor },
-            { symbol: "crosshatch", color: themeObj.decalColor },
+            { symbol: 'diagonal', color: themeObj.decalColor },
+            { symbol: 'dots', color: themeObj.decalColor },
+            { symbol: 'diagonal-reverse', color: themeObj.decalColor },
+            { symbol: 'checkerboard', color: themeObj.decalColor },
+            { symbol: 'crosshatch', color: themeObj.decalColor },
           ],
         },
       },
       xAxis: {
-        type: "category",
-        data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
         show: true,
         splitLine: {
           show: showGrid,
           lineStyle: {
-            color: "#eee",
-            type: "dashed",
+            color: '#eee',
+            type: 'dashed',
           },
         },
       },
       yAxis: {
-        type: "value",
+        type: 'value',
         show: true,
         splitNumber: splitNumber,
         splitLine: {
           show: showGrid,
           lineStyle: {
-            color: "#eee",
+            color: '#eee',
           },
         },
       },
       series: [
         {
-          name: "Product A",
-          type: "stackBar3D",
+          name: 'Product A',
+          type: 'stackBar3D',
           data: [120, 132, 101, 134, 90, 230, 210],
-          itemStyle: { color: "#5470c6", borderWidth: 0 },
+          itemStyle: { color: '#5470c6', borderWidth: 0 },
         },
         {
-          name: "Product B",
-          type: "stackBar3D",
+          name: 'Product B',
+          type: 'stackBar3D',
           data: [220, 182, 191, 234, 290, 330, 310],
-          itemStyle: { color: "#91cc75", borderWidth: 0 },
+          itemStyle: { color: '#91cc75', borderWidth: 0 },
         },
         {
-          name: "Product C",
-          type: "stackBar3D",
+          name: 'Product C',
+          type: 'stackBar3D',
           data: [150, 232, 201, 154, 190, 330, 410],
-          itemStyle: { color: "#fac858", borderWidth: 0 },
+          itemStyle: { color: '#fac858', borderWidth: 0 },
         },
       ],
       animation: true,
@@ -121,45 +121,45 @@ export const StackBar3DExample = ({ theme = "light" }: { theme?: Theme }) => {
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Stacked 3D Bar Chart</h2>
-      <p style={{ marginBottom: 20, color: "#666", fontSize: 14 }}>
+      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Stacked bars with pseudo-3D effect
       </p>
 
       <div
         style={{
           marginBottom: 20,
-          display: "flex",
+          display: 'flex',
           gap: 20,
-          flexWrap: "wrap",
-          alignItems: "center",
+          flexWrap: 'wrap',
+          alignItems: 'center',
         }}
       >
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
             style={{
-              padding: "4px 8px",
+              padding: '4px 8px',
               borderRadius: 4,
-              border: "1px solid #ddd",
+              border: '1px solid #ddd',
             }}
           >
-            <option value="canvas">Canvas</option>
-            <option value="svg">SVG</option>
+            <option value='canvas'>Canvas</option>
+            <option value='svg'>SVG</option>
           </select>
         </label>
 
         <label
           style={{
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
           }}
         >
           <input
-            type="checkbox"
+            type='checkbox'
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
@@ -168,14 +168,14 @@ export const StackBar3DExample = ({ theme = "light" }: { theme?: Theme }) => {
 
         <label
           style={{
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
           }}
         >
           <input
-            type="checkbox"
+            type='checkbox'
             checked={showGrid}
             onChange={(e) => setShowGrid(e.target.checked)}
           />
@@ -184,24 +184,24 @@ export const StackBar3DExample = ({ theme = "light" }: { theme?: Theme }) => {
 
         {showGrid && (
           <>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>Grid Top: {gridTop}</span>
               <input
-                type="range"
-                min="20"
-                max="100"
+                type='range'
+                min='20'
+                max='100'
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>Y Split: {splitNumber}</span>
               <input
-                type="range"
-                min="2"
-                max="10"
-                step="1"
+                type='range'
+                min='2'
+                max='10'
+                step='1'
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
@@ -217,22 +217,22 @@ export const StackBar3DExample = ({ theme = "light" }: { theme?: Theme }) => {
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: "1px solid #e0e0e0",
+          border: '1px solid #e0e0e0',
           borderRadius: 8,
-          height: "600px",
+          height: '600px',
         }}
       />
 
-      <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
+      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={handleUpdateSeries}
           style={{
-            padding: "8px 16px",
-            backgroundColor: "#5470c6",
-            color: "white",
-            border: "none",
+            padding: '8px 16px',
+            backgroundColor: '#5470c6',
+            color: 'white',
+            border: 'none',
             borderRadius: 4,
-            cursor: "pointer",
+            cursor: 'pointer',
             fontSize: 14,
           }}
         >

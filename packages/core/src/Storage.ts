@@ -2,8 +2,8 @@
  * Storage - Manages graphical elements (Model layer)
  */
 
-import ChartElement from "./ChartElement";
-import Group from "./Group";
+import ChartElement from './ChartElement';
+import Group from './Group';
 
 export default class Storage {
   private _roots: Group[] = [];

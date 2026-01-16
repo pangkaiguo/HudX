@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
-import { HChart } from "hux-charts";
-import type { ChartOption, HChartRef } from "hux-charts";
-import { ThemeManager, Theme } from "hux-core";
-import type { RenderMode } from "hux-core";
+import React, { useState, useRef } from 'react';
+import { HChart } from 'hux-charts';
+import type { ChartOption, HChartRef } from 'hux-charts';
+import { ThemeManager, Theme } from 'hux-core';
+import type { RenderMode } from 'hux-core';
 
 export const StackHorizontalBarExample = ({
-  theme = "light",
+  theme = 'light',
 }: {
   theme?: Theme;
 }) => {
@@ -13,26 +13,26 @@ export const StackHorizontalBarExample = ({
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
   const [splitNumber, setSplitNumber] = useState(5);
-  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
     tooltip: {
       show: true,
-      trigger: "axis",
+      trigger: 'axis',
       axisPointer: {
-        type: "shadow",
+        type: 'shadow',
       },
     },
     legend: {
-      data: ["Direct", "Mail Ad", "Affiliate Ad", "Video Ad", "Search Engine"],
+      data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine'],
       bottom: 10,
     },
     grid: {
-      left: "3%",
-      right: "4%",
-      bottom: "10%",
+      left: '3%',
+      right: '4%',
+      bottom: '10%',
       top: gridTop,
       containLabel: true,
     },
@@ -41,79 +41,79 @@ export const StackHorizontalBarExample = ({
       decal: {
         show: isDecal,
         decals: [
-          { symbol: "diagonal", color: themeObj.decalColor },
-          { symbol: "dots", color: themeObj.decalColor },
-          { symbol: "diagonal-reverse", color: themeObj.decalColor },
-          { symbol: "checkerboard", color: themeObj.decalColor },
-          { symbol: "crosshatch", color: themeObj.decalColor },
+          { symbol: 'diagonal', color: themeObj.decalColor },
+          { symbol: 'dots', color: themeObj.decalColor },
+          { symbol: 'diagonal-reverse', color: themeObj.decalColor },
+          { symbol: 'checkerboard', color: themeObj.decalColor },
+          { symbol: 'crosshatch', color: themeObj.decalColor },
         ],
       },
     },
     xAxis: {
-      type: "value",
+      type: 'value',
       show: true,
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: "#eee",
-          type: "dashed",
+          color: '#eee',
+          type: 'dashed',
         },
       },
     },
     yAxis: {
-      type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       show: true,
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: "#eee",
+          color: '#eee',
         },
       },
     },
     series: [
       {
-        name: "Direct",
-        type: "bar",
-        stack: "total",
+        name: 'Direct',
+        type: 'bar',
+        stack: 'total',
         label: { show: true },
-        emphasis: { focus: "series" },
+        emphasis: { focus: 'series' },
         data: [320, 302, 301, 334, 390, 330, 320],
         itemStyle: { borderWidth: 0 },
       },
       {
-        name: "Mail Ad",
-        type: "bar",
-        stack: "total",
+        name: 'Mail Ad',
+        type: 'bar',
+        stack: 'total',
         label: { show: true },
-        emphasis: { focus: "series" },
+        emphasis: { focus: 'series' },
         data: [120, 132, 101, 134, 90, 230, 210],
         itemStyle: { borderWidth: 0 },
       },
       {
-        name: "Affiliate Ad",
-        type: "bar",
-        stack: "total",
+        name: 'Affiliate Ad',
+        type: 'bar',
+        stack: 'total',
         label: { show: true },
-        emphasis: { focus: "series" },
+        emphasis: { focus: 'series' },
         data: [220, 182, 191, 234, 290, 330, 310],
         itemStyle: { borderWidth: 0 },
       },
       {
-        name: "Video Ad",
-        type: "bar",
-        stack: "total",
+        name: 'Video Ad',
+        type: 'bar',
+        stack: 'total',
         label: { show: true },
-        emphasis: { focus: "series" },
+        emphasis: { focus: 'series' },
         data: [150, 212, 201, 154, 190, 330, 410],
         itemStyle: { borderWidth: 0 },
       },
       {
-        name: "Search Engine",
-        type: "bar",
-        stack: "total",
+        name: 'Search Engine',
+        type: 'bar',
+        stack: 'total',
         label: { show: true },
-        emphasis: { focus: "series" },
+        emphasis: { focus: 'series' },
         data: [820, 832, 901, 934, 1290, 1330, 1320],
         itemStyle: { borderWidth: 0 },
       },
@@ -147,38 +147,38 @@ export const StackHorizontalBarExample = ({
       <div
         style={{
           marginBottom: 20,
-          display: "flex",
+          display: 'flex',
           gap: 20,
-          flexWrap: "wrap",
-          alignItems: "center",
+          flexWrap: 'wrap',
+          alignItems: 'center',
         }}
       >
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
             style={{
-              padding: "4px 8px",
+              padding: '4px 8px',
               borderRadius: 4,
-              border: "1px solid #ddd",
+              border: '1px solid #ddd',
             }}
           >
-            <option value="canvas">Canvas</option>
-            <option value="svg">SVG</option>
+            <option value='canvas'>Canvas</option>
+            <option value='svg'>SVG</option>
           </select>
         </label>
 
         <label
           style={{
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
           }}
         >
           <input
-            type="checkbox"
+            type='checkbox'
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
@@ -187,14 +187,14 @@ export const StackHorizontalBarExample = ({
 
         <label
           style={{
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
           }}
         >
           <input
-            type="checkbox"
+            type='checkbox'
             checked={showGrid}
             onChange={(e) => setShowGrid(e.target.checked)}
           />
@@ -203,24 +203,24 @@ export const StackHorizontalBarExample = ({
 
         {showGrid && (
           <>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>Grid Top: {gridTop}</span>
               <input
-                type="range"
-                min="20"
-                max="150"
+                type='range'
+                min='20'
+                max='150'
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>X Split: {splitNumber}</span>
               <input
-                type="range"
-                min="2"
-                max="10"
-                step="1"
+                type='range'
+                min='2'
+                max='10'
+                step='1'
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
@@ -235,22 +235,22 @@ export const StackHorizontalBarExample = ({
         theme={theme}
         renderMode={renderMode}
         style={{
-          width: "100%",
-          height: "600px",
-          border: "1px solid #e0e0e0",
+          width: '100%',
+          height: '600px',
+          border: '1px solid #e0e0e0',
           borderRadius: 8,
         }}
       />
-      <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
+      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={handleUpdateSeries}
           style={{
-            padding: "8px 16px",
-            backgroundColor: "#5470c6",
-            color: "white",
-            border: "none",
+            padding: '8px 16px',
+            backgroundColor: '#5470c6',
+            color: 'white',
+            border: 'none',
             borderRadius: 4,
-            cursor: "pointer",
+            cursor: 'pointer',
             fontSize: 14,
           }}
         >

@@ -11,7 +11,7 @@ export const parseColor = (
   if (!color) return null;
 
   // Hex color
-  if (color.startsWith("#")) {
+  if (color.startsWith('#')) {
     const hex = color.slice(1);
     if (hex.length === 3) {
       const r = parseInt(hex[0] + hex[0], 16);
@@ -35,7 +35,7 @@ export const parseColor = (
   // RGB/RGBA color
   const rgbMatch = color.match(/rgba?\(([^)]+)\)/);
   if (rgbMatch) {
-    const values = rgbMatch[1].split(",").map((v) => parseFloat(v.trim()));
+    const values = rgbMatch[1].split(',').map((v) => parseFloat(v.trim()));
     if (values.length >= 3) {
       return [
         values[0],
@@ -159,14 +159,14 @@ export const toHex = (color: string): string => {
   const rgba = parseColor(color);
   if (!rgba) return color;
 
-  const r = Math.round(rgba[0]).toString(16).padStart(2, "0");
-  const g = Math.round(rgba[1]).toString(16).padStart(2, "0");
-  const b = Math.round(rgba[2]).toString(16).padStart(2, "0");
+  const r = Math.round(rgba[0]).toString(16).padStart(2, '0');
+  const g = Math.round(rgba[1]).toString(16).padStart(2, '0');
+  const b = Math.round(rgba[2]).toString(16).padStart(2, '0');
 
   if (rgba[3] < 1) {
     const a = Math.round(rgba[3] * 255)
       .toString(16)
-      .padStart(2, "0");
+      .padStart(2, '0');
     return `#${r}${g}${b}${a}`;
   }
 

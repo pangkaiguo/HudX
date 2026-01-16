@@ -2,8 +2,8 @@
  * Text - Text shape element
  */
 
-import ChartElement from "../ChartElement";
-import type { ElementOption, BoundingRect } from "../types";
+import ChartElement from '../ChartElement';
+import type { ElementOption, BoundingRect } from '../types';
 
 export interface TextShape {
   x: number;
@@ -16,11 +16,11 @@ export default class Text extends ChartElement {
 
   constructor(
     opts: ElementOption & { shape: TextShape } = {
-      shape: { x: 0, y: 0, text: "" },
+      shape: { x: 0, y: 0, text: '' },
     },
   ) {
     super(opts);
-    this.shape = opts.shape || { x: 0, y: 0, text: "" };
+    this.shape = opts.shape || { x: 0, y: 0, text: '' };
     // Also support text in style
     if (opts.style?.text) {
       this.shape.text = opts.style.text;
@@ -62,8 +62,8 @@ export default class Text extends ChartElement {
     const shape = this.shape;
     const style = this.style;
     const fontSize = style.fontSize || 12;
-    const fontFamily = style.fontFamily || "sans-serif";
-    const fontWeight = style.fontWeight || "normal";
+    const fontFamily = style.fontFamily || 'sans-serif';
+    const fontWeight = style.fontWeight || 'normal';
 
     // Parse text if needed
     if (!this._textFragments || this.isDirty()) {
@@ -73,22 +73,22 @@ export default class Text extends ChartElement {
     const width = this._totalWidth + this._getPaddingWidth(style.padding);
     const height = this._totalHeight + this._getPaddingHeight(style.padding);
 
-    const textAlign = style.textAlign || "left";
-    const textBaseline = style.textBaseline || "alphabetic";
+    const textAlign = style.textAlign || 'left';
+    const textBaseline = style.textBaseline || 'alphabetic';
 
     let x = shape.x;
-    if (textAlign === "center") {
+    if (textAlign === 'center') {
       x -= width / 2;
-    } else if (textAlign === "right") {
+    } else if (textAlign === 'right') {
       x -= width;
     }
 
     let y = shape.y;
-    if (textBaseline === "middle") {
+    if (textBaseline === 'middle') {
       y -= height / 2;
-    } else if (textBaseline === "top") {
+    } else if (textBaseline === 'top') {
       // y is top
-    } else if (textBaseline === "bottom") {
+    } else if (textBaseline === 'bottom') {
       // y stays as is if baseline is bottom?
       // Actually standard baseline is alphabetic which is near bottom.
       // If we treat the box, 'bottom' usually means y is at bottom edge of box.
@@ -117,30 +117,30 @@ export default class Text extends ChartElement {
   }
 
   private _getPaddingWidth(padding?: number | number[]): number {
-    if (typeof padding === "number") return padding * 2;
+    if (typeof padding === 'number') return padding * 2;
     if (Array.isArray(padding)) return (padding[1] || 0) + (padding[3] || 0);
     return 0;
   }
 
   private _getPaddingHeight(padding?: number | number[]): number {
-    if (typeof padding === "number") return padding * 2;
+    if (typeof padding === 'number') return padding * 2;
     if (Array.isArray(padding)) return (padding[0] || 0) + (padding[2] || 0);
     return 0;
   }
 
   private _parseText(rich?: Record<string, any>): void {
-    const text = this.shape.text || "";
-    const lines = text.split("\n");
+    const text = this.shape.text || '';
+    const lines = text.split('\n');
     const parsedLines: { fragments: any[]; width: number; height: number }[] =
       [];
 
     let maxTotalWidth = 0;
     let totalHeight = 0;
 
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d")!;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
     const baseStyle = this.style;
-    const baseFont = `${baseStyle.fontWeight || "normal"} ${baseStyle.fontSize || 12}px ${baseStyle.fontFamily || "sans-serif"}`;
+    const baseFont = `${baseStyle.fontWeight || 'normal'} ${baseStyle.fontSize || 12}px ${baseStyle.fontFamily || 'sans-serif'}`;
     const baseFontSize = baseStyle.fontSize || 12;
 
     lines.forEach((lineText) => {
@@ -191,9 +191,9 @@ export default class Text extends ChartElement {
           // Measure with specific style
           const fontSize = style.fontSize || baseFontSize;
           const fontFamily =
-            style.fontFamily || baseStyle.fontFamily || "sans-serif";
+            style.fontFamily || baseStyle.fontFamily || 'sans-serif';
           const fontWeight =
-            style.fontWeight || baseStyle.fontWeight || "normal";
+            style.fontWeight || baseStyle.fontWeight || 'normal';
           ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
           const metrics = ctx.measureText(content);
 
@@ -315,16 +315,16 @@ export default class Text extends ChartElement {
 
     // Draw fragments line by line
     let currentY = startY;
-    const textAlign = style.textAlign || "left";
+    const textAlign = style.textAlign || 'left';
 
     this._textLines!.forEach((line) => {
       const { fragments, width, height } = line;
 
       // Calculate X start based on alignment relative to text block
       let lineStartX = startX;
-      if (textAlign === "center") {
+      if (textAlign === 'center') {
         lineStartX += (this._totalWidth - width) / 2;
-      } else if (textAlign === "right") {
+      } else if (textAlign === 'right') {
         lineStartX += this._totalWidth - width;
       }
 
@@ -335,11 +335,11 @@ export default class Text extends ChartElement {
         const fStyle = frag.style;
         const fontSize = fStyle.fontSize || style.fontSize || 12;
         const fontFamily =
-          fStyle.fontFamily || style.fontFamily || "sans-serif";
-        const fontWeight = fStyle.fontWeight || style.fontWeight || "normal";
+          fStyle.fontFamily || style.fontFamily || 'sans-serif';
+        const fontWeight = fStyle.fontWeight || style.fontWeight || 'normal';
 
         ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-        ctx.textBaseline = "middle";
+        ctx.textBaseline = 'middle';
 
         const fragHeight = frag.height;
         const fragWidth = frag.width;
@@ -378,7 +378,7 @@ export default class Text extends ChartElement {
         const contentX = currentX + this._getPaddingLeft(fStyle.padding);
         const contentY = centerY; // Middle baseline
 
-        ctx.fillStyle = fStyle.color || style.fill || "#000";
+        ctx.fillStyle = fStyle.color || style.fill || '#000';
         ctx.fillText(frag.text, contentX, contentY);
 
         currentX += fragWidth;
@@ -391,13 +391,13 @@ export default class Text extends ChartElement {
   }
 
   private _getPaddingLeft(padding?: number | number[]): number {
-    if (typeof padding === "number") return padding;
+    if (typeof padding === 'number') return padding;
     if (Array.isArray(padding)) return padding[3] || 0;
     return 0;
   }
 
   private _getPaddingTop(padding?: number | number[]): number {
-    if (typeof padding === "number") return padding;
+    if (typeof padding === 'number') return padding;
     if (Array.isArray(padding)) return padding[0] || 0;
     return 0;
   }

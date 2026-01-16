@@ -3,10 +3,10 @@
  * Similar to zRender's Handler class
  */
 
-import IPainter from "./painter/IPainter";
-import Storage from "./Storage";
-import ChartElement from "./ChartElement";
-import type { EventData, Point } from "./types";
+import IPainter from './painter/IPainter';
+import Storage from './Storage';
+import ChartElement from './ChartElement';
+import type { EventData, Point } from './types';
 
 export default class Handler {
   private _painter: IPainter;
@@ -31,38 +31,38 @@ export default class Handler {
       return;
     }
 
-    target.addEventListener("mousedown", (e: Event) =>
+    target.addEventListener('mousedown', (e: Event) =>
       this._onMouseDown(e as MouseEvent),
     );
-    target.addEventListener("mousemove", (e: Event) =>
+    target.addEventListener('mousemove', (e: Event) =>
       this._onMouseMove(e as MouseEvent),
     );
-    target.addEventListener("mouseup", (e: Event) =>
+    target.addEventListener('mouseup', (e: Event) =>
       this._onMouseUp(e as MouseEvent),
     );
-    target.addEventListener("mouseout", (e: Event) =>
+    target.addEventListener('mouseout', (e: Event) =>
       this._onMouseOut(e as MouseEvent),
     );
-    target.addEventListener("click", (e: Event) =>
+    target.addEventListener('click', (e: Event) =>
       this._onClick(e as MouseEvent),
     );
-    target.addEventListener("dblclick", (e: Event) =>
+    target.addEventListener('dblclick', (e: Event) =>
       this._onDblClick(e as MouseEvent),
     );
-    target.addEventListener("contextmenu", (e: Event) =>
+    target.addEventListener('contextmenu', (e: Event) =>
       this._onContextMenu(e as MouseEvent),
     );
-    target.addEventListener("wheel", (e: Event) =>
+    target.addEventListener('wheel', (e: Event) =>
       this._onWheel(e as WheelEvent),
     );
 
-    target.addEventListener("touchstart", (e: Event) =>
+    target.addEventListener('touchstart', (e: Event) =>
       this._onTouchStart(e as TouchEvent),
     );
-    target.addEventListener("touchmove", (e: Event) =>
+    target.addEventListener('touchmove', (e: Event) =>
       this._onTouchMove(e as TouchEvent),
     );
-    target.addEventListener("touchend", (e: Event) =>
+    target.addEventListener('touchend', (e: Event) =>
       this._onTouchEnd(e as TouchEvent),
     );
   }
@@ -160,8 +160,8 @@ export default class Handler {
         target.style.cursor = this._hovered.cursor;
       }
     } else {
-      if (target.style.cursor !== "default") {
-        target.style.cursor = "default";
+      if (target.style.cursor !== 'default') {
+        target.style.cursor = 'default';
       }
     }
   }
@@ -183,9 +183,9 @@ export default class Handler {
       };
     }
 
-    const eventData = this._createEventData("mousedown", point, element, e);
+    const eventData = this._createEventData('mousedown', point, element, e);
     if (element) {
-      element.trigger("mousedown", eventData);
+      element.trigger('mousedown', eventData);
     }
   }
 
@@ -200,7 +200,7 @@ export default class Handler {
       const dx = point.x - this._dragStart.x;
       const dy = point.y - this._dragStart.y;
 
-      this._dragging.attr("transform", {
+      this._dragging.attr('transform', {
         ...this._dragging.transform,
         x: this._dragStartElementPos!.x + dx,
         y: this._dragStartElementPos!.y + dy,
@@ -208,31 +208,31 @@ export default class Handler {
 
       this._painter.markDirty();
 
-      const eventData = this._createEventData("drag", point, this._dragging, e);
-      this._dragging.trigger("drag", eventData);
+      const eventData = this._createEventData('drag', point, this._dragging, e);
+      this._dragging.trigger('drag', eventData);
     }
 
     if (element !== this._hovered) {
       if (this._hovered) {
         const eventData = this._createEventData(
-          "mouseout",
+          'mouseout',
           point,
           this._hovered,
           e,
         );
-        this._hovered.trigger("mouseout", eventData);
+        this._hovered.trigger('mouseout', eventData);
       }
       if (element) {
-        const eventData = this._createEventData("mouseover", point, element, e);
-        element.trigger("mouseover", eventData);
+        const eventData = this._createEventData('mouseover', point, element, e);
+        element.trigger('mouseover', eventData);
       }
       this._hovered = element;
       this._updateCursor();
     }
 
-    const eventData = this._createEventData("mousemove", point, element, e);
+    const eventData = this._createEventData('mousemove', point, element, e);
     if (element) {
-      element.trigger("mousemove", eventData);
+      element.trigger('mousemove', eventData);
     }
   }
 
@@ -245,20 +245,20 @@ export default class Handler {
 
     if (this._dragging) {
       const eventData = this._createEventData(
-        "dragend",
+        'dragend',
         point,
         this._dragging,
         e,
       );
-      this._dragging.trigger("dragend", eventData);
+      this._dragging.trigger('dragend', eventData);
       this._dragging = null;
       this._dragStart = null;
       this._dragStartElementPos = null;
     }
 
-    const eventData = this._createEventData("mouseup", point, element, e);
+    const eventData = this._createEventData('mouseup', point, element, e);
     if (element) {
-      element.trigger("mouseup", eventData);
+      element.trigger('mouseup', eventData);
     }
   }
 
@@ -269,12 +269,12 @@ export default class Handler {
     if (this._hovered) {
       const point = this._getEventPoint(e);
       const eventData = this._createEventData(
-        "mouseout",
+        'mouseout',
         point,
         this._hovered,
         e,
       );
-      this._hovered.trigger("mouseout", eventData);
+      this._hovered.trigger('mouseout', eventData);
       this._hovered = null;
       this._updateCursor();
     }
@@ -286,9 +286,9 @@ export default class Handler {
   private _onClick(e: MouseEvent): void {
     const point = this._getEventPoint(e);
     const element = this._findHoveredElement(point.x, point.y);
-    const eventData = this._createEventData("click", point, element, e);
+    const eventData = this._createEventData('click', point, element, e);
     if (element) {
-      element.trigger("click", eventData);
+      element.trigger('click', eventData);
     }
   }
 
@@ -298,9 +298,9 @@ export default class Handler {
   private _onDblClick(e: MouseEvent): void {
     const point = this._getEventPoint(e);
     const element = this._findHoveredElement(point.x, point.y);
-    const eventData = this._createEventData("dblclick", point, element, e);
+    const eventData = this._createEventData('dblclick', point, element, e);
     if (element) {
-      element.trigger("dblclick", eventData);
+      element.trigger('dblclick', eventData);
     }
   }
 
@@ -310,9 +310,9 @@ export default class Handler {
   private _onContextMenu(e: MouseEvent): void {
     const point = this._getEventPoint(e);
     const element = this._findHoveredElement(point.x, point.y);
-    const eventData = this._createEventData("contextmenu", point, element, e);
+    const eventData = this._createEventData('contextmenu', point, element, e);
     if (element) {
-      element.trigger("contextmenu", eventData);
+      element.trigger('contextmenu', eventData);
     }
   }
 
@@ -322,9 +322,9 @@ export default class Handler {
   private _onWheel(e: WheelEvent): void {
     const point = this._getEventPoint(e);
     const element = this._findHoveredElement(point.x, point.y);
-    const eventData = this._createEventData("mousewheel", point, element, e);
+    const eventData = this._createEventData('mousewheel', point, element, e);
     if (element) {
-      element.trigger("mousewheel", eventData);
+      element.trigger('mousewheel', eventData);
     }
   }
 
@@ -335,9 +335,9 @@ export default class Handler {
     e.preventDefault();
     const point = this._getEventPoint(e);
     const element = this._findHoveredElement(point.x, point.y);
-    const eventData = this._createEventData("touchstart", point, element, e);
+    const eventData = this._createEventData('touchstart', point, element, e);
     if (element) {
-      element.trigger("touchstart", eventData);
+      element.trigger('touchstart', eventData);
     }
   }
 
@@ -348,9 +348,9 @@ export default class Handler {
     e.preventDefault();
     const point = this._getEventPoint(e);
     const element = this._findHoveredElement(point.x, point.y);
-    const eventData = this._createEventData("touchmove", point, element, e);
+    const eventData = this._createEventData('touchmove', point, element, e);
     if (element) {
-      element.trigger("touchmove", eventData);
+      element.trigger('touchmove', eventData);
     }
   }
 
@@ -361,9 +361,9 @@ export default class Handler {
     e.preventDefault();
     const point = this._getEventPoint(e);
     const element = this._findHoveredElement(point.x, point.y);
-    const eventData = this._createEventData("touchend", point, element, e);
+    const eventData = this._createEventData('touchend', point, element, e);
     if (element) {
-      element.trigger("touchend", eventData);
+      element.trigger('touchend', eventData);
     }
   }
 

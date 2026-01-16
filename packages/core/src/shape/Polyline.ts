@@ -2,8 +2,8 @@
  * Polyline - Polyline shape element
  */
 
-import ChartElement from "../ChartElement";
-import type { ElementOption, BoundingRect, Point } from "../types";
+import ChartElement from '../ChartElement';
+import type { ElementOption, BoundingRect, Point } from '../types';
 
 export interface PolylineShape {
   points: Point[] | number[][];

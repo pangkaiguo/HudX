@@ -46,9 +46,9 @@ export interface Style {
   /** Font weight */
   fontWeight?: string | number;
   /** Text alignment */
-  textAlign?: "left" | "center" | "right";
+  textAlign?: 'left' | 'center' | 'right';
   /** Text baseline */
-  textBaseline?: "top" | "middle" | "bottom" | "alphabetic";
+  textBaseline?: 'top' | 'middle' | 'bottom' | 'alphabetic';
   /** Background color */
   backgroundColor?: string;
   /** Border color */
@@ -156,17 +156,17 @@ export interface AnimationOption {
 /**
  * Rendering mode
  */
-export type RenderMode = "canvas" | "svg";
+export type RenderMode = 'canvas' | 'svg';
 
 /**
  * Theme mode
  */
-export type Theme = "light" | "dark" | string;
+export type Theme = 'light' | 'dark' | string;
 
 /**
  * Locale
  */
-export type Locale = "en" | "zh" | "zh-CN" | "zh-TW";
+export type Locale = 'en' | 'zh' | 'zh-CN' | 'zh-TW';
 
 /**
  * Theme Token
@@ -386,7 +386,7 @@ export interface ResizeOpts {
  * Data URL export options
  */
 export interface DataURLOpts {
-  type?: "png" | "jpg" | "svg";
+  type?: 'png' | 'jpg' | 'svg';
   pixelRatio?: number;
   backgroundColor?: string;
   excludeComponents?: string[];
@@ -401,13 +401,13 @@ export interface ElementWithParent {
 
 export interface DecalObject {
   symbol?:
-    | "circle"
-    | "rect"
-    | "triangle"
-    | "diamond"
-    | "pin"
-    | "arrow"
-    | "none"
+    | 'circle'
+    | 'rect'
+    | 'triangle'
+    | 'diamond'
+    | 'pin'
+    | 'arrow'
+    | 'none'
     | string;
   symbolSize?: number;
   symbolKeepAspect?: boolean;
@@ -452,6 +452,6 @@ export interface TitleOption {
   /** Subtitle text style */
   subtextStyle?: Partial<Style>;
   /** Horizontal alignment of title text */
-  textAlign?: "auto" | "left" | "right" | "center";
+  textAlign?: 'auto' | 'left' | 'right' | 'center';
   [key: string]: any;
 }

@@ -1,5 +1,5 @@
-import Chart from "../Chart";
-import type { SeriesOption, ChartData, EmphasisOption } from "../types";
+import Chart from '../Chart';
+import type { SeriesOption, ChartData, EmphasisOption } from '../types';
 import {
   Sector,
   Text,
@@ -7,8 +7,8 @@ import {
   createDecalPattern,
   Z_SERIES,
   Z_LABEL,
-} from "hux-core";
-import { EventHelper } from "../util/EventHelper";
+} from 'hux-core';
+import { EventHelper } from '../util/EventHelper';
 
 // TODO: Define a proper interface for the extended Sector to avoid 'any' casting throughout the file.
 // Currently relying on monkey-patching properties like __initialStyle, __label, etc.
@@ -64,7 +64,7 @@ export default class PieChart extends Chart {
 
       this._renderer.flush();
     } catch (e) {
-      console.error("[PieChart] Render error:", e);
+      console.error('[PieChart] Render error:', e);
     }
   }
 
@@ -95,7 +95,7 @@ export default class PieChart extends Chart {
     const seriesItem = series[0];
     if (
       !seriesItem.type ||
-      !["pie", "doughnut", "half-doughnut"].includes(seriesItem.type)
+      !['pie', 'doughnut', 'half-doughnut'].includes(seriesItem.type)
     ) {
       return { seriesItem: null, data: null };
     }
@@ -122,19 +122,19 @@ export default class PieChart extends Chart {
     // TODO: Extract Legend item creation logic to a separate mapper
     const items = data.map((it: any, i: number) => {
       let value = 0;
-      if (typeof it === "number") value = it;
+      if (typeof it === 'number') value = it;
       else if (Array.isArray(it)) value = it[0] || 0;
-      else if (typeof it === "object" && it !== null) value = it.value;
+      else if (typeof it === 'object' && it !== null) value = it.value;
 
       const percent = total > 0 ? value / total : 0;
 
       return {
-        name: typeof it === "object" && it.name ? it.name : `item-${i + 1}`,
+        name: typeof it === 'object' && it.name ? it.name : `item-${i + 1}`,
         color:
-          (typeof it === "object" && it.itemStyle?.color) ||
+          (typeof it === 'object' && it.itemStyle?.color) ||
           seriesItem.itemStyle?.color ||
           this._getSeriesColor(i),
-        icon: this._option.legend?.icon || "circle",
+        icon: this._option.legend?.icon || 'circle',
         textColor: this.getThemeConfig().legendTextColor,
         value,
         percent,
@@ -147,24 +147,24 @@ export default class PieChart extends Chart {
 
   // --- Helper to get icon shape from Legend style ---
   private _getIconShape(type: string | undefined): string {
-    if (type === "rect") return "border-radius:2px;";
-    if (type === "circle") return "border-radius:50%;";
-    if (type === "line") return "height:2px;margin-top:4px;"; // simplified
+    if (type === 'rect') return 'border-radius:2px;';
+    if (type === 'circle') return 'border-radius:50%;';
+    if (type === 'line') return 'height:2px;margin-top:4px;'; // simplified
     // Default to Legend's default behavior if not specified, but here we return CSS for tooltip
-    return "border-radius:50%;";
+    return 'border-radius:50%;';
   }
 
   protected _getTooltipMarker(color: string): string {
     // Try to sync with legend icon
-    const legendIcon = this._option.legend?.icon || "circle";
-    let borderRadius = "50%"; // Default circle
-    let sizeStyle = "width:10px;height:10px;";
+    const legendIcon = this._option.legend?.icon || 'circle';
+    let borderRadius = '50%'; // Default circle
+    let sizeStyle = 'width:10px;height:10px;';
 
-    if (legendIcon === "rect") {
-      borderRadius = "2px";
-    } else if (legendIcon === "line") {
-      borderRadius = "0";
-      sizeStyle = "width:12px;height:2px;margin-top:4px;"; // Center vertically roughly
+    if (legendIcon === 'rect') {
+      borderRadius = '2px';
+    } else if (legendIcon === 'line') {
+      borderRadius = '0';
+      sizeStyle = 'width:12px;height:2px;margin-top:4px;'; // Center vertically roughly
     }
 
     return `<span style="display:inline-block;margin-right:4px;${sizeStyle}border-radius:${borderRadius};background-color:${color};"></span>`;
@@ -174,9 +174,9 @@ export default class PieChart extends Chart {
     if (!seriesItem.roseType) return 0;
     return data.reduce((max: number, item: any) => {
       let v = 0;
-      if (typeof item === "number") v = item;
+      if (typeof item === 'number') v = item;
       else if (Array.isArray(item)) v = item[0] || 0;
-      else if (typeof item === "object" && item !== null) v = item.value;
+      else if (typeof item === 'object' && item !== null) v = item.value;
       return Math.max(max, v);
     }, 0);
   }
@@ -187,7 +187,7 @@ export default class PieChart extends Chart {
 
     if (seriesItem.startAngle !== undefined) {
       startAngle = degToRad(seriesItem.startAngle);
-    } else if (seriesItem.type === "half-doughnut") {
+    } else if (seriesItem.type === 'half-doughnut') {
       startAngle = -Math.PI;
     } else {
       startAngle = -Math.PI / 2;
@@ -196,7 +196,7 @@ export default class PieChart extends Chart {
     let endAngle: number;
     if (seriesItem.endAngle !== undefined) {
       endAngle = degToRad(seriesItem.endAngle);
-    } else if (seriesItem.type === "half-doughnut") {
+    } else if (seriesItem.type === 'half-doughnut') {
       endAngle = 0;
     } else {
       endAngle = startAngle + Math.PI * 2;
@@ -236,7 +236,7 @@ export default class PieChart extends Chart {
 
     data.forEach((item: ChartData, index: number) => {
       const value = this._getDataValue(item);
-      if (typeof value !== "number") return;
+      if (typeof value !== 'number') return;
 
       const percent = total > 0 ? value / total : 0;
       const { angle, itemR } = this._calculateSectorGeometry(
@@ -252,7 +252,7 @@ export default class PieChart extends Chart {
 
       let itemName = `item-${index + 1}`;
       if (
-        typeof item === "object" &&
+        typeof item === 'object' &&
         item !== null &&
         !Array.isArray(item) &&
         item.name
@@ -332,7 +332,7 @@ export default class PieChart extends Chart {
       if (shouldAnimate) {
         const delay = oldSector ? 0 : index * 100; // Staggered entry
         const duration = seriesItem.animationDuration || 500;
-        const easing = seriesItem.animationEasing || "cubicOut";
+        const easing = seriesItem.animationEasing || 'cubicOut';
 
         // Check if angles need animation
         if (
@@ -340,7 +340,7 @@ export default class PieChart extends Chart {
           Math.abs(initialEnd - targetEnd) > 0.001
         ) {
           this._animator
-            .animate(sector.shape, "startAngle", targetStart, {
+            .animate(sector.shape, 'startAngle', targetStart, {
               duration,
               delay,
               easing,
@@ -351,7 +351,7 @@ export default class PieChart extends Chart {
             })
             .start();
           this._animator
-            .animate(sector.shape, "endAngle", targetEnd, {
+            .animate(sector.shape, 'endAngle', targetEnd, {
               duration,
               delay,
               easing,
@@ -369,7 +369,7 @@ export default class PieChart extends Chart {
         // Check if radius needs animation (Rose Chart or Resize)
         if (seriesItem.roseType || Math.abs(initialR - itemR) > 0.1) {
           this._animator
-            .animate(sector.shape, "r", itemR, {
+            .animate(sector.shape, 'r', itemR, {
               duration,
               delay,
               easing,
@@ -384,7 +384,7 @@ export default class PieChart extends Chart {
         // Check if inner radius needs animation
         if (Math.abs(sector.shape.r0 - r0) > 0.1) {
           this._animator
-            .animate(sector.shape, "r0", r0, {
+            .animate(sector.shape, 'r0', r0, {
               duration,
               delay,
               easing,
@@ -466,7 +466,7 @@ export default class PieChart extends Chart {
     if (seriesItem.roseType) {
       angle = totalAngle / dataLength;
       if (maxValue > 0) {
-        if (seriesItem.roseType === "area") {
+        if (seriesItem.roseType === 'area') {
           itemR = r0 + (r - r0) * Math.sqrt(value / maxValue);
         } else {
           itemR = r0 + (r - r0) * (value / maxValue);
@@ -506,7 +506,7 @@ export default class PieChart extends Chart {
     const itemStyle = seriesItem.itemStyle || {};
     let color: string;
     if (
-      typeof item === "object" &&
+      typeof item === 'object' &&
       item !== null &&
       !Array.isArray(item) &&
       item.itemStyle?.color
@@ -520,7 +520,7 @@ export default class PieChart extends Chart {
     const aria = this._option.aria;
     if (aria?.enabled && aria?.decal?.show) {
       const decals = aria.decal.decals || [];
-      const decal = decals[index % decals.length] || { symbol: "circle" };
+      const decal = decals[index % decals.length] || { symbol: 'circle' };
       const pattern = createDecalPattern(decal, color);
       if (pattern) {
         fillStyle = pattern;
@@ -542,7 +542,7 @@ export default class PieChart extends Chart {
       },
       style: {
         fill: fillStyle,
-        stroke: seriesItem.itemStyle?.borderColor || "#fff",
+        stroke: seriesItem.itemStyle?.borderColor || '#fff',
         lineWidth: seriesItem.itemStyle?.borderWidth ?? 0,
       },
       transform: {
@@ -554,7 +554,7 @@ export default class PieChart extends Chart {
         originY: cy,
       },
       z: Z_SERIES,
-      cursor: this._tooltip || seriesItem.emphasis ? "pointer" : "default",
+      cursor: this._tooltip || seriesItem.emphasis ? 'pointer' : 'default',
     });
 
     // TODO: Replace these monkey-patched properties with a proper storage or extended class
@@ -605,8 +605,8 @@ export default class PieChart extends Chart {
         this._tooltip.show(mx, my, content, params);
       }
 
-      const seriesType = seriesItem.type || "pie";
-      if (["doughnut", "half-doughnut"].includes(seriesType) && r0 > 0) {
+      const seriesType = seriesItem.type || 'pie';
+      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
         this._showDynamicCenterLabel(
           seriesItem,
           item,
@@ -641,7 +641,7 @@ export default class PieChart extends Chart {
     EventHelper.bindHoverEvents(sector, onMouseOver, onMouseOut);
 
     let rafId: number | null = null;
-    sector.on("mousemove", (evt: any) => {
+    sector.on('mousemove', (evt: any) => {
       // Throttle tooltip updates to prevent flickering and performance issues
       if (rafId) {
         return;
@@ -724,20 +724,20 @@ export default class PieChart extends Chart {
 
     const labelAngle = currentAngle + angle / 2;
     const isOutside =
-      seriesItem.label?.position === "outside" ||
+      seriesItem.label?.position === 'outside' ||
       seriesItem.label?.position === undefined;
 
     let labelText: string;
     const formatter = seriesItem.label?.formatter;
     if (formatter) {
       labelText = this._formatLabel(formatter, {
-        name: (item as any).name || "",
+        name: (item as any).name || '',
         value,
         percent: (percent * 100).toFixed(0),
         data: item,
       });
     } else {
-      labelText = (item as any).name || "";
+      labelText = (item as any).name || '';
     }
 
     const isVisible = seriesItem.label?.show !== false && !showOnHover;
@@ -748,7 +748,7 @@ export default class PieChart extends Chart {
       sector,
       isOutside,
       item,
-      color: seriesItem.label?.color || (isOutside ? "#333" : "#fff"),
+      color: seriesItem.label?.color || (isOutside ? '#333' : '#fff'),
       itemColor: color,
       seriesItem,
       handlers,
@@ -761,9 +761,9 @@ export default class PieChart extends Chart {
   // --- Logic Helpers ---
 
   protected _getDataValue(item: ChartData): number {
-    if (typeof item === "number") return item;
+    if (typeof item === 'number') return item;
     if (Array.isArray(item)) return item[0] || 0;
-    if (typeof item === "object" && item !== null) return item.value;
+    if (typeof item === 'object' && item !== null) return item.value;
     return 0;
   }
 
@@ -775,9 +775,9 @@ export default class PieChart extends Chart {
     percent: number,
     color: string,
   ) {
-    let itemName = "";
+    let itemName = '';
     if (
-      typeof item === "object" &&
+      typeof item === 'object' &&
       item !== null &&
       !Array.isArray(item) &&
       item.name
@@ -785,8 +785,8 @@ export default class PieChart extends Chart {
       itemName = item.name;
     }
     return {
-      componentType: "series",
-      seriesType: "pie",
+      componentType: 'series',
+      seriesType: 'pie',
       seriesIndex: 0,
       seriesName: seriesItem.name,
       name: itemName,
@@ -803,7 +803,7 @@ export default class PieChart extends Chart {
     return data.reduce((sum: number, item: ChartData, index: number) => {
       let itemName = `item-${index + 1}`;
       if (
-        typeof item === "object" &&
+        typeof item === 'object' &&
         item !== null &&
         !Array.isArray(item) &&
         item.name
@@ -833,9 +833,9 @@ export default class PieChart extends Chart {
       this._root.remove(this._centerLabel);
     }
 
-    let itemName = "";
+    let itemName = '';
     if (
-      typeof item === "object" &&
+      typeof item === 'object' &&
       item !== null &&
       !Array.isArray(item) &&
       item.name
@@ -846,11 +846,11 @@ export default class PieChart extends Chart {
     let textContent = itemName;
     let rich = emphasis?.label?.rich || seriesItem.label?.rich;
     let style: any = {
-      fill: emphasis?.label?.color || seriesItem.label?.color || "#333",
+      fill: emphasis?.label?.color || seriesItem.label?.color || '#333',
       fontSize: emphasis?.label?.fontSize || 20,
-      fontWeight: emphasis?.label?.fontWeight || "bold",
-      textAlign: "center",
-      textBaseline: "middle",
+      fontWeight: emphasis?.label?.fontWeight || 'bold',
+      textAlign: 'center',
+      textBaseline: 'middle',
     };
 
     if (emphasis?.label) {
@@ -896,42 +896,42 @@ export default class PieChart extends Chart {
     if (centerLabelConfig.show === false || r0 <= 0) return;
     if (this._centerLabel) return;
 
-    let textContent = "";
+    let textContent = '';
     let rich = centerLabelConfig.rich || seriesItem.label?.rich;
     const style = {
-      fill: seriesItem.label?.color || "#333",
+      fill: seriesItem.label?.color || '#333',
       fontSize: 20,
-      fontWeight: "bold",
-      textAlign: "center",
-      textBaseline: "middle",
+      fontWeight: 'bold',
+      textAlign: 'center',
+      textBaseline: 'middle',
       ...centerLabelConfig.style,
     };
 
-    if (centerLabelConfig.type === "percentage") {
+    if (centerLabelConfig.type === 'percentage') {
       const data = seriesItem.data || [];
       if (data.length > 0) {
         const firstVal = data[0].value || data[0];
         const percent = ((firstVal / total) * 100).toFixed(0);
-        const defaultFormatter = "{d}%";
+        const defaultFormatter = '{d}%';
         const fmt = centerLabelConfig.formatter || defaultFormatter;
         textContent = this._formatLabel(fmt, {
-          name: data[0].name || "",
+          name: data[0].name || '',
           value: firstVal,
           percent,
           data: data[0],
         });
 
         if (!centerLabelConfig.style?.backgroundColor) {
-          style.backgroundColor = "#eee";
+          style.backgroundColor = '#eee';
           style.borderRadius = 20;
           style.padding = [5, 15];
         }
       }
     } else {
       const fmt = centerLabelConfig.formatter;
-      if (typeof fmt === "string") {
+      if (typeof fmt === 'string') {
         textContent = fmt;
-      } else if (typeof fmt === "function") {
+      } else if (typeof fmt === 'function') {
         textContent = fmt({ total });
       }
     }
@@ -955,10 +955,10 @@ export default class PieChart extends Chart {
       data?: any;
     },
   ): string {
-    if (typeof formatter === "function") {
+    if (typeof formatter === 'function') {
       return formatter(params);
     }
-    if (typeof formatter === "string") {
+    if (typeof formatter === 'string') {
       let result = formatter
         .replace(/\{b\}/g, params.name)
         .replace(/\{c\}/g, String(params.value))
@@ -967,12 +967,12 @@ export default class PieChart extends Chart {
         .replace(/\{value\}/g, String(params.value))
         .replace(/\{percent\}/g, String(params.percent));
 
-      if (params.data && typeof params.data === "object") {
+      if (params.data && typeof params.data === 'object') {
         Object.keys(params.data).forEach((key) => {
           const val = params.data[key];
-          if (typeof val === "string" || typeof val === "number") {
+          if (typeof val === 'string' || typeof val === 'number') {
             result = result.replace(
-              new RegExp(`\\{${key}\\}`, "g"),
+              new RegExp(`\\{${key}\\}`, 'g'),
               String(val),
             );
           }
@@ -980,7 +980,7 @@ export default class PieChart extends Chart {
       }
       return result;
     }
-    return "";
+    return '';
   }
 
   // --- Layout & Rendering of Labels ---
@@ -1082,10 +1082,10 @@ export default class PieChart extends Chart {
         },
         style: {
           fontSize: seriesItem.label?.fontSize || 12,
-          fontWeight: seriesItem.label?.fontWeight || "normal",
+          fontWeight: seriesItem.label?.fontWeight || 'normal',
           fill: label.color,
-          textAlign: dir === 1 ? "left" : "right",
-          textBaseline: "middle",
+          textAlign: dir === 1 ? 'left' : 'right',
+          textBaseline: 'middle',
           rich: rich,
           backgroundColor: seriesItem.label?.backgroundColor,
           borderColor: seriesItem.label?.borderColor,
@@ -1108,7 +1108,7 @@ export default class PieChart extends Chart {
       if (label.fadeIn) {
         // Animate fade in
         this._animator
-          .animate(text.style, "opacity", 1, {
+          .animate(text.style, 'opacity', 1, {
             duration: seriesItem.animationDuration || 500,
             delay: 100, // Small delay to let sector expand a bit
             onUpdate: () => {
@@ -1141,7 +1141,7 @@ export default class PieChart extends Chart {
               label.itemColor ||
               label.color,
             lineWidth: seriesItem.labelLine?.lineStyle?.width || 1,
-            fill: "none",
+            fill: 'none',
             opacity: label.opacity, // Use calculated opacity
           },
           z: Z_LABEL,
@@ -1157,7 +1157,7 @@ export default class PieChart extends Chart {
 
         if (label.fadeIn) {
           this._animator
-            .animate(line.style, "opacity", 1, {
+            .animate(line.style, 'opacity', 1, {
               duration: seriesItem.animationDuration || 500,
               delay: 100,
               onUpdate: () => {
@@ -1187,7 +1187,7 @@ export default class PieChart extends Chart {
     r0: number,
   ): void {
     const seriesItem = label.seriesItem;
-    const isCenter = seriesItem.label?.position === "center";
+    const isCenter = seriesItem.label?.position === 'center';
     const angle = label.angle;
 
     let labelX, labelY;
@@ -1211,10 +1211,10 @@ export default class PieChart extends Chart {
       },
       style: {
         fontSize: seriesItem.label?.fontSize || 12,
-        fontWeight: seriesItem.label?.fontWeight || "normal",
+        fontWeight: seriesItem.label?.fontWeight || 'normal',
         fill: label.color,
-        textAlign: "center",
-        textBaseline: "middle",
+        textAlign: 'center',
+        textBaseline: 'middle',
         rich: seriesItem.label?.rich,
         opacity: isVisible ? 1 : 0,
       },
@@ -1241,10 +1241,10 @@ export default class PieChart extends Chart {
     const center = (seriesItem as any).center;
     if (Array.isArray(center)) {
       return [
-        typeof center[0] === "string"
+        typeof center[0] === 'string'
           ? this._parsePercent(center[0], this._width)
           : center[0],
-        typeof center[1] === "string"
+        typeof center[1] === 'string'
           ? this._parsePercent(center[1], this._height)
           : center[1],
       ];
@@ -1263,36 +1263,36 @@ export default class PieChart extends Chart {
       ];
     }
 
-    if (typeof radius === "string") {
+    if (typeof radius === 'string') {
       const outer = this._parsePercent(radius, maxRadius);
       if (
-        seriesItem.type === "doughnut" ||
-        seriesItem.type === "half-doughnut"
+        seriesItem.type === 'doughnut' ||
+        seriesItem.type === 'half-doughnut'
       ) {
         return [outer * 0.5, outer];
       }
       return [0, outer];
     }
-    if (typeof radius === "number") {
+    if (typeof radius === 'number') {
       if (
-        seriesItem.type === "doughnut" ||
-        seriesItem.type === "half-doughnut"
+        seriesItem.type === 'doughnut' ||
+        seriesItem.type === 'half-doughnut'
       ) {
         return [radius * 0.5, radius];
       }
       return [0, radius];
     }
-    if (seriesItem.type === "doughnut" || seriesItem.type === "half-doughnut") {
+    if (seriesItem.type === 'doughnut' || seriesItem.type === 'half-doughnut') {
       return [maxRadius * 0.4, maxRadius * 0.8];
     }
     return [0, maxRadius * 0.8];
   }
 
   private _parsePercent(value: string | number, base: number): number {
-    if (typeof value === "number") {
+    if (typeof value === 'number') {
       return value;
     }
-    if (typeof value === "string" && value.endsWith("%")) {
+    if (typeof value === 'string' && value.endsWith('%')) {
       return (parseFloat(value) / 100) * base;
     }
     return parseFloat(value as string) || 0;
@@ -1324,8 +1324,8 @@ export default class PieChart extends Chart {
 
       this._applyEmphasisAnimation(sector, emphasis, true, r);
 
-      const seriesType = seriesItem.type || "pie";
-      if (["doughnut", "half-doughnut"].includes(seriesType) && r0 > 0) {
+      const seriesType = seriesItem.type || 'pie';
+      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
         const item = (sector as any).data;
         const total = this._calculateTotal(seriesItem.data || []);
         const value = this._getDataValue(item) || 0;
@@ -1344,8 +1344,8 @@ export default class PieChart extends Chart {
     } else {
       this._applyEmphasisAnimation(sector, emphasis, false, r);
 
-      const seriesType = seriesItem.type || "pie";
-      if (["doughnut", "half-doughnut"].includes(seriesType) && r0 > 0) {
+      const seriesType = seriesItem.type || 'pie';
+      if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
         if (this._restoreTimeout) {
           clearTimeout(this._restoreTimeout);
         }
@@ -1384,17 +1384,17 @@ export default class PieChart extends Chart {
   ) {
     const seriesItem = (sector as any).__seriesItem;
     const showOnHover = seriesItem?.label?.showOnHover;
-    const focus = emphasis?.focus || "none";
+    const focus = emphasis?.focus || 'none';
 
     // 1. Handle OTHER sectors (dimming)
     this._activeSectors.forEach((s) => {
       if (s !== sector) {
         let sectorTargetOpacity = (s as any).__initialStyle?.opacity ?? 1;
 
-        if (focus === "self") {
+        if (focus === 'self') {
           sectorTargetOpacity = 0.2;
           this._animator
-            .animate(s.style, "opacity", 0.2, {
+            .animate(s.style, 'opacity', 0.2, {
               duration: 200,
               onUpdate: () => {
                 s.markRedraw();
@@ -1411,9 +1411,9 @@ export default class PieChart extends Chart {
         const sBaseR = (s as any).__baseR;
         if (sBaseR !== undefined) {
           this._animator
-            .animate(s.shape, "r", sBaseR, {
+            .animate(s.shape, 'r', sBaseR, {
               duration: 200,
-              easing: "cubicOut",
+              easing: 'cubicOut',
               onUpdate: () => {
                 s.markRedraw();
                 this._renderer.refresh();
@@ -1423,9 +1423,9 @@ export default class PieChart extends Chart {
         }
         if (s.transform) {
           this._animator
-            .animate(s.transform, "scaleX", 1, {
+            .animate(s.transform, 'scaleX', 1, {
               duration: 200,
-              easing: "cubicOut",
+              easing: 'cubicOut',
               onUpdate: () => {
                 s.markRedraw();
                 this._renderer.refresh();
@@ -1433,9 +1433,9 @@ export default class PieChart extends Chart {
             })
             .start();
           this._animator
-            .animate(s.transform, "scaleY", 1, {
+            .animate(s.transform, 'scaleY', 1, {
               duration: 200,
-              easing: "cubicOut",
+              easing: 'cubicOut',
               onUpdate: () => {
                 s.markRedraw();
                 this._renderer.refresh();
@@ -1478,9 +1478,9 @@ export default class PieChart extends Chart {
     this._activeSectors.forEach((s) => {
       const initOpacity = (s as any).__initialStyle?.opacity ?? 1;
       this._animator
-        .animate(s.style, "opacity", initOpacity, {
+        .animate(s.style, 'opacity', initOpacity, {
           duration: 300,
-          easing: "cubicOut",
+          easing: 'cubicOut',
           onUpdate: () => {
             s.markRedraw();
             this._renderer.refresh();
@@ -1518,7 +1518,7 @@ export default class PieChart extends Chart {
       let targetOpacity = initLabelOpacity;
 
       if (!isCurrent) {
-        if (focus === "self") {
+        if (focus === 'self') {
           targetOpacity = showOnHover ? 0 : 0.2;
         } else if (showOnHover) {
           targetOpacity = 0;
@@ -1526,7 +1526,7 @@ export default class PieChart extends Chart {
       }
 
       this._animator
-        .animate(label.style, "opacity", targetOpacity, {
+        .animate(label.style, 'opacity', targetOpacity, {
           duration: 200,
           onUpdate: () => {
             label.markRedraw();
@@ -1544,7 +1544,7 @@ export default class PieChart extends Chart {
       let targetOpacity = initLineOpacity;
 
       if (!isCurrent) {
-        if (focus === "self") {
+        if (focus === 'self') {
           targetOpacity = showOnHover ? 0 : 0.2;
         } else if (showOnHover) {
           targetOpacity = 0;
@@ -1552,7 +1552,7 @@ export default class PieChart extends Chart {
       }
 
       this._animator
-        .animate(labelLine.style, "opacity", targetOpacity, {
+        .animate(labelLine.style, 'opacity', targetOpacity, {
           duration: 200,
           onUpdate: () => {
             labelLine.markRedraw();
@@ -1573,9 +1573,9 @@ export default class PieChart extends Chart {
     if (label) {
       const initLabelOpacity = label.__initialStyle?.opacity ?? 1;
       this._animator
-        .animate(label.style, "opacity", initLabelOpacity, {
+        .animate(label.style, 'opacity', initLabelOpacity, {
           duration: 300,
-          easing: "cubicOut",
+          easing: 'cubicOut',
           onUpdate: () => {
             label.markRedraw();
             this._renderer.refresh();
@@ -1590,9 +1590,9 @@ export default class PieChart extends Chart {
     if (labelLine) {
       const initLineOpacity = labelLine.__initialStyle?.opacity ?? 1;
       this._animator
-        .animate(labelLine.style, "opacity", initLineOpacity, {
+        .animate(labelLine.style, 'opacity', initLineOpacity, {
           duration: 300,
-          easing: "cubicOut",
+          easing: 'cubicOut',
           onUpdate: () => {
             labelLine.markRedraw();
             this._renderer.refresh();
@@ -1628,7 +1628,7 @@ export default class PieChart extends Chart {
     } else if (finalShowOnHover) {
       label.invisible = false;
       this._animator
-        .animate(label.style, "opacity", 1, {
+        .animate(label.style, 'opacity', 1, {
           duration: 200,
           onUpdate: () => {
             label.markRedraw();
@@ -1639,7 +1639,7 @@ export default class PieChart extends Chart {
     } else {
       if (!label.invisible && (label.style.opacity as number) < 1) {
         this._animator
-          .animate(label.style, "opacity", 1, {
+          .animate(label.style, 'opacity', 1, {
             duration: 200,
             onUpdate: () => {
               label.markRedraw();
@@ -1665,7 +1665,7 @@ export default class PieChart extends Chart {
       if (labelLine.invisible || (labelLine.style.opacity as number) < 1) {
         labelLine.invisible = false;
         this._animator
-          .animate(labelLine.style, "opacity", 1, {
+          .animate(labelLine.style, 'opacity', 1, {
             duration: 200,
             onUpdate: () => {
               labelLine.markRedraw();
@@ -1706,11 +1706,11 @@ export default class PieChart extends Chart {
 
     Object.keys(targetStyle).forEach((key) => {
       const value = targetStyle[key];
-      if (typeof value === "number") {
+      if (typeof value === 'number') {
         this._animator
           .animate(style, key, value, {
             duration: 200,
-            easing: "cubicOut",
+            easing: 'cubicOut',
             onUpdate: () => {
               sector.markRedraw();
               this._renderer.refresh();
@@ -1736,18 +1736,18 @@ export default class PieChart extends Chart {
     targetStyle.shadowBlur = init.shadowBlur ?? 0;
     targetStyle.shadowOffsetX = init.shadowOffsetX ?? 0;
     targetStyle.shadowOffsetY = init.shadowOffsetY ?? 0;
-    targetStyle.shadowColor = init.shadowColor ?? "transparent";
+    targetStyle.shadowColor = init.shadowColor ?? 'transparent';
     if (init.fill !== undefined) targetStyle.fill = init.fill;
     if (init.stroke !== undefined) targetStyle.stroke = init.stroke;
     if (init.lineWidth !== undefined) targetStyle.lineWidth = init.lineWidth;
 
     Object.keys(targetStyle).forEach((key) => {
       const value = targetStyle[key];
-      if (typeof value === "number") {
+      if (typeof value === 'number') {
         this._animator
           .animate(style, key, value, {
             duration: 200,
-            easing: "cubicOut",
+            easing: 'cubicOut',
             onUpdate: () => {
               sector.markRedraw();
               this._renderer.refresh();
@@ -1772,9 +1772,9 @@ export default class PieChart extends Chart {
       const scaleSize = emphasis.scaleSize || 1.1;
       const targetR = baseR * scaleSize;
       this._animator
-        .animate(sector.shape, "r", targetR, {
+        .animate(sector.shape, 'r', targetR, {
           duration: 200,
-          easing: "cubicOut",
+          easing: 'cubicOut',
           onUpdate: () => {
             sector.markRedraw();
             this._renderer.refresh();
@@ -1785,9 +1785,9 @@ export default class PieChart extends Chart {
       // Transform scale fallback
       const scaleSize = emphasis.scaleSize || 1.1;
       this._animator
-        .animate(sector.transform || {}, "scaleX", scaleSize, {
+        .animate(sector.transform || {}, 'scaleX', scaleSize, {
           duration: 200,
-          easing: "cubicOut",
+          easing: 'cubicOut',
           onUpdate: () => {
             sector.markRedraw();
             this._renderer.refresh();
@@ -1795,9 +1795,9 @@ export default class PieChart extends Chart {
         })
         .start();
       this._animator
-        .animate(sector.transform || {}, "scaleY", scaleSize, {
+        .animate(sector.transform || {}, 'scaleY', scaleSize, {
           duration: 200,
-          easing: "cubicOut",
+          easing: 'cubicOut',
           onUpdate: () => {
             sector.markRedraw();
             this._renderer.refresh();
@@ -1809,9 +1809,9 @@ export default class PieChart extends Chart {
       // If baseR is provided, restore radius
       if (baseR !== undefined) {
         this._animator
-          .animate(sector.shape, "r", baseR, {
+          .animate(sector.shape, 'r', baseR, {
             duration: 300,
-            easing: "cubicOut",
+            easing: 'cubicOut',
             onUpdate: () => {
               sector.markRedraw();
               this._renderer.refresh();
@@ -1821,9 +1821,9 @@ export default class PieChart extends Chart {
       } else {
         // Restore transform scale
         this._animator
-          .animate(sector.transform || {}, "scaleX", 1, {
+          .animate(sector.transform || {}, 'scaleX', 1, {
             duration: 300,
-            easing: "cubicOut",
+            easing: 'cubicOut',
             onUpdate: () => {
               sector.markRedraw();
               this._renderer.refresh();
@@ -1831,9 +1831,9 @@ export default class PieChart extends Chart {
           })
           .start();
         this._animator
-          .animate(sector.transform || {}, "scaleY", 1, {
+          .animate(sector.transform || {}, 'scaleY', 1, {
             duration: 300,
-            easing: "cubicOut",
+            easing: 'cubicOut',
             onUpdate: () => {
               sector.markRedraw();
               this._renderer.refresh();

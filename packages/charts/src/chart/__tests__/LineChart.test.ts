@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach, beforeAll } from "vitest";
-import LineChart from "../LineChart";
-import type { ChartOption } from "../../types";
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
+import LineChart from '../LineChart';
+import type { ChartOption } from '../../types';
 
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),
@@ -25,18 +25,18 @@ const mockContext = {
   strokeRect: vi.fn(),
   clearRect: vi.fn(),
   setTransform: vi.fn(),
-  font: "",
+  font: '',
 } as unknown as CanvasRenderingContext2D;
 
 beforeAll(() => {
-  Object.defineProperty(HTMLCanvasElement.prototype, "getContext", {
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
     value: () => mockContext,
     writable: true,
   });
 
   // Mock Path2D for happy-dom environment
   vi.stubGlobal(
-    "Path2D",
+    'Path2D',
     class Path2D {
       constructor(d?: string | Path2D) {}
       addPath(path: Path2D, transform?: DOMMatrix2DInit) {}
@@ -77,40 +77,40 @@ beforeAll(() => {
 });
 
 if (!window.requestAnimationFrame) {
-  vi.stubGlobal("requestAnimationFrame", (cb: any) => setTimeout(cb, 16));
+  vi.stubGlobal('requestAnimationFrame', (cb: any) => setTimeout(cb, 16));
 }
 if (!window.cancelAnimationFrame) {
-  vi.stubGlobal("cancelAnimationFrame", (id: any) => clearTimeout(id));
+  vi.stubGlobal('cancelAnimationFrame', (id: any) => clearTimeout(id));
 }
-vi.stubGlobal("devicePixelRatio", 1);
+vi.stubGlobal('devicePixelRatio', 1);
 
-describe("LineChart", () => {
+describe('LineChart', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
-    container = document.createElement("div");
-    Object.defineProperty(container, "clientWidth", { value: 800 });
-    Object.defineProperty(container, "clientHeight", { value: 600 });
+    container = document.createElement('div');
+    Object.defineProperty(container, 'clientWidth', { value: 800 });
+    Object.defineProperty(container, 'clientHeight', { value: 600 });
   });
 
-  it("should initialize correctly", () => {
+  it('should initialize correctly', () => {
     const chart = new LineChart(container);
     expect(chart).toBeDefined();
   });
 
-  it("should support smooth, areaStyle and symbol", () => {
+  it('should support smooth, areaStyle and symbol', () => {
     const chart = new LineChart(container);
     const option: ChartOption = {
       animation: false,
-      xAxis: { type: "category", data: ["A", "B"] },
-      yAxis: { type: "value" },
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
       series: [
         {
-          type: "line",
+          type: 'line',
           data: [10, 20],
           smooth: true,
           areaStyle: { opacity: 0.5 },
-          symbol: "rect",
+          symbol: 'rect',
           symbolSize: 10,
         },
       ],
@@ -125,15 +125,15 @@ describe("LineChart", () => {
 
     // Check if line is Path (smooth) instead of Polyline
     // We imported Polyline and Path in source, but here we can check constructor name or type
-    expect(seriesItem.line.constructor.name).toBe("Path");
+    expect(seriesItem.line.constructor.name).toBe('Path');
 
     // Check area existence
     expect(seriesItem.area).toBeDefined();
-    expect(seriesItem.area.constructor.name).toBe("Path");
+    expect(seriesItem.area.constructor.name).toBe('Path');
 
     // Check symbols
     expect(seriesItem.symbols.length).toBe(2);
     // Rect symbol should be created
-    expect(seriesItem.symbols[0].constructor.name).toBe("Rect");
+    expect(seriesItem.symbols[0].constructor.name).toBe('Rect');
   });
 });

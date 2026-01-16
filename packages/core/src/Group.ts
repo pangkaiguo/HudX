@@ -2,8 +2,8 @@
  * Group - Container for multiple elements
  */
 
-import ChartElement from "./ChartElement";
-import type { ElementOption } from "./types";
+import ChartElement from './ChartElement';
+import type { ElementOption } from './types';
 
 export default class Group extends ChartElement {
   private _children: ChartElement[] = [];
@@ -114,7 +114,7 @@ export default class Group extends ChartElement {
   /**
    * Get bounding rect (union of all children)
    */
-  getBoundingRect(): import("./types").BoundingRect {
+  getBoundingRect(): import('./types').BoundingRect {
     if (this._children.length === 0) {
       return { x: 0, y: 0, width: 0, height: 0 };
     }

@@ -1,85 +1,85 @@
-import type { DecalObject } from "../types";
+import type { DecalObject } from '../types';
 
 const DECAL_PRESETS: Record<string, Partial<DecalObject>> = {
   diagonal: {
-    symbol: "line",
+    symbol: 'line',
     dashArrayX: [1, 0],
     dashArrayY: [1, 0.5],
     rotation: Math.PI / 4,
     symbolSize: 0.5,
   },
-  "diagonal-reverse": {
-    symbol: "line",
+  'diagonal-reverse': {
+    symbol: 'line',
     dashArrayX: [1, 0],
     dashArrayY: [1, 0.5],
     rotation: -Math.PI / 4,
     symbolSize: 0.5,
   },
   grid: {
-    symbol: "cross",
+    symbol: 'cross',
     dashArrayX: [1, 1],
     dashArrayY: [1, 1],
     rotation: 0,
     symbolSize: 0.5,
   },
   crosshatch: {
-    symbol: "cross",
+    symbol: 'cross',
     dashArrayX: [1, 0],
     dashArrayY: [1, 0],
     rotation: Math.PI / 4,
     symbolSize: 0.5,
   },
   checkerboard: {
-    symbol: "rect",
+    symbol: 'rect',
     dashArrayX: [1, 0.5],
     dashArrayY: [1, 0.5],
     rotation: 0,
     symbolSize: 0.5,
   },
   dots: {
-    symbol: "circle",
+    symbol: 'circle',
     dashArrayX: [1, 0.5],
     dashArrayY: [1, 0.5],
     rotation: 0,
     symbolSize: 0.5,
   },
   rect: {
-    symbol: "rect",
+    symbol: 'rect',
     dashArrayX: [1, 0.5],
     dashArrayY: [1, 0.5],
     rotation: 0,
     symbolSize: 0.5,
   },
   circle: {
-    symbol: "circle",
+    symbol: 'circle',
     dashArrayX: [1, 0.5],
     dashArrayY: [1, 0.5],
     rotation: 0,
     symbolSize: 0.5,
   },
   triangle: {
-    symbol: "triangle",
+    symbol: 'triangle',
     dashArrayX: [1, 0.5],
     dashArrayY: [1, 0.5],
     rotation: 0,
     symbolSize: 0.5,
   },
   diamond: {
-    symbol: "diamond",
+    symbol: 'diamond',
     dashArrayX: [1, 0.5],
     dashArrayY: [1, 0.5],
     rotation: 0,
     symbolSize: 0.5,
   },
   pin: {
-    symbol: "pin",
+    symbol: 'pin',
     dashArrayX: [1, 0.5],
     dashArrayY: [1, 0.5],
     rotation: 0,
     symbolSize: 0.5,
   },
   arrow: {
-    symbol: "arrow",
+    symbol: 'arrow',
     dashArrayX: [1, 0.5],
     dashArrayY: [1, 0.5],
     rotation: 0,
@@ -97,7 +97,7 @@ export function createDecalPattern(
     ? { ...preset, ...decalObject, symbol: preset.symbol }
     : decalObject;
 
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   const size = 6; // Default tile size (reduced for better density)
   const w = size;
   const h = size;
@@ -105,7 +105,7 @@ export function createDecalPattern(
   // Normalize dash arrays
   const normalizeDash = (dash: number[] | number | undefined): number[] => {
     if (dash === undefined) return [1];
-    if (typeof dash === "number") return [dash];
+    if (typeof dash === 'number') return [dash];
     return dash.length ? dash : [1];
   };
 
@@ -126,7 +126,7 @@ export function createDecalPattern(
   canvas.width = totalW;
   canvas.height = totalH;
 
-  const pCtx = canvas.getContext("2d");
+  const pCtx = canvas.getContext('2d');
   if (!pCtx) return null;
 
   // Draw background
@@ -139,11 +139,11 @@ export function createDecalPattern(
   }
 
   // Draw symbol
-  pCtx.fillStyle = decal.color || "rgba(0, 0, 0, 0.2)";
-  pCtx.strokeStyle = decal.color || "rgba(0, 0, 0, 0.2)";
+  pCtx.fillStyle = decal.color || 'rgba(0, 0, 0, 0.2)';
+  pCtx.strokeStyle = decal.color || 'rgba(0, 0, 0, 0.2)';
   pCtx.lineWidth = 1;
 
-  const symbol = decal.symbol || "circle";
+  const symbol = decal.symbol || 'circle';
   const symbolSize = (decal.symbolSize || 1) * Math.min(w, h);
 
   const shouldDraw = (dash: number[], index: number) => {
@@ -164,7 +164,7 @@ export function createDecalPattern(
         pCtx.translate(i * w + w / 2, j * h + h / 2);
 
         switch (symbol) {
-          case "rect":
+          case 'rect':
             pCtx.fillRect(
               -symbolSize / 2,
               -symbolSize / 2,
@@ -172,7 +172,7 @@ export function createDecalPattern(
               symbolSize,
             );
             break;
-          case "triangle":
+          case 'triangle':
             pCtx.beginPath();
             pCtx.moveTo(0, -symbolSize / 2);
             pCtx.lineTo(symbolSize / 2, symbolSize / 2);
@@ -180,7 +180,7 @@ export function createDecalPattern(
             pCtx.closePath();
             pCtx.fill();
             break;
-          case "diamond":
+          case 'diamond':
             pCtx.beginPath();
             pCtx.moveTo(0, -symbolSize / 2);
             pCtx.lineTo(symbolSize / 2, 0);
@@ -189,7 +189,7 @@ export function createDecalPattern(
             pCtx.closePath();
             pCtx.fill();
             break;
-          case "arrow":
+          case 'arrow':
             pCtx.beginPath();
             pCtx.moveTo(0, -symbolSize / 2);
             pCtx.lineTo(symbolSize / 2, symbolSize / 2);
@@ -198,18 +198,18 @@ export function createDecalPattern(
             pCtx.closePath();
             pCtx.fill();
             break;
-          case "pin":
+          case 'pin':
             pCtx.beginPath();
             pCtx.arc(0, 0, symbolSize / 2, 0, Math.PI * 2);
             pCtx.fill();
             break;
-          case "line":
+          case 'line':
             pCtx.beginPath();
             pCtx.moveTo(-symbolSize / 2, 0);
             pCtx.lineTo(symbolSize / 2, 0);
             pCtx.stroke();
             break;
-          case "cross":
+          case 'cross':
             pCtx.beginPath();
             pCtx.moveTo(-symbolSize / 2, 0);
             pCtx.lineTo(symbolSize / 2, 0);
@@ -217,7 +217,7 @@ export function createDecalPattern(
             pCtx.lineTo(0, symbolSize / 2);
             pCtx.stroke();
             break;
-          case "circle":
+          case 'circle':
           default:
             pCtx.beginPath();
             pCtx.arc(0, 0, symbolSize / 2, 0, Math.PI * 2);
@@ -230,13 +230,13 @@ export function createDecalPattern(
     }
   }
 
-  const pattern = pCtx.createPattern(canvas, "repeat");
+  const pattern = pCtx.createPattern(canvas, 'repeat');
   if (pattern) {
     (pattern as any)._canvas = canvas;
     // Store rotation for SVG painter or other renderers
     (pattern as any)._rotation = decal.rotation || 0;
 
-    if (decal.rotation && typeof DOMMatrix !== "undefined") {
+    if (decal.rotation && typeof DOMMatrix !== 'undefined') {
       const matrix = new DOMMatrix().rotateSelf(
         (decal.rotation * 180) / Math.PI,
       );

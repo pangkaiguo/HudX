@@ -1,52 +1,52 @@
-import React, { useState, useRef } from "react";
-import { HChart } from "hux-charts";
-import type { ChartOption, HChartRef } from "hux-charts";
-import { ThemeManager, Theme } from "hux-core";
-import type { RenderMode } from "hux-core";
+import React, { useState, useRef } from 'react';
+import { HChart } from 'hux-charts';
+import type { ChartOption, HChartRef } from 'hux-charts';
+import { ThemeManager, Theme } from 'hux-core';
+import type { RenderMode } from 'hux-core';
 
-export const HalfDoughnutExample = ({ theme = "light" }: { theme?: Theme }) => {
+export const HalfDoughnutExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
-  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
     tooltip: {
       show: true,
-      trigger: "item",
+      trigger: 'item',
     },
     aria: {
       enabled: true,
       decal: {
         show: isDecal,
         decals: [
-          { symbol: "diagonal", color: themeObj.decalColor },
-          { symbol: "dots", color: themeObj.decalColor },
-          { symbol: "diagonal-reverse", color: themeObj.decalColor },
-          { symbol: "checkerboard", color: themeObj.decalColor },
-          { symbol: "crosshatch", color: themeObj.decalColor },
+          { symbol: 'diagonal', color: themeObj.decalColor },
+          { symbol: 'dots', color: themeObj.decalColor },
+          { symbol: 'diagonal-reverse', color: themeObj.decalColor },
+          { symbol: 'checkerboard', color: themeObj.decalColor },
+          { symbol: 'crosshatch', color: themeObj.decalColor },
         ],
       },
     },
     legend: {
       show: true,
-      orient: "vertical",
-      left: "left",
-      top: "middle",
-      icon: "rect",
+      orient: 'vertical',
+      left: 'left',
+      top: 'middle',
+      icon: 'rect',
     },
     series: [
       {
-        name: "Access Source",
-        type: "half-doughnut",
-        radius: ["40%", "70%"],
-        center: ["50%", "70%"],
+        name: 'Access Source',
+        type: 'half-doughnut',
+        radius: ['40%', '70%'],
+        center: ['50%', '70%'],
         // adjust the start angle
         startAngle: 180,
         endAngle: 360,
         itemStyle: {
           borderWidth: 0,
-          borderColor: "transparent",
+          borderColor: 'transparent',
         },
         emphasis: {
           scale: true,
@@ -59,20 +59,20 @@ export const HalfDoughnutExample = ({ theme = "light" }: { theme?: Theme }) => {
           label: {
             show: true,
             fontSize: 16,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           },
         },
         data: [
-          { value: 1048, name: "Search Engine" },
-          { value: 735, name: "Direct" },
-          { value: 580, name: "Email" },
-          { value: 484, name: "Union Ads" },
-          { value: 300, name: "Video Ads" },
+          { value: 1048, name: 'Search Engine' },
+          { value: 735, name: 'Direct' },
+          { value: 580, name: 'Email' },
+          { value: 484, name: 'Union Ads' },
+          { value: 300, name: 'Video Ads' },
         ],
         label: {
           show: false,
-          position: "center",
-          formatter: "{b}",
+          position: 'center',
+          formatter: '{b}',
         },
       },
     ],
@@ -86,12 +86,12 @@ export const HalfDoughnutExample = ({ theme = "light" }: { theme?: Theme }) => {
       const newData = [
         {
           value: Math.floor(Math.random() * 1000) + 200,
-          name: "Search Engine",
+          name: 'Search Engine',
         },
-        { value: Math.floor(Math.random() * 1000) + 200, name: "Direct" },
-        { value: Math.floor(Math.random() * 1000) + 200, name: "Email" },
-        { value: Math.floor(Math.random() * 1000) + 200, name: "Union Ads" },
-        { value: Math.floor(Math.random() * 1000) + 200, name: "Video Ads" },
+        { value: Math.floor(Math.random() * 1000) + 200, name: 'Direct' },
+        { value: Math.floor(Math.random() * 1000) + 200, name: 'Email' },
+        { value: Math.floor(Math.random() * 1000) + 200, name: 'Union Ads' },
+        { value: Math.floor(Math.random() * 1000) + 200, name: 'Video Ads' },
       ];
       chartInstance.setOption({
         series: [
@@ -106,43 +106,43 @@ export const HalfDoughnutExample = ({ theme = "light" }: { theme?: Theme }) => {
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Half Doughnut Chart</h2>
-      <p style={{ marginBottom: 20, color: "#666", fontSize: 14 }}>
+      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Half-doughnut / Gauge style chart (180 degree arc)
       </p>
       <div
         style={{
           marginBottom: 20,
-          display: "flex",
+          display: 'flex',
           gap: 20,
-          flexWrap: "wrap",
-          alignItems: "center",
+          flexWrap: 'wrap',
+          alignItems: 'center',
         }}
       >
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
             style={{
-              padding: "4px 8px",
+              padding: '4px 8px',
               borderRadius: 4,
-              border: "1px solid #ddd",
+              border: '1px solid #ddd',
             }}
           >
-            <option value="canvas">Canvas</option>
-            <option value="svg">SVG</option>
+            <option value='canvas'>Canvas</option>
+            <option value='svg'>SVG</option>
           </select>
         </label>
         <label
           style={{
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
           }}
         >
           <input
-            type="checkbox"
+            type='checkbox'
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
@@ -155,21 +155,21 @@ export const HalfDoughnutExample = ({ theme = "light" }: { theme?: Theme }) => {
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: "1px solid #e0e0e0",
+          border: '1px solid #e0e0e0',
           borderRadius: 8,
-          height: "600px",
+          height: '600px',
         }}
       />
-      <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
+      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={handleUpdateSeries}
           style={{
-            padding: "8px 16px",
-            backgroundColor: "#5470c6",
-            color: "white",
-            border: "none",
+            padding: '8px 16px',
+            backgroundColor: '#5470c6',
+            color: 'white',
+            border: 'none',
             borderRadius: 4,
-            cursor: "pointer",
+            cursor: 'pointer',
             fontSize: 14,
           }}
         >

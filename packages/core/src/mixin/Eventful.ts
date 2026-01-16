@@ -2,7 +2,7 @@
  * Eventful mixin - provides event handling capabilities
  */
 
-import type { EventData, EventCallback } from "../types";
+import type { EventData, EventCallback } from '../types';
 
 export default class Eventful {
   private _handlers: Map<string, EventCallback[]> = new Map();

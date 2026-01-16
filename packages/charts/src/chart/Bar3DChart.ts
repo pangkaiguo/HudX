@@ -1,9 +1,9 @@
-import Chart from "../Chart";
+import Chart from '../Chart';
 import {
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
-} from "../util/coordinate";
+} from '../util/coordinate';
 import {
   Rect,
   Polygon,
@@ -12,8 +12,8 @@ import {
   darken,
   createDecalPattern,
   Z_SERIES,
-} from "hux-core";
-import { EventHelper } from "../util/EventHelper";
+} from 'hux-core';
+import { EventHelper } from '../util/EventHelper';
 
 export default class Bar3DChart extends Chart {
   private _activeGroups: Map<string, Group> = new Map();
@@ -48,7 +48,7 @@ export default class Bar3DChart extends Chart {
 
       let data: any[] = [];
       series.forEach((s) => {
-        if (s.type === "bar3D" && s.show !== false) {
+        if (s.type === 'bar3D' && s.show !== false) {
           data = data.concat(s.data || []);
         }
       });
@@ -59,20 +59,20 @@ export default class Bar3DChart extends Chart {
       const yDomain = calculateDomain(yAxis || {}, data, false);
 
       const xScale =
-        xAxis?.type === "category"
+        xAxis?.type === 'category'
           ? createOrdinalScale(xDomain, [plotX, plotX + plotWidth])
           : createLinearScale(xDomain, [plotX, plotX + plotWidth]);
 
       const yScale = createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
       const barSeries = series.filter(
-        (s) => s.type === "bar3D" && s.show !== false,
+        (s) => s.type === 'bar3D' && s.show !== false,
       );
       const seriesCount = barSeries.length || 1;
 
       // Layout calculation (simplified from BarChart)
       let categoryCount: number;
-      if (xAxis?.type === "category") {
+      if (xAxis?.type === 'category') {
         categoryCount = Array.isArray(xAxis?.data)
           ? xAxis.data.length
           : xDomain.length;
@@ -84,11 +84,11 @@ export default class Bar3DChart extends Chart {
         categoryCount > 0 ? plotWidth / categoryCount : plotWidth;
 
       const firstSeries = barSeries[0] || {};
-      const barCategoryGapStr = firstSeries.barCategoryGap ?? "20%";
-      const barGapStr = firstSeries.barGap ?? "30%";
+      const barCategoryGapStr = firstSeries.barCategoryGap ?? '20%';
+      const barGapStr = firstSeries.barGap ?? '30%';
 
       const parsePercent = (val: string | number) => {
-        if (typeof val === "string" && val.endsWith("%")) {
+        if (typeof val === 'string' && val.endsWith('%')) {
           return parseFloat(val) / 100;
         }
         return 0;
@@ -100,7 +100,7 @@ export default class Bar3DChart extends Chart {
       let barWidthPerSeries: number;
       let gapWidth: number;
 
-      if (typeof barGapStr === "string" && barGapStr.endsWith("%")) {
+      if (typeof barGapStr === 'string' && barGapStr.endsWith('%')) {
         const gapPercent = parsePercent(barGapStr);
         barWidthPerSeries =
           availableWidth / (seriesCount + (seriesCount - 1) * gapPercent);
@@ -120,11 +120,11 @@ export default class Bar3DChart extends Chart {
       // Legend
       if (option.legend?.show !== false) {
         const items = (series as any[])
-          .filter((s) => s.type === "bar3D" && s.show !== false)
+          .filter((s) => s.type === 'bar3D' && s.show !== false)
           .map((s, i) => ({
-            name: s.name || this.t("series.name", "Series") + "-" + (i + 1),
+            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
-            icon: option.legend?.icon || "rect",
+            icon: option.legend?.icon || 'rect',
             textColor: this.getThemeConfig().legendTextColor,
             data: s,
           }));
@@ -138,12 +138,12 @@ export default class Bar3DChart extends Chart {
       const shiftY = -depth * Math.sin(angle);
 
       series.forEach((seriesItem, seriesIndex) => {
-        if (seriesItem.type !== "bar3D") return;
+        if (seriesItem.type !== 'bar3D') return;
         if (seriesItem.show === false) return;
 
         const seriesName =
           seriesItem.name ||
-          this.t("series.name", "Series") + "-" + (seriesIndex + 1);
+          this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
         if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
@@ -159,7 +159,7 @@ export default class Bar3DChart extends Chart {
         if (aria?.enabled && aria?.decal?.show) {
           const decals = aria.decal.decals || [];
           const decal = decals[seriesIndex % decals.length] || {
-            symbol: "rect",
+            symbol: 'rect',
           };
           const pattern = createDecalPattern(decal, barColor);
           if (pattern) {
@@ -173,10 +173,10 @@ export default class Bar3DChart extends Chart {
 
         seriesData.forEach((item: any, index: number) => {
           let xVal, yVal;
-          if (xAxis?.type === "category") {
+          if (xAxis?.type === 'category') {
             xVal = xDomain[index];
             if (
-              typeof item === "object" &&
+              typeof item === 'object' &&
               item !== null &&
               item.value !== undefined
             ) {
@@ -224,7 +224,7 @@ export default class Bar3DChart extends Chart {
                 height: h,
               },
               style: { fill: fillStyle },
-              cursor: this._tooltip ? "pointer" : "default",
+              cursor: this._tooltip ? 'pointer' : 'default',
             });
 
             // Top face
@@ -238,7 +238,7 @@ export default class Bar3DChart extends Chart {
                 ],
               },
               style: { fill: topColor },
-              cursor: this._tooltip ? "pointer" : "default",
+              cursor: this._tooltip ? 'pointer' : 'default',
             });
 
             // Side face
@@ -252,29 +252,29 @@ export default class Bar3DChart extends Chart {
                 ],
               },
               style: { fill: sideColor },
-              cursor: this._tooltip ? "pointer" : "default",
+              cursor: this._tooltip ? 'pointer' : 'default',
             });
 
             // Bind hover events to shapes since Group bubbling might be issue
             if (this._tooltip) {
               const handleMouseOver = (evt: any) => {
-                group.attr("opacity", 0.8);
+                group.attr('opacity', 0.8);
                 const itemName =
-                  typeof item === "object" && item.name
+                  typeof item === 'object' && item.name
                     ? item.name
-                    : xAxis?.data?.[index] || "";
+                    : xAxis?.data?.[index] || '';
                 const params = {
-                  componentType: "series",
-                  seriesType: "bar3D",
+                  componentType: 'series',
+                  seriesType: 'bar3D',
                   seriesIndex,
                   seriesName,
                   name: itemName,
                   dataIndex: index,
                   data: item,
                   value: yVal,
-                  color: typeof barColor === "string" ? barColor : undefined,
+                  color: typeof barColor === 'string' ? barColor : undefined,
                   marker:
-                    typeof barColor === "string"
+                    typeof barColor === 'string'
                       ? this._getTooltipMarker(barColor)
                       : undefined,
                 };
@@ -294,7 +294,7 @@ export default class Bar3DChart extends Chart {
               };
 
               const handleMouseOut = () => {
-                group.attr("opacity", 1);
+                group.attr('opacity', 1);
                 this._tooltip!.hide();
               };
 
@@ -323,10 +323,10 @@ export default class Bar3DChart extends Chart {
 
               const animatorObj = { height: initialHeight };
 
-              this._animator.animate(animatorObj, "height", targetHeight, {
+              this._animator.animate(animatorObj, 'height', targetHeight, {
                 duration,
                 delay,
-                easing: "cubicOut",
+                easing: 'cubicOut',
                 onUpdate: (target: any, percent: number) => {
                   const h = target.height;
                   (group as any).__currentHeight = h;

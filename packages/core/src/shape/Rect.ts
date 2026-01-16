@@ -2,8 +2,8 @@
  * Rect - Rectangle shape element
  */
 
-import ChartElement from "../ChartElement";
-import type { ElementOption, BoundingRect } from "../types";
+import ChartElement from '../ChartElement';
+import type { ElementOption, BoundingRect } from '../types';
 
 export interface RectShape {
   x: number;

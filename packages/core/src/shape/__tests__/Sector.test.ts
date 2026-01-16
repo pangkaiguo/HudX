@@ -1,8 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import Sector from "../Sector";
+import { describe, it, expect, vi } from 'vitest';
+import Sector from '../Sector';
 
-describe("Sector", () => {
-  it("should initialize with provided values", () => {
+describe('Sector', () => {
+  it('should initialize with provided values', () => {
     const sector = new Sector({
       shape: {
         cx: 100,
@@ -23,7 +23,7 @@ describe("Sector", () => {
     });
   });
 
-  it("should calculate bounding rect correctly", () => {
+  it('should calculate bounding rect correctly', () => {
     const sector = new Sector({
       shape: {
         cx: 100,
@@ -45,7 +45,7 @@ describe("Sector", () => {
     expect(bbox.height).toBeCloseTo(201);
   });
 
-  it("should check containment correctly", () => {
+  it('should check containment correctly', () => {
     const sector = new Sector({
       shape: {
         cx: 100,
@@ -72,7 +72,7 @@ describe("Sector", () => {
     expect(sector.contain(100, 100)).toBe(false);
   });
 
-  it("should check containment crossing 0", () => {
+  it('should check containment crossing 0', () => {
     // 350 deg to 10 deg
     const startAngle = (350 * Math.PI) / 180;
     const endAngle = (10 * Math.PI) / 180;
@@ -87,7 +87,7 @@ describe("Sector", () => {
     expect(sector.contain(-50, 0)).toBe(false);
   });
 
-  it("should render pie sector (no hole)", () => {
+  it('should render pie sector (no hole)', () => {
     const sector = new Sector({
       shape: {
         cx: 100,
@@ -97,7 +97,7 @@ describe("Sector", () => {
         startAngle: 0,
         endAngle: Math.PI / 2,
       },
-      style: { fill: "red" },
+      style: { fill: 'red' },
     });
 
     const ctx = {
@@ -122,7 +122,7 @@ describe("Sector", () => {
     expect(ctx.fill).toHaveBeenCalled();
   });
 
-  it("should render donut sector (with hole)", () => {
+  it('should render donut sector (with hole)', () => {
     const sector = new Sector({
       shape: {
         cx: 100,
@@ -132,7 +132,7 @@ describe("Sector", () => {
         startAngle: 0,
         endAngle: Math.PI / 2,
       },
-      style: { fill: "red" },
+      style: { fill: 'red' },
     });
 
     const ctx = {
@@ -199,7 +199,7 @@ describe("Sector", () => {
     expect(ctx.fill).toHaveBeenCalled();
   });
 
-  it("should not render if invisible", () => {
+  it('should not render if invisible', () => {
     const sector = new Sector({
       shape: { cx: 0, cy: 0, r0: 0, r: 10, startAngle: 0, endAngle: 1 },
       invisible: true,

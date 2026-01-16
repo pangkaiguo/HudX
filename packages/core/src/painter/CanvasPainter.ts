@@ -2,9 +2,9 @@
  * CanvasPainter - Canvas rendering implementation
  */
 
-import Storage from "../Storage";
-import IPainter from "./IPainter";
-import type { DataURLOpts } from "../types";
+import Storage from '../Storage';
+import IPainter from './IPainter';
+import type { DataURLOpts } from '../types';
 
 export default class CanvasPainter implements IPainter {
   private _dom: HTMLElement;
@@ -19,11 +19,11 @@ export default class CanvasPainter implements IPainter {
   constructor(dom: HTMLElement, storage: Storage) {
     this._dom = dom;
     this._storage = storage;
-    this._canvas = document.createElement("canvas");
-    this._ctx = this._canvas.getContext("2d")!;
+    this._canvas = document.createElement('canvas');
+    this._ctx = this._canvas.getContext('2d')!;
 
     if (!this._ctx) {
-      throw new Error("Canvas 2D context is not supported");
+      throw new Error('Canvas 2D context is not supported');
     }
 
     this._dom.appendChild(this._canvas);
@@ -58,7 +58,7 @@ export default class CanvasPainter implements IPainter {
 
     // Ensure image smoothing is enabled (high quality)
     this._ctx.imageSmoothingEnabled = true;
-    (this._ctx as any).imageSmoothingQuality = "high";
+    (this._ctx as any).imageSmoothingQuality = 'high';
 
     this.markDirty();
   }
@@ -167,7 +167,7 @@ export default class CanvasPainter implements IPainter {
       resizeObserver.observe(this._dom);
     } else {
       // Fallback for browsers without ResizeObserver
-      window.addEventListener("resize", () => {
+      window.addEventListener('resize', () => {
         this._resize();
       });
     }
@@ -190,18 +190,18 @@ export default class CanvasPainter implements IPainter {
    * Get data URL
    */
   getDataURL(opts: DataURLOpts = {}): string {
-    const type = opts.type || "png";
+    const type = opts.type || 'png';
     const pixelRatio = opts.pixelRatio || window.devicePixelRatio || 1;
     const backgroundColor = opts.backgroundColor;
 
     // Create a temporary canvas if we need to change pixel ratio or background color
     if (pixelRatio !== 1 || backgroundColor) {
-      const tempCanvas = document.createElement("canvas");
+      const tempCanvas = document.createElement('canvas');
       const width = this._width;
       const height = this._height;
       tempCanvas.width = width * pixelRatio;
       tempCanvas.height = height * pixelRatio;
-      const ctx = tempCanvas.getContext("2d");
+      const ctx = tempCanvas.getContext('2d');
 
       if (ctx) {
         if (backgroundColor) {

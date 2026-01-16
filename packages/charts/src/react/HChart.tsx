@@ -10,18 +10,18 @@ import React, {
   useCallback,
   forwardRef,
   useImperativeHandle,
-} from "react";
-import type { ChartOption, ChartEvent } from "../types";
-import type { RenderMode, Theme, Locale } from "hux-core";
-import Chart from "../Chart";
-import LineChart from "../chart/LineChart";
-import BarChart from "../chart/BarChart";
-import Bar3DChart from "../chart/Bar3DChart";
-import StackBar3DChart from "../chart/StackBar3DChart";
-import PieChart from "../chart/PieChart";
-import DoughnutChart from "../chart/DoughnutChart";
-import HalfDoughnutChart from "../chart/HalfDoughnutChart";
-import ScatterChart from "../chart/ScatterChart";
+} from 'react';
+import type { ChartOption, ChartEvent } from '../types';
+import type { RenderMode, Theme, Locale } from 'hux-core';
+import Chart from '../Chart';
+import LineChart from '../chart/LineChart';
+import BarChart from '../chart/BarChart';
+import Bar3DChart from '../chart/Bar3DChart';
+import StackBar3DChart from '../chart/StackBar3DChart';
+import PieChart from '../chart/PieChart';
+import DoughnutChart from '../chart/DoughnutChart';
+import HalfDoughnutChart from '../chart/HalfDoughnutChart';
+import ScatterChart from '../chart/ScatterChart';
 
 export interface HChartProps {
   /** Chart configuration option */
@@ -64,10 +64,10 @@ const HChart = forwardRef<HChartRef, HChartProps>(
       height,
       className,
       style,
-      renderMode = "canvas",
+      renderMode = 'canvas',
       theme: propTheme,
       mode,
-      locale = "en",
+      locale = 'en',
       onEvents,
       notMerge = false,
       lazyUpdate = false,
@@ -84,9 +84,9 @@ const HChart = forwardRef<HChartRef, HChartProps>(
         return propTheme;
       }
       if (mode) {
-        return mode.toLowerCase() === "dark" ? "dark" : "light";
+        return mode.toLowerCase() === 'dark' ? 'dark' : 'light';
       }
-      return "light";
+      return 'light';
     }, [propTheme, mode]);
 
     useImperativeHandle(ref, () => ({
@@ -97,9 +97,9 @@ const HChart = forwardRef<HChartRef, HChartProps>(
     const chartType = useMemo(() => {
       const series = option.series || [];
       if (series.length > 0) {
-        return series[0].type || "line";
+        return series[0].type || 'line';
       }
-      return "line";
+      return 'line';
     }, [option.series]);
 
     // Create chart instance
@@ -110,28 +110,28 @@ const HChart = forwardRef<HChartRef, HChartProps>(
 
       let ChartClass: typeof Chart;
       switch (chartType) {
-        case "line":
+        case 'line':
           ChartClass = LineChart;
           break;
-        case "bar":
+        case 'bar':
           ChartClass = BarChart;
           break;
-        case "bar3D":
+        case 'bar3D':
           ChartClass = Bar3DChart;
           break;
-        case "stackBar3D":
+        case 'stackBar3D':
           ChartClass = StackBar3DChart;
           break;
-        case "pie":
+        case 'pie':
           ChartClass = PieChart;
           break;
-        case "doughnut":
+        case 'doughnut':
           ChartClass = DoughnutChart;
           break;
-        case "half-doughnut":
+        case 'half-doughnut':
           ChartClass = HalfDoughnutChart;
           break;
-        case "scatter":
+        case 'scatter':
           ChartClass = ScatterChart;
           break;
         default:
@@ -200,10 +200,10 @@ const HChart = forwardRef<HChartRef, HChartProps>(
       handleResize(); // Initial resize
 
       // Auto resize on window resize if dimensions are not fixed numbers
-      if (typeof width !== "number" || typeof height !== "number") {
-        window.addEventListener("resize", handleResize);
+      if (typeof width !== 'number' || typeof height !== 'number') {
+        window.addEventListener('resize', handleResize);
         return () => {
-          window.removeEventListener("resize", handleResize);
+          window.removeEventListener('resize', handleResize);
         };
       }
     }, [width, height, handleResize]);
@@ -230,7 +230,7 @@ const HChart = forwardRef<HChartRef, HChartProps>(
         ref={containerRef}
         className={className}
         style={{
-          width: width === undefined ? "100%" : width,
+          width: width === undefined ? '100%' : width,
           height: height === undefined ? 300 : height,
           ...style,
         }}
@@ -239,6 +239,6 @@ const HChart = forwardRef<HChartRef, HChartProps>(
   },
 );
 
-HChart.displayName = "HChart";
+HChart.displayName = 'HChart';
 
 export default HChart;

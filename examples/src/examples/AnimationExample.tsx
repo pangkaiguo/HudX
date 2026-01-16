@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Renderer,
   Circle,
@@ -7,12 +7,12 @@ import {
   Easing,
   ThemeManager,
   Theme,
-} from "hux-core";
-import type { RenderMode } from "hux-core";
+} from 'hux-core';
+import type { RenderMode } from 'hux-core';
 
-export const AnimationExample = ({ theme = "light" }: { theme?: Theme }) => {
+export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -21,7 +21,7 @@ export const AnimationExample = ({ theme = "light" }: { theme?: Theme }) => {
       containerRef.current,
       renderMode,
       theme,
-      "en",
+      'en',
     );
     const themeObj = ThemeManager.getTheme(theme);
 
@@ -41,7 +41,7 @@ export const AnimationExample = ({ theme = "light" }: { theme?: Theme }) => {
 
     const anim1 = new Animation(
       circle.shape as unknown as Record<string, unknown>,
-      "cx",
+      'cx',
       600,
       2000,
       0,
@@ -54,7 +54,7 @@ export const AnimationExample = ({ theme = "light" }: { theme?: Theme }) => {
 
     const anim2 = new Animation(
       rect.transform as Record<string, unknown>,
-      "scaleX",
+      'scaleX',
       2,
       2000,
       0,
@@ -67,7 +67,7 @@ export const AnimationExample = ({ theme = "light" }: { theme?: Theme }) => {
 
     const anim3 = new Animation(
       rect.transform as Record<string, unknown>,
-      "scaleY",
+      'scaleY',
       2,
       2000,
       0,
@@ -93,35 +93,35 @@ export const AnimationExample = ({ theme = "light" }: { theme?: Theme }) => {
       <div
         style={{
           marginBottom: 20,
-          display: "flex",
+          display: 'flex',
           gap: 20,
-          flexWrap: "wrap",
-          alignItems: "center",
+          flexWrap: 'wrap',
+          alignItems: 'center',
         }}
       >
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
             style={{
-              padding: "4px 8px",
+              padding: '4px 8px',
               borderRadius: 4,
-              border: "1px solid #ddd",
+              border: '1px solid #ddd',
             }}
           >
-            <option value="canvas">Canvas</option>
-            <option value="svg">SVG</option>
+            <option value='canvas'>Canvas</option>
+            <option value='svg'>SVG</option>
           </select>
         </label>
       </div>
-      <p style={{ marginBottom: 20, color: "#666" }}>
+      <p style={{ marginBottom: 20, color: '#666' }}>
         Circle moves right, Rectangle scales
       </p>
       <div
         ref={containerRef}
         style={{
-          border: "1px solid #e0e0e0",
+          border: '1px solid #e0e0e0',
           borderRadius: 8,
           width: 800,
           height: 300,

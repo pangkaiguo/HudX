@@ -1,11 +1,11 @@
-import React, { useRef, useState, useMemo } from "react";
-import { HChart } from "hux-charts";
-import type { ChartOption, HChartRef } from "hux-charts";
-import { ThemeManager, Theme } from "hux-core";
-import type { RenderMode } from "hux-core";
+import React, { useRef, useState, useMemo } from 'react';
+import { HChart } from 'hux-charts';
+import type { ChartOption, HChartRef } from 'hux-charts';
+import { ThemeManager, Theme } from 'hux-core';
+import type { RenderMode } from 'hux-core';
 
 export const AreaLineChartExample = ({
-  theme = "light",
+  theme = 'light',
 }: {
   theme?: Theme;
 }) => {
@@ -14,7 +14,7 @@ export const AreaLineChartExample = ({
   const [showGrid, setShowGrid] = useState(true);
   const [gridTop, setGridTop] = useState(60);
   const [splitNumber, setSplitNumber] = useState(5);
-  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const [isSmooth, setIsSmooth] = useState(true);
 
   // Generate more data points (e.g. 100)
@@ -29,7 +29,7 @@ export const AreaLineChartExample = ({
 
     for (let i = 0; i < count; i++) {
       date.setDate(date.getDate() + 1);
-      data.push([date.getMonth() + 1, date.getDate()].join("/"));
+      data.push([date.getMonth() + 1, date.getDate()].join('/'));
 
       baseValue = baseValue + Math.random() * 20 - 10;
       valuesA.push(Math.abs(baseValue) + 50);
@@ -46,14 +46,14 @@ export const AreaLineChartExample = ({
   const option: ChartOption = {
     tooltip: {
       show: true,
-      trigger: "axis",
+      trigger: 'axis',
     },
     legend: {
       show: true,
-      orient: "vertical",
-      left: "right",
+      orient: 'vertical',
+      left: 'right',
       top: 20,
-      icon: "rect",
+      icon: 'rect',
     },
     grid: {
       left: 50,
@@ -62,14 +62,14 @@ export const AreaLineChartExample = ({
       bottom: 60,
     },
     xAxis: {
-      type: "category",
+      type: 'category',
       data: chartData.category,
       show: true,
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: "#eee",
-          type: "dashed",
+          color: '#eee',
+          type: 'dashed',
         },
       },
       axisLabel: {
@@ -78,20 +78,20 @@ export const AreaLineChartExample = ({
       },
     },
     yAxis: {
-      type: "value",
+      type: 'value',
       show: true,
       splitNumber: splitNumber,
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: "#eee",
+          color: '#eee',
         },
       },
     },
     series: [
       {
-        name: "Series A",
-        type: "line",
+        name: 'Series A',
+        type: 'line',
         data: chartData.valuesA,
         itemStyle: { color: themeObj.seriesColors?.[0] },
         lineStyle: { width: 2 },
@@ -100,8 +100,8 @@ export const AreaLineChartExample = ({
         areaStyle: { opacity: 0.3 },
       },
       {
-        name: "Series B",
-        type: "line",
+        name: 'Series B',
+        type: 'line',
         data: chartData.valuesB,
         itemStyle: { color: themeObj.seriesColors?.[1] },
         lineStyle: { width: 2 },
@@ -110,8 +110,8 @@ export const AreaLineChartExample = ({
         areaStyle: { opacity: 0.3 },
       },
       {
-        name: "Series C",
-        type: "line",
+        name: 'Series C',
+        type: 'line',
         data: chartData.valuesC,
         itemStyle: { color: themeObj.seriesColors?.[2] },
         lineStyle: { width: 2 },
@@ -122,7 +122,7 @@ export const AreaLineChartExample = ({
     ],
     animation: true,
     animationDuration: 1000,
-    animationEasing: "cubicOut",
+    animationEasing: 'cubicOut',
   };
 
   const handleUpdateSeries = () => {
@@ -134,45 +134,45 @@ export const AreaLineChartExample = ({
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Area Line Chart</h2>
-      <p style={{ marginBottom: 20, color: "#666", fontSize: 14 }}>
+      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         Features: Large dataset (30 points), Area fill, Smooth curves, Symbol
         hidden by default
       </p>
       <div
         style={{
           marginBottom: 20,
-          display: "flex",
+          display: 'flex',
           gap: 20,
-          flexWrap: "wrap",
-          alignItems: "center",
+          flexWrap: 'wrap',
+          alignItems: 'center',
         }}
       >
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
             style={{
-              padding: "4px 8px",
+              padding: '4px 8px',
               borderRadius: 4,
-              border: "1px solid #ddd",
+              border: '1px solid #ddd',
             }}
           >
-            <option value="canvas">Canvas</option>
-            <option value="svg">SVG</option>
+            <option value='canvas'>Canvas</option>
+            <option value='svg'>SVG</option>
           </select>
         </label>
 
         <label
           style={{
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
           }}
         >
           <input
-            type="checkbox"
+            type='checkbox'
             checked={isSmooth}
             onChange={(e) => setIsSmooth(e.target.checked)}
           />
@@ -181,14 +181,14 @@ export const AreaLineChartExample = ({
 
         <label
           style={{
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
             gap: 8,
           }}
         >
           <input
-            type="checkbox"
+            type='checkbox'
             checked={showGrid}
             onChange={(e) => setShowGrid(e.target.checked)}
           />
@@ -197,24 +197,24 @@ export const AreaLineChartExample = ({
 
         {showGrid && (
           <>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>Grid Top: {gridTop}</span>
               <input
-                type="range"
-                min="20"
-                max="150"
+                type='range'
+                min='20'
+                max='150'
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>Y Split: {splitNumber}</span>
               <input
-                type="range"
-                min="2"
-                max="10"
-                step="1"
+                type='range'
+                min='2'
+                max='10'
+                step='1'
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
@@ -229,21 +229,21 @@ export const AreaLineChartExample = ({
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: "1px solid #e0e0e0",
+          border: '1px solid #e0e0e0',
           borderRadius: 8,
-          height: "600px",
+          height: '600px',
         }}
       />
-      <div style={{ marginTop: 20, display: "flex", justifyContent: "center" }}>
+      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'center' }}>
         <button
           onClick={handleUpdateSeries}
           style={{
-            padding: "8px 16px",
-            backgroundColor: "#5470c6",
-            color: "white",
-            border: "none",
+            padding: '8px 16px',
+            backgroundColor: '#5470c6',
+            color: 'white',
+            border: 'none',
             borderRadius: 4,
-            cursor: "pointer",
+            cursor: 'pointer',
             fontSize: 14,
           }}
         >

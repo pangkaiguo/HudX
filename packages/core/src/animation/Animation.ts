@@ -115,7 +115,7 @@ export default class Animation {
     endValue: number,
     duration: number = 1000,
     delay: number = 0,
-    easing: string | EasingFunction = "linear",
+    easing: string | EasingFunction = 'linear',
     onUpdate?: (target: Record<string, unknown>, percent: number) => void,
     onComplete?: () => void,
   ) {
@@ -126,7 +126,7 @@ export default class Animation {
     this._duration = duration;
     this._delay = delay;
     this._easing =
-      typeof easing === "string"
+      typeof easing === 'string'
         ? ((Easing as Record<string, unknown>)[easing] as EasingFunction) ||
           Easing.linear
         : easing;
@@ -210,16 +210,16 @@ export default class Animation {
   };
 
   private _getValue(target: Record<string, unknown>, property: string): number {
-    const parts = property.split(".");
+    const parts = property.split('.');
     let value: unknown = target;
     for (const part of parts) {
-      if (typeof value === "object" && value !== null) {
+      if (typeof value === 'object' && value !== null) {
         value = (value as any)[part];
       } else {
         return 0;
       }
     }
-    return typeof value === "number" ? value : 0;
+    return typeof value === 'number' ? value : 0;
   }
 
   private _setValue(
@@ -227,14 +227,14 @@ export default class Animation {
     property: string,
     value: number,
   ): void {
-    const parts = property.split(".");
+    const parts = property.split('.');
     let obj: any = target;
     for (let i = 0; i < parts.length - 1; i++) {
       if (obj[parts[i]] === undefined) {
         obj[parts[i]] = {};
       }
       const next = obj[parts[i]];
-      if (typeof next === "object" && next !== null) {
+      if (typeof next === 'object' && next !== null) {
         obj = next;
       } else {
         return;

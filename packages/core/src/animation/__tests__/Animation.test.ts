@@ -1,12 +1,12 @@
-import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
-import Animation, { Easing } from "../Animation";
+import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
+import Animation, { Easing } from '../Animation';
 
-describe("Animation", () => {
+describe('Animation', () => {
   beforeAll(() => {
-    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {
       return setTimeout(callback, 16);
     });
-    vi.stubGlobal("cancelAnimationFrame", (id: number) => {
+    vi.stubGlobal('cancelAnimationFrame', (id: number) => {
       clearTimeout(id);
     });
   });
@@ -15,13 +15,13 @@ describe("Animation", () => {
     vi.unstubAllGlobals();
   });
 
-  it("should initialize correctly", () => {
+  it('should initialize correctly', () => {
     const target = { x: 0 };
-    const anim = new Animation(target, "x", 100, 1000);
+    const anim = new Animation(target, 'x', 100, 1000);
     expect(target.x).toBe(0);
   });
 
-  it("should animate value", () =>
+  it('should animate value', () =>
     new Promise<void>((resolve) => {
       const target = { x: 0 };
       const onUpdate = vi.fn();
@@ -32,18 +32,18 @@ describe("Animation", () => {
 
       const anim = new Animation(
         target,
-        "x",
+        'x',
         100,
         100,
         0,
-        "linear",
+        'linear',
         onUpdate,
         onComplete,
       );
       anim.start();
     }));
 
-  it("should handle delay", () =>
+  it('should handle delay', () =>
     new Promise<void>((resolve) => {
       const target = { x: 0 };
       const onComplete = vi.fn(() => {
@@ -53,35 +53,35 @@ describe("Animation", () => {
 
       const anim = new Animation(
         target,
-        "x",
+        'x',
         100,
         50,
         10,
-        "linear",
+        'linear',
         undefined,
         onComplete,
       );
       anim.start();
     }));
 
-  it("should support custom easing", () => {
+  it('should support custom easing', () => {
     const easing = Easing.quadraticIn;
     expect(easing(0)).toBe(0);
     expect(easing(0.5)).toBe(0.25);
     expect(easing(1)).toBe(1);
   });
 
-  it("should stop animation", () =>
+  it('should stop animation', () =>
     new Promise<void>((resolve) => {
       const target = { x: 0 };
       const onComplete = vi.fn();
       const anim = new Animation(
         target,
-        "x",
+        'x',
         100,
         100,
         0,
-        "linear",
+        'linear',
         undefined,
         onComplete,
       );
@@ -100,19 +100,19 @@ describe("Animation", () => {
 
   // --- New Tests for Coverage ---
 
-  describe("Easing Functions", () => {
-    it("should have valid easing functions", () => {
+  describe('Easing Functions', () => {
+    it('should have valid easing functions', () => {
       const keys = Object.keys(Easing) as Array<keyof typeof Easing>;
       keys.forEach((key) => {
         const fn = Easing[key];
-        expect(typeof fn).toBe("function");
-        expect(typeof fn(0)).toBe("number");
-        expect(typeof fn(0.5)).toBe("number");
-        expect(typeof fn(1)).toBe("number");
+        expect(typeof fn).toBe('function');
+        expect(typeof fn(0)).toBe('number');
+        expect(typeof fn(0.5)).toBe('number');
+        expect(typeof fn(1)).toBe('number');
       });
     });
 
-    it("should test specific branches in easing functions", () => {
+    it('should test specific branches in easing functions', () => {
       expect(Easing.quadraticInOut(0.4)).toBeCloseTo(2 * 0.4 * 0.4);
       expect(Easing.quadraticInOut(0.6)).toBeCloseTo(-1 + (4 - 2 * 0.6) * 0.6);
 
@@ -164,34 +164,34 @@ describe("Animation", () => {
       expect(Easing.bounceOut(0.8)).toBeDefined();
       expect(Easing.bounceOut(0.95)).toBeDefined();
     });
-    it("should fallback to linear for invalid easing string", () => {
+    it('should fallback to linear for invalid easing string', () => {
       const target = { x: 0 };
       // @ts-ignore - intentional invalid value
-      const anim = new Animation(target, "x", 100, 100, 0, "invalid-easing");
+      const anim = new Animation(target, 'x', 100, 100, 0, 'invalid-easing');
       expect((anim as any)._easing).toBe(Easing.linear);
     });
 
-    it("should return 0 for non-number values on get", () => {
-      const target = { x: "string" };
-      const anim = new Animation(target, "x", 100);
+    it('should return 0 for non-number values on get', () => {
+      const target = { x: 'string' };
+      const anim = new Animation(target, 'x', 100);
       expect((anim as any)._startValue).toBe(0);
     });
   });
 
-  describe("Control Flow", () => {
-    it("should ignore start if already running", () => {
+  describe('Control Flow', () => {
+    it('should ignore start if already running', () => {
       const target = { x: 0 };
-      const anim = new Animation(target, "x", 100, 100);
+      const anim = new Animation(target, 'x', 100, 100);
       anim.start();
       const id = (anim as any)._animationFrameId;
       anim.start();
       expect((anim as any)._animationFrameId).toBe(id);
     });
 
-    it("should pause and resume", () =>
+    it('should pause and resume', () =>
       new Promise<void>((resolve) => {
         const target = { x: 0 };
-        const anim = new Animation(target, "x", 100, 200);
+        const anim = new Animation(target, 'x', 100, 200);
 
         anim.start();
 
@@ -214,9 +214,9 @@ describe("Animation", () => {
         }, 50);
       }));
 
-    it("should ignore pause/resume if not appropriate", () => {
+    it('should ignore pause/resume if not appropriate', () => {
       const target = { x: 0 };
-      const anim = new Animation(target, "x", 100, 100);
+      const anim = new Animation(target, 'x', 100, 100);
 
       anim.pause();
       expect((anim as any)._paused).toBe(false);
@@ -238,10 +238,10 @@ describe("Animation", () => {
       expect((anim as any)._paused).toBe(false);
     });
 
-    it("should loop in animate when paused", () =>
+    it('should loop in animate when paused', () =>
       new Promise<void>((resolve) => {
         const target = { x: 0 };
-        const anim = new Animation(target, "x", 100, 100);
+        const anim = new Animation(target, 'x', 100, 100);
         anim.start();
         anim.pause();
 
@@ -253,11 +253,11 @@ describe("Animation", () => {
       }));
   });
 
-  describe("Deep Property Access", () => {
-    it("should animate nested property", () =>
+  describe('Deep Property Access', () => {
+    it('should animate nested property', () =>
       new Promise<void>((resolve) => {
         const target = { style: { opacity: 0 } };
-        const anim = new Animation(target, "style.opacity", 1, 100);
+        const anim = new Animation(target, 'style.opacity', 1, 100);
         anim.start();
 
         setTimeout(() => {
@@ -267,22 +267,22 @@ describe("Animation", () => {
         }, 50);
       }));
 
-    it("should handle missing nested properties on get", () => {
+    it('should handle missing nested properties on get', () => {
       const target = {};
-      const anim = new Animation(target, "a.b.c", 100);
+      const anim = new Animation(target, 'a.b.c', 100);
       expect((anim as any)._startValue).toBe(0);
     });
 
-    it("should handle non-object in path on get", () => {
+    it('should handle non-object in path on get', () => {
       const target = { a: 1 };
-      const anim = new Animation(target, "a.b", 100);
+      const anim = new Animation(target, 'a.b', 100);
       expect((anim as any)._startValue).toBe(0);
     });
 
-    it("should create missing nested properties on set", () =>
+    it('should create missing nested properties on set', () =>
       new Promise<void>((resolve) => {
         const target: any = {};
-        const anim = new Animation(target, "a.b.c", 100, 50);
+        const anim = new Animation(target, 'a.b.c', 100, 50);
         anim.start();
 
         setTimeout(() => {
@@ -293,10 +293,10 @@ describe("Animation", () => {
         }, 60);
       }));
 
-    it("should stop setting if path is blocked by non-object", () =>
+    it('should stop setting if path is blocked by non-object', () =>
       new Promise<void>((resolve) => {
         const target = { a: 1 };
-        const anim = new Animation(target, "a.b", 100, 50);
+        const anim = new Animation(target, 'a.b', 100, 50);
         anim.start();
 
         setTimeout(() => {

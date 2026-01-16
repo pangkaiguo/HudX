@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Renderer,
   Circle,
@@ -9,12 +9,12 @@ import {
   Text,
   ThemeManager,
   Theme,
-} from "hux-core";
-import type { RenderMode } from "hux-core";
+} from 'hux-core';
+import type { RenderMode } from 'hux-core';
 
-export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
+export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [renderMode, setRenderMode] = useState<RenderMode>("canvas");
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -23,26 +23,26 @@ export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
       containerRef.current,
       renderMode,
       theme,
-      "en",
+      'en',
     );
     const themeObj = ThemeManager.getTheme(theme);
-    const normalizedTheme = (theme || "light").toLowerCase();
-    const textColor = normalizedTheme === "dark" ? "#eee" : "#333";
+    const normalizedTheme = (theme || 'light').toLowerCase();
+    const textColor = normalizedTheme === 'dark' ? '#eee' : '#333';
 
     renderer.add(
       new Circle({
         shape: { cx: 100, cy: 100, r: 40 },
         style: {
           fill: themeObj.seriesColors?.[0],
-          stroke: textColor === "#eee" ? "#333" : "#fff",
+          stroke: textColor === '#eee' ? '#333' : '#fff',
           lineWidth: 2,
         },
       }),
     );
     renderer.add(
       new Text({
-        shape: { text: "Circle", x: 100, y: 160 },
-        style: { textAlign: "center", fill: textColor, fontSize: 12 },
+        shape: { text: 'Circle', x: 100, y: 160 },
+        style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
 
@@ -54,8 +54,8 @@ export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: "Rect", x: 240, y: 160 },
-        style: { textAlign: "center", fill: textColor, fontSize: 12 },
+        shape: { text: 'Rect', x: 240, y: 160 },
+        style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
 
@@ -67,8 +67,8 @@ export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: "Line", x: 360, y: 160 },
-        style: { textAlign: "center", fill: textColor, fontSize: 12 },
+        shape: { text: 'Line', x: 360, y: 160 },
+        style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
 
@@ -87,8 +87,8 @@ export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: "Polyline", x: 500, y: 160 },
-        style: { textAlign: "center", fill: textColor, fontSize: 12 },
+        shape: { text: 'Polyline', x: 500, y: 160 },
+        style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
 
@@ -108,19 +108,19 @@ export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: "Polygon", x: 640, y: 160 },
-        style: { textAlign: "center", fill: textColor, fontSize: 12 },
+        shape: { text: 'Polygon', x: 640, y: 160 },
+        style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
 
     renderer.add(
       new Text({
-        shape: { text: "Core API Shapes", x: 400, y: 30 },
+        shape: { text: 'Core API Shapes', x: 400, y: 30 },
         style: {
-          textAlign: "center",
+          textAlign: 'center',
           fill: textColor,
           fontSize: 16,
-          fontWeight: "bold",
+          fontWeight: 'bold',
         },
       }),
     );
@@ -137,35 +137,35 @@ export const ShapeExample = ({ theme = "light" }: { theme?: Theme }) => {
       <div
         style={{
           marginBottom: 20,
-          display: "flex",
+          display: 'flex',
           gap: 20,
-          flexWrap: "wrap",
-          alignItems: "center",
+          flexWrap: 'wrap',
+          alignItems: 'center',
         }}
       >
-        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Render Mode:</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
             style={{
-              padding: "4px 8px",
+              padding: '4px 8px',
               borderRadius: 4,
-              border: "1px solid #ddd",
+              border: '1px solid #ddd',
             }}
           >
-            <option value="canvas">Canvas</option>
-            <option value="svg">SVG</option>
+            <option value='canvas'>Canvas</option>
+            <option value='svg'>SVG</option>
           </select>
         </label>
       </div>
-      <p style={{ marginBottom: 20, color: "#666" }}>
+      <p style={{ marginBottom: 20, color: '#666' }}>
         Demonstrates basic shapes from hux-core
       </p>
       <div
         ref={containerRef}
         style={{
-          border: "1px solid #e0e0e0",
+          border: '1px solid #e0e0e0',
           borderRadius: 8,
           width: 800,
           height: 200,

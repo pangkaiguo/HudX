@@ -2,8 +2,8 @@
  * BezierCurve - Bezier curve shape element
  */
 
-import ChartElement from "../ChartElement";
-import type { ElementOption, BoundingRect, Point } from "../types";
+import ChartElement from '../ChartElement';
+import type { ElementOption, BoundingRect, Point } from '../types';
 
 export interface BezierCurveShape {
   x1: number;

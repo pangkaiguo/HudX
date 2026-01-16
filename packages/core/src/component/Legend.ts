@@ -2,19 +2,19 @@
  * Legend - Enhanced legend component (ECharts-like)
  */
 
-import Group from "../Group";
-import Rect from "../shape/Rect";
-import Text from "../shape/Text";
-import Circle from "../shape/Circle";
-import Line from "../shape/Line";
-import { Z_LEGEND } from "../constants";
-import { createDecalPattern } from "../util/pattern";
-import type { DecalObject } from "../types";
+import Group from '../Group';
+import Rect from '../shape/Rect';
+import Text from '../shape/Text';
+import Circle from '../shape/Circle';
+import Line from '../shape/Line';
+import { Z_LEGEND } from '../constants';
+import { createDecalPattern } from '../util/pattern';
+import type { DecalObject } from '../types';
 
 export interface LegendItem {
   name: string;
   color: string;
-  icon?: "circle" | "rect" | "line";
+  icon?: 'circle' | 'rect' | 'line';
   decal?: DecalObject;
   value?: number;
   percent?: number;
@@ -23,9 +23,9 @@ export interface LegendItem {
 
 export interface LegendOption {
   show?: boolean;
-  orient?: "horizontal" | "vertical";
-  x?: number | "left" | "center" | "right";
-  y?: number | "top" | "middle" | "bottom";
+  orient?: 'horizontal' | 'vertical';
+  x?: number | 'left' | 'center' | 'right';
+  y?: number | 'top' | 'middle' | 'bottom';
   right?: number | string;
   bottom?: number | string;
   backgroundColor?: string;
@@ -39,11 +39,11 @@ export interface LegendOption {
   height?: number;
   onSelect?: (name: string, selected: boolean) => void;
   onHover?: (name: string, hovered: boolean) => void;
-  selectedMode?: "single" | "multiple";
+  selectedMode?: 'single' | 'multiple';
   formatter?: string | ((name: string, item: LegendItem) => string | string[]);
-  renderMode?: "canvas" | "html";
+  renderMode?: 'canvas' | 'html';
   itemMaxWidth?: number;
-  align?: "left" | "center" | "right";
+  align?: 'left' | 'center' | 'right';
   tableHead?: string[];
   itemPadding?: number;
 }
@@ -62,22 +62,22 @@ export default class Legend extends Group {
     super();
     this._option = {
       show: true,
-      orient: "horizontal",
+      orient: 'horizontal',
       x: undefined,
       y: undefined,
       right: undefined,
       bottom: undefined,
-      backgroundColor: "rgba(255, 255, 255, 0.9)",
-      textColor: "#333",
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      textColor: '#333',
       padding: 8,
       itemPadding: 8,
       fontSize: 12,
       itemGap: 0,
       itemWidth: 100,
       iconGap: 8,
-      selectedMode: "multiple",
-      renderMode: "canvas",
-      align: "left",
+      selectedMode: 'multiple',
+      renderMode: 'canvas',
+      align: 'left',
       ...option,
     };
     this.z = Z_LEGEND;
@@ -138,7 +138,7 @@ export default class Legend extends Group {
   }
 
   private _render(): void {
-    if (this._option.renderMode === "html") {
+    if (this._option.renderMode === 'html') {
       this._renderHtml();
       return;
     } else {
@@ -158,14 +158,14 @@ export default class Legend extends Group {
     const iconGap = this._option.iconGap || 8;
     const iconWidth = 12;
 
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d")!;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d')!;
     ctx.font = `${fontSize}px sans-serif`;
 
     const wrapText = (text: string, maxWidth: number): string[] => {
-      const words = text.split("");
+      const words = text.split('');
       let lines: string[] = [];
-      let currentLine = "";
+      let currentLine = '';
 
       for (let i = 0; i < text.length; i++) {
         const char = text[i];
@@ -240,7 +240,7 @@ export default class Legend extends Group {
     let currentRowWidth = 0;
     let currentRowHeight = 0;
 
-    if (this._option.orient === "horizontal") {
+    if (this._option.orient === 'horizontal') {
       measurements.forEach((m, i) => {
         const { itemW, itemH } = m;
         if (
@@ -307,7 +307,7 @@ export default class Legend extends Group {
     rows.forEach((r) => {
       maxLineMetric = Math.max(
         maxLineMetric,
-        this._option.orient === "horizontal" ? r.width : r.height,
+        this._option.orient === 'horizontal' ? r.width : r.height,
       );
     });
 
@@ -316,19 +316,19 @@ export default class Legend extends Group {
     let currentY = padding;
     let totalWidth = 0;
     let totalHeight = 0;
-    const align = this._option.align || "left";
+    const align = this._option.align || 'left';
 
     // If width is specified in option, use it for alignment reference?
     const referenceWidth = this._option.width
       ? this._option.width - padding * 2
       : maxLineMetric;
 
-    if (this._option.orient === "horizontal") {
+    if (this._option.orient === 'horizontal') {
       rows.forEach((row) => {
         let startX = currentX;
-        if (align === "center") {
+        if (align === 'center') {
           startX += (referenceWidth - row.width) / 2;
-        } else if (align === "right") {
+        } else if (align === 'right') {
           startX += referenceWidth - row.width;
         }
 
@@ -358,9 +358,9 @@ export default class Legend extends Group {
 
         col.items.forEach((m) => {
           let itemX = colX;
-          if (align === "center") {
+          if (align === 'center') {
             itemX += (col.width - m.itemW) / 2;
-          } else if (align === "right") {
+          } else if (align === 'right') {
             itemX += col.width - m.itemW;
           }
 
@@ -391,7 +391,7 @@ export default class Legend extends Group {
       shape: { x: 0, y: 0, width: totalWidth, height: totalHeight, r: 4 },
       style: {
         fill: this._option.backgroundColor,
-        stroke: "#ddd",
+        stroke: '#ddd',
         lineWidth: 1,
       },
     });
@@ -405,7 +405,7 @@ export default class Legend extends Group {
       const contentX = x + itemPadding;
       const contentY = y + itemPadding;
 
-      const icon = item.icon || "rect";
+      const icon = item.icon || 'rect';
       let iconElement: any;
 
       let fillStyle: string | CanvasPattern = item.color;
@@ -420,15 +420,15 @@ export default class Legend extends Group {
       }
       const firstLineCenterY = contentY + lineHeight / 2;
 
-      if (icon === "circle") {
+      if (icon === 'circle') {
         iconElement = new Circle({
           shape: { cx: contentX + 6, cy: firstLineCenterY, r: 4 },
           style: {
-            fill: isSelected ? fillStyle : "#ccc",
+            fill: isSelected ? fillStyle : '#ccc',
             opacity: isSelected ? 1 : 0.3,
           },
         });
-      } else if (icon === "line") {
+      } else if (icon === 'line') {
         iconElement = new Line({
           shape: {
             x1: contentX,
@@ -437,7 +437,7 @@ export default class Legend extends Group {
             y2: firstLineCenterY,
           },
           style: {
-            stroke: isSelected ? strokeStyle : "#ccc",
+            stroke: isSelected ? strokeStyle : '#ccc',
             lineWidth: 2,
             opacity: isSelected ? 1 : 0.3,
           },
@@ -452,7 +452,7 @@ export default class Legend extends Group {
             r: 2,
           },
           style: {
-            fill: isSelected ? fillStyle : "#ccc",
+            fill: isSelected ? fillStyle : '#ccc',
             opacity: isSelected ? 1 : 0.3,
           },
         });
@@ -472,7 +472,7 @@ export default class Legend extends Group {
             fill: this._option.textColor,
             fontSize,
             opacity: isSelected ? 1 : 0.5,
-            textBaseline: "middle",
+            textBaseline: 'middle',
           },
         });
         this.add(label);
@@ -480,12 +480,12 @@ export default class Legend extends Group {
 
       const interactRect = new Rect({
         shape: { x, y, width: width, height: height },
-        style: { fill: "transparent" },
-        cursor: "pointer",
+        style: { fill: 'transparent' },
+        cursor: 'pointer',
       });
 
-      (interactRect as any).on("click", () => {
-        if (this._option.selectedMode === "single") {
+      (interactRect as any).on('click', () => {
+        if (this._option.selectedMode === 'single') {
           if (
             this._selectedItems.has(item.name) &&
             this._selectedItems.size === 1
@@ -510,16 +510,16 @@ export default class Legend extends Group {
         this.markRedraw();
       });
 
-      (interactRect as any).on("mouseover", () => {
-        interactRect.attr("style", { fill: "transparent" });
+      (interactRect as any).on('mouseover', () => {
+        interactRect.attr('style', { fill: 'transparent' });
         if (this._option.onHover) {
           this._option.onHover(item.name, true);
         }
         this.markRedraw();
       });
 
-      (interactRect as any).on("mouseout", (e: any) => {
-        interactRect.attr("style", { fill: "transparent" });
+      (interactRect as any).on('mouseout', (e: any) => {
+        interactRect.attr('style', { fill: 'transparent' });
         if (this._option.onHover) {
           this._option.onHover(item.name, false);
         }
@@ -530,16 +530,16 @@ export default class Legend extends Group {
     });
 
     let x: number;
-    if (typeof this._option.x === "number") {
+    if (typeof this._option.x === 'number') {
       x = this._option.x;
-    } else if (this._option.x === "left") {
+    } else if (this._option.x === 'left') {
       x = 10;
-    } else if (this._option.x === "center") {
+    } else if (this._option.x === 'center') {
       x = Math.max(0, (this._containerWidth - totalWidth) / 2);
     } else if (this._option.right !== undefined) {
       const rightVal = this._option.right;
       const rightPx =
-        typeof rightVal === "number"
+        typeof rightVal === 'number'
           ? rightVal
           : parseFloat(String(rightVal)) || 10;
       x = Math.max(0, this._containerWidth - totalWidth - rightPx);
@@ -548,23 +548,23 @@ export default class Legend extends Group {
     }
 
     let y: number;
-    if (typeof this._option.y === "number") {
+    if (typeof this._option.y === 'number') {
       y = this._option.y;
-    } else if (this._option.y === "top") {
+    } else if (this._option.y === 'top') {
       y = 10;
-    } else if (this._option.y === "middle") {
+    } else if (this._option.y === 'middle') {
       y = Math.max(0, (this._containerHeight - totalHeight) / 2);
     } else if (this._option.bottom !== undefined) {
       const bottomVal = this._option.bottom;
       const bottomPx =
-        typeof bottomVal === "number"
+        typeof bottomVal === 'number'
           ? bottomVal
           : parseFloat(String(bottomVal)) || 10;
       y = Math.max(0, this._containerHeight - totalHeight - bottomPx);
     } else {
       y = 10;
     }
-    this.attr("transform", { x, y });
+    this.attr('transform', { x, y });
   }
 
   private _renderHtml(): void {
@@ -572,74 +572,74 @@ export default class Legend extends Group {
     this.removeAll();
 
     if (!this._htmlEl) {
-      this._htmlEl = document.createElement("div");
-      this._htmlEl.style.position = "absolute";
-      this._htmlEl.style.zIndex = "999";
+      this._htmlEl = document.createElement('div');
+      this._htmlEl.style.position = 'absolute';
+      this._htmlEl.style.zIndex = '999';
       this._domContainer.appendChild(this._htmlEl);
     }
 
     const opt = this._option;
     const s = this._htmlEl.style;
-    s.backgroundColor = opt.backgroundColor || "rgba(255, 255, 255, 0.9)";
-    s.padding = (opt.padding || 8) + "px";
-    s.fontSize = (opt.fontSize || 12) + "px";
-    s.color = opt.textColor || "#333";
-    s.borderRadius = "4px";
-    s.pointerEvents = "auto";
-    s.display = "block";
+    s.backgroundColor = opt.backgroundColor || 'rgba(255, 255, 255, 0.9)';
+    s.padding = (opt.padding || 8) + 'px';
+    s.fontSize = (opt.fontSize || 12) + 'px';
+    s.color = opt.textColor || '#333';
+    s.borderRadius = '4px';
+    s.pointerEvents = 'auto';
+    s.display = 'block';
 
-    s.transform = "";
-    s.left = "";
-    s.right = "";
-    s.top = "";
-    s.bottom = "";
+    s.transform = '';
+    s.left = '';
+    s.right = '';
+    s.top = '';
+    s.bottom = '';
 
     const formatSize = (val: number | string | undefined) => {
       if (val === undefined) return undefined;
-      if (typeof val === "number") return val + "px";
+      if (typeof val === 'number') return val + 'px';
       return val;
     };
 
-    if (typeof opt.x === "number") s.left = opt.x + "px";
-    else if (opt.x === "left") s.left = "10px";
-    else if (opt.x === "right") s.right = "10px";
-    else if (opt.x === "center") {
-      s.left = "50%";
-      s.transform = "translateX(-50%)";
+    if (typeof opt.x === 'number') s.left = opt.x + 'px';
+    else if (opt.x === 'left') s.left = '10px';
+    else if (opt.x === 'right') s.right = '10px';
+    else if (opt.x === 'center') {
+      s.left = '50%';
+      s.transform = 'translateX(-50%)';
     } else {
-      if (opt.right !== undefined) s.right = formatSize(opt.right) || "";
-      else s.left = "10px";
+      if (opt.right !== undefined) s.right = formatSize(opt.right) || '';
+      else s.left = '10px';
     }
 
-    if (typeof opt.y === "number") s.top = opt.y + "px";
-    else if (opt.y === "top") s.top = "10px";
-    else if (opt.y === "bottom") s.bottom = "10px";
-    else if (opt.y === "middle") {
-      s.top = "50%";
+    if (typeof opt.y === 'number') s.top = opt.y + 'px';
+    else if (opt.y === 'top') s.top = '10px';
+    else if (opt.y === 'bottom') s.bottom = '10px';
+    else if (opt.y === 'middle') {
+      s.top = '50%';
       s.transform = s.transform
-        ? s.transform + " translateY(-50%)"
-        : "translateY(-50%)";
+        ? s.transform + ' translateY(-50%)'
+        : 'translateY(-50%)';
     } else {
-      if (opt.bottom !== undefined) s.bottom = formatSize(opt.bottom) || "";
-      else s.top = "10px";
+      if (opt.bottom !== undefined) s.bottom = formatSize(opt.bottom) || '';
+      else s.top = '10px';
     }
 
-    const table = document.createElement("table");
-    table.style.borderCollapse = "collapse";
+    const table = document.createElement('table');
+    table.style.borderCollapse = 'collapse';
 
     if (opt.tableHead) {
-      const thead = document.createElement("thead");
-      const trHead = document.createElement("tr");
+      const thead = document.createElement('thead');
+      const trHead = document.createElement('tr');
       // Add empty th for icon column
-      const thIcon = document.createElement("th");
+      const thIcon = document.createElement('th');
       trHead.appendChild(thIcon);
 
       opt.tableHead.forEach((headText) => {
-        const th = document.createElement("th");
+        const th = document.createElement('th');
         th.innerHTML = headText;
-        th.style.textAlign = "left";
-        th.style.padding = "4px 8px";
-        th.style.borderBottom = "1px solid #ddd";
+        th.style.textAlign = 'left';
+        th.style.padding = '4px 8px';
+        th.style.borderBottom = '1px solid #ddd';
         trHead.appendChild(th);
       });
       thead.appendChild(trHead);
@@ -648,13 +648,13 @@ export default class Legend extends Group {
 
     this._items.forEach((item) => {
       const isSelected = this._selectedItems.has(item.name);
-      const tr = document.createElement("tr");
-      tr.style.cursor = "pointer";
-      tr.style.opacity = isSelected ? "1" : "0.5";
+      const tr = document.createElement('tr');
+      tr.style.cursor = 'pointer';
+      tr.style.opacity = isSelected ? '1' : '0.5';
 
       tr.onclick = (e) => {
         e.stopPropagation();
-        if (opt.selectedMode === "single") {
+        if (opt.selectedMode === 'single') {
           if (
             this._selectedItems.has(item.name) &&
             this._selectedItems.size === 1
@@ -686,25 +686,25 @@ export default class Legend extends Group {
         }
       };
 
-      const tdIcon = document.createElement("td");
-      const itemPadding = (opt.itemPadding ?? 8) + "px";
+      const tdIcon = document.createElement('td');
+      const itemPadding = (opt.itemPadding ?? 8) + 'px';
       tdIcon.style.paddingTop = itemPadding;
       tdIcon.style.paddingBottom = itemPadding;
       tdIcon.style.paddingLeft = itemPadding;
-      tdIcon.style.paddingRight = (opt.iconGap || 8) + "px";
-      tdIcon.style.verticalAlign = "middle";
+      tdIcon.style.paddingRight = (opt.iconGap || 8) + 'px';
+      tdIcon.style.verticalAlign = 'middle';
 
-      const icon = document.createElement("span");
-      icon.style.display = "inline-block";
-      icon.style.width = "12px";
-      icon.style.height = "12px";
+      const icon = document.createElement('span');
+      icon.style.display = 'inline-block';
+      icon.style.width = '12px';
+      icon.style.height = '12px';
       icon.style.backgroundColor = item.color;
-      if (item.icon === "circle") icon.style.borderRadius = "50%";
-      else if (item.icon === "rect") icon.style.borderRadius = "2px";
-      else if (item.icon === "line") {
-        icon.style.height = "2px";
-        icon.style.width = "12px";
-        icon.style.marginTop = "5px";
+      if (item.icon === 'circle') icon.style.borderRadius = '50%';
+      else if (item.icon === 'rect') icon.style.borderRadius = '2px';
+      else if (item.icon === 'line') {
+        icon.style.height = '2px';
+        icon.style.width = '12px';
+        icon.style.marginTop = '5px';
       }
 
       tdIcon.appendChild(icon);
@@ -712,7 +712,7 @@ export default class Legend extends Group {
 
       let labelContent: string | string[] = item.name;
       if (opt.formatter) {
-        if (typeof opt.formatter === "string") {
+        if (typeof opt.formatter === 'string') {
           labelContent = opt.formatter;
         } else {
           labelContent = opt.formatter(item.name, item);
@@ -721,24 +721,24 @@ export default class Legend extends Group {
 
       if (Array.isArray(labelContent)) {
         labelContent.forEach((content) => {
-          const td = document.createElement("td");
-          td.style.verticalAlign = "middle";
-          td.style.padding = (opt.itemPadding ?? 8) + "px";
+          const td = document.createElement('td');
+          td.style.verticalAlign = 'middle';
+          td.style.padding = (opt.itemPadding ?? 8) + 'px';
           td.innerHTML = content;
           tr.appendChild(td);
         });
       } else {
-        const tdLabel = document.createElement("td");
-        tdLabel.style.verticalAlign = "middle";
+        const tdLabel = document.createElement('td');
+        tdLabel.style.verticalAlign = 'middle';
         tdLabel.innerHTML = labelContent;
-        tdLabel.style.padding = (opt.itemPadding ?? 8) + "px";
+        tdLabel.style.padding = (opt.itemPadding ?? 8) + 'px';
         tr.appendChild(tdLabel);
       }
 
       table.appendChild(tr);
     });
 
-    this._htmlEl.innerHTML = "";
+    this._htmlEl.innerHTML = '';
     this._htmlEl.appendChild(table);
   }
 }
