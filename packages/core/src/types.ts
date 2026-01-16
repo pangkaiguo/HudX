@@ -401,14 +401,14 @@ export interface ElementWithParent {
 
 export interface DecalObject {
   symbol?:
-  | "circle"
-  | "rect"
-  | "triangle"
-  | "diamond"
-  | "pin"
-  | "arrow"
-  | "none"
-  | string;
+    | "circle"
+    | "rect"
+    | "triangle"
+    | "diamond"
+    | "pin"
+    | "arrow"
+    | "none"
+    | string;
   symbolSize?: number;
   symbolKeepAspect?: boolean;
   color?: string;

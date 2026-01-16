@@ -445,7 +445,7 @@ View the following files for complete examples:
 
 - `examples/src/examples/FullFeatureDemo.tsx` - Complete feature demo
 - `examples/src/examples/StackLineChart.tsx` - Stack line chart
-- `examples/src/examples/AdvancedBarChart.tsx` - Advanced bar chart
+- `examples/src/examples/GroupBarChart.tsx` - Advanced bar chart
 - `examples/src/examples/AdvancedPieChart.tsx` - Advanced pie chart
 - `examples/src/examples/InteractiveDashboard.tsx` - Interactive dashboard
 

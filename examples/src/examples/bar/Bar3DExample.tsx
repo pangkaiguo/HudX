@@ -119,6 +119,7 @@ export const Bar3DExample = ({ theme = "light" }: { theme?: Theme }) => {
           marginBottom: 20,
           display: "flex",
           gap: 20,
+          flexWrap: "wrap",
           alignItems: "center",
         }}
       >

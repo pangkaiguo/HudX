@@ -149,6 +149,7 @@ export const StackHorizontalBarExample = ({
           marginBottom: 20,
           display: "flex",
           gap: 20,
+          flexWrap: "wrap",
           alignItems: "center",
         }}
       >

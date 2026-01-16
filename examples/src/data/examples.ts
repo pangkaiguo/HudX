@@ -209,13 +209,13 @@ export const examples: Example[] = [
 };`,
   },
   {
-    id: "advanced-bar",
+    id: "group-bar",
     category: "bar",
-    title: "Advanced Bar Chart",
-    subtitle: "Advanced Bar Chart",
+    title: "Group Bar Chart",
+    subtitle: "Group Bar Chart",
     code: `option = {
   title: {
-    text: 'Advanced Bar Chart',
+    text: 'Group Bar Chart',
     subtext: 'Feature Demonstration',
     left: 'center',
     top: 20

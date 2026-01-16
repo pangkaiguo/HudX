@@ -357,7 +357,7 @@ const ${jsCode.replace("option =", "option: ChartOption =")}`;
           </div>
           <CodeEditor
             code={activeTab === "TS" ? getTsCode(code) : code}
-            onChange={activeTab === "TS" ? () => { } : setCode}
+            onChange={activeTab === "TS" ? () => {} : setCode}
             theme={theme === "dark" ? "dark" : "light"}
           />
           {error && (

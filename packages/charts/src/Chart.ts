@@ -145,10 +145,10 @@ export default class Chart {
     notMerge?:
       | boolean
       | {
-        notMerge?: boolean;
-        lazyUpdate?: boolean;
-        silent?: boolean;
-      },
+          notMerge?: boolean;
+          lazyUpdate?: boolean;
+          silent?: boolean;
+        },
     lazyUpdate?: boolean,
   ): this {
     // Handle parameter overloading
@@ -444,7 +444,7 @@ export default class Chart {
                   xAxis.splitLine.lineStyle?.type === "solid"
                     ? undefined
                     : xAxis.splitLine.lineStyle?.type === "dashed" ||
-                      !xAxis.splitLine.lineStyle?.type
+                        !xAxis.splitLine.lineStyle?.type
                       ? [4, 4]
                       : undefined,
               },
@@ -654,7 +654,7 @@ export default class Chart {
                   yAxis.splitLine.lineStyle?.type === "solid"
                     ? undefined
                     : yAxis.splitLine.lineStyle?.type === "dashed" ||
-                      !yAxis.splitLine.lineStyle?.type
+                        !yAxis.splitLine.lineStyle?.type
                       ? [4, 4]
                       : undefined,
               },
@@ -681,7 +681,7 @@ export default class Chart {
                   yAxis.splitLine.lineStyle?.type === "solid"
                     ? undefined
                     : yAxis.splitLine.lineStyle?.type === "dashed" ||
-                      !yAxis.splitLine.lineStyle?.type
+                        !yAxis.splitLine.lineStyle?.type
                       ? [4, 4]
                       : undefined,
               },

@@ -4,7 +4,7 @@ import type { ChartOption, HChartRef } from "hux-charts";
 import { ThemeManager, Theme } from "hux-core";
 import type { RenderMode } from "hux-core";
 
-export const AdvancedBarExample = ({ theme = "light" }: { theme?: Theme }) => {
+export const GroupBarExample = ({ theme = "light" }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [barGap, setBarGap] = useState<number | string>(30); // Use number for percent, or could be string for px
   const [showGrid, setShowGrid] = useState(false);
@@ -122,7 +122,7 @@ export const AdvancedBarExample = ({ theme = "light" }: { theme?: Theme }) => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Advanced Bar Chart</h2>
+      <h2 style={{ marginBottom: 10 }}>Group Bar Chart</h2>
       <p style={{ marginBottom: 20, color: "#666", fontSize: 14 }}>
         Features: Staggered bar animations, Interactive legend, Hover tooltips
         with values
@@ -132,6 +132,7 @@ export const AdvancedBarExample = ({ theme = "light" }: { theme?: Theme }) => {
           marginBottom: 20,
           display: "flex",
           gap: 20,
+          flexWrap: "wrap",
           alignItems: "center",
         }}
       >
@@ -278,4 +279,4 @@ export const AdvancedBarExample = ({ theme = "light" }: { theme?: Theme }) => {
   );
 };
 
-export default AdvancedBarExample;
+export default GroupBarExample;

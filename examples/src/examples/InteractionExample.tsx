@@ -81,6 +81,7 @@ export const InteractionExample = ({ theme = "light" }: { theme?: Theme }) => {
           marginBottom: 20,
           display: "flex",
           gap: 20,
+          flexWrap: "wrap",
           alignItems: "center",
         }}
       >

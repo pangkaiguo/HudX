@@ -387,7 +387,7 @@ circle.on("mouseover", () => {
 
 - `examples/src/examples/FullFeatureDemo.tsx` - 完整功能演示
 - `examples/src/examples/StackLineChart.tsx` - 堆叠折线图
-- `examples/src/examples/AdvancedBarChart.tsx` - 高级柱状图
+- `examples/src/examples/GroupBarChart.tsx` - 高级柱状图
 - `examples/src/examples/AdvancedPieChart.tsx` - 高级饼图
 - `examples/src/examples/InteractiveDashboard.tsx` - 交互式仪表板
 

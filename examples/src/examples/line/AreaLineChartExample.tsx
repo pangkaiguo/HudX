@@ -143,6 +143,7 @@ export const AreaLineChartExample = ({
           marginBottom: 20,
           display: "flex",
           gap: 20,
+          flexWrap: "wrap",
           alignItems: "center",
         }}
       >

@@ -15,8 +15,8 @@ const ShapeExample = lazy(() => import("./examples/ShapeExample"));
 const ThemeExample = lazy(() => import("./examples/ThemeExample"));
 
 // Bar charts
-const AdvancedBarChartExample = lazy(
-  () => import("./examples/bar/AdvancedBarExample"),
+const GroupBarChartExample = lazy(
+  () => import("./examples/bar/GroupBarExample"),
 );
 const BasicBarExample = lazy(() => import("./examples/bar/BasicBarExample"));
 const StackBarExample = lazy(() => import("./examples/bar/StackBarExample"));
@@ -92,9 +92,9 @@ const chartExamples = [
         component: StackHorizontalBarExample,
       },
       {
-        id: "advanced-bar",
-        name: "Advanced Bar",
-        component: AdvancedBarChartExample,
+        id: "group-bar",
+        name: "Group Bar",
+        component: GroupBarChartExample,
       },
       { id: "bar-3d", name: "Bar 3D", component: Bar3DExample },
       {
@@ -434,7 +434,7 @@ const OldApp = memo(function OldApp({
             color: theme === "Dark" ? "#fff" : "#333",
           }}
         >
-          HudX Examples
+          HudX Charts
         </h1>
         <div
           style={{
@@ -455,7 +455,6 @@ const OldApp = memo(function OldApp({
               color: theme === "Dark" ? "#eee" : "#333",
             }}
           >
-            <span>UI Mode:</span>
             <div
               style={{
                 display: "flex",
@@ -491,17 +490,6 @@ const OldApp = memo(function OldApp({
                 Modern
               </button>
             </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              fontSize: 14,
-              color: theme === "Dark" ? "#eee" : "#333",
-            }}
-          >
-            <span>Theme:</span>
             <div
               style={{
                 display: "flex",
