@@ -22,12 +22,6 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
-    title: {
-      text: 'Bar Chart',
-      subtext: 'Basic Example',
-      left: 'center',
-      top: 20
-    },
     tooltip: {
       show: true,
       trigger: 'item'

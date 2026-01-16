@@ -13,12 +13,6 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
 
   const option: ChartOption = {
-    title: {
-      text: 'Line Chart',
-      subtext: 'Basic Example',
-      left: 'center',
-      top: 20
-    },
     tooltip: {
       show: true,
       trigger: 'axis'
