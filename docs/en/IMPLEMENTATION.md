@@ -8,8 +8,8 @@ This document details the implementation logic and design philosophy of HudX.
 
 HudX adopts a layered architecture with two main packages:
 
-1. **hux-core**: Core rendering engine, similar to ZRender, supports both Canvas and SVG rendering modes
-2. **hux-charts**: Chart library, similar to ECharts
+1. **hudx-core**: Core rendering engine, similar to ZRender, supports both Canvas and SVG rendering modes
+2. **hudx-charts**: Chart library, similar to ECharts
 
 ### MVC Pattern
 

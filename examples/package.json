@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "hudx": "workspace:*",
-    "hux-core": "workspace:*",
-    "hux-charts": "workspace:*",
+    "hudx-core": "workspace:*",
+    "hudx-charts": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

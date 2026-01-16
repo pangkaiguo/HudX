@@ -13,7 +13,7 @@ import {
   darken,
   createDecalPattern,
   Z_SERIES,
-} from 'hux-core';
+} from 'hudx-core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class StackBar3DChart extends Chart {

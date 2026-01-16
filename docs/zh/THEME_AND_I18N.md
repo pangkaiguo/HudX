@@ -58,7 +58,7 @@ interface ThemeToken {
 你可以通过 `ThemeManager` 注册或更新 Token，系统会自动将其映射到主题配置中。
 
 ```typescript
-import { ThemeManager } from "hux-core";
+import { ThemeManager } from "hudx-core";
 
 // 1. 注册/更新 Token
 ThemeManager.registerToken("light", {
@@ -80,7 +80,7 @@ const bgColor = theme.backgroundColor; // 包含更新后的背景色
 #### 在 Renderer 中使用
 
 ```typescript
-import { Renderer, Circle } from "hux-core";
+import { Renderer, Circle } from "hudx-core";
 
 // 创建时指定主题
 const renderer = Renderer.init("#container", "canvas", "dark");
@@ -98,7 +98,7 @@ const themeConfig = renderer.getThemeConfig();
 #### 在 Chart 中使用
 
 ```typescript
-import { LineChart } from "hux-charts";
+import { LineChart } from "hudx-charts";
 
 // 创建时指定主题
 const chart = new LineChart(dom, option, "canvas", "dark");
@@ -113,7 +113,7 @@ const theme = chart.getTheme();
 #### 在 React 组件中使用
 
 ```tsx
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 <HChart option={option} theme="dark" width={800} height={400} />;
 ```
@@ -121,7 +121,7 @@ import { HChart } from "hux-charts";
 ### 自定义主题
 
 ```typescript
-import { ThemeManager } from "hux-core";
+import { ThemeManager } from "hudx-core";
 
 // 注册自定义主题
 ThemeManager.registerTheme("custom", {
@@ -168,7 +168,7 @@ const renderer = Renderer.init("#container", "canvas", "custom");
 #### 在 Renderer 中使用
 
 ```typescript
-import { Renderer } from "hux-core";
+import { Renderer } from "hudx-core";
 
 // 创建时指定语言
 const renderer = Renderer.init("#container", "canvas", "light", "zh-CN");
@@ -186,7 +186,7 @@ const text = renderer.t("chart.title", "Chart");
 #### 在 Chart 中使用
 
 ```typescript
-import { LineChart } from "hux-charts";
+import { LineChart } from "hudx-charts";
 
 // 创建时指定语言
 const chart = new LineChart(dom, option, "canvas", "light", "zh-CN");
@@ -201,7 +201,7 @@ const text = chart.t("chart.title", "Chart");
 #### 在 React 组件中使用
 
 ```tsx
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 <HChart option={option} locale="zh-CN" width={800} height={400} />;
 ```
@@ -209,7 +209,7 @@ import { HChart } from "hux-charts";
 ### 自定义语言
 
 ```typescript
-import { LocaleManager } from "hux-core";
+import { LocaleManager } from "hudx-core";
 
 // 注册自定义语言
 LocaleManager.registerLocale("custom", {
@@ -239,7 +239,7 @@ const renderer = Renderer.init("#container", "canvas", "light", "custom");
 ### 完整示例
 
 ```typescript
-import { Renderer, Circle } from "hux-core";
+import { Renderer, Circle } from "hudx-core";
 
 // 创建带主题和语言的渲染器
 const renderer = Renderer.init(
@@ -264,7 +264,7 @@ const title = renderer.t("chart.title", "Chart");
 ### React 组件完整示例
 
 ```tsx
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 import { useState } from "react";
 
 function App() {

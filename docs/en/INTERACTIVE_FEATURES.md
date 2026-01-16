@@ -64,7 +64,7 @@ EventHelper.bindHoverEvents(
 The core animation engine (`Animator`) supports complex transitions.
 
 ```typescript
-import { Animation, Easing } from "hux-core";
+import { Animation, Easing } from "hudx-core";
 
 const anim = new Animation(target, "x", 100, 500, 0, Easing.cubicOut);
 anim.start();

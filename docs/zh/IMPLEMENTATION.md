@@ -8,8 +8,8 @@
 
 HudX 采用分层架构，分为两个主要包：
 
-1. **hux-core**: 核心渲染引擎，类似 hrender，支持 Canvas 和 SVG 两种渲染模式
-2. **hux-charts**: 图表库，类似 echarts
+1. **hudx-core**: 核心渲染引擎，类似 hrender，支持 Canvas 和 SVG 两种渲染模式
+2. **hudx-charts**: 图表库，类似 echarts
 
 ### MVC 模式
 

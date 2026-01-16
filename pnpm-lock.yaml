@@ -29,10 +29,10 @@ importers:
       hudx:
         specifier: workspace:*
         version: link:../packages/hudx
-      hudx/charts:
+      hudx-charts:
         specifier: workspace:*
         version: link:../packages/charts
-      hudx/core:
+      hudx-core:
         specifier: workspace:*
         version: link:../packages/core
       react:
@@ -60,7 +60,7 @@ importers:
 
   packages/charts:
     dependencies:
-      hudx/core:
+      hudx-core:
         specifier: workspace:*
         version: link:../core
       react:
@@ -106,10 +106,10 @@ importers:
 
   packages/hudx:
     dependencies:
-      hudx/charts:
+      hudx-charts:
         specifier: workspace:*
         version: link:../charts
-      hudx/core:
+      hudx-core:
         specifier: workspace:*
         version: link:../core
       react:

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import ScatterChart from '../ScatterChart';
 import type { ChartOption } from '../../types';
-import { Group, Circle } from 'hux-core';
+import { Group, Circle } from 'hudx-core';
 
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),

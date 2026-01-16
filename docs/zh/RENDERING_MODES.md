@@ -54,7 +54,7 @@ HudX 支持两种渲染模式：**Canvas** 和 **SVG**。
 ### 在 Renderer 中使用
 
 ```typescript
-import { Renderer, Circle, Rect } from "hux-core";
+import { Renderer, Circle, Rect } from "hudx-core";
 
 // Canvas 模式
 const renderer = Renderer.init("#container", "canvas");
@@ -69,7 +69,7 @@ renderer.setRenderMode("svg");
 ### 在 React 组件中使用
 
 ```tsx
-import { HChart } from 'hux-charts';
+import { HChart } from 'hudx-charts';
 
 // Canvas 模式
 <HChart
@@ -91,7 +91,7 @@ import { HChart } from 'hux-charts';
 ### 在 Chart 类中使用
 
 ```typescript
-import { LineChart } from "hux-charts";
+import { LineChart } from "hudx-charts";
 
 // Canvas 模式
 const chart = new LineChart(dom, option, "canvas");

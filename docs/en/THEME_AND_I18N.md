@@ -58,7 +58,7 @@ interface ThemeToken {
 You can access theme tokens via `ThemeManager` or directly from the theme configuration.
 
 ```typescript
-import { ThemeManager } from "hux-core";
+import { ThemeManager } from "hudx-core";
 
 // 1. Register/Update Tokens
 ThemeManager.registerToken("light", {
@@ -80,7 +80,7 @@ This is particularly useful when you want to align chart colors with your design
 #### In Renderer
 
 ```typescript
-import { Renderer, Circle } from "hux-core";
+import { Renderer, Circle } from "hudx-core";
 
 // Specify theme when creating
 const renderer = Renderer.init("#container", "canvas", "dark");
@@ -98,7 +98,7 @@ const themeConfig = renderer.getThemeConfig();
 #### In Chart
 
 ```typescript
-import { LineChart } from "hux-charts";
+import { LineChart } from "hudx-charts";
 
 // Specify theme when creating
 const chart = new LineChart(dom, option, "canvas", "dark");
@@ -113,7 +113,7 @@ const theme = chart.getTheme();
 #### In React Component
 
 ```tsx
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 <HChart option={option} theme="dark" width={800} height={400} />;
 ```
@@ -121,7 +121,7 @@ import { HChart } from "hux-charts";
 ### Custom Themes
 
 ```typescript
-import { ThemeManager } from "hux-core";
+import { ThemeManager } from "hudx-core";
 
 // Register custom theme
 ThemeManager.registerTheme("custom", {
@@ -163,7 +163,7 @@ HudX supports multiple languages with the ability to add custom languages.
 #### In Renderer
 
 ```typescript
-import { Renderer, Circle } from "hux-core";
+import { Renderer, Circle } from "hudx-core";
 
 // Specify locale when creating
 const renderer = Renderer.init("#container", "canvas", "light", "zh-CN");
@@ -181,7 +181,7 @@ const messages = renderer.getLocaleMessages();
 #### In Chart
 
 ```typescript
-import { LineChart } from "hux-charts";
+import { LineChart } from "hudx-charts";
 
 // Specify locale when creating
 const chart = new LineChart(dom, option, "canvas", "light", "zh-CN");
@@ -196,7 +196,7 @@ const locale = chart.getLocale();
 #### In React Component
 
 ```tsx
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 <HChart option={option} locale="en" width={800} height={400} />;
 ```
@@ -204,7 +204,7 @@ import { HChart } from "hux-charts";
 ### Adding Custom Language
 
 ```typescript
-import { LocaleManager } from "hux-core";
+import { LocaleManager } from "hudx-core";
 
 // Register custom language
 LocaleManager.registerLocale("custom", {
@@ -234,7 +234,7 @@ const renderer = Renderer.init("#container", "canvas", "light", "custom");
 
 ```tsx
 import React, { useState } from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function ThemeSwitcher() {
   const [theme, setTheme] = useState("light");
@@ -259,7 +259,7 @@ function ThemeSwitcher() {
 
 ```tsx
 import React, { useState } from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function LocaleSwitcher() {
   const [locale, setLocale] = useState("en");
@@ -285,7 +285,7 @@ function LocaleSwitcher() {
 ### System Theme Detection
 
 ```typescript
-import { Renderer } from "hux-core";
+import { Renderer } from "hudx-core";
 
 // Detect system theme preference
 const darkModePreferred = window.matchMedia(

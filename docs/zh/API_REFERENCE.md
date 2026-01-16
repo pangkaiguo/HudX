@@ -4,13 +4,13 @@
 
 ## 目录
 
-- [核心引擎 (`hux-core`)](#核心引擎-hudxcore)
+- [核心引擎 (`hudx-core`)](#核心引擎-hudxcore)
   - [渲染器 (`Renderer`)](#renderer)
   - [图形元素 (`ChartElement`)](#chartelement)
   - [基础图形 (`Shape`)](#shape)
   - [动画 (`Animation`)](#animation)
   - [工具 (`Utils`)](#utils)
-- [图表库 (`hux-charts`)](#图表库-hudxcharts)
+- [图表库 (`hudx-charts`)](#图表库-hudxcharts)
   - [图表基类 (`Chart`)](#chart)
   - [具体图表 (`LineChart`, `BarChart`, ...)](#具体图表)
   - [React 组件 (`HChart`)](#hchart)
@@ -18,7 +18,7 @@
 
 ---
 
-## 核心引擎 (`hux-core`)
+## 核心引擎 (`hudx-core`)
 
 核心引擎提供了底层的渲染能力，支持 Canvas 和 SVG 双模式。
 
@@ -27,7 +27,7 @@
 渲染器入口，负责管理 Painter 和 Storage。
 
 ```typescript
-import { Renderer } from 'hux-core';
+import { Renderer } from 'hudx-core';
 
 // 初始化渲染器
 const renderer = Renderer.init(
@@ -58,7 +58,7 @@ renderer.dispose();
 所有图形元素的基类。
 
 ```typescript
-import { ChartElement } from 'hux-core';
+import { ChartElement } from 'hudx-core';
 
 const element = new ChartElement({
   zlevel: 0,       // 层级
@@ -98,7 +98,7 @@ element.attr('style', { fill: 'red' });
 动画系统支持。
 
 ```typescript
-import { Animation, Easing } from 'hux-core';
+import { Animation, Easing } from 'hudx-core';
 
 const anim = new Animation(
   target: object,    // 目标对象
@@ -125,7 +125,7 @@ anim.start();
 
 ---
 
-## 图表库 (`hux-charts`)
+## 图表库 (`hudx-charts`)
 
 基于核心引擎构建的高层图表组件，API 设计兼容 ECharts。
 
@@ -147,7 +147,7 @@ anim.start();
 React 组件封装，推荐在 React 项目中使用。
 
 ```tsx
-import { HChart } from 'hux-charts';
+import { HChart } from 'hudx-charts';
 
 <HChart
   option={option}           // ECharts 风格配置项

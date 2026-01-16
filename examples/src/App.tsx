@@ -1,7 +1,7 @@
 import React, { useState, lazy, Suspense, useMemo, memo } from 'react';
-import { HChart } from 'hux-charts';
-import type { ChartOption } from 'hux-charts';
-import { Theme } from 'hux-core';
+import { HChart } from 'hudx-charts';
+import type { ChartOption } from 'hudx-charts';
+import { Theme } from 'hudx-core';
 import { Sidebar } from './components/Sidebar';
 import { Codebox } from './components/Codebox';
 import { examples, Example } from './data/examples';

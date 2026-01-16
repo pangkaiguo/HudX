@@ -22,8 +22,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore"
   },
   "dependencies": {
-    "hux-charts": "workspace:*",
-    "hux-core": "workspace:*"
+    "hudx-charts": "workspace:*",
+    "hudx-core": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0",

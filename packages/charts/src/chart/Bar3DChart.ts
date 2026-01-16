@@ -12,7 +12,7 @@ import {
   darken,
   createDecalPattern,
   Z_SERIES,
-} from 'hux-core';
+} from 'hudx-core';
 import { EventHelper } from '../util/EventHelper';
 
 export default class Bar3DChart extends Chart {

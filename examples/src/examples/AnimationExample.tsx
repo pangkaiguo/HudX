@@ -7,8 +7,8 @@ import {
   Easing,
   ThemeManager,
   Theme,
-} from 'hux-core';
-import type { RenderMode } from 'hux-core';
+} from 'hudx-core';
+import type { RenderMode } from 'hudx-core';
 
 export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);

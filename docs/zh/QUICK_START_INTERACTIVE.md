@@ -14,7 +14,7 @@ import {
   Legend,
   Animation,
   Easing,
-} from "hux-core";
+} from "hudx-core";
 
 // 初始化渲染器
 const renderer = Renderer.init(container, "canvas", "light", "en");

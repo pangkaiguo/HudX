@@ -6,7 +6,7 @@
 
 ```tsx
 import React from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function LineChartExample() {
   const option = {
@@ -43,7 +43,7 @@ function LineChartExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function BarChartExample() {
   const option = {
@@ -76,7 +76,7 @@ function BarChartExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function PieChartExample() {
   const option = {
@@ -109,7 +109,7 @@ function PieChartExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function ScatterChartExample() {
   const option = {
@@ -150,7 +150,7 @@ function ScatterChartExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function MultiSeriesExample() {
   const option = {
@@ -183,7 +183,7 @@ function MultiSeriesExample() {
 
 ```tsx
 import React from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function EventExample() {
   const option = {
@@ -224,7 +224,7 @@ function EventExample() {
 
 ```tsx
 import React, { useState, useEffect } from "react";
-import { HChart } from "hux-charts";
+import { HChart } from "hudx-charts";
 
 function DynamicUpdateExample() {
   const [data, setData] = useState([120, 200, 150, 80, 70, 110, 130]);
@@ -262,7 +262,7 @@ function DynamicUpdateExample() {
 ### 创建自定义图形
 
 ```typescript
-import { Renderer, Circle, Rect, Group } from "hux-core";
+import { Renderer, Circle, Rect, Group } from "hudx-core";
 
 // 初始化
 const renderer = Renderer.init("#container");
@@ -308,7 +308,7 @@ renderer.add(group);
 ### 动画示例
 
 ```typescript
-import { Renderer, Circle, Animation, Easing } from "hux-core";
+import { Renderer, Circle, Animation, Easing } from "hudx-core";
 
 const renderer = Renderer.init("#container");
 
@@ -348,7 +348,7 @@ animation.start();
 ### 事件处理
 
 ```typescript
-import { Renderer, Circle } from "hux-core";
+import { Renderer, Circle } from "hudx-core";
 
 const renderer = Renderer.init("#container");
 
@@ -393,7 +393,7 @@ renderer.add(circle);
 ### 使用对象池
 
 ```typescript
-import { Renderer, Circle, ObjectPool } from "hux-core";
+import { Renderer, Circle, ObjectPool } from "hudx-core";
 
 const renderer = Renderer.init("#container");
 
@@ -429,7 +429,7 @@ for (let i = 0; i < 100; i++) {
 ### 批量更新
 
 ```typescript
-import { Renderer, BatchUpdater, Circle } from "hux-core";
+import { Renderer, BatchUpdater, Circle } from "hudx-core";
 
 const renderer = Renderer.init("#container");
 const updater = new BatchUpdater();
@@ -458,7 +458,7 @@ for (let i = 0; i < 1000; i++) {
 
 ```tsx
 import React from 'react';
-import { HChart } from 'hux-charts';
+import { HChart } from 'hudx-charts';
 
 function LazyUpdateExample() {
   const [option, setOption] = useState({...});
@@ -480,9 +480,9 @@ function LazyUpdateExample() {
 ### 扩展 Chart 类
 
 ```typescript
-import Chart from "hux-charts/Chart";
-import type { ChartOption } from "hux-charts/types";
-import { Rect, Text } from "hux-core";
+import Chart from "hudx-charts/Chart";
+import type { ChartOption } from "hudx-charts/types";
+import { Rect, Text } from "hudx-core";
 
 export default class CustomChart extends Chart {
   protected _render(): void {

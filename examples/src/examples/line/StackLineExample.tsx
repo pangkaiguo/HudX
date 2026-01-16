@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import { HChart } from 'hux-charts';
-import type { ChartOption, HChartRef } from 'hux-charts';
-import { ThemeManager, Theme } from 'hux-core';
-import type { RenderMode } from 'hux-core';
+import { HChart } from 'hudx-charts';
+import type { ChartOption, HChartRef } from 'hudx-charts';
+import { ThemeManager, Theme } from 'hudx-core';
+import type { RenderMode } from 'hudx-core';
 
 export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const themeObj = ThemeManager.getTheme(theme);

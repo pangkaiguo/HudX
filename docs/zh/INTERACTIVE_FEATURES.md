@@ -64,7 +64,7 @@ EventHelper.bindHoverEvents(
 核心动画引擎 (`Animator`) 支持复杂的过渡效果。
 
 ```typescript
-import { Animation, Easing } from "hux-core";
+import { Animation, Easing } from "hudx-core";
 
 const anim = new Animation(target, "x", 100, 500, 0, Easing.cubicOut);
 anim.start();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { HChart } from 'hux-charts';
-import type { ChartOption } from 'hux-charts';
-import { ThemeManager, Theme } from 'hux-core';
+import { HChart } from 'hudx-charts';
+import type { ChartOption } from 'hudx-charts';
+import { ThemeManager, Theme } from 'hudx-core';
 import { CodeEditor } from './CodeEditor';
 
 interface CodeboxProps {
@@ -357,7 +357,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
           </div>
           <CodeEditor
             code={activeTab === 'TS' ? getTsCode(code) : code}
-            onChange={activeTab === 'TS' ? () => {} : setCode}
+            onChange={activeTab === 'TS' ? () => { } : setCode}
             theme={theme === 'dark' ? 'dark' : 'light'}
           />
           {error && (

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createSymbol } from '../symbol';
-import { Circle, Rect, Polygon, Path } from 'hux-core';
+import { Circle, Rect, Polygon, Path } from 'hudx-core';
 
 describe('symbol utility', () => {
   it('should create circle symbol', () => {

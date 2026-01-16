@@ -2,7 +2,7 @@
  * Chart type definitions
  */
 
-import type { DecalObject } from 'hux-core';
+import type { DecalObject } from 'hudx-core';
 export type { DecalObject };
 
 // Re-export Scale from coordinate to avoid duplication if it was there,
@@ -108,15 +108,15 @@ export interface TooltipOption {
   transitionDuration?: number;
   /** Position configuration */
   position?:
-    | string
-    | number[]
-    | ((
-        point: number[],
-        params: any,
-        dom: HTMLElement,
-        rect: any,
-        size: any,
-      ) => number[]);
+  | string
+  | number[]
+  | ((
+    point: number[],
+    params: any,
+    dom: HTMLElement,
+    rect: any,
+    size: any,
+  ) => number[]);
   /** Show content */
   showContent?: boolean;
   /** Always show content */
@@ -403,19 +403,19 @@ export interface SeriesOption {
   // Line specific
   smooth?: boolean | number;
   symbol?:
-    | string
-    | 'none'
-    | 'circle'
-    | 'rect'
-    | 'roundRect'
-    | 'triangle'
-    | 'diamond'
-    | 'pin'
-    | 'arrow';
+  | string
+  | 'none'
+  | 'circle'
+  | 'rect'
+  | 'roundRect'
+  | 'triangle'
+  | 'diamond'
+  | 'pin'
+  | 'arrow';
   symbolSize?:
-    | number
-    | number[]
-    | ((value: any, params: any) => number | number[]);
+  | number
+  | number[]
+  | ((value: any, params: any) => number | number[]);
   symbolRotate?: number;
   symbolKeepAspect?: boolean;
   symbolOffset?: [string | number, string | number];
@@ -480,21 +480,21 @@ export interface LabelOption {
   show?: boolean;
   showOnHover?: boolean;
   position?:
-    | 'top'
-    | 'left'
-    | 'right'
-    | 'bottom'
-    | 'inside'
-    | 'insideLeft'
-    | 'insideRight'
-    | 'insideTop'
-    | 'insideBottom'
-    | 'insideTopLeft'
-    | 'insideBottomLeft'
-    | 'insideTopRight'
-    | 'insideBottomRight'
-    | 'outside'
-    | 'center';
+  | 'top'
+  | 'left'
+  | 'right'
+  | 'bottom'
+  | 'inside'
+  | 'insideLeft'
+  | 'insideRight'
+  | 'insideTop'
+  | 'insideBottom'
+  | 'insideTopLeft'
+  | 'insideBottomLeft'
+  | 'insideTopRight'
+  | 'insideBottomRight'
+  | 'outside'
+  | 'center';
   color?: string;
   fontSize?: number;
   formatter?: string | ((params: any) => string);
@@ -515,12 +515,12 @@ export type ChartData =
   | number
   | number[]
   | {
-      name?: string;
-      value: any;
-      itemStyle?: ItemStyleOption;
-      label?: LabelOption;
-      [key: string]: any;
-    };
+    name?: string;
+    value: any;
+    itemStyle?: ItemStyleOption;
+    label?: LabelOption;
+    [key: string]: any;
+  };
 
 export interface ChartEvent {
   type: string;

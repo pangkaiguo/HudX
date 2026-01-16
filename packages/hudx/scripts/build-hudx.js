@@ -13,10 +13,10 @@ try {
 
     // Replace relative paths with package names
     // Handling both with and without .ts extension just in case
-    content = content.replace(/(\.\.\/)+core\/src\/index(\.ts)?/g, 'hux-core');
+    content = content.replace(/(\.\.\/)+core\/src\/index(\.ts)?/g, 'hudx-core');
     content = content.replace(
       /(\.\.\/)+charts\/src\/index(\.ts)?/g,
-      'hux-charts',
+      'hudx-charts',
     );
 
     fs.writeFileSync(destDtsPath, content);
