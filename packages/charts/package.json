@@ -19,20 +19,20 @@
     "clean": "tsc --build --clean && rm -rf dist"
   },
   "dependencies": {
-    "hudx-core": "workspace:*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "hudx-core": "workspace:*"
   },
   "devDependencies": {
-    "@types/react": "^18.2.45",
-    "@types/react-dom": "^18.2.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@vitest/coverage-v8": "^4.0.17",
     "happy-dom": "^20.0.11",
-    "typescript": "^5.3.3",
+    "typescript": "^5.9.3",
     "vitest": "^4.0.16"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": ">=18.3.1",
+    "react-dom": ">=18.3.1"
   }
 }
