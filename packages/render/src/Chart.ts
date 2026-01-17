@@ -1,5 +1,13 @@
 /**
  * Chart - Base chart class
+ *
+ * Algorithm: Render Loop & Lifecycle Management
+ *
+ * Description:
+ * Orchestrates the initialization, rendering, and event handling lifecycle.
+ * Implements the "Dirty-Check" mechanism to optimize rendering by only updating
+ * modified components. Manages the component tree (Scene Graph) and coordinates
+ * interactions between Renderer, Animator, and Components.
  */
 
 import Renderer from './Renderer';
@@ -1195,9 +1203,9 @@ export default class Chart {
       finalItems = option.legend.data.map((dataItem: any) => {
         const name = typeof dataItem === 'string' ? dataItem : dataItem.name;
         const seriesItem = items.find((i) => i.name === name);
-        
+
         const customItem = typeof dataItem === 'object' ? dataItem : {};
-        
+
         if (seriesItem) {
           return {
             ...seriesItem,
@@ -1205,13 +1213,13 @@ export default class Chart {
             textStyle: customItem.textStyle
           };
         }
-        
+
         return {
-            name: name,
-            color: '#ccc',
-            icon: customItem.icon || option.legend?.icon || 'rect',
-            textColor: this.getThemeConfig().legendTextColor,
-            textStyle: customItem.textStyle
+          name: name,
+          color: '#ccc',
+          icon: customItem.icon || option.legend?.icon || 'rect',
+          textColor: this.getThemeConfig().legendTextColor,
+          textStyle: customItem.textStyle
         };
       });
     }

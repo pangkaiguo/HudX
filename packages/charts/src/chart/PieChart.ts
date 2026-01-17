@@ -10,6 +10,17 @@ import {
   EventHelper,
 } from 'hudx-render';
 
+/**
+ * PieChart - Pie chart implementation
+ *
+ * Algorithm: Polar Coordinate Layout
+ *
+ * Description:
+ * Converts data values to angles (radians).
+ * - Accumulates angles to determine start/end angles for each sector.
+ * - Handles "Rose Type" (Nightingale Chart) by mapping values to radius instead of (or in addition to) angle.
+ * - Implements sector interaction (scale on hover) and label positioning.
+ */
 // TODO: Define a proper interface for the extended Sector to avoid 'any' casting throughout the file.
 // Currently relying on monkey-patching properties like __initialStyle, __label, etc.
 

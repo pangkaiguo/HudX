@@ -1,5 +1,14 @@
 /**
  * Coordinate system utilities
+ *
+ * Algorithm: Linear & Ordinal Scaling, Nice Ticks Calculation
+ *
+ * Description:
+ * Implements mathematical mapping between data domains and pixel ranges.
+ * - createLinearScale: Uses linear interpolation y = mx + c.
+ * - createOrdinalScale: Maps discrete categories to band intervals.
+ * - niceDomain/calculateNiceTicks: Implements a "Nice Numbers" algorithm (similar to Wilkinson’s algorithm)
+ *   to generate human-readable tick intervals (1, 2, 5 steps).
  */
 
 import type { AxisOption, ChartData, Coordinate } from '../types';

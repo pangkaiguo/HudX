@@ -1,5 +1,13 @@
 /**
  * CanvasPainter - Canvas rendering implementation
+ *
+ * Algorithm: Immediate Mode Rendering with Dirty Rectangles (Simplified)
+ *
+ * Description:
+ * Implements the Painter interface for HTML5 Canvas. Uses a requestAnimationFrame
+ * loop for batched rendering. Optimizes performance by checking dirty flags on
+ * elements before drawing. Handles High-DPI (Retina) scaling by applying device
+ * pixel ratio transforms.
  */
 
 import Storage from '../Storage';

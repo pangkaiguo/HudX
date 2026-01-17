@@ -7,6 +7,17 @@ import {
 import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from 'hudx-render';
 import { EventHelper } from 'hudx-render';
 
+/**
+ * BarChart - Bar chart implementation
+ *
+ * Algorithm: Band Scale Layout & Stack Layout
+ *
+ * Description:
+ * Calculates bar positions and widths using the Band Scale model.
+ * - Handles grouped bars by subdividing the category bandwidth.
+ * - Supports stacked bars by accumulating positive/negative values (Stack Layout algorithm).
+ * - Manages coordinate mapping from data domain to pixel space.
+ */
 export default class BarChart extends Chart {
   private _activeBars: Map<string, Rect> = new Map();
 

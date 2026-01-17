@@ -1,5 +1,12 @@
 /**
  * SVGPainter - SVG rendering implementation
+ *
+ * Algorithm: Retained Mode Rendering via DOM Diffing (Simplified)
+ *
+ * Description:
+ * Implements the Painter interface for SVG. Maps the internal Scene Graph (Storage)
+ * to SVG DOM elements. Uses a "Create or Update" strategy (similar to a lightweight
+ * Virtual DOM) to minimize DOM manipulations, updating attributes only when changed.
  */
 
 import Storage from '../Storage';

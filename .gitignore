@@ -16,6 +16,7 @@ packages/*/dist/
 *.swo
 *~
 .DS_Store
+.trae/
 
 # Logs
 *.log

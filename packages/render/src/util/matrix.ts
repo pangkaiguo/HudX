@@ -1,5 +1,13 @@
 /**
  * Matrix utilities for transformations
+ *
+ * Algorithm: 2D Affine Transformations
+ *
+ * Description:
+ * Implements 3x3 matrix operations for 2D geometry (Translation, Rotation, Scaling, Skewing).
+ * Uses homogeneous coordinates [x, y, 1] implicitly.
+ * x' = ax + cy + e
+ * y' = bx + dy + f
  */
 
 export interface Matrix {

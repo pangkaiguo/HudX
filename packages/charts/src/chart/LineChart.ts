@@ -22,6 +22,17 @@ import {
   createSymbol,
 } from 'hudx-render';
 
+/**
+ * LineChart - Line chart implementation
+ *
+ * Algorithm: Cartesian Mapping & Spline Interpolation
+ *
+ * Description:
+ * Maps data points to Cartesian coordinates.
+ * - Delegates smoothing logic to `getSmoothPath` (Catmull-Rom Spline).
+ * - Implements "Area Fill" logic by closing the path with the baseline.
+ * - Manages point markers and their interactions (hover/tooltip).
+ */
 export default class LineChart extends Chart {
   private _activeLines: Map<
     number,

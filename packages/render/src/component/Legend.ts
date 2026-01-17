@@ -1,5 +1,15 @@
 /**
  * Legend - Enhanced legend component (ECharts-like)
+ *
+ * Algorithm: Flex/Grid Layout & Interaction State Management
+ *
+ * Description:
+ * Implements a flexible layout system for legend items, supporting:
+ * - Flow layout (horizontal/vertical) with wrapping
+ * - Alignment (left/center/right, top/middle/bottom)
+ * - Custom item styling and rich text formatting
+ * Manages selection state (single/multiple) and coordinates with the Chart
+ * via callbacks (onSelect, onHover) to trigger re-renders or highlights.
  */
 
 import Group from '../Group';

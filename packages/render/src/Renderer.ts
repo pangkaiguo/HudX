@@ -1,6 +1,13 @@
 /**
- * Renderer - Main rendering engine class
+ * Renderer - Main entry point, main rendering engine class
  * High-performance rendering engine supporting Canvas and SVG modes
+ *
+ * Algorithm: Abstract Factory & Painter Delegation
+ *
+ * Description:
+ * Acts as the entry point for the rendering engine. Uses the Abstract Factory
+ * pattern to instantiate the appropriate Painter (Canvas or SVG) based on configuration.
+ * Manages the global Storage (Display List) for all graphical elements.
  */
 
 import Storage from './Storage';
