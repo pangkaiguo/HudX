@@ -211,8 +211,13 @@ export default class SVGPainter implements IPainter {
         group.setAttribute('fill', 'none');
       }
 
-      if (style.stroke && typeof style.stroke === 'string') {
-        group.setAttribute('stroke', style.stroke);
+      if (style.stroke) {
+        if (typeof style.stroke === 'string') {
+          group.setAttribute('stroke', style.stroke);
+        } else if ((style.stroke as any)._canvas) {
+          const patternId = this._createSVGPattern(style.stroke as any);
+          group.setAttribute('stroke', `url(#${patternId})`);
+        }
       }
 
       if (style.lineWidth !== undefined) {
@@ -737,10 +742,33 @@ export default class SVGPainter implements IPainter {
     patternObj: CanvasPattern & {
       _canvas: HTMLCanvasElement;
       _rotation?: number;
+      _dpr?: number;
+      _tileWidth?: number;
+      _tileHeight?: number;
     },
   ): string {
     const canvas = patternObj._canvas;
     const rotation = patternObj._rotation || 0;
+    const dpr = patternObj._dpr || 1;
+    const tileWidth = patternObj._tileWidth || canvas.width;
+    const tileHeight = patternObj._tileHeight || canvas.height;
+    const meta = (patternObj as any)._decalMeta as
+      | {
+        baseColor: string;
+        fgColor: string;
+        symbol: string;
+        unitSize: number;
+        symbolSize: number;
+        lineWidth: number;
+        dashX: number[];
+        dashY: number[];
+        centersX: number[];
+        centersY: number[];
+        tileWidth: number;
+        tileHeight: number;
+        rotation: number;
+      }
+      | undefined;
 
     const id = `pattern_${Math.random().toString(36).substr(2, 9)}`;
     const pattern = document.createElementNS(
@@ -749,14 +777,148 @@ export default class SVGPainter implements IPainter {
     );
     pattern.setAttribute('id', id);
     pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-    pattern.setAttribute('width', String(canvas.width));
-    pattern.setAttribute('height', String(canvas.height));
+    pattern.setAttribute('width', String(meta?.tileWidth ?? tileWidth));
+    pattern.setAttribute('height', String(meta?.tileHeight ?? tileHeight));
 
-    if (rotation) {
-      pattern.setAttribute(
-        'patternTransform',
-        `rotate(${(rotation * 180) / Math.PI})`,
-      );
+    const transforms: string[] = [];
+    if (meta) {
+      if (meta.rotation) {
+        transforms.push(`rotate(${(meta.rotation * 180) / Math.PI})`);
+      }
+    } else {
+      if (dpr !== 1) {
+        transforms.push(`scale(${1 / dpr})`);
+      }
+      if (rotation) {
+        transforms.push(`rotate(${(rotation * 180) / Math.PI})`);
+      }
+    }
+    if (transforms.length) {
+      pattern.setAttribute('patternTransform', transforms.join(' '));
+    }
+
+    if (meta) {
+      const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      bg.setAttribute('x', '0');
+      bg.setAttribute('y', '0');
+      bg.setAttribute('width', String(meta.tileWidth));
+      bg.setAttribute('height', String(meta.tileHeight));
+      bg.setAttribute('fill', meta.baseColor);
+      pattern.appendChild(bg);
+
+      const createSymbol = (): SVGElement => {
+        const s = meta.symbol;
+        const half = meta.symbolSize / 2;
+        if (s === 'line') {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          el.setAttribute('x1', String(-meta.unitSize / 2));
+          el.setAttribute('y1', '0');
+          el.setAttribute('x2', String(meta.unitSize / 2));
+          el.setAttribute('y2', '0');
+          el.setAttribute('stroke', meta.fgColor);
+          el.setAttribute('stroke-width', String(meta.lineWidth));
+          el.setAttribute('stroke-linecap', 'square');
+          return el;
+        }
+        if (s === 'cross') {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          el.setAttribute(
+            'd',
+            `M ${-meta.unitSize / 2} 0 L ${meta.unitSize / 2} 0 M 0 ${-meta.unitSize / 2} L 0 ${meta.unitSize / 2}`,
+          );
+          el.setAttribute('fill', 'none');
+          el.setAttribute('stroke', meta.fgColor);
+          el.setAttribute('stroke-width', String(meta.lineWidth));
+          el.setAttribute('stroke-linecap', 'square');
+          return el;
+        }
+        if (s === 'circle' || s === 'pin') {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          el.setAttribute('cx', '0');
+          el.setAttribute('cy', '0');
+          el.setAttribute('r', String(half));
+          el.setAttribute('fill', meta.fgColor);
+          return el;
+        }
+        if (s === 'rect' || s === 'square') {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          el.setAttribute('x', String(-half));
+          el.setAttribute('y', String(-half));
+          el.setAttribute('width', String(meta.symbolSize));
+          el.setAttribute('height', String(meta.symbolSize));
+          el.setAttribute('fill', meta.fgColor);
+          return el;
+        }
+        if (s === 'roundRect') {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          const r = Math.min(2, meta.symbolSize / 4);
+          el.setAttribute('x', String(-half));
+          el.setAttribute('y', String(-half));
+          el.setAttribute('width', String(meta.symbolSize));
+          el.setAttribute('height', String(meta.symbolSize));
+          el.setAttribute('rx', String(r));
+          el.setAttribute('ry', String(r));
+          el.setAttribute('fill', meta.fgColor);
+          return el;
+        }
+        if (s === 'triangle') {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          el.setAttribute(
+            'd',
+            `M 0 ${-half} L ${half} ${half} L ${-half} ${half} Z`,
+          );
+          el.setAttribute('fill', meta.fgColor);
+          return el;
+        }
+        if (s === 'diamond') {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          el.setAttribute(
+            'd',
+            `M 0 ${-half} L ${half} 0 L 0 ${half} L ${-half} 0 Z`,
+          );
+          el.setAttribute('fill', meta.fgColor);
+          return el;
+        }
+        if (s === 'arrow') {
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          el.setAttribute(
+            'd',
+            `M 0 ${-half} L ${half} ${half} L 0 ${half * 0.36} L ${-half} ${half} Z`,
+          );
+          el.setAttribute('fill', meta.fgColor);
+          return el;
+        }
+        if (s === 'pentagon') {
+          const r = half;
+          const pts: string[] = [];
+          for (let k = 0; k < 5; k++) {
+            const ang = -Math.PI / 2 + (k * 2 * Math.PI) / 5;
+            pts.push(`${r * Math.cos(ang)} ${r * Math.sin(ang)}`);
+          }
+          const el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          el.setAttribute('points', pts.join(' '));
+          el.setAttribute('fill', meta.fgColor);
+          return el;
+        }
+        const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        el.setAttribute('cx', '0');
+        el.setAttribute('cy', '0');
+        el.setAttribute('r', String(half));
+        el.setAttribute('fill', meta.fgColor);
+        return el;
+      };
+
+      for (const cx of meta.centersX) {
+        for (const cy of meta.centersY) {
+          const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          g.setAttribute('transform', `translate(${cx}, ${cy})`);
+          g.appendChild(createSymbol());
+          pattern.appendChild(g);
+        }
+      }
+
+      this._defs.appendChild(pattern);
+      return id;
     }
 
     const image = document.createElementNS(

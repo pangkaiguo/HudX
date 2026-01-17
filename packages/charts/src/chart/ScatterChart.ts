@@ -101,6 +101,9 @@ export default class ScatterChart extends Chart {
       }
 
       if (option.legend?.show !== false) {
+        const aria = option.aria;
+        const ariaDecals =
+          aria?.enabled && aria?.decal?.show ? aria.decal.decals || [] : [];
         const items = (series as any[])
           .filter((s: any) => s.type === 'scatter' && s.show !== false)
           .map((s: any, i: number) => ({
@@ -114,6 +117,11 @@ export default class ScatterChart extends Chart {
             icon: option.legend?.icon || 'circle',
             textColor: this.getThemeConfig().legendTextColor,
             data: s,
+            decal:
+              s.itemStyle?.decal ||
+              (ariaDecals.length
+                ? ariaDecals[i % ariaDecals.length] || { symbol: 'circle' }
+                : undefined),
           }));
         this._mountLegend(items);
       }

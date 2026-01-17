@@ -149,6 +149,10 @@ export default class PieChart extends Chart {
   ): void {
     if (this._option.legend?.show === false) return;
 
+    const aria = this._option.aria;
+    const ariaDecals =
+      aria?.enabled && aria?.decal?.show ? aria.decal.decals || [] : [];
+
     // TODO: Extract Legend item creation logic to a separate mapper
     const items = data.map((it: any, i: number) => {
       let value = 0;
@@ -169,6 +173,12 @@ export default class PieChart extends Chart {
         value,
         percent,
         data: it,
+        decal:
+          (typeof it === 'object' && it.itemStyle?.decal) ||
+          seriesItem.itemStyle?.decal ||
+          (ariaDecals.length
+            ? ariaDecals[i % ariaDecals.length] || { symbol: 'circle' }
+            : undefined),
       };
     });
 

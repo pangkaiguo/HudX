@@ -7,7 +7,7 @@ import type { RenderMode } from 'hudx-render';
 export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
-  const [gridTop, setGridTop] = useState(40);
+  const [gridTop, setGridTop] = useState(80);
   const [splitNumber, setSplitNumber] = useState(5);
   const [xInterval, setXInterval] = useState(0);
   const [xAutoInterval, setXAutoInterval] = useState(true);
@@ -24,7 +24,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const option: ChartOption = {
     tooltip: {
       show: true,
-      trigger: 'item',
+      trigger: 'axis',
     },
     aria: {
       enabled: true,
@@ -83,7 +83,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
     },
     series: [
       {
-        name: 'Weekly Data',
+        name: 'Direct',
         type: 'bar',
         data: [120, 200, 150, 80, 70, 110, 130],
         barWidth: barWidth === 'auto' ? undefined : barWidth,
@@ -93,6 +93,21 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         },
         itemStyle: {
           color: themeObj.seriesColors?.[0],
+          opacity: 0.8,
+          borderWidth: 0,
+        },
+      },
+      {
+        name: 'Mail Ad',
+        type: 'bar',
+        data: [60, 80, 70, 60, 50, 70, 60],
+        barWidth: barWidth === 'auto' ? undefined : barWidth,
+        showBackground: showBackground,
+        backgroundStyle: {
+          color: 'rgba(180, 180, 180, 0.2)',
+        },
+        itemStyle: {
+          color: themeObj.seriesColors?.[1],
           opacity: 0.8,
           borderWidth: 0,
         },

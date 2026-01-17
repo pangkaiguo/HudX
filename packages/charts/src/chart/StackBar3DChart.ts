@@ -179,6 +179,9 @@ export default class StackBar3DChart extends Chart {
 
       // Legend
       if (option.legend?.show !== false) {
+        const aria = option.aria;
+        const ariaDecals =
+          aria?.enabled && aria?.decal?.show ? aria.decal.decals || [] : [];
         const items = barSeries.map((s, i) => ({
           name: getSeriesDisplayName(
             (key: string, defaultValue?: string) => this.t(key, defaultValue),
@@ -189,6 +192,11 @@ export default class StackBar3DChart extends Chart {
           icon: option.legend?.icon || 'rect',
           textColor: this.getThemeConfig().legendTextColor,
           data: s,
+          decal:
+            s.itemStyle?.decal ||
+            (ariaDecals.length
+              ? ariaDecals[i % ariaDecals.length] || { symbol: 'circle' }
+              : undefined),
         }));
         this._mountLegend(items);
       }

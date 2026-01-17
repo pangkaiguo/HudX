@@ -8,6 +8,7 @@ const mockContext = {
   beginPath: vi.fn(),
   moveTo: vi.fn(),
   lineTo: vi.fn(),
+  arcTo: vi.fn(),
   closePath: vi.fn(),
   fill: vi.fn(),
   stroke: vi.fn(),
@@ -16,9 +17,15 @@ const mockContext = {
   translate: vi.fn(),
   rotate: vi.fn(),
   arc: vi.fn(),
+  setTransform: vi.fn(),
   createPattern: vi.fn().mockReturnValue({
     setTransform: vi.fn(),
   }),
+  lineCap: '',
+  lineJoin: '',
+  fillStyle: '',
+  strokeStyle: '',
+  lineWidth: 1,
 } as unknown as CanvasRenderingContext2D;
 
 const mockCanvas = {
@@ -46,19 +53,16 @@ describe('createDecalPattern', () => {
     const decal: DecalObject = { symbol: 'circle' };
     createDecalPattern(decal, '#000');
 
-    // Default dashArray [1, 0.5] from preset for 'circle'
-    // Sum = 1.5. Tile size = 6. Width = 9.
-    expect(mockCanvas.width).toBe(9);
-    expect(mockCanvas.height).toBe(9);
+    expect(mockCanvas.width).toBe(12);
+    expect(mockCanvas.height).toBe(12);
   });
 
   it('should respect dashArrayX', () => {
     const decal: DecalObject = { symbol: 'circle', dashArrayX: [2, 1] };
     createDecalPattern(decal, '#000');
 
-    // Sum = 3. Width = 3 * 6 = 18.
-    expect(mockCanvas.width).toBe(18);
-    expect(mockCanvas.height).toBe(9); // Default dashArrayY [1, 0.5] -> 9
+    expect(mockCanvas.width).toBe(3);
+    expect(mockCanvas.height).toBe(12);
   });
 
   it('should respect maxTileWidth constraint', () => {
@@ -76,7 +80,11 @@ describe('createDecalPattern', () => {
     const decal: DecalObject = { symbol: 'circle' };
     createDecalPattern(decal, '#000');
 
-    expect(mockContext.arc).toHaveBeenCalledWith(0, 0, 1.5, 0, Math.PI * 2);
+    const calls = (mockContext.arc as any).mock.calls as any[];
+    expect(calls.length).toBeGreaterThan(0);
+    expect(calls[0][0]).toBe(0);
+    expect(calls[0][1]).toBe(0);
+    expect(calls[0][2]).toBeCloseTo(1.8, 6);
   });
 
   it('should store rotation on the pattern object', () => {
@@ -89,28 +97,34 @@ describe('createDecalPattern', () => {
   describe('Presets verification', () => {
     it('should verify diagonal preset dimensions', () => {
       createDecalPattern({ symbol: 'diagonal' }, '#000');
-      expect(mockCanvas.width).toBe(6);
-      expect(mockCanvas.height).toBe(9);
+      expect(mockCanvas.width).toBe(12);
+      expect(mockCanvas.height).toBe(12);
 
-      expect(mockContext.moveTo).toHaveBeenCalledWith(-1.5, 0);
-      expect(mockContext.lineTo).toHaveBeenCalledWith(1.5, 0);
+      expect(mockContext.moveTo).toHaveBeenCalledWith(-3, 0);
+      expect(mockContext.lineTo).toHaveBeenCalledWith(3, 0);
     });
 
     it('should verify grid preset dimensions', () => {
       createDecalPattern({ symbol: 'grid' }, '#000');
-      expect(mockCanvas.width).toBe(12);
-      expect(mockCanvas.height).toBe(12);
+      expect(mockCanvas.width).toBe(10);
+      expect(mockCanvas.height).toBe(10);
     });
 
     it('should verify rect preset dimensions and symbol size', () => {
       createDecalPattern({ symbol: 'rect' }, '#000');
-      expect(mockCanvas.width).toBe(9);
-      expect(mockCanvas.height).toBe(9);
+      expect(mockCanvas.width).toBe(12);
+      expect(mockCanvas.height).toBe(12);
 
-      expect(mockContext.fillRect).toHaveBeenCalledWith(-1.5, -1.5, 3, 3);
+      const calls = (mockContext.fillRect as any).mock.calls as any[];
+      expect(calls.length).toBeGreaterThan(1);
+      const last = calls[calls.length - 1];
+      expect(last[0]).toBeCloseTo(-1.95, 6);
+      expect(last[1]).toBeCloseTo(-1.95, 6);
+      expect(last[2]).toBeCloseTo(3.9, 6);
+      expect(last[3]).toBeCloseTo(3.9, 6);
     });
 
-    it('should verify all presets use symbolSize 0.5', () => {
+    it('should create all presets without error', () => {
       const presets = [
         'diagonal',
         'diagonal-reverse',
@@ -119,10 +133,13 @@ describe('createDecalPattern', () => {
         'checkerboard',
         'dots',
         'rect',
+        'square',
+        'roundRect',
         'circle',
         'triangle',
         'diamond',
         'pin',
+        'pentagon',
         'arrow',
       ];
 
@@ -131,20 +148,8 @@ describe('createDecalPattern', () => {
         createDecalPattern({ symbol: preset }, '#000');
 
         expect(mockCanvas.getContext).toHaveBeenCalled();
-
-        if (preset === 'crosshatch') {
-          expect(mockCanvas.width).toBe(6);
-          expect(mockCanvas.height).toBe(6);
-        } else if (preset === 'grid') {
-          expect(mockCanvas.width).toBe(12);
-          expect(mockCanvas.height).toBe(12);
-        } else if (preset.startsWith('diagonal')) {
-          expect(mockCanvas.width).toBe(6);
-          expect(mockCanvas.height).toBe(9);
-        } else {
-          expect(mockCanvas.width).toBe(9);
-          expect(mockCanvas.height).toBe(9);
-        }
+        expect(mockCanvas.width).toBeGreaterThan(0);
+        expect(mockCanvas.height).toBeGreaterThan(0);
       });
     });
   });

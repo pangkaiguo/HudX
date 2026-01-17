@@ -315,6 +315,9 @@ export default class BarChart extends Chart {
       }
 
       if (option.legend?.show !== false) {
+        const aria = option.aria;
+        const ariaDecals =
+          aria?.enabled && aria?.decal?.show ? aria.decal.decals || [] : [];
         const items = (series as any[])
           .filter((s) => s.type === 'bar' && s.show !== false)
           .map((s, i) => ({
@@ -328,6 +331,11 @@ export default class BarChart extends Chart {
             icon: option.legend?.icon || 'rect',
             textColor: this.getThemeConfig().legendTextColor,
             data: s,
+            decal:
+              s.itemStyle?.decal ||
+              (ariaDecals.length
+                ? ariaDecals[i % ariaDecals.length] || { symbol: 'circle' }
+                : undefined),
           }));
         this._mountLegend(items);
       }
