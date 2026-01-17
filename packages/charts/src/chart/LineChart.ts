@@ -432,6 +432,7 @@ export default class LineChart extends Chart {
               opacity: 0, // Start invisible for animation
             },
             z: Z_SERIES - 1,
+            cursor: 'pointer',
           });
           this._root.add(area);
         }
@@ -465,6 +466,26 @@ export default class LineChart extends Chart {
         }
 
         this._root.add(line);
+
+        if (area) {
+          area.on('mouseover', () => {
+            this._onLegendHover(seriesName, true);
+            this._renderer.flush();
+          });
+          area.on('mouseout', () => {
+            this._onLegendHover(seriesName, false);
+            this._renderer.flush();
+          });
+        }
+
+        line.on('mouseover', () => {
+          this._onLegendHover(seriesName, true);
+          this._renderer.flush();
+        });
+        line.on('mouseout', () => {
+          this._onLegendHover(seriesName, false);
+          this._renderer.flush();
+        });
 
         if (!this._activeLines.has(seriesIndex)) {
           this._activeLines.set(seriesIndex, { line, symbols: [], area });

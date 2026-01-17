@@ -136,4 +136,52 @@ describe('LineChart', () => {
     // Rect symbol should be created
     expect(seriesItem.symbols[0].constructor.name).toBe('Rect');
   });
+
+  it('should highlight area on hover like legend hover', () => {
+    const chart = new LineChart(container);
+    const option: ChartOption = {
+      animation: false,
+      legend: { show: true },
+      xAxis: { type: 'category', data: ['A', 'B', 'C'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          name: 'S1',
+          type: 'line',
+          data: [10, 20, 15],
+          areaStyle: { opacity: 0.5 },
+          lineStyle: { width: 2 },
+        },
+        {
+          name: 'S2',
+          type: 'line',
+          data: [12, 18, 16],
+          areaStyle: { opacity: 0.5 },
+          lineStyle: { width: 2 },
+        },
+      ],
+    };
+    chart.setOption(option);
+
+    const activeLines = (chart as any)._activeLines as Map<
+      number,
+      { line: any; area?: any }
+    >;
+    const s1 = activeLines.get(0)!;
+    const s2 = activeLines.get(1)!;
+    expect(s1.area).toBeDefined();
+    expect(s2.area).toBeDefined();
+
+    s1.area.trigger('mouseover');
+    expect(s1.area.style.opacity).toBeCloseTo(0.5);
+    expect(s2.area.style.opacity).toBeCloseTo(0.1);
+    expect(s1.line.style.lineWidth).toBe(3);
+    expect(s2.line.style.opacity).toBeCloseTo(0.1);
+
+    s1.area.trigger('mouseout');
+    expect(s1.area.style.opacity).toBeCloseTo(0.5);
+    expect(s2.area.style.opacity).toBeCloseTo(0.5);
+    expect(s1.line.style.lineWidth).toBe(2);
+    expect(s2.line.style.opacity).toBeCloseTo(1);
+  });
 });
