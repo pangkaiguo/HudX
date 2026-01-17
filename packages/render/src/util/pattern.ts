@@ -1,5 +1,44 @@
 import type { DecalObject } from '../types';
 
+export type DecalPatternSymbol =
+  | 'line'
+  | 'cross'
+  | 'circle'
+  | 'rect'
+  | 'roundRect'
+  | 'square'
+  | 'triangle'
+  | 'diamond'
+  | 'pin'
+  | 'arrow'
+  | 'pentagon'
+  | 'none';
+
+export type DecalPatternMeta = {
+  baseColor: string;
+  fgColor: string;
+  symbol: string;
+  unitSize: number;
+  symbolSize: number;
+  lineWidth: number;
+  dashX: number[];
+  dashY: number[];
+  centersX: number[];
+  centersY: number[];
+  tileWidth: number;
+  tileHeight: number;
+  rotation: number;
+};
+
+export type CanvasPatternWithMeta = CanvasPattern & {
+  _canvas: HTMLCanvasElement;
+  _rotation?: number;
+  _dpr?: number;
+  _tileWidth?: number;
+  _tileHeight?: number;
+  _decalMeta?: DecalPatternMeta;
+};
+
 const DECAL_PRESETS: Record<string, Partial<DecalObject>> = {
   diagonal: {
     symbol: 'line',
@@ -223,7 +262,8 @@ export function createDecalPattern(
     ? { ...preset, ...decalObject, symbol: preset.symbol }
     : decalObject;
 
-  const symbol = decal.symbol || 'circle';
+  const symbol =
+    typeof decal.symbol === 'string' ? decal.symbol : ('circle' as const);
   if (symbol === 'none') {
     return null;
   }
@@ -390,13 +430,13 @@ export function createDecalPattern(
 
   const pattern = pCtx.createPattern(canvas, 'repeat');
   if (pattern) {
-    (pattern as any)._canvas = canvas;
-    // Store rotation for SVG painter or other renderers
-    (pattern as any)._rotation = decal.rotation || 0;
-    (pattern as any)._dpr = dpr;
-    (pattern as any)._tileWidth = totalW;
-    (pattern as any)._tileHeight = totalH;
-    (pattern as any)._decalMeta = {
+    const pat = pattern as CanvasPatternWithMeta;
+    pat._canvas = canvas;
+    pat._rotation = decal.rotation || 0;
+    pat._dpr = dpr;
+    pat._tileWidth = totalW;
+    pat._tileHeight = totalH;
+    pat._decalMeta = {
       baseColor,
       fgColor,
       symbol,
@@ -420,7 +460,7 @@ export function createDecalPattern(
       if (decal.rotation) {
         matrix.rotateSelf((decal.rotation * 180) / Math.PI);
       }
-      pattern.setTransform(matrix);
+      pat.setTransform(matrix);
     }
   }
 

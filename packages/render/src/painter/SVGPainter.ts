@@ -15,6 +15,7 @@ import Text from '../graphic/Text';
 import Group from '../Group';
 import IPainter from './IPainter';
 import type { DataURLOpts } from '../types';
+import type { CanvasPatternWithMeta, DecalPatternMeta } from '../util/pattern';
 
 export default class SVGPainter implements IPainter {
   private _dom: HTMLElement;
@@ -201,8 +202,8 @@ export default class SVGPainter implements IPainter {
       if (style.fill) {
         if (typeof style.fill === 'string') {
           group.setAttribute('fill', style.fill);
-        } else if ((style.fill as any)._canvas) {
-          const patternId = this._createSVGPattern(style.fill as any);
+        } else if (this._isCanvasPatternWithMeta(style.fill)) {
+          const patternId = this._createSVGPattern(style.fill);
           group.setAttribute('fill', `url(#${patternId})`);
         } else {
           group.setAttribute('fill', 'none');
@@ -214,8 +215,8 @@ export default class SVGPainter implements IPainter {
       if (style.stroke) {
         if (typeof style.stroke === 'string') {
           group.setAttribute('stroke', style.stroke);
-        } else if ((style.stroke as any)._canvas) {
-          const patternId = this._createSVGPattern(style.stroke as any);
+        } else if (this._isCanvasPatternWithMeta(style.stroke)) {
+          const patternId = this._createSVGPattern(style.stroke);
           group.setAttribute('stroke', `url(#${patternId})`);
         }
       }
@@ -523,78 +524,95 @@ export default class SVGPainter implements IPainter {
           let currentX = lineStartX;
           const centerY = currentY + height / 2;
 
-          fragments.forEach((frag: any) => {
-            const fStyle = frag.style;
-            const fragWidth = frag.width;
-            const fragHeight = frag.height;
+          fragments.forEach(
+            (frag: {
+              text: string;
+              width: number;
+              height: number;
+              style: {
+                padding?: number | number[];
+                backgroundColor?: string;
+                borderColor?: string;
+                borderWidth?: number;
+                borderRadius?: number;
+                fontSize?: number;
+                fontFamily?: string;
+                fontWeight?: string | number;
+                color?: string;
+              };
+            }) => {
+              const fStyle = frag.style;
+              const fragWidth = frag.width;
+              const fragHeight = frag.height;
 
-            // Fragment background/border
-            if (
-              fStyle.backgroundColor ||
-              (fStyle.borderColor && fStyle.borderWidth)
-            ) {
-              const fragRect = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'rect',
-              );
-              // Center vertically
-              const fy = centerY - fragHeight / 2;
-              fragRect.setAttribute('x', String(currentX));
-              fragRect.setAttribute('y', String(fy));
-              fragRect.setAttribute('width', String(fragWidth));
-              fragRect.setAttribute('height', String(fragHeight));
-
-              if (fStyle.backgroundColor) {
-                fragRect.setAttribute('fill', fStyle.backgroundColor);
-              } else {
-                fragRect.setAttribute('fill', 'none');
-              }
-
-              if (fStyle.borderColor && fStyle.borderWidth) {
-                fragRect.setAttribute('stroke', fStyle.borderColor);
-                fragRect.setAttribute(
-                  'stroke-width',
-                  String(fStyle.borderWidth),
+              // Fragment background/border
+              if (
+                fStyle.backgroundColor ||
+                (fStyle.borderColor && fStyle.borderWidth)
+              ) {
+                const fragRect = document.createElementNS(
+                  'http://www.w3.org/2000/svg',
+                  'rect',
                 );
+                // Center vertically
+                const fy = centerY - fragHeight / 2;
+                fragRect.setAttribute('x', String(currentX));
+                fragRect.setAttribute('y', String(fy));
+                fragRect.setAttribute('width', String(fragWidth));
+                fragRect.setAttribute('height', String(fragHeight));
+
+                if (fStyle.backgroundColor) {
+                  fragRect.setAttribute('fill', fStyle.backgroundColor);
+                } else {
+                  fragRect.setAttribute('fill', 'none');
+                }
+
+                if (fStyle.borderColor && fStyle.borderWidth) {
+                  fragRect.setAttribute('stroke', fStyle.borderColor);
+                  fragRect.setAttribute(
+                    'stroke-width',
+                    String(fStyle.borderWidth),
+                  );
+                }
+
+                if (fStyle.borderRadius) {
+                  fragRect.setAttribute('rx', String(fStyle.borderRadius));
+                  fragRect.setAttribute('ry', String(fStyle.borderRadius));
+                }
+                group.appendChild(fragRect);
               }
 
-              if (fStyle.borderRadius) {
-                fragRect.setAttribute('rx', String(fStyle.borderRadius));
-                fragRect.setAttribute('ry', String(fStyle.borderRadius));
-              }
-              group.appendChild(fragRect);
-            }
+              // Text Content
+              const text = document.createElementNS(
+                'http://www.w3.org/2000/svg',
+                'text',
+              );
+              const contentX = currentX + element.getPaddingLeft(fStyle.padding);
 
-            // Text Content
-            const text = document.createElementNS(
-              'http://www.w3.org/2000/svg',
-              'text',
-            );
-            const contentX = currentX + element.getPaddingLeft(fStyle.padding);
+              text.setAttribute('x', String(contentX));
+              text.setAttribute('y', String(centerY));
+              text.setAttribute('dominant-baseline', 'middle');
+              text.setAttribute('text-anchor', 'start');
+              text.textContent = frag.text;
 
-            text.setAttribute('x', String(contentX));
-            text.setAttribute('y', String(centerY));
-            text.setAttribute('dominant-baseline', 'middle');
-            text.setAttribute('text-anchor', 'start');
-            text.textContent = frag.text;
+              // Apply fragment styles
+              const fontSize = fStyle.fontSize || style.fontSize || 12;
+              const fontFamily =
+                fStyle.fontFamily || style.fontFamily || 'sans-serif';
+              const fontWeight =
+                fStyle.fontWeight || style.fontWeight || 'normal';
+              const color = fStyle.color || style.fill || '#000';
 
-            // Apply fragment styles
-            const fontSize = fStyle.fontSize || style.fontSize || 12;
-            const fontFamily =
-              fStyle.fontFamily || style.fontFamily || 'sans-serif';
-            const fontWeight =
-              fStyle.fontWeight || style.fontWeight || 'normal';
-            const color = fStyle.color || style.fill || '#000';
+              text.setAttribute('font-size', String(fontSize));
+              text.setAttribute('font-family', fontFamily);
+              text.setAttribute('font-weight', String(fontWeight));
+              text.setAttribute('fill', color);
 
-            text.setAttribute('font-size', String(fontSize));
-            text.setAttribute('font-family', fontFamily);
-            text.setAttribute('font-weight', String(fontWeight));
-            text.setAttribute('fill', color);
+              group.appendChild(text);
 
-            group.appendChild(text);
-
-            currentX += fragWidth;
-          });
+              currentX += fragWidth;
+            },
+          );
 
           currentY += height;
         });
@@ -739,36 +757,14 @@ export default class SVGPainter implements IPainter {
    * Create SVG pattern from canvas
    */
   private _createSVGPattern(
-    patternObj: CanvasPattern & {
-      _canvas: HTMLCanvasElement;
-      _rotation?: number;
-      _dpr?: number;
-      _tileWidth?: number;
-      _tileHeight?: number;
-    },
+    patternObj: CanvasPatternWithMeta,
   ): string {
     const canvas = patternObj._canvas;
     const rotation = patternObj._rotation || 0;
     const dpr = patternObj._dpr || 1;
     const tileWidth = patternObj._tileWidth || canvas.width;
     const tileHeight = patternObj._tileHeight || canvas.height;
-    const meta = (patternObj as any)._decalMeta as
-      | {
-        baseColor: string;
-        fgColor: string;
-        symbol: string;
-        unitSize: number;
-        symbolSize: number;
-        lineWidth: number;
-        dashX: number[];
-        dashY: number[];
-        centersX: number[];
-        centersY: number[];
-        tileWidth: number;
-        tileHeight: number;
-        rotation: number;
-      }
-      | undefined;
+    const meta: DecalPatternMeta | undefined = patternObj._decalMeta;
 
     const id = `pattern_${Math.random().toString(36).substr(2, 9)}`;
     const pattern = document.createElementNS(
@@ -935,6 +931,11 @@ export default class SVGPainter implements IPainter {
     this._defs.appendChild(pattern);
 
     return id;
+  }
+
+  private _isCanvasPatternWithMeta(value: unknown): value is CanvasPatternWithMeta {
+    if (typeof value !== 'object' || value === null) return false;
+    return '_canvas' in value;
   }
 
   /**

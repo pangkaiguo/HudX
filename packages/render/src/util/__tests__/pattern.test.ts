@@ -3,21 +3,35 @@ import { createDecalPattern } from '../pattern';
 import { DecalObject } from '../../types';
 
 // Mock Canvas API
+const fillRectMock = vi.fn();
+const beginPathMock = vi.fn();
+const moveToMock = vi.fn();
+const lineToMock = vi.fn();
+const arcToMock = vi.fn();
+const closePathMock = vi.fn();
+const fillMock = vi.fn();
+const strokeMock = vi.fn();
+const saveMock = vi.fn();
+const restoreMock = vi.fn();
+const translateMock = vi.fn();
+const rotateMock = vi.fn();
+const arcMock = vi.fn();
+const setTransformMock = vi.fn();
 const mockContext = {
-  fillRect: vi.fn(),
-  beginPath: vi.fn(),
-  moveTo: vi.fn(),
-  lineTo: vi.fn(),
-  arcTo: vi.fn(),
-  closePath: vi.fn(),
-  fill: vi.fn(),
-  stroke: vi.fn(),
-  save: vi.fn(),
-  restore: vi.fn(),
-  translate: vi.fn(),
-  rotate: vi.fn(),
-  arc: vi.fn(),
-  setTransform: vi.fn(),
+  fillRect: fillRectMock,
+  beginPath: beginPathMock,
+  moveTo: moveToMock,
+  lineTo: lineToMock,
+  arcTo: arcToMock,
+  closePath: closePathMock,
+  fill: fillMock,
+  stroke: strokeMock,
+  save: saveMock,
+  restore: restoreMock,
+  translate: translateMock,
+  rotate: rotateMock,
+  arc: arcMock,
+  setTransform: setTransformMock,
   createPattern: vi.fn().mockReturnValue({
     setTransform: vi.fn(),
   }),
@@ -80,18 +94,20 @@ describe('createDecalPattern', () => {
     const decal: DecalObject = { symbol: 'circle' };
     createDecalPattern(decal, '#000');
 
-    const calls = (mockContext.arc as any).mock.calls as any[];
-    expect(calls.length).toBeGreaterThan(0);
-    expect(calls[0][0]).toBe(0);
-    expect(calls[0][1]).toBe(0);
-    expect(calls[0][2]).toBeCloseTo(1.8, 6);
+    expect(arcMock.mock.calls.length).toBeGreaterThan(0);
+    const first = arcMock.mock.calls[0]!;
+    expect(first[0]).toBe(0);
+    expect(first[1]).toBe(0);
+    expect(first[2]).toBeCloseTo(1.8, 6);
   });
 
   it('should store rotation on the pattern object', () => {
     const decal: DecalObject = { symbol: 'line', rotation: Math.PI / 4 };
     const pattern = createDecalPattern(decal, '#000');
 
-    expect((pattern as any)._rotation).toBeCloseTo(Math.PI / 4);
+    expect((pattern as unknown as { _rotation?: number })._rotation).toBeCloseTo(
+      Math.PI / 4,
+    );
   });
 
   describe('Presets verification', () => {
@@ -115,9 +131,8 @@ describe('createDecalPattern', () => {
       expect(mockCanvas.width).toBe(12);
       expect(mockCanvas.height).toBe(12);
 
-      const calls = (mockContext.fillRect as any).mock.calls as any[];
-      expect(calls.length).toBeGreaterThan(1);
-      const last = calls[calls.length - 1];
+      expect(fillRectMock.mock.calls.length).toBeGreaterThan(1);
+      const last = fillRectMock.mock.calls[fillRectMock.mock.calls.length - 1]!;
       expect(last[0]).toBeCloseTo(-1.95, 6);
       expect(last[1]).toBeCloseTo(-1.95, 6);
       expect(last[2]).toBeCloseTo(3.9, 6);
