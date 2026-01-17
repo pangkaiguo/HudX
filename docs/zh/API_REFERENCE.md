@@ -4,7 +4,7 @@
 
 ## 目录
 
-- [核心引擎 (`hudx-core`)](#核心引擎-hudxcore)
+- [核心引擎 (`hudx-render`)](#核心引擎-hudx-render)
   - [渲染器 (`Renderer`)](#renderer)
   - [图形元素 (`ChartElement`)](#chartelement)
   - [基础图形 (`Shape`)](#shape)
@@ -18,7 +18,7 @@
 
 ---
 
-## 核心引擎 (`hudx-core`)
+## 核心引擎 (`hudx-render`)
 
 核心引擎提供了底层的渲染能力，支持 Canvas 和 SVG 双模式。
 
@@ -27,7 +27,7 @@
 渲染器入口，负责管理 Painter 和 Storage。
 
 ```typescript
-import { Renderer } from 'hudx-core';
+import { Renderer } from 'hudx-render';
 
 // 初始化渲染器
 const renderer = Renderer.init(
@@ -58,7 +58,7 @@ renderer.dispose();
 所有图形元素的基类。
 
 ```typescript
-import { ChartElement } from 'hudx-core';
+import { ChartElement } from 'hudx-render';
 
 const element = new ChartElement({
   zlevel: 0,       // 层级
@@ -98,7 +98,7 @@ element.attr('style', { fill: 'red' });
 动画系统支持。
 
 ```typescript
-import { Animation, Easing } from 'hudx-core';
+import { Animation, Easing } from 'hudx-render';
 
 const anim = new Animation(
   target: object,    // 目标对象

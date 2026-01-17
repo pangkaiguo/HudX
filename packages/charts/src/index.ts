@@ -1,5 +1,7 @@
+// Re-export render
+export * from 'hudx-render';
+
 // Chart exports
-export { default as Chart } from './Chart';
 export { default as LineChart } from './chart/LineChart';
 export { default as BarChart } from './chart/BarChart';
 export { default as Bar3DChart } from './chart/Bar3DChart';
@@ -15,10 +17,4 @@ export {
   default as HChart,
   type HChartProps,
   type HChartRef,
-} from './react/HChart';
-
-// Types
-export * from './types';
-
-// Utils
-export * from './util/coordinate';
+} from './HChart';

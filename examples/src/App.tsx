@@ -1,7 +1,7 @@
 import React, { useState, lazy, Suspense, useMemo, memo } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption } from 'hudx-charts';
-import { Theme } from 'hudx-core';
+import { Theme } from 'hudx-render';
 import { Sidebar } from './components/Sidebar';
 import { Codebox } from './components/Codebox';
 import { examples, Example } from './data/examples';
@@ -61,12 +61,16 @@ const ScatterChartExample = lazy(
 // Axis charts
 const AxisLabelExample = lazy(() => import('./examples/axis/AxisLabelExample'));
 
-// Bundle example
-const BundleExample = lazy(() =>
-  import('./examples/BundleExample').then((m) => ({
-    default: m.BundleExample,
-  })),
-);
+// New Examples
+const TitleExample = lazy(() => import('./examples/TitleExample'));
+const LegendExample = lazy(() => import('./examples/LegendExample'));
+const TooltipExample = lazy(() => import('./examples/TooltipExample'));
+
+// Bundle examples
+const BundleExample = lazy(() => import('./examples/bundle/BundleExample'));
+const BundleBarExample = lazy(() => import('./examples/bundle/BundleBarExample'));
+const BundleLineExample = lazy(() => import('./examples/bundle/BundleLineExample'));
+const BundlePieExample = lazy(() => import('./examples/bundle/BundlePieExample'));
 
 const chartExamples = [
   {
@@ -142,15 +146,21 @@ const chartExamples = [
     ],
   },
   {
-    category: 'Axis',
+    category: 'Sub Components',
     items: [
       { id: 'axis-label', name: 'Axis Label', component: AxisLabelExample },
+      { id: 'title-example', name: 'Title', component: TitleExample },
+      { id: 'legend-example', name: 'Legend', component: LegendExample },
+      { id: 'tooltip-example', name: 'Tooltip', component: TooltipExample },
     ],
   },
   {
     category: 'Bundle',
     items: [
       { id: 'bundle-test', name: 'Unified Bundle', component: BundleExample },
+      { id: 'bundle-bar', name: 'BarChart Import', component: BundleBarExample },
+      { id: 'bundle-line', name: 'LineChart Import', component: BundleLineExample },
+      { id: 'bundle-pie', name: 'PieChart Import', component: BundlePieExample },
     ],
   },
 ];
@@ -225,8 +235,8 @@ const categories = [
   { key: 'bar', label: 'Bar' },
   { key: 'pie', label: 'Pie' },
   { key: 'scatter', label: 'Scatter' },
-  { key: 'axis', label: 'Axis' },
-  { key: 'other', label: 'Others' },
+  { key: 'sub-components', label: 'Sub Components' },
+  { key: 'bundle', label: 'Bundle' },
 ];
 
 function parseOption(code: string): ChartOption {

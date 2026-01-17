@@ -5,7 +5,7 @@ import { resolve } from 'path';
 export default defineConfig({
   resolve: {
     alias: {
-      'hudx-core': resolve(__dirname, '../core/src/index.ts'),
+      'hudx-render': resolve(__dirname, '../render/src/index.ts'),
       'hudx-charts': resolve(__dirname, '../charts/src/index.ts'),
     },
   },

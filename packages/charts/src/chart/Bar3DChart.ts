@@ -1,10 +1,8 @@
-import Chart from '../Chart';
 import {
+  Chart,
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
-} from '../util/coordinate';
-import {
   Rect,
   Polygon,
   Group,
@@ -12,8 +10,8 @@ import {
   darken,
   createDecalPattern,
   Z_SERIES,
-} from 'hudx-core';
-import { EventHelper } from '../util/EventHelper';
+  EventHelper,
+} from 'hudx-render';
 
 export default class Bar3DChart extends Chart {
   private _activeGroups: Map<string, Group> = new Map();

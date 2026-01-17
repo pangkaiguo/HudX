@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "hudx-core": ["../packages/core/src"],
+      "hudx-render": ["../packages/render/src"],
       "hudx-charts": ["../packages/charts/src"]
     }
   },

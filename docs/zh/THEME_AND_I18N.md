@@ -58,7 +58,7 @@ interface ThemeToken {
 你可以通过 `ThemeManager` 注册或更新 Token，系统会自动将其映射到主题配置中。
 
 ```typescript
-import { ThemeManager } from "hudx-core";
+import { ThemeManager } from "hudx-render";
 
 // 1. 注册/更新 Token
 ThemeManager.registerToken("light", {
@@ -80,7 +80,7 @@ const bgColor = theme.backgroundColor; // 包含更新后的背景色
 #### 在 Renderer 中使用
 
 ```typescript
-import { Renderer, Circle } from "hudx-core";
+import { Renderer, Circle } from "hudx-render";
 
 // 创建时指定主题
 const renderer = Renderer.init("#container", "canvas", "dark");
@@ -121,7 +121,7 @@ import { HChart } from "hudx-charts";
 ### 自定义主题
 
 ```typescript
-import { ThemeManager } from "hudx-core";
+import { ThemeManager } from "hudx-render";
 
 // 注册自定义主题
 ThemeManager.registerTheme("custom", {
@@ -168,7 +168,7 @@ const renderer = Renderer.init("#container", "canvas", "custom");
 #### 在 Renderer 中使用
 
 ```typescript
-import { Renderer } from "hudx-core";
+import { Renderer } from "hudx-render";
 
 // 创建时指定语言
 const renderer = Renderer.init("#container", "canvas", "light", "zh-CN");
@@ -209,7 +209,7 @@ import { HChart } from "hudx-charts";
 ### 自定义语言
 
 ```typescript
-import { LocaleManager } from "hudx-core";
+import { LocaleManager } from "hudx-render";
 
 // 注册自定义语言
 LocaleManager.registerLocale("custom", {
@@ -239,7 +239,7 @@ const renderer = Renderer.init("#container", "canvas", "light", "custom");
 ### 完整示例
 
 ```typescript
-import { Renderer, Circle } from "hudx-core";
+import { Renderer, Circle } from "hudx-render";
 
 // 创建带主题和语言的渲染器
 const renderer = Renderer.init(

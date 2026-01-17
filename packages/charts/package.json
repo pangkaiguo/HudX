@@ -1,34 +1,47 @@
 {
   "name": "hudx-charts",
   "version": "1.0.0",
-  "description": "Chart library built on top of hudx core",
+  "description": "Chart library built on top of hudx render",
   "type": "module",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.cjs"
+    }
+  },
   "sideEffects": false,
   "files": [
-    "src",
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build",
-    "dev": "tsc --watch",
+    "build": "vite build && pnpm pack",
+    "dev": "vite build --watch",
     "test": "vitest --environment happy-dom --coverage.enabled=true",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore",
     "clean": "tsc --build --clean && rm -rf dist"
   },
   "dependencies": {
-    "hudx-core": "workspace:*"
+    "hudx-render": "workspace:*"
   },
   "devDependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitest/coverage-v8": "^4.0.17",
     "happy-dom": "^20.0.11",
-    "typescript": "^5.9.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.4.5",
+    "vite": "^7.3.1",
+    "vite-plugin-dts": "^3.6.4",
     "vitest": "^4.0.16"
   },
   "peerDependencies": {

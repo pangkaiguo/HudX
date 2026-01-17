@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Text, ThemeManager, Theme } from 'hudx-core';
-import type { RenderMode } from 'hudx-core';
+import { Renderer, Circle, Text, ThemeManager, Theme } from 'hudx-render';
+import type { RenderMode } from 'hudx-render';
 
 export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);

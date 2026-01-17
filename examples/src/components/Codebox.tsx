@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-core';
+import { ThemeManager, Theme } from 'hudx-render';
 import { CodeEditor } from './CodeEditor';
 
 interface CodeboxProps {

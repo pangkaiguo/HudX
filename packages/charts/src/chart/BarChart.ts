@@ -1,11 +1,11 @@
-import Chart from '../Chart';
+import { Chart } from 'hudx-render';
 import {
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
-} from '../util/coordinate';
-import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from 'hudx-core';
-import { EventHelper } from '../util/EventHelper';
+} from 'hudx-render';
+import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from 'hudx-render';
+import { EventHelper } from 'hudx-render';
 
 export default class BarChart extends Chart {
   private _activeBars: Map<string, Rect> = new Map();
@@ -50,7 +50,10 @@ export default class BarChart extends Chart {
 
       const option = this._option;
       const series = option.series || [];
-      if (series.length === 0) return;
+      if (series.length === 0) {
+        this._renderer.flush();
+        return;
+      }
 
       const {
         x: plotX,
@@ -62,6 +65,12 @@ export default class BarChart extends Chart {
       const xAxis = Array.isArray(option.xAxis)
         ? option.xAxis[0]
         : option.xAxis;
+
+      // Auto-detect category axis if data is provided but type is missing
+      if (xAxis && !xAxis.type && xAxis.data && xAxis.data.length > 0) {
+        xAxis.type = 'category';
+      }
+
       const yAxis = Array.isArray(option.yAxis)
         ? option.yAxis[0]
         : option.yAxis;

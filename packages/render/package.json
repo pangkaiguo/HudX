@@ -1,0 +1,40 @@
+{
+  "name": "hudx-render",
+  "version": "1.0.0",
+  "description": "Core rendering engine for hudx charts",
+  "type": "module",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.cjs"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "import": "./dist/esm/*.js",
+      "require": "./dist/cjs/*.cjs"
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build && pnpm pack",
+    "dev": "vite build --watch",
+    "test": "vitest --environment happy-dom --coverage.enabled=true",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore",
+    "clean": "tsc --build --clean && rm -rf dist"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.17",
+    "happy-dom": "^20.0.11",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-dts": "^3.6.4",
+    "vitest": "^4.0.16"
+  }
+}

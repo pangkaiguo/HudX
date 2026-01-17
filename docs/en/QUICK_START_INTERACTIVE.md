@@ -14,7 +14,7 @@ import {
   Legend,
   Animation,
   Easing,
-} from "hudx-core";
+} from "hudx-render";
 
 // Initialize renderer
 const renderer = Renderer.init(container, "canvas", "light", "en");
@@ -454,7 +454,7 @@ View the following files for complete examples:
 ## Next Steps
 
 1. View [Interactive Examples Guide](../examples/INTERACTIVE_EXAMPLES.md)
-2. Read [Core API Documentation](../packages/core/README.md)
+2. Read [Core API Documentation](../packages/render/README.md)
 3. Explore [Complete Examples](../examples/src/examples/)
 
 ---

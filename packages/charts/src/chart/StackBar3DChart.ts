@@ -1,10 +1,9 @@
-import Chart from '../Chart';
+import { Chart } from 'hudx-render';
 import {
   createLinearScale,
   createOrdinalScale,
-  calculateDomain,
   niceDomain,
-} from '../util/coordinate';
+} from 'hudx-render';
 import {
   Rect,
   Polygon,
@@ -12,9 +11,9 @@ import {
   lighten,
   darken,
   createDecalPattern,
+  EventHelper,
   Z_SERIES,
-} from 'hudx-core';
-import { EventHelper } from '../util/EventHelper';
+} from 'hudx-render';
 
 export default class StackBar3DChart extends Chart {
   private _activeGroups: Map<string, Group> = new Map();

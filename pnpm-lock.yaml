@@ -21,8 +21,8 @@ importers:
         specifier: ^3.8.0
         version: 3.8.0
       typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+        specifier: ^5.4.5
+        version: 5.4.5
 
   examples:
     dependencies:
@@ -32,9 +32,9 @@ importers:
       hudx-charts:
         specifier: workspace:*
         version: link:../packages/charts
-      hudx-core:
+      hudx-render:
         specifier: workspace:*
-        version: link:../packages/core
+        version: link:../packages/render
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -60,9 +60,9 @@ importers:
 
   packages/charts:
     dependencies:
-      hudx-core:
+      hudx-render:
         specifier: workspace:*
-        version: link:../core
+        version: link:../render
     devDependencies:
       '@types/react':
         specifier: ^18.3.3
@@ -83,23 +83,14 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       typescript:
-        specifier: ^5.9.3
+        specifier: ^5.4.5
         version: 5.9.3
-      vitest:
-        specifier: ^4.0.16
-        version: 4.0.17(@types/node@20.19.29)(happy-dom@20.1.0)
-
-  packages/core:
-    devDependencies:
-      '@vitest/coverage-v8':
-        specifier: ^4.0.17
-        version: 4.0.17(vitest@4.0.17)
-      happy-dom:
-        specifier: ^20.0.11
-        version: 20.1.0
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
+      vite:
+        specifier: ^7.3.1
+        version: 7.3.1(@types/node@20.19.29)
+      vite-plugin-dts:
+        specifier: ^3.6.4
+        version: 3.9.1(@types/node@20.19.29)(typescript@5.9.3)(vite@7.3.1)
       vitest:
         specifier: ^4.0.16
         version: 4.0.17(@types/node@20.19.29)(happy-dom@20.1.0)
@@ -109,9 +100,9 @@ importers:
       hudx-charts:
         specifier: workspace:*
         version: link:../charts
-      hudx-core:
+      hudx-render:
         specifier: workspace:*
-        version: link:../core
+        version: link:../render
       react:
         specifier: '>=18.3.1'
         version: 18.3.1
@@ -123,11 +114,32 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^5.0.10
-        version: 5.4.21(@types/node@20.19.29)
+        specifier: ^7.3.1
+        version: 7.3.1(@types/node@20.19.29)
       vite-plugin-dts:
         specifier: ^3.6.4
-        version: 3.9.1(@types/node@20.19.29)(typescript@5.9.3)(vite@5.4.21)
+        version: 3.9.1(@types/node@20.19.29)(typescript@5.9.3)(vite@7.3.1)
+
+  packages/render:
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^4.0.17
+        version: 4.0.17(vitest@4.0.17)
+      happy-dom:
+        specifier: ^20.0.11
+        version: 20.1.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^7.3.1
+        version: 7.3.1(@types/node@20.19.29)
+      vite-plugin-dts:
+        specifier: ^3.6.4
+        version: 3.9.1(@types/node@20.19.29)(typescript@5.9.3)(vite@7.3.1)
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.17(@types/node@20.19.29)(happy-dom@20.1.0)
 
 packages:
 
@@ -2025,6 +2037,12 @@ packages:
     hasBin: true
     dev: true
 
+  /typescript@5.4.5:
+    resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    dev: true
+
   /typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
@@ -2062,7 +2080,7 @@ packages:
     engines: {node: '>= 0.10'}
     dev: true
 
-  /vite-plugin-dts@3.9.1(@types/node@20.19.29)(typescript@5.9.3)(vite@5.4.21):
+  /vite-plugin-dts@3.9.1(@types/node@20.19.29)(typescript@5.9.3)(vite@7.3.1):
     resolution: {integrity: sha512-rVp2KM9Ue22NGWB8dNtWEr+KekN3rIgz1tWD050QnRGlriUCmaDwa7qA5zDEjbXg5lAXhYMSBJtx3q3hQIJZSg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -2079,7 +2097,7 @@ packages:
       kolorist: 1.8.0
       magic-string: 0.30.21
       typescript: 5.9.3
-      vite: 5.4.21(@types/node@20.19.29)
+      vite: 7.3.1(@types/node@20.19.29)
       vue-tsc: 1.8.27(typescript@5.9.3)
     transitivePeerDependencies:
       - '@types/node'

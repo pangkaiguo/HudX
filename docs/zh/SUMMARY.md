@@ -25,7 +25,7 @@ HudX 是一个高性能图表库，兼容 ECharts API 设计，拥有强大的�
 
 ## 实现状态 (v1.0.0)
 
-### ✅ 核心引擎 (`hudx-core`)
+### ✅ 核心引擎 (`hudx-render`)
 
 - **双模式渲染**: Canvas 和 SVG 绘制器已完全实现。
 - **事件系统**: `EventHelper` 实现统一事件绑定，支持冒泡。

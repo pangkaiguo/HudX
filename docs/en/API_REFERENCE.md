@@ -1,10 +1,10 @@
 # HudX API Reference
 
-This document provides detailed information about the core API and chart components of HudX.
+This document provides detailed information about the render API and chart components of HudX.
 
 ## Table of Contents
 
-- [Core Engine (`hudx-core`)](#core-engine-hudxcore)
+- [Core Engine (`hudx-render`)](#render-engine-hudx-render)
   - [Renderer](#renderer)
   - [ChartElement](#chartelement)
   - [Shape](#shape)
@@ -18,16 +18,16 @@ This document provides detailed information about the core API and chart compone
 
 ---
 
-## Core Engine (`hudx-core`)
+## Core Engine (`hudx-render`)
 
-The core engine provides low-level rendering capabilities, supporting both Canvas and SVG modes.
+The render engine provides low-level rendering capabilities, supporting both Canvas and SVG modes.
 
 ### Renderer
 
 The entry point for rendering, managing Painter and Storage.
 
 ```typescript
-import { Renderer } from 'hudx-core';
+import { Renderer } from 'hudx-render';
 
 // Initialize renderer
 const renderer = Renderer.init(
@@ -58,7 +58,7 @@ renderer.dispose();
 Base class for all graphical elements.
 
 ```typescript
-import { ChartElement } from 'hudx-core';
+import { ChartElement } from 'hudx-render';
 
 const element = new ChartElement({
   zlevel: 0,       // Layer index
@@ -98,7 +98,7 @@ Built-in basic shapes.
 Animation system support.
 
 ```typescript
-import { Animation, Easing } from 'hudx-core';
+import { Animation, Easing } from 'hudx-render';
 
 const anim = new Animation(
   target: object,    // Target object
@@ -127,7 +127,7 @@ Utility functions.
 
 ## Chart Library (`hudx-charts`)
 
-High-level chart components built on the core engine, designed to be compatible with ECharts API.
+High-level chart components built on the render engine, designed to be compatible with ECharts API.
 
 ### Chart
 
@@ -178,7 +178,16 @@ interface ChartOption {
   };
   legend?: {
     show: boolean;
-    data?: string[];
+    data?: string[] | Array<{
+      name: string;
+      icon?: 'circle' | 'rect' | 'line';
+      textStyle?: {
+        color?: string;
+        fontSize?: number;
+        fontWeight?: string;
+        fontFamily?: string;
+      };
+    }>;
     orient?: 'horizontal' | 'vertical';
   };
   grid?: {
@@ -188,7 +197,7 @@ interface ChartOption {
     bottom?: string | number;
   };
   xAxis?: {
-    type: 'category' | 'value';
+    type?: 'category' | 'value'; // Auto-detected as 'category' if data is provided
     data?: any[];
   };
   yAxis?: {

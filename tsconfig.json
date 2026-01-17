@@ -16,10 +16,10 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "hudx-core": ["packages/core/src"],
+      "hudx-render": ["packages/hudx-render/src"],
       "hudx-charts": ["packages/charts/src"]
     }
   },
   "files": [],
-  "references": [{ "path": "packages/core" }, { "path": "packages/charts" }]
+  "references": [{ "path": "packages/render" }, { "path": "packages/charts" }]
 }

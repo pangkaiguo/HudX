@@ -5,7 +5,7 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     alias: {
-      'hudx-core': path.resolve(__dirname, '../core/src'),
+      'hudx-render': path.resolve(__dirname, '../render/src'),
     },
   },
 });

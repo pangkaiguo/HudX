@@ -223,7 +223,7 @@ function ConfigurationExample() {
 ### Using Core API
 
 ```typescript
-import { Renderer, Circle, Rect, Group } from "hudx-core";
+import { Renderer, Circle, Rect, Group } from "hudx-render";
 
 // Initialize renderer
 const renderer = Renderer.init("#container", "canvas", "light", "en");

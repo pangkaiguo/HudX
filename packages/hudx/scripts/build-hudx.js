@@ -11,9 +11,7 @@ try {
   if (fs.existsSync(srcDtsPath)) {
     let content = fs.readFileSync(srcDtsPath, 'utf-8');
 
-    // Replace relative paths with package names
-    // Handling both with and without .ts extension just in case
-    content = content.replace(/(\.\.\/)+core\/src\/index(\.ts)?/g, 'hudx-core');
+    content = content.replace(/(\.\.\/)+render\/src\/index(\.ts)?/g, 'hudx-render');
     content = content.replace(
       /(\.\.\/)+charts\/src\/index(\.ts)?/g,
       'hudx-charts',
@@ -22,7 +20,6 @@ try {
     fs.writeFileSync(destDtsPath, content);
     console.log('Successfully processed and moved index.d.ts');
 
-    // Clean up the intermediate directory
     const packagesDir = path.join(distDir, 'packages');
     if (fs.existsSync(packagesDir)) {
       fs.rmSync(packagesDir, { recursive: true, force: true });
@@ -30,7 +27,6 @@ try {
     }
   } else {
     console.warn(`Warning: Source declaration file not found at ${srcDtsPath}`);
-    // If the file is already at dest (e.g. re-running script), we might want to check that too
     if (!fs.existsSync(destDtsPath)) {
       process.exit(1);
     }

@@ -1,36 +1,36 @@
 {
   "name": "hudx",
   "version": "1.0.0",
-  "description": "Unified hudx package including core and charts",
+  "description": "Unified hudx package including render and charts",
   "type": "module",
   "main": "./dist/hudx.cjs",
   "module": "./dist/hudx.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/hudx.js",
-      "require": "./dist/hudx.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/hudx.cjs"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "vite build && node scripts/build-hudx.js",
+    "build": "vite build && node scripts/build-hudx.js && pnpm pack",
     "dev": "vite build --watch",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore"
   },
   "dependencies": {
     "hudx-charts": "workspace:*",
-    "hudx-core": "workspace:*"
+    "hudx-render": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18.3.1",
     "react-dom": ">=18.3.1"
   },
   "devDependencies": {
-    "vite": "^5.0.10",
+    "vite": "^7.3.1",
     "vite-plugin-dts": "^3.6.4",
     "typescript": "^5.9.3"
   }

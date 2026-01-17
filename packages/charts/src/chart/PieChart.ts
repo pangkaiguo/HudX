@@ -1,5 +1,5 @@
-import Chart from '../Chart';
-import type { SeriesOption, ChartData, EmphasisOption } from '../types';
+import { Chart } from 'hudx-render';
+import type { SeriesOption, ChartData, EmphasisOption } from 'hudx-render';
 import {
   Sector,
   Text,
@@ -7,8 +7,8 @@ import {
   createDecalPattern,
   Z_SERIES,
   Z_LABEL,
-} from 'hudx-core';
-import { EventHelper } from '../util/EventHelper';
+  EventHelper,
+} from 'hudx-render';
 
 // TODO: Define a proper interface for the extended Sector to avoid 'any' casting throughout the file.
 // Currently relying on monkey-patching properties like __initialStyle, __label, etc.

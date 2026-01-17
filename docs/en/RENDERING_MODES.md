@@ -54,7 +54,7 @@ HudX supports two rendering modes: **Canvas** and **SVG**.
 ### Using Renderer
 
 ```typescript
-import { Renderer, Circle, Rect } from "hudx-core";
+import { Renderer, Circle, Rect } from "hudx-render";
 
 // Canvas mode
 const renderer = Renderer.init("#container", "canvas");

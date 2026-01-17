@@ -54,7 +54,7 @@ HudX 支持两种渲染模式：**Canvas** 和 **SVG**。
 ### 在 Renderer 中使用
 
 ```typescript
-import { Renderer, Circle, Rect } from "hudx-core";
+import { Renderer, Circle, Rect } from "hudx-render";
 
 // Canvas 模式
 const renderer = Renderer.init("#container", "canvas");

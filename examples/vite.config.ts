@@ -22,11 +22,11 @@ export default defineConfig({
             }
             return 'vendor';
           }
-          if (id.includes('hudx-core')) {
+          if (id.includes('hudx-render')) {
             if (id.includes('shape/')) return 'hudx-shapes';
             if (id.includes('animation/')) return 'hudx-animation';
             if (id.includes('component/')) return 'hudx-components';
-            return 'hudx-core';
+            return 'hudx-render';
           }
           if (id.includes('hudx-charts')) {
             return 'hudx-charts';
@@ -44,8 +44,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'hudx-core': path.resolve(__dirname, '../packages/core/src'),
-      'hudx-charts': path.resolve(__dirname, '../packages/charts/src'),
+      // 'hudx-render': path.resolve(__dirname, '../packages/render/src'),
+      // 'hudx-charts': path.resolve(__dirname, '../packages/charts/src'),
     },
   },
   optimizeDeps: {

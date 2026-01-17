@@ -262,7 +262,7 @@ function DynamicUpdateExample() {
 ### 创建自定义图形
 
 ```typescript
-import { Renderer, Circle, Rect, Group } from "hudx-core";
+import { Renderer, Circle, Rect, Group } from "hudx-render";
 
 // 初始化
 const renderer = Renderer.init("#container");
@@ -308,7 +308,7 @@ renderer.add(group);
 ### 动画示例
 
 ```typescript
-import { Renderer, Circle, Animation, Easing } from "hudx-core";
+import { Renderer, Circle, Animation, Easing } from "hudx-render";
 
 const renderer = Renderer.init("#container");
 
@@ -348,7 +348,7 @@ animation.start();
 ### 事件处理
 
 ```typescript
-import { Renderer, Circle } from "hudx-core";
+import { Renderer, Circle } from "hudx-render";
 
 const renderer = Renderer.init("#container");
 
@@ -393,7 +393,7 @@ renderer.add(circle);
 ### 使用对象池
 
 ```typescript
-import { Renderer, Circle, ObjectPool } from "hudx-core";
+import { Renderer, Circle, ObjectPool } from "hudx-render";
 
 const renderer = Renderer.init("#container");
 
@@ -429,7 +429,7 @@ for (let i = 0; i < 100; i++) {
 ### 批量更新
 
 ```typescript
-import { Renderer, BatchUpdater, Circle } from "hudx-core";
+import { Renderer, BatchUpdater, Circle } from "hudx-render";
 
 const renderer = Renderer.init("#container");
 const updater = new BatchUpdater();
@@ -482,7 +482,7 @@ function LazyUpdateExample() {
 ```typescript
 import Chart from "hudx-charts/Chart";
 import type { ChartOption } from "hudx-charts/types";
-import { Rect, Text } from "hudx-core";
+import { Rect, Text } from "hudx-render";
 
 export default class CustomChart extends Chart {
   protected _render(): void {

@@ -8,7 +8,7 @@ import {
   Polygon,
   getUnit32RandomValues,
   Theme,
-} from 'hudx-core';
+} from 'hudx-render';
 
 type ShapeType = 'circle' | 'rect' | 'line' | 'polyline' | 'polygon';
 

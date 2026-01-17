@@ -8,12 +8,12 @@ This document details the implementation logic and design philosophy of HudX.
 
 HudX adopts a layered architecture with two main packages:
 
-1. **hudx-core**: Core rendering engine, similar to ZRender, supports both Canvas and SVG rendering modes
+1. **hudx-render**: Core rendering engine, similar to ZRender, supports both Canvas and SVG rendering modes
 2. **hudx-charts**: Chart library, similar to ECharts
 
 ### MVC Pattern
 
-The core rendering engine adopts an MVC pattern:
+The render rendering engine adopts an MVC pattern:
 
 ```
 ┌──────────────┐
@@ -352,7 +352,7 @@ const messages = renderer.getLocaleMessages();
 
 ```
 packages/
-├── core/
+├── render/
 │   ├── Renderer.ts           # Main renderer
 │   ├── Element.ts           # Base element class
 │   ├── Group.ts             # Container element

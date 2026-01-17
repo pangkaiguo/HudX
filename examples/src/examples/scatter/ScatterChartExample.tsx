@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-core';
-import type { RenderMode } from 'hudx-core';
+import { ThemeManager, Theme } from 'hudx-render';
+import type { RenderMode } from 'hudx-render';
 
 const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);

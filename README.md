@@ -9,7 +9,7 @@ HudX is a high-performance charting library built with React and TypeScript. It 
 - 🚀 **High Performance**: Supports Canvas and SVG rendering modes, handles large datasets efficiently.
 - 🎨 **Rich Chart Types**: Line, Bar, Pie, Scatter, and Heatmap charts.
 - ⚛️ **React Integration**: Seamless React component integration (`HChart`).
-- 📦 **Modular Design**: Decoupled core rendering engine (`hudx-core`) and chart library (`hudx-charts`).
+- 📦 **Modular Design**: Decoupled render rendering engine (`hudx-render`) and chart library (`hudx-charts`).
 - 🎯 **TypeScript**: Full TypeScript support with strict type checking.
 - 🎬 **Complete Animation System**: Supports property transitions, multiple easing functions, and staggered animations.
 - 🖱️ **Rich Interaction**: Built-in Tooltip, Legend, and comprehensive event handling (click, hover, drag, etc.).
@@ -22,7 +22,7 @@ HudX is a high-performance charting library built with React and TypeScript. It 
 ```
 HudX/
 ├── packages/
-│   ├── core/          # Core rendering engine
+│   ├── render/          # Core rendering engine
 │   │   ├── src/
 │   │   │   ├── Renderer.ts      # Main entry
 │   │   │   ├── shape/           # Graphic elements (Circle, Rect, Path, etc.)
@@ -113,7 +113,7 @@ function App() {
 ### Core API (Low-level)
 
 ```typescript
-import { Renderer, Circle, Animation, Easing } from "hudx-core";
+import { Renderer, Circle, Animation, Easing } from "hudx-render";
 
 // Initialize
 const renderer = Renderer.init(document.getElementById("container"));

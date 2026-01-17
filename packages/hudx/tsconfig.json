@@ -6,10 +6,10 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "hudx-core": ["../core/src/index.ts"],
+      "hudx-render": ["../render/src/index.ts"],
       "hudx-charts": ["../charts/src/index.ts"]
     }
   },
-  "include": ["src", "../core/src", "../charts/src"],
+  "include": ["src", "../render/src", "../charts/src"],
   "exclude": ["node_modules", "dist"]
 }

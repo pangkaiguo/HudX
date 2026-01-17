@@ -25,7 +25,7 @@ HudX is a high-performance charting library compatible with ECharts API design, 
 
 ## Implementation Status (v1.0.0)
 
-### ✅ Core Engine (`hudx-core`)
+### ✅ Core Engine (`hudx-render`)
 
 - **Dual Rendering**: Canvas & SVG painters fully implemented.
 - **Event System**: `EventHelper` for unified event binding, bubbling support.

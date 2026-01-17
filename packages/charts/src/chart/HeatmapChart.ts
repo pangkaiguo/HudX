@@ -2,9 +2,9 @@
  * HeatmapChart - Heatmap chart implementation
  */
 
-import Chart from '../Chart';
-import { Rect } from 'hudx-core';
-import { EventHelper } from '../util/EventHelper';
+import { Chart } from 'hudx-render';
+import { Rect } from 'hudx-render';
+import { EventHelper } from 'hudx-render';
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {

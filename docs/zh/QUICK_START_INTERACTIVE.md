@@ -14,7 +14,7 @@ import {
   Legend,
   Animation,
   Easing,
-} from "hudx-core";
+} from "hudx-render";
 
 // 初始化渲染器
 const renderer = Renderer.init(container, "canvas", "light", "en");
@@ -396,7 +396,7 @@ circle.on("mouseover", () => {
 ## 下一步
 
 1. 查看 [交互式示例指南](../examples/INTERACTIVE_EXAMPLES.md)
-2. 阅读 [Core API 文档](../packages/core/README.md)
+2. 阅读 [Core API 文档](../packages/render/README.md)
 3. 探索 [完整示例](../examples/src/examples/)
 
 ---

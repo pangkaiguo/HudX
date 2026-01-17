@@ -1,11 +1,11 @@
-import Chart from '../Chart';
+import { Chart } from 'hudx-render';
 import {
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
-} from '../util/coordinate';
-import { Circle, Z_SERIES } from 'hudx-core';
-import { EventHelper } from '../util/EventHelper';
+} from 'hudx-render';
+import { Circle, Z_SERIES } from 'hudx-render';
+import { EventHelper } from 'hudx-render';
 
 export default class ScatterChart extends Chart {
   private _activeScatters: Map<number, Circle[]> = new Map();

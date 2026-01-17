@@ -7,7 +7,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "tsc --build",
+    "build": "pnpm -r run build",
+    "type-check": "tsc --build",
     "dev": "pnpm -r dev",
     "dev:examples": "pnpm --filter HudX/examples dev",
     "test": "pnpm -r test",
@@ -20,7 +21,7 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "prettier": "^3.8.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": ">=20.0.0",

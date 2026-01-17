@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-core';
-import type { RenderMode } from 'hudx-core';
+import { ThemeManager, Theme } from 'hudx-render';
+import type { RenderMode } from 'hudx-render';
 
 export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);

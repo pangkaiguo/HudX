@@ -1,10 +1,10 @@
-import Chart from '../Chart';
 import {
+  Chart,
+  type SeriesOption,
+  type ChartData,
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
-} from '../util/coordinate';
-import {
   Polyline,
   Circle,
   Text,
@@ -17,9 +17,10 @@ import {
   Z_SERIES,
   Z_LABEL,
   Z_AXIS,
-} from 'hudx-core';
-import { getSmoothPath, getSmoothAreaPath } from '../util/curve';
-import { createSymbol } from '../util/symbol';
+  getSmoothPath,
+  getSmoothAreaPath,
+  createSymbol,
+} from 'hudx-render';
 
 export default class LineChart extends Chart {
   private _activeLines: Map<
@@ -79,7 +80,10 @@ export default class LineChart extends Chart {
 
       const option = this._option;
       const series = option.series || [];
-      if (series.length === 0) return;
+      if (series.length === 0) {
+        this._renderer.flush();
+        return;
+      }
 
       const {
         x: plotX,
@@ -91,6 +95,12 @@ export default class LineChart extends Chart {
       const xAxis = Array.isArray(option.xAxis)
         ? option.xAxis[0]
         : option.xAxis;
+
+      // Auto-detect category axis if data is provided but type is missing
+      if (xAxis && !xAxis.type && xAxis.data && xAxis.data.length > 0) {
+        xAxis.type = 'category';
+      }
+
       const yAxis = Array.isArray(option.yAxis)
         ? option.yAxis[0]
         : option.yAxis;

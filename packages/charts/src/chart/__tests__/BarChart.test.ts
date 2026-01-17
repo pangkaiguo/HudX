@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import BarChart from '../BarChart';
-import type { ChartOption } from '../../types';
+import type { ChartOption } from 'hudx-render';
 
 // Mock canvas and context
 const mockContext = {

@@ -58,7 +58,7 @@ interface ThemeToken {
 You can access theme tokens via `ThemeManager` or directly from the theme configuration.
 
 ```typescript
-import { ThemeManager } from "hudx-core";
+import { ThemeManager } from "hudx-render";
 
 // 1. Register/Update Tokens
 ThemeManager.registerToken("light", {
@@ -80,7 +80,7 @@ This is particularly useful when you want to align chart colors with your design
 #### In Renderer
 
 ```typescript
-import { Renderer, Circle } from "hudx-core";
+import { Renderer, Circle } from "hudx-render";
 
 // Specify theme when creating
 const renderer = Renderer.init("#container", "canvas", "dark");
@@ -121,7 +121,7 @@ import { HChart } from "hudx-charts";
 ### Custom Themes
 
 ```typescript
-import { ThemeManager } from "hudx-core";
+import { ThemeManager } from "hudx-render";
 
 // Register custom theme
 ThemeManager.registerTheme("custom", {
@@ -163,7 +163,7 @@ HudX supports multiple languages with the ability to add custom languages.
 #### In Renderer
 
 ```typescript
-import { Renderer, Circle } from "hudx-core";
+import { Renderer, Circle } from "hudx-render";
 
 // Specify locale when creating
 const renderer = Renderer.init("#container", "canvas", "light", "zh-CN");
@@ -204,7 +204,7 @@ import { HChart } from "hudx-charts";
 ### Adding Custom Language
 
 ```typescript
-import { LocaleManager } from "hudx-core";
+import { LocaleManager } from "hudx-render";
 
 // Register custom language
 LocaleManager.registerLocale("custom", {
@@ -285,7 +285,7 @@ function LocaleSwitcher() {
 ### System Theme Detection
 
 ```typescript
-import { Renderer } from "hudx-core";
+import { Renderer } from "hudx-render";
 
 // Detect system theme preference
 const darkModePreferred = window.matchMedia(

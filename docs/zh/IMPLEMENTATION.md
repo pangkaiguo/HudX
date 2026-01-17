@@ -8,7 +8,7 @@
 
 HudX 采用分层架构，分为两个主要包：
 
-1. **hudx-core**: 核心渲染引擎，类似 hrender，支持 Canvas 和 SVG 两种渲染模式
+1. **hudx-render**: 核心渲染引擎，类似 hudx-render，支持 Canvas 和 SVG 两种渲染模式
 2. **hudx-charts**: 图表库，类似 echarts
 
 ### MVC 模式
@@ -507,7 +507,7 @@ interface EventData {
 
 1. 创建 Shape 类继承 Element
 2. 实现 `getBoundingRect()`, `contain()`, `render()` 方法
-3. 在 `packages/core/src/index.ts` 导出
+3. 在 `packages/render/src/index.ts` 导出
 
 ### 添加新图表类型
 

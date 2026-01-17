@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import PieChart from '../PieChart';
-import type { ChartOption } from '../../types';
+import type { ChartOption } from 'hudx-render';
 
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),
@@ -38,11 +38,11 @@ beforeAll(() => {
   vi.stubGlobal(
     'Path2D',
     class Path2D {
-      constructor(d?: string | Path2D) {}
-      addPath(path: Path2D, transform?: DOMMatrix2DInit) {}
-      closePath() {}
-      moveTo(x: number, y: number) {}
-      lineTo(x: number, y: number) {}
+      constructor(d?: string | Path2D) { }
+      addPath(path: Path2D, transform?: DOMMatrix2DInit) { }
+      closePath() { }
+      moveTo(x: number, y: number) { }
+      lineTo(x: number, y: number) { }
       bezierCurveTo(
         cp1x: number,
         cp1y: number,
@@ -50,8 +50,8 @@ beforeAll(() => {
         cp2y: number,
         x: number,
         y: number,
-      ) {}
-      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) {}
+      ) { }
+      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) { }
       arc(
         x: number,
         y: number,
@@ -59,8 +59,8 @@ beforeAll(() => {
         startAngle: number,
         endAngle: number,
         counterclockwise?: boolean,
-      ) {}
-      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {}
+      ) { }
+      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) { }
       ellipse(
         x: number,
         y: number,
@@ -70,8 +70,8 @@ beforeAll(() => {
         startAngle: number,
         endAngle: number,
         counterclockwise?: boolean,
-      ) {}
-      rect(x: number, y: number, w: number, h: number) {}
+      ) { }
+      rect(x: number, y: number, w: number, h: number) { }
     },
   );
 });
