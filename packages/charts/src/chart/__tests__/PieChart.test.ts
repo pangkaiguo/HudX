@@ -244,6 +244,130 @@ describe('PieChart', () => {
     vi.useRealTimers();
   });
 
+  it('doughnut chart should keep inner radius unchanged on hover', () => {
+    vi.useFakeTimers();
+    const chart = new PieChart(container);
+    chart.setOption({
+      animation: false,
+      series: [
+        {
+          type: 'doughnut',
+          data: [
+            { value: 10, name: 'A' },
+            { value: 20, name: 'B' },
+          ],
+          emphasis: {
+            focus: 'self',
+            scaleSize: 1.2,
+          },
+        },
+      ],
+    });
+
+    const sectors = Array.from((chart as any)._activeSectors.values());
+    const sectorA = sectors.find((s: any) => s.name === 'A') as any;
+    expect(sectorA).toBeDefined();
+
+    const baseR = sectorA.shape.r;
+    const baseR0 = sectorA.shape.r0;
+
+    (chart as any)._onLegendHover('A', true);
+    vi.advanceTimersByTime(250);
+
+    expect(sectorA.shape.r0).toBeCloseTo(baseR0);
+    expect(sectorA.shape.r).toBeGreaterThan(baseR);
+    expect(sectorA.transform?.scaleX ?? 1).toBeCloseTo(1);
+    expect(sectorA.transform?.scaleY ?? 1).toBeCloseTo(1);
+
+    (chart as any)._onLegendHover('A', false);
+    vi.advanceTimersByTime(350);
+
+    expect(sectorA.shape.r0).toBeCloseTo(baseR0);
+    expect(sectorA.shape.r).toBeCloseTo(baseR);
+
+    vi.useRealTimers();
+  });
+
+  it('doughnut chart should restore previous sector when switching hover A->B', () => {
+    vi.useFakeTimers();
+    const chart = new PieChart(container);
+    chart.setOption({
+      animation: false,
+      series: [
+        {
+          type: 'doughnut',
+          data: [
+            { value: 10, name: 'A' },
+            { value: 20, name: 'B' },
+          ],
+          emphasis: {
+            focus: 'self',
+            scaleSize: 1.2,
+          },
+          label: { show: true, position: 'outside' },
+          labelLine: { show: true },
+        },
+      ],
+    });
+
+    const sectors = Array.from((chart as any)._activeSectors.values());
+    const sectorA = sectors.find((s: any) => s.name === 'A') as any;
+    const sectorB = sectors.find((s: any) => s.name === 'B') as any;
+    expect(sectorA).toBeDefined();
+    expect(sectorB).toBeDefined();
+
+    const baseRA = sectorA.shape.r;
+    const baseRB = sectorB.shape.r;
+
+    (chart as any)._onLegendHover('A', true);
+    vi.advanceTimersByTime(250);
+    expect(sectorA.shape.r).toBeGreaterThan(baseRA);
+
+    (chart as any)._onLegendHover('B', true);
+    vi.advanceTimersByTime(250);
+
+    expect(sectorA.shape.r).toBeCloseTo(baseRA);
+    expect(sectorA.style.opacity).toBeCloseTo(0.2);
+    expect(sectorB.shape.r).toBeGreaterThan(baseRB);
+
+    vi.useRealTimers();
+  });
+
+  it('should replay entry animation after switching render mode', () => {
+    vi.useFakeTimers();
+    const chart = new PieChart(container);
+    chart.setOption({
+      series: [
+        {
+          type: 'pie',
+          animationDuration: 200,
+          data: [
+            { value: 10, name: 'A' },
+            { value: 20, name: 'B' },
+          ],
+        },
+      ],
+    });
+
+    vi.advanceTimersByTime(400);
+
+    const sectorsBefore = Array.from((chart as any)._activeSectors.values()) as any[];
+    expect(sectorsBefore.length).toBe(2);
+    const aBefore = sectorsBefore.find((s: any) => s.name === 'A') as any;
+    expect(aBefore).toBeDefined();
+    expect(aBefore.shape.endAngle - aBefore.shape.startAngle).toBeGreaterThan(0.01);
+
+    chart.setRenderMode('svg');
+
+    const sectorsAfter = Array.from((chart as any)._activeSectors.values()) as any[];
+    expect(sectorsAfter.length).toBe(2);
+    const aAfter = sectorsAfter.find((s: any) => s.name === 'A') as any;
+    expect(aAfter).toBeDefined();
+    expect(Math.abs(aAfter.shape.endAngle - aAfter.shape.startAngle)).toBeLessThan(0.001);
+
+    vi.useRealTimers();
+  });
+
   it('should show label on hover when label.show is false but emphasis.label.show is true', () => {
     vi.useFakeTimers();
     const chart = new PieChart(container);

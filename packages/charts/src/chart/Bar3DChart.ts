@@ -12,9 +12,15 @@ import {
   Z_SERIES,
   EventHelper,
 } from 'hudx-render';
+import type { RenderMode } from 'hudx-render';
 
 export default class Bar3DChart extends Chart {
   private _activeGroups: Map<string, Group> = new Map();
+
+  setRenderMode(renderMode: RenderMode): void {
+    this._activeGroups = new Map();
+    super.setRenderMode(renderMode);
+  }
 
   protected _render(): void {
     try {
@@ -23,7 +29,7 @@ export default class Bar3DChart extends Chart {
       if (!this._activeGroups) {
         this._activeGroups = new Map();
       }
-      const oldGroups = this._activeGroups;
+      const oldGroups = this._forceReinitOnNextRender ? new Map() : this._activeGroups;
       this._activeGroups = new Map();
 
       const option = this._option;
@@ -316,7 +322,11 @@ export default class Bar3DChart extends Chart {
           const animateHeight = (targetHeight: number) => {
             if (this._shouldAnimateFor(seriesName) || oldGroup) {
               const isUpdate = !!oldGroup;
-              const delay = isUpdate ? 0 : index * 100 + seriesIndex * 200;
+              const baseDelay =
+                typeof seriesItem.animationDelay === 'function'
+                  ? seriesItem.animationDelay(index)
+                  : seriesItem.animationDelay ?? 0;
+              const delay = isUpdate ? 0 : baseDelay;
               const duration = this._getAnimationDuration(isUpdate);
 
               const animatorObj = { height: initialHeight };

@@ -1,4 +1,5 @@
 import { Chart } from 'hudx-render';
+import type { RenderMode } from 'hudx-render';
 import {
   createLinearScale,
   createOrdinalScale,
@@ -20,6 +21,11 @@ import { EventHelper } from 'hudx-render';
  */
 export default class BarChart extends Chart {
   private _activeBars: Map<string, Rect> = new Map();
+
+  setRenderMode(renderMode: RenderMode): void {
+    this._activeBars = new Map();
+    super.setRenderMode(renderMode);
+  }
 
   protected _onLegendHover(name: string, hovered: boolean): void {
     const seriesIndex = (this._option.series || []).findIndex((s, i) => {
@@ -56,7 +62,7 @@ export default class BarChart extends Chart {
         this._activeBars = new Map();
       }
 
-      const oldBars = this._activeBars;
+      const oldBars = this._forceReinitOnNextRender ? new Map() : this._activeBars;
       this._activeBars = new Map();
 
       const option = this._option;
@@ -268,11 +274,6 @@ export default class BarChart extends Chart {
       const groupInnerWidth =
         groupCount * barWidthPerSeries + (groupCount - 1) * gapWidth;
 
-      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, {
-        x: xScale,
-        y: yScale,
-      });
-
       // Setup Axis Pointer (Guide Line)
       let axisPointerLine: Line | null = null;
 
@@ -320,6 +321,10 @@ export default class BarChart extends Chart {
       const stackValues: Record<
         string,
         Record<string, { pos: number; neg: number }>
+      > = {};
+      const stackPixels: Record<
+        string,
+        Record<string, { pos?: number; neg?: number }>
       > = {};
       const lastBars: Record<
         string,
@@ -388,6 +393,12 @@ export default class BarChart extends Chart {
           if (!stackValues[catKey][stackId]) {
             stackValues[catKey][stackId] = { pos: 0, neg: 0 };
           }
+          if (!stackPixels[catKey]) {
+            stackPixels[catKey] = {};
+          }
+          if (!stackPixels[catKey][stackId]) {
+            stackPixels[catKey][stackId] = {};
+          }
 
           const valueVal = isHorizontal ? xVal : yVal;
 
@@ -412,8 +423,22 @@ export default class BarChart extends Chart {
           const barCategoryPos =
             groupStart + stackGroupIndex * (barWidthPerSeries + gapWidth);
 
-          const barValueEnd = valueScale(topValue);
-          const barValueStart = valueScale(baseValue);
+          const rawBarValueEnd = valueScale(topValue);
+          const barValueEnd = Math.round(rawBarValueEnd);
+          const pixelState = stackPixels[catKey][stackId];
+          if (pixelState.pos === undefined || pixelState.neg === undefined) {
+            const zeroPx = Math.round(valueScale(0));
+            if (pixelState.pos === undefined) pixelState.pos = zeroPx;
+            if (pixelState.neg === undefined) pixelState.neg = zeroPx;
+          }
+          const barValueStart = isPositive
+            ? (pixelState.pos ?? Math.round(valueScale(baseValue)))
+            : (pixelState.neg ?? Math.round(valueScale(baseValue)));
+          if (isPositive) {
+            pixelState.pos = barValueEnd;
+          } else {
+            pixelState.neg = barValueEnd;
+          }
 
           let barX, barY, barWidth, barHeight;
 
@@ -498,12 +523,12 @@ export default class BarChart extends Chart {
           } else {
             if (isHorizontal) {
               initialWidth = 0;
-              initialX = valueScale(baseValue);
+              initialX = barValueStart;
               initialY = barY;
               initialHeight = barHeight;
             } else {
               initialHeight = 0;
-              initialY = valueScale(baseValue);
+              initialY = barValueStart;
               initialX = barX;
               initialWidth = barWidth;
             }
@@ -712,8 +737,11 @@ export default class BarChart extends Chart {
             const isUpdate = !!oldBar;
             // If chart has existing bars (update scenario), skip staggered delay to ensure sync
             const hasOldBars = oldBars.size > 0;
-            const delay =
-              isUpdate || hasOldBars ? 0 : index * 100 + seriesIndex * 200;
+            const baseDelay =
+              typeof seriesItem.animationDelay === 'function'
+                ? seriesItem.animationDelay(index)
+                : seriesItem.animationDelay ?? 0;
+            const delay = isUpdate || hasOldBars ? 0 : baseDelay;
             const duration = this._getAnimationDuration(isUpdate);
 
             // Animate properties
@@ -813,6 +841,11 @@ export default class BarChart extends Chart {
               .start();
           }
         }
+      });
+
+      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, {
+        x: xScale,
+        y: yScale,
       });
 
       this._renderer.flush();

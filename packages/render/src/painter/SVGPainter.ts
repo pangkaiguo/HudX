@@ -157,22 +157,37 @@ export default class SVGPainter implements IPainter {
     if (transform) {
       const transforms: string[] = [];
 
-      if (transform.x !== undefined || transform.y !== undefined) {
-        transforms.push(`translate(${transform.x ?? 0}, ${transform.y ?? 0})`);
+      const x = transform.x ?? 0;
+      const y = transform.y ?? 0;
+      const originX = transform.originX ?? 0;
+      const originY = transform.originY ?? 0;
+      const rotation = transform.rotation ?? 0;
+      const scaleX = transform.scaleX ?? 1;
+      const scaleY = transform.scaleY ?? 1;
+
+      if (x !== 0 || y !== 0) {
+        transforms.push(`translate(${x}, ${y})`);
       }
 
-      if (transform.scaleX !== undefined || transform.scaleY !== undefined) {
-        transforms.push(
-          `scale(${transform.scaleX ?? 1}, ${transform.scaleY ?? 1})`,
-        );
+      const hasScale = scaleX !== 1 || scaleY !== 1;
+      const hasRotation = rotation !== 0;
+      const hasOrigin = originX !== 0 || originY !== 0;
+      const needOriginTransform = hasOrigin && (hasScale || hasRotation);
+
+      if (needOriginTransform) {
+        transforms.push(`translate(${originX}, ${originY})`);
       }
 
-      if (transform.rotation) {
-        const originX = transform.originX ?? 0;
-        const originY = transform.originY ?? 0;
-        transforms.push(
-          `rotate(${(transform.rotation * 180) / Math.PI} ${originX} ${originY})`,
-        );
+      if (hasRotation) {
+        transforms.push(`rotate(${(rotation * 180) / Math.PI})`);
+      }
+
+      if (hasScale) {
+        transforms.push(`scale(${scaleX}, ${scaleY})`);
+      }
+
+      if (needOriginTransform) {
+        transforms.push(`translate(${-originX}, ${-originY})`);
       }
 
       if (transforms.length > 0) {

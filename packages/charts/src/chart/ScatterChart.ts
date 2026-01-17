@@ -232,7 +232,11 @@ export default class ScatterChart extends Chart {
           }
 
           if (this._isAnimationEnabled()) {
-            const delay = index * 50 + seriesIndex * 100;
+            const baseDelay =
+              typeof s.animationDelay === 'function'
+                ? s.animationDelay(index)
+                : s.animationDelay ?? 0;
+            const delay = baseDelay;
             const duration = this._getAnimationDuration() / 2;
 
             circle.shape.r = 0;

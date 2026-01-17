@@ -46,6 +46,7 @@ export default class Chart {
   protected _animationId: number | null = null;
   protected _renderScheduled: boolean = false;
   protected _animator: Animator = new Animator();
+  protected _forceReinitOnNextRender: boolean = false;
   protected _tooltip?: Tooltip;
   protected _legend?: Legend;
   protected _title?: Title;
@@ -78,8 +79,14 @@ export default class Chart {
    * Set render mode
    */
   setRenderMode(renderMode: RenderMode): void {
+    if (this.getRenderMode() === renderMode) {
+      return;
+    }
+    this.stopAnimation();
+    this._forceReinitOnNextRender = true;
     this._renderer.setRenderMode(renderMode);
     this._render();
+    this._forceReinitOnNextRender = false;
   }
 
   getTheme(): Theme {

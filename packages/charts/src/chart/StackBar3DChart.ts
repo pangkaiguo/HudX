@@ -1,4 +1,5 @@
 import { Chart } from 'hudx-render';
+import type { RenderMode } from 'hudx-render';
 import {
   createLinearScale,
   createOrdinalScale,
@@ -18,6 +19,11 @@ import {
 export default class StackBar3DChart extends Chart {
   private _activeGroups: Map<string, Group> = new Map();
 
+  setRenderMode(renderMode: RenderMode): void {
+    this._activeGroups = new Map();
+    super.setRenderMode(renderMode);
+  }
+
   protected _render(): void {
     try {
       super._render();
@@ -25,7 +31,7 @@ export default class StackBar3DChart extends Chart {
       if (!this._activeGroups) {
         this._activeGroups = new Map();
       }
-      const oldGroups = this._activeGroups;
+      const oldGroups = this._forceReinitOnNextRender ? new Map() : this._activeGroups;
       this._activeGroups = new Map();
 
       const option = this._option;

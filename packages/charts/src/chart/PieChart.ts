@@ -1,5 +1,5 @@
-import { Chart } from 'hudx-render';
-import type { SeriesOption, ChartData, EmphasisOption } from 'hudx-render';
+import { Chart, Animator } from 'hudx-render';
+import type { SeriesOption, ChartData, EmphasisOption, RenderMode } from 'hudx-render';
 import {
   Sector,
   Text,
@@ -29,6 +29,19 @@ export default class PieChart extends Chart {
   private _centerLabel: Text | null = null;
   private _restoreTimeout: any = null;
   private _prevRoseType: boolean | string = false;
+  private _hoverAnimator: Animator = new Animator();
+  private _hoveredSectorName: string | null = null;
+
+  setRenderMode(renderMode: RenderMode): void {
+    this._activeSectors = new Map();
+    this._hoveredSectorName = null;
+    this._hoverAnimator.stopAll();
+    if (this._restoreTimeout) {
+      clearTimeout(this._restoreTimeout);
+      this._restoreTimeout = null;
+    }
+    super.setRenderMode(renderMode);
+  }
 
   protected _render(): void {
     try {
@@ -90,7 +103,9 @@ export default class PieChart extends Chart {
       this._centerLabel = null;
     }
 
-    const oldSectors = this._activeSectors || new Map();
+    const oldSectors = this._forceReinitOnNextRender
+      ? new Map()
+      : this._activeSectors || new Map();
     this._activeSectors = new Map();
     this._root.removeAll();
     this._mountTitle();
@@ -306,6 +321,12 @@ export default class PieChart extends Chart {
         currentAngle: initialStart,
         angle: initialEnd - initialStart,
       });
+      (sector as any).__targetShape = {
+        startAngle: targetStart,
+        endAngle: targetEnd,
+        r: itemR,
+        r0,
+      };
 
       // Override radius for initial state if animating
       if (oldSector) {
@@ -341,7 +362,11 @@ export default class PieChart extends Chart {
       // Animate
       const shouldAnimate = this._shouldAnimateFor(itemName);
       if (shouldAnimate) {
-        const delay = oldSector ? 0 : index * 100; // Staggered entry
+        const baseDelay =
+          typeof seriesItem.animationDelay === 'function'
+            ? seriesItem.animationDelay(index)
+            : seriesItem.animationDelay ?? 0;
+        const delay = oldSector ? 0 : baseDelay;
         const duration = seriesItem.animationDuration || 500;
         const easing = seriesItem.animationEasing || 'cubicOut';
 
@@ -592,6 +617,10 @@ export default class PieChart extends Chart {
     if (!this._tooltip && !seriesItem.emphasis) return undefined;
 
     const emphasis = seriesItem.emphasis;
+    const itemName =
+      typeof item === 'object' && item !== null && !Array.isArray(item) && item.name
+        ? String(item.name)
+        : `item-${index + 1}`;
 
     const onMouseOver = (evt: any) => {
       if (this._restoreTimeout) {
@@ -599,7 +628,11 @@ export default class PieChart extends Chart {
         this._restoreTimeout = null;
       }
 
-      this._applyEmphasisAnimation(sector, emphasis, true, r);
+      if (this._hoveredSectorName !== itemName) {
+        this._hoveredSectorName = itemName;
+        this._hoverAnimator.stopAll();
+        this._applyEmphasisAnimation(sector, emphasis, true);
+      }
 
       if (this._tooltip) {
         const params = this._createTooltipParams(
@@ -631,9 +664,19 @@ export default class PieChart extends Chart {
     };
 
     const onMouseOut = () => {
-      // Delay restore to prevent flickering when moving between sectors
+      if (this._hoveredSectorName === itemName) {
+        this._hoveredSectorName = null;
+      }
+      if (this._restoreTimeout) {
+        clearTimeout(this._restoreTimeout);
+      }
       this._restoreTimeout = setTimeout(() => {
-        this._applyEmphasisAnimation(sector, emphasis, false, r);
+        if (this._hoveredSectorName !== null) {
+          return;
+        }
+
+        this._hoverAnimator.stopAll();
+        this._applyEmphasisAnimation(sector, emphasis, false);
 
         if (this._tooltip) {
           this._tooltip.hide();
@@ -646,7 +689,7 @@ export default class PieChart extends Chart {
 
         this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
         this._restoreTimeout = null;
-      }, 50);
+      }, 80);
     };
 
     EventHelper.bindHoverEvents(sector, onMouseOver, onMouseOut);
@@ -690,11 +733,27 @@ export default class PieChart extends Chart {
 
         if (this._tooltip) {
           if (!this._tooltip.isVisible() || needsEmphasis) {
-            this._applyEmphasisAnimation(sector, emphasis, true, r);
+            if (this._hoveredSectorName !== itemName) {
+              if (this._restoreTimeout) {
+                clearTimeout(this._restoreTimeout);
+                this._restoreTimeout = null;
+              }
+              this._hoveredSectorName = itemName;
+              this._hoverAnimator.stopAll();
+              this._applyEmphasisAnimation(sector, emphasis, true);
+            }
           }
           this._tooltip.show(mx, my, content, params);
         } else if (needsEmphasis) {
-          this._applyEmphasisAnimation(sector, emphasis, true, r);
+          if (this._hoveredSectorName !== itemName) {
+            if (this._restoreTimeout) {
+              clearTimeout(this._restoreTimeout);
+              this._restoreTimeout = null;
+            }
+            this._hoveredSectorName = itemName;
+            this._hoverAnimator.stopAll();
+            this._applyEmphasisAnimation(sector, emphasis, true);
+          }
         }
       });
     });
@@ -1123,6 +1182,10 @@ export default class PieChart extends Chart {
             duration: seriesItem.animationDuration || 500,
             delay: 100, // Small delay to let sector expand a bit
             onUpdate: () => {
+              const override = (text as any).__hoverOpacityOverride;
+              if (override !== undefined) {
+                text.style.opacity = override;
+              }
               text.markRedraw();
               this._renderer.refresh();
             },
@@ -1172,6 +1235,10 @@ export default class PieChart extends Chart {
               duration: seriesItem.animationDuration || 500,
               delay: 100,
               onUpdate: () => {
+                const override = (line as any).__hoverOpacityOverride;
+                if (override !== undefined) {
+                  line.style.opacity = override;
+                }
                 line.markRedraw();
                 this._renderer.refresh();
               },
@@ -1330,10 +1397,9 @@ export default class PieChart extends Chart {
         this._restoreTimeout = null;
       }
 
-      // Stop any ongoing animations to prevent conflict/glitch
-      this._animator.stopAll();
-
-      this._applyEmphasisAnimation(sector, emphasis, true, r);
+      this._hoveredSectorName = name;
+      this._hoverAnimator.stopAll();
+      this._applyEmphasisAnimation(sector, emphasis, true);
 
       const seriesType = seriesItem.type || 'pie';
       if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
@@ -1353,7 +1419,11 @@ export default class PieChart extends Chart {
         );
       }
     } else {
-      this._applyEmphasisAnimation(sector, emphasis, false, r);
+      if (this._hoveredSectorName === name) {
+        this._hoveredSectorName = null;
+      }
+      this._hoverAnimator.stopAll();
+      this._applyEmphasisAnimation(sector, emphasis, false);
 
       const seriesType = seriesItem.type || 'pie';
       if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
@@ -1370,7 +1440,7 @@ export default class PieChart extends Chart {
           const total = this._calculateTotal(seriesItem.data || []);
           this._renderStaticCenterLabel(seriesItem, cx, cy, r0, total);
           this._restoreTimeout = null;
-        }, 50);
+        }, 80);
       }
     }
   }
@@ -1379,10 +1449,9 @@ export default class PieChart extends Chart {
     sector: Sector,
     emphasis: EmphasisOption | undefined,
     isEnter: boolean,
-    baseR?: number,
   ): void {
     if (isEnter) {
-      this._applyEnterEmphasis(sector, emphasis, baseR);
+      this._applyEnterEmphasis(sector, emphasis);
     } else {
       this._applyLeaveEmphasis(sector);
     }
@@ -1391,7 +1460,6 @@ export default class PieChart extends Chart {
   private _applyEnterEmphasis(
     sector: Sector,
     emphasis: EmphasisOption | undefined,
-    baseR?: number,
   ) {
     const seriesItem = (sector as any).__seriesItem;
     const showOnHover = seriesItem?.label?.showOnHover;
@@ -1400,40 +1468,27 @@ export default class PieChart extends Chart {
     // 1. Handle OTHER sectors (dimming)
     this._activeSectors.forEach((s) => {
       if (s !== sector) {
-        let sectorTargetOpacity = (s as any).__initialStyle?.opacity ?? 1;
-
         if (focus === 'self') {
-          sectorTargetOpacity = 0.2;
-          this._animator
-            .animate(s.style, 'opacity', 0.2, {
-              duration: 200,
-              onUpdate: () => {
-                s.markRedraw();
-                this._renderer.refresh();
-              },
-            })
-            .start();
+          s.style.opacity = 0.2;
+          s.markRedraw();
+        }
+
+        const seriesType = (s as any).__seriesItem?.type || 'pie';
+        const isDoughnut =
+          seriesType === 'doughnut' || seriesType === 'half-doughnut';
+        if (isDoughnut) {
+          const baseR = (s as any).__baseR;
+          if (baseR !== undefined && s.shape && typeof s.shape === 'object') {
+            (s.shape as any).r = baseR;
+            s.markRedraw();
+          }
         }
 
         // Handle Label & Line
         this._animateLabelAndLineOpacity(s, focus, showOnHover, false);
 
-        // Reset other properties
-        const sBaseR = (s as any).__baseR;
-        if (sBaseR !== undefined) {
-          this._animator
-            .animate(s.shape, 'r', sBaseR, {
-              duration: 200,
-              easing: 'cubicOut',
-              onUpdate: () => {
-                s.markRedraw();
-                this._renderer.refresh();
-              },
-            })
-            .start();
-        }
         if (s.transform) {
-          this._animator
+          this._hoverAnimator
             .animate(s.transform, 'scaleX', 1, {
               duration: 200,
               easing: 'cubicOut',
@@ -1443,7 +1498,7 @@ export default class PieChart extends Chart {
               },
             })
             .start();
-          this._animator
+          this._hoverAnimator
             .animate(s.transform, 'scaleY', 1, {
               duration: 200,
               easing: 'cubicOut',
@@ -1474,7 +1529,7 @@ export default class PieChart extends Chart {
     }
 
     // Scale animation (handled in _applyScaleAnimation)
-    this._applyScaleAnimation(sector, emphasis, true, (sector as any).__baseR);
+    this._applyScaleAnimation(sector, emphasis, true);
 
     // Label animation
     this._animateCurrentLabel(sector, emphasis, showOnHover);
@@ -1488,31 +1543,25 @@ export default class PieChart extends Chart {
     // Restore ALL sectors
     this._activeSectors.forEach((s) => {
       const initOpacity = (s as any).__initialStyle?.opacity ?? 1;
-      this._animator
-        .animate(s.style, 'opacity', initOpacity, {
-          duration: 300,
-          easing: 'cubicOut',
-          onUpdate: () => {
-            s.markRedraw();
-            this._renderer.refresh();
-          },
-        })
-        .start();
+      s.style.opacity = initOpacity;
+      const baseR = (s as any).__baseR;
+      if (baseR !== undefined && s.shape && typeof s.shape === 'object') {
+        (s.shape as any).r = baseR;
+      }
+      if (s.transform) {
+        s.transform.scaleX = 1;
+        s.transform.scaleY = 1;
+      }
 
       // Restore Label & Line
       this._restoreLabelAndLine(s);
+      this._restoreSectorStyle(s);
+      s.markRedraw();
     });
-
-    // Restore Scale
-    this._applyScaleAnimation(
-      sector,
-      undefined,
-      false,
-      (sector as any).__baseR,
-    );
 
     // Restore Style
     this._restoreSectorStyle(sector);
+    this._renderer.refresh();
   }
 
   private _animateLabelAndLineOpacity(
@@ -1535,19 +1584,10 @@ export default class PieChart extends Chart {
           targetOpacity = 0;
         }
       }
-
-      this._animator
-        .animate(label.style, 'opacity', targetOpacity, {
-          duration: 200,
-          onUpdate: () => {
-            label.markRedraw();
-            this._renderer.refresh();
-          },
-          onComplete: () => {
-            if (targetOpacity === 0) label.invisible = true;
-          },
-        })
-        .start();
+      label.style.opacity = targetOpacity;
+      label.invisible = targetOpacity === 0;
+      (label as any).__hoverOpacityOverride = targetOpacity;
+      label.markRedraw();
     }
 
     if (labelLine) {
@@ -1561,20 +1601,12 @@ export default class PieChart extends Chart {
           targetOpacity = 0;
         }
       }
-
-      this._animator
-        .animate(labelLine.style, 'opacity', targetOpacity, {
-          duration: 200,
-          onUpdate: () => {
-            labelLine.markRedraw();
-            this._renderer.refresh();
-          },
-          onComplete: () => {
-            if (targetOpacity === 0) labelLine.invisible = true;
-          },
-        })
-        .start();
+      labelLine.style.opacity = targetOpacity;
+      labelLine.invisible = targetOpacity === 0;
+      (labelLine as any).__hoverOpacityOverride = targetOpacity;
+      labelLine.markRedraw();
     }
+    this._renderer.refresh();
   }
 
   private _restoreLabelAndLine(sector: Sector) {
@@ -1583,37 +1615,20 @@ export default class PieChart extends Chart {
 
     if (label) {
       const initLabelOpacity = label.__initialStyle?.opacity ?? 1;
-      this._animator
-        .animate(label.style, 'opacity', initLabelOpacity, {
-          duration: 300,
-          easing: 'cubicOut',
-          onUpdate: () => {
-            label.markRedraw();
-            this._renderer.refresh();
-          },
-          onComplete: () => {
-            if (initLabelOpacity === 0) label.invisible = true;
-          },
-        })
-        .start();
+      label.style.opacity = initLabelOpacity;
+      label.invisible = initLabelOpacity === 0;
+      (label as any).__hoverOpacityOverride = initLabelOpacity;
+      label.markRedraw();
     }
 
     if (labelLine) {
       const initLineOpacity = labelLine.__initialStyle?.opacity ?? 1;
-      this._animator
-        .animate(labelLine.style, 'opacity', initLineOpacity, {
-          duration: 300,
-          easing: 'cubicOut',
-          onUpdate: () => {
-            labelLine.markRedraw();
-            this._renderer.refresh();
-          },
-          onComplete: () => {
-            if (initLineOpacity === 0) labelLine.invisible = true;
-          },
-        })
-        .start();
+      labelLine.style.opacity = initLineOpacity;
+      labelLine.invisible = initLineOpacity === 0;
+      (labelLine as any).__hoverOpacityOverride = initLineOpacity;
+      labelLine.markRedraw();
     }
+    this._renderer.refresh();
   }
 
   private _animateCurrentLabel(
@@ -1636,28 +1651,15 @@ export default class PieChart extends Chart {
     if (empLabel.show !== undefined) {
       label.invisible = !empLabel.show;
       label.style.opacity = empLabel.show ? 1 : 0;
+      (label as any).__hoverOpacityOverride = label.style.opacity;
     } else if (finalShowOnHover) {
       label.invisible = false;
-      this._animator
-        .animate(label.style, 'opacity', 1, {
-          duration: 200,
-          onUpdate: () => {
-            label.markRedraw();
-            this._renderer.refresh();
-          },
-        })
-        .start();
+      label.style.opacity = 1;
+      (label as any).__hoverOpacityOverride = 1;
     } else {
       if (!label.invisible && (label.style.opacity as number) < 1) {
-        this._animator
-          .animate(label.style, 'opacity', 1, {
-            duration: 200,
-            onUpdate: () => {
-              label.markRedraw();
-              this._renderer.refresh();
-            },
-          })
-          .start();
+        label.style.opacity = 1;
+        (label as any).__hoverOpacityOverride = 1;
       }
     }
 
@@ -1675,20 +1677,14 @@ export default class PieChart extends Chart {
     if (labelLine) {
       if (labelLine.invisible || (labelLine.style.opacity as number) < 1) {
         labelLine.invisible = false;
-        this._animator
-          .animate(labelLine.style, 'opacity', 1, {
-            duration: 200,
-            onUpdate: () => {
-              labelLine.markRedraw();
-              this._renderer.refresh();
-            },
-          })
-          .start();
+        labelLine.style.opacity = 1;
+        (labelLine as any).__hoverOpacityOverride = 1;
       }
     }
 
     label.markRedraw();
     if (labelLine) labelLine.markRedraw();
+    this._renderer.refresh();
   }
 
   private _applyEmphasisStyle(sector: Sector, emphasisStyle: any) {
@@ -1717,23 +1713,10 @@ export default class PieChart extends Chart {
 
     Object.keys(targetStyle).forEach((key) => {
       const value = targetStyle[key];
-      if (typeof value === 'number') {
-        this._animator
-          .animate(style, key, value, {
-            duration: 200,
-            easing: 'cubicOut',
-            onUpdate: () => {
-              sector.markRedraw();
-              this._renderer.refresh();
-            },
-          })
-          .start();
-      } else {
-        style[key] = value;
-        sector.markRedraw();
-        this._renderer.refresh();
-      }
+      style[key] = value as any;
     });
+    sector.markRedraw();
+    this._renderer.refresh();
   }
 
   private _restoreSectorStyle(sector: Sector) {
@@ -1754,74 +1737,33 @@ export default class PieChart extends Chart {
 
     Object.keys(targetStyle).forEach((key) => {
       const value = targetStyle[key];
-      if (typeof value === 'number') {
-        this._animator
-          .animate(style, key, value, {
-            duration: 200,
-            easing: 'cubicOut',
-            onUpdate: () => {
-              sector.markRedraw();
-              this._renderer.refresh();
-            },
-          })
-          .start();
-      } else {
-        style[key] = value;
-        sector.markRedraw();
-        this._renderer.refresh();
-      }
+      style[key] = value as any;
     });
+    sector.markRedraw();
+    this._renderer.refresh();
   }
 
   private _applyScaleAnimation(
     sector: Sector,
     emphasis: EmphasisOption | undefined,
     isEnter: boolean,
-    baseR?: number,
   ) {
-    if (isEnter && emphasis && baseR !== undefined) {
-      const scaleSize = emphasis.scaleSize || 1.1;
-      const targetR = baseR * scaleSize;
-      this._animator
-        .animate(sector.shape, 'r', targetR, {
-          duration: 200,
-          easing: 'cubicOut',
-          onUpdate: () => {
-            sector.markRedraw();
-            this._renderer.refresh();
-          },
-        })
-        .start();
-    } else if (isEnter && emphasis) {
-      // Transform scale fallback
-      const scaleSize = emphasis.scaleSize || 1.1;
-      this._animator
-        .animate(sector.transform || {}, 'scaleX', scaleSize, {
-          duration: 200,
-          easing: 'cubicOut',
-          onUpdate: () => {
-            sector.markRedraw();
-            this._renderer.refresh();
-          },
-        })
-        .start();
-      this._animator
-        .animate(sector.transform || {}, 'scaleY', scaleSize, {
-          duration: 200,
-          easing: 'cubicOut',
-          onUpdate: () => {
-            sector.markRedraw();
-            this._renderer.refresh();
-          },
-        })
-        .start();
-    } else {
-      // Restore
-      // If baseR is provided, restore radius
-      if (baseR !== undefined) {
-        this._animator
-          .animate(sector.shape, 'r', baseR, {
-            duration: 300,
+    const scaleSize = isEnter && emphasis ? emphasis.scaleSize || 1.1 : 1;
+    const duration = isEnter ? 160 : 220;
+
+    const seriesType = (sector as any).__seriesItem?.type || 'pie';
+    const isDoughnut =
+      seriesType === 'doughnut' || seriesType === 'half-doughnut';
+    if (isDoughnut) {
+      const baseR = (sector as any).__baseR;
+      if (baseR !== undefined && sector.shape && typeof sector.shape === 'object') {
+        if (sector.transform) {
+          sector.transform.scaleX = 1;
+          sector.transform.scaleY = 1;
+        }
+        this._hoverAnimator
+          .animate(sector.shape as any, 'r', baseR * scaleSize, {
+            duration,
             easing: 'cubicOut',
             onUpdate: () => {
               sector.markRedraw();
@@ -1829,29 +1771,29 @@ export default class PieChart extends Chart {
             },
           })
           .start();
-      } else {
-        // Restore transform scale
-        this._animator
-          .animate(sector.transform || {}, 'scaleX', 1, {
-            duration: 300,
-            easing: 'cubicOut',
-            onUpdate: () => {
-              sector.markRedraw();
-              this._renderer.refresh();
-            },
-          })
-          .start();
-        this._animator
-          .animate(sector.transform || {}, 'scaleY', 1, {
-            duration: 300,
-            easing: 'cubicOut',
-            onUpdate: () => {
-              sector.markRedraw();
-              this._renderer.refresh();
-            },
-          })
-          .start();
+        return;
       }
     }
+
+    this._hoverAnimator
+      .animate(sector.transform || {}, 'scaleX', scaleSize, {
+        duration,
+        easing: 'cubicOut',
+        onUpdate: () => {
+          sector.markRedraw();
+          this._renderer.refresh();
+        },
+      })
+      .start();
+    this._hoverAnimator
+      .animate(sector.transform || {}, 'scaleY', scaleSize, {
+        duration,
+        easing: 'cubicOut',
+        onUpdate: () => {
+          sector.markRedraw();
+          this._renderer.refresh();
+        },
+      })
+      .start();
   }
 }
