@@ -32,7 +32,7 @@ import { Renderer } from 'hudx-render';
 // 初始化渲染器
 const renderer = Renderer.init(
   dom: HTMLElement,           // 容器 DOM
-  renderMode?: 'canvas' | 'svg', // 渲染模式，默认 'canvas'
+  renderMode?: 'canvas' | 'svg', // 渲染模式，默认 'svg'
   theme?: string | object,    // 主题，默认 'light'
   locale?: string             // 语言，默认 'en'
 );
@@ -154,7 +154,7 @@ import { HChart } from 'hudx-charts';
   width={800}               // 宽度 (可选)
   height={600}              // 高度 (可选)
   theme="light"             // 主题
-  renderMode="canvas"       // 渲染模式 'canvas' | 'svg'
+  renderMode="svg"          // 渲染模式 'canvas' | 'svg'
   onEvents={{ click: ... }} // 事件绑定
 />
 ```

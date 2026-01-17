@@ -4,7 +4,7 @@ HudX supports two rendering modes: **Canvas** and **SVG**.
 
 ## Rendering Mode Comparison
 
-### Canvas Mode (Default)
+### Canvas Mode
 
 **Advantages**:
 
@@ -26,7 +26,7 @@ HudX supports two rendering modes: **Canvas** and **SVG**.
 - Interactive visualizations
 - Performance-critical scenarios
 
-### SVG Mode
+### SVG Mode (Default)
 
 **Advantages**:
 
@@ -159,7 +159,7 @@ Both rendering modes support the complete event system:
 
 ## Best Practices
 
-1. **Default to Canvas** - Use Canvas mode for most scenarios
+1. **Default to SVG** - Use SVG mode for most scenarios
 2. **Switch When Needed** - Switch to SVG for export or printing
 3. **Monitor Performance** - Test with your typical dataset size
 4. **Consider Responsiveness** - Both modes work well with responsive designs

@@ -7,6 +7,11 @@ import {
 } from 'hudx-render';
 import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from 'hudx-render';
 import { EventHelper } from 'hudx-render';
+import {
+  findSeriesIndexByDisplayName,
+  getSeriesDisplayName,
+  resolveAnimationDelay,
+} from './chartUtils';
 
 /**
  * BarChart - Bar chart implementation
@@ -23,15 +28,16 @@ export default class BarChart extends Chart {
   private _activeBars: Map<string, Rect> = new Map();
 
   setRenderMode(renderMode: RenderMode): void {
+    if (this.getRenderMode() === renderMode) {
+      return;
+    }
     this._activeBars = new Map();
     super.setRenderMode(renderMode);
   }
 
   protected _onLegendHover(name: string, hovered: boolean): void {
-    const seriesIndex = (this._option.series || []).findIndex((s, i) => {
-      const sName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
-      return sName === name;
-    });
+    const t = (key: string, defaultValue?: string) => this.t(key, defaultValue);
+    const seriesIndex = findSeriesIndexByDisplayName(t, this._option.series || [], name);
 
     if (seriesIndex === -1) return;
 
@@ -185,8 +191,11 @@ export default class BarChart extends Chart {
       const stacks: Record<string, any[]> = {};
       series.forEach((s, i) => {
         if (s.type !== 'bar' || s.show === false) return;
-        const seriesName =
-          s.name || this.t('series.name', 'Series') + '-' + (i + 1);
+        const seriesName = getSeriesDisplayName(
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
+          s,
+          i,
+        );
         const stackId = s.stack || `__no_stack_${seriesName}`;
 
         if (!stacks[stackId]) {
@@ -309,7 +318,12 @@ export default class BarChart extends Chart {
         const items = (series as any[])
           .filter((s) => s.type === 'bar' && s.show !== false)
           .map((s, i) => ({
-            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
+            name: getSeriesDisplayName(
+              (key: string, defaultValue?: string) =>
+                this.t(key, defaultValue),
+              s,
+              i,
+            ),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
             icon: option.legend?.icon || 'rect',
             textColor: this.getThemeConfig().legendTextColor,
@@ -338,9 +352,11 @@ export default class BarChart extends Chart {
         if (seriesItem.show === false) {
           return;
         }
-        const seriesName =
-          seriesItem.name ||
-          this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
+        const seriesName = getSeriesDisplayName(
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
+          seriesItem,
+          seriesIndex,
+        );
         if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
@@ -737,11 +753,7 @@ export default class BarChart extends Chart {
             const isUpdate = !!oldBar;
             // If chart has existing bars (update scenario), skip staggered delay to ensure sync
             const hasOldBars = oldBars.size > 0;
-            const baseDelay =
-              typeof seriesItem.animationDelay === 'function'
-                ? seriesItem.animationDelay(index)
-                : seriesItem.animationDelay ?? 0;
-            const delay = isUpdate || hasOldBars ? 0 : baseDelay;
+            const delay = isUpdate || hasOldBars ? 0 : resolveAnimationDelay(seriesItem.animationDelay, index);
             const duration = this._getAnimationDuration(isUpdate);
 
             // Animate properties

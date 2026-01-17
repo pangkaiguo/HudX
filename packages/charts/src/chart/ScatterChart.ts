@@ -5,18 +5,18 @@ import {
   calculateDomain,
 } from 'hudx-render';
 import { Circle, Z_SERIES } from 'hudx-render';
-import { EventHelper } from 'hudx-render';
+import {
+  findSeriesIndexByDisplayName,
+  getSeriesDisplayName,
+  resolveAnimationDelay,
+} from './chartUtils';
 
 export default class ScatterChart extends Chart {
   private _activeScatters: Map<number, Circle[]> = new Map();
 
   protected _onLegendHover(name: string, hovered: boolean): void {
-    const seriesIndex = (this._option.series || []).findIndex(
-      (s: any, i: number) => {
-        const sName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
-        return sName === name;
-      },
-    );
+    const t = (key: string, defaultValue?: string) => this.t(key, defaultValue);
+    const seriesIndex = findSeriesIndexByDisplayName(t, this._option.series || [], name);
 
     if (seriesIndex === -1) return;
 
@@ -104,7 +104,12 @@ export default class ScatterChart extends Chart {
         const items = (series as any[])
           .filter((s: any) => s.type === 'scatter' && s.show !== false)
           .map((s: any, i: number) => ({
-            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
+            name: getSeriesDisplayName(
+              (key: string, defaultValue?: string) =>
+                this.t(key, defaultValue),
+              s,
+              i,
+            ),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
             icon: option.legend?.icon || 'circle',
             textColor: this.getThemeConfig().legendTextColor,
@@ -199,9 +204,12 @@ export default class ScatterChart extends Chart {
                 componentType: 'series',
                 seriesType: 'scatter',
                 seriesIndex,
-                seriesName:
-                  s.name ||
-                  this.t('series.name', 'Series') + '-' + (seriesIndex + 1),
+                seriesName: getSeriesDisplayName(
+                  (key: string, defaultValue?: string) =>
+                    this.t(key, defaultValue),
+                  s,
+                  seriesIndex,
+                ),
                 name: itemName,
                 dataIndex: index,
                 data: item,
@@ -233,9 +241,7 @@ export default class ScatterChart extends Chart {
 
           if (this._isAnimationEnabled()) {
             const baseDelay =
-              typeof s.animationDelay === 'function'
-                ? s.animationDelay(index)
-                : s.animationDelay ?? 0;
+              resolveAnimationDelay(s.animationDelay, index);
             const delay = baseDelay;
             const duration = this._getAnimationDuration() / 2;
 

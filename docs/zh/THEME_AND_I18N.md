@@ -283,7 +283,7 @@ function App() {
       </div>
       <HChart
         option={option}
-        renderMode="canvas"
+  renderMode="svg"
         theme={theme}
         locale={locale}
         width={800}

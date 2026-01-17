@@ -103,7 +103,7 @@ function App() {
       option={option}
       width={800}
       height={400}
-      renderMode="canvas" // or "svg"
+      renderMode="svg" // or "canvas"
       theme="light"
     />
   );
@@ -116,7 +116,7 @@ function App() {
 import { Renderer, Circle, Animation, Easing } from "hudx-render";
 
 // Initialize
-const renderer = Renderer.init(document.getElementById("container"));
+const renderer = Renderer.init(document.getElementById("container"), "svg");
 
 // Add Element
 const circle = new Circle({

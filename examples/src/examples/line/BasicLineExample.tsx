@@ -10,7 +10,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = React.useState(false);
   const [gridTop, setGridTop] = React.useState(40);
   const [splitNumber, setSplitNumber] = React.useState(5);
-  const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = React.useState<RenderMode>('svg');
 
   const option: ChartOption = {
     tooltip: {
@@ -59,7 +59,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
         itemStyle: { color: themeObj.seriesColors?.[0] },
-        lineStyle: { width: 2 },
+        lineStyle: { width: 1 },
         showSymbol: true,
         emphasis: {
           scale: true,

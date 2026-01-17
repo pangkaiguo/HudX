@@ -207,7 +207,7 @@ function ConfigurationExample() {
       option={option}
       width={800}
       height={400}
-      renderMode="canvas"
+  renderMode="svg"
       theme="dark"
       locale="en"
       onEvents={{

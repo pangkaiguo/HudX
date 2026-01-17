@@ -21,6 +21,7 @@ import {
   getSmoothAreaPath,
   createSymbol,
 } from 'hudx-render';
+import { findSeriesIndexByDisplayName, getSeriesDisplayName } from './chartUtils';
 
 /**
  * LineChart - Line chart implementation
@@ -40,10 +41,8 @@ export default class LineChart extends Chart {
   > = new Map();
 
   protected _onLegendHover(name: string, hovered: boolean): void {
-    const seriesIndex = (this._option.series || []).findIndex((s, i) => {
-      const sName = s.name || this.t('series.name', 'Series') + '-' + (i + 1);
-      return sName === name;
-    });
+    const t = (key: string, defaultValue?: string) => this.t(key, defaultValue);
+    const seriesIndex = findSeriesIndexByDisplayName(t, this._option.series || [], name);
 
     if (seriesIndex === -1) return;
 
@@ -53,7 +52,7 @@ export default class LineChart extends Chart {
           // Highlight
           item.line.attr('style', {
             opacity: 1,
-            lineWidth: (this._option.series?.[idx].lineStyle?.width || 2) + 1,
+            lineWidth: (this._option.series?.[idx].lineStyle?.width || 1) + 1,
           });
           item.symbols.forEach((s) => s.attr('style', { opacity: 1 }));
           if (item.area)
@@ -70,7 +69,7 @@ export default class LineChart extends Chart {
         // Restore
         item.line.attr('style', {
           opacity: 1,
-          lineWidth: this._option.series?.[idx].lineStyle?.width || 2,
+          lineWidth: this._option.series?.[idx].lineStyle?.width || 1,
         });
         item.symbols.forEach((s) => s.attr('style', { opacity: 1 }));
         if (item.area)
@@ -331,7 +330,12 @@ export default class LineChart extends Chart {
         const items = (series as any[])
           .filter((s) => s.type === 'line' && s.show !== false)
           .map((s, i) => ({
-            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
+            name: getSeriesDisplayName(
+              (key: string, defaultValue?: string) =>
+                this.t(key, defaultValue),
+              s,
+              i,
+            ),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
             icon: option.legend?.icon || 'rect',
             textColor: this.getThemeConfig().legendTextColor,
@@ -343,9 +347,11 @@ export default class LineChart extends Chart {
       series.forEach((seriesItem, seriesIndex) => {
         if (seriesItem.type !== 'line') return;
         if (seriesItem.show === false) return;
-        const seriesName =
-          seriesItem.name ||
-          this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
+        const seriesName = getSeriesDisplayName(
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
+          seriesItem,
+          seriesIndex,
+        );
         if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const data = seriesItem.data || [];
@@ -430,7 +436,7 @@ export default class LineChart extends Chart {
             shape: { d },
             style: {
               stroke: lineColor,
-              lineWidth: seriesItem.lineStyle?.width || 2,
+              lineWidth: seriesItem.lineStyle?.width || 1,
               fill: 'none',
               opacity: 1,
             },
@@ -443,7 +449,7 @@ export default class LineChart extends Chart {
             },
             style: {
               stroke: lineColor,
-              lineWidth: seriesItem.lineStyle?.width || 2,
+              lineWidth: seriesItem.lineStyle?.width || 1,
               fill: 'none',
             },
             z: Z_SERIES,

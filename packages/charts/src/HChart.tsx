@@ -69,7 +69,7 @@ const HChart = forwardRef<HChartRef, HChartProps>(
       height,
       className,
       style,
-      renderMode = 'canvas',
+      renderMode = 'svg',
       theme: propTheme,
       mode,
       locale = 'en',

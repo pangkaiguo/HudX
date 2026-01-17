@@ -9,7 +9,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(5);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 

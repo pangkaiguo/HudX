@@ -10,7 +10,7 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = React.useState(true);
   const [gridTop, setGridTop] = React.useState(60);
   const [splitNumber, setSplitNumber] = React.useState(5);
-  const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = React.useState<RenderMode>('svg');
 
   const option: ChartOption = {
     tooltip: {
@@ -59,7 +59,7 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         type: 'line',
         data: [120, 200, 150, 80, 70, 110, 130],
         itemStyle: { color: themeObj.seriesColors?.[0] },
-        lineStyle: { width: 2 },
+        lineStyle: { width: 1 },
         showSymbol: true,
         symbol: 'circle',
       },
@@ -68,7 +68,7 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         type: 'line',
         data: [100, 150, 120, 110, 90, 140, 120],
         itemStyle: { color: themeObj.seriesColors?.[1] },
-        lineStyle: { width: 2 },
+        lineStyle: { width: 1 },
         showSymbol: true,
         symbol: 'rect',
         symbolSize: 8,
@@ -78,7 +78,7 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         type: 'line',
         data: [80, 120, 100, 140, 110, 100, 90],
         itemStyle: { color: themeObj.seriesColors?.[2] },
-        lineStyle: { width: 2 },
+        lineStyle: { width: 1 },
         showSymbol: true,
         symbol: 'triangle',
         symbolSize: 10,

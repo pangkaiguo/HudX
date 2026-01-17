@@ -357,7 +357,8 @@ describe('PieChart', () => {
     expect(aBefore).toBeDefined();
     expect(aBefore.shape.endAngle - aBefore.shape.startAngle).toBeGreaterThan(0.01);
 
-    chart.setRenderMode('svg');
+    const nextMode = chart.getRenderMode() === 'svg' ? 'canvas' : 'svg';
+    chart.setRenderMode(nextMode);
 
     const sectorsAfter = Array.from((chart as any)._activeSectors.values()) as any[];
     expect(sectorsAfter.length).toBe(2);

@@ -5,7 +5,7 @@ import type { RenderMode } from 'hudx-render';
 export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [clickCount, setClickCount] = useState(0);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
 
   useEffect(() => {
     if (!containerRef.current) return;

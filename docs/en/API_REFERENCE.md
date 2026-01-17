@@ -32,7 +32,7 @@ import { Renderer } from 'hudx-render';
 // Initialize renderer
 const renderer = Renderer.init(
   dom: HTMLElement,           // Container DOM
-  renderMode?: 'canvas' | 'svg', // Render mode, default 'canvas'
+  renderMode?: 'canvas' | 'svg', // Render mode, default 'svg'
   theme?: string | object,    // Theme, default 'light'
   locale?: string             // Locale, default 'en'
 );
@@ -154,7 +154,7 @@ import { HChart } from 'hudx-charts';
   width={800}               // Width (optional)
   height={600}              // Height (optional)
   theme="light"             // Theme
-  renderMode="canvas"       // Render mode 'canvas' | 'svg'
+  renderMode="svg"          // Render mode 'canvas' | 'svg'
   onEvents={{ click: ... }} // Event binding
 />
 ```

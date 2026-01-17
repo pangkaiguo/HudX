@@ -12,7 +12,7 @@ import type { RenderMode } from 'hudx-render';
 
 export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
 
   useEffect(() => {
     if (!containerRef.current) return;

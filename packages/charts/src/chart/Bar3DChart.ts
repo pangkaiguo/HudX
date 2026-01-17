@@ -13,11 +13,15 @@ import {
   EventHelper,
 } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { getSeriesDisplayName, resolveAnimationDelay } from './chartUtils';
 
 export default class Bar3DChart extends Chart {
   private _activeGroups: Map<string, Group> = new Map();
 
   setRenderMode(renderMode: RenderMode): void {
+    if (this.getRenderMode() === renderMode) {
+      return;
+    }
     this._activeGroups = new Map();
     super.setRenderMode(renderMode);
   }
@@ -126,7 +130,12 @@ export default class Bar3DChart extends Chart {
         const items = (series as any[])
           .filter((s) => s.type === 'bar3D' && s.show !== false)
           .map((s, i) => ({
-            name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
+            name: getSeriesDisplayName(
+              (key: string, defaultValue?: string) =>
+                this.t(key, defaultValue),
+              s,
+              i,
+            ),
             color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
             icon: option.legend?.icon || 'rect',
             textColor: this.getThemeConfig().legendTextColor,
@@ -145,9 +154,11 @@ export default class Bar3DChart extends Chart {
         if (seriesItem.type !== 'bar3D') return;
         if (seriesItem.show === false) return;
 
-        const seriesName =
-          seriesItem.name ||
-          this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
+        const seriesName = getSeriesDisplayName(
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
+          seriesItem,
+          seriesIndex,
+        );
         if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
@@ -322,11 +333,7 @@ export default class Bar3DChart extends Chart {
           const animateHeight = (targetHeight: number) => {
             if (this._shouldAnimateFor(seriesName) || oldGroup) {
               const isUpdate = !!oldGroup;
-              const baseDelay =
-                typeof seriesItem.animationDelay === 'function'
-                  ? seriesItem.animationDelay(index)
-                  : seriesItem.animationDelay ?? 0;
-              const delay = isUpdate ? 0 : baseDelay;
+              const delay = isUpdate ? 0 : resolveAnimationDelay(seriesItem.animationDelay, index);
               const duration = this._getAnimationDuration(isUpdate);
 
               const animatorObj = { height: initialHeight };

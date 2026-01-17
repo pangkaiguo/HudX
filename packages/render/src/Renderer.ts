@@ -42,7 +42,7 @@ export default class Renderer {
 
   constructor(
     dom: HTMLElement,
-    renderMode: RenderMode = 'canvas',
+    renderMode: RenderMode = 'svg',
     theme: Theme = 'light',
     locale: Locale = 'en',
   ) {
@@ -77,7 +77,7 @@ export default class Renderer {
    */
   static init(
     dom: HTMLElement | string,
-    renderMode: RenderMode = 'canvas',
+    renderMode: RenderMode = 'svg',
     theme: Theme = 'light',
     locale: Locale = 'en',
   ): Renderer {

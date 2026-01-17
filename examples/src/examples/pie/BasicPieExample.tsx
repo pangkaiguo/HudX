@@ -6,7 +6,7 @@ import type { RenderMode } from 'hudx-render';
 
 export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const [roseType, setRoseType] = useState<boolean | 'radius' | 'area'>(false);
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);

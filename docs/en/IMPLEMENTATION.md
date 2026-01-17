@@ -229,7 +229,7 @@ const transform = [
 
 ## Dual Rendering Implementation
 
-### Canvas Mode (Default)
+### Canvas Mode
 
 **Advantages**:
 
@@ -245,7 +245,7 @@ const transform = [
 - Coordinate transformation
 - Performance optimization
 
-### SVG Mode
+### SVG Mode (Default)
 
 **Advantages**:
 

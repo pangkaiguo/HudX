@@ -4,7 +4,6 @@
 
 import { Chart } from 'hudx-render';
 import { Rect } from 'hudx-render';
-import { EventHelper } from 'hudx-render';
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {

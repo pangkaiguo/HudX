@@ -1,5 +1,6 @@
 import { Chart, Animator } from 'hudx-render';
 import type { SeriesOption, ChartData, EmphasisOption, RenderMode } from 'hudx-render';
+import { resolveAnimationDelay } from './chartUtils';
 import {
   Sector,
   Text,
@@ -33,6 +34,9 @@ export default class PieChart extends Chart {
   private _hoveredSectorName: string | null = null;
 
   setRenderMode(renderMode: RenderMode): void {
+    if (this.getRenderMode() === renderMode) {
+      return;
+    }
     this._activeSectors = new Map();
     this._hoveredSectorName = null;
     this._hoverAnimator.stopAll();
@@ -362,11 +366,7 @@ export default class PieChart extends Chart {
       // Animate
       const shouldAnimate = this._shouldAnimateFor(itemName);
       if (shouldAnimate) {
-        const baseDelay =
-          typeof seriesItem.animationDelay === 'function'
-            ? seriesItem.animationDelay(index)
-            : seriesItem.animationDelay ?? 0;
-        const delay = oldSector ? 0 : baseDelay;
+        const delay = oldSector ? 0 : resolveAnimationDelay(seriesItem.animationDelay, index);
         const duration = seriesItem.animationDuration || 500;
         const easing = seriesItem.animationEasing || 'cubicOut';
 

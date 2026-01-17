@@ -58,7 +58,7 @@ export default class Chart {
   constructor(
     dom: HTMLElement,
     option: ChartOption = {},
-    renderMode: RenderMode = 'canvas',
+    renderMode: RenderMode = 'svg',
     theme: Theme = 'light',
     locale: Locale = 'en',
   ) {

@@ -14,7 +14,7 @@ export const AreaLineChartExample = ({
   const [showGrid, setShowGrid] = useState(true);
   const [gridTop, setGridTop] = useState(60);
   const [splitNumber, setSplitNumber] = useState(5);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const [isSmooth, setIsSmooth] = useState(true);
 
   // Generate more data points (e.g. 100)
@@ -94,7 +94,7 @@ export const AreaLineChartExample = ({
         type: 'line',
         data: chartData.valuesA,
         itemStyle: { color: themeObj.seriesColors?.[0] },
-        lineStyle: { width: 2 },
+        lineStyle: { width: 1 },
         showSymbol: false,
         smooth: isSmooth,
         areaStyle: { opacity: 0.3 },
@@ -104,7 +104,7 @@ export const AreaLineChartExample = ({
         type: 'line',
         data: chartData.valuesB,
         itemStyle: { color: themeObj.seriesColors?.[1] },
-        lineStyle: { width: 2 },
+        lineStyle: { width: 1 },
         showSymbol: false,
         smooth: isSmooth,
         areaStyle: { opacity: 0.3 },
@@ -114,7 +114,7 @@ export const AreaLineChartExample = ({
         type: 'line',
         data: chartData.valuesC,
         itemStyle: { color: themeObj.seriesColors?.[2] },
-        lineStyle: { width: 2 },
+        lineStyle: { width: 1 },
         showSymbol: false,
         smooth: isSmooth,
         areaStyle: { opacity: 0.3 },

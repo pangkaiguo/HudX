@@ -1,5 +1,6 @@
 import { Chart } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { getSeriesDisplayName } from './chartUtils';
 import {
   createLinearScale,
   createOrdinalScale,
@@ -20,6 +21,9 @@ export default class StackBar3DChart extends Chart {
   private _activeGroups: Map<string, Group> = new Map();
 
   setRenderMode(renderMode: RenderMode): void {
+    if (this.getRenderMode() === renderMode) {
+      return;
+    }
     this._activeGroups = new Map();
     super.setRenderMode(renderMode);
   }
@@ -176,7 +180,11 @@ export default class StackBar3DChart extends Chart {
       // Legend
       if (option.legend?.show !== false) {
         const items = barSeries.map((s, i) => ({
-          name: s.name || this.t('series.name', 'Series') + '-' + (i + 1),
+          name: getSeriesDisplayName(
+            (key: string, defaultValue?: string) => this.t(key, defaultValue),
+            s,
+            i,
+          ),
           color: s.itemStyle?.color || s.color || this._getSeriesColor(i),
           icon: option.legend?.icon || 'rect',
           textColor: this.getThemeConfig().legendTextColor,
@@ -196,9 +204,11 @@ export default class StackBar3DChart extends Chart {
       const currentStackNeg = new Map<string | number, number>();
 
       barSeries.forEach((seriesItem, seriesIndex) => {
-        const seriesName =
-          seriesItem.name ||
-          this.t('series.name', 'Series') + '-' + (seriesIndex + 1);
+        const seriesName = getSeriesDisplayName(
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
+          seriesItem,
+          seriesIndex,
+        );
         if (this._legend && !this._legendSelected.has(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
