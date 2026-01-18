@@ -186,7 +186,7 @@ export default class LineChart extends Chart {
           },
           style: { fill: 'transparent' },
           silent: false,
-          cursor: 'crosshair',
+          cursor: 'default',//'crosshair',
         });
 
         // Axis Pointer Line

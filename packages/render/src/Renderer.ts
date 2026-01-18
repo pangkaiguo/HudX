@@ -38,6 +38,7 @@ export default class Renderer {
   private _renderMode: RenderMode;
   private _theme: Theme;
   private _locale: Locale;
+  private _backgroundColorOverride?: string;
   private _disposed: boolean = false;
   private _followGlobalTheme: boolean = false;
   private _unsubscribeThemeChange?: () => void;
@@ -134,6 +135,9 @@ export default class Renderer {
     // Recreate handler
     this._handler = new Handler(this._painter, this._storage);
 
+    // Re-apply theme & background to the new painter
+    this._applyTheme();
+
     // Refresh
     this._painter.markDirty();
   }
@@ -210,18 +214,9 @@ export default class Renderer {
   /**
    * Set background color
    */
-  setBackgroundColor(color: string): this {
-    if (this._renderMode === 'canvas') {
-      const canvas = this._painter.getCanvas?.();
-      if (canvas) {
-        canvas.style.backgroundColor = color;
-      }
-    } else {
-      const svg = this._painter.getSVG?.();
-      if (svg) {
-        svg.style.backgroundColor = color;
-      }
-    }
+  setBackgroundColor(color?: string | null): this {
+    this._backgroundColorOverride = color ?? undefined;
+    this._applyTheme();
     return this;
   }
 
@@ -253,7 +248,10 @@ export default class Renderer {
    * Get data URL
    */
   getDataURL(opts: DataURLOpts = {}): string {
-    return this._painter.getDataURL(opts);
+    const themeConfig = ThemeManager.getTheme(this._theme);
+    const backgroundColor =
+      opts.backgroundColor ?? this._backgroundColorOverride ?? themeConfig.backgroundColor;
+    return this._painter.getDataURL({ ...opts, backgroundColor });
   }
 
   /**
@@ -360,16 +358,18 @@ export default class Renderer {
    */
   private _applyTheme(): void {
     const themeConfig = ThemeManager.getTheme(this._theme);
+    const backgroundColor =
+      this._backgroundColorOverride ?? themeConfig.backgroundColor;
 
     if (this._renderMode === 'canvas') {
       const canvas = this._painter.getCanvas?.();
       if (canvas) {
-        canvas.style.backgroundColor = themeConfig.backgroundColor;
+        canvas.style.backgroundColor = backgroundColor;
       }
     } else {
       const svg = this._painter.getSVG?.();
       if (svg) {
-        svg.style.backgroundColor = themeConfig.backgroundColor;
+        svg.style.backgroundColor = backgroundColor;
       }
     }
   }

@@ -106,7 +106,7 @@ describe('Chart Integration', () => {
             type: 'line',
             lineStyle: {
               color: 'red',
-              width: 2,
+              width: 1,
               type: 'dashed',
             },
           },

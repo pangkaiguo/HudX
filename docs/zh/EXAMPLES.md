@@ -26,7 +26,7 @@ function LineChartExample() {
         data: [120, 200, 150, 80, 70, 110, 130],
         lineStyle: {
           color: "#5470c6",
-          width: 2,
+          width: 1,
         },
         itemStyle: {
           color: "#5470c6",

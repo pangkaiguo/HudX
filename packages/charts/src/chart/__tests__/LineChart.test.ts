@@ -150,14 +150,14 @@ describe('LineChart', () => {
           type: 'line',
           data: [10, 20, 15],
           areaStyle: { opacity: 0.5 },
-          lineStyle: { width: 2 },
+          lineStyle: { width: 1 },
         },
         {
           name: 'S2',
           type: 'line',
           data: [12, 18, 16],
           areaStyle: { opacity: 0.5 },
-          lineStyle: { width: 2 },
+          lineStyle: { width: 1 },
         },
       ],
     };

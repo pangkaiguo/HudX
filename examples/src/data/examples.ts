@@ -173,7 +173,7 @@ option = {
     data: ys,
     smooth: 0.5,
     showSymbol: false,
-    lineStyle: { width: 2 }
+    lineStyle: { width: 1 }
   }],
   animation: true
 };`,

@@ -68,7 +68,7 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         smooth: smoothEnabled ? tension : false,
         showSymbol,
         itemStyle: { color: themeObj.seriesColors?.[0] },
-        lineStyle: { width: 2 },
+        lineStyle: { width: 1 },
       },
     ],
     animation: true,

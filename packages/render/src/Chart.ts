@@ -213,6 +213,12 @@ export default class Chart {
       this._renderer.getDom().dispatchEvent(event);
     }
 
+    if (this._option.backgroundColor != null) {
+      this._renderer.setBackgroundColor(this._option.backgroundColor);
+    } else {
+      this._renderer.setBackgroundColor();
+    }
+
     // Render immediately if not lazy update
     if (!opts.lazyUpdate) {
       this._render();
