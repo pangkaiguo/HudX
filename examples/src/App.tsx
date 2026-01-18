@@ -49,22 +49,18 @@ const DoughnutExample = lazy(() => import('./examples/pie/DoughnutExample'));
 const HalfDoughnutExample = lazy(
   () => import('./examples/pie/HalfDoughnutExample'),
 );
-const RichTextPieExample = lazy(
-  () => import('./examples/pie/RichTextPieExample'),
-);
 
 // Scatter charts
 const ScatterChartExample = lazy(
   () => import('./examples/scatter/ScatterChartExample'),
 );
 
-// Axis charts
-const AxisLabelExample = lazy(() => import('./examples/axis/AxisLabelExample'));
-
-// New Examples
-const TitleExample = lazy(() => import('./examples/TitleExample'));
-const LegendExample = lazy(() => import('./examples/LegendExample'));
-const TooltipExample = lazy(() => import('./examples/TooltipExample'));
+// Sub components
+const AxisLabelExample = lazy(() => import('./examples/sub-components/AxisLabelExample'));
+const TitleExample = lazy(() => import('./examples/sub-components/TitleExample'));
+const LegendExample = lazy(() => import('./examples/sub-components/LegendExample'));
+const TooltipExample = lazy(() => import('./examples/sub-components/TooltipExample'));
+const RichTextExample = lazy(() => import('./examples/sub-components/RichTextExample'));
 
 // Bundle examples
 const BundleExample = lazy(() => import('./examples/bundle/BundleExample'));
@@ -113,11 +109,6 @@ const chartExamples = [
     items: [
       { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
       {
-        id: 'rich-text-pie',
-        name: 'Rich Text Pie',
-        component: RichTextPieExample,
-      },
-      {
         id: 'advanced-pie',
         name: 'Advanced Pie',
         component: AdvancedPieChartExample,
@@ -151,7 +142,11 @@ const chartExamples = [
       { id: 'axis-label', name: 'Axis Label', component: AxisLabelExample },
       { id: 'title-example', name: 'Title', component: TitleExample },
       { id: 'legend-example', name: 'Legend', component: LegendExample },
-      { id: 'tooltip-example', name: 'Tooltip', component: TooltipExample },
+      { id: 'tooltip-example', name: 'Tooltip', component: TooltipExample }, {
+        id: 'rich-text-example',
+        name: 'Rich Text',
+        component: RichTextExample,
+      },
     ],
   },
   {

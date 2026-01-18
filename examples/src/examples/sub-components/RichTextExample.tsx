@@ -1,8 +1,7 @@
-import { HChart } from 'hudx-charts';
-import type { ChartOption } from 'hudx-charts';
+import { HChart, type ChartOption } from 'hudx-charts';
 import { Theme } from 'hudx-render';
 
-export const RichTextPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const RichTextExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const option: ChartOption = {
     tooltip: {
       show: true,
@@ -97,4 +96,4 @@ export const RichTextPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
   );
 };
 
-export default RichTextPieExample;
+export default RichTextExample;
