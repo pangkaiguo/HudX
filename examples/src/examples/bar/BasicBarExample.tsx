@@ -91,6 +91,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         name: 'Direct',
         type: 'bar',
         data: [120, 200, 150, 80, 70, 110, 130],
+        label: { show: true, position: 'outside', formatter: '{b}: {c}' },
         barWidth: barWidth === 'auto' ? undefined : barWidth,
         showBackground: showBackground,
         backgroundStyle: {

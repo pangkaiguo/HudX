@@ -219,6 +219,7 @@ option = {
       name: 'Direct',
       type: 'bar',
       data: [120, 200, 150, 80, 70, 110, 130],
+      label: { show: true, position: 'outside', formatter: '{b}: {c}' },
       showBackground: false,
       backgroundStyle: { color: 'rgba(180, 180, 180, 0.2)' },
       itemStyle: { color: '#5470c6', opacity: 0.8, borderWidth: 0 }
@@ -252,9 +253,9 @@ option = {
   xAxis: { type: 'category', data: ['Q1', 'Q2', 'Q3', 'Q4'], show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
   yAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
-    { name: 'Product A', type: 'bar', data: [320, 332, 301, 334], itemStyle: { color: '#5470c6', borderWidth: 0 }, barGap: '30%' },
-    { name: 'Product B', type: 'bar', data: [220, 182, 191, 234], itemStyle: { color: '#91cc75', borderWidth: 0 }, barGap: '30%' },
-    { name: 'Product C', type: 'bar', data: [150, 232, 201, 154], itemStyle: { color: '#fac858', borderWidth: 0 }, barGap: '30%' }
+    { name: 'Product A', type: 'bar', data: [320, 332, 301, 334], label: { show: true, position: 'top', formatter: '{c}' }, itemStyle: { color: '#5470c6', borderWidth: 0 }, barGap: '30%' },
+    { name: 'Product B', type: 'bar', data: [220, 182, 191, 234], label: { show: true, position: 'top', formatter: '{c}' }, itemStyle: { color: '#91cc75', borderWidth: 0 }, barGap: '30%' },
+    { name: 'Product C', type: 'bar', data: [150, 232, 201, 154], label: { show: true, position: 'top', formatter: '{c}' }, itemStyle: { color: '#fac858', borderWidth: 0 }, barGap: '30%' }
   ],
   animation: true,
   animationDuration: 600,
@@ -297,10 +298,10 @@ option = {
     splitLine: { show: false, lineStyle: { color: '#eee' } }
   }],
   series: [
-    { name: 'Direct', type: 'bar', stack: 'total', emphasis: { focus: 'series' }, data: [320, 332, 301, 334, 390, 330, 320], itemStyle: { borderWidth: 0 } },
-    { name: 'Email', type: 'bar', stack: 'total', emphasis: { focus: 'series' }, data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { borderWidth: 0 } },
-    { name: 'Union Ads', type: 'bar', stack: 'total', emphasis: { focus: 'series' }, data: [220, 182, 191, 234, 290, 330, 310], itemStyle: { borderWidth: 0 } },
-    { name: 'Video Ads', type: 'bar', stack: 'total', emphasis: { focus: 'series' }, data: [150, 232, 201, 154, 190, 330, 410], itemStyle: { borderWidth: 0 } },
+    { name: 'Direct', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}' }, emphasis: { focus: 'series' }, data: [320, 332, 301, 334, 390, 330, 320], itemStyle: { borderWidth: 0 } },
+    { name: 'Email', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}' }, emphasis: { focus: 'series' }, data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { borderWidth: 0 } },
+    { name: 'Union Ads', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}' }, emphasis: { focus: 'series' }, data: [220, 182, 191, 234, 290, 330, 310], itemStyle: { borderWidth: 0 } },
+    { name: 'Video Ads', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}' }, emphasis: { focus: 'series' }, data: [150, 232, 201, 154, 190, 330, 410], itemStyle: { borderWidth: 0 } },
   ]
 };`,
   },
@@ -329,78 +330,78 @@ option = {
   xAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
   yAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
-    { name: 'Direct', type: 'bar', stack: 'total', label: { show: true }, emphasis: { focus: 'series' }, data: [320, 302, 301, 334, 390, 330, 320], itemStyle: { borderWidth: 0 } },
-    { name: 'Mail Ad', type: 'bar', stack: 'total', label: { show: true }, emphasis: { focus: 'series' }, data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { borderWidth: 0 } },
-    { name: 'Affiliate Ad', type: 'bar', stack: 'total', label: { show: true }, emphasis: { focus: 'series' }, data: [220, 182, 191, 234, 290, 330, 310], itemStyle: { borderWidth: 0 } },
-    { name: 'Video Ad', type: 'bar', stack: 'total', label: { show: true }, emphasis: { focus: 'series' }, data: [150, 212, 201, 154, 190, 330, 410], itemStyle: { borderWidth: 0 } },
-    { name: 'Search Engine', type: 'bar', stack: 'total', label: { show: true }, emphasis: { focus: 'series' }, data: [820, 832, 901, 934, 1290, 1330, 1320], itemStyle: { borderWidth: 0 } }
+    { name: 'Direct', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 }, emphasis: { focus: 'series' }, data: [320, 302, 301, 334, 390, 330, 320], itemStyle: { borderWidth: 0 } },
+    { name: 'Mail Ad', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 }, emphasis: { focus: 'series' }, data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { borderWidth: 0 } },
+    { name: 'Affiliate Ad', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 }, emphasis: { focus: 'series' }, data: [220, 182, 191, 234, 290, 330, 310], itemStyle: { borderWidth: 0 } },
+    { name: 'Video Ad', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 }, emphasis: { focus: 'series' }, data: [150, 212, 201, 154, 190, 330, 410], itemStyle: { borderWidth: 0 } },
+    { name: 'Search Engine', type: 'bar', stack: 'total', label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 }, emphasis: { focus: 'series' }, data: [820, 832, 901, 934, 1290, 1330, 1320], itemStyle: { borderWidth: 0 } }
   ],
   animation: true
 };`,
   },
-  {
-    id: 'bar-3d',
-    category: 'bar',
-    title: '3D Bar Chart',
-    subtitle: 'Pseudo-3D bar chart (bar3D)',
-    code: `option = {
-  tooltip: { show: true, trigger: 'item' },
-  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
-  grid: { left: 60, right: 60, top: 40, bottom: 60 },
-  aria: {
-    enabled: true,
-    decal: {
-      show: false,
-      decals: [
-        { symbol: 'diagonal', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'dots', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'diagonal-reverse', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'checkerboard', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'crosshatch', color: 'rgba(0, 0, 0, 0.2)' }
-      ]
-    }
-  },
-  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
-  yAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee' } } },
-  series: [
-    { name: 'Sales', type: 'bar3D', data: [120, 200, 150, 80, 70, 110, 130], itemStyle: { color: '#5470c6', borderWidth: 0 } },
-    { name: 'Profits', type: 'bar3D', data: [60, 100, 75, 40, 35, 55, 65], itemStyle: { color: '#91cc75', borderWidth: 0 } }
-  ],
-  animation: true
-};`,
-  },
-  {
-    id: 'stack-bar-3d',
-    category: 'bar',
-    title: 'Stacked 3D Bar Chart',
-    subtitle: 'Pseudo-3D stacked bars (stackBar3D)',
-    code: `option = {
-  tooltip: { show: true, trigger: 'item' },
-  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
-  grid: { left: 60, right: 60, top: 40, bottom: 60 },
-  aria: {
-    enabled: true,
-    decal: {
-      show: false,
-      decals: [
-        { symbol: 'diagonal', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'dots', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'diagonal-reverse', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'checkerboard', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'crosshatch', color: 'rgba(0, 0, 0, 0.2)' }
-      ]
-    }
-  },
-  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
-  yAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee' } } },
-  series: [
-    { name: 'Product A', type: 'stackBar3D', data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { color: '#5470c6', borderWidth: 0 } },
-    { name: 'Product B', type: 'stackBar3D', data: [220, 182, 191, 234, 290, 330, 310], itemStyle: { color: '#91cc75', borderWidth: 0 } },
-    { name: 'Product C', type: 'stackBar3D', data: [150, 232, 201, 154, 190, 330, 410], itemStyle: { color: '#fac858', borderWidth: 0 } }
-  ],
-  animation: true
-};`,
-  },
+  //   {
+  //     id: 'bar-3d',
+  //     category: 'bar',
+  //     title: '3D Bar Chart',
+  //     subtitle: 'Pseudo-3D bar chart (bar3D)',
+  //     code: `option = {
+  //   tooltip: { show: true, trigger: 'item' },
+  //   legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
+  //   grid: { left: 60, right: 60, top: 40, bottom: 60 },
+  //   aria: {
+  //     enabled: true,
+  //     decal: {
+  //       show: false,
+  //       decals: [
+  //         { symbol: 'diagonal', color: 'rgba(0, 0, 0, 0.2)' },
+  //         { symbol: 'dots', color: 'rgba(0, 0, 0, 0.2)' },
+  //         { symbol: 'diagonal-reverse', color: 'rgba(0, 0, 0, 0.2)' },
+  //         { symbol: 'checkerboard', color: 'rgba(0, 0, 0, 0.2)' },
+  //         { symbol: 'crosshatch', color: 'rgba(0, 0, 0, 0.2)' }
+  //       ]
+  //     }
+  //   },
+  //   xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  //   yAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee' } } },
+  //   series: [
+  //     { name: 'Sales', type: 'bar3D', data: [120, 200, 150, 80, 70, 110, 130], itemStyle: { color: '#5470c6', borderWidth: 0 } },
+  //     { name: 'Profits', type: 'bar3D', data: [60, 100, 75, 40, 35, 55, 65], itemStyle: { color: '#91cc75', borderWidth: 0 } }
+  //   ],
+  //   animation: true
+  // };`,
+  //   },
+  //   {
+  //     id: 'stack-bar-3d',
+  //     category: 'bar',
+  //     title: 'Stacked 3D Bar Chart',
+  //     subtitle: 'Pseudo-3D stacked bars (stackBar3D)',
+  //     code: `option = {
+  //   tooltip: { show: true, trigger: 'item' },
+  //   legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
+  //   grid: { left: 60, right: 60, top: 40, bottom: 60 },
+  //   aria: {
+  //     enabled: true,
+  //     decal: {
+  //       show: false,
+  //       decals: [
+  //         { symbol: 'diagonal', color: 'rgba(0, 0, 0, 0.2)' },
+  //         { symbol: 'dots', color: 'rgba(0, 0, 0, 0.2)' },
+  //         { symbol: 'diagonal-reverse', color: 'rgba(0, 0, 0, 0.2)' },
+  //         { symbol: 'checkerboard', color: 'rgba(0, 0, 0, 0.2)' },
+  //         { symbol: 'crosshatch', color: 'rgba(0, 0, 0, 0.2)' }
+  //       ]
+  //     }
+  //   },
+  //   xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  //   yAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee' } } },
+  //   series: [
+  //     { name: 'Product A', type: 'stackBar3D', data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { color: '#5470c6', borderWidth: 0 } },
+  //     { name: 'Product B', type: 'stackBar3D', data: [220, 182, 191, 234, 290, 330, 310], itemStyle: { color: '#91cc75', borderWidth: 0 } },
+  //     { name: 'Product C', type: 'stackBar3D', data: [150, 232, 201, 154, 190, 330, 410], itemStyle: { color: '#fac858', borderWidth: 0 } }
+  //   ],
+  //   animation: true
+  // };`,
+  //   },
   {
     id: 'basic-pie',
     category: 'pie',

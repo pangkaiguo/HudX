@@ -8,6 +8,7 @@ import {
 import {
   Rect,
   Line,
+  Text,
   createDecalPattern,
   Z_SERIES,
   Z_AXIS,
@@ -33,12 +34,14 @@ import {
  */
 export default class BarChart extends Chart {
   private _activeBars: Map<string, Rect> = new Map();
+  private _activeLabels: Map<string, Text> = new Map();
 
   setRenderMode(renderMode: RenderMode): void {
     if (this.getRenderMode() === renderMode) {
       return;
     }
     this._activeBars = new Map();
+    this._activeLabels = new Map();
     super.setRenderMode(renderMode);
   }
 
@@ -65,6 +68,15 @@ export default class BarChart extends Chart {
         bar.attr('style', { opacity: 1 });
       }
     });
+
+    this._activeLabels.forEach((label, key) => {
+      const [sIdx] = key.split('-').map(Number);
+      if (hovered) {
+        label.attr('style', { opacity: sIdx === seriesIndex ? 1 : 0.1 });
+      } else {
+        label.attr('style', { opacity: 1 });
+      }
+    });
   }
 
   protected _render(): void {
@@ -77,6 +89,12 @@ export default class BarChart extends Chart {
 
       const oldBars = this._forceReinitOnNextRender ? new Map() : this._activeBars;
       this._activeBars = new Map();
+
+      if (!this._activeLabels) {
+        this._activeLabels = new Map();
+      }
+      const oldLabels = this._forceReinitOnNextRender ? new Map() : this._activeLabels;
+      this._activeLabels = new Map();
 
       const option = this._option;
       const series = option.series || [];
@@ -602,6 +620,216 @@ export default class BarChart extends Chart {
           this._root.add(rect);
           this._activeBars.set(barKey, rect);
 
+          const seriesLabel = seriesItem.label;
+          const itemLabel =
+            typeof item === 'object' && item !== null ? (item as any).label : undefined;
+          const labelOpt = { ...(seriesLabel || {}), ...(itemLabel || {}) } as any;
+          const showLabel = labelOpt && labelOpt.show === true;
+
+          if (showLabel) {
+            const theme = this.getThemeConfig();
+            const position = (labelOpt.position || 'outside') as string;
+            const value = this._getDataValue(item);
+            const itemName =
+              typeof item === 'object' && (item as any).name
+                ? (item as any).name
+                : isHorizontal
+                  ? yDomain[index]
+                  : xAxis?.data?.[index] || '';
+
+            const resolvedPosition =
+              position === 'outside'
+                ? isHorizontal
+                  ? isPositive
+                    ? 'right'
+                    : 'left'
+                  : isPositive
+                    ? 'top'
+                    : 'bottom'
+                : position;
+
+            const paramsForLabel = {
+              componentType: 'series',
+              seriesType: 'bar',
+              seriesIndex,
+              seriesName,
+              name: itemName,
+              dataIndex: index,
+              data: item,
+              value,
+            };
+
+            const formatLabel = (formatter: any): string => {
+              if (typeof formatter === 'function') return formatter(paramsForLabel);
+              if (typeof formatter === 'string') {
+                let result = formatter
+                  .replace(/\{a\}/g, String(seriesName ?? ''))
+                  .replace(/\{b\}/g, String(itemName ?? ''))
+                  .replace(/\{c\}/g, String(value ?? ''))
+                  .replace(/\{name\}/g, String(itemName ?? ''))
+                  .replace(/\{value\}/g, String(value ?? ''));
+
+                if (item && typeof item === 'object') {
+                  Object.keys(item).forEach((k) => {
+                    const v = (item as any)[k];
+                    if (typeof v === 'string' || typeof v === 'number') {
+                      result = result.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v));
+                    }
+                  });
+                }
+                return result;
+              }
+              return String(value ?? '');
+            };
+
+            const labelText = formatLabel(labelOpt.formatter);
+
+            const getLabelLayout = (
+              x: number,
+              y: number,
+              w: number,
+              h: number,
+            ) => {
+              const offset = 4;
+              const cx = x + w / 2;
+              const cy = y + h / 2;
+              let lx = cx;
+              let ly = cy;
+              let textAlign: CanvasTextAlign = 'center';
+              let textBaseline: CanvasTextBaseline = 'middle';
+
+              const pos = resolvedPosition;
+
+              if (pos === 'center' || pos === 'inside') {
+                lx = cx;
+                ly = cy;
+              } else if (pos === 'top') {
+                lx = cx;
+                ly = y - offset;
+                textBaseline = 'bottom';
+              } else if (pos === 'bottom') {
+                lx = cx;
+                ly = y + h + offset;
+                textBaseline = 'top';
+              } else if (pos === 'insideTop') {
+                lx = cx;
+                ly = y + offset;
+                textBaseline = 'top';
+              } else if (pos === 'insideBottom') {
+                lx = cx;
+                ly = y + h - offset;
+                textBaseline = 'bottom';
+              } else if (pos === 'left') {
+                lx = x - offset;
+                ly = cy;
+                textAlign = 'right';
+              } else if (pos === 'right') {
+                lx = x + w + offset;
+                ly = cy;
+                textAlign = 'left';
+              } else if (pos === 'insideLeft') {
+                lx = x + offset;
+                ly = cy;
+                textAlign = 'left';
+              } else if (pos === 'insideRight') {
+                lx = x + w - offset;
+                ly = cy;
+                textAlign = 'right';
+              } else if (pos === 'insideTopLeft') {
+                lx = x + offset;
+                ly = y + offset;
+                textAlign = 'left';
+                textBaseline = 'top';
+              } else if (pos === 'insideTopRight') {
+                lx = x + w - offset;
+                ly = y + offset;
+                textAlign = 'right';
+                textBaseline = 'top';
+              } else if (pos === 'insideBottomLeft') {
+                lx = x + offset;
+                ly = y + h - offset;
+                textAlign = 'left';
+                textBaseline = 'bottom';
+              } else if (pos === 'insideBottomRight') {
+                lx = x + w - offset;
+                ly = y + h - offset;
+                textAlign = 'right';
+                textBaseline = 'bottom';
+              }
+
+              return { x: lx, y: ly, textAlign, textBaseline };
+            };
+
+            const initialLayout = getLabelLayout(
+              initialX,
+              initialY,
+              initialWidth,
+              initialHeight,
+            );
+            const finalLayout = getLabelLayout(barX, barY, barWidth, barHeight);
+
+            const oldLabel = oldLabels.get(barKey);
+            const shouldAnimate = this._shouldAnimateFor(seriesName) || oldLabel;
+            const isUpdate = !!oldLabel;
+            const hasOldLabels = oldLabels.size > 0;
+            const delay =
+              isUpdate || hasOldLabels
+                ? 0
+                : resolveAnimationDelay(seriesItem.animationDelay, index);
+            const duration = this._getAnimationDuration(isUpdate);
+
+            const isInside =
+              String(resolvedPosition).startsWith('inside') ||
+              resolvedPosition === 'inside' ||
+              resolvedPosition === 'center';
+
+            const label = new Text({
+              shape: {
+                x: oldLabel ? (oldLabel.shape as any).x : initialLayout.x,
+                y: oldLabel ? (oldLabel.shape as any).y : initialLayout.y,
+                text: labelText,
+              },
+              style: {
+                fill:
+                  labelOpt.color ||
+                  (isInside
+                    ? (theme.token as any)?.colorTextOnSeries || '#fff'
+                    : theme.axisLabelColor || theme.textColor),
+                fontSize: labelOpt.fontSize ?? theme.fontSize,
+                fontFamily: theme.fontFamily,
+                textAlign: finalLayout.textAlign,
+                textBaseline: finalLayout.textBaseline,
+                opacity: 1,
+              },
+              z: Z_SERIES + 1,
+              silent: true,
+            });
+
+            this._root.add(label);
+            this._activeLabels.set(barKey, label);
+
+            if (shouldAnimate) {
+              this._animator
+                .animate(label.attr('shape'), 'x', finalLayout.x, {
+                  duration,
+                  delay,
+                  easing: 'cubicOut',
+                  onUpdate: () => label.markRedraw(),
+                })
+                .start();
+              this._animator
+                .animate(label.attr('shape'), 'y', finalLayout.y, {
+                  duration,
+                  delay,
+                  easing: 'cubicOut',
+                  onUpdate: () => label.markRedraw(),
+                })
+                .start();
+            } else {
+              label.attr('shape', { x: finalLayout.x, y: finalLayout.y });
+            }
+          }
+
           if (this._tooltip) {
             EventHelper.bindHoverEvents(
               rect,
@@ -618,8 +846,18 @@ export default class BarChart extends Chart {
                       bar.attr('style', { opacity: 0.2 });
                     }
                   });
+                  this._activeLabels.forEach((label, key) => {
+                    const [sIdx] = key.split('-').map(Number);
+                    if (sIdx === seriesIndex) {
+                      label.attr('style', { opacity: 1 });
+                    } else {
+                      label.attr('style', { opacity: 0.2 });
+                    }
+                  });
                 } else {
                   rect.attr('style', { opacity: 0.8 });
+                  const label = this._activeLabels.get(barKey);
+                  if (label) label.attr('style', { opacity: 0.8 });
                 }
 
                 const itemName =
@@ -685,8 +923,13 @@ export default class BarChart extends Chart {
                   this._activeBars.forEach((bar) => {
                     bar.attr('style', { opacity: 1 });
                   });
+                  this._activeLabels.forEach((label) => {
+                    label.attr('style', { opacity: 1 });
+                  });
                 } else {
                   rect.attr('style', { opacity: 1 });
+                  const label = this._activeLabels.get(barKey);
+                  if (label) label.attr('style', { opacity: 1 });
                 }
                 this._tooltip!.hide();
                 if (axisPointerLine) {
@@ -737,8 +980,18 @@ export default class BarChart extends Chart {
                         bar.attr('style', { opacity: 0.2 });
                       }
                     });
+                    this._activeLabels.forEach((label, key) => {
+                      const [sIdx] = key.split('-').map(Number);
+                      if (sIdx === seriesIndex) {
+                        label.attr('style', { opacity: 1 });
+                      } else {
+                        label.attr('style', { opacity: 0.2 });
+                      }
+                    });
                   } else {
                     rect.attr('style', { opacity: 0.8 });
+                    const label = this._activeLabels.get(barKey);
+                    if (label) label.attr('style', { opacity: 0.8 });
                   }
                 }
                 this._tooltip.show(mx, my, content, params, rect.attr('shape'));
@@ -869,6 +1122,20 @@ export default class BarChart extends Chart {
               })
               .start();
           }
+        }
+      });
+
+      oldLabels.forEach((label, key) => {
+        if (!this._activeLabels.has(key)) {
+          label.z = Z_SERIES + 1;
+          this._root.add(label);
+          this._animator
+            .animate(label.style, 'opacity', 0, {
+              duration: 200,
+              easing: 'cubicOut',
+              onUpdate: () => label.markRedraw(),
+            })
+            .start();
         }
       });
 

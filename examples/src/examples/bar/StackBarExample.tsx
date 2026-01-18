@@ -81,6 +81,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         name: 'Direct',
         type: 'bar',
         stack: 'total',
+        label: { show: true, position: 'inside', formatter: '{c}' },
         emphasis: {
           focus: 'series',
         },
@@ -91,6 +92,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         name: 'Email',
         type: 'bar',
         stack: 'total',
+        label: { show: true, position: 'inside', formatter: '{c}' },
         emphasis: {
           focus: 'series',
         },
@@ -101,6 +103,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         name: 'Union Ads',
         type: 'bar',
         stack: 'total',
+        label: { show: true, position: 'inside', formatter: '{c}' },
         emphasis: {
           focus: 'series',
         },
@@ -111,6 +114,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         name: 'Video Ads',
         type: 'bar',
         stack: 'total',
+        label: { show: true, position: 'inside', formatter: '{c}' },
         emphasis: {
           focus: 'series',
         },

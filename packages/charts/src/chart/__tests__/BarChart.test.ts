@@ -112,4 +112,28 @@ describe('BarChart', () => {
     const activeBars = (chart as any)._activeBars;
     expect(activeBars.size).toBe(2);
   });
+
+  it('should support per-series labels', () => {
+    const chart = new BarChart(container);
+    const option: ChartOption = {
+      animation: false,
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'bar',
+          name: 'S1',
+          data: [10, 20],
+          label: { show: true, position: 'outside' },
+        },
+      ],
+    };
+    chart.setOption(option);
+
+    const activeLabels = (chart as any)._activeLabels;
+    expect(activeLabels.size).toBe(2);
+    const firstLabel = activeLabels.values().next().value;
+    expect(firstLabel.shape.text).toBeDefined();
+    expect(String(firstLabel.shape.text).length).toBeGreaterThan(0);
+  });
 });
