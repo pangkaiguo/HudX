@@ -14,6 +14,7 @@ export const AreaLineChartExample = ({
   const [showGrid, setShowGrid] = useState(true);
   const [gridTop, setGridTop] = useState(60);
   const [splitNumber, setSplitNumber] = useState(5);
+  const [xSplitNumber, setXSplitNumber] = useState(5);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const [isSmooth, setIsSmooth] = useState(true);
 
@@ -72,6 +73,7 @@ export const AreaLineChartExample = ({
           type: 'dashed',
         },
       },
+      splitNumber: xSplitNumber,
       axisLabel: {
         // Show fewer labels to avoid clutter
         interval: (index: number) => index % 5 === 0,
@@ -205,6 +207,18 @@ export const AreaLineChartExample = ({
                 max='150'
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
+                style={{ width: 100 }}
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>X Split: {xSplitNumber}</span>
+              <input
+                type='range'
+                min='2'
+                max='10'
+                step='1'
+                value={xSplitNumber}
+                onChange={(e) => setXSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>

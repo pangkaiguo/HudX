@@ -12,6 +12,7 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(5);
+  const [xSplitNumber, setXSplitNumber] = useState(5);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
 
   const option = useMemo<ChartOption>(
@@ -58,6 +59,7 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
             type: 'dashed',
           },
         },
+        splitNumber: xSplitNumber,
       },
       yAxis: {
         type: 'value',
@@ -86,7 +88,7 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
       ],
       animation: true,
     }),
-    [isDecal, showGrid, gridTop, splitNumber, themeObj],
+    [isDecal, showGrid, gridTop, splitNumber, xSplitNumber, themeObj],
   );
 
   const handleUpdateSeries = () => {
@@ -181,6 +183,18 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 max='100'
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
+                style={{ width: 100 }}
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>X Split: {xSplitNumber}</span>
+              <input
+                type='range'
+                min='2'
+                max='10'
+                step='1'
+                value={xSplitNumber}
+                onChange={(e) => setXSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>

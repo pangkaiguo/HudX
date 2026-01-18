@@ -10,6 +10,7 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = React.useState(true);
   const [gridTop, setGridTop] = React.useState(60);
   const [splitNumber, setSplitNumber] = React.useState(5);
+  const [xSplitNumber, setXSplitNumber] = React.useState(5);
   const [renderMode, setRenderMode] = React.useState<RenderMode>('svg');
 
   const option: ChartOption = {
@@ -36,11 +37,13 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
       show: true,
       splitLine: {
         show: showGrid,
+        interval: 0,
         lineStyle: {
           color: '#eee',
           type: 'dashed',
         },
       },
+      splitNumber: xSplitNumber,
     },
     yAxis: {
       type: 'value',
@@ -170,6 +173,18 @@ export const StackLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 max='150'
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
+                style={{ width: 100 }}
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>X Split: {xSplitNumber}</span>
+              <input
+                type='range'
+                min='2'
+                max='10'
+                step='1'
+                value={xSplitNumber}
+                onChange={(e) => setXSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>

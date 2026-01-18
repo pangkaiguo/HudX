@@ -20,6 +20,7 @@ export const examples: Example[] = [
     type: 'category',
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     show: true,
+    splitNumber: 5,
     splitLine: { show: false, lineStyle: { color: '#e6e6e6', type: 'dashed' } }
   },
   yAxis: {
@@ -53,6 +54,7 @@ export const examples: Example[] = [
     type: 'category',
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     show: true,
+    splitNumber: 5,
     splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } }
   },
   yAxis: {
@@ -119,6 +121,7 @@ option = {
     type: 'category',
     data: category,
     show: true,
+    splitNumber: 5,
     splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } },
     axisLabel: { interval: function (index) { return index % 5 === 0; } }
   },
@@ -165,6 +168,7 @@ option = {
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     show: true,
     axisLabel: { interval: 'auto' },
+    splitNumber: 5,
     splitLine: { show: false, interval: 'auto', lineStyle: { color: '#e6e6e6', type: 'dashed' } }
   },
   yAxis: {
@@ -216,7 +220,7 @@ option = {
   },
   legend: { show: true, orient: 'vertical', left: 'right', top: 20, icon: 'rect', selectedMode: 'single' },
   grid: { left: 70, right: 40, top: 80, bottom: 60 },
-  xAxis: { type: 'category', data: ['Q1', 'Q2', 'Q3', 'Q4'], show: true, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  xAxis: { type: 'category', data: ['Q1', 'Q2', 'Q3', 'Q4'], show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
   yAxis: { type: 'value', show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
     { name: 'Product A', type: 'bar', data: [320, 332, 301, 334], itemStyle: { color: '#5470c6', borderWidth: 0 }, barGap: '30%' },
@@ -254,6 +258,7 @@ option = {
     type: 'category',
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     show: true,
+    splitNumber: 5,
     splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } }
   }],
   yAxis: [{
@@ -297,7 +302,7 @@ option = {
       ]
     }
   },
-  xAxis: { type: 'value', show: true, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  xAxis: { type: 'value', show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
   yAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
     { name: 'Direct', type: 'bar', stack: 'total', label: { show: true }, emphasis: { focus: 'series' }, data: [320, 302, 301, 334, 390, 330, 320], itemStyle: { borderWidth: 0 } },
@@ -331,7 +336,7 @@ option = {
       ]
     }
   },
-  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
   yAxis: { type: 'value', show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
     { name: 'Sales', type: 'bar3D', data: [120, 200, 150, 80, 70, 110, 130], itemStyle: { color: '#5470c6', borderWidth: 0 } },
@@ -362,7 +367,7 @@ option = {
       ]
     }
   },
-  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
   yAxis: { type: 'value', show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
     { name: 'Product A', type: 'stackBar3D', data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { color: '#5470c6', borderWidth: 0 } },

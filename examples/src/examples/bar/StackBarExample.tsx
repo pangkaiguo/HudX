@@ -9,6 +9,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(5);
+  const [xSplitNumber, setXSplitNumber] = useState(5);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
@@ -59,6 +60,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             type: 'dashed',
           },
         },
+        splitNumber: xSplitNumber,
       },
     ],
     yAxis: [
@@ -268,6 +270,18 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 max='100'
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
+                style={{ width: 100 }}
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>X Split: {xSplitNumber}</span>
+              <input
+                type='range'
+                min='2'
+                max='10'
+                step='1'
+                value={xSplitNumber}
+                onChange={(e) => setXSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>

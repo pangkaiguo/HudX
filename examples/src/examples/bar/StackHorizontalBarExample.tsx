@@ -12,7 +12,7 @@ export const StackHorizontalBarExample = ({
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
-  const [splitNumber, setSplitNumber] = useState(5);
+  const [xSplitNumber, setXSplitNumber] = useState(5);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
@@ -52,6 +52,7 @@ export const StackHorizontalBarExample = ({
     xAxis: {
       type: 'value',
       show: true,
+      splitNumber: xSplitNumber,
       splitLine: {
         show: showGrid,
         lineStyle: {
@@ -215,14 +216,14 @@ export const StackHorizontalBarExample = ({
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>X Split: {splitNumber}</span>
+              <span>X Split: {xSplitNumber}</span>
               <input
                 type='range'
                 min='2'
                 max='10'
                 step='1'
-                value={splitNumber}
-                onChange={(e) => setSplitNumber(Number(e.target.value))}
+                value={xSplitNumber}
+                onChange={(e) => setXSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>

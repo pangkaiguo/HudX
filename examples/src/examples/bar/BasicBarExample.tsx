@@ -11,6 +11,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [splitNumber, setSplitNumber] = useState(5);
   const [xInterval, setXInterval] = useState(0);
   const [xAutoInterval, setXAutoInterval] = useState(true);
+  const [xSplitNumber, setXSplitNumber] = useState(5);
   const [showBackground, setShowBackground] = useState(false);
   const [inverse, setInverse] = useState(false);
   const [xGridType, setXGridType] = useState<'solid' | 'dashed'>('dashed');
@@ -66,12 +67,12 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
       },
       splitLine: {
         show: showGrid,
-        interval: xAutoInterval ? 'auto' : xInterval,
         lineStyle: {
           color: themeObj.gridColor,
           type: xGridType,
         },
       },
+      splitNumber: xSplitNumber,
     },
     yAxis: {
       type: 'value',
@@ -259,6 +260,18 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 max='100'
                 value={gridTop}
                 onChange={(e) => setGridTop(Number(e.target.value))}
+                style={{ width: 100 }}
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>X Split: {xSplitNumber}</span>
+              <input
+                type='range'
+                min='2'
+                max='10'
+                step='1'
+                value={xSplitNumber}
+                onChange={(e) => setXSplitNumber(Number(e.target.value))}
                 style={{ width: 100 }}
               />
             </div>

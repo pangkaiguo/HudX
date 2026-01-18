@@ -439,7 +439,51 @@ export default class Chart {
       this._root.add(xAxisLine);
 
       if (xAxis?.splitLine?.show) {
-        if (xAxis?.data && xAxis.data.length > 0) {
+        const addSplitLine = (x: number) => {
+          const line = new Line({
+            shape: {
+              x1: x,
+              y1: plotY,
+              x2: x,
+              y2: plotY + height,
+            },
+            style: {
+              stroke:
+                xAxis.splitLine?.lineStyle?.color || this.getThemeConfig().gridColor,
+              lineWidth: xAxis.splitLine?.lineStyle?.width || 1,
+              lineDash:
+                xAxis.splitLine?.lineStyle?.type === 'solid'
+                  ? undefined
+                  : xAxis.splitLine?.lineStyle?.type === 'dashed' ||
+                    !xAxis.splitLine?.lineStyle?.type
+                    ? [4, 4]
+                    : undefined,
+            },
+            z: Z_AXIS - 0.5,
+          });
+          this._root.add(line);
+        };
+
+        if (scales?.x && xAxis.type === 'value') {
+          const domain = scales.x.domain();
+          const tickCount = xAxis.splitNumber ?? 5;
+          const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
+
+          ticks.forEach((tick) => {
+            const x = scales.x!(tick);
+            if (x < plotX - 0.1 || x > plotX + width + 0.1) return;
+            addSplitLine(x);
+          });
+        } else if (typeof xAxis.splitNumber === 'number' && xAxis.splitNumber > 0) {
+          const count = xAxis.splitNumber;
+          for (let i = 1; i <= count; i++) {
+            const ratio = i / (count + 1);
+            const x = xAxis.inverse
+              ? plotX + width - ratio * width
+              : plotX + ratio * width;
+            addSplitLine(x);
+          }
+        } else if (xAxis?.data && xAxis.data.length > 0) {
           const xRange = xAxis.inverse
             ? [plotX + width, plotX]
             : [plotX, plotX + width];
@@ -460,28 +504,7 @@ export default class Chart {
               return;
 
             const x = xAxis.type === 'category' ? xScale(label) : xScale(index);
-            const line = new Line({
-              shape: {
-                x1: x,
-                y1: plotY,
-                x2: x,
-                y2: plotY + height,
-              },
-              style: {
-                stroke:
-                  xAxis.splitLine.lineStyle?.color || this.getThemeConfig().gridColor,
-                lineWidth: xAxis.splitLine.lineStyle?.width || 1,
-                lineDash:
-                  xAxis.splitLine.lineStyle?.type === 'solid'
-                    ? undefined
-                    : xAxis.splitLine.lineStyle?.type === 'dashed' ||
-                      !xAxis.splitLine.lineStyle?.type
-                      ? [4, 4]
-                      : undefined,
-              },
-              z: Z_AXIS - 0.5,
-            });
-            this._root.add(line);
+            addSplitLine(x);
           });
         }
       }
