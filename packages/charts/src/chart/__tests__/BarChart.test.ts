@@ -136,4 +136,86 @@ describe('BarChart', () => {
     expect(firstLabel.shape.text).toBeDefined();
     expect(String(firstLabel.shape.text).length).toBeGreaterThan(0);
   });
+
+  it('should support diverging horizontal bars with labels', () => {
+    const chart = new BarChart(container);
+    const option: ChartOption = {
+      animation: false,
+      xAxis: { type: 'value' },
+      yAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed'] },
+      series: [
+        {
+          name: 'Profit',
+          type: 'bar',
+          data: [200, 170, 240],
+          label: { show: true, position: 'inside', formatter: '{a}: {c}' },
+        },
+        {
+          name: 'Expenses',
+          type: 'bar',
+          data: [-120, -132, -101],
+          label: { show: true, position: 'outside', formatter: '{c}' },
+        },
+        {
+          name: 'Income',
+          type: 'bar',
+          data: [320, 302, 341],
+          label: { show: true, position: 'inside', formatter: '{c}' },
+        },
+      ],
+    };
+    chart.setOption(option);
+
+    const activeBars = (chart as any)._activeBars;
+    expect(activeBars.size).toBe(9);
+    const negativeBars = Array.from(activeBars.values()).filter(
+      (b: any) => b.__isPositive === false,
+    );
+    expect(negativeBars.length).toBe(3);
+
+    const activeLabels = (chart as any)._activeLabels;
+    expect(activeLabels.size).toBe(9);
+    const firstLabel = activeLabels.values().next().value;
+    expect(String(firstLabel.shape.text).length).toBeGreaterThan(0);
+  });
+
+  it('should support diverging vertical bars with labels', () => {
+    const chart = new BarChart(container);
+    const option: ChartOption = {
+      animation: false,
+      xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          name: 'Profit',
+          type: 'bar',
+          data: [200, 170, 240],
+          label: { show: true, position: 'inside', formatter: '{a}: {c}' },
+        },
+        {
+          name: 'Expenses',
+          type: 'bar',
+          data: [-120, -132, -101],
+          label: { show: true, position: 'outside', formatter: '{c}' },
+        },
+        {
+          name: 'Income',
+          type: 'bar',
+          data: [320, 302, 341],
+          label: { show: true, position: 'inside', formatter: '{c}' },
+        },
+      ],
+    };
+    chart.setOption(option);
+
+    const activeBars = (chart as any)._activeBars;
+    expect(activeBars.size).toBe(9);
+    const negativeBars = Array.from(activeBars.values()).filter(
+      (b: any) => b.__isPositive === false,
+    );
+    expect(negativeBars.length).toBe(3);
+
+    const activeLabels = (chart as any)._activeLabels;
+    expect(activeLabels.size).toBe(9);
+  });
 });

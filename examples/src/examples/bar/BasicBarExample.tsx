@@ -13,7 +13,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [xAutoInterval, setXAutoInterval] = useState(true);
   const [xSplitNumber, setXSplitNumber] = useState(10);
   const [showBackground, setShowBackground] = useState(false);
-  const [inverse, setInverse] = useState(false);
+  // const [inverse, setInverse] = useState(false);
   const [xGridType, setXGridType] = useState<'solid' | 'dashed'>('dashed');
   const [yGridType, setYGridType] = useState<'solid' | 'dashed'>('solid');
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
@@ -61,7 +61,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
       type: 'category',
       data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       show: true,
-      inverse: inverse,
+      // inverse: inverse,
       axisLabel: {
         interval: xAutoInterval ? 'auto' : xInterval,
       },
@@ -203,7 +203,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
           Background
         </label>
 
-        <label
+        {/* <label
           style={{
             cursor: 'pointer',
             display: 'flex',
@@ -217,7 +217,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             onChange={(e) => setInverse(e.target.checked)}
           />
           Inverse X
-        </label>
+        </label> */}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>Bar Width: {barWidth}</span>

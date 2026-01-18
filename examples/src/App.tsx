@@ -29,6 +29,12 @@ const StackBarExample = lazy(() => import('./examples/bar/StackBarExample'));
 const StackHorizontalBarExample = lazy(
   () => import('./examples/bar/StackHorizontalBarExample'),
 );
+const DivergingHorizontalBarExample = lazy(
+  () => import('./examples/bar/DivergingHorizontalBarExample'),
+);
+const DivergingVerticalBarExample = lazy(
+  () => import('./examples/bar/DivergingVerticalBarExample'),
+);
 // const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
 // const StackBar3DExample = lazy(
 //   () => import('./examples/bar/StackBar3DExample'),
@@ -95,6 +101,16 @@ const chartExamples = [
     category: 'Bar Charts',
     items: [
       { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
+      {
+        id: 'diverging-horizontal-bar',
+        name: 'Diverging Horizontal Bar',
+        component: DivergingHorizontalBarExample,
+      },
+      {
+        id: 'diverging-vertical-bar',
+        name: 'Diverging Vertical Bar',
+        component: DivergingVerticalBarExample,
+      },
       { id: 'stack-bar', name: 'Stack Bar', component: StackBarExample },
       {
         id: 'stack-horizontal-bar',

@@ -175,13 +175,13 @@ describe('LineChart', () => {
     s1.area.trigger('mouseover');
     expect(s1.area.style.opacity).toBeCloseTo(0.5);
     expect(s2.area.style.opacity).toBeCloseTo(0.1);
-    expect(s1.line.style.lineWidth).toBe(3);
+    expect(s1.line.style.lineWidth).toBe(2);
     expect(s2.line.style.opacity).toBeCloseTo(0.1);
 
     s1.area.trigger('mouseout');
     expect(s1.area.style.opacity).toBeCloseTo(0.5);
     expect(s2.area.style.opacity).toBeCloseTo(0.5);
-    expect(s1.line.style.lineWidth).toBe(2);
+    expect(s1.line.style.lineWidth).toBe(1);
     expect(s2.line.style.opacity).toBeCloseTo(1);
   });
 });

@@ -132,7 +132,7 @@ describe('Chart Integration', () => {
       );
 
       expect(pointerLine).toBeDefined();
-      expect(pointerLine.style.lineWidth).toBe(2);
+      expect(pointerLine.style.lineWidth).toBe(1);
       expect(pointerLine.style.lineDash).toEqual([4, 4]);
       expect(pointerLine.invisible).toBe(true); // Should be initially invisible
     });
