@@ -4,6 +4,7 @@
 
 import ChartElement from '../ChartElement';
 import type { ElementOption, BoundingRect } from '../types';
+import { ThemeManager } from '../theme/ThemeManager';
 
 export interface TextShape {
   x: number;
@@ -61,8 +62,9 @@ export default class Text extends ChartElement {
   getBoundingRect(): BoundingRect {
     const shape = this.shape;
     const style = this.style;
-    const fontSize = style.fontSize || 12;
-    const fontFamily = style.fontFamily || 'sans-serif';
+    const theme = ThemeManager.getTheme();
+    const fontSize = style.fontSize || theme.fontSize;
+    const fontFamily = style.fontFamily || theme.fontFamily;
     const fontWeight = style.fontWeight || 'normal';
 
     // Parse text if needed
@@ -140,8 +142,9 @@ export default class Text extends ChartElement {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d')!;
     const baseStyle = this.style;
-    const baseFont = `${baseStyle.fontWeight || 'normal'} ${baseStyle.fontSize || 12}px ${baseStyle.fontFamily || 'sans-serif'}`;
-    const baseFontSize = baseStyle.fontSize || 12;
+    const theme = ThemeManager.getTheme();
+    const baseFont = `${baseStyle.fontWeight || 'normal'} ${baseStyle.fontSize || theme.fontSize}px ${baseStyle.fontFamily || theme.fontFamily}`;
+    const baseFontSize = baseStyle.fontSize || theme.fontSize;
 
     lines.forEach((lineText) => {
       const fragments: any[] = [];
@@ -191,7 +194,7 @@ export default class Text extends ChartElement {
           // Measure with specific style
           const fontSize = style.fontSize || baseFontSize;
           const fontFamily =
-            style.fontFamily || baseStyle.fontFamily || 'sans-serif';
+            style.fontFamily || baseStyle.fontFamily || theme.fontFamily;
           const fontWeight =
             style.fontWeight || baseStyle.fontWeight || 'normal';
           ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
@@ -273,6 +276,7 @@ export default class Text extends ChartElement {
     // Don't apply base style fill/stroke immediately if we handle rich text manual drawing
     // But we need base shadow/opacity
     const style = this.style;
+    const theme = ThemeManager.getTheme();
     if (style.opacity !== undefined) ctx.globalAlpha = style.opacity;
     if (style.shadowColor) {
       ctx.shadowColor = style.shadowColor;
@@ -333,9 +337,9 @@ export default class Text extends ChartElement {
 
       fragments.forEach((frag) => {
         const fStyle = frag.style;
-        const fontSize = fStyle.fontSize || style.fontSize || 12;
+        const fontSize = fStyle.fontSize || style.fontSize || theme.fontSize;
         const fontFamily =
-          fStyle.fontFamily || style.fontFamily || 'sans-serif';
+          fStyle.fontFamily || style.fontFamily || theme.fontFamily;
         const fontWeight = fStyle.fontWeight || style.fontWeight || 'normal';
 
         ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
@@ -378,7 +382,7 @@ export default class Text extends ChartElement {
         const contentX = currentX + this._getPaddingLeft(fStyle.padding);
         const contentY = centerY; // Middle baseline
 
-        ctx.fillStyle = fStyle.color || style.fill || '#000';
+        ctx.fillStyle = fStyle.color || style.fill || theme.textColor;
         ctx.fillText(frag.text, contentX, contentY);
 
         currentX += fragWidth;

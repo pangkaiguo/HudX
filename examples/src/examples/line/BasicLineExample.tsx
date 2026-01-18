@@ -6,6 +6,11 @@ import type { RenderMode } from 'hudx-render';
 
 export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
+  const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
   const chartRef = useRef<HChartRef>(null);
   const [showGrid, setShowGrid] = React.useState(false);
   const [gridTop, setGridTop] = React.useState(40);
@@ -37,7 +42,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: '#eee',
+          color: themeObj.gridColor,
           type: 'dashed',
         },
       },
@@ -49,7 +54,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: '#eee',
+          color: themeObj.gridColor,
         },
       },
     },
@@ -92,7 +97,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
     <div>
       <div style={{ marginBottom: 20 }}>
         <h2 style={{ marginBottom: 10 }}>Line Chart</h2>
-        <p style={{ color: '#666', fontSize: 14 }}>
+        <p style={{ color: textSecondary, fontSize: 14 }}>
           Hover over data points to see values
         </p>
       </div>
@@ -113,7 +118,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #ddd',
+              border: `1px solid ${border}`,
             }}
           >
             <option value='canvas'>Canvas</option>
@@ -171,7 +176,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: '1px solid #e0e0e0',
+          border: `1px solid ${border}`,
           borderRadius: 8,
           height: '600px',
         }}
@@ -181,8 +186,8 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
           onClick={handleUpdateSeries}
           style={{
             padding: '8px 16px',
-            backgroundColor: '#5470c6',
-            color: 'white',
+            backgroundColor: primary,
+            color: primaryText,
             border: 'none',
             borderRadius: 4,
             cursor: 'pointer',

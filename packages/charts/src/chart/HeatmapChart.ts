@@ -37,7 +37,12 @@ export default class HeatmapChart extends Chart {
 
           const rect = new Rect({
             shape: { x, y, width: cellWidth, height: cellHeight },
-            style: { fill: color, stroke: '#fff', lineWidth: 1, opacity: 0 }, // Start with opacity 0 for animation
+            style: {
+              fill: color,
+              stroke: this.getThemeConfig().backgroundColor,
+              lineWidth: 1,
+              opacity: 0,
+            },
             cursor: this._tooltip ? 'pointer' : 'default',
           });
 
@@ -47,7 +52,10 @@ export default class HeatmapChart extends Chart {
           if (this._tooltip) {
             rect.on('mouseover', (evt: any) => {
               // Highlight
-              rect.attr('style', { stroke: '#333', lineWidth: 2 });
+              rect.attr('style', {
+                stroke: this.getThemeConfig().textColor,
+                lineWidth: 2,
+              });
 
               const xName = s.xAxisData?.[colIndex] || colIndex;
               const yName = s.yAxisData?.[rowIndex] || rowIndex;
@@ -78,7 +86,10 @@ export default class HeatmapChart extends Chart {
 
             rect.on('mouseout', () => {
               // Restore
-              rect.attr('style', { stroke: '#fff', lineWidth: 1 });
+              rect.attr('style', {
+                stroke: this.getThemeConfig().backgroundColor,
+                lineWidth: 1,
+              });
               this._tooltip!.hide();
             });
           }
@@ -102,7 +113,7 @@ export default class HeatmapChart extends Chart {
             // Set final opacity if animation is disabled
             rect.attr('style', {
               fill: color,
-              stroke: '#fff',
+              stroke: this.getThemeConfig().backgroundColor,
               lineWidth: 1,
               opacity: 1,
             });
@@ -113,9 +124,14 @@ export default class HeatmapChart extends Chart {
   }
 
   private _getHeatmapColor(intensity: number): string {
-    if (intensity < 0.25) return '#313695';
-    if (intensity < 0.5) return '#4575b4';
-    if (intensity < 0.75) return '#fee090';
-    return '#d73027';
+    const theme = this.getThemeConfig();
+    const palette =
+      (((theme.token as any).heatmapColors as string[]) || theme.seriesColors) ??
+      [];
+    const colors = palette.length >= 4 ? palette : theme.seriesColors;
+    if (intensity < 0.25) return colors[0] || theme.seriesColors[0]!;
+    if (intensity < 0.5) return colors[1] || theme.seriesColors[1]!;
+    if (intensity < 0.75) return colors[2] || theme.seriesColors[2]!;
+    return colors[3] || theme.seriesColors[3]!;
   }
 }

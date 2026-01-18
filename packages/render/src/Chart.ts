@@ -25,6 +25,7 @@ import type {
   DataURLOpts,
   ThemeConfig,
 } from './types';
+import { ThemeManager } from './theme/ThemeManager';
 import { toRgbaWithOpacity } from './util/color';
 import { Z_AXIS } from './constants';
 import type { ChartOption, ChartEvent } from './types';
@@ -59,10 +60,15 @@ export default class Chart {
     dom: HTMLElement,
     option: ChartOption = {},
     renderMode: RenderMode = 'svg',
-    theme: Theme = 'light',
+    theme?: Theme,
     locale: Locale = 'en',
   ) {
-    this._renderer = Renderer.init(dom, renderMode, theme, locale);
+    this._renderer = Renderer.init(
+      dom,
+      renderMode,
+      theme ?? ThemeManager.getCurrentTheme(),
+      locale,
+    );
     this._option = option;
     this._root = this._renderer.getRoot();
     this._init();
@@ -118,6 +124,7 @@ export default class Chart {
   protected _init(): void {
     this._isMounted = true;
     this.resize();
+    const theme = this.getThemeConfig();
     const tooltipOpt = this._option?.tooltip || {};
     this._tooltip = new Tooltip({
       ...tooltipOpt,
@@ -126,6 +133,14 @@ export default class Chart {
         typeof tooltipOpt?.formatter === 'function'
           ? tooltipOpt.formatter
           : undefined,
+      backgroundColor: tooltipOpt.backgroundColor ?? theme.tooltipBackgroundColor,
+      textStyle: {
+        ...(tooltipOpt.textStyle || {}),
+        color: tooltipOpt.textStyle?.color ?? theme.tooltipTextColor,
+        fontFamily: tooltipOpt.textStyle?.fontFamily ?? theme.fontFamily,
+        fontSize: tooltipOpt.textStyle?.fontSize ?? theme.fontSize,
+      },
+      borderColor: tooltipOpt.borderColor ?? theme.borderColor,
     });
     this._tooltip.setContainer(this.getDom());
     this.setOption(this._option);
@@ -453,7 +468,8 @@ export default class Chart {
                 y2: plotY + height,
               },
               style: {
-                stroke: xAxis.splitLine.lineStyle?.color || '#eee',
+                stroke:
+                  xAxis.splitLine.lineStyle?.color || this.getThemeConfig().gridColor,
                 lineWidth: xAxis.splitLine.lineStyle?.width || 1,
                 lineDash:
                   xAxis.splitLine.lineStyle?.type === 'solid'
@@ -484,8 +500,8 @@ export default class Chart {
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
         const overflow = axisLabel.overflow || 'break';
-        const fontSize = axisLabel.fontSize || 12;
-        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const fontSize = axisLabel.fontSize || this.getThemeConfig().fontSize;
+        const fontFamily = this.getThemeConfig().fontFamily;
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
         const interval = axisLabel.interval;
 
@@ -556,8 +572,8 @@ export default class Chart {
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
         const overflow = axisLabel.overflow || 'break';
-        const fontSize = axisLabel.fontSize || 12;
-        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const fontSize = axisLabel.fontSize || this.getThemeConfig().fontSize;
+        const fontFamily = this.getThemeConfig().fontFamily;
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
         const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
@@ -663,7 +679,8 @@ export default class Chart {
                 y2: y,
               },
               style: {
-                stroke: yAxis.splitLine.lineStyle?.color || '#eee',
+                stroke:
+                  yAxis.splitLine.lineStyle?.color || this.getThemeConfig().gridColor,
                 lineWidth: yAxis.splitLine.lineStyle?.width || 1,
                 lineDash:
                   yAxis.splitLine.lineStyle?.type === 'solid'
@@ -690,7 +707,8 @@ export default class Chart {
                 y2: y,
               },
               style: {
-                stroke: yAxis.splitLine.lineStyle?.color || '#eee',
+                stroke:
+                  yAxis.splitLine.lineStyle?.color || this.getThemeConfig().gridColor,
                 lineWidth: yAxis.splitLine.lineStyle?.width || 1,
                 lineDash:
                   yAxis.splitLine.lineStyle?.type === 'solid'
@@ -716,8 +734,8 @@ export default class Chart {
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
         const overflow = axisLabel.overflow || 'break';
-        const fontSize = axisLabel.fontSize || 12;
-        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const fontSize = axisLabel.fontSize || this.getThemeConfig().fontSize;
+        const fontFamily = this.getThemeConfig().fontFamily;
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
         const interval = axisLabel.interval;
 
@@ -786,8 +804,8 @@ export default class Chart {
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
         const overflow = axisLabel.overflow || 'break';
-        const fontSize = axisLabel.fontSize || 12;
-        const fontFamily = this.getThemeConfig().fontFamily || 'sans-serif';
+        const fontSize = axisLabel.fontSize || this.getThemeConfig().fontSize;
+        const fontFamily = this.getThemeConfig().fontFamily;
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
         const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
@@ -859,8 +877,8 @@ export default class Chart {
   private _wrapText(
     text: string,
     width: number,
-    fontSize: number = 12,
-    fontFamily: string = 'sans-serif',
+    fontSize?: number,
+    fontFamily?: string,
     overflow: string = 'break',
   ): string {
     if (!width || width <= 0) return text;
@@ -873,7 +891,9 @@ export default class Chart {
     const ctx = canvas.getContext('2d');
     if (!ctx) return text;
 
-    ctx.font = `${fontSize}px ${fontFamily}`;
+    const fs = fontSize ?? this.getThemeConfig().fontSize;
+    const ff = fontFamily ?? this.getThemeConfig().fontFamily;
+    ctx.font = `${fs}px ${ff}`;
 
     if (overflow === 'truncate') {
       if (ctx.measureText(text).width <= width) return text;
@@ -1037,7 +1057,7 @@ export default class Chart {
     const opts = {
       text: loadingOpts?.text || this.t('data.loading', 'Loading...'),
       color: loadingOpts?.color || '#5470c6',
-      textColor: loadingOpts?.textColor || '#333',
+      textColor: loadingOpts?.textColor || this.getThemeConfig().textColor,
       maskColor: loadingOpts?.maskColor || 'rgba(255, 255, 255, 0.8)',
       zlevel: loadingOpts?.zlevel || 9999,
     };
@@ -1145,6 +1165,7 @@ export default class Chart {
   protected _mountLegend(items: any[]): void {
     const option = this._option;
     if (option.legend?.show === false) return;
+    const theme = this.getThemeConfig();
 
     if (this._legend) {
       this._legend.dispose();
@@ -1170,6 +1191,9 @@ export default class Chart {
       tableHead: option.legend?.tableHead,
       itemMaxWidth: option.legend?.itemMaxWidth,
       align: option.legend?.align,
+      textColor: theme.legendTextColor,
+      fontSize: option.legend?.fontSize ?? theme.fontSize,
+      backgroundColor: option.legend?.backgroundColor ?? theme.backgroundColor,
       onSelect: (name: string, selected: boolean) => {
         if (this._legend) {
           const currentSelected = this._legend.getSelected();
@@ -1223,7 +1247,7 @@ export default class Chart {
 
         return {
           name: name,
-          color: '#ccc',
+          color: this.getThemeConfig().borderColor,
           icon: customItem.icon || option.legend?.icon || 'rect',
           textColor: this.getThemeConfig().legendTextColor,
           textStyle: customItem.textStyle
@@ -1246,11 +1270,27 @@ export default class Chart {
     const option = this._option;
     if (option.title?.show === false) return;
     if (!option.title) return;
+    const theme = this.getThemeConfig();
+    const titleOption = {
+      ...option.title,
+      textStyle: {
+        color: theme.textColor,
+        fontFamily: theme.fontFamily,
+        fontSize: theme.fontSize + 6,
+        ...(option.title.textStyle || {}),
+      },
+      subtextStyle: {
+        color: theme.axisLabelColor,
+        fontFamily: theme.fontFamily,
+        fontSize: theme.fontSize,
+        ...(option.title.subtextStyle || {}),
+      },
+    };
 
     if (!this._title) {
-      this._title = new Title(option.title);
+      this._title = new Title(titleOption);
     } else {
-      this._title.updateOption(option.title);
+      this._title.updateOption(titleOption);
     }
 
     this._title.setContainer(this._width, this._height);

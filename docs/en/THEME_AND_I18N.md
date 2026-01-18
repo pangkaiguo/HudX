@@ -75,6 +75,19 @@ const bgColor = theme.backgroundColor; // Contains updated background
 
 This is particularly useful when you want to align chart colors with your design system's tokens.
 
+#### Global Theme Mode
+
+ThemeManager can act as a global style driver: set the current theme (light/dark) once, and let render instances use it when `theme` is not explicitly provided.
+
+```typescript
+import { ThemeManager, Renderer } from "hudx-render";
+
+ThemeManager.setCurrentTheme("dark");
+
+// If theme is omitted, it uses ThemeManager.getCurrentTheme()
+const renderer = Renderer.init("#container", "canvas");
+```
+
 ### Usage
 
 #### In Renderer
@@ -144,6 +157,10 @@ const renderer = Renderer.init("#container", "canvas", "custom");
 ### ThemeManager
 
 - `getTheme(theme: Theme): ThemeConfig` - Get theme configuration
+- `getTheme(): ThemeConfig` - Get theme configuration for current theme
+- `getCurrentTheme(): Theme` - Get current theme
+- `setCurrentTheme(theme: Theme): void` - Set current theme
+- `onThemeChange(listener): () => void` - Subscribe to theme change
 - `registerTheme(theme: Theme, config: ThemeConfig): void` - Register custom theme
 - `registerToken(theme: string, token: ThemeToken): void` - Register or update theme tokens
 - `getThemes(): Theme[]` - Get all registered themes

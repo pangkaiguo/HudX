@@ -7,7 +7,6 @@ import React, {
   useEffect,
   useRef,
   useMemo,
-  useCallback,
   forwardRef,
   useImperativeHandle,
 } from 'react';
@@ -152,26 +151,13 @@ const HChart = forwardRef<HChartRef, HChartProps>(
       );
       optionRef.current = option;
 
-      // Bind events
-      if (onEvents) {
-        Object.keys(onEvents).forEach((eventName) => {
-          chartRef.current?.on(eventName, onEvents[eventName]);
-        });
-      }
-
       return () => {
         if (chartRef.current) {
-          // Unbind events
-          if (onEvents) {
-            Object.keys(onEvents).forEach((eventName) => {
-              chartRef.current?.off(eventName, onEvents[eventName]);
-            });
-          }
           chartRef.current.dispose();
           chartRef.current = null;
         }
       };
-    }, [chartType, renderMode, theme, locale]); // Recreate on chart type, render mode, theme, or locale change
+    }, [chartType]); // Only recreate on chart type change
 
     // Update option
     useEffect(() => {
@@ -194,24 +180,40 @@ const HChart = forwardRef<HChartRef, HChartProps>(
       }
     }, [option, notMerge, lazyUpdate]);
 
-    // Handle resize
-    const handleResize = useCallback(() => {
-      if (chartRef.current) {
-        chartRef.current.resize(width, height);
+    useEffect(() => {
+      if (!chartRef.current) {
+        return;
+      }
+
+      chartRef.current.resize(width, height);
+
+      if (typeof width !== 'number' || typeof height !== 'number') {
+        chartRef.current.makeResponsive();
+      } else {
+        chartRef.current.stopResponsive();
       }
     }, [width, height]);
 
     useEffect(() => {
-      handleResize(); // Initial resize
-
-      // Auto resize on window resize if dimensions are not fixed numbers
-      if (typeof width !== 'number' || typeof height !== 'number') {
-        window.addEventListener('resize', handleResize);
-        return () => {
-          window.removeEventListener('resize', handleResize);
-        };
+      if (!chartRef.current) {
+        return;
       }
-    }, [width, height, handleResize]);
+      chartRef.current.setTheme(theme);
+    }, [theme]);
+
+    useEffect(() => {
+      if (!chartRef.current) {
+        return;
+      }
+      chartRef.current.setLocale(locale);
+    }, [locale]);
+
+    useEffect(() => {
+      if (!chartRef.current) {
+        return;
+      }
+      chartRef.current.setRenderMode(renderMode);
+    }, [renderMode]);
 
     // Update events
     useEffect(() => {

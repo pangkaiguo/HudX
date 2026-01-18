@@ -39,11 +39,13 @@ export default class Renderer {
   private _theme: Theme;
   private _locale: Locale;
   private _disposed: boolean = false;
+  private _followGlobalTheme: boolean = false;
+  private _unsubscribeThemeChange?: () => void;
 
   constructor(
     dom: HTMLElement,
     renderMode: RenderMode = 'svg',
-    theme: Theme = 'light',
+    theme?: Theme,
     locale: Locale = 'en',
   ) {
     this._dom = dom;
@@ -51,7 +53,8 @@ export default class Renderer {
     this._root = new Group();
     this._storage.addRoot(this._root);
     this._renderMode = renderMode;
-    this._theme = theme;
+    this._followGlobalTheme = theme === undefined;
+    this._theme = this._followGlobalTheme ? ThemeManager.getCurrentTheme() : (theme as Theme);
     this._locale = locale;
 
     // Create painter based on render mode
@@ -66,6 +69,13 @@ export default class Renderer {
     // Apply theme
     this._applyTheme();
 
+    if (this._followGlobalTheme) {
+      this._unsubscribeThemeChange = ThemeManager.onThemeChange((nextTheme) => {
+        if (!this._followGlobalTheme || this._disposed) return;
+        this.setTheme(nextTheme);
+      });
+    }
+
     // Listen to storage changes
     this._root.on('dirty', () => {
       this._painter.markDirty();
@@ -78,7 +88,7 @@ export default class Renderer {
   static init(
     dom: HTMLElement | string,
     renderMode: RenderMode = 'svg',
-    theme: Theme = 'light',
+    theme?: Theme,
     locale: Locale = 'en',
   ): Renderer {
     let element: HTMLElement;
@@ -298,6 +308,11 @@ export default class Renderer {
    * Set theme
    */
   setTheme(theme: Theme | string): this {
+    if (this._followGlobalTheme) {
+      this._followGlobalTheme = false;
+      this._unsubscribeThemeChange?.();
+      this._unsubscribeThemeChange = undefined;
+    }
     if (this._theme === theme) {
       return this;
     }
@@ -366,6 +381,9 @@ export default class Renderer {
     if (this._disposed) {
       return;
     }
+    this._followGlobalTheme = false;
+    this._unsubscribeThemeChange?.();
+    this._unsubscribeThemeChange = undefined;
     this._handler.dispose();
     this._painter.dispose();
     this._storage.clear();

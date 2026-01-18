@@ -1,10 +1,18 @@
 import React from 'react';
 import { HChart, type ChartOption } from 'hudx-charts';
+import { ThemeManager } from 'hudx-render';
 
 /**
  * Demonstrates TitleOption properties as defined in types.ts
  */
 const TitleExample: React.FC = () => {
+  const themeObj = ThemeManager.getTheme();
+  const ui = themeObj.token as any;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
+  const textTertiary = ui.colorTextTertiary || themeObj.axisLabelColor;
+
   // 1. Basic Positioning Examples
   const topLeftOption: ChartOption = {
     title: { text: 'Top Left', left: 'left', top: 'top' },
@@ -31,7 +39,7 @@ const TitleExample: React.FC = () => {
       text: 'Middle Center', 
       left: 'center', 
       top: 'middle', 
-      textStyle: { fontSize: 24, color: '#4096ff' } 
+      textStyle: { fontSize: 24, color: primary } 
     },
     series: [],
   };
@@ -44,21 +52,21 @@ const TitleExample: React.FC = () => {
       left: 'center',
       top: 'center',
       // Container style
-      backgroundColor: '#f4f4f4',
-      borderColor: '#ccc',
+      backgroundColor: ui.colorFillContainerAlt || themeObj.gridColor,
+      borderColor: border,
       borderWidth: 2,
       borderRadius: 10,
       padding: [20, 40],
       // Text style
       textStyle: {
-        color: '#333',
+        color: themeObj.textColor,
         fontSize: 24,
         fontWeight: 'bold',
         fontFamily: 'serif',
       },
       // Subtext style
       subtextStyle: {
-        color: '#888',
+        color: textTertiary,
         fontSize: 14,
         fontStyle: 'italic',
       },
@@ -80,12 +88,12 @@ const TitleExample: React.FC = () => {
     series: [],
   };
 
-  const chartStyle = { width: '100%', height: 200, border: '1px solid #eee' };
+  const chartStyle = { width: '100%', height: 200, border: `1px solid ${themeObj.gridColor}` };
 
   return (
     <div style={{ padding: 20 }}>
       <h1>Title Configuration</h1>
-      <p style={{ color: '#666' }}>Matching <code>TitleOption</code> interface.</p>
+      <p style={{ color: textSecondary }}>Matching <code>TitleOption</code> interface.</p>
       
       <h3>1. Positioning</h3>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20, marginBottom: 30 }}>

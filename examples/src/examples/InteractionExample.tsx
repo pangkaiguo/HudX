@@ -6,6 +6,10 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [clickCount, setClickCount] = useState(0);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -16,8 +20,6 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
       theme,
       'en',
     );
-    const themeObj = ThemeManager.getTheme(theme);
-    const normalizedTheme = (theme || 'light').toLowerCase();
 
     const circles = [];
     for (let i = 0; i < 5; i++) {
@@ -60,7 +62,7 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
         shape: { text: 'Click circles to interact', x: 400, y: 50 },
         style: {
           textAlign: 'center',
-          fill: normalizedTheme === 'dark' ? '#eee' : '#333',
+          fill: themeObj.textColor,
           fontSize: 16,
           fontWeight: 'bold',
         },
@@ -93,7 +95,7 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #ddd',
+              border: `1px solid ${border}`,
             }}
           >
             <option value='canvas'>Canvas</option>
@@ -101,7 +103,7 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
           </select>
         </label>
       </div>
-      <p style={{ marginBottom: 20, color: '#666' }}>
+      <p style={{ marginBottom: 20, color: textSecondary }}>
         Click Count: {clickCount}
       </p>
       <div
@@ -109,7 +111,7 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
         role='img'
         aria-label='Interactive demo with 5 clickable circles'
         style={{
-          border: '1px solid #e0e0e0',
+          border: `1px solid ${border}`,
           borderRadius: 8,
           width: 800,
           height: 300,

@@ -1,8 +1,14 @@
-import React, { useState, lazy, Suspense, useMemo, memo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  lazy,
+  Suspense,
+  useMemo,
+  memo,
+} from 'react';
 import { HChart } from 'hudx-charts';
-import type { ChartOption } from 'hudx-charts';
-import { Theme } from 'hudx-render';
-import { Sidebar } from './components/Sidebar';
+import type { ChartOption, HChartRef } from 'hudx-charts';
+import { Theme, ThemeManager, toRgbaWithOpacity } from 'hudx-render';
 import { Codebox } from './components/Codebox';
 import { examples, Example } from './data/examples';
 
@@ -177,53 +183,55 @@ const NavButton = ({
   example,
   activeExample,
   setActiveExample,
+  theme,
 }: {
   example: any;
   activeExample: string;
   setActiveExample: (id: string) => void;
-}) => (
-  <button
-    onClick={() => setActiveExample(example.id)}
-    aria-label={`View ${example.name} example`}
-    aria-current={activeExample === example.id ? 'page' : undefined}
-    style={{
-      display: 'block',
-      width: '100%',
-      padding: '8px 12px',
-      marginBottom: 4,
-      border: '2px solid transparent',
-      borderRadius: 6,
-      backgroundColor: activeExample === example.id ? '#5470c6' : 'transparent',
-      color: activeExample === example.id ? '#fff' : '#333',
-      cursor: 'pointer',
-      textAlign: 'left',
-      fontSize: 13,
-      fontWeight: activeExample === example.id ? 600 : 400,
-      transition: 'all 0.2s',
-      outline: 'none',
-    }}
-    onMouseEnter={(e) => {
-      if (activeExample !== example.id) {
-        e.currentTarget.style.backgroundColor = '#f0f0f0';
-      }
-    }}
-    onMouseLeave={(e) => {
-      if (activeExample !== example.id) {
-        e.currentTarget.style.backgroundColor = 'transparent';
-      }
-    }}
-    onFocus={(e) => {
-      e.currentTarget.style.borderColor = '#5470c6';
-      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(84, 112, 198, 0.2)';
-    }}
-    onBlur={(e) => {
-      e.currentTarget.style.borderColor = 'transparent';
-      e.currentTarget.style.boxShadow = 'none';
-    }}
-  >
-    {example.name}
-  </button>
-);
+  theme: Theme;
+}) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
+  const hoverBg = ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
+  const isActive = activeExample === example.id;
+
+  return (
+    <button
+      onClick={() => setActiveExample(example.id)}
+      aria-label={`View ${example.name} example`}
+      aria-current={isActive ? 'page' : undefined}
+      style={{
+        display: 'block',
+        width: '100%',
+        padding: '8px 12px',
+        marginBottom: 4,
+        border: `2px solid ${isFocused ? String(primary) : 'transparent'}`,
+        borderRadius: 6,
+        backgroundColor: isActive ? primary : isHovered ? String(hoverBg) : 'transparent',
+        color: isActive ? primaryText : themeObj.textColor,
+        cursor: 'pointer',
+        textAlign: 'left',
+        fontSize: 13,
+        fontWeight: isActive ? 600 : 400,
+        transition: 'all 0.2s',
+        outline: 'none',
+        boxShadow: isFocused
+          ? `0 0 0 3px ${toRgbaWithOpacity(String(primary), 0.2)}`
+          : 'none',
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+    >
+      {example.name}
+    </button>
+  );
+};
 
 const categories = [
   { key: 'line', label: 'Line' },
@@ -233,6 +241,28 @@ const categories = [
   { key: 'sub-components', label: 'Sub Components' },
   { key: 'bundle', label: 'Bundle' },
 ];
+
+function useLocalStorageState<T>(key: string, initialValue: T) {
+  const [value, setValue] = useState<T>(() => {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw == null) return initialValue;
+      return JSON.parse(raw) as T;
+    } catch {
+      return initialValue;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      return;
+    }
+  }, [key, value]);
+
+  return [value, setValue] as const;
+}
 
 function parseOption(code: string): ChartOption {
   try {
@@ -249,46 +279,183 @@ function parseOption(code: string): ChartOption {
   }
 }
 
+const SegmentedControl = ({
+  leftLabel,
+  rightLabel,
+  value,
+  leftValue,
+  rightValue,
+  onChange,
+  theme,
+}: {
+  leftLabel: string;
+  rightLabel: string;
+  value: string;
+  leftValue: string;
+  rightValue: string;
+  onChange: (next: string) => void;
+  theme?: Theme;
+}) => {
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        border: `1px solid ${border}`,
+        borderRadius: 4,
+        overflow: 'hidden',
+      }}
+    >
+      <button
+        onClick={() => onChange(leftValue)}
+        style={{
+          padding: '4px 12px',
+          background: value === leftValue ? primary : 'transparent',
+          color: value === leftValue ? primaryText : themeObj.textColor,
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: 12,
+        }}
+      >
+        {leftLabel}
+      </button>
+      <button
+        onClick={() => onChange(rightValue)}
+        style={{
+          padding: '4px 12px',
+          background: value === rightValue ? primary : 'transparent',
+          color: value === rightValue ? primaryText : themeObj.textColor,
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: 12,
+        }}
+      >
+        {rightLabel}
+      </button>
+    </div>
+  );
+};
+
 const ChartCard = ({
   example,
   onClick,
+  theme,
 }: {
   example: Example;
   onClick: () => void;
+  theme: Theme;
 }) => {
   const option = useMemo(() => parseOption(example.code), [example.code]);
+  const previewOption = useMemo(
+    () => ({
+      ...option,
+      animation: false,
+      animationDuration: 0,
+      animationDurationUpdate: 0,
+    }),
+    [option],
+  );
+  const chartRef = React.useRef<HChartRef>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const cardBg = ui.colorFillContainer || themeObj.backgroundColor;
+  const previewBg = ui.colorFillContainerAlt || themeObj.gridColor;
+  const subtitleColor = ui.colorTextTertiary || themeObj.axisLabelColor;
+
+  useEffect(() => {
+    let raf1 = 0;
+    let raf2 = 0;
+
+    const capture = () => {
+      const chart = chartRef.current?.getChartInstance();
+      if (!chart) return;
+      setPreviewUrl(
+        chart.getDataURL({
+          type: 'png',
+          pixelRatio: 2,
+          backgroundColor: String(previewBg),
+        }),
+      );
+    };
+
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(capture);
+    });
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [previewOption, previewBg, theme]);
 
   return (
     <div
       onClick={onClick}
       style={{
-        border: '1px solid #e0e0e0',
+        border: `1px solid ${border}`,
         borderRadius: 8,
         overflow: 'hidden',
         cursor: 'pointer',
         transition: 'box-shadow 0.2s',
-        backgroundColor: '#fff',
+        backgroundColor: cardBg,
         display: 'flex',
         flexDirection: 'column',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+        e.currentTarget.style.boxShadow = `0 4px 12px ${toRgbaWithOpacity(themeObj.shadowColor, 0.17)}`;
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.boxShadow = 'none';
       }}
     >
-      <div style={{ height: 200, padding: 10, backgroundColor: '#f9f9f9' }}>
-        <HChart
-          option={option}
-          style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
-        />
+      <div style={{ height: 200, padding: 10, backgroundColor: previewBg }}>
+        {previewUrl ? (
+          <img
+            src={previewUrl}
+            alt={example.title}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              display: 'block',
+            }}
+          />
+        ) : (
+          <div style={{ width: '100%', height: '100%' }} />
+        )}
+        <div
+          style={{
+            position: 'fixed',
+            left: -10000,
+            top: -10000,
+            width: 600,
+            height: 400,
+            opacity: 0,
+            pointerEvents: 'none',
+          }}
+        >
+          <HChart
+            ref={chartRef}
+            option={previewOption}
+            theme={theme}
+            renderMode='canvas'
+            width={600}
+            height={400}
+          />
+        </div>
       </div>
       <div style={{ padding: '12px 16px' }}>
         <div style={{ fontWeight: 'bold', marginBottom: 4, fontSize: 14 }}>
           {example.title}
         </div>
-        <div style={{ color: '#999', fontSize: 12 }}>{example.subtitle}</div>
+        <div style={{ color: subtitleColor, fontSize: 12 }}>{example.subtitle}</div>
       </div>
     </div>
   );
@@ -298,13 +465,17 @@ const Dashboard = ({
   activeCategory,
   onSelectExample,
   theme,
-  onThemeChange,
 }: {
   activeCategory: string;
   onSelectExample: (id: string) => void;
   theme: Theme;
-  onThemeChange: (theme: Theme) => void;
 }) => {
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const pageBg = ui.colorFillPage || themeObj.backgroundColor;
+  const hintText = ui.colorTextTertiary || themeObj.axisLabelColor;
+
   const categoryLabel =
     categories.find((c) => c.key === activeCategory)?.label || activeCategory;
   const filteredExamples = examples.filter(
@@ -314,62 +485,15 @@ const Dashboard = ({
   return (
     <div
       style={{
-        flex: 1,
+        backgroundColor: pageBg,
         height: '100%',
         overflowY: 'auto',
-        backgroundColor: '#f5f7fa',
       }}
     >
-      <div
-        style={{
-          padding: '20px 40px',
-          backgroundColor: '#fff',
-          borderBottom: '1px solid #e0e0e0',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <h2 style={{ margin: 0, fontSize: 24, fontWeight: 'normal' }}>
+      <div style={{ padding: 40 }}>
+        <h2 style={{ margin: '0 0 20px', fontSize: 24, fontWeight: 'normal' }}>
           {categoryLabel}
         </h2>
-        <div
-          style={{
-            display: 'flex',
-            border: '1px solid #e0e0e0',
-            borderRadius: 4,
-            overflow: 'hidden',
-          }}
-        >
-          <button
-            onClick={() => onThemeChange('light')}
-            style={{
-              padding: '4px 12px',
-              background: theme === 'light' ? '#4096ff' : 'transparent',
-              color: theme === 'light' ? '#fff' : '#333',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: 12,
-            }}
-          >
-            Light
-          </button>
-          <button
-            onClick={() => onThemeChange('dark')}
-            style={{
-              padding: '4px 12px',
-              background: theme === 'dark' ? '#4096ff' : 'transparent',
-              color: theme === 'dark' ? '#fff' : '#333',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: 12,
-            }}
-          >
-            Dark
-          </button>
-        </div>
-      </div>
-      <div style={{ padding: 40 }}>
         <div
           style={{
             display: 'grid',
@@ -382,10 +506,11 @@ const Dashboard = ({
               key={ex.id}
               example={ex}
               onClick={() => onSelectExample(ex.id)}
+              theme={theme}
             />
           ))}
           {filteredExamples.length === 0 && (
-            <div style={{ color: '#999' }}>
+            <div style={{ color: hintText }}>
               No examples yet for this category.
             </div>
           )}
@@ -399,12 +524,25 @@ const OldApp = memo(function OldApp({
   theme,
   setTheme,
   setMode,
+  activeExample,
+  setActiveExample,
 }: {
   theme: 'Light' | 'Dark';
   setTheme: (t: 'Light' | 'Dark') => void;
   setMode: (m: 'classic' | 'modern') => void;
+  activeExample: string;
+  setActiveExample: (id: string) => void;
 }) {
-  const [activeExample, setActiveExample] = useState('basic-line');
+  const themeKey = theme.toLowerCase() as Theme;
+  const themeObj = ThemeManager.getTheme(themeKey);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const pageBg = ui.colorFillPage || themeObj.backgroundColor;
+  const navBg = ui.colorFillContainer || themeObj.backgroundColor;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
+  const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
+  const textTertiary = ui.colorTextTertiary || themeObj.axisLabelColor;
 
   const ActiveComponent = useMemo(
     () =>
@@ -418,25 +556,25 @@ const OldApp = memo(function OldApp({
       style={{
         display: 'flex',
         height: '100vh',
-        backgroundColor: theme === 'Dark' ? '#1a1a1a' : '#fff',
+        backgroundColor: pageBg,
       }}
     >
       <nav
         aria-label='Examples navigation'
         style={{
           width: 280,
-          borderRight: `1px solid ${theme === 'Dark' ? '#333' : '#e0e0e0'}`,
+          borderRight: `1px solid ${border}`,
           padding: 20,
           overflowY: 'auto',
-          backgroundColor: theme === 'Dark' ? '#222' : '#f5f5f5',
-          color: theme === 'Dark' ? '#eee' : '#333',
+          backgroundColor: navBg,
+          color: themeObj.textColor,
         }}
       >
         <h1
           style={{
             fontSize: 20,
             marginBottom: 10,
-            color: theme === 'Dark' ? '#fff' : '#333',
+            color: themeObj.textColor,
           }}
         >
           HudX Charts
@@ -445,7 +583,7 @@ const OldApp = memo(function OldApp({
           style={{
             marginBottom: 20,
             padding: '10px 0',
-            borderBottom: `1px solid ${theme === 'Dark' ? '#333' : '#e0e0e0'}`,
+            borderBottom: `1px solid ${border}`,
             display: 'flex',
             flexDirection: 'column',
             gap: 10,
@@ -457,13 +595,13 @@ const OldApp = memo(function OldApp({
               alignItems: 'center',
               justifyContent: 'space-between',
               fontSize: 14,
-              color: theme === 'Dark' ? '#eee' : '#333',
+              color: themeObj.textColor,
             }}
           >
             <div
               style={{
                 display: 'flex',
-                border: `1px solid ${theme === 'Dark' ? '#333' : '#e0e0e0'}`,
+                border: `1px solid ${border}`,
                 borderRadius: 4,
                 overflow: 'hidden',
               }}
@@ -472,8 +610,8 @@ const OldApp = memo(function OldApp({
                 onClick={() => setMode('classic')}
                 style={{
                   padding: '4px 12px',
-                  background: '#4096ff',
-                  color: '#fff',
+                  background: primary,
+                  color: primaryText,
                   border: 'none',
                   cursor: 'pointer',
                   fontSize: 12,
@@ -486,7 +624,7 @@ const OldApp = memo(function OldApp({
                 style={{
                   padding: '4px 12px',
                   background: 'transparent',
-                  color: theme === 'Dark' ? '#fff' : '#333',
+                  color: themeObj.textColor,
                   border: 'none',
                   cursor: 'pointer',
                   fontSize: 12,
@@ -498,7 +636,7 @@ const OldApp = memo(function OldApp({
             <div
               style={{
                 display: 'flex',
-                border: `1px solid ${theme === 'Dark' ? '#333' : '#e0e0e0'}`,
+                border: `1px solid ${border}`,
                 borderRadius: 4,
                 overflow: 'hidden',
               }}
@@ -507,13 +645,11 @@ const OldApp = memo(function OldApp({
                 onClick={() => setTheme('Light')}
                 style={{
                   padding: '4px 12px',
-                  background: theme === 'Light' ? '#4096ff' : 'transparent',
+                  background: theme === 'Light' ? primary : 'transparent',
                   color:
                     theme === 'Light'
-                      ? '#fff'
-                      : theme === 'Dark'
-                        ? '#fff'
-                        : '#333',
+                      ? primaryText
+                      : themeObj.textColor,
                   border: 'none',
                   cursor: 'pointer',
                   fontSize: 12,
@@ -525,8 +661,8 @@ const OldApp = memo(function OldApp({
                 onClick={() => setTheme('Dark')}
                 style={{
                   padding: '4px 12px',
-                  background: theme === 'Dark' ? '#4096ff' : 'transparent',
-                  color: theme === 'Dark' ? '#fff' : '#333',
+                  background: theme === 'Dark' ? primary : 'transparent',
+                  color: theme === 'Dark' ? primaryText : themeObj.textColor,
                   border: 'none',
                   cursor: 'pointer',
                   fontSize: 12,
@@ -545,7 +681,7 @@ const OldApp = memo(function OldApp({
                 fontSize: 14,
                 fontWeight: 'bold',
                 margin: '20px 0 10px',
-                color: '#666',
+                color: textSecondary,
               }}
             >
               {category.category}
@@ -556,6 +692,7 @@ const OldApp = memo(function OldApp({
                 example={example}
                 activeExample={activeExample}
                 setActiveExample={setActiveExample}
+                theme={themeKey}
               />
             ))}
           </React.Fragment>
@@ -566,7 +703,7 @@ const OldApp = memo(function OldApp({
             fontSize: 14,
             fontWeight: 'bold',
             margin: '20px 0 10px',
-            color: '#666',
+            color: textSecondary,
           }}
         >
           Feature Demos
@@ -577,6 +714,7 @@ const OldApp = memo(function OldApp({
             example={example}
             activeExample={activeExample}
             setActiveExample={setActiveExample}
+            theme={themeKey}
           />
         ))}
       </nav>
@@ -587,8 +725,8 @@ const OldApp = memo(function OldApp({
           flex: 1,
           padding: 40,
           overflowY: 'auto',
-          backgroundColor: theme === 'Dark' ? '#1a1a1a' : '#fff',
-          color: theme === 'Dark' ? '#eee' : '#333',
+          backgroundColor: pageBg,
+          color: themeObj.textColor,
         }}
       >
         <Suspense
@@ -599,7 +737,7 @@ const OldApp = memo(function OldApp({
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: '400px',
-                color: '#999',
+                color: textTertiary,
                 fontSize: '16px',
                 willChange: 'contents',
               }}
@@ -626,8 +764,26 @@ const ModernApp = ({
   setTheme: (t: Theme) => void;
   setMode: (m: 'classic' | 'modern') => void;
 }) => {
-  const [activeCategory, setActiveCategory] = useState('line');
-  const [activeExampleId, setActiveExampleId] = useState<string | null>(null);
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const pageBg = ui.colorFillPage || themeObj.backgroundColor;
+  const navBg = ui.colorFillContainer || themeObj.backgroundColor;
+  const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
+  const hoverBg = ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
+
+  const [activeCategory, setActiveCategory] = useLocalStorageState<string>(
+    'hudx.examples.modern.activeCategory',
+    'line',
+  );
+  const [activeExampleId, setActiveExampleId] = useLocalStorageState<string | null>(
+    'hudx.examples.modern.activeExampleId',
+    null,
+  );
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [focusedCategory, setFocusedCategory] = useState<string | null>(null);
 
   const activeExample = useMemo(
     () => examples.find((e) => e.id === activeExampleId),
@@ -653,82 +809,160 @@ const ModernApp = ({
         height: '100vh',
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        backgroundColor: pageBg,
       }}
     >
-      <Sidebar
-        categories={categories}
-        activeCategory={activeCategory}
-        onSelect={setActiveCategory}
-      />
-      <div
+      <nav
+        aria-label='Examples navigation'
         style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          overflow: 'hidden',
+          width: 280,
+          borderRight: `1px solid ${border}`,
+          padding: 20,
+          overflowY: 'auto',
+          backgroundColor: navBg,
+          color: themeObj.textColor,
         }}
       >
+        <h1
+          style={{
+            fontSize: 20,
+            marginBottom: 10,
+            color: themeObj.textColor,
+          }}
+        >
+          HudX Charts
+        </h1>
         <div
           style={{
-            padding: '10px 20px',
-            backgroundColor: '#fff',
-            borderBottom: '1px solid #e0e0e0',
+            marginBottom: 20,
+            padding: '10px 0',
+            borderBottom: `1px solid ${border}`,
             display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
+            flexDirection: 'column',
+            gap: 10,
           }}
         >
           <div
             style={{
               display: 'flex',
-              border: '1px solid #e0e0e0',
-              borderRadius: 4,
-              overflow: 'hidden',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              fontSize: 14,
+              color: themeObj.textColor,
             }}
           >
-            <button
-              onClick={() => setMode('classic')}
-              style={{
-                padding: '4px 12px',
-                background: 'transparent',
-                color: '#333',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 12,
-              }}
-            >
-              Classic
-            </button>
-            <button
-              onClick={() => setMode('modern')}
-              style={{
-                padding: '4px 12px',
-                background: '#4096ff',
-                color: '#fff',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 12,
-              }}
-            >
-              Modern
-            </button>
+            <SegmentedControl
+              leftLabel='Classic'
+              rightLabel='Modern'
+              value='modern'
+              leftValue='classic'
+              rightValue='modern'
+              onChange={(next) => setMode(next as 'classic' | 'modern')}
+              theme={theme}
+            />
+            <SegmentedControl
+              leftLabel='Light'
+              rightLabel='Dark'
+              value={theme}
+              leftValue='light'
+              rightValue='dark'
+              onChange={(next) => setTheme(next)}
+              theme={theme}
+            />
           </div>
         </div>
+        <h2
+          style={{
+            fontSize: 14,
+            fontWeight: 'bold',
+            margin: '20px 0 10px',
+            color: textSecondary,
+          }}
+        >
+          Categories
+        </h2>
+        {categories.map((cat) => {
+          const isActive = activeCategory === cat.key;
+          const isHovered = hoveredCategory === cat.key;
+          const isFocused = focusedCategory === cat.key;
+
+          return (
+            <button
+              key={cat.key}
+              onClick={() => setActiveCategory(cat.key)}
+              aria-current={isActive ? 'page' : undefined}
+              style={{
+                display: 'block',
+                width: '100%',
+                padding: '8px 12px',
+                marginBottom: 4,
+                border: `2px solid ${isFocused ? String(primary) : 'transparent'}`,
+                borderRadius: 6,
+                backgroundColor: isActive
+                  ? primary
+                  : isHovered
+                    ? String(hoverBg)
+                    : 'transparent',
+                color: isActive ? primaryText : themeObj.textColor,
+                cursor: 'pointer',
+                textAlign: 'left',
+                fontSize: 13,
+                fontWeight: isActive ? 600 : 400,
+                transition: 'all 0.2s',
+                outline: 'none',
+                boxShadow: isFocused
+                  ? `0 0 0 3px ${toRgbaWithOpacity(String(primary), 0.2)}`
+                  : 'none',
+              }}
+              onMouseEnter={() => setHoveredCategory(cat.key)}
+              onMouseLeave={() => setHoveredCategory(null)}
+              onFocus={() => setFocusedCategory(cat.key)}
+              onBlur={() => setFocusedCategory(null)}
+            >
+              {cat.label}
+            </button>
+          );
+        })}
+      </nav>
+      <main
+        role='main'
+        aria-label='Example content'
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          backgroundColor: pageBg,
+          color: themeObj.textColor,
+        }}
+      >
         <Dashboard
           activeCategory={activeCategory}
           onSelectExample={setActiveExampleId}
           theme={theme}
-          onThemeChange={setTheme}
         />
-      </div>
+      </main>
     </div>
   );
 };
 
 export default function App() {
-  const [mode, setMode] = useState<'classic' | 'modern'>('classic');
-  const [theme, setTheme] = useState<Theme>('light');
+  const [mode, setMode] = useLocalStorageState<'classic' | 'modern'>(
+    'hudx.examples.mode',
+    'classic',
+  );
+  const [theme, setTheme] = useLocalStorageState<Theme>(
+    'hudx.examples.theme',
+    'light',
+  );
+  const [activeClassicExample, setActiveClassicExample] = useLocalStorageState<string>(
+    'hudx.examples.classic.activeExample',
+    'basic-line',
+  );
+
+  ThemeManager.setCurrentTheme(theme);
+  const setThemeAndSync = (nextTheme: Theme) => {
+    ThemeManager.setCurrentTheme(nextTheme);
+    setTheme(nextTheme);
+  };
 
   // Sync theme string case for compatibility
   const normalizedTheme =
@@ -738,15 +972,17 @@ export default function App() {
         : 'Light'
       : 'Light';
   const setNormalizedTheme = (t: 'Light' | 'Dark') =>
-    setTheme(t.toLowerCase() as Theme);
+    setThemeAndSync(t.toLowerCase() as Theme);
 
   return mode === 'classic' ? (
     <OldApp
       theme={normalizedTheme}
       setTheme={setNormalizedTheme}
       setMode={setMode}
+      activeExample={activeClassicExample}
+      setActiveExample={setActiveClassicExample}
     />
   ) : (
-    <ModernApp theme={theme} setTheme={setTheme} setMode={setMode} />
+    <ModernApp theme={theme} setTheme={setThemeAndSync} setMode={setMode} />
   );
 }

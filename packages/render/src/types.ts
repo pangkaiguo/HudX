@@ -23,18 +23,59 @@ export interface DecalObject {
 export type RenderMode = 'canvas' | 'svg';
 export type Theme = 'light' | 'dark' | string;
 export type Locale = 'en' | 'zh' | string;
-export type ThemeToken = any;
+
+export interface ThemeToken {
+  colorText?: string;
+  colorTextSecondary?: string;
+  colorTextTertiary?: string;
+  colorBackground?: string;
+  colorFillPage?: string;
+  colorFillContainer?: string;
+  colorFillContainerAlt?: string;
+  colorFillHover?: string;
+  colorBorder?: string;
+  colorBorderSecondary?: string;
+  colorGrid?: string;
+  colorAxisLine?: string;
+  colorAxisLabel?: string;
+  colorTooltipBackground?: string;
+  colorTooltipText?: string;
+  colorLegendText?: string;
+  colorTextOnSeries?: string;
+  colorPrimary?: string;
+  colorPrimaryText?: string;
+  colorShadow?: string;
+  colorMask?: string;
+  colorDecal?: string;
+  colorCodeBackground?: string;
+  colorCodeGutterBackground?: string;
+  colorCodeText?: string;
+  colorCodeGutterText?: string;
+  fontFamily?: string;
+  fontSize?: number;
+  seriesColors?: string[];
+  heatmapColors?: string[];
+  [key: string]: unknown;
+}
 
 export interface ThemeConfig {
   backgroundColor: string;
   textColor: string;
+  borderColor: string;
+  gridColor: string;
   axisLineColor: string;
   axisLabelColor: string;
   splitLineColor?: string;
   tooltipBackgroundColor: string;
   tooltipTextColor: string;
+  legendTextColor: string;
+  shadowColor: string;
+  maskColor: string;
+  decalColor: string;
   seriesColors: string[];
-  fontFamily?: string;
+  fontFamily: string;
+  fontSize: number;
+  token: ThemeToken;
   [key: string]: any;
 }
 

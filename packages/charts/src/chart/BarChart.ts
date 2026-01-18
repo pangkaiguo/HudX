@@ -5,7 +5,14 @@ import {
   createOrdinalScale,
   calculateDomain,
 } from 'hudx-render';
-import { Rect, Line, createDecalPattern, Z_SERIES, Z_AXIS } from 'hudx-render';
+import {
+  Rect,
+  Line,
+  createDecalPattern,
+  Z_SERIES,
+  Z_AXIS,
+  toRgbaWithOpacity,
+} from 'hudx-render';
 import { EventHelper } from 'hudx-render';
 import {
   findSeriesIndexByDisplayName,
@@ -299,7 +306,7 @@ export default class BarChart extends Chart {
           style: {
             stroke:
               option.tooltip?.axisPointer?.lineStyle?.color ||
-              'rgba(0,0,0,0.3)',
+              toRgbaWithOpacity(this.getThemeConfig().shadowColor, 0.5),
             lineWidth: option.tooltip?.axisPointer?.lineStyle?.width || 1,
             lineDash:
               option.tooltip?.axisPointer?.lineStyle?.type === 'solid'
@@ -491,7 +498,9 @@ export default class BarChart extends Chart {
                 height: isHorizontal ? barHeight : plotHeight,
               },
               style: {
-                fill: bgStyle.color || 'rgba(180, 180, 180, 0.2)',
+                fill:
+                  bgStyle.color ||
+                  toRgbaWithOpacity(this.getThemeConfig().borderColor, 0.2),
                 stroke: bgStyle.borderColor,
                 lineWidth: bgStyle.borderWidth,
                 opacity: bgStyle.opacity,

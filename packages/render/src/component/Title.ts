@@ -5,8 +5,9 @@
 import Group from '../Group';
 import Text from '../graphic/Text';
 import Rect from '../graphic/Rect';
-import { Z_TITLE } from '../constants';
+import { COLOR_TRANSPARENT, Z_TITLE } from '../constants';
 import type { TitleOption } from '../types';
+import { ThemeManager } from '../theme/ThemeManager';
 
 export default class Title extends Group {
   private _option: TitleOption;
@@ -15,6 +16,7 @@ export default class Title extends Group {
 
   constructor(option: TitleOption = {}) {
     super();
+    const theme = ThemeManager.getTheme();
     this._option = {
       show: true,
       text: '',
@@ -23,22 +25,22 @@ export default class Title extends Group {
       top: 'auto',
       right: 'auto',
       bottom: 'auto',
-      backgroundColor: 'transparent',
-      borderColor: 'transparent',
+      backgroundColor: COLOR_TRANSPARENT,
+      borderColor: COLOR_TRANSPARENT,
       borderWidth: 0,
       padding: 5,
       itemGap: 10,
       textStyle: {
-        fontSize: 18,
+        fontSize: theme.fontSize + 6,
         fontWeight: 'bold',
-        color: '#333',
-        fontFamily: 'sans-serif',
+        color: theme.textColor,
+        fontFamily: theme.fontFamily,
       },
       subtextStyle: {
-        fontSize: 12,
+        fontSize: theme.fontSize,
         fontWeight: 'normal',
-        color: '#aaa',
-        fontFamily: 'sans-serif',
+        color: theme.axisLabelColor,
+        fontFamily: theme.fontFamily,
       },
       ...option,
     };

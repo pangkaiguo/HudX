@@ -16,6 +16,7 @@ import Group from '../Group';
 import IPainter from './IPainter';
 import type { DataURLOpts } from '../types';
 import type { CanvasPatternWithMeta, DecalPatternMeta } from '../util/pattern';
+import { ThemeManager } from '../theme/ThemeManager';
 
 export default class SVGPainter implements IPainter {
   private _dom: HTMLElement;
@@ -598,10 +599,13 @@ export default class SVGPainter implements IPainter {
               // Apply fragment styles
               const fontSize = fStyle.fontSize || style.fontSize || 12;
               const fontFamily =
-                fStyle.fontFamily || style.fontFamily || 'sans-serif';
+                fStyle.fontFamily ||
+                style.fontFamily ||
+                ThemeManager.getTheme().fontFamily;
               const fontWeight =
                 fStyle.fontWeight || style.fontWeight || 'normal';
-              const color = fStyle.color || style.fill || '#000';
+              const color =
+                fStyle.color || style.fill || ThemeManager.getTheme().textColor;
 
               text.setAttribute('font-size', String(fontSize));
               text.setAttribute('font-family', fontFamily);

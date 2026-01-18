@@ -75,6 +75,19 @@ const bgColor = theme.backgroundColor; // 包含更新后的背景色
 
 当你需要将图表颜色与设计系统的 Token 对齐时，这非常有用。
 
+#### 全局主题模式
+
+ThemeManager 可以作为全局风格驱动管理器使用：你可以设置当前主题（light/dark），并让未显式指定 theme 的渲染实例自动使用当前主题。
+
+```typescript
+import { ThemeManager, Renderer } from "hudx-render";
+
+ThemeManager.setCurrentTheme("dark");
+
+// 未传 theme 时，使用 ThemeManager.getCurrentTheme()
+const renderer = Renderer.init("#container", "canvas");
+```
+
 ### 使用方法
 
 #### 在 Renderer 中使用
@@ -323,6 +336,10 @@ function App() {
 ### ThemeManager
 
 - `getTheme(theme: Theme): ThemeConfig` - 获取主题配置
+- `getTheme(): ThemeConfig` - 获取当前主题配置
+- `getCurrentTheme(): Theme` - 获取当前主题
+- `setCurrentTheme(theme: Theme): void` - 设置当前主题
+- `onThemeChange(listener): () => void` - 监听主题变化
 - `registerTheme(theme: Theme, config: ThemeConfig): void` - 注册主题
 - `registerToken(theme: string, token: ThemeToken): void` - 注册或更新主题 Token
 - `getThemes(): Theme[]` - 获取所有已注册主题

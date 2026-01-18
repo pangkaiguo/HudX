@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { ThemeManager } from 'hudx-render';
 
 interface CodeEditorProps {
   code: string;
@@ -23,10 +24,13 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const lineCount = code.split('\n').length;
   const lineNumbers = Array.from({ length: lineCount }, (_, i) => i + 1);
 
-  const bgColor = theme === 'dark' ? '#1e1e1e' : '#f5f5f5';
-  const textColor = theme === 'dark' ? '#d4d4d4' : '#333';
-  const gutterBg = theme === 'dark' ? '#252526' : '#e0e0e0';
-  const gutterColor = theme === 'dark' ? '#858585' : '#999';
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const bgColor = ui.colorCodeBackground || ui.colorFillContainerAlt || themeObj.backgroundColor;
+  const textColor = ui.colorCodeText || themeObj.textColor;
+  const gutterBg =
+    ui.colorCodeGutterBackground || ui.colorBorderSecondary || themeObj.borderColor;
+  const gutterColor = ui.colorCodeGutterText || ui.colorTextTertiary || themeObj.axisLabelColor;
 
   return (
     <div

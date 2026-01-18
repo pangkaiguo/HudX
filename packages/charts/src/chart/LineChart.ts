@@ -20,6 +20,7 @@ import {
   getSmoothPath,
   getSmoothAreaPath,
   createSymbol,
+  toRgbaWithOpacity,
 } from 'hudx-render';
 import { findSeriesIndexByDisplayName, getSeriesDisplayName } from './chartUtils';
 
@@ -192,7 +193,7 @@ export default class LineChart extends Chart {
         const axisPointerLine = new Line({
           shape: { x1: 0, y1: plotY, x2: 0, y2: plotY + plotHeight },
           style: {
-            stroke: 'rgba(0,0,0,0.3)',
+            stroke: toRgbaWithOpacity(this.getThemeConfig().shadowColor, 0.5),
             lineWidth: 1,
             lineDash: [4, 4],
           },
@@ -595,7 +596,7 @@ export default class LineChart extends Chart {
               initialSize,
               {
                 fill: pointFill,
-                stroke: '#fff',
+                stroke: this.getThemeConfig().backgroundColor,
                 lineWidth: 2,
               },
               Z_SERIES + 1,
@@ -699,8 +700,8 @@ export default class LineChart extends Chart {
             const text = new Text({
               shape: { x: point.x, y: point.y - 10, text: labelText },
               style: {
-                fontSize: 12,
-                fill: '#666',
+                fontSize: this.getThemeConfig().fontSize,
+                fill: this.getThemeConfig().axisLabelColor,
                 textAlign: 'center',
                 textBaseline: 'bottom',
               },

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-render';
+import { ThemeManager, Theme, toRgbaWithOpacity } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
 
 export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
@@ -19,6 +19,10 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [barWidth, setBarWidth] = useState<number | 'auto'>('auto');
 
   const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
   const chartRef = useRef<HChartRef>(null);
 
   const option: ChartOption = {
@@ -64,7 +68,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         show: showGrid,
         interval: xAutoInterval ? 'auto' : xInterval,
         lineStyle: {
-          color: '#eee',
+          color: themeObj.gridColor,
           type: xGridType,
         },
       },
@@ -76,7 +80,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
       splitLine: {
         show: showGrid,
         lineStyle: {
-          color: '#eee',
+          color: themeObj.gridColor,
           type: yGridType,
         },
       },
@@ -89,7 +93,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         barWidth: barWidth === 'auto' ? undefined : barWidth,
         showBackground: showBackground,
         backgroundStyle: {
-          color: 'rgba(180, 180, 180, 0.2)',
+          color: toRgbaWithOpacity(themeObj.borderColor, 0.2),
         },
         itemStyle: {
           color: themeObj.seriesColors?.[0],
@@ -104,7 +108,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         barWidth: barWidth === 'auto' ? undefined : barWidth,
         showBackground: showBackground,
         backgroundStyle: {
-          color: 'rgba(180, 180, 180, 0.2)',
+          color: toRgbaWithOpacity(themeObj.borderColor, 0.2),
         },
         itemStyle: {
           color: themeObj.seriesColors?.[1],
@@ -137,7 +141,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Bar Chart</h2>
-      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
+      <p style={{ marginBottom: 20, color: ui.colorTextSecondary || themeObj.axisLabelColor, fontSize: 14 }}>
         Hover over bars to see values
       </p>
       <div
@@ -157,7 +161,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #ddd',
+              border: `1px solid ${border}`,
             }}
           >
             <option value='canvas'>Canvas</option>
@@ -312,7 +316,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 style={{
                   padding: '2px 4px',
                   borderRadius: 4,
-                  border: '1px solid #ddd',
+                  border: `1px solid ${border}`,
                 }}
               >
                 <option value='solid'>Solid</option>
@@ -329,7 +333,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 style={{
                   padding: '2px 4px',
                   borderRadius: 4,
-                  border: '1px solid #ddd',
+                  border: `1px solid ${border}`,
                 }}
               >
                 <option value='solid'>Solid</option>
@@ -345,7 +349,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: '1px solid #e0e0e0',
+          border: `1px solid ${border}`,
           borderRadius: 8,
           height: '600px',
         }}
@@ -355,8 +359,8 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
           onClick={handleUpdateSeries}
           style={{
             padding: '8px 16px',
-            backgroundColor: '#5470c6',
-            color: 'white',
+            backgroundColor: primary,
+            color: primaryText,
             border: 'none',
             borderRadius: 4,
             cursor: 'pointer',

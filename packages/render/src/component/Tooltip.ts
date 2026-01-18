@@ -2,6 +2,13 @@
  * Tooltip - DOM-based tooltip component
  */
 
+import { ThemeManager } from '../theme/ThemeManager';
+import {
+  DEFAULT_BORDER_RADIUS,
+  DEFAULT_TOOLTIP_LINE_HEIGHT,
+  DEFAULT_TOOLTIP_PADDING,
+} from '../constants';
+
 export interface TooltipOption {
   show?: boolean;
   trigger?: 'item' | 'axis' | 'none';
@@ -22,15 +29,15 @@ export interface TooltipOption {
   confine?: boolean;
   transitionDuration?: number;
   position?:
-    | string
-    | number[]
-    | ((
-        point: number[],
-        params: any,
-        dom: HTMLElement,
-        rect: any,
-        size: any,
-      ) => number[]);
+  | string
+  | number[]
+  | ((
+    point: number[],
+    params: any,
+    dom: HTMLElement,
+    rect: any,
+    size: any,
+  ) => number[]);
   showContent?: boolean;
   alwaysShowContent?: boolean;
   triggerOn?: 'mousemove' | 'click' | 'mousemove|click' | 'none';
@@ -53,16 +60,18 @@ export default class Tooltip {
   private _lastHeight: number = 0;
 
   constructor(option: TooltipOption = {}) {
+    const theme = ThemeManager.getTheme();
     this._option = {
       show: true,
-      backgroundColor: 'rgba(50, 50, 50, 0.7)',
-      borderColor: '#333',
+      backgroundColor: theme.tooltipBackgroundColor,
+      borderColor: theme.borderColor,
       borderWidth: 0,
-      padding: [10, 10, 10, 10],
+      padding: DEFAULT_TOOLTIP_PADDING,
       textStyle: {
-        color: '#fff',
-        fontSize: 12,
-        lineHeight: 20,
+        color: theme.tooltipTextColor,
+        fontSize: theme.fontSize,
+        fontFamily: theme.fontFamily,
+        lineHeight: DEFAULT_TOOLTIP_LINE_HEIGHT,
       },
       transitionDuration: 0.4,
       confine: true,
@@ -84,7 +93,7 @@ export default class Tooltip {
     s.borderStyle = 'solid';
     s.whiteSpace = 'nowrap';
     s.zIndex = '9999999';
-    s.boxShadow = 'rgba(0, 0, 0, 0.2) 1px 2px 10px';
+    s.boxShadow = `${ThemeManager.getTheme().shadowColor} 1px 2px 10px`;
     s.boxSizing = 'border-box';
     s.pointerEvents = this._option.enterable ? 'auto' : 'none';
 
@@ -95,10 +104,11 @@ export default class Tooltip {
 
   updateStyle(): void {
     const opt = this._option;
+    const theme = ThemeManager.getTheme();
     const s = this._el.style;
 
-    s.backgroundColor = opt.backgroundColor || 'rgba(50, 50, 50, 0.7)';
-    s.borderColor = opt.borderColor || '#333';
+    s.backgroundColor = String(opt.backgroundColor ?? theme.tooltipBackgroundColor);
+    s.borderColor = String(opt.borderColor ?? theme.borderColor);
     s.borderWidth = (opt.borderWidth || 0) + 'px';
 
     const padding = opt.padding;
@@ -108,9 +118,9 @@ export default class Tooltip {
       s.padding = (padding || 5) + 'px';
     }
 
-    s.color = opt.textStyle?.color || '#fff';
-    s.fontSize = (opt.textStyle?.fontSize || 14) + 'px';
-    s.fontFamily = opt.textStyle?.fontFamily || 'sans-serif';
+    s.color = String(opt.textStyle?.color ?? theme.tooltipTextColor);
+    s.fontSize = String(opt.textStyle?.fontSize ?? theme.fontSize) + 'px';
+    s.fontFamily = String(opt.textStyle?.fontFamily ?? theme.fontFamily);
 
     if (opt.textStyle) {
       Object.keys(opt.textStyle).forEach((key) => {
@@ -124,7 +134,7 @@ export default class Tooltip {
       });
     }
 
-    s.borderRadius = '4px';
+    s.borderRadius = `${DEFAULT_BORDER_RADIUS}px`;
 
     if (opt.extraCssText) {
       this._el.style.cssText += opt.extraCssText;

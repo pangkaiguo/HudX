@@ -17,9 +17,10 @@ import Rect from '../graphic/Rect';
 import Text from '../graphic/Text';
 import Circle from '../graphic/Circle';
 import Line from '../graphic/Line';
-import { Z_LEGEND } from '../constants';
+import { DEFAULT_BORDER_RADIUS, Z_LEGEND } from '../constants';
 import { createDecalPattern } from '../util/pattern';
 import type { DecalObject } from '../types';
+import { ThemeManager } from '../theme/ThemeManager';
 
 export interface LegendItem {
   name: string;
@@ -40,7 +41,11 @@ export interface LegendOption {
   right?: number | string;
   bottom?: number | string;
   backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+  borderRadius?: number;
   textColor?: string;
+  inactiveColor?: string;
   padding?: number;
   fontSize?: number;
   itemGap?: number;
@@ -71,6 +76,7 @@ export default class Legend extends Group {
 
   constructor(option: LegendOption = {}) {
     super();
+    const theme = ThemeManager.getTheme();
     this._option = {
       show: true,
       orient: 'horizontal',
@@ -78,11 +84,15 @@ export default class Legend extends Group {
       y: undefined,
       right: undefined,
       bottom: undefined,
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
-      textColor: '#333',
+      backgroundColor: theme.backgroundColor,
+      borderColor: theme.borderColor,
+      borderWidth: 1,
+      borderRadius: DEFAULT_BORDER_RADIUS,
+      textColor: theme.legendTextColor,
+      inactiveColor: theme.borderColor,
       padding: 8,
       itemPadding: 8,
-      fontSize: 12,
+      fontSize: theme.fontSize,
       itemGap: 0,
       itemWidth: 100,
       iconGap: 8,
@@ -171,7 +181,7 @@ export default class Legend extends Group {
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d')!;
-    ctx.font = `${fontSize}px sans-serif`;
+    ctx.font = `${fontSize}px ${ThemeManager.getTheme().fontFamily}`;
 
     const wrapText = (text: string, maxWidth: number): string[] => {
       const words = text.split('');
@@ -399,11 +409,17 @@ export default class Legend extends Group {
     }
 
     const bgRect = new Rect({
-      shape: { x: 0, y: 0, width: totalWidth, height: totalHeight, r: 4 },
+      shape: {
+        x: 0,
+        y: 0,
+        width: totalWidth,
+        height: totalHeight,
+        r: this._option.borderRadius ?? 0,
+      },
       style: {
         fill: this._option.backgroundColor,
-        stroke: '#ddd',
-        lineWidth: 1,
+        stroke: this._option.borderColor,
+        lineWidth: this._option.borderWidth,
       },
     });
     this.add(bgRect);
@@ -435,7 +451,7 @@ export default class Legend extends Group {
         iconElement = new Circle({
           shape: { cx: contentX + 6, cy: firstLineCenterY, r: 4 },
           style: {
-            fill: isSelected ? fillStyle : '#ccc',
+            fill: isSelected ? fillStyle : this._option.inactiveColor || item.color,
             opacity: isSelected ? 1 : 0.3,
           },
         });
@@ -448,7 +464,7 @@ export default class Legend extends Group {
             y2: firstLineCenterY,
           },
           style: {
-            stroke: isSelected ? strokeStyle : '#ccc',
+            stroke: isSelected ? strokeStyle : this._option.inactiveColor || item.color,
             lineWidth: 2,
             opacity: isSelected ? 1 : 0.3,
           },
@@ -463,7 +479,7 @@ export default class Legend extends Group {
             r: 2,
           },
           style: {
-            fill: isSelected ? fillStyle : '#ccc',
+            fill: isSelected ? fillStyle : this._option.inactiveColor || item.color,
             opacity: isSelected ? 1 : 0.3,
           },
         });
@@ -593,12 +609,13 @@ export default class Legend extends Group {
     }
 
     const opt = this._option;
+    const theme = ThemeManager.getTheme();
     const s = this._htmlEl.style;
-    s.backgroundColor = opt.backgroundColor || 'rgba(255, 255, 255, 0.9)';
+    s.backgroundColor = String(opt.backgroundColor ?? theme.backgroundColor);
     s.padding = (opt.padding || 8) + 'px';
     s.fontSize = (opt.fontSize || 12) + 'px';
-    s.color = opt.textColor || '#333';
-    s.borderRadius = '4px';
+    s.color = String(opt.textColor ?? theme.legendTextColor);
+    s.borderRadius = `${opt.borderRadius ?? DEFAULT_BORDER_RADIUS}px`;
     s.pointerEvents = 'auto';
     s.display = 'block';
 
@@ -653,7 +670,7 @@ export default class Legend extends Group {
         th.innerHTML = headText;
         th.style.textAlign = 'left';
         th.style.padding = '4px 8px';
-        th.style.borderBottom = '1px solid #ddd';
+        th.style.borderBottom = `1px solid ${opt.borderColor ?? theme.borderColor}`;
         trHead.appendChild(th);
       });
       thead.appendChild(trHead);

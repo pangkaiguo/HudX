@@ -19,6 +19,10 @@ export const Codebox: React.FC<CodeboxProps> = ({
   theme,
   onThemeChange,
 }) => {
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
   const [code, setCode] = useState(initialCode);
   const [option, setOption] = useState<ChartOption>({});
   const [error, setError] = useState<string | null>(null);
@@ -77,7 +81,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
           canvas.height = svg.clientHeight;
           const ctx = canvas.getContext('2d');
           if (ctx) {
-            ctx.fillStyle = theme === 'dark' ? '#100c2a' : '#fff'; // Add background
+            ctx.fillStyle = String(ui.colorFillPage || themeObj.backgroundColor);
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0);
 
@@ -142,9 +146,11 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
     runCode();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const bgColor = theme === 'dark' ? '#100c2a' : '#fff';
-  const textColor = theme === 'dark' ? '#fff' : '#333';
-  const borderColor = theme === 'dark' ? '#333' : '#e0e0e0';
+  const bgColor = ui.colorFillPage || themeObj.backgroundColor;
+  const textColor = themeObj.textColor;
+  const borderColor = ui.colorBorderSecondary || themeObj.borderColor;
+  const toolbarBg = ui.colorFillContainer || themeObj.backgroundColor;
+  const toolbarAltBg = ui.colorCodeGutterBackground || ui.colorFillContainerAlt || themeObj.gridColor;
 
   return (
     <div
@@ -196,8 +202,8 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               onClick={() => onThemeChange('light')}
               style={{
                 padding: '4px 12px',
-                background: theme === 'light' ? '#4096ff' : 'transparent',
-                color: theme === 'light' ? '#fff' : textColor,
+                background: theme === 'light' ? primary : 'transparent',
+                color: theme === 'light' ? primaryText : textColor,
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: 12,
@@ -209,8 +215,8 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               onClick={() => onThemeChange('dark')}
               style={{
                 padding: '4px 12px',
-                background: theme === 'dark' ? '#4096ff' : 'transparent',
-                color: theme === 'dark' ? '#fff' : textColor,
+                background: theme === 'dark' ? primary : 'transparent',
+                color: theme === 'dark' ? primaryText : textColor,
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: 12,
@@ -231,8 +237,8 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               onClick={() => setRenderMode('svg')}
               style={{
                 padding: '4px 12px',
-                background: renderMode === 'svg' ? '#4096ff' : 'transparent',
-                color: renderMode === 'svg' ? '#fff' : textColor,
+                background: renderMode === 'svg' ? primary : 'transparent',
+                color: renderMode === 'svg' ? primaryText : textColor,
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: 12,
@@ -244,8 +250,8 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               onClick={() => setRenderMode('canvas')}
               style={{
                 padding: '4px 12px',
-                background: renderMode === 'canvas' ? '#4096ff' : 'transparent',
-                color: renderMode === 'canvas' ? '#fff' : textColor,
+                background: renderMode === 'canvas' ? primary : 'transparent',
+                color: renderMode === 'canvas' ? primaryText : textColor,
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: 12,
@@ -275,7 +281,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               display: 'flex',
               alignItems: 'center',
               padding: '0 10px',
-              backgroundColor: theme === 'dark' ? '#252526' : '#f0f0f0',
+              backgroundColor: toolbarAltBg,
             }}
           >
             <button
@@ -284,9 +290,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
                 height: '100%',
                 background:
                   activeTab === 'JS'
-                    ? theme === 'dark'
-                      ? '#1e1e1e'
-                      : '#fff'
+                    ? toolbarBg
                     : 'transparent',
                 border: 'none',
                 color: textColor,
@@ -303,9 +307,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
                 height: '100%',
                 background:
                   activeTab === 'TS'
-                    ? theme === 'dark'
-                      ? '#1e1e1e'
-                      : '#fff'
+                    ? toolbarBg
                     : 'transparent',
                 border: 'none',
                 color: textColor,
@@ -321,8 +323,8 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               onClick={runCode}
               style={{
                 padding: '4px 15px',
-                background: '#4096ff',
-                color: '#fff',
+                background: primary,
+                color: primaryText,
                 border: 'none',
                 borderRadius: 4,
                 cursor: 'pointer',
@@ -381,7 +383,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
             padding: 20,
             display: 'flex',
             flexDirection: 'column',
-            backgroundColor: theme === 'dark' ? '#100c2a' : '#fff',
+            backgroundColor: bgColor,
           }}
         >
           <div

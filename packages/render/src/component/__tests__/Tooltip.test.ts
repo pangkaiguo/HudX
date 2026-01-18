@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Tooltip, { TooltipOption } from '../Tooltip';
+import { ThemeManager } from '../../theme/ThemeManager';
 
 describe('Tooltip', () => {
   let container: HTMLElement;
@@ -36,7 +37,7 @@ describe('Tooltip', () => {
     expect(el).toBeDefined();
     expect(el.style.position).toBe('absolute');
     expect(el.style.display).toBe('none');
-    expect(el.style.backgroundColor).toBe('rgba(50, 50, 50, 0.7)');
+    expect(el.style.backgroundColor).toBe(ThemeManager.getTheme().tooltipBackgroundColor);
   });
 
   it('should apply custom styling options', () => {

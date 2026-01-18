@@ -1,7 +1,12 @@
 import { HChart, type ChartOption } from 'hudx-charts';
-import { Theme } from 'hudx-render';
+import { Theme, ThemeManager } from 'hudx-render';
 
 export const RichTextExample = ({ theme = 'light' }: { theme?: Theme }) => {
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
+
   const option: ChartOption = {
     tooltip: {
       show: true,
@@ -34,7 +39,7 @@ export const RichTextExample = ({ theme = 'light' }: { theme?: Theme }) => {
         ],
         itemStyle: {
           borderWidth: 2,
-          borderColor: '#fff',
+          borderColor: themeObj.backgroundColor,
         },
         label: {
           show: true,
@@ -42,27 +47,27 @@ export const RichTextExample = ({ theme = 'light' }: { theme?: Theme }) => {
           formatter: '{b|{b}}\n{hr|}\n{c|{c}}  {per|{d}%}',
           rich: {
             b: {
-              color: '#4C5058',
+              color: themeObj.textColor,
               fontSize: 14,
               fontWeight: 'bold',
               padding: [3, 4],
             },
             hr: {
-              borderColor: '#8C8D8E',
+              borderColor: themeObj.borderColor,
               width: '100%',
               borderWidth: 1,
               height: 0,
               padding: [0, 0],
             },
             c: {
-              color: '#4C5058',
+              color: themeObj.textColor,
               fontSize: 12,
               fontWeight: 'bold',
               padding: [3, 4],
             },
             per: {
-              color: '#fff',
-              backgroundColor: '#4C5058',
+              color: primaryText,
+              backgroundColor: primary,
               padding: [3, 4],
               borderRadius: 4,
             },
@@ -82,10 +87,10 @@ export const RichTextExample = ({ theme = 'light' }: { theme?: Theme }) => {
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>Rich Text Pie Chart</h2>
-      <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
+      <p style={{ marginBottom: 20, color: ui.colorTextSecondary || themeObj.axisLabelColor, fontSize: 14 }}>
         Demonstrating rich text labels and auto-colored label lines.
       </p>
-      <div style={{ height: 500, border: '1px solid #eee' }}>
+      <div style={{ height: 500, border: `1px solid ${themeObj.gridColor}` }}>
         <HChart
           option={option}
           theme={theme}

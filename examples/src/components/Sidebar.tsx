@@ -1,4 +1,5 @@
 import React from 'react';
+import { ThemeManager, toRgbaWithOpacity } from 'hudx-render';
 
 interface SidebarProps {
   categories: { key: string; label: string; icon?: React.ReactNode }[];
@@ -11,14 +12,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   activeCategory,
   onSelect,
 }) => {
+  const themeObj = ThemeManager.getTheme();
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const bg = ui.colorFillContainer || themeObj.backgroundColor;
+  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const hoverBg = ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
+
   return (
     <div
       style={{
         width: 200,
-        borderRight: '1px solid #e0e0e0',
+        borderRight: `1px solid ${border}`,
         height: '100%',
         overflowY: 'auto',
-        backgroundColor: '#fff',
+        backgroundColor: bg,
       }}
     >
       <div
@@ -27,10 +35,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderBottom: '1px solid #e0e0e0',
+          borderBottom: `1px solid ${border}`,
           fontSize: 20,
           fontWeight: 'bold',
-          color: '#5470c6',
+          color: primary,
         }}
       >
         HudX Charts
@@ -43,14 +51,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
             style={{
               padding: '12px 24px',
               cursor: 'pointer',
-              color: activeCategory === cat.key ? '#5470c6' : '#333',
+              color: activeCategory === cat.key ? primary : themeObj.textColor,
               backgroundColor:
-                activeCategory === cat.key ? '#f0f5ff' : 'transparent',
+                activeCategory === cat.key
+                  ? toRgbaWithOpacity(String(primary), 0.12)
+                  : 'transparent',
               fontWeight: activeCategory === cat.key ? 'bold' : 'normal',
               display: 'flex',
               alignItems: 'center',
               gap: 10,
               fontSize: 14,
+            }}
+            onMouseEnter={(e) => {
+              if (activeCategory !== cat.key) {
+                e.currentTarget.style.backgroundColor = String(hoverBg);
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeCategory !== cat.key) {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
             }}
           >
             {/* Placeholder for icon */}
@@ -60,7 +80,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 height: 4,
                 borderRadius: '50%',
                 backgroundColor:
-                  activeCategory === cat.key ? '#5470c6' : '#ccc',
+                  activeCategory === cat.key ? primary : border,
               }}
             />
             {cat.label}

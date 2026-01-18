@@ -15,6 +15,11 @@ import type { RenderMode } from 'hudx-render';
 export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const textColor = themeObj.textColor;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -25,16 +30,13 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
       theme,
       'en',
     );
-    const themeObj = ThemeManager.getTheme(theme);
-    const normalizedTheme = (theme || 'light').toLowerCase();
-    const textColor = normalizedTheme === 'dark' ? '#eee' : '#333';
 
     renderer.add(
       new Circle({
         shape: { cx: 100, cy: 100, r: 40 },
         style: {
           fill: themeObj.seriesColors?.[0],
-          stroke: textColor === '#eee' ? '#333' : '#fff',
+          stroke: border,
           lineWidth: 2,
         },
       }),
@@ -151,7 +153,7 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #ddd',
+              border: `1px solid ${border}`,
             }}
           >
             <option value='canvas'>Canvas</option>
@@ -159,13 +161,13 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
           </select>
         </label>
       </div>
-      <p style={{ marginBottom: 20, color: '#666' }}>
+      <p style={{ marginBottom: 20, color: textSecondary }}>
         Demonstrates basic shapes from hudx-render
       </p>
       <div
         ref={containerRef}
         style={{
-          border: '1px solid #e0e0e0',
+          border: `1px solid ${border}`,
           borderRadius: 8,
           width: 800,
           height: 200,

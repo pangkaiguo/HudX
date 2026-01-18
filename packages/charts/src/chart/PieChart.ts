@@ -588,7 +588,8 @@ export default class PieChart extends Chart {
       },
       style: {
         fill: fillStyle,
-        stroke: seriesItem.itemStyle?.borderColor || '#fff',
+        stroke:
+          seriesItem.itemStyle?.borderColor || this.getThemeConfig().backgroundColor,
         lineWidth: seriesItem.itemStyle?.borderWidth ?? 0,
       },
       transform: {
@@ -828,7 +829,12 @@ export default class PieChart extends Chart {
       sector,
       isOutside,
       item,
-      color: seriesItem.label?.color || (isOutside ? '#333' : '#fff'),
+      color:
+        seriesItem.label?.color ||
+        (isOutside
+          ? this.getThemeConfig().textColor
+          : (((this.getThemeConfig().token as any).colorTextOnSeries as string) ||
+            this.getThemeConfig().tooltipTextColor)),
       itemColor: color,
       seriesItem,
       handlers,
@@ -926,7 +932,8 @@ export default class PieChart extends Chart {
     let textContent = itemName;
     let rich = emphasis?.label?.rich || seriesItem.label?.rich;
     let style: any = {
-      fill: emphasis?.label?.color || seriesItem.label?.color || '#333',
+      fill:
+        emphasis?.label?.color || seriesItem.label?.color || this.getThemeConfig().textColor,
       fontSize: emphasis?.label?.fontSize || 20,
       fontWeight: emphasis?.label?.fontWeight || 'bold',
       textAlign: 'center',
@@ -979,7 +986,7 @@ export default class PieChart extends Chart {
     let textContent = '';
     let rich = centerLabelConfig.rich || seriesItem.label?.rich;
     const style = {
-      fill: seriesItem.label?.color || '#333',
+      fill: seriesItem.label?.color || this.getThemeConfig().textColor,
       fontSize: 20,
       fontWeight: 'bold',
       textAlign: 'center',
@@ -1002,7 +1009,7 @@ export default class PieChart extends Chart {
         });
 
         if (!centerLabelConfig.style?.backgroundColor) {
-          style.backgroundColor = '#eee';
+          style.backgroundColor = this.getThemeConfig().gridColor;
           style.borderRadius = 20;
           style.padding = [5, 15];
         }

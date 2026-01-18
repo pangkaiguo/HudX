@@ -4,6 +4,7 @@ import Line from '../../graphic/Line';
 import Circle from '../../graphic/Circle';
 import Rect from '../../graphic/Rect';
 import Text from '../../graphic/Text';
+import { ThemeManager } from '../../theme/ThemeManager';
 
 describe('Legend', () => {
   beforeAll(() => {
@@ -43,6 +44,7 @@ describe('Legend', () => {
   });
 
   it('should render correct icons', () => {
+    const bgFill = ThemeManager.getTheme().backgroundColor;
     const legend = new Legend();
     legend.setItems([
       { name: 'A', color: 'red', icon: 'circle' },
@@ -59,7 +61,7 @@ describe('Legend', () => {
         c instanceof Line ||
         (c instanceof Rect &&
           c.style.fill !== 'transparent' &&
-          c.style.fill !== 'rgba(255, 255, 255, 0.9)'),
+          c.style.fill !== bgFill),
     );
 
     const circleIcon = children.find((c) => c instanceof Circle);
@@ -76,6 +78,7 @@ describe('Legend', () => {
   });
 
   it('should render decal pattern', () => {
+    const bgFill = ThemeManager.getTheme().backgroundColor;
     const legend = new Legend();
     legend.setItems([
       {
@@ -91,7 +94,7 @@ describe('Legend', () => {
       (c) =>
         c instanceof Rect &&
         c.style.fill !== 'transparent' &&
-        c.style.fill !== 'rgba(255, 255, 255, 0.9)',
+        c.style.fill !== bgFill,
     );
 
     expect(rectIcon).toBeDefined();
@@ -410,7 +413,7 @@ describe('Legend', () => {
 
     const children = legend.children();
     const text = children.find(c => c instanceof Text) as Text;
-    
+
     expect(text).toBeDefined();
     expect(text.style.fill).toBe('blue');
     expect(text.style.fontSize).toBe(20);
