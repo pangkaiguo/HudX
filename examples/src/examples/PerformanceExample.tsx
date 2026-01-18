@@ -7,12 +7,20 @@ import {
   Polyline,
   Polygon,
   getUnit32RandomValues,
+  Locale,
   Theme,
 } from 'hudx-render';
+import { t } from '../i18n';
 
 type ShapeType = 'circle' | 'rect' | 'line' | 'polyline' | 'polygon';
 
-export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const PerformanceExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(1000);
   const [renderTime, setRenderTime] = useState(0);
@@ -24,7 +32,7 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
     if (!containerRef.current) return;
 
     const startTime = performance.now();
-    const renderer = Renderer.init(containerRef.current, mode, theme, 'en');
+    const renderer = Renderer.init(containerRef.current, mode, theme, locale);
 
     const width = 800;
     const height = 600;
@@ -103,11 +111,13 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
     setRenderTime(Math.round(endTime - startTime));
 
     return () => renderer.dispose();
-  }, [count, mode, shapeType, theme]);
+  }, [count, locale, mode, shapeType, theme]);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 20 }}>Performance Test</h2>
+      <h2 style={{ marginBottom: 20 }}>
+        {t(locale, 'examples.performance.title', 'Performance Test')}
+      </h2>
 
       <div
         style={{
@@ -119,7 +129,7 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as 'canvas' | 'svg')}
@@ -129,13 +139,13 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
 
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Element Count:</span>
+          <span>{t(locale, 'examples.performance.elementCount', 'Element Count')}:</span>
           <input
             type='number'
             value={count}
@@ -150,7 +160,7 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
         </label>
 
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Shape Type:</span>
+          <span>{t(locale, 'examples.performance.shapeType', 'Shape Type')}:</span>
           <select
             value={shapeType}
             onChange={(e) => setShapeType(e.target.value as ShapeType)}
@@ -160,11 +170,11 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: '1px solid #ddd',
             }}
           >
-            <option value='circle'>Circle</option>
-            <option value='rect'>Rect</option>
-            <option value='line'>Line</option>
-            <option value='polyline'>Polyline</option>
-            <option value='polygon'>Polygon</option>
+            <option value='circle'>{t(locale, 'examples.shape.circle', 'Circle')}</option>
+            <option value='rect'>{t(locale, 'examples.shape.rect', 'Rect')}</option>
+            <option value='line'>{t(locale, 'examples.shape.line', 'Line')}</option>
+            <option value='polyline'>{t(locale, 'examples.shape.polyline', 'Polyline')}</option>
+            <option value='polygon'>{t(locale, 'examples.shape.polygon', 'Polygon')}</option>
           </select>
         </label>
       </div>
@@ -178,10 +188,22 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
           borderRadius: 8,
         }}
       >
-        <strong>Render Time:</strong> {renderTime}ms |{' '}
-        <strong>Elements:</strong> {count} | <strong>Mode:</strong>{' '}
-        {mode.toUpperCase()} | <strong>Shape:</strong>{' '}
-        {shapeType.charAt(0).toUpperCase() + shapeType.slice(1)}
+        <strong>{t(locale, 'examples.performance.renderTime', 'Render Time')}:</strong> {renderTime}ms |{' '}
+        <strong>{t(locale, 'examples.performance.elements', 'Elements')}:</strong> {count} |{' '}
+        <strong>{t(locale, 'examples.performance.mode', 'Mode')}:</strong>{' '}
+        {mode === 'canvas'
+          ? t(locale, 'examples.control.canvas', 'Canvas')
+          : t(locale, 'examples.control.svg', 'SVG')}{' '}
+        | <strong>{t(locale, 'examples.performance.shape', 'Shape')}:</strong>{' '}
+        {shapeType === 'circle'
+          ? t(locale, 'examples.shape.circle', 'Circle')
+          : shapeType === 'rect'
+            ? t(locale, 'examples.shape.rect', 'Rect')
+            : shapeType === 'line'
+              ? t(locale, 'examples.shape.line', 'Line')
+              : shapeType === 'polyline'
+                ? t(locale, 'examples.shape.polyline', 'Polyline')
+                : t(locale, 'examples.shape.polygon', 'Polygon')}
       </div>
 
       <div

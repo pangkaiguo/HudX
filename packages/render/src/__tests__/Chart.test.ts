@@ -218,6 +218,21 @@ describe('Chart (Core)', () => {
       expect(handler).toHaveBeenCalledTimes(2);
       expect(handler.mock.calls[1][0].show).toBe(false);
     });
+
+    it('should localize loading text based on locale', () => {
+      const chart = new TestChart(document.createElement('div'));
+      const handler = vi.fn();
+      chart.on('loading', handler);
+
+      chart.setLocale('zh-CN');
+      chart.showLoading();
+      expect(handler.mock.calls[0][0].text).toBe('加载中...');
+
+      handler.mockClear();
+      chart.setLocale('zh-TW');
+      chart.showLoading();
+      expect(handler.mock.calls[0][0].text).toBe('載入中...');
+    });
   });
 
   describe('Legend Hover Interaction', () => {

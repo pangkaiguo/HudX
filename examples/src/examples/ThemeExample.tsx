@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Rect, Circle, Text, Theme } from 'hudx-render';
+import { Renderer, Rect, Circle, Text, Locale, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../i18n';
 
-export const ThemeExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const ThemeExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<Renderer>();
   const [themeName, setThemeName] = useState<'light' | 'dark'>(
@@ -21,13 +28,17 @@ export const ThemeExample = ({ theme = 'light' }: { theme?: Theme }) => {
       containerRef.current,
       renderMode,
       themeName,
-      'en',
+      locale,
     );
     rendererRef.current = renderer;
 
     const drawChart = () => {
       renderer.getRoot().removeAll();
       const theme = renderer.getThemeConfig();
+      const themeLabel =
+        themeName === 'light'
+          ? t(locale, 'examples.theme.light', 'Light')
+          : t(locale, 'examples.theme.dark', 'Dark');
 
       renderer.add(
         new Rect({
@@ -49,7 +60,11 @@ export const ThemeExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
       renderer.add(
         new Text({
-          shape: { text: `Theme: ${themeName}`, x: 400, y: 200 },
+          shape: {
+            text: `${t(locale, 'examples.themeExample.themeLabel', 'Theme')}: ${themeLabel}`,
+            x: 400,
+            y: 200,
+          },
           style: {
             textAlign: 'center',
             fill: theme.textColor,
@@ -66,11 +81,13 @@ export const ThemeExample = ({ theme = 'light' }: { theme?: Theme }) => {
     drawChart();
 
     return () => renderer.dispose();
-  }, [themeName]);
+  }, [locale, renderMode, themeName]);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Theme Switch Demo</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.themeExample.title', 'Theme Switch Demo')}
+      </h2>
       <div
         style={{
           marginBottom: 20,
@@ -83,21 +100,21 @@ export const ThemeExample = ({ theme = 'light' }: { theme?: Theme }) => {
         <div style={{ display: 'flex', gap: 10 }}>
           <button
             onClick={() => setThemeName('light')}
-            aria-label='Switch to light theme'
+            aria-label={t(locale, 'examples.themeExample.switchToLight', 'Switch to light theme')}
             style={{ padding: '8px 16px', cursor: 'pointer' }}
           >
-            Light
+            {t(locale, 'examples.theme.light', 'Light')}
           </button>
           <button
             onClick={() => setThemeName('dark')}
-            aria-label='Switch to dark theme'
+            aria-label={t(locale, 'examples.themeExample.switchToDark', 'Switch to dark theme')}
             style={{ padding: '8px 16px', cursor: 'pointer' }}
           >
-            Dark
+            {t(locale, 'examples.theme.dark', 'Dark')}
           </button>
         </div>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -107,8 +124,8 @@ export const ThemeExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
       </div>

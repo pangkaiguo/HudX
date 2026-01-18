@@ -1,7 +1,14 @@
 import { HChart, type ChartOption } from 'hudx-charts';
-import { Theme, ThemeManager } from 'hudx-render';
+import { Locale, Theme, ThemeManager } from 'hudx-render';
+import { t } from '../../i18n';
 
-export const RichTextExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const RichTextExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
@@ -86,14 +93,21 @@ export const RichTextExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Rich Text Pie Chart</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.richText.title', 'Rich Text Pie Chart')}
+      </h2>
       <p style={{ marginBottom: 20, color: ui.colorTextSecondary || themeObj.axisLabelColor, fontSize: 14 }}>
-        Demonstrating rich text labels and auto-colored label lines.
+        {t(
+          locale,
+          'examples.richText.desc',
+          'Demonstrating rich text labels and auto-colored label lines.',
+        )}
       </p>
       <div style={{ height: 500, border: `1px solid ${themeObj.gridColor}` }}>
         <HChart
           option={option}
           theme={theme}
+          locale={locale}
           style={{ width: '100%', height: '600px' }}
         />
       </div>

@@ -1,10 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-render';
+import { Locale, ThemeManager, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../../i18n';
 
-const DivergingVerticalBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
+const DivergingVerticalBarExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
@@ -93,9 +100,15 @@ const DivergingVerticalBarExample = ({ theme = 'light' }: { theme?: Theme }) => 
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Diverging Vertical Bar</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.list.diverging-vertical-bar.title', 'Diverging Vertical Bar')}
+      </h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Positive values go up, negative values go down
+        {t(
+          locale,
+          'examples.list.diverging-vertical-bar.subtitle',
+          'Positive values go up, negative values go down',
+        )}
       </p>
 
       <div
@@ -108,7 +121,7 @@ const DivergingVerticalBarExample = ({ theme = 'light' }: { theme?: Theme }) => 
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -118,8 +131,8 @@ const DivergingVerticalBarExample = ({ theme = 'light' }: { theme?: Theme }) => 
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
 
@@ -136,7 +149,7 @@ const DivergingVerticalBarExample = ({ theme = 'light' }: { theme?: Theme }) => 
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
-          Decal Patterns
+          {t(locale, 'examples.control.decalPatterns', 'Decal Patterns')}
         </label>
 
         <label
@@ -152,7 +165,7 @@ const DivergingVerticalBarExample = ({ theme = 'light' }: { theme?: Theme }) => 
             checked={showGrid}
             onChange={(e) => setShowGrid(e.target.checked)}
           />
-          Show Grid
+          {t(locale, 'examples.control.showGrid', 'Show Grid')}
         </label>
       </div>
 
@@ -160,6 +173,7 @@ const DivergingVerticalBarExample = ({ theme = 'light' }: { theme?: Theme }) => 
         ref={chartRef}
         option={option}
         theme={theme}
+        locale={locale}
         renderMode={renderMode}
         style={{
           width: '100%',
@@ -182,7 +196,11 @@ const DivergingVerticalBarExample = ({ theme = 'light' }: { theme?: Theme }) => 
             fontSize: 14,
           }}
         >
-          Update Data (via getChartInstance)
+          {t(
+            locale,
+            'examples.control.updateData',
+            'Update Data (via getChartInstance)',
+          )}
         </button>
       </div>
     </div>

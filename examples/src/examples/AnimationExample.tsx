@@ -6,11 +6,19 @@ import {
   Animation,
   Easing,
   ThemeManager,
+  Locale,
   Theme,
 } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../i18n';
 
-export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const AnimationExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
 
@@ -21,7 +29,7 @@ export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
       containerRef.current,
       renderMode,
       theme,
-      'en',
+      locale,
     );
     const themeObj = ThemeManager.getTheme(theme);
 
@@ -85,11 +93,13 @@ export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
     renderer.flush();
 
     return () => renderer.dispose();
-  }, [renderMode, theme]);
+  }, [locale, renderMode, theme]);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Animation Demo</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.animation.title', 'Animation Demo')}
+      </h2>
       <div
         style={{
           marginBottom: 20,
@@ -100,7 +110,7 @@ export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -110,13 +120,17 @@ export const AnimationExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
       </div>
       <p style={{ marginBottom: 20, color: '#666' }}>
-        Circle moves right, Rectangle scales
+        {t(
+          locale,
+          'examples.animation.desc',
+          'Circle moves right, Rectangle scales',
+        )}
       </p>
       <div
         ref={containerRef}

@@ -1,9 +1,16 @@
 import React, { useRef, useState } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { Theme } from 'hudx-render';
+import { Locale, Theme } from 'hudx-render';
+import { t } from '../../i18n';
 
-export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const AxisLabelExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const chartRef = useRef<HChartRef>(null);
 
   const [rotate, setRotate] = useState(45);
@@ -160,13 +167,17 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Axis Label Example</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.axisLabel.pageTitle', 'Axis Label Example')}
+      </h2>
 
       <div style={{ marginBottom: 20 }}>
-        <h3 style={{ fontSize: 16, marginBottom: 10 }}>X Axis Settings</h3>
+        <h3 style={{ fontSize: 16, marginBottom: 10 }}>
+          {t(locale, 'examples.axisLabel.xAxis.title', 'X Axis Settings')}
+        </h3>
         <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            Rotate:
+            {t(locale, 'examples.axisLabel.rotate', 'Rotate')}:
             <input
               type='number'
               value={rotate}
@@ -180,7 +191,7 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
             />
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            Width:
+            {t(locale, 'examples.axisLabel.width', 'Width')}:
             <input
               type='number'
               value={width}
@@ -194,7 +205,7 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
             />
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            Overflow:
+            {t(locale, 'examples.axisLabel.overflow', 'Overflow')}:
             <select
               value={overflow}
               onChange={(e) =>
@@ -206,9 +217,9 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 border: '1px solid #ddd',
               }}
             >
-              <option value='break'>Break</option>
-              <option value='truncate'>Truncate</option>
-              <option value='none'>None</option>
+              <option value='break'>{t(locale, 'examples.axisLabel.overflow.break', 'Break')}</option>
+              <option value='truncate'>{t(locale, 'examples.axisLabel.overflow.truncate', 'Truncate')}</option>
+              <option value='none'>{t(locale, 'examples.axisLabel.overflow.none', 'None')}</option>
             </select>
           </label>
         </div>
@@ -223,14 +234,16 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
           marginBottom: 40,
         }}
       >
-        <HChart ref={chartRef} option={option} theme={theme} />
+        <HChart ref={chartRef} option={option} theme={theme} locale={locale} />
       </div>
 
       <div style={{ marginBottom: 20 }}>
-        <h3 style={{ fontSize: 16, marginBottom: 10 }}>Y Axis Settings</h3>
+        <h3 style={{ fontSize: 16, marginBottom: 10 }}>
+          {t(locale, 'examples.axisLabel.yAxis.title', 'Y Axis Settings')}
+        </h3>
         <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            Rotate:
+            {t(locale, 'examples.axisLabel.rotate', 'Rotate')}:
             <input
               type='number'
               value={yRotate}
@@ -244,7 +257,7 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
             />
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            Width:
+            {t(locale, 'examples.axisLabel.width', 'Width')}:
             <input
               type='number'
               value={yWidth}
@@ -258,7 +271,7 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
             />
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            Overflow:
+            {t(locale, 'examples.axisLabel.overflow', 'Overflow')}:
             <select
               value={yOverflow}
               onChange={(e) =>
@@ -270,9 +283,9 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
                 border: '1px solid #ddd',
               }}
             >
-              <option value='break'>Break</option>
-              <option value='truncate'>Truncate</option>
-              <option value='none'>None</option>
+              <option value='break'>{t(locale, 'examples.axisLabel.overflow.break', 'Break')}</option>
+              <option value='truncate'>{t(locale, 'examples.axisLabel.overflow.truncate', 'Truncate')}</option>
+              <option value='none'>{t(locale, 'examples.axisLabel.overflow.none', 'None')}</option>
             </select>
           </label>
         </div>
@@ -287,12 +300,16 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
           marginBottom: 40,
         }}
       >
-        <HChart option={yOption} theme={theme} />
+        <HChart option={yOption} theme={theme} locale={locale} />
       </div>
 
       <div style={{ marginBottom: 20 }}>
         <h3 style={{ fontSize: 16, marginBottom: 10 }}>
-          Combined Axis Settings (Uses both X and Y settings above)
+          {t(
+            locale,
+            'examples.axisLabel.combined.title',
+            'Combined Axis Settings (Uses both X and Y settings above)',
+          )}
         </h3>
       </div>
 
@@ -304,7 +321,7 @@ export const AxisLabelExample = ({ theme = 'light' }: { theme?: Theme }) => {
           borderRadius: 8,
         }}
       >
-        <HChart option={xyOption} theme={theme} />
+        <HChart option={xyOption} theme={theme} locale={locale} />
       </div>
     </div>
   );

@@ -8,9 +8,10 @@ import React, {
 } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { Theme, ThemeManager, toRgbaWithOpacity } from 'hudx-render';
+import { Locale, Theme, ThemeManager, toRgbaWithOpacity } from 'hudx-render';
 import { Codebox } from './components/Codebox';
 import { examples, Example } from './data/examples';
+import { getLocaleLabel, t } from './i18n';
 
 // Lazy load components for better performance
 // Root examples
@@ -83,129 +84,87 @@ const BundleBarExample = lazy(() => import('./examples/bundle/BundleBarExample')
 const BundleLineExample = lazy(() => import('./examples/bundle/BundleLineExample'));
 const BundlePieExample = lazy(() => import('./examples/bundle/BundlePieExample'));
 
-const chartExamples = [
+type ClassicExample = { id: string; component: React.ComponentType<any> };
+type ClassicSection = { categoryKey: string; items: ClassicExample[] };
+
+const chartExamples: ClassicSection[] = [
   {
-    category: 'Line Charts',
+    categoryKey: 'line',
     items: [
-      { id: 'basic-line', name: 'Basic Line', component: BasicLineExample },
-      {
-        id: 'stack-line',
-        name: 'Stack Line',
-        component: StackLineChartExample,
-      },
-      { id: 'area-line', name: 'Area Line', component: AreaLineChartExample },
-      { id: 'smooth-line', name: 'Smooth Line', component: SmoothLineExample },
+      { id: 'basic-line', component: BasicLineExample },
+      { id: 'stack-line', component: StackLineChartExample },
+      { id: 'area-line', component: AreaLineChartExample },
+      { id: 'smooth-line', component: SmoothLineExample },
     ],
   },
   {
-    category: 'Bar Charts',
+    categoryKey: 'bar',
     items: [
-      { id: 'basic-bar', name: 'Basic Bar', component: BasicBarExample },
-      {
-        id: 'diverging-horizontal-bar',
-        name: 'Diverging Horizontal Bar',
-        component: DivergingHorizontalBarExample,
-      },
-      {
-        id: 'diverging-vertical-bar',
-        name: 'Diverging Vertical Bar',
-        component: DivergingVerticalBarExample,
-      },
-      { id: 'stack-bar', name: 'Stack Bar', component: StackBarExample },
-      {
-        id: 'stack-horizontal-bar',
-        name: 'Stack Horizontal Bar',
-        component: StackHorizontalBarExample,
-      },
-      {
-        id: 'group-bar',
-        name: 'Group Bar',
-        component: GroupBarChartExample,
-      },
-      // { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
-      // {
-      //   id: 'stack-bar-3d',
-      //   name: 'Stack Bar 3D',
-      //   component: StackBar3DExample,
-      // },
+      { id: 'basic-bar', component: BasicBarExample },
+      { id: 'diverging-horizontal-bar', component: DivergingHorizontalBarExample },
+      { id: 'diverging-vertical-bar', component: DivergingVerticalBarExample },
+      { id: 'stack-bar', component: StackBarExample },
+      { id: 'stack-horizontal-bar', component: StackHorizontalBarExample },
+      { id: 'group-bar', component: GroupBarChartExample },
     ],
   },
   {
-    category: 'Pie Charts',
+    categoryKey: 'pie',
     items: [
-      { id: 'basic-pie', name: 'Basic Pie', component: BasicPieExample },
-      {
-        id: 'advanced-pie',
-        name: 'Advanced Pie',
-        component: AdvancedPieChartExample,
-      },
-      { id: 'doughnut', name: 'Doughnut', component: DoughnutExample },
-      {
-        id: 'advanced-doughnut',
-        name: 'Advanced Doughnut',
-        component: AdvancedDoughnutExample,
-      },
-      {
-        id: 'half-doughnut',
-        name: 'Half Doughnut',
-        component: HalfDoughnutExample,
-      },
+      { id: 'basic-pie', component: BasicPieExample },
+      { id: 'advanced-pie', component: AdvancedPieChartExample },
+      { id: 'doughnut', component: DoughnutExample },
+      { id: 'advanced-doughnut', component: AdvancedDoughnutExample },
+      { id: 'half-doughnut', component: HalfDoughnutExample },
     ],
   },
   {
-    category: 'Scatter Charts',
+    categoryKey: 'scatter',
+    items: [{ id: 'scatter-chart', component: ScatterChartExample }],
+  },
+  {
+    categoryKey: 'sub-components',
     items: [
-      {
-        id: 'scatter-chart',
-        name: 'Scatter Chart',
-        component: ScatterChartExample,
-      },
+      { id: 'axis-label', component: AxisLabelExample },
+      { id: 'title-example', component: TitleExample },
+      { id: 'legend-example', component: LegendExample },
+      { id: 'tooltip-example', component: TooltipExample },
+      { id: 'rich-text-example', component: RichTextExample },
     ],
   },
   {
-    category: 'Sub Components',
+    categoryKey: 'bundle',
     items: [
-      { id: 'axis-label', name: 'Axis Label', component: AxisLabelExample },
-      { id: 'title-example', name: 'Title', component: TitleExample },
-      { id: 'legend-example', name: 'Legend', component: LegendExample },
-      { id: 'tooltip-example', name: 'Tooltip', component: TooltipExample }, {
-        id: 'rich-text-example',
-        name: 'Rich Text',
-        component: RichTextExample,
-      },
-    ],
-  },
-  {
-    category: 'Bundle',
-    items: [
-      { id: 'bundle-test', name: 'Unified Bundle', component: BundleExample },
-      { id: 'bundle-bar', name: 'BarChart Import', component: BundleBarExample },
-      { id: 'bundle-line', name: 'LineChart Import', component: BundleLineExample },
-      { id: 'bundle-pie', name: 'PieChart Import', component: BundlePieExample },
+      { id: 'bundle-test', component: BundleExample },
+      { id: 'bundle-bar', component: BundleBarExample },
+      { id: 'bundle-line', component: BundleLineExample },
+      { id: 'bundle-pie', component: BundlePieExample },
     ],
   },
 ];
 
-const featureExamples = [
-  { id: 'shape', name: 'Shape', component: ShapeExample },
-  { id: 'themes', name: 'Theme', component: ThemeExample },
-  { id: 'interaction', name: 'Interaction', component: InteractionExample },
-  { id: 'animation', name: 'Animation', component: AnimationExample },
-  { id: 'performance', name: 'Performance', component: PerformanceExample },
+const featureExamples: Array<{ id: string; component: React.ComponentType<any> }> = [
+  { id: 'shape', component: ShapeExample },
+  { id: 'themes', component: ThemeExample },
+  { id: 'interaction', component: InteractionExample },
+  { id: 'animation', component: AnimationExample },
+  { id: 'performance', component: PerformanceExample },
 ];
 
-const allExamples: any[] = [
-  ...chartExamples.flatMap((c: any) => c.items),
+const allExamples: ClassicExample[] = [
+  ...chartExamples.flatMap((c) => c.items),
   ...featureExamples,
 ];
 
 const NavButton = ({
   example,
+  label,
   activeExample,
   setActiveExample,
   theme,
 }: {
-  example: any;
+  example: { id: string };
+  label: string;
   activeExample: string;
   setActiveExample: (id: string) => void;
   theme: Theme;
@@ -222,7 +181,7 @@ const NavButton = ({
   return (
     <button
       onClick={() => setActiveExample(example.id)}
-      aria-label={`View ${example.name} example`}
+      aria-label={label}
       aria-current={isActive ? 'page' : undefined}
       style={{
         display: 'block',
@@ -248,19 +207,12 @@ const NavButton = ({
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
     >
-      {example.name}
+      {label}
     </button>
   );
 };
 
-const categories = [
-  { key: 'line', label: 'Line' },
-  { key: 'bar', label: 'Bar' },
-  { key: 'pie', label: 'Pie' },
-  { key: 'scatter', label: 'Scatter' },
-  { key: 'sub-components', label: 'Sub Components' },
-  { key: 'bundle', label: 'Bundle' },
-];
+const categories = ['line', 'bar', 'pie', 'scatter', 'sub-components', 'bundle'] as const;
 
 function useLocalStorageState<T>(key: string, initialValue: T) {
   const [value, setValue] = useState<T>(() => {
@@ -326,6 +278,7 @@ const SegmentedControl = ({
     <div
       style={{
         display: 'flex',
+        width: '100%',
         border: `1px solid ${border}`,
         borderRadius: 4,
         overflow: 'hidden',
@@ -334,12 +287,15 @@ const SegmentedControl = ({
       <button
         onClick={() => onChange(leftValue)}
         style={{
+          flex: 1,
+          minWidth: 0,
           padding: '4px 12px',
           background: value === leftValue ? primary : 'transparent',
           color: value === leftValue ? primaryText : themeObj.textColor,
           border: 'none',
           cursor: 'pointer',
           fontSize: 12,
+          textAlign: 'center',
         }}
       >
         {leftLabel}
@@ -347,12 +303,15 @@ const SegmentedControl = ({
       <button
         onClick={() => onChange(rightValue)}
         style={{
+          flex: 1,
+          minWidth: 0,
           padding: '4px 12px',
           background: value === rightValue ? primary : 'transparent',
           color: value === rightValue ? primaryText : themeObj.textColor,
           border: 'none',
           cursor: 'pointer',
           fontSize: 12,
+          textAlign: 'center',
         }}
       >
         {rightLabel}
@@ -361,15 +320,215 @@ const SegmentedControl = ({
   );
 };
 
+const SidebarSettingsCard = ({
+  theme,
+  mode,
+  onModeChange,
+  themeValue,
+  themeLeftValue,
+  themeRightValue,
+  onThemeChange,
+  locale,
+  onLocaleChange,
+}: {
+  theme: Theme;
+  mode: 'classic' | 'modern';
+  onModeChange: (mode: 'classic' | 'modern') => void;
+  themeValue: string;
+  themeLeftValue: string;
+  themeRightValue: string;
+  onThemeChange: (theme: string) => void;
+  locale: Locale;
+  onLocaleChange: (locale: Locale) => void;
+}) => {
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const cardBg = ui.colorFillContainerAlt || ui.colorFillContainer || themeObj.backgroundColor;
+  const inputBg = ui.colorFillContainer || themeObj.backgroundColor;
+  const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
+
+  return (
+    <div
+      style={{
+        border: `1px solid ${border}`,
+        borderRadius: 8,
+        padding: 12,
+        backgroundColor: cardBg,
+      }}
+    >
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '56px 1fr',
+          gap: '8px 10px',
+          alignItems: 'center',
+        }}
+      >
+        <span style={{ fontSize: 12, color: textSecondary }}>
+          {t(locale, 'examples.sidebar.mode', 'Mode')}
+        </span>
+        <SegmentedControl
+          leftLabel={t(locale, 'examples.mode.classic')}
+          rightLabel={t(locale, 'examples.mode.modern')}
+          value={mode}
+          leftValue='classic'
+          rightValue='modern'
+          onChange={(next) => onModeChange(next as 'classic' | 'modern')}
+          theme={theme}
+        />
+
+        <span style={{ fontSize: 12, color: textSecondary }}>
+          {t(locale, 'examples.sidebar.theme', 'Theme')}
+        </span>
+        <SegmentedControl
+          leftLabel={t(locale, 'examples.theme.light')}
+          rightLabel={t(locale, 'examples.theme.dark')}
+          value={themeValue}
+          leftValue={themeLeftValue}
+          rightValue={themeRightValue}
+          onChange={(next) => onThemeChange(next)}
+          theme={theme}
+        />
+
+        <span style={{ fontSize: 12, color: textSecondary }}>
+          {t(locale, 'examples.sidebar.locale', 'Locale')}
+        </span>
+        <select
+          value={locale}
+          onChange={(e) => onLocaleChange(e.target.value as Locale)}
+          style={{
+            width: '100%',
+            padding: '6px 8px',
+            borderRadius: 6,
+            border: `1px solid ${border}`,
+            backgroundColor: inputBg,
+            color: themeObj.textColor,
+            fontSize: 12,
+            outline: 'none',
+          }}
+        >
+          {(['en', 'zh-CN', 'zh-TW'] as Locale[]).map((l) => (
+            <option key={l} value={l}>
+              {getLocaleLabel(l)}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+};
+
+const SettingsPopover = ({
+  open,
+  onClose,
+  anchorRef,
+  theme,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  anchorRef: React.RefObject<HTMLElement>;
+  theme: Theme;
+  children: React.ReactNode;
+}) => {
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const border = ui.colorBorderSecondary || themeObj.borderColor;
+  const cardBg = ui.colorFillContainerAlt || ui.colorFillContainer || themeObj.backgroundColor;
+
+  const [pos, setPos] = useState<{ left: number; top: number; maxHeight: number }>({
+    left: 8,
+    top: 8,
+    maxHeight: 300,
+  });
+
+  useEffect(() => {
+    if (!open) return;
+
+    const update = () => {
+      const rect = anchorRef.current?.getBoundingClientRect();
+      const width = 260;
+      const gap = 8;
+
+      const left = rect
+        ? Math.min(
+          Math.max(gap, rect.right - width),
+          window.innerWidth - width - gap,
+        )
+        : gap;
+      const top = rect ? rect.bottom + gap : gap;
+      const maxHeight = Math.max(120, window.innerHeight - top - gap);
+      setPos({ left, top, maxHeight });
+    };
+
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, true);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update, true);
+    };
+  }, [anchorRef, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onClose, open]);
+
+  if (!open) return null;
+
+  return (
+    <>
+      <div
+        onMouseDown={onClose}
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 2000,
+          backgroundColor: 'transparent',
+        }}
+      />
+      <div
+        onMouseDown={(e) => e.stopPropagation()}
+        style={{
+          position: 'fixed',
+          zIndex: 2001,
+          left: pos.left,
+          top: pos.top,
+          width: 260,
+          maxHeight: pos.maxHeight,
+          overflow: 'auto',
+          border: `1px solid ${border}`,
+          borderRadius: 10,
+          backgroundColor: cardBg,
+          boxShadow: `0 10px 30px ${toRgbaWithOpacity(themeObj.shadowColor, 0.22)}`,
+          padding: 12,
+        }}
+      >
+        {children}
+      </div>
+    </>
+  );
+};
+
 const ChartCard = ({
   example,
   onClick,
   theme,
+  locale,
 }: {
   example: Example;
   onClick: () => void;
   theme: Theme;
+  locale: Locale;
 }) => {
+  const titleText = t(locale, `examples.list.${example.id}.title`, example.title);
+  const subtitleText = t(locale, `examples.list.${example.id}.subtitle`, example.subtitle);
   const option = useMemo(() => parseOption(example.code), [example.code]);
   const previewOption = useMemo(
     () => ({
@@ -439,7 +598,7 @@ const ChartCard = ({
         {previewUrl ? (
           <img
             src={previewUrl}
-            alt={example.title}
+            alt={titleText}
             style={{
               width: '100%',
               height: '100%',
@@ -465,6 +624,7 @@ const ChartCard = ({
             ref={chartRef}
             option={previewOption}
             theme={theme}
+            locale={locale}
             renderMode='canvas'
             width={600}
             height={400}
@@ -473,9 +633,9 @@ const ChartCard = ({
       </div>
       <div style={{ padding: '12px 16px' }}>
         <div style={{ fontWeight: 'bold', marginBottom: 4, fontSize: 14 }}>
-          {example.title}
+          {titleText}
         </div>
-        <div style={{ color: subtitleColor, fontSize: 12 }}>{example.subtitle}</div>
+        <div style={{ color: subtitleColor, fontSize: 12 }}>{subtitleText}</div>
       </div>
     </div>
   );
@@ -485,19 +645,19 @@ const Dashboard = ({
   activeCategory,
   onSelectExample,
   theme,
+  locale,
 }: {
   activeCategory: string;
   onSelectExample: (id: string) => void;
   theme: Theme;
+  locale: Locale;
 }) => {
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
-  const border = ui.colorBorderSecondary || themeObj.borderColor;
   const pageBg = ui.colorFillPage || themeObj.backgroundColor;
   const hintText = ui.colorTextTertiary || themeObj.axisLabelColor;
 
-  const categoryLabel =
-    categories.find((c) => c.key === activeCategory)?.label || activeCategory;
+  const categoryLabel = t(locale, `examples.category.${activeCategory}`, activeCategory);
   const filteredExamples = examples.filter(
     (e) => e.category === activeCategory,
   );
@@ -527,11 +687,12 @@ const Dashboard = ({
               example={ex}
               onClick={() => onSelectExample(ex.id)}
               theme={theme}
+              locale={locale}
             />
           ))}
           {filteredExamples.length === 0 && (
             <div style={{ color: hintText }}>
-              No examples yet for this category.
+              {t(locale, 'examples.emptyCategory')}
             </div>
           )}
         </div>
@@ -544,23 +705,27 @@ const OldApp = memo(function OldApp({
   theme,
   setTheme,
   setMode,
+  locale,
+  setLocale,
   activeExample,
   setActiveExample,
 }: {
   theme: 'Light' | 'Dark';
   setTheme: (t: 'Light' | 'Dark') => void;
   setMode: (m: 'classic' | 'modern') => void;
+  locale: Locale;
+  setLocale: (l: Locale) => void;
   activeExample: string;
   setActiveExample: (id: string) => void;
 }) {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsButtonRef = React.useRef<HTMLButtonElement>(null);
   const themeKey = theme.toLowerCase() as Theme;
   const themeObj = ThemeManager.getTheme(themeKey);
   const ui = themeObj.token as any;
   const border = ui.colorBorderSecondary || themeObj.borderColor;
   const pageBg = ui.colorFillPage || themeObj.backgroundColor;
   const navBg = ui.colorFillContainer || themeObj.backgroundColor;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
-  const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
   const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
   const textTertiary = ui.colorTextTertiary || themeObj.axisLabelColor;
 
@@ -584,29 +749,22 @@ const OldApp = memo(function OldApp({
         style={{
           width: 280,
           borderRight: `1px solid ${border}`,
-          padding: 20,
-          overflowY: 'auto',
           backgroundColor: navBg,
           color: themeObj.textColor,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          overflow: 'hidden',
         }}
       >
-        <h1
-          style={{
-            fontSize: 20,
-            marginBottom: 10,
-            color: themeObj.textColor,
-          }}
-        >
-          HudX Charts
-        </h1>
         <div
           style={{
-            marginBottom: 20,
-            padding: '10px 0',
+            position: 'sticky',
+            top: 0,
+            zIndex: 2,
+            backgroundColor: navBg,
+            padding: '20px 20px 12px',
             borderBottom: `1px solid ${border}`,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
           }}
         >
           <div
@@ -614,129 +772,113 @@ const OldApp = memo(function OldApp({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              fontSize: 14,
-              color: themeObj.textColor,
+              gap: 8,
             }}
           >
-            <div
+            <h1
               style={{
-                display: 'flex',
-                border: `1px solid ${border}`,
-                borderRadius: 4,
-                overflow: 'hidden',
+                fontSize: 20,
+                margin: 0,
+                color: themeObj.textColor,
+                lineHeight: '24px',
               }}
             >
-              <button
-                onClick={() => setMode('classic')}
-                style={{
-                  padding: '4px 12px',
-                  background: primary,
-                  color: primaryText,
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: 12,
-                }}
-              >
-                Classic
-              </button>
-              <button
-                onClick={() => setMode('modern')}
-                style={{
-                  padding: '4px 12px',
-                  background: 'transparent',
-                  color: themeObj.textColor,
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: 12,
-                }}
-              >
-                Modern
-              </button>
-            </div>
-            <div
+              {t(locale, 'examples.app.title')}
+            </h1>
+            <button
+              ref={settingsButtonRef}
+              onClick={() => setSettingsOpen(true)}
+              aria-label={t(locale, 'examples.sidebar.settings', 'Settings')}
+              aria-haspopup='dialog'
+              aria-expanded={settingsOpen}
               style={{
-                display: 'flex',
+                width: 32,
+                height: 32,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 8,
                 border: `1px solid ${border}`,
-                borderRadius: 4,
-                overflow: 'hidden',
+                backgroundColor: 'transparent',
+                color: themeObj.textColor,
+                cursor: 'pointer',
+                fontSize: 16,
+                lineHeight: '16px',
               }}
             >
-              <button
-                onClick={() => setTheme('Light')}
-                style={{
-                  padding: '4px 12px',
-                  background: theme === 'Light' ? primary : 'transparent',
-                  color:
-                    theme === 'Light'
-                      ? primaryText
-                      : themeObj.textColor,
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: 12,
-                }}
-              >
-                Light
-              </button>
-              <button
-                onClick={() => setTheme('Dark')}
-                style={{
-                  padding: '4px 12px',
-                  background: theme === 'Dark' ? primary : 'transparent',
-                  color: theme === 'Dark' ? primaryText : themeObj.textColor,
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: 12,
-                }}
-              >
-                Dark
-              </button>
-            </div>
+              ⚙︎
+            </button>
           </div>
+          <SettingsPopover
+            open={settingsOpen}
+            onClose={() => setSettingsOpen(false)}
+            anchorRef={settingsButtonRef}
+            theme={themeKey}
+          >
+            <SidebarSettingsCard
+              theme={themeKey}
+              mode='classic'
+              onModeChange={(next) => {
+                setSettingsOpen(false);
+                setMode(next);
+              }}
+              themeValue={theme}
+              themeLeftValue='Light'
+              themeRightValue='Dark'
+              onThemeChange={(next) => setTheme(next as 'Light' | 'Dark')}
+              locale={locale}
+              onLocaleChange={setLocale}
+            />
+          </SettingsPopover>
         </div>
 
-        {chartExamples.map((category) => (
-          <React.Fragment key={category.category}>
-            <h2
-              style={{
-                fontSize: 14,
-                fontWeight: 'bold',
-                margin: '20px 0 10px',
-                color: textSecondary,
-              }}
-            >
-              {category.category}
-            </h2>
-            {category.items.map((example) => (
-              <NavButton
-                key={example.id}
-                example={example}
-                activeExample={activeExample}
-                setActiveExample={setActiveExample}
-                theme={themeKey}
-              />
-            ))}
-          </React.Fragment>
-        ))}
+        <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}>
+          {chartExamples.map((category) => (
+            <React.Fragment key={category.categoryKey}>
+              <h2
+                style={{
+                  fontSize: 14,
+                  fontWeight: 'bold',
+                  margin: '20px 0 10px',
+                  color: textSecondary,
+                }}
+              >
+                {t(locale, `examples.category.${category.categoryKey}`, category.categoryKey)}
+              </h2>
+              {category.items.map((example) => (
+                <NavButton
+                  key={example.id}
+                  example={example}
+                  label={t(locale, `examples.list.${example.id}.title`, example.id)}
+                  activeExample={activeExample}
+                  setActiveExample={setActiveExample}
+                  theme={themeKey}
+                />
+              ))}
+            </React.Fragment>
+          ))}
 
-        <h2
-          style={{
-            fontSize: 14,
-            fontWeight: 'bold',
-            margin: '20px 0 10px',
-            color: textSecondary,
-          }}
-        >
-          Feature Demos
-        </h2>
-        {featureExamples.map((example) => (
-          <NavButton
-            key={example.id}
-            example={example}
-            activeExample={activeExample}
-            setActiveExample={setActiveExample}
-            theme={themeKey}
-          />
-        ))}
+          <h2
+            style={{
+              fontSize: 14,
+              fontWeight: 'bold',
+              margin: '20px 0 10px',
+              color: textSecondary,
+            }}
+          >
+            {t(locale, 'examples.nav.featureDemos')}
+          </h2>
+          {featureExamples.map((example) => (
+            <NavButton
+              key={example.id}
+              example={example}
+              label={t(locale, `examples.feature.${example.id}`, example.id)}
+              activeExample={activeExample}
+              setActiveExample={setActiveExample}
+              theme={themeKey}
+            />
+          ))}
+        </div>
       </nav>
       <main
         role='main'
@@ -762,12 +904,12 @@ const OldApp = memo(function OldApp({
                 willChange: 'contents',
               }}
             >
-              Loading...
+              {t(locale, 'examples.loading')}
             </div>
           }
         >
           <div style={{ contain: 'layout style paint' }}>
-            <ActiveComponent theme={theme} />
+            <ActiveComponent theme={theme} locale={locale} />
           </div>
         </Suspense>
       </main>
@@ -779,11 +921,17 @@ const ModernApp = ({
   theme,
   setTheme,
   setMode,
+  locale,
+  setLocale,
 }: {
   theme: Theme;
   setTheme: (t: Theme) => void;
   setMode: (m: 'classic' | 'modern') => void;
+  locale: Locale;
+  setLocale: (l: Locale) => void;
 }) => {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsButtonRef = React.useRef<HTMLButtonElement>(null);
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const border = ui.colorBorderSecondary || themeObj.borderColor;
@@ -814,10 +962,12 @@ const ModernApp = ({
     return (
       <Codebox
         initialCode={activeExample.code}
-        title={activeExample.title}
+        title={t(locale, `examples.list.${activeExample.id}.title`, activeExample.title)}
         onBack={() => setActiveExampleId(null)}
         theme={theme}
         onThemeChange={setTheme}
+        locale={locale}
+        onLocaleChange={setLocale}
       />
     );
   }
@@ -837,29 +987,22 @@ const ModernApp = ({
         style={{
           width: 280,
           borderRight: `1px solid ${border}`,
-          padding: 20,
-          overflowY: 'auto',
           backgroundColor: navBg,
           color: themeObj.textColor,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+          overflow: 'hidden',
         }}
       >
-        <h1
-          style={{
-            fontSize: 20,
-            marginBottom: 10,
-            color: themeObj.textColor,
-          }}
-        >
-          HudX Charts
-        </h1>
         <div
           style={{
-            marginBottom: 20,
-            padding: '10px 0',
+            position: 'sticky',
+            top: 0,
+            zIndex: 2,
+            backgroundColor: navBg,
+            padding: '20px 20px 12px',
             borderBottom: `1px solid ${border}`,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 10,
           }}
         >
           <div
@@ -867,82 +1010,119 @@ const ModernApp = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              fontSize: 14,
-              color: themeObj.textColor,
+              gap: 8,
             }}
           >
-            <SegmentedControl
-              leftLabel='Classic'
-              rightLabel='Modern'
-              value='modern'
-              leftValue='classic'
-              rightValue='modern'
-              onChange={(next) => setMode(next as 'classic' | 'modern')}
-              theme={theme}
-            />
-            <SegmentedControl
-              leftLabel='Light'
-              rightLabel='Dark'
-              value={theme}
-              leftValue='light'
-              rightValue='dark'
-              onChange={(next) => setTheme(next)}
-              theme={theme}
-            />
-          </div>
-        </div>
-        <h2
-          style={{
-            fontSize: 14,
-            fontWeight: 'bold',
-            margin: '20px 0 10px',
-            color: textSecondary,
-          }}
-        >
-          Categories
-        </h2>
-        {categories.map((cat) => {
-          const isActive = activeCategory === cat.key;
-          const isHovered = hoveredCategory === cat.key;
-          const isFocused = focusedCategory === cat.key;
-
-          return (
-            <button
-              key={cat.key}
-              onClick={() => setActiveCategory(cat.key)}
-              aria-current={isActive ? 'page' : undefined}
+            <h1
               style={{
-                display: 'block',
-                width: '100%',
-                padding: '8px 12px',
-                marginBottom: 4,
-                border: `2px solid ${isFocused ? String(primary) : 'transparent'}`,
-                borderRadius: 6,
-                backgroundColor: isActive
-                  ? primary
-                  : isHovered
-                    ? String(hoverBg)
-                    : 'transparent',
-                color: isActive ? primaryText : themeObj.textColor,
-                cursor: 'pointer',
-                textAlign: 'left',
-                fontSize: 13,
-                fontWeight: isActive ? 600 : 400,
-                transition: 'all 0.2s',
-                outline: 'none',
-                boxShadow: isFocused
-                  ? `0 0 0 3px ${toRgbaWithOpacity(String(primary), 0.2)}`
-                  : 'none',
+                fontSize: 20,
+                margin: 0,
+                color: themeObj.textColor,
+                lineHeight: '24px',
               }}
-              onMouseEnter={() => setHoveredCategory(cat.key)}
-              onMouseLeave={() => setHoveredCategory(null)}
-              onFocus={() => setFocusedCategory(cat.key)}
-              onBlur={() => setFocusedCategory(null)}
             >
-              {cat.label}
+              {t(locale, 'examples.app.title')}
+            </h1>
+            <button
+              ref={settingsButtonRef}
+              onClick={() => setSettingsOpen(true)}
+              aria-label={t(locale, 'examples.sidebar.settings', 'Settings')}
+              aria-haspopup='dialog'
+              aria-expanded={settingsOpen}
+              style={{
+                width: 32,
+                height: 32,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 8,
+                border: `1px solid ${border}`,
+                backgroundColor: 'transparent',
+                color: themeObj.textColor,
+                cursor: 'pointer',
+                fontSize: 16,
+                lineHeight: '16px',
+              }}
+            >
+              ⚙︎
             </button>
-          );
-        })}
+          </div>
+          <SettingsPopover
+            open={settingsOpen}
+            onClose={() => setSettingsOpen(false)}
+            anchorRef={settingsButtonRef}
+            theme={theme}
+          >
+            <SidebarSettingsCard
+              theme={theme}
+              mode='modern'
+              onModeChange={(next) => {
+                setSettingsOpen(false);
+                setMode(next);
+              }}
+              themeValue={theme}
+              themeLeftValue='light'
+              themeRightValue='dark'
+              onThemeChange={(next) => setTheme(next as Theme)}
+              locale={locale}
+              onLocaleChange={setLocale}
+            />
+          </SettingsPopover>
+        </div>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}>
+          <h2
+            style={{
+              fontSize: 14,
+              fontWeight: 'bold',
+              margin: '0 0 10px',
+              color: textSecondary,
+            }}
+          >
+            {t(locale, 'examples.nav.categories')}
+          </h2>
+          {categories.map((categoryKey) => {
+            const isActive = activeCategory === categoryKey;
+            const isHovered = hoveredCategory === categoryKey;
+            const isFocused = focusedCategory === categoryKey;
+
+            return (
+              <button
+                key={categoryKey}
+                onClick={() => setActiveCategory(categoryKey)}
+                aria-current={isActive ? 'page' : undefined}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  padding: '8px 12px',
+                  marginBottom: 4,
+                  border: `2px solid ${isFocused ? String(primary) : 'transparent'}`,
+                  borderRadius: 6,
+                  backgroundColor: isActive
+                    ? primary
+                    : isHovered
+                      ? String(hoverBg)
+                      : 'transparent',
+                  color: isActive ? primaryText : themeObj.textColor,
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  fontSize: 13,
+                  fontWeight: isActive ? 600 : 400,
+                  transition: 'all 0.2s',
+                  outline: 'none',
+                  boxShadow: isFocused
+                    ? `0 0 0 3px ${toRgbaWithOpacity(String(primary), 0.2)}`
+                    : 'none',
+                }}
+                onMouseEnter={() => setHoveredCategory(categoryKey)}
+                onMouseLeave={() => setHoveredCategory(null)}
+                onFocus={() => setFocusedCategory(categoryKey)}
+                onBlur={() => setFocusedCategory(null)}
+              >
+                {t(locale, `examples.category.${categoryKey}`, categoryKey)}
+              </button>
+            );
+          })}
+        </div>
       </nav>
       <main
         role='main'
@@ -958,6 +1138,7 @@ const ModernApp = ({
           activeCategory={activeCategory}
           onSelectExample={setActiveExampleId}
           theme={theme}
+          locale={locale}
         />
       </main>
     </div>
@@ -972,6 +1153,10 @@ export default function App() {
   const [theme, setTheme] = useLocalStorageState<Theme>(
     'hudx.examples.theme',
     'light',
+  );
+  const [locale, setLocale] = useLocalStorageState<Locale>(
+    'hudx.examples.locale',
+    'zh-CN',
   );
   const [activeClassicExample, setActiveClassicExample] = useLocalStorageState<string>(
     'hudx.examples.classic.activeExample',
@@ -999,10 +1184,18 @@ export default function App() {
       theme={normalizedTheme}
       setTheme={setNormalizedTheme}
       setMode={setMode}
+      locale={locale}
+      setLocale={setLocale}
       activeExample={activeClassicExample}
       setActiveExample={setActiveClassicExample}
     />
   ) : (
-    <ModernApp theme={theme} setTheme={setThemeAndSync} setMode={setMode} />
+    <ModernApp
+      theme={theme}
+      setTheme={setThemeAndSync}
+      setMode={setMode}
+      locale={locale}
+      setLocale={setLocale}
+    />
   );
 }

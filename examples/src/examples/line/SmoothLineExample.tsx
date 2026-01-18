@@ -1,10 +1,17 @@
 import React, { useMemo, useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-render';
+import { Locale, ThemeManager, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../../i18n';
 
-export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const SmoothLineExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const chartRef = useRef<HChartRef>(null);
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
@@ -89,9 +96,15 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   return (
     <div>
       <div style={{ marginBottom: 20 }}>
-        <h2 style={{ marginBottom: 10 }}>Smooth Line Chart</h2>
+        <h2 style={{ marginBottom: 10 }}>
+          {t(locale, 'examples.list.smooth-line.title', 'Smooth Line Chart')}
+        </h2>
         <p style={{ color: textSecondary, fontSize: 14 }}>
-          Smooth uses Catmull-Rom; tension 0~1 controls curve tightness
+          {t(
+            locale,
+            'examples.list.smooth-line.subtitle',
+            'Smooth uses Catmull-Rom; tension 0~1 controls curve tightness',
+          )}
         </p>
       </div>
 
@@ -105,7 +118,7 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -115,8 +128,8 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
 
@@ -133,11 +146,13 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={smoothEnabled}
             onChange={(e) => setSmoothEnabled(e.target.checked)}
           />
-          Smooth
+          {t(locale, 'examples.control.smooth', 'Smooth')}
         </label>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Tension: {tension.toFixed(2)}</span>
+          <span>
+            {t(locale, 'examples.control.tension', 'Tension')}: {tension.toFixed(2)}
+          </span>
           <input
             type='range'
             min='0'
@@ -163,7 +178,7 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={showSymbol}
             onChange={(e) => setShowSymbol(e.target.checked)}
           />
-          Show Symbol
+          {t(locale, 'examples.control.showSymbol', 'Show Symbol')}
         </label>
 
         <label
@@ -179,13 +194,15 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={showGrid}
             onChange={(e) => setShowGrid(e.target.checked)}
           />
-          Show Grid
+          {t(locale, 'examples.control.showGrid', 'Show Grid')}
         </label>
 
         {showGrid && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Grid Top: {gridTop}</span>
+              <span>
+                {t(locale, 'examples.control.gridTop', 'Grid Top')}: {gridTop}
+              </span>
               <input
                 type='range'
                 min='20'
@@ -196,7 +213,9 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>X Split: {xSplitNumber}</span>
+              <span>
+                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+              </span>
               <input
                 type='range'
                 min='2'
@@ -208,7 +227,9 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Y Split: {splitNumber}</span>
+              <span>
+                {t(locale, 'examples.control.ySplit', 'Y Split')}: {splitNumber}
+              </span>
               <input
                 type='range'
                 min='2'
@@ -227,6 +248,7 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
         ref={chartRef}
         option={option}
         theme={theme}
+        locale={locale}
         renderMode={renderMode}
         style={{
           border: `1px solid ${border}`,
@@ -248,7 +270,11 @@ export const SmoothLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
             fontSize: 14,
           }}
         >
-          Update Data (via getChartInstance)
+          {t(
+            locale,
+            'examples.control.updateData',
+            'Update Data (via getChartInstance)',
+          )}
         </button>
       </div>
     </div>

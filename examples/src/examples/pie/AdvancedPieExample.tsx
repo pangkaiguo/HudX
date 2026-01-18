@@ -1,10 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-render';
+import { Locale, ThemeManager, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../../i18n';
 
-export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const AdvancedPieExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const [isDecal, setIsDecal] = useState(false);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
@@ -155,10 +162,15 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Advanced Pie Chart</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.list.advanced-pie.title', 'Advanced Pie Chart')}
+      </h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Features: Smooth pie slice animations, Percentage display, Interactive
-        legend, Hover tooltips
+        {t(
+          locale,
+          'examples.advanced-pie.features',
+          'Features: Smooth pie slice animations, Percentage display, Interactive legend, Hover tooltips',
+        )}
       </p>
       <div
         style={{
@@ -170,7 +182,7 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -180,8 +192,8 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
 
@@ -198,13 +210,14 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
-          Decal Patterns
+          {t(locale, 'examples.control.decalPatterns', 'Decal Patterns')}
         </label>
       </div>
       <HChart
         ref={chartRef}
         option={option}
         theme={theme}
+        locale={locale}
         renderMode={renderMode}
         style={{
           border: '1px solid #D6D8DA',
@@ -225,7 +238,11 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
             fontSize: 14,
           }}
         >
-          Update Data (via getChartInstance)
+          {t(
+            locale,
+            'examples.control.updateData',
+            'Update Data (via getChartInstance)',
+          )}
         </button>
       </div>
     </div>

@@ -1,10 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme, toRgbaWithOpacity } from 'hudx-render';
+import { Locale, ThemeManager, Theme, toRgbaWithOpacity } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../../i18n';
 
-export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const BasicBarExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
@@ -126,9 +133,15 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Bar Chart</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.list.basic-bar.title', 'Bar Chart')}
+      </h2>
       <p style={{ marginBottom: 20, color: ui.colorTextSecondary || themeObj.axisLabelColor, fontSize: 14 }}>
-        Hover over bars to see values
+        {t(
+          locale,
+          'examples.list.basic-bar.subtitle',
+          'Hover over bars to see values',
+        )}
       </p>
       <div
         style={{
@@ -140,7 +153,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -150,8 +163,8 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
 
@@ -168,7 +181,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
-          Decal Patterns
+          {t(locale, 'examples.control.decalPatterns', 'Decal Patterns')}
         </label>
 
         <label
@@ -184,7 +197,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={showGrid}
             onChange={(e) => setShowGrid(e.target.checked)}
           />
-          Show Grid
+          {t(locale, 'examples.control.showGrid', 'Show Grid')}
         </label>
 
         <label
@@ -200,7 +213,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={showBackground}
             onChange={(e) => setShowBackground(e.target.checked)}
           />
-          Background
+          {t(locale, 'examples.control.background', 'Background')}
         </label>
 
         {/* <label
@@ -220,7 +233,9 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         </label> */}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Bar Width: {barWidth}</span>
+          <span>
+            {t(locale, 'examples.control.barWidth', 'Bar Width')}: {barWidth}
+          </span>
           <input
             type='range'
             min='0'
@@ -238,7 +253,9 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         {showGrid && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Grid Top: {gridTop}</span>
+              <span>
+                {t(locale, 'examples.control.gridTop', 'Grid Top')}: {gridTop}
+              </span>
               <input
                 type='range'
                 min='20'
@@ -249,7 +266,9 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>X Split: {xSplitNumber}</span>
+              <span>
+                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+              </span>
               <input
                 type='range'
                 min='2'
@@ -274,11 +293,13 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                   checked={xAutoInterval}
                   onChange={(e) => setXAutoInterval(e.target.checked)}
                 />
-                <span>Auto Interval</span>
+                <span>{t(locale, 'examples.control.autoInterval', 'Auto Interval')}</span>
               </label>
               {!xAutoInterval && (
                 <>
-                  <span>Val: {xInterval}</span>
+                  <span>
+                    {t(locale, 'examples.control.intervalValue', 'Val')}: {xInterval}
+                  </span>
                   <input
                     type='range'
                     min='0'
@@ -287,13 +308,15 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                     value={xInterval}
                     onChange={(e) => setXInterval(Number(e.target.value))}
                     style={{ width: 80 }}
-                    title='0: All, 1: Every 2nd, etc.'
+                    title={t(locale, 'examples.control.intervalHelp', '0: All, 1: Every 2nd, etc.')}
                   />
                 </>
               )}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Y Split: {splitNumber}</span>
+              <span>
+                {t(locale, 'examples.control.ySplit', 'Y Split')}: {splitNumber}
+              </span>
               <input
                 type='range'
                 min='2'
@@ -305,7 +328,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               />
             </div>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>X Grid:</span>
+              <span>{t(locale, 'examples.control.xGrid', 'X Grid:')}</span>
               <select
                 value={xGridType}
                 onChange={(e) =>
@@ -317,12 +340,12 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                   border: `1px solid ${border}`,
                 }}
               >
-                <option value='solid'>Solid</option>
-                <option value='dashed'>Dashed</option>
+                <option value='solid'>{t(locale, 'examples.control.solid', 'Solid')}</option>
+                <option value='dashed'>{t(locale, 'examples.control.dashed', 'Dashed')}</option>
               </select>
             </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Y Grid:</span>
+              <span>{t(locale, 'examples.control.yGrid', 'Y Grid:')}</span>
               <select
                 value={yGridType}
                 onChange={(e) =>
@@ -334,8 +357,12 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
                   border: `1px solid ${border}`,
                 }}
               >
-                <option value='solid'>Solid</option>
-                <option value='dashed'>Dashed</option>
+                <option value='solid'>
+                  {t(locale, 'examples.control.solid', 'Solid')}
+                </option>
+                <option value='dashed'>
+                  {t(locale, 'examples.control.dashed', 'Dashed')}
+                </option>
               </select>
             </label>
           </>
@@ -345,6 +372,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         ref={chartRef}
         option={option}
         theme={theme}
+        locale={locale}
         renderMode={renderMode}
         style={{
           border: `1px solid ${border}`,
@@ -365,10 +393,14 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             fontSize: 14,
           }}
         >
-          Update Data (via getChartInstance)
+          {t(
+            locale,
+            'examples.control.updateData',
+            'Update Data (via getChartInstance)',
+          )}
         </button>
       </div>
-    </div>
+    </div >
   );
 };
 

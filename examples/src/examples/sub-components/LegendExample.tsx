@@ -1,10 +1,18 @@
 import React from 'react';
 import { HChart, type ChartOption } from 'hudx-charts';
+import { Locale, Theme } from 'hudx-render';
+import { t } from '../../i18n';
 
 /**
  * Demonstrates LegendOption properties as defined in types.ts
  */
-const LegendExample: React.FC = () => {
+const LegendExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const baseData = {
     xAxis: { data: ['A', 'B', 'C'] },
     yAxis: {},
@@ -18,7 +26,7 @@ const LegendExample: React.FC = () => {
   // 1. Orientation & Position
   const orientOption: ChartOption = {
     ...baseData,
-    title: { text: 'Vertical Right' },
+    title: { text: t(locale, 'examples.legend.chartTitle.verticalRight', 'Vertical Right') },
     legend: {
       show: true,
       orient: 'vertical',
@@ -34,7 +42,7 @@ const LegendExample: React.FC = () => {
   // 2. Styling (Item gap, width, height)
   const styleOption: ChartOption = {
     ...baseData,
-    title: { text: 'Custom Item Style' },
+    title: { text: t(locale, 'examples.legend.chartTitle.customItemStyle', 'Custom Item Style') },
     legend: {
       show: true,
       orient: 'vertical',
@@ -54,7 +62,7 @@ const LegendExample: React.FC = () => {
   // 3. Data Format (Custom Icons)
   const dataOption: ChartOption = {
     ...baseData,
-    title: { text: 'Custom Data Icons' },
+    title: { text: t(locale, 'examples.legend.chartTitle.customDataIcons', 'Custom Data Icons') },
     legend: {
       show: true,
       orient: 'vertical',
@@ -70,26 +78,35 @@ const LegendExample: React.FC = () => {
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>Legend Configuration</h1>
-      <p style={{ color: '#666' }}>Matching <code>LegendOption</code> interface.</p>
+      <h1>{t(locale, 'examples.legend.pageTitle', 'Legend Configuration')}</h1>
+      <p style={{ color: '#666' }}>
+        {t(locale, 'examples.legend.pageDesc.prefix', 'Matching')} <code>LegendOption</code>{' '}
+        {t(locale, 'examples.legend.pageDesc.suffix', 'interface.')}
+      </p>
       
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <div style={{ border: '1px solid #eee', padding: 10 }}>
-          <h3>Orientation & Position</h3>
-          <p style={{ fontSize: 12 }}>vertical, right, top, border, background</p>
-          <HChart option={orientOption} height={300} />
+          <h3>{t(locale, 'examples.legend.section.orient', 'Orientation & Position')}</h3>
+          <p style={{ fontSize: 12 }}>
+            {t(locale, 'examples.legend.section.orient.desc', 'vertical, right, top, border, background')}
+          </p>
+          <HChart option={orientOption} height={300} theme={theme} locale={locale} />
         </div>
         
         <div style={{ border: '1px solid #eee', padding: 10 }}>
-          <h3>Item Styling</h3>
-          <p style={{ fontSize: 12 }}>itemGap, itemWidth, itemHeight, textStyle</p>
-          <HChart option={styleOption} height={300} />
+          <h3>{t(locale, 'examples.legend.section.style', 'Item Styling')}</h3>
+          <p style={{ fontSize: 12 }}>
+            {t(locale, 'examples.legend.section.style.desc', 'itemGap, itemWidth, itemHeight, textStyle')}
+          </p>
+          <HChart option={styleOption} height={300} theme={theme} locale={locale} />
         </div>
 
         <div style={{ border: '1px solid #eee', padding: 10 }}>
-          <h3>Custom Data</h3>
-          <p style={{ fontSize: 12 }}>per-item icon and textStyle</p>
-          <HChart option={dataOption} height={300} />
+          <h3>{t(locale, 'examples.legend.section.customData', 'Custom Data')}</h3>
+          <p style={{ fontSize: 12 }}>
+            {t(locale, 'examples.legend.section.customData.desc', 'per-item icon and textStyle')}
+          </p>
+          <HChart option={dataOption} height={300} theme={theme} locale={locale} />
         </div>
       </div>
     </div>

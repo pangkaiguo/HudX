@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Text, ThemeManager, Theme } from 'hudx-render';
+import { Renderer, Circle, Text, Locale, ThemeManager, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../i18n';
 
-export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const InteractionExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [clickCount, setClickCount] = useState(0);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
@@ -18,7 +25,7 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
       containerRef.current,
       renderMode,
       theme,
-      'en',
+      locale,
     );
 
     const circles = [];
@@ -59,7 +66,11 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
     renderer.add(
       new Text({
-        shape: { text: 'Click circles to interact', x: 400, y: 50 },
+        shape: {
+          text: t(locale, 'examples.interaction.instruction', 'Click circles to interact'),
+          x: 400,
+          y: 50,
+        },
         style: {
           textAlign: 'center',
           fill: themeObj.textColor,
@@ -73,11 +84,13 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
     renderer.flush();
 
     return () => renderer.dispose();
-  }, [renderMode, theme]);
+  }, [locale, renderMode, theme]);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Interaction Demo</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.interaction.title', 'Interaction Demo')}
+      </h2>
       <div
         style={{
           marginBottom: 20,
@@ -88,7 +101,7 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -98,18 +111,22 @@ export const InteractionExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
       </div>
       <p style={{ marginBottom: 20, color: textSecondary }}>
-        Click Count: {clickCount}
+        {t(locale, 'examples.interaction.clickCount', 'Click Count')}: {clickCount}
       </p>
       <div
         ref={containerRef}
         role='img'
-        aria-label='Interactive demo with 5 clickable circles'
+        aria-label={t(
+          locale,
+          'examples.interaction.aria',
+          'Interactive demo with 5 clickable circles',
+        )}
         style={{
           border: `1px solid ${border}`,
           borderRadius: 8,

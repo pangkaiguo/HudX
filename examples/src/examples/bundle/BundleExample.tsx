@@ -1,8 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import { Rect, Circle, Renderer, HChart, type ChartOption } from 'hudx';
+import type { Locale } from 'hudx-render';
+import { t } from '../../i18n';
 
 // This example demonstrates importing everything from the unified 'hudx' package
-export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
+export const BundleExample: React.FC<{ theme?: any; locale?: Locale }> = ({
+  theme,
+  locale = 'zh-CN',
+}) => {
   const coreRef = useRef<HTMLDivElement>(null);
 
   // Example 1: Using HChart component from hudx package
@@ -94,26 +99,40 @@ export const BundleExample: React.FC<{ theme?: any }> = ({ theme }) => {
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>Unified Bundle Example</h1>
+      <h1>{t(locale, 'examples.bundle.unified.title', 'Unified Bundle Example')}</h1>
       <p>
-        This example demonstrates importing both Charts and Core components from
-        the single <code>hudx</code> package.
+        {t(
+          locale,
+          'examples.bundle.unified.desc.prefix',
+          'This example demonstrates importing both Charts and Core components from the single',
+        )}{' '}
+        <code>hudx</code>{' '}
+        {t(locale, 'examples.bundle.unified.desc.suffix', 'package.')}
       </p>
 
       <div style={{ marginBottom: 40 }}>
-        <h2>1. HChart Component imported from 'hudx'</h2>
+        <h2>
+          {t(locale, 'examples.bundle.unified.section1', "1. HChart Component imported from 'hudx'")}
+        </h2>
         <div style={{ border: '1px solid #ccc', display: 'inline-block' }}>
           <HChart
             option={barOption}
             width={600}
             height={400}
             theme={theme || 'light'}
+            locale={locale}
           />
         </div>
       </div>
 
       <div>
-        <h2>2. Core Shapes (Rect, Circle) imported from 'hudx'</h2>
+        <h2>
+          {t(
+            locale,
+            'examples.bundle.unified.section2',
+            "2. Core Shapes (Rect, Circle) imported from 'hudx'",
+          )}
+        </h2>
         <div
           ref={coreRef}
           style={{

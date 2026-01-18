@@ -2,15 +2,19 @@ import React, { useEffect, useRef } from 'react';
 // @ts-ignore
 import BarChart from 'hudx-charts/chart/BarChart';
 import type { ChartOption } from 'hudx-charts';
+import type { Locale } from 'hudx-render';
+import { t } from '../../i18n';
 
-const BundleBarExample: React.FC = () => {
+const BundleBarExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!chartRef.current) return;
 
     const option: ChartOption = {
-      title: { text: 'Independent BarChart Bundle' },
+      title: {
+        text: t(locale, 'examples.bundle.barChart.chartTitle', 'Independent BarChart Bundle'),
+      },
       tooltip: { show: true },
       xAxis: { data: ['A', 'B', 'C', 'D', 'E'] },
       yAxis: {},
@@ -23,16 +27,16 @@ const BundleBarExample: React.FC = () => {
       ],
     };
 
-    const chart = new BarChart(chartRef.current, option);
+    const chart = new BarChart(chartRef.current, option, 'svg', undefined, locale);
 
     return () => {
       chart.dispose();
     };
-  }, []);
+  }, [locale]);
 
   return (
     <div style={{ padding: 20 }}>
-      <h3>BarChart Bundle Import</h3>
+      <h3>{t(locale, 'examples.bundle.barChart.title', 'BarChart Bundle Import')}</h3>
       <p style={{ fontSize: 12, color: '#666' }}>
         <code>import BarChart from 'hudx-charts/chart/BarChart';</code>
       </p>

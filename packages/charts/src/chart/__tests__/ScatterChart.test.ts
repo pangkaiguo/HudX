@@ -190,4 +190,38 @@ describe('ScatterChart', () => {
 
     expect(params.seriesName).toBe('Series-1');
   });
+
+  it('should localize default series name based on locale when series name is missing', () => {
+    const chart = new ScatterChart(container);
+    chart.setLocale('zh-CN');
+    const option: ChartOption = {
+      series: [
+        {
+          type: 'scatter',
+          data: [[10, 10]],
+        },
+      ],
+      tooltip: {
+        show: true,
+      },
+    };
+    chart.setOption(option);
+
+    const root = (chart as any)._root as Group;
+    const circle = root
+      .children()
+      .find((child: any) => child instanceof Circle) as Circle;
+    expect(circle).toBeDefined();
+
+    const tooltip = (chart as any)._tooltip;
+    const showSpy = vi.spyOn(tooltip, 'show');
+
+    circle.trigger('mouseover', { offsetX: 0, offsetY: 0 });
+
+    expect(showSpy).toHaveBeenCalled();
+    const args = showSpy.mock.calls[0];
+    const params = args[3] as any;
+
+    expect(params.seriesName).toBe('系列-1');
+  });
 });

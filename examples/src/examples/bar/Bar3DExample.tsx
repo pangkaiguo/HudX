@@ -1,10 +1,17 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-render';
+import { Locale, ThemeManager, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../../i18n';
 
-export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const Bar3DExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const chartRef = useRef<HChartRef>(null);
   const themeObj = ThemeManager.getTheme(theme);
 
@@ -111,9 +118,15 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>3D Bar Chart</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.bar-3d.title', '3D Bar Chart')}
+      </h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Pseudo-3D effect using 2.5D projection
+        {t(
+          locale,
+          'examples.bar-3d.subtitle',
+          'Pseudo-3D effect using 2.5D projection',
+        )}
       </p>
 
       <div
@@ -126,7 +139,7 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -136,8 +149,10 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
 
@@ -154,7 +169,7 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
-          Decal Patterns
+          {t(locale, 'examples.control.decalPatterns', 'Decal Patterns')}
         </label>
 
         <label
@@ -170,13 +185,15 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={showGrid}
             onChange={(e) => setShowGrid(e.target.checked)}
           />
-          Show Grid
+          {t(locale, 'examples.control.showGrid', 'Show Grid')}
         </label>
 
         {showGrid && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Grid Top: {gridTop}</span>
+              <span>
+                {t(locale, 'examples.control.gridTop', 'Grid Top')}: {gridTop}
+              </span>
               <input
                 type='range'
                 min='20'
@@ -187,7 +204,9 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>X Split: {xSplitNumber}</span>
+              <span>
+                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+              </span>
               <input
                 type='range'
                 min='2'
@@ -199,7 +218,9 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Y Split: {splitNumber}</span>
+              <span>
+                {t(locale, 'examples.control.ySplit', 'Y Split')}: {splitNumber}
+              </span>
               <input
                 type='range'
                 min='2'
@@ -218,6 +239,7 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
         ref={chartRef}
         option={option}
         theme={theme}
+        locale={locale}
         renderMode={renderMode}
         style={{
           border: '1px solid #D6D8DA',
@@ -239,7 +261,11 @@ export const Bar3DExample = ({ theme = 'light' }: { theme?: Theme }) => {
             fontSize: 14,
           }}
         >
-          Update Data (via getChartInstance)
+          {t(
+            locale,
+            'examples.control.updateData',
+            'Update Data (via getChartInstance)',
+          )}
         </button>
       </div>
     </div>

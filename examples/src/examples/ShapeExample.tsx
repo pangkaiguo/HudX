@@ -8,11 +8,19 @@ import {
   Polygon,
   Text,
   ThemeManager,
+  Locale,
   Theme,
 } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../i18n';
 
-export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const ShapeExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
@@ -28,7 +36,7 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
       containerRef.current,
       renderMode,
       theme,
-      'en',
+      locale,
     );
 
     renderer.add(
@@ -43,7 +51,7 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: 'Circle', x: 100, y: 160 },
+        shape: { text: t(locale, 'examples.shape.circle', 'Circle'), x: 100, y: 160 },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
@@ -56,7 +64,7 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: 'Rect', x: 240, y: 160 },
+        shape: { text: t(locale, 'examples.shape.rect', 'Rect'), x: 240, y: 160 },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
@@ -69,7 +77,7 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: 'Line', x: 360, y: 160 },
+        shape: { text: t(locale, 'examples.shape.line', 'Line'), x: 360, y: 160 },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
@@ -89,7 +97,7 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: 'Polyline', x: 500, y: 160 },
+        shape: { text: t(locale, 'examples.shape.polyline', 'Polyline'), x: 500, y: 160 },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
@@ -110,14 +118,14 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
     );
     renderer.add(
       new Text({
-        shape: { text: 'Polygon', x: 640, y: 160 },
+        shape: { text: t(locale, 'examples.shape.polygon', 'Polygon'), x: 640, y: 160 },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
 
     renderer.add(
       new Text({
-        shape: { text: 'Core API Shapes', x: 400, y: 30 },
+        shape: { text: t(locale, 'examples.shape.title', 'Core API Shapes'), x: 400, y: 30 },
         style: {
           textAlign: 'center',
           fill: textColor,
@@ -131,11 +139,13 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
     renderer.flush();
 
     return () => renderer.dispose();
-  }, [renderMode, theme]);
+  }, [locale, renderMode, theme]);
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Core API Demo</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.feature.shape', 'Core API Demo')}
+      </h2>
       <div
         style={{
           marginBottom: 20,
@@ -146,7 +156,7 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -156,13 +166,17 @@ export const ShapeExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
       </div>
       <p style={{ marginBottom: 20, color: textSecondary }}>
-        Demonstrates basic shapes from hudx-render
+        {t(
+          locale,
+          'examples.shape.desc',
+          'Demonstrates basic shapes from hudx-render',
+        )}
       </p>
       <div
         ref={containerRef}

@@ -2,15 +2,20 @@ import React, { useEffect, useRef } from 'react';
 // @ts-ignore
 import PieChart from 'hudx-charts/chart/PieChart';
 import type { ChartOption } from 'hudx-charts';
+import type { Locale } from 'hudx-render';
+import { t } from '../../i18n';
 
-const BundlePieExample: React.FC = () => {
+const BundlePieExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!chartRef.current) return;
 
     const option: ChartOption = {
-      title: { text: 'Independent PieChart Bundle', left: 'center' },
+      title: {
+        text: t(locale, 'examples.bundle.pieChart.chartTitle', 'Independent PieChart Bundle'),
+        left: 'center',
+      },
       tooltip: { trigger: 'item' },
       series: [
         {
@@ -34,16 +39,16 @@ const BundlePieExample: React.FC = () => {
       ],
     };
 
-    const chart = new PieChart(chartRef.current, option);
+    const chart = new PieChart(chartRef.current, option, 'svg', undefined, locale);
 
     return () => {
       chart.dispose();
     };
-  }, []);
+  }, [locale]);
 
   return (
     <div style={{ padding: 20 }}>
-      <h3>PieChart Bundle Import</h3>
+      <h3>{t(locale, 'examples.bundle.pieChart.title', 'PieChart Bundle Import')}</h3>
       <p style={{ fontSize: 12, color: '#666' }}>
         <code>import PieChart from 'hudx-charts/chart/PieChart';</code>
       </p>

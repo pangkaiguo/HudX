@@ -1,13 +1,16 @@
 import React, { useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
+import type { Locale, Theme } from 'hudx-render';
 
-import { Theme } from 'hudx-render';
+import { t } from '../../i18n';
 
 export const AdvancedDoughnutExample = ({
   theme = 'light',
+  locale = 'zh-CN',
 }: {
   theme?: Theme;
+  locale?: Locale;
 }) => {
   const portionRef = useRef<HChartRef>(null);
   const progressRef = useRef<HChartRef>(null);
@@ -356,9 +359,15 @@ export const AdvancedDoughnutExample = ({
 
   return (
     <div style={{ padding: 20 }}>
-      <h2 style={{ marginBottom: 20 }}>Advanced Doughnut Charts</h2>
+      <h2 style={{ marginBottom: 20 }}>
+        {t(locale, 'examples.list.advanced-doughnut.title', 'Advanced Doughnut Charts')}
+      </h2>
       <p style={{ marginBottom: 20, color: '#666' }}>
-        Demonstrating various center label configurations and nested layouts.
+        {t(
+          locale,
+          'examples.advanced-doughnut.desc',
+          'Demonstrating various center label configurations and nested layouts.',
+        )}
       </p>
 
       <div
@@ -373,6 +382,7 @@ export const AdvancedDoughnutExample = ({
             ref={portionRef}
             option={portionOption}
             theme={theme}
+            locale={locale}
             style={chartStyle}
           />
         </div>
@@ -381,6 +391,7 @@ export const AdvancedDoughnutExample = ({
             ref={progressRef}
             option={progressOption}
             theme={theme}
+            locale={locale}
             style={chartStyle}
           />
         </div>
@@ -389,6 +400,7 @@ export const AdvancedDoughnutExample = ({
             ref={darkRef}
             option={darkOption}
             theme={theme}
+            locale={locale}
             style={chartStyle}
           />
         </div>
@@ -397,6 +409,7 @@ export const AdvancedDoughnutExample = ({
             ref={nestedRef}
             option={nestedOption}
             theme={theme}
+            locale={locale}
             style={chartStyle}
           />
         </div>
@@ -405,6 +418,7 @@ export const AdvancedDoughnutExample = ({
             ref={rightLegendRef}
             option={rightLegendOption}
             theme={theme}
+            locale={locale}
             style={chartStyle}
           />
         </div>

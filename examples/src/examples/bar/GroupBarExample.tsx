@@ -1,10 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-render';
+import { Locale, ThemeManager, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
+import { t } from '../../i18n';
 
-export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
+export const GroupBarExample = ({
+  theme = 'light',
+  locale = 'zh-CN',
+}: {
+  theme?: Theme;
+  locale?: Locale;
+}) => {
   const [isDecal, setIsDecal] = useState(false);
   const [barGap, setBarGap] = useState<number | string>(30); // Use number for percent, or could be string for px
   const [showGrid, setShowGrid] = useState(false);
@@ -127,10 +134,15 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
 
   return (
     <div>
-      <h2 style={{ marginBottom: 10 }}>Group Bar Chart</h2>
+      <h2 style={{ marginBottom: 10 }}>
+        {t(locale, 'examples.list.group-bar.title', 'Group Bar Chart')}
+      </h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
-        Features: Staggered bar animations, Interactive legend, Hover tooltips
-        with values
+        {t(
+          locale,
+          'examples.list.group-bar.subtitle',
+          'Grouped bars with configurable barGap and optional decals',
+        )}
       </p>
       <div
         style={{
@@ -142,7 +154,7 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>Render Mode:</span>
+          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -152,8 +164,10 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>Canvas</option>
-            <option value='svg'>SVG</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
           </select>
         </label>
 
@@ -170,12 +184,13 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={isDecal}
             onChange={(e) => setIsDecal(e.target.checked)}
           />
-          Decal Patterns
+          {t(locale, 'examples.control.decalPatterns', 'Decal Patterns')}
         </label>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>
-            Bar Gap: {typeof barGap === 'number' ? `${barGap}%` : barGap}
+            {t(locale, 'examples.control.barGap', 'Bar Gap')}:{' '}
+            {typeof barGap === 'number' ? `${barGap}%` : barGap}
           </span>
           <select
             value={typeof barGap === 'number' ? 'percent' : 'pixel'}
@@ -188,8 +203,10 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             }}
             style={{ marginRight: 8 }}
           >
-            <option value='percent'>Percent</option>
-            <option value='pixel'>Pixel</option>
+            <option value='percent'>
+              {t(locale, 'examples.control.percent', 'Percent')}
+            </option>
+            <option value='pixel'>{t(locale, 'examples.control.pixel', 'Pixel')}</option>
           </select>
 
           {typeof barGap === 'number' ? (
@@ -223,12 +240,14 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             checked={showGrid}
             onChange={(e) => setShowGrid(e.target.checked)}
           />
-          Show Grid
+          {t(locale, 'examples.control.showGrid', 'Show Grid')}
         </label>
         {showGrid && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Grid Top: {gridTop}</span>
+              <span>
+                {t(locale, 'examples.control.gridTop', 'Grid Top')}: {gridTop}
+              </span>
               <input
                 type='range'
                 min='20'
@@ -239,7 +258,9 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>X Split: {xSplitNumber}</span>
+              <span>
+                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+              </span>
               <input
                 type='range'
                 min='2'
@@ -251,7 +272,9 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>Y Split: {splitNumber}</span>
+              <span>
+                {t(locale, 'examples.control.ySplit', 'Y Split')}: {splitNumber}
+              </span>
               <input
                 type='range'
                 min='2'
@@ -269,6 +292,7 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         ref={chartRef}
         option={option}
         theme={theme}
+        locale={locale}
         renderMode={renderMode}
         style={{
           border: '1px solid #D6D8DA',
@@ -289,7 +313,11 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
             fontSize: 14,
           }}
         >
-          Update Data (via getChartInstance)
+          {t(
+            locale,
+            'examples.control.updateData',
+            'Update Data (via getChartInstance)',
+          )}
         </button>
       </div>
     </div>

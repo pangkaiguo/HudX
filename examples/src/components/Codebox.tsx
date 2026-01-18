@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { HChart } from 'hudx-charts';
 import type { ChartOption } from 'hudx-charts';
-import { ThemeManager, Theme } from 'hudx-render';
+import { Locale, ThemeManager, Theme } from 'hudx-render';
 import { CodeEditor } from './CodeEditor';
+import { getLocaleLabel, t } from '../i18n';
 
 interface CodeboxProps {
   initialCode: string;
@@ -10,6 +11,8 @@ interface CodeboxProps {
   title?: string;
   theme: Theme;
   onThemeChange: (theme: Theme) => void;
+  locale: Locale;
+  onLocaleChange: (locale: Locale) => void;
 }
 
 export const Codebox: React.FC<CodeboxProps> = ({
@@ -18,6 +21,8 @@ export const Codebox: React.FC<CodeboxProps> = ({
   title,
   theme,
   onThemeChange,
+  locale,
+  onLocaleChange,
 }) => {
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
@@ -184,9 +189,11 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               color: textColor,
             }}
           >
-            ← Back
+            ← {t(locale, 'examples.codebox.back')}
           </button>
-          <span style={{ fontWeight: 'bold' }}>{title || 'Chart Example'}</span>
+          <span style={{ fontWeight: 'bold' }}>
+            {title || t(locale, 'examples.codebox.defaultTitle')}
+          </span>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 15 }}>
@@ -209,7 +216,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
                 fontSize: 12,
               }}
             >
-              Light
+              {t(locale, 'examples.theme.light')}
             </button>
             <button
               onClick={() => onThemeChange('dark')}
@@ -222,7 +229,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
                 fontSize: 12,
               }}
             >
-              Dark
+              {t(locale, 'examples.theme.dark')}
             </button>
           </div>
           <div
@@ -244,7 +251,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
                 fontSize: 12,
               }}
             >
-              SVG
+              {t(locale, 'examples.render.svg')}
             </button>
             <button
               onClick={() => setRenderMode('canvas')}
@@ -257,7 +264,55 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
                 fontSize: 12,
               }}
             >
-              CANVAS
+              {t(locale, 'examples.render.canvas')}
+            </button>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              border: `1px solid ${borderColor}`,
+              borderRadius: 4,
+              overflow: 'hidden',
+            }}
+          >
+            <button
+              onClick={() => onLocaleChange('en')}
+              style={{
+                padding: '4px 12px',
+                background: locale === 'en' ? primary : 'transparent',
+                color: locale === 'en' ? primaryText : textColor,
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
+            >
+              {getLocaleLabel('en')}
+            </button>
+            <button
+              onClick={() => onLocaleChange('zh-CN')}
+              style={{
+                padding: '4px 12px',
+                background: locale === 'zh-CN' ? primary : 'transparent',
+                color: locale === 'zh-CN' ? primaryText : textColor,
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
+            >
+              {getLocaleLabel('zh-CN')}
+            </button>
+            <button
+              onClick={() => onLocaleChange('zh-TW')}
+              style={{
+                padding: '4px 12px',
+                background: locale === 'zh-TW' ? primary : 'transparent',
+                color: locale === 'zh-TW' ? primaryText : textColor,
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
+            >
+              {getLocaleLabel('zh-TW')}
             </button>
           </div>
         </div>
@@ -399,6 +454,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
             <HChart
               option={option}
               theme={theme}
+              locale={locale}
               renderMode={renderMode}
               style={{ width: '100%', height: '100%' }}
             />
