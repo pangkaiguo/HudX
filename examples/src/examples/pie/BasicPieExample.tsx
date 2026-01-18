@@ -37,8 +37,8 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'left',
-      top: 'middle',
+      right: 10,
+      top: 10,
       icon: 'rect',
     },
     aria: {
@@ -228,7 +228,7 @@ export const BasicPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: '1px solid #e0e0e0',
+          border: '1px solid #D6D8DA',
           borderRadius: 8,
           height: '600px',
         }}

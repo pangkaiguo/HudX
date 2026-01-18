@@ -14,9 +14,6 @@ export const AdvancedDoughnutExample = ({
   const darkRef = useRef<HChartRef>(null);
   const nestedRef = useRef<HChartRef>(null);
   const rightLegendRef = useRef<HChartRef>(null);
-  const leftLegendRef = useRef<HChartRef>(null);
-  const bottomLegendRef = useRef<HChartRef>(null);
-  const topLegendRef = useRef<HChartRef>(null);
 
   // 1. Portion Doughnut Chart - Rich Text Label
   const portionOption: ChartOption = {
@@ -24,8 +21,9 @@ export const AdvancedDoughnutExample = ({
       trigger: 'item',
     },
     legend: {
-      bottom: 10,
-      left: 'center',
+      orient: 'vertical',
+      right: 10,
+      top: 10,
       icon: 'circle',
     },
     series: [
@@ -91,8 +89,9 @@ export const AdvancedDoughnutExample = ({
       trigger: 'item',
     },
     legend: {
-      top: '5%',
-      left: 'center',
+      orient: 'vertical',
+      right: 10,
+      top: 10,
     },
     series: [
       {
@@ -148,7 +147,8 @@ export const AdvancedDoughnutExample = ({
     },
     legend: {
       orient: 'vertical',
-      left: 'left',
+      right: 10,
+      top: 10,
       textStyle: {
         color: '#fff',
       },
@@ -225,8 +225,9 @@ export const AdvancedDoughnutExample = ({
         'Bing',
         'Others',
       ],
-      top: 'bottom',
-      left: 'center',
+      orient: 'vertical',
+      right: 10,
+      top: 10,
     },
     series: [
       {
@@ -295,8 +296,8 @@ export const AdvancedDoughnutExample = ({
     },
     legend: {
       orient: 'vertical',
-      right: '5%',
-      top: 'middle',
+      right: 10,
+      top: 10,
       renderMode: 'html',
       tableHead: ['Category', 'Amount', 'Ratio'],
       formatter: (name: string, item: any) => {
@@ -345,175 +346,10 @@ export const AdvancedDoughnutExample = ({
     ],
   };
 
-  // 6. HTML Legend Doughnut Chart (Left)
-  const leftLegendOption: ChartOption = {
-    tooltip: { trigger: 'item' },
-    legend: {
-      orient: 'vertical',
-      left: '5%',
-      top: 'middle',
-      renderMode: 'html',
-      tableHead: ['Category', 'Amount', 'Ratio'],
-      formatter: (name: string, item: any) => {
-        const percent = item.percent
-          ? (item.percent * 100).toFixed(0) + '%'
-          : '0%';
-        const value = item.value ? `HKD ${Math.round(item.value / 10)}M` : '0';
-        return [
-          `<span style="font-weight: bold; color: ${item.color}">${name}</span>`,
-          `<span style="color: #666;">${value}</span>`,
-          `<span style="color: #666;">${percent}</span>`,
-        ];
-      },
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'doughnut',
-        radius: ['45%', '60%'],
-        center: ['70%', '50%'],
-        avoidLabelOverlap: false,
-        label: { show: false },
-        emphasis: {
-          scale: true,
-          scaleSize: 1.03,
-          label: {
-            show: true,
-            fontSize: 20,
-            fontWeight: 'bold',
-          },
-        },
-        labelLine: { show: false },
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' },
-        ],
-        centerLabel: {
-          show: true,
-          formatter: 'Left',
-          style: { fontSize: 20, fontWeight: 'bold', color: '#333' },
-        },
-      },
-    ],
-  };
-
-  // 7. HTML Legend Doughnut Chart (Bottom)
-  const bottomLegendOption: ChartOption = {
-    tooltip: { trigger: 'item' },
-    legend: {
-      orient: 'horizontal',
-      bottom: '5%',
-      left: 'center',
-      renderMode: 'html',
-      tableHead: ['Category', 'Amount', 'Ratio'],
-      formatter: (name: string, item: any) => {
-        const percent = item.percent
-          ? (item.percent * 100).toFixed(0) + '%'
-          : '0%';
-        const value = item.value ? `HKD ${Math.round(item.value / 10)}M` : '0';
-        return [
-          `<span style="font-weight: bold; color: ${item.color}">${name}</span>`,
-          `<span style="color: #666;">${value}</span>`,
-          `<span style="color: #666;">${percent}</span>`,
-        ];
-      },
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'doughnut',
-        radius: ['45%', '60%'],
-        center: ['50%', '40%'],
-        avoidLabelOverlap: false,
-        label: { show: false },
-        emphasis: {
-          scale: true,
-          scaleSize: 1.03,
-          label: {
-            show: true,
-            fontSize: 20,
-            fontWeight: 'bold',
-          },
-        },
-        labelLine: { show: false },
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' },
-        ],
-        centerLabel: {
-          show: true,
-          formatter: 'Bottom',
-          style: { fontSize: 20, fontWeight: 'bold', color: '#333' },
-        },
-      },
-    ],
-  };
-
-  // 8. HTML Legend Doughnut Chart (Top)
-  const topLegendOption: ChartOption = {
-    tooltip: { trigger: 'item' },
-    legend: {
-      orient: 'horizontal',
-      top: '10%',
-      left: 'center',
-      renderMode: 'html',
-      tableHead: ['Category', 'Amount', 'Ratio'],
-      formatter: (name: string, item: any) => {
-        const percent = item.percent
-          ? (item.percent * 100).toFixed(0) + '%'
-          : '0%';
-        const value = item.value ? `HKD ${Math.round(item.value / 10)}M` : '0';
-        return [
-          `<span style="font-weight: bold; color: ${item.color}">${name}</span>`,
-          `<span style="color: #666;">${value}</span>`,
-          `<span style="color: #666;">${percent}</span>`,
-        ];
-      },
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'doughnut',
-        radius: ['45%', '60%'],
-        center: ['50%', '60%'],
-        avoidLabelOverlap: false,
-        label: { show: false },
-        emphasis: {
-          scale: true,
-          scaleSize: 1.03,
-          label: {
-            show: true,
-            fontSize: 20,
-            fontWeight: 'bold',
-          },
-        },
-        labelLine: { show: false },
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' },
-        ],
-        centerLabel: {
-          show: true,
-          formatter: 'Top',
-          style: { fontSize: 20, fontWeight: 'bold', color: '#333' },
-        },
-      },
-    ],
-  };
-
   const chartStyle = {
     height: '400px',
     width: '100%',
-    border: '1px solid #e0e0e0',
+    border: '1px solid #D6D8DA',
     borderRadius: 8,
     marginBottom: '20px',
   };
@@ -568,30 +404,6 @@ export const AdvancedDoughnutExample = ({
           <HChart
             ref={rightLegendRef}
             option={rightLegendOption}
-            theme={theme}
-            style={chartStyle}
-          />
-        </div>
-        <div>
-          <HChart
-            ref={leftLegendRef}
-            option={leftLegendOption}
-            theme={theme}
-            style={chartStyle}
-          />
-        </div>
-        <div>
-          <HChart
-            ref={bottomLegendRef}
-            option={bottomLegendOption}
-            theme={theme}
-            style={chartStyle}
-          />
-        </div>
-        <div>
-          <HChart
-            ref={topLegendRef}
-            option={topLegendOption}
             theme={theme}
             style={chartStyle}
           />

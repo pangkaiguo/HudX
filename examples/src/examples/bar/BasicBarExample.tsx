@@ -8,10 +8,10 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
-  const [splitNumber, setSplitNumber] = useState(5);
+  const [splitNumber, setSplitNumber] = useState(10);
   const [xInterval, setXInterval] = useState(0);
   const [xAutoInterval, setXAutoInterval] = useState(true);
-  const [xSplitNumber, setXSplitNumber] = useState(5);
+  const [xSplitNumber, setXSplitNumber] = useState(10);
   const [showBackground, setShowBackground] = useState(false);
   const [inverse, setInverse] = useState(false);
   const [xGridType, setXGridType] = useState<'solid' | 'dashed'>('dashed');
@@ -47,8 +47,8 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'right',
-      top: 20,
+      right: 10,
+      top: 10,
       icon: 'rect',
     },
     grid: {
@@ -102,21 +102,6 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
           borderWidth: 0,
         },
       },
-      {
-        name: 'Mail Ad',
-        type: 'bar',
-        data: [60, 80, 70, 60, 50, 70, 60],
-        barWidth: barWidth === 'auto' ? undefined : barWidth,
-        showBackground: showBackground,
-        backgroundStyle: {
-          color: toRgbaWithOpacity(themeObj.borderColor, 0.2),
-        },
-        itemStyle: {
-          color: themeObj.seriesColors?.[1],
-          opacity: 0.8,
-          borderWidth: 0,
-        },
-      },
     ],
     animation: true,
   };
@@ -124,7 +109,6 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const handleUpdateSeries = () => {
     const chartInstance = chartRef.current?.getChartInstance();
     if (chartInstance) {
-      // Simulate new data
       const newData = Array.from(
         { length: 7 },
         () => Math.floor(Math.random() * 200) + 50,
@@ -268,7 +252,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={xSplitNumber}
                 onChange={(e) => setXSplitNumber(Number(e.target.value))}
@@ -312,7 +296,7 @@ export const BasicBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}

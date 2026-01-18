@@ -1,6 +1,6 @@
 {
   "name": "hudx/examples",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "HudX examples and performance tests",
   "private": true,
   "scripts": {

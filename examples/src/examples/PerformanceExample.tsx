@@ -16,7 +16,7 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(1000);
   const [renderTime, setRenderTime] = useState(0);
-  const [mode, setMode] = useState<'canvas' | 'svg'>('canvas');
+  const [mode, setMode] = useState<'canvas' | 'svg'>('svg');
   const [shapeType, setShapeType] = useState<ShapeType>('circle');
   const normalizedTheme = (theme || 'light').toLowerCase();
 
@@ -187,7 +187,7 @@ export const PerformanceExample = ({ theme = 'light' }: { theme?: Theme }) => {
       <div
         ref={containerRef}
         style={{
-          border: '1px solid #e0e0e0',
+          border: '1px solid #D6D8DA',
           borderRadius: 8,
           width: 800,
           height: 600,

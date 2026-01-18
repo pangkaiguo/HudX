@@ -23,7 +23,7 @@ const LegendExample: React.FC = () => {
       show: true,
       orient: 'vertical',
       right: 10,
-      top: 'center',
+      top: 10,
       backgroundColor: '#f9f9f9',
       borderColor: '#eee',
       borderWidth: 1,
@@ -37,7 +37,9 @@ const LegendExample: React.FC = () => {
     title: { text: 'Custom Item Style' },
     legend: {
       show: true,
-      bottom: 0,
+      orient: 'vertical',
+      right: 10,
+      top: 10,
       itemGap: 30,
       itemWidth: 40,
       itemHeight: 20,
@@ -55,7 +57,9 @@ const LegendExample: React.FC = () => {
     title: { text: 'Custom Data Icons' },
     legend: {
       show: true,
-      top: 30,
+      orient: 'vertical',
+      right: 10,
+      top: 10,
       data: [
         { name: 'Series A', icon: 'circle', textStyle: { color: 'red' } },
         { name: 'Series B', icon: 'rect' },

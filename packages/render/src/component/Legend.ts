@@ -564,6 +564,8 @@ export default class Legend extends Group {
       x = this._option.x;
     } else if (this._option.x === 'left') {
       x = 10;
+    } else if (this._option.x === 'right') {
+      x = Math.max(0, this._containerWidth - totalWidth - 10);
     } else if (this._option.x === 'center') {
       x = Math.max(0, (this._containerWidth - totalWidth) / 2);
     } else if (this._option.right !== undefined) {
@@ -574,7 +576,7 @@ export default class Legend extends Group {
           : parseFloat(String(rightVal)) || 10;
       x = Math.max(0, this._containerWidth - totalWidth - rightPx);
     } else {
-      x = 10;
+      x = Math.max(0, this._containerWidth - totalWidth - 10);
     }
 
     let y: number;
@@ -639,7 +641,7 @@ export default class Legend extends Group {
       s.transform = 'translateX(-50%)';
     } else {
       if (opt.right !== undefined) s.right = formatSize(opt.right) || '';
-      else s.left = '10px';
+      else s.right = '10px';
     }
 
     if (typeof opt.y === 'number') s.top = opt.y + 'px';

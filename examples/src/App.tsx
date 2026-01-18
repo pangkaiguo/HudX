@@ -29,10 +29,10 @@ const StackBarExample = lazy(() => import('./examples/bar/StackBarExample'));
 const StackHorizontalBarExample = lazy(
   () => import('./examples/bar/StackHorizontalBarExample'),
 );
-const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
-const StackBar3DExample = lazy(
-  () => import('./examples/bar/StackBar3DExample'),
-);
+// const Bar3DExample = lazy(() => import('./examples/bar/Bar3DExample'));
+// const StackBar3DExample = lazy(
+//   () => import('./examples/bar/StackBar3DExample'),
+// );
 
 // Line charts
 const StackLineChartExample = lazy(
@@ -41,6 +41,9 @@ const StackLineChartExample = lazy(
 const BasicLineExample = lazy(() => import('./examples/line/BasicLineExample'));
 const AreaLineChartExample = lazy(
   () => import('./examples/line/AreaLineChartExample'),
+);
+const SmoothLineExample = lazy(
+  () => import('./examples/line/SmoothLineExample'),
 );
 
 // Pie charts
@@ -85,6 +88,7 @@ const chartExamples = [
         component: StackLineChartExample,
       },
       { id: 'area-line', name: 'Area Line', component: AreaLineChartExample },
+      { id: 'smooth-line', name: 'Smooth Line', component: SmoothLineExample },
     ],
   },
   {
@@ -102,12 +106,12 @@ const chartExamples = [
         name: 'Group Bar',
         component: GroupBarChartExample,
       },
-      { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
-      {
-        id: 'stack-bar-3d',
-        name: 'Stack Bar 3D',
-        component: StackBar3DExample,
-      },
+      // { id: 'bar-3d', name: 'Bar 3D', component: Bar3DExample },
+      // {
+      //   id: 'stack-bar-3d',
+      //   name: 'Stack Bar 3D',
+      //   component: StackBar3DExample,
+      // },
     ],
   },
   {

@@ -12,7 +12,7 @@ export const StackHorizontalBarExample = ({
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
-  const [xSplitNumber, setXSplitNumber] = useState(5);
+  const [xSplitNumber, setXSplitNumber] = useState(10);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
@@ -27,10 +27,13 @@ export const StackHorizontalBarExample = ({
     },
     legend: {
       data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine'],
-      bottom: 10,
+      show: true,
+      orient: 'vertical',
+      right: 10,
+      top: 10,
     },
     grid: {
-      left: '3%',
+      left: '15%',
       right: '4%',
       bottom: '10%',
       top: gridTop,
@@ -220,7 +223,7 @@ export const StackHorizontalBarExample = ({
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={xSplitNumber}
                 onChange={(e) => setXSplitNumber(Number(e.target.value))}
@@ -238,7 +241,7 @@ export const StackHorizontalBarExample = ({
         style={{
           width: '100%',
           height: '600px',
-          border: '1px solid #e0e0e0',
+          border: '1px solid #D6D8DA',
           borderRadius: 8,
         }}
       />

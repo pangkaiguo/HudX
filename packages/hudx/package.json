@@ -1,6 +1,6 @@
 {
   "name": "hudx",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Unified hudx package including render and charts",
   "type": "module",
   "main": "./dist/hudx.cjs",

@@ -16,8 +16,8 @@ export const RichTextExample = ({ theme = 'light' }: { theme?: Theme }) => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'left',
-      top: 'middle',
+      right: 10,
+      top: 10,
       height: 150,
     },
     series: [

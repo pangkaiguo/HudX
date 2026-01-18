@@ -1,6 +1,6 @@
 {
   "name": "hudx",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A high-performance charting library built with React and TypeScript",
   "private": true,
   "workspaces": [

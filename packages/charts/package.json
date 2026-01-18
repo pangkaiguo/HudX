@@ -1,6 +1,6 @@
 {
   "name": "hudx-charts",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Chart library built on top of hudx render",
   "type": "module",
   "main": "dist/cjs/index.cjs",

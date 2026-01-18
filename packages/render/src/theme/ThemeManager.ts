@@ -22,9 +22,9 @@ export class ThemeManager {
       colorFillContainerAlt: '#f9f9f9',
       colorFillHover: '#f0f0f0',
       colorBorder: '#cccccc',
-      colorBorderSecondary: '#e0e0e0',
+      colorBorderSecondary: '#D6D8DA',
       colorGrid: '#e6e6e6',
-      colorAxisLine: '#e0e0e0',
+      colorAxisLine: '#D6D8DA',
       colorAxisLabel: '#999999',
       colorTooltipBackground: 'rgba(50, 50, 50, 0.9)',
       colorTooltipText: '#ffffff',
@@ -36,7 +36,7 @@ export class ThemeManager {
       colorMask: 'rgba(255, 255, 255, 0.8)',
       colorDecal: 'rgba(0, 0, 0, 0.2)',
       colorCodeBackground: '#f5f5f5',
-      colorCodeGutterBackground: '#e0e0e0',
+      colorCodeGutterBackground: '#D6D8DA',
       colorCodeText: '#333333',
       colorCodeGutterText: '#999999',
       fontFamily: 'sans-serif',
@@ -58,7 +58,7 @@ export class ThemeManager {
 
     // Default Dark Token
     const darkToken: ThemeToken = {
-      colorText: '#e0e0e0',
+      colorText: '#D6D8DA',
       colorTextSecondary: '#b0b0b0',
       colorTextTertiary: '#888888',
       colorBackground: '#1e1e1e',
@@ -73,7 +73,7 @@ export class ThemeManager {
       colorAxisLabel: '#aaaaaa',
       colorTooltipBackground: 'rgba(200, 200, 200, 0.9)',
       colorTooltipText: '#1e1e1e',
-      colorLegendText: '#e0e0e0',
+      colorLegendText: '#D6D8DA',
       colorTextOnSeries: '#ffffff',
       colorPrimary: '#5470c6',
       colorPrimaryText: '#ffffff',

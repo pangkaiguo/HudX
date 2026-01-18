@@ -39,8 +39,8 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
     legend: {
       show: true,
       orient: 'horizontal',
-      right: 'left',
-      bottom: 'bottom',
+      right: 10,
+      top: 10,
       icon: 'rect',
       // Demonstrating conflict/interaction between width, height and itemWidth
       width: 400, // Limits the total width. With itemWidth 140, only 1 column fits (2nd column would overflow 200px)
@@ -207,7 +207,7 @@ export const AdvancedPieExample = ({ theme = 'light' }: { theme?: Theme }) => {
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: '1px solid #e0e0e0',
+          border: '1px solid #D6D8DA',
           borderRadius: 8,
           height: '600px',
         }}

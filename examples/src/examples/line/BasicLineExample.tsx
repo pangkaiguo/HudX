@@ -14,8 +14,8 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const chartRef = useRef<HChartRef>(null);
   const [showGrid, setShowGrid] = React.useState(false);
   const [gridTop, setGridTop] = React.useState(40);
-  const [splitNumber, setSplitNumber] = React.useState(5);
-  const [xSplitNumber, setXSplitNumber] = React.useState(5);
+  const [splitNumber, setSplitNumber] = React.useState(10);
+  const [xSplitNumber, setXSplitNumber] = React.useState(10);
   const [renderMode, setRenderMode] = React.useState<RenderMode>('svg');
 
   const option: ChartOption = {
@@ -26,8 +26,8 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'right',
-      top: 20,
+      right: 10,
+      top: 10,
       icon: 'rect',
     },
     grid: {
@@ -163,7 +163,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={xSplitNumber}
                 onChange={(e) => setXSplitNumber(Number(e.target.value))}
@@ -175,7 +175,7 @@ export const BasicLineExample = ({ theme = 'light' }: { theme?: Theme }) => {
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}

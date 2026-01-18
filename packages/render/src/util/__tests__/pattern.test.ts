@@ -67,8 +67,8 @@ describe('createDecalPattern', () => {
     const decal: DecalObject = { symbol: 'circle' };
     createDecalPattern(decal, '#000');
 
-    expect(mockCanvas.width).toBe(12);
-    expect(mockCanvas.height).toBe(12);
+    expect(mockCanvas.width).toBe(8);
+    expect(mockCanvas.height).toBe(8);
   });
 
   it('should respect dashArrayX', () => {
@@ -76,7 +76,7 @@ describe('createDecalPattern', () => {
     createDecalPattern(decal, '#000');
 
     expect(mockCanvas.width).toBe(3);
-    expect(mockCanvas.height).toBe(12);
+    expect(mockCanvas.height).toBe(8);
   });
 
   it('should respect maxTileWidth constraint', () => {
@@ -98,7 +98,7 @@ describe('createDecalPattern', () => {
     const first = arcMock.mock.calls[0]!;
     expect(first[0]).toBe(0);
     expect(first[1]).toBe(0);
-    expect(first[2]).toBeCloseTo(1.8, 6);
+    expect(first[2]).toBeCloseTo(1.2, 6);
   });
 
   it('should store rotation on the pattern object', () => {
@@ -113,30 +113,30 @@ describe('createDecalPattern', () => {
   describe('Presets verification', () => {
     it('should verify diagonal preset dimensions', () => {
       createDecalPattern({ symbol: 'diagonal' }, '#000');
-      expect(mockCanvas.width).toBe(12);
-      expect(mockCanvas.height).toBe(12);
+      expect(mockCanvas.width).toBe(8);
+      expect(mockCanvas.height).toBe(8);
 
-      expect(mockContext.moveTo).toHaveBeenCalledWith(-3, 0);
-      expect(mockContext.lineTo).toHaveBeenCalledWith(3, 0);
+      expect(mockContext.moveTo).toHaveBeenCalledWith(-2, 0);
+      expect(mockContext.lineTo).toHaveBeenCalledWith(2, 0);
     });
 
     it('should verify grid preset dimensions', () => {
       createDecalPattern({ symbol: 'grid' }, '#000');
-      expect(mockCanvas.width).toBe(10);
-      expect(mockCanvas.height).toBe(10);
+      expect(mockCanvas.width).toBe(8);
+      expect(mockCanvas.height).toBe(8);
     });
 
     it('should verify rect preset dimensions and symbol size', () => {
       createDecalPattern({ symbol: 'rect' }, '#000');
-      expect(mockCanvas.width).toBe(12);
-      expect(mockCanvas.height).toBe(12);
+      expect(mockCanvas.width).toBe(8);
+      expect(mockCanvas.height).toBe(8);
 
       expect(fillRectMock.mock.calls.length).toBeGreaterThan(1);
       const last = fillRectMock.mock.calls[fillRectMock.mock.calls.length - 1]!;
-      expect(last[0]).toBeCloseTo(-1.95, 6);
-      expect(last[1]).toBeCloseTo(-1.95, 6);
-      expect(last[2]).toBeCloseTo(3.9, 6);
-      expect(last[3]).toBeCloseTo(3.9, 6);
+      expect(last[0]).toBeCloseTo(-1.3, 6);
+      expect(last[1]).toBeCloseTo(-1.3, 6);
+      expect(last[2]).toBeCloseTo(2.6, 6);
+      expect(last[3]).toBeCloseTo(2.6, 6);
     });
 
     it('should create all presets without error', () => {

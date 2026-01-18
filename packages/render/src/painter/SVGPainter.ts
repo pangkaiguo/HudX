@@ -310,9 +310,6 @@ export default class SVGPainter implements IPainter {
     });
     const url = URL.createObjectURL(svgBlob);
 
-    // TODO
-    console.info(img, url);
-
     // Note: This is asynchronous in nature but we need synchronous return.
     // In a real implementation we might want to return a Promise or handle this differently.
     // For now, we'll return a placeholder or handle it if the image loads immediately (which it won't).
@@ -403,10 +400,29 @@ export default class SVGPainter implements IPainter {
         'http://www.w3.org/2000/svg',
         'rect',
       );
-      rect.setAttribute('x', String(shapeObj.x));
-      rect.setAttribute('y', String(shapeObj.y));
-      rect.setAttribute('width', String(shapeObj.width));
-      rect.setAttribute('height', String(shapeObj.height));
+      let x = Number(shapeObj.x);
+      let y = Number(shapeObj.y);
+      let width = Number(shapeObj.width);
+      let height = Number(shapeObj.height);
+
+      if (!isFinite(x)) x = 0;
+      if (!isFinite(y)) y = 0;
+      if (!isFinite(width)) width = 0;
+      if (!isFinite(height)) height = 0;
+
+      if (width < 0) {
+        x += width;
+        width = -width;
+      }
+      if (height < 0) {
+        y += height;
+        height = -height;
+      }
+
+      rect.setAttribute('x', String(x));
+      rect.setAttribute('y', String(y));
+      rect.setAttribute('width', String(width));
+      rect.setAttribute('height', String(height));
       if (shapeObj.r) {
         rect.setAttribute('rx', String(shapeObj.r));
         rect.setAttribute('ry', String(shapeObj.r));

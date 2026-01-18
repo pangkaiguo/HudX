@@ -8,8 +8,8 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(40);
-  const [splitNumber, setSplitNumber] = useState(5);
-  const [xSplitNumber, setXSplitNumber] = useState(5);
+  const [splitNumber, setSplitNumber] = useState(10);
+  const [xSplitNumber, setXSplitNumber] = useState(10);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
@@ -25,13 +25,13 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'left',
-      top: 'middle',
+      right: 10,
+      top: 10,
     },
     grid: {
       left: '15%',
       right: '4%',
-      bottom: '3%',
+      bottom: '10%',
       top: gridTop,
       containLabel: true,
     },
@@ -115,62 +115,6 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
           focus: 'series',
         },
         data: [150, 232, 201, 154, 190, 330, 410],
-        itemStyle: { borderWidth: 0 },
-      },
-      {
-        name: 'Search Engine',
-        type: 'bar',
-        data: [862, 1018, 964, 1026, 1679, 1600, 1570],
-        emphasis: {
-          focus: 'series',
-        },
-        markLine: {
-          lineStyle: {
-            type: 'dashed',
-          },
-          data: [[{ type: 'min' }, { type: 'max' }]],
-        },
-        itemStyle: { borderWidth: 0 },
-      },
-      {
-        name: 'Baidu',
-        type: 'bar',
-        barWidth: 5,
-        stack: 'search',
-        emphasis: {
-          focus: 'series',
-        },
-        data: [620, 732, 701, 734, 1090, 1130, 1120],
-        itemStyle: { borderWidth: 0 },
-      },
-      {
-        name: 'Google',
-        type: 'bar',
-        stack: 'search',
-        emphasis: {
-          focus: 'series',
-        },
-        data: [120, 132, 101, 134, 290, 230, 220],
-        itemStyle: { borderWidth: 0 },
-      },
-      {
-        name: 'Bing',
-        type: 'bar',
-        stack: 'search',
-        emphasis: {
-          focus: 'series',
-        },
-        data: [60, 72, 71, 74, 190, 130, 110],
-        itemStyle: { borderWidth: 0 },
-      },
-      {
-        name: 'Others',
-        type: 'bar',
-        stack: 'search',
-        emphasis: {
-          focus: 'series',
-        },
-        data: [62, 82, 91, 84, 109, 110, 120],
         itemStyle: { borderWidth: 0 },
       },
     ],
@@ -278,7 +222,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={xSplitNumber}
                 onChange={(e) => setXSplitNumber(Number(e.target.value))}
@@ -290,7 +234,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}
@@ -309,7 +253,7 @@ export const StackBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         style={{
           width: '100%',
           height: '600px',
-          border: '1px solid #e0e0e0',
+          border: '1px solid #D6D8DA',
           borderRadius: 8,
         }}
       />

@@ -466,7 +466,7 @@ export default class Chart {
 
         if (scales?.x && xAxis.type === 'value') {
           const domain = scales.x.domain();
-          const tickCount = xAxis.splitNumber ?? 5;
+          const tickCount = xAxis.splitNumber ?? 10;
           const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
 
           ticks.forEach((tick) => {
@@ -590,7 +590,7 @@ export default class Chart {
         });
       } else if (xAxis?.type === 'value' && scales?.x) {
         const domain = scales.x.domain();
-        const tickCount = xAxis.splitNumber ?? 5;
+        const tickCount = xAxis.splitNumber ?? 10;
         const axisLabel = xAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;
@@ -686,7 +686,7 @@ export default class Chart {
       if (yAxis?.splitLine?.show) {
         if (scales?.y && yAxis.type === 'value') {
           const domain = scales.y.domain();
-          const tickCount = yAxis.splitNumber ?? 5;
+          const tickCount = yAxis.splitNumber ?? 10;
           const ticks = calculateNiceTicks(domain[0], domain[1], tickCount);
 
           ticks.forEach((tick) => {
@@ -719,7 +719,7 @@ export default class Chart {
           });
         } else {
           // Simplified: Draw 5 grid lines if not provided
-          const tickCount = yAxis.splitNumber ?? 5;
+          const tickCount = yAxis.splitNumber ?? 10;
           for (let i = 0; i <= tickCount; i++) {
             const y = plotY + height - (i / tickCount) * height;
             const line = new Line({
@@ -822,7 +822,7 @@ export default class Chart {
         });
       } else if (yAxis?.type === 'value' && scales?.y) {
         const domain = scales.y.domain();
-        const tickCount = yAxis.splitNumber ?? 5;
+        const tickCount = yAxis.splitNumber ?? 10;
         const axisLabel = yAxis.axisLabel || {};
         const rotate = axisLabel.rotate || 0;
         const maxWidth = axisLabel.width;

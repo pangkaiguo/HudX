@@ -9,8 +9,8 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const [barGap, setBarGap] = useState<number | string>(30); // Use number for percent, or could be string for px
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
-  const [splitNumber, setSplitNumber] = useState(5);
-  const [xSplitNumber, setXSplitNumber] = useState(5);
+  const [splitNumber, setSplitNumber] = useState(10);
+  const [xSplitNumber, setXSplitNumber] = useState(10);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
@@ -36,8 +36,8 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'right',
-      top: 20,
+      right: 10,
+      top: 10,
       icon: 'rect',
       selectedMode: 'single',
     },
@@ -240,7 +240,7 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={xSplitNumber}
                 onChange={(e) => setXSplitNumber(Number(e.target.value))}
@@ -252,7 +252,7 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}
@@ -268,7 +268,7 @@ export const GroupBarExample = ({ theme = 'light' }: { theme?: Theme }) => {
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: '1px solid #e0e0e0',
+          border: '1px solid #D6D8DA',
           borderRadius: 8,
           height: '600px',
         }}

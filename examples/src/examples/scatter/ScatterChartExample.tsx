@@ -9,8 +9,8 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
   const themeObj = ThemeManager.getTheme(theme);
   const [showGrid, setShowGrid] = React.useState(true);
   const [gridTop, setGridTop] = React.useState(80);
-  const [splitNumber, setSplitNumber] = React.useState(5);
-  const [xSplitNumber, setXSplitNumber] = React.useState(5);
+  const [splitNumber, setSplitNumber] = React.useState(10);
+  const [xSplitNumber, setXSplitNumber] = React.useState(10);
   const [renderMode, setRenderMode] = React.useState<RenderMode>('svg');
   const [xGridType, setXGridType] = React.useState<'solid' | 'dashed'>(
     'dashed',
@@ -25,7 +25,9 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
     },
     legend: {
       show: true,
-      bottom: 20,
+      orient: 'vertical',
+      right: 10,
+      top: 10,
     },
     grid: {
       top: gridTop,
@@ -194,7 +196,7 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
           <input
             type='range'
             min='2'
-            max='10'
+            max='20'
             step='1'
             value={xSplitNumber}
             onChange={(e) => setXSplitNumber(Number(e.target.value))}
@@ -207,7 +209,7 @@ const ScatterChartExample = ({ theme = 'light' }: { theme?: Theme }) => {
           <input
             type='range'
             min='2'
-            max='10'
+            max='20'
             step='1'
             value={splitNumber}
             onChange={(e) => setSplitNumber(Number(e.target.value))}

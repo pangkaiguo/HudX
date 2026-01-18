@@ -13,8 +13,8 @@ export const AreaLineChartExample = ({
   const chartRef = useRef<HChartRef>(null);
   const [showGrid, setShowGrid] = useState(true);
   const [gridTop, setGridTop] = useState(60);
-  const [splitNumber, setSplitNumber] = useState(5);
-  const [xSplitNumber, setXSplitNumber] = useState(5);
+  const [splitNumber, setSplitNumber] = useState(10);
+  const [xSplitNumber, setXSplitNumber] = useState(10);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const [isSmooth, setIsSmooth] = useState(true);
 
@@ -52,8 +52,8 @@ export const AreaLineChartExample = ({
     legend: {
       show: true,
       orient: 'vertical',
-      left: 'right',
-      top: 20,
+      right: 10,
+      top: 10,
       icon: 'rect',
     },
     grid: {
@@ -215,7 +215,7 @@ export const AreaLineChartExample = ({
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={xSplitNumber}
                 onChange={(e) => setXSplitNumber(Number(e.target.value))}
@@ -227,7 +227,7 @@ export const AreaLineChartExample = ({
               <input
                 type='range'
                 min='2'
-                max='10'
+                max='20'
                 step='1'
                 value={splitNumber}
                 onChange={(e) => setSplitNumber(Number(e.target.value))}
@@ -243,7 +243,7 @@ export const AreaLineChartExample = ({
         theme={theme}
         renderMode={renderMode}
         style={{
-          border: '1px solid #e0e0e0',
+          border: '1px solid #D6D8DA',
           borderRadius: 8,
           height: '600px',
         }}

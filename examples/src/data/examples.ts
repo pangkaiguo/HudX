@@ -14,19 +14,19 @@ export const examples: Example[] = [
     subtitle: 'Basic line with tooltip, legend and optional grid lines',
     code: `option = {
   tooltip: { show: true, trigger: 'axis' },
-  legend: { show: true, orient: 'vertical', left: 'right', top: 20, icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   grid: { left: 60, right: 40, top: 40, bottom: 60 },
   xAxis: {
     type: 'category',
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: false, lineStyle: { color: '#e6e6e6', type: 'dashed' } }
   },
   yAxis: {
     type: 'value',
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: false, lineStyle: { color: '#e6e6e6' } }
   },
   series: [{
@@ -48,19 +48,19 @@ export const examples: Example[] = [
     subtitle: 'Multi-series line with symbols and dashed grid',
     code: `option = {
   tooltip: { show: true, trigger: 'axis' },
-  legend: { show: true, orient: 'vertical', left: 'right', top: 20, icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   grid: { left: 70, right: 40, top: 60, bottom: 60 },
   xAxis: {
     type: 'category',
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } }
   },
   yAxis: {
     type: 'value',
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: true, lineStyle: { color: '#eee' } }
   },
   series: [
@@ -115,20 +115,20 @@ const valuesC = [140,142,143,145,147,149,150,152,154,156,158,159,161,163,165,166
 
 option = {
   tooltip: { show: true, trigger: 'axis' },
-  legend: { show: true, orient: 'vertical', left: 'right', top: 20, icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   grid: { left: 50, right: 40, top: 60, bottom: 60 },
   xAxis: {
     type: 'category',
     data: category,
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } },
     axisLabel: { interval: function (index) { return index % 5 === 0; } }
   },
   yAxis: {
     type: 'value',
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: true, lineStyle: { color: '#eee' } }
   },
   series: [
@@ -139,6 +139,43 @@ option = {
   animation: true,
   animationDuration: 1000,
   animationEasing: 'cubicOut'
+};`,
+  },
+  {
+    id: 'smooth-line',
+    category: 'line',
+    title: 'Smooth Line Chart',
+    subtitle: 'Smooth line with tension control',
+    code: `const xs = Array.from({ length: 60 }, (_, i) => String(i + 1));
+const ys = xs.map((_, i) => Math.round(Math.sin(i / 6) * 40 + 120));
+
+option = {
+  tooltip: { show: true, trigger: 'axis' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
+  grid: { left: 60, right: 40, top: 60, bottom: 60 },
+  xAxis: {
+    type: 'category',
+    data: xs,
+    show: true,
+    splitNumber: 8,
+    axisLabel: { interval: function (index) { return index % 6 === 0; } },
+    splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } }
+  },
+  yAxis: {
+    type: 'value',
+    show: true,
+    splitNumber: 5,
+    splitLine: { show: true, lineStyle: { color: '#eee' } }
+  },
+  series: [{
+    name: 'Smooth Series',
+    type: 'line',
+    data: ys,
+    smooth: 0.5,
+    showSymbol: false,
+    lineStyle: { width: 2 }
+  }],
+  animation: true
 };`,
   },
   {
@@ -161,20 +198,20 @@ option = {
       ]
     }
   },
-  legend: { show: true, orient: 'vertical', left: 'right', top: 20, icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   grid: { left: 60, right: 40, top: 80, bottom: 60 },
   xAxis: {
     type: 'category',
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     show: true,
     axisLabel: { interval: 'auto' },
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: false, interval: 'auto', lineStyle: { color: '#e6e6e6', type: 'dashed' } }
   },
   yAxis: {
     type: 'value',
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: false, lineStyle: { color: '#e6e6e6', type: 'solid' } }
   },
   series: [
@@ -186,14 +223,6 @@ option = {
       backgroundStyle: { color: 'rgba(180, 180, 180, 0.2)' },
       itemStyle: { color: '#5470c6', opacity: 0.8, borderWidth: 0 }
     },
-    {
-      name: 'Mail Ad',
-      type: 'bar',
-      data: [60, 80, 70, 60, 50, 70, 60],
-      showBackground: false,
-      backgroundStyle: { color: 'rgba(180, 180, 180, 0.2)' },
-      itemStyle: { color: '#91cc75', opacity: 0.8, borderWidth: 0 }
-    }
   ],
   animation: true
 };`,
@@ -218,10 +247,10 @@ option = {
       ]
     }
   },
-  legend: { show: true, orient: 'vertical', left: 'right', top: 20, icon: 'rect', selectedMode: 'single' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect', selectedMode: 'single' },
   grid: { left: 70, right: 40, top: 80, bottom: 60 },
-  xAxis: { type: 'category', data: ['Q1', 'Q2', 'Q3', 'Q4'], show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
-  yAxis: { type: 'value', show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee' } } },
+  xAxis: { type: 'category', data: ['Q1', 'Q2', 'Q3', 'Q4'], show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  yAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
     { name: 'Product A', type: 'bar', data: [320, 332, 301, 334], itemStyle: { color: '#5470c6', borderWidth: 0 }, barGap: '30%' },
     { name: 'Product B', type: 'bar', data: [220, 182, 191, 234], itemStyle: { color: '#91cc75', borderWidth: 0 }, barGap: '30%' },
@@ -239,8 +268,8 @@ option = {
     subtitle: 'Stacked bars with axisPointer and markLine',
     code: `option = {
   tooltip: { show: true, trigger: 'axis', axisPointer: { type: 'shadow' } },
-  legend: { show: true, orient: 'vertical', left: 'left', top: 'middle' },
-  grid: { left: '15%', right: '4%', bottom: '3%', top: 40, containLabel: true },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10 },
+  grid: { left: '15%', right: '4%', bottom: '10%', top: 40, containLabel: true },
   aria: {
     enabled: true,
     decal: {
@@ -258,13 +287,13 @@ option = {
     type: 'category',
     data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } }
   }],
   yAxis: [{
     type: 'value',
     show: true,
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: false, lineStyle: { color: '#eee' } }
   }],
   series: [
@@ -272,11 +301,6 @@ option = {
     { name: 'Email', type: 'bar', stack: 'total', emphasis: { focus: 'series' }, data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { borderWidth: 0 } },
     { name: 'Union Ads', type: 'bar', stack: 'total', emphasis: { focus: 'series' }, data: [220, 182, 191, 234, 290, 330, 310], itemStyle: { borderWidth: 0 } },
     { name: 'Video Ads', type: 'bar', stack: 'total', emphasis: { focus: 'series' }, data: [150, 232, 201, 154, 190, 330, 410], itemStyle: { borderWidth: 0 } },
-    { name: 'Search Engine', type: 'bar', emphasis: { focus: 'series' }, data: [862, 1018, 964, 1026, 1679, 1600, 1570], itemStyle: { borderWidth: 0 }, markLine: { lineStyle: { type: 'dashed' }, data: [[{ type: 'min' }, { type: 'max' }]] } },
-    { name: 'Baidu', type: 'bar', barWidth: 5, stack: 'search', emphasis: { focus: 'series' }, data: [620, 732, 701, 734, 1090, 1130, 1120], itemStyle: { borderWidth: 0 } },
-    { name: 'Google', type: 'bar', stack: 'search', emphasis: { focus: 'series' }, data: [120, 132, 101, 134, 290, 230, 220], itemStyle: { borderWidth: 0 } },
-    { name: 'Bing', type: 'bar', stack: 'search', emphasis: { focus: 'series' }, data: [60, 72, 71, 74, 190, 130, 110], itemStyle: { borderWidth: 0 } },
-    { name: 'Others', type: 'bar', stack: 'search', emphasis: { focus: 'series' }, data: [62, 82, 91, 84, 109, 110, 120], itemStyle: { borderWidth: 0 } }
   ]
 };`,
   },
@@ -287,8 +311,8 @@ option = {
     subtitle: 'Horizontal stacked bars with labels',
     code: `option = {
   tooltip: { show: true, trigger: 'axis', axisPointer: { type: 'shadow' } },
-  legend: { data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine'], bottom: 10 },
-  grid: { left: '3%', right: '4%', bottom: '10%', top: 80, containLabel: true },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, data: ['Direct', 'Mail Ad', 'Affiliate Ad', 'Video Ad', 'Search Engine'] },
+  grid: { left: '15%', right: '4%', bottom: '10%', top: 80, containLabel: true },
   aria: {
     enabled: true,
     decal: {
@@ -302,7 +326,7 @@ option = {
       ]
     }
   },
-  xAxis: { type: 'value', show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  xAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
   yAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
     { name: 'Direct', type: 'bar', stack: 'total', label: { show: true }, emphasis: { focus: 'series' }, data: [320, 302, 301, 334, 390, 330, 320], itemStyle: { borderWidth: 0 } },
@@ -321,7 +345,7 @@ option = {
     subtitle: 'Pseudo-3D bar chart (bar3D)',
     code: `option = {
   tooltip: { show: true, trigger: 'item' },
-  legend: { show: true, orient: 'vertical', left: 'right', top: 20, icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   grid: { left: 60, right: 60, top: 40, bottom: 60 },
   aria: {
     enabled: true,
@@ -336,8 +360,8 @@ option = {
       ]
     }
   },
-  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
-  yAxis: { type: 'value', show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee' } } },
+  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  yAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
     { name: 'Sales', type: 'bar3D', data: [120, 200, 150, 80, 70, 110, 130], itemStyle: { color: '#5470c6', borderWidth: 0 } },
     { name: 'Profits', type: 'bar3D', data: [60, 100, 75, 40, 35, 55, 65], itemStyle: { color: '#91cc75', borderWidth: 0 } }
@@ -352,7 +376,7 @@ option = {
     subtitle: 'Pseudo-3D stacked bars (stackBar3D)',
     code: `option = {
   tooltip: { show: true, trigger: 'item' },
-  legend: { show: true, orient: 'vertical', left: 'right', top: 20, icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   grid: { left: 60, right: 60, top: 40, bottom: 60 },
   aria: {
     enabled: true,
@@ -367,8 +391,8 @@ option = {
       ]
     }
   },
-  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
-  yAxis: { type: 'value', show: true, splitNumber: 5, splitLine: { show: false, lineStyle: { color: '#eee' } } },
+  xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  yAxis: { type: 'value', show: true, splitNumber: 10, splitLine: { show: false, lineStyle: { color: '#eee' } } },
   series: [
     { name: 'Product A', type: 'stackBar3D', data: [120, 132, 101, 134, 90, 230, 210], itemStyle: { color: '#5470c6', borderWidth: 0 } },
     { name: 'Product B', type: 'stackBar3D', data: [220, 182, 191, 234, 290, 330, 310], itemStyle: { color: '#91cc75', borderWidth: 0 } },
@@ -402,7 +426,7 @@ option = {
       );
     }
   },
-  legend: { show: true, orient: 'vertical', left: 'left', top: 'middle', icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   aria: {
     enabled: true,
     decal: {
@@ -466,8 +490,8 @@ option = {
   legend: {
     show: true,
     orient: 'horizontal',
-    right: 'left',
-    bottom: 'bottom',
+    right: 10,
+    top: 10,
     icon: 'rect',
     width: 400,
     height: 150,
@@ -521,7 +545,7 @@ option = {
       ]
     }
   },
-  legend: { show: true, orient: 'vertical', left: 'left', top: 'middle', icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   series: [{
     name: 'Access Source',
     type: 'doughnut',
@@ -561,7 +585,7 @@ option = {
     subtitle: 'Doughnut centerLabel + emphasis rich text (portion demo)',
     code: `option = {
   tooltip: { trigger: 'item' },
-  legend: { bottom: 10, left: 'center', icon: 'circle' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'circle' },
   series: [{
     name: 'Portion',
     type: 'doughnut',
@@ -614,7 +638,7 @@ option = {
       ]
     }
   },
-  legend: { show: true, orient: 'vertical', left: 'left', top: 'middle', icon: 'rect' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
   series: [{
     name: 'Access Source',
     type: 'half-doughnut',
@@ -648,18 +672,18 @@ option = {
     subtitle: 'Two scatter series with legend and grid lines',
     code: `option = {
   tooltip: { show: true, trigger: 'item', layout: 'vertical' },
-  legend: { show: true, bottom: 20 },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10 },
   grid: { top: 80, bottom: 60, left: 60, right: 40 },
   xAxis: {
     type: 'value',
     name: 'X Axis',
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } }
   },
   yAxis: {
     type: 'value',
     name: 'Y Axis',
-    splitNumber: 5,
+    splitNumber: 10,
     splitLine: { show: true, lineStyle: { color: '#eee', type: 'solid' } }
   },
   series: [
@@ -717,7 +741,7 @@ option = {
     text: 'Main Title',
     subtext: 'Subtitle with custom style',
     left: 'center',
-    top: 'center',
+    top: 10,
     backgroundColor: '#f4f4f4',
     borderColor: '#ccc',
     borderWidth: 2,
@@ -798,7 +822,7 @@ option = {
     subtitle: 'Rich text label formatter for pie chart',
     code: `option = {
   tooltip: { show: true, trigger: 'item' },
-  legend: { show: true, orient: 'vertical', left: 'left', top: 'middle', height: 150 },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, height: 150 },
   series: [{
     name: 'Distribution',
     type: 'pie',
