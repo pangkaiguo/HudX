@@ -25,7 +25,7 @@ HudX/
 │   ├── render/          # Core rendering engine
 │   │   ├── src/
 │   │   │   ├── Renderer.ts      # Main entry
-│   │   │   ├── shape/           # Graphic elements (Circle, Rect, Path, etc.)
+│   │   │   ├── graphic/           # Graphic elements (Circle, Rect, Path, etc.)
 │   │   │   ├── animation/       # Animation system
 │   │   │   ├── component/       # UI Components (Tooltip, Legend)
 │   │   │   ├── painter/         # Painters (Canvas, SVG)

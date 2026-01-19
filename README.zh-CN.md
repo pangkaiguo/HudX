@@ -25,7 +25,7 @@ HudX/
 │   ├── render/          # 核心渲染引擎
 │   │   ├── src/
 │   │   │   ├── Renderer.ts      # 主入口
-│   │   │   ├── shape/           # 图形元素（Circle, Rect, Path 等）
+│   │   │   ├── graphic/           # 图形元素（Circle, Rect, Path 等）
 │   │   │   ├── animation/       # 动画系统
 │   │   │   ├── component/       # UI 组件（Tooltip, Legend）
 │   │   │   ├── painter/         # 绘制器（Canvas, SVG）

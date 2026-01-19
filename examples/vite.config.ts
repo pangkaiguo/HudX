@@ -23,7 +23,7 @@ export default defineConfig({
             return 'vendor';
           }
           if (id.includes('hudx-render')) {
-            if (id.includes('shape/')) return 'hudx-shapes';
+            if (id.includes('graphic/')) return 'hudx-shapes';
             if (id.includes('animation/')) return 'hudx-animation';
             if (id.includes('component/')) return 'hudx-components';
             return 'hudx-render';

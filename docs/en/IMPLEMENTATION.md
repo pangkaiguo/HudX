@@ -358,7 +358,7 @@ packages/
 │   ├── Group.ts             # Container element
 │   ├── Storage.ts           # Element storage
 │   ├── Handler.ts           # Event handler
-│   ├── shape/               # Graphic elements
+│   ├── graphic/               # Graphic elements
 │   ├── painter/             # Rendering
 │   ├── animation/           # Animation system
 │   ├── i18n/                # Localization

@@ -16,7 +16,7 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "hudx-render": ["packages/hudx-render/src"],
+      "hudx-render": ["packages/render/src"],
       "hudx-charts": ["packages/charts/src"]
     }
   },

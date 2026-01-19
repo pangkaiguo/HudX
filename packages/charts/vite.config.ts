@@ -3,9 +3,9 @@ import dts from "vite-plugin-dts";
 import { resolve, join } from "path";
 import { readdirSync, statSync } from "fs";
 
-function getEntryFiles(dir: string, baseDir: string = dir): Record<string, string> {
+const getEntryFiles = (dir: string, baseDir: string = dir): Record<string, string> => {
   const entries: Record<string, string> = {};
-  function walk(currentDir: string) {
+  const walk = (currentDir: string) => {
     const files = readdirSync(currentDir);
     for (const file of files) {
       const fullPath = join(currentDir, file);
