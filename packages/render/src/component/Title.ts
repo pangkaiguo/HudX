@@ -144,8 +144,8 @@ export default class Title extends Group {
           r: this._option.borderRadius || 0,
         },
         style: {
-          fill: this._option.backgroundColor || 'transparent',
-          stroke: this._option.borderColor || 'transparent',
+          fill: this._option.backgroundColor || COLOR_TRANSPARENT,
+          stroke: this._option.borderColor || COLOR_TRANSPARENT,
           lineWidth: this._option.borderWidth || 0,
         },
       });
@@ -166,7 +166,6 @@ export default class Title extends Group {
     // We center them in contentWidth.
 
     if (mainTextEl) {
-      const tx = contentX + (contentWidth - mainWidth) / 2; // Center in content box? No, default left?
       // ECharts defaults: left aligned to each other.
       // But let's assume left for simplicity unless we add textAlign option for internal alignment.
       // Actually standard ECharts behavior: if title is centered, text and subtext are centered.

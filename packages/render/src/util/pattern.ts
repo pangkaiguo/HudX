@@ -1,4 +1,10 @@
 import type { DecalObject } from '../types';
+import {
+  DECAL_AUTO_FG_ALPHA,
+  DECAL_AUTO_FG_LUMINANCE_THRESHOLD,
+  DECAL_DEFAULT_DASH_SEGMENT,
+} from '../constants';
+import { parseColor as parseRgba } from './color';
 
 export type DecalPatternSymbol =
   | 'line'
@@ -151,82 +157,38 @@ const clamp01 = (v: number): number => {
   return Math.max(0, Math.min(1, v));
 };
 
-const parseColor = (
-  input: string,
-): { r: number; g: number; b: number; a: number } | null => {
-  const str = input.trim();
-  if (!str) return null;
-
-  const rgbaMatch = str.match(
-    /^rgba\(\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)\s*\)$/i,
-  );
-  if (rgbaMatch) {
-    return {
-      r: Number(rgbaMatch[1]),
-      g: Number(rgbaMatch[2]),
-      b: Number(rgbaMatch[3]),
-      a: clamp01(Number(rgbaMatch[4])),
-    };
-  }
-
-  const rgbMatch = str.match(
-    /^rgb\(\s*([0-9.]+)\s*,\s*([0-9.]+)\s*,\s*([0-9.]+)\s*\)$/i,
-  );
-  if (rgbMatch) {
-    return {
-      r: Number(rgbMatch[1]),
-      g: Number(rgbMatch[2]),
-      b: Number(rgbMatch[3]),
-      a: 1,
-    };
-  }
-
-  const hexMatch = str.match(/^#([0-9a-f]{3,8})$/i);
-  if (hexMatch) {
-    const hex = hexMatch[1].toLowerCase();
-    const expand = (c: string) => c + c;
-    const hasAlpha = hex.length === 8 || hex.length === 4;
-
-    const r = parseInt(hex.length <= 4 ? expand(hex[0]) : hex.slice(0, 2), 16);
-    const g = parseInt(hex.length <= 4 ? expand(hex[1]) : hex.slice(2, 4), 16);
-    const b = parseInt(hex.length <= 4 ? expand(hex[2]) : hex.slice(4, 6), 16);
-    const a = hasAlpha
-      ? parseInt(hex.length <= 4 ? expand(hex[3]) : hex.slice(6, 8), 16) / 255
-      : 1;
-
-    return { r, g, b, a: clamp01(a) };
-  }
-
-  return null;
-};
-
 const srgbToLinear = (c: number): number => {
   const v = c / 255;
   return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
 };
 
-const relativeLuminance = (rgb: { r: number; g: number; b: number }): number => {
-  const r = srgbToLinear(rgb.r);
-  const g = srgbToLinear(rgb.g);
-  const b = srgbToLinear(rgb.b);
+const relativeLuminance = (rgba: [number, number, number, number]): number => {
+  const r = srgbToLinear(rgba[0]);
+  const g = srgbToLinear(rgba[1]);
+  const b = srgbToLinear(rgba[2]);
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
 const autoForegroundColor = (baseColor: string): string => {
-  const parsed = parseColor(baseColor);
-  const lum = parsed ? relativeLuminance(parsed) : 0.5;
-  const a = 0.35;
-  if (lum < 0.35) {
-    return `rgba(255, 255, 255, ${a})`;
+  const rgba = parseRgba(baseColor);
+  const lum = rgba ? relativeLuminance(rgba) : 0.5;
+  if (lum < DECAL_AUTO_FG_LUMINANCE_THRESHOLD) {
+    return `rgba(255, 255, 255, ${DECAL_AUTO_FG_ALPHA})`;
   }
-  return `rgba(0, 0, 0, ${a})`;
+  return `rgba(0, 0, 0, ${DECAL_AUTO_FG_ALPHA})`;
 };
 
 const normalizeDash = (dash: number[] | number | undefined): number[] => {
-  if (dash === undefined) return [5, 5];
-  if (typeof dash === 'number') return dash > 0 ? [dash, dash] : [5, 5];
+  if (dash === undefined) return [DECAL_DEFAULT_DASH_SEGMENT, DECAL_DEFAULT_DASH_SEGMENT];
+  if (typeof dash === 'number') {
+    return dash > 0
+      ? [dash, dash]
+      : [DECAL_DEFAULT_DASH_SEGMENT, DECAL_DEFAULT_DASH_SEGMENT];
+  }
   const v = dash.filter((x) => typeof x === 'number' && isFinite(x) && x > 0);
-  return v.length ? v : [5, 5];
+  return v.length
+    ? v
+    : [DECAL_DEFAULT_DASH_SEGMENT, DECAL_DEFAULT_DASH_SEGMENT];
 };
 
 const sumDash = (dash: number[]): number => {

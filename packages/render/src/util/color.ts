@@ -8,16 +8,23 @@
 export const parseColor = (
   color: string,
 ): [number, number, number, number] | null => {
-  if (!color) return null;
+  const input = color?.trim?.() ?? '';
+  if (!input) return null;
 
   // Hex color
-  if (color.startsWith('#')) {
-    const hex = color.slice(1);
+  if (input.startsWith('#')) {
+    const hex = input.slice(1);
     if (hex.length === 3) {
       const r = parseInt(hex[0] + hex[0], 16);
       const g = parseInt(hex[1] + hex[1], 16);
       const b = parseInt(hex[2] + hex[2], 16);
       return [r, g, b, 1];
+    } else if (hex.length === 4) {
+      const r = parseInt(hex[0] + hex[0], 16);
+      const g = parseInt(hex[1] + hex[1], 16);
+      const b = parseInt(hex[2] + hex[2], 16);
+      const a = parseInt(hex[3] + hex[3], 16) / 255;
+      return [r, g, b, a];
     } else if (hex.length === 6) {
       const r = parseInt(hex.slice(0, 2), 16);
       const g = parseInt(hex.slice(2, 4), 16);
@@ -33,7 +40,7 @@ export const parseColor = (
   }
 
   // RGB/RGBA color
-  const rgbMatch = color.match(/rgba?\(([^)]+)\)/);
+  const rgbMatch = input.match(/rgba?\(([^)]+)\)/);
   if (rgbMatch) {
     const values = rgbMatch[1].split(',').map((v) => parseFloat(v.trim()));
     if (values.length >= 3) {
@@ -59,7 +66,7 @@ export const parseColor = (
     transparent: [0, 0, 0, 0],
   };
 
-  const lowerColor = color.toLowerCase();
+  const lowerColor = input.toLowerCase();
   if (namedColors[lowerColor]) {
     return namedColors[lowerColor];
   }

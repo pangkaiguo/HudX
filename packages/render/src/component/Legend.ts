@@ -17,7 +17,7 @@ import Rect from '../graphic/Rect';
 import Text from '../graphic/Text';
 import Circle from '../graphic/Circle';
 import Line from '../graphic/Line';
-import { DEFAULT_BORDER_RADIUS, Z_LEGEND } from '../constants';
+import { COLOR_TRANSPARENT, DEFAULT_BORDER_RADIUS, Z_LEGEND } from '../constants';
 import { createDecalPattern } from '../util/pattern';
 import type { DecalObject } from '../types';
 import { ThemeManager } from '../theme/ThemeManager';
@@ -184,7 +184,6 @@ export default class Legend extends Group {
     ctx.font = `${fontSize}px ${ThemeManager.getTheme().fontFamily}`;
 
     const wrapText = (text: string, maxWidth: number): string[] => {
-      const words = text.split('');
       let lines: string[] = [];
       let currentLine = '';
 
@@ -510,7 +509,7 @@ export default class Legend extends Group {
 
       const interactRect = new Rect({
         shape: { x, y, width: width, height: height },
-        style: { fill: 'transparent' },
+        style: { fill: COLOR_TRANSPARENT },
         cursor: 'pointer',
       });
 
@@ -541,15 +540,15 @@ export default class Legend extends Group {
       });
 
       (interactRect as any).on('mouseover', () => {
-        interactRect.attr('style', { fill: 'transparent' });
+        interactRect.attr('style', { fill: COLOR_TRANSPARENT });
         if (this._option.onHover) {
           this._option.onHover(item.name, true);
         }
         this.markRedraw();
       });
 
-      (interactRect as any).on('mouseout', (e: any) => {
-        interactRect.attr('style', { fill: 'transparent' });
+      (interactRect as any).on('mouseout', () => {
+        interactRect.attr('style', { fill: COLOR_TRANSPARENT });
         if (this._option.onHover) {
           this._option.onHover(item.name, false);
         }

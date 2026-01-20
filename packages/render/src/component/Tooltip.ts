@@ -7,6 +7,9 @@ import {
   DEFAULT_BORDER_RADIUS,
   DEFAULT_TOOLTIP_LINE_HEIGHT,
   DEFAULT_TOOLTIP_PADDING,
+  TOOLTIP_DEFAULT_PADDING_PX,
+  TOOLTIP_DOM_Z_INDEX,
+  TOOLTIP_TRANSITION_BEZIER,
 } from '../constants';
 
 export interface TooltipOption {
@@ -92,12 +95,12 @@ export default class Tooltip {
     s.display = 'none';
     s.borderStyle = 'solid';
     s.whiteSpace = 'nowrap';
-    s.zIndex = '9999999';
+    s.zIndex = String(TOOLTIP_DOM_Z_INDEX);
     s.boxShadow = `${ThemeManager.getTheme().shadowColor} 1px 2px 10px`;
     s.boxSizing = 'border-box';
     s.pointerEvents = this._option.enterable ? 'auto' : 'none';
 
-    s.transition = `left ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s, top ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s`;
+    s.transition = `left ${this._option.transitionDuration}s ${TOOLTIP_TRANSITION_BEZIER} 0s, top ${this._option.transitionDuration}s ${TOOLTIP_TRANSITION_BEZIER} 0s`;
 
     this.updateStyle();
   }
@@ -115,7 +118,7 @@ export default class Tooltip {
     if (Array.isArray(padding)) {
       s.padding = padding.map((p) => p + 'px').join(' ');
     } else {
-      s.padding = (padding || 5) + 'px';
+      s.padding = (padding || TOOLTIP_DEFAULT_PADDING_PX) + 'px';
     }
 
     s.color = String(opt.textStyle?.color ?? theme.tooltipTextColor);
@@ -187,9 +190,6 @@ export default class Tooltip {
     const show = () => {
       this._updateContent(content);
 
-      const originalDisplay = this._el.style.display;
-      const originalVisibility = this._el.style.visibility;
-
       this._el.style.display = 'block';
       this._el.style.visibility = 'hidden';
 
@@ -204,7 +204,7 @@ export default class Tooltip {
       if (sizeChanged) {
         this._el.style.transition = 'none';
       } else {
-        this._el.style.transition = `left ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s, top ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s`;
+        this._el.style.transition = `left ${this._option.transitionDuration}s ${TOOLTIP_TRANSITION_BEZIER} 0s, top ${this._option.transitionDuration}s ${TOOLTIP_TRANSITION_BEZIER} 0s`;
       }
 
       this._updatePosition(x, y, params, targetRect);
@@ -214,7 +214,7 @@ export default class Tooltip {
 
       if (sizeChanged) {
         requestAnimationFrame(() => {
-          this._el.style.transition = `left ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s, top ${this._option.transitionDuration}s cubic-bezier(0.23, 1, 0.32, 1) 0s`;
+          this._el.style.transition = `left ${this._option.transitionDuration}s ${TOOLTIP_TRANSITION_BEZIER} 0s, top ${this._option.transitionDuration}s ${TOOLTIP_TRANSITION_BEZIER} 0s`;
         });
       }
     };
