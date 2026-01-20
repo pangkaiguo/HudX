@@ -1,183 +1,13 @@
 export interface Example {
   id: string;
-  category: 'line' | 'bar' | 'pie' | 'scatter' | 'sub-components' | 'bundle';
+  category: 'bar' | 'line' | 'pie' | 'scatter' | 'sub-components' | 'bundle';
   title: string;
   subtitle: string;
   code: string;
 }
 
 export const examples: Example[] = [
-  {
-    id: 'basic-line',
-    category: 'line',
-    title: 'Basic Line Chart',
-    subtitle: 'Basic line with tooltip, legend and optional grid lines',
-    code: `option = {
-  tooltip: { show: true, trigger: 'axis' },
-  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
-  grid: { left: 60, right: 40, top: 40, bottom: 60 },
-  xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    show: true,
-    splitNumber: 10,
-    splitLine: { show: false, lineStyle: { color: '#e6e6e6', type: 'dashed' } }
-  },
-  yAxis: {
-    type: 'value',
-    show: true,
-    splitNumber: 10,
-    splitLine: { show: false, lineStyle: { color: '#e6e6e6' } }
-  },
-  series: [{
-    name: 'Weekly Data',
-    type: 'line',
-    data: [120, 200, 150, 80, 70, 110, 130],
-    itemStyle: { color: '#5470c6' },
-    lineStyle: { width: 1 },
-    showSymbol: true,
-    emphasis: { scale: true, itemStyle: { color: '#ee6666' } }
-  }],
-  animation: true
-};`,
-  },
-  {
-    id: 'stack-line',
-    category: 'line',
-    title: 'Stack Line Chart',
-    subtitle: 'Multi-series line with symbols and dashed grid',
-    code: `option = {
-  tooltip: { show: true, trigger: 'axis' },
-  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
-  grid: { left: 70, right: 40, top: 60, bottom: 60 },
-  xAxis: {
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    show: true,
-    splitNumber: 10,
-    splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } }
-  },
-  yAxis: {
-    type: 'value',
-    show: true,
-    splitNumber: 10,
-    splitLine: { show: true, lineStyle: { color: '#eee' } }
-  },
-  series: [
-    {
-      name: 'Series A',
-      type: 'line',
-      data: [120, 200, 150, 80, 70, 110, 130],
-      itemStyle: { color: '#5470c6' },
-      lineStyle: { width: 1 },
-      showSymbol: true,
-      symbol: 'circle'
-    },
-    {
-      name: 'Series B',
-      type: 'line',
-      data: [100, 150, 120, 110, 90, 140, 120],
-      itemStyle: { color: '#91cc75' },
-      lineStyle: { width: 1 },
-      showSymbol: true,
-      symbol: 'rect',
-      symbolSize: 8
-    },
-    {
-      name: 'Series C',
-      type: 'line',
-      data: [80, 120, 100, 140, 110, 100, 90],
-      itemStyle: { color: '#fac858' },
-      lineStyle: { width: 1 },
-      showSymbol: true,
-      symbol: 'triangle',
-      symbolSize: 10
-    }
-  ],
-  animation: true,
-  animationDuration: 600,
-  animationEasing: 'cubicOut'
-};`,
-  },
-  {
-    id: 'area-line',
-    category: 'line',
-    title: 'Area Line Chart',
-    subtitle: 'Area fill + smooth curves + denser x-axis labels',
-    code: `const category = [
-  '1/2','1/3','1/4','1/5','1/6','1/7','1/8','1/9','1/10','1/11',
-  '1/12','1/13','1/14','1/15','1/16','1/17','1/18','1/19','1/20','1/21',
-  '1/22','1/23','1/24','1/25','1/26','1/27','1/28','1/29','1/30','1/31'
-];
-const valuesA = [120,124,123,126,130,128,132,136,140,139,142,145,147,149,151,150,153,156,158,160,161,163,165,166,168,170,172,174,175,176];
-const valuesB = [90,92,91,93,95,97,98,100,101,103,105,106,108,110,112,111,113,115,116,118,120,121,123,124,126,127,129,130,131,133];
-const valuesC = [140,142,143,145,147,149,150,152,154,156,158,159,161,163,165,166,168,170,172,173,175,177,179,180,182,184,185,187,189,190];
 
-option = {
-  tooltip: { show: true, trigger: 'axis' },
-  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
-  grid: { left: 50, right: 40, top: 60, bottom: 60 },
-  xAxis: {
-    type: 'category',
-    data: category,
-    show: true,
-    splitNumber: 10,
-    splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } },
-    axisLabel: { interval: function (index) { return index % 5 === 0; } }
-  },
-  yAxis: {
-    type: 'value',
-    show: true,
-    splitNumber: 10,
-    splitLine: { show: true, lineStyle: { color: '#eee' } }
-  },
-  series: [
-    { name: 'Series A', type: 'line', data: valuesA, itemStyle: { color: '#5470c6' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } },
-    { name: 'Series B', type: 'line', data: valuesB, itemStyle: { color: '#91cc75' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } },
-    { name: 'Series C', type: 'line', data: valuesC, itemStyle: { color: '#fac858' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } }
-  ],
-  animation: true,
-  animationDuration: 1000,
-  animationEasing: 'cubicOut'
-};`,
-  },
-  {
-    id: 'smooth-line',
-    category: 'line',
-    title: 'Smooth Line Chart',
-    subtitle: 'Smooth line with tension control',
-    code: `const xs = Array.from({ length: 60 }, (_, i) => String(i + 1));
-const ys = xs.map((_, i) => Math.round(Math.sin(i / 6) * 40 + 120));
-
-option = {
-  tooltip: { show: true, trigger: 'axis' },
-  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
-  grid: { left: 60, right: 40, top: 60, bottom: 60 },
-  xAxis: {
-    type: 'category',
-    data: xs,
-    show: true,
-    splitNumber: 8,
-    axisLabel: { interval: function (index) { return index % 6 === 0; } },
-    splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } }
-  },
-  yAxis: {
-    type: 'value',
-    show: true,
-    splitNumber: 5,
-    splitLine: { show: true, lineStyle: { color: '#eee' } }
-  },
-  series: [{
-    name: 'Smooth Series',
-    type: 'line',
-    data: ys,
-    smooth: 0.5,
-    showSymbol: false,
-    lineStyle: { width: 1 }
-  }],
-  animation: true
-};`,
-  },
   {
     id: 'basic-bar',
     category: 'bar',
@@ -466,6 +296,177 @@ option = {
   //   animation: true
   // };`,
   //   },
+  {
+    id: 'basic-line',
+    category: 'line',
+    title: 'Basic Line Chart',
+    subtitle: 'Basic line with tooltip, legend and optional grid lines',
+    code: `option = {
+  tooltip: { show: true, trigger: 'axis' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
+  grid: { left: 60, right: 40, top: 40, bottom: 60 },
+  xAxis: {
+    type: 'category',
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    show: true,
+    splitNumber: 10,
+    splitLine: { show: false, lineStyle: { color: '#e6e6e6', type: 'dashed' } }
+  },
+  yAxis: {
+    type: 'value',
+    show: true,
+    splitNumber: 10,
+    splitLine: { show: false, lineStyle: { color: '#e6e6e6' } }
+  },
+  series: [{
+    name: 'Weekly Data',
+    type: 'line',
+    data: [120, 200, 150, 80, 70, 110, 130],
+    itemStyle: { color: '#5470c6' },
+    lineStyle: { width: 1 },
+    showSymbol: true,
+    emphasis: { scale: true, itemStyle: { color: '#ee6666' } }
+  }],
+  animation: true
+};`,
+  },
+  {
+    id: 'stack-line',
+    category: 'line',
+    title: 'Stack Line Chart',
+    subtitle: 'Multi-series line with symbols and dashed grid',
+    code: `option = {
+  tooltip: { show: true, trigger: 'axis' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
+  grid: { left: 70, right: 40, top: 60, bottom: 60 },
+  xAxis: {
+    type: 'category',
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    show: true,
+    splitNumber: 10,
+    splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } }
+  },
+  yAxis: {
+    type: 'value',
+    show: true,
+    splitNumber: 10,
+    splitLine: { show: true, lineStyle: { color: '#eee' } }
+  },
+  series: [
+    {
+      name: 'Series A',
+      type: 'line',
+      data: [120, 200, 150, 80, 70, 110, 130],
+      itemStyle: { color: '#5470c6' },
+      lineStyle: { width: 1 },
+      showSymbol: true,
+      symbol: 'circle'
+    },
+    {
+      name: 'Series B',
+      type: 'line',
+      data: [100, 150, 120, 110, 90, 140, 120],
+      itemStyle: { color: '#91cc75' },
+      lineStyle: { width: 1 },
+      showSymbol: true,
+      symbol: 'rect',
+      symbolSize: 8
+    },
+    {
+      name: 'Series C',
+      type: 'line',
+      data: [80, 120, 100, 140, 110, 100, 90],
+      itemStyle: { color: '#fac858' },
+      lineStyle: { width: 1 },
+      showSymbol: true,
+      symbol: 'triangle',
+      symbolSize: 10
+    }
+  ],
+  animation: true,
+  animationDuration: 600,
+  animationEasing: 'cubicOut'
+};`,
+  },
+  {
+    id: 'area-line',
+    category: 'line',
+    title: 'Area Line Chart',
+    subtitle: 'Area fill + smooth curves + denser x-axis labels',
+    code: `const category = [
+  '1/2','1/3','1/4','1/5','1/6','1/7','1/8','1/9','1/10','1/11',
+  '1/12','1/13','1/14','1/15','1/16','1/17','1/18','1/19','1/20','1/21',
+  '1/22','1/23','1/24','1/25','1/26','1/27','1/28','1/29','1/30','1/31'
+];
+const valuesA = [120,124,123,126,130,128,132,136,140,139,142,145,147,149,151,150,153,156,158,160,161,163,165,166,168,170,172,174,175,176];
+const valuesB = [90,92,91,93,95,97,98,100,101,103,105,106,108,110,112,111,113,115,116,118,120,121,123,124,126,127,129,130,131,133];
+const valuesC = [140,142,143,145,147,149,150,152,154,156,158,159,161,163,165,166,168,170,172,173,175,177,179,180,182,184,185,187,189,190];
+
+option = {
+  tooltip: { show: true, trigger: 'axis' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
+  grid: { left: 50, right: 40, top: 60, bottom: 60 },
+  xAxis: {
+    type: 'category',
+    data: category,
+    show: true,
+    splitNumber: 10,
+    splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } },
+    axisLabel: { interval: function (index) { return index % 5 === 0; } }
+  },
+  yAxis: {
+    type: 'value',
+    show: true,
+    splitNumber: 10,
+    splitLine: { show: true, lineStyle: { color: '#eee' } }
+  },
+  series: [
+    { name: 'Series A', type: 'line', data: valuesA, itemStyle: { color: '#5470c6' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } },
+    { name: 'Series B', type: 'line', data: valuesB, itemStyle: { color: '#91cc75' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } },
+    { name: 'Series C', type: 'line', data: valuesC, itemStyle: { color: '#fac858' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } }
+  ],
+  animation: true,
+  animationDuration: 1000,
+  animationEasing: 'cubicOut'
+};`,
+  },
+  {
+    id: 'smooth-line',
+    category: 'line',
+    title: 'Smooth Line Chart',
+    subtitle: 'Smooth line with tension control',
+    code: `const xs = Array.from({ length: 60 }, (_, i) => String(i + 1));
+const ys = xs.map((_, i) => Math.round(Math.sin(i / 6) * 40 + 120));
+
+option = {
+  tooltip: { show: true, trigger: 'axis' },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
+  grid: { left: 60, right: 40, top: 60, bottom: 60 },
+  xAxis: {
+    type: 'category',
+    data: xs,
+    show: true,
+    splitNumber: 8,
+    axisLabel: { interval: function (index) { return index % 6 === 0; } },
+    splitLine: { show: true, lineStyle: { color: '#eee', type: 'dashed' } }
+  },
+  yAxis: {
+    type: 'value',
+    show: true,
+    splitNumber: 5,
+    splitLine: { show: true, lineStyle: { color: '#eee' } }
+  },
+  series: [{
+    name: 'Smooth Series',
+    type: 'line',
+    data: ys,
+    smooth: 0.5,
+    showSymbol: false,
+    lineStyle: { width: 1 }
+  }],
+  animation: true
+};`,
+  },
   {
     id: 'basic-pie',
     category: 'pie',

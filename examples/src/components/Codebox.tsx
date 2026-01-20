@@ -6,7 +6,7 @@ import { CodeEditor } from './CodeEditor';
 import { getLocaleLabel, t } from '../i18n';
 import { EXAMPLES_LOCALES } from '../constants';
 
-interface CodeboxProps {
+interface CodeBoxProps {
   initialCode: string;
   onBack: () => void;
   title?: string;
@@ -16,7 +16,7 @@ interface CodeboxProps {
   onLocaleChange: (locale: Locale) => void;
 }
 
-export const Codebox: React.FC<CodeboxProps> = ({
+export const CodeBox: React.FC<CodeBoxProps> = ({
   initialCode,
   onBack,
   title,
@@ -523,3 +523,5 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
     </div>
   );
 };
+
+export default CodeBox;

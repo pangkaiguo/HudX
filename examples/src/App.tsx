@@ -9,7 +9,7 @@ import React, {
 import { HChart } from 'hudx-charts';
 import type { ChartOption, HChartRef } from 'hudx-charts';
 import { Locale, Theme, ThemeManager, toRgbaWithOpacity } from 'hudx-render';
-import { Codebox } from './components/Codebox';
+import { CodeBox } from './components/CodeBox';
 import { examples, Example } from './data/examples';
 import { getLocaleLabel, t } from './i18n';
 import {
@@ -97,15 +97,6 @@ type ClassicSection = { categoryKey: string; items: ClassicExample[] };
 
 const chartExamples: ClassicSection[] = [
   {
-    categoryKey: 'line',
-    items: [
-      { id: 'basic-line', component: BasicLineExample },
-      { id: 'stack-line', component: StackLineChartExample },
-      { id: 'area-line', component: AreaLineChartExample },
-      { id: 'smooth-line', component: SmoothLineExample },
-    ],
-  },
-  {
     categoryKey: 'bar',
     items: [
       { id: 'basic-bar', component: BasicBarExample },
@@ -114,6 +105,15 @@ const chartExamples: ClassicSection[] = [
       { id: 'stack-bar', component: StackBarExample },
       { id: 'stack-horizontal-bar', component: StackHorizontalBarExample },
       { id: 'group-bar', component: GroupBarChartExample },
+    ],
+  },
+  {
+    categoryKey: 'line',
+    items: [
+      { id: 'basic-line', component: BasicLineExample },
+      { id: 'stack-line', component: StackLineChartExample },
+      { id: 'area-line', component: AreaLineChartExample },
+      { id: 'smooth-line', component: SmoothLineExample },
     ],
   },
   {
@@ -959,6 +959,12 @@ const ModernApp = ({
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [focusedCategory, setFocusedCategory] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!EXAMPLES_CATEGORIES.includes(activeCategory as any)) {
+      setActiveCategory(EXAMPLES_DEFAULTS.modernActiveCategory);
+    }
+  }, [activeCategory, setActiveCategory]);
+
   const activeExample = useMemo(
     () => examples.find((e) => e.id === activeExampleId),
     [activeExampleId],
@@ -966,7 +972,7 @@ const ModernApp = ({
 
   if (activeExampleId && activeExample) {
     return (
-      <Codebox
+      <CodeBox
         initialCode={activeExample.code}
         title={t(locale, `examples.list.${activeExample.id}.title`, activeExample.title)}
         onBack={() => setActiveExampleId(null)}

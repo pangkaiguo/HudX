@@ -4,8 +4,8 @@ export const EXAMPLES_DEFAULTS = {
   mode: 'classic' as const,
   theme: 'light' as Theme,
   locale: 'zh-CN' as Locale,
-  classicActiveExample: 'basic-line',
-  modernActiveCategory: 'line',
+  classicActiveExample: 'basic-bar',
+  modernActiveCategory: 'bar',
   modernActiveExampleId: null as string | null,
 };
 
@@ -26,8 +26,8 @@ export const EXAMPLES_LOCALES = [
 ] as const satisfies readonly Locale[];
 
 export const EXAMPLES_CATEGORIES = [
-  'line',
   'bar',
+  'line',
   'pie',
   'scatter',
   'sub-components',
