@@ -2,7 +2,7 @@
 
 ## 概述
 
-HudX 提供了一套丰富的交互功能，包括动画、提示框（Tooltip）、图例（Legend）和高级事件处理，旨在对标 ECharts 的能力。
+HudX Charts 提供了一套丰富的交互功能，包括动画、提示框（Tooltip）、图例（Legend）和高级事件处理，旨在对标 ECharts 的能力。
 
 ## 1. 高亮与悬停效果 (Emphasis)
 

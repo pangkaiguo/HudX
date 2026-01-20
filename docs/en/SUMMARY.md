@@ -2,7 +2,7 @@
 
 ## Overview
 
-HudX is a high-performance charting library compatible with ECharts API design, featuring a powerful underlying rendering engine (similar to ZRender).
+HudX Charts is a high-performance charting library compatible with ECharts API design, featuring a powerful underlying rendering engine (similar to ZRender).
 
 ## Documentation Index
 

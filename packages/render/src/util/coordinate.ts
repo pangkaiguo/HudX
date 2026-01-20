@@ -40,27 +40,27 @@ export const createLinearScale = (domain: number[], range: number[]): Scale => {
   }
   const k = (r1 - r0) / (d1 - d0);
 
-  const scale = function (value: number): number {
+  const scale = ((value: number): number => {
     const v = r0 + (value - d0) * k;
     if (!isFinite(v)) return r0;
     return v;
-  } as Scale;
+  }) as Scale;
 
-  scale.invert = function (value: number): number {
+  scale.invert = (value: number): number => {
     return d0 + (value - r0) / k;
   };
 
   scale.getPixel = scale;
   scale.getValue = scale.invert;
 
-  scale.domain = function (newDomain?: number[]): any {
+  scale.domain = (newDomain?: number[]): any => {
     if (newDomain) {
       return createLinearScale(newDomain, range);
     }
     return domain;
   };
 
-  scale.range = function (newRange?: number[]): any {
+  scale.range = (newRange?: number[]): any => {
     if (newRange) {
       return createLinearScale(domain, newRange);
     }
@@ -80,7 +80,7 @@ export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
     domainMap.set(d, i);
   });
 
-  const scale = function (value: any): number {
+  const scale = ((value: any): number => {
     const index = domainMap.get(value);
     if (index === undefined) {
       return range[0];
@@ -89,9 +89,9 @@ export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
     const step = (range[range.length - 1] - range[0]) / total;
     // Return band center position
     return range[0] + (index + 0.5) * step;
-  } as Scale;
+  }) as Scale;
 
-  scale.invert = function (value: number): any {
+  scale.invert = (value: number): any => {
     const total = Math.max(1, domain.length);
     const step = (range[range.length - 1] - range[0]) / total;
     const index = Math.floor((value - range[0]) / step);
@@ -101,14 +101,14 @@ export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
   scale.getPixel = scale;
   scale.getValue = scale.invert;
 
-  scale.domain = function (newDomain?: any[]): any {
+  scale.domain = (newDomain?: any[]): any => {
     if (newDomain) {
       return createOrdinalScale(newDomain, range);
     }
     return domain;
   };
 
-  scale.range = function (newRange?: number[]): any {
+  scale.range = (newRange?: number[]): any => {
     if (newRange) {
       return createOrdinalScale(domain, newRange);
     }

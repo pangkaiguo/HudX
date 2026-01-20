@@ -147,11 +147,13 @@ const DECAL_PRESETS: Record<string, Partial<DecalObject>> = {
   },
 };
 
-function clamp01(v: number): number {
+const clamp01 = (v: number): number => {
   return Math.max(0, Math.min(1, v));
-}
+};
 
-function parseColor(input: string): { r: number; g: number; b: number; a: number } | null {
+const parseColor = (
+  input: string,
+): { r: number; g: number; b: number; a: number } | null => {
   const str = input.trim();
   if (!str) return null;
 
@@ -196,21 +198,21 @@ function parseColor(input: string): { r: number; g: number; b: number; a: number
   }
 
   return null;
-}
+};
 
-function srgbToLinear(c: number): number {
+const srgbToLinear = (c: number): number => {
   const v = c / 255;
   return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-}
+};
 
-function relativeLuminance(rgb: { r: number; g: number; b: number }): number {
+const relativeLuminance = (rgb: { r: number; g: number; b: number }): number => {
   const r = srgbToLinear(rgb.r);
   const g = srgbToLinear(rgb.g);
   const b = srgbToLinear(rgb.b);
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
+};
 
-function autoForegroundColor(baseColor: string): string {
+const autoForegroundColor = (baseColor: string): string => {
   const parsed = parseColor(baseColor);
   const lum = parsed ? relativeLuminance(parsed) : 0.5;
   const a = 0.35;
@@ -218,20 +220,20 @@ function autoForegroundColor(baseColor: string): string {
     return `rgba(255, 255, 255, ${a})`;
   }
   return `rgba(0, 0, 0, ${a})`;
-}
+};
 
-function normalizeDash(dash: number[] | number | undefined): number[] {
+const normalizeDash = (dash: number[] | number | undefined): number[] => {
   if (dash === undefined) return [5, 5];
   if (typeof dash === 'number') return dash > 0 ? [dash, dash] : [5, 5];
   const v = dash.filter((x) => typeof x === 'number' && isFinite(x) && x > 0);
   return v.length ? v : [5, 5];
-}
+};
 
-function sumDash(dash: number[]): number {
+const sumDash = (dash: number[]): number => {
   return dash.reduce((a, b) => a + b, 0);
-}
+};
 
-function getOnSegmentCenters(dash: number[]): number[] {
+const getOnSegmentCenters = (dash: number[]): number[] => {
   const centers: number[] = [];
   let pos = 0;
   for (let i = 0; i < dash.length; i++) {
@@ -242,19 +244,19 @@ function getOnSegmentCenters(dash: number[]): number[] {
     pos += len;
   }
   return centers;
-}
+};
 
-function getUnitSize(dashX: number[], dashY: number[]): number {
+const getUnitSize = (dashX: number[], dashY: number[]): number => {
   const onX = dashX.filter((_, i) => i % 2 === 0).map((v) => Math.max(1, v));
   const onY = dashY.filter((_, i) => i % 2 === 0).map((v) => Math.max(1, v));
   const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / Math.max(1, arr.length);
   return Math.max(1, Math.min(avg(onX), avg(onY)));
-}
+};
 
-export function createDecalPattern(
+export const createDecalPattern = (
   decalObject: DecalObject,
   baseColor: string,
-): CanvasPattern | null {
+): CanvasPattern | null => {
   // Apply preset if symbol matches a preset name
   const preset =
     typeof decalObject.symbol === 'string' && DECAL_PRESETS[decalObject.symbol];
@@ -465,4 +467,4 @@ export function createDecalPattern(
   }
 
   return pattern;
-}
+};

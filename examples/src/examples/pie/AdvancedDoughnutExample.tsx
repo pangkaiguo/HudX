@@ -14,7 +14,6 @@ export const AdvancedDoughnutExample = ({
 }) => {
   const portionRef = useRef<HChartRef>(null);
   const progressRef = useRef<HChartRef>(null);
-  const darkRef = useRef<HChartRef>(null);
   const nestedRef = useRef<HChartRef>(null);
   const rightLegendRef = useRef<HChartRef>(null);
 
@@ -142,74 +141,7 @@ export const AdvancedDoughnutExample = ({
     ],
   };
 
-  // 3. Dark Mode Doughnut Chart
-  const darkOption: ChartOption = {
-    backgroundColor: '#1a1a1a',
-    tooltip: {
-      trigger: 'item',
-    },
-    legend: {
-      orient: 'vertical',
-      right: 10,
-      top: 10,
-      textStyle: {
-        color: '#fff',
-      },
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'doughnut',
-        radius: ['50%', '70%'],
-        center: ['50%', '50%'],
-        avoidLabelOverlap: false,
-        label: {
-          show: false,
-          position: 'center',
-        },
-        emphasis: {
-          scale: true,
-          scaleSize: 1.03,
-          label: {
-            show: true,
-            fontSize: 40,
-            fontWeight: 'bold',
-            color: '#fff',
-            formatter: '{title|{name}}\n{value|{value}}',
-          },
-        },
-        labelLine: {
-          show: false,
-        },
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' },
-        ],
-        centerLabel: {
-          show: true,
-          formatter: '{title|Traffic}\n{value|High}',
-          rich: {
-            title: {
-              fontSize: 14,
-              color: '#aaa',
-              lineHeight: 20,
-            },
-            value: {
-              fontSize: 24,
-              fontWeight: 'bold',
-              color: '#fff',
-              lineHeight: 30,
-            },
-          },
-        },
-      },
-    ],
-  };
-
-  // 4. Nested Doughnut Chart
+  // 3. Nested Doughnut Chart
   const nestedOption: ChartOption = {
     tooltip: {
       trigger: 'item',
@@ -292,7 +224,7 @@ export const AdvancedDoughnutExample = ({
     ],
   };
 
-  // 5. HTML Legend Doughnut Chart (Right)
+  // 4. HTML Legend Doughnut Chart (Right)
   const rightLegendOption: ChartOption = {
     tooltip: {
       trigger: 'item',
@@ -390,15 +322,6 @@ export const AdvancedDoughnutExample = ({
           <HChart
             ref={progressRef}
             option={progressOption}
-            theme={theme}
-            locale={locale}
-            style={chartStyle}
-          />
-        </div>
-        <div>
-          <HChart
-            ref={darkRef}
-            option={darkOption}
             theme={theme}
             locale={locale}
             style={chartStyle}

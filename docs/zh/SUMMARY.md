@@ -2,7 +2,7 @@
 
 ## 概述
 
-HudX 是一个高性能图表库，兼容 ECharts API 设计，拥有强大的底层渲染引擎（类似 ZRender）。
+HudX Charts 是一个高性能图表库，兼容 ECharts API 设计，拥有强大的底层渲染引擎（类似 ZRender）。
 
 ## 文档目录
 

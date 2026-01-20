@@ -2,7 +2,7 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-HudX is a high-performance charting library built with React and TypeScript. It is inspired by the underlying rendering logic of [ZRender](https://github.com/ecomfe/zrender) and the API design of [ECharts](https://github.com/apache/echarts), supporting both Canvas and SVG rendering modes.
+HudX Charts is a high-performance charting library built with React and TypeScript. It is inspired by the underlying rendering logic of [ZRender](https://github.com/ecomfe/zrender) and the API design of [ECharts](https://github.com/apache/echarts), supporting both Canvas and SVG rendering modes.
 
 ## Features
 

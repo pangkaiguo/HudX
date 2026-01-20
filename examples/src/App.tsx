@@ -220,7 +220,7 @@ const NavButton = ({
   );
 };
 
-function useLocalStorageState<T>(key: string, initialValue: T) {
+const useLocalStorageState = <T,>(key: string, initialValue: T) => {
   const [value, setValue] = useState<T>(() => {
     try {
       const raw = localStorage.getItem(key);
@@ -240,9 +240,9 @@ function useLocalStorageState<T>(key: string, initialValue: T) {
   }, [key, value]);
 
   return [value, setValue] as const;
-}
+};
 
-function parseOption(code: string): ChartOption {
+const parseOption = (code: string): ChartOption => {
   try {
     // eslint-disable-next-line no-new-func
     const func = new Function(`
@@ -255,7 +255,7 @@ function parseOption(code: string): ChartOption {
     console.error('Failed to parse option', e);
     return {};
   }
-}
+};
 
 const SegmentedControl = ({
   leftLabel,
@@ -357,7 +357,6 @@ const SidebarSettingsCard = ({
   return (
     <div
       style={{
-        border: `1px solid ${border}`,
         borderRadius: 8,
         padding: 12,
         backgroundColor: cardBg,
@@ -549,7 +548,6 @@ const ChartCard = ({
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
-  const border = ui.colorBorderSecondary || themeObj.borderColor;
   const cardBg = ui.colorFillContainer || themeObj.backgroundColor;
   const previewBg = ui.colorFillContainerAlt || themeObj.gridColor;
   const subtitleColor = ui.colorTextTertiary || themeObj.axisLabelColor;
@@ -584,7 +582,6 @@ const ChartCard = ({
     <div
       onClick={onClick}
       style={{
-        border: `1px solid ${border}`,
         borderRadius: 8,
         overflow: 'hidden',
         cursor: 'pointer',
@@ -707,7 +704,7 @@ const Dashboard = ({
   );
 };
 
-const OldApp = memo(function OldApp({
+const OldApp = memo(({
   theme,
   setTheme,
   setMode,
@@ -723,7 +720,7 @@ const OldApp = memo(function OldApp({
   setLocale: (l: Locale) => void;
   activeExample: string;
   setActiveExample: (id: string) => void;
-}) {
+}) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const settingsButtonRef = React.useRef<HTMLButtonElement>(null);
   const themeKey = theme.toLowerCase() as Theme;
@@ -922,6 +919,7 @@ const OldApp = memo(function OldApp({
     </div>
   );
 });
+OldApp.displayName = 'OldApp';
 
 const ModernApp = ({
   theme,
@@ -1157,7 +1155,7 @@ const ModernApp = ({
   );
 };
 
-export default function App() {
+const App = () => {
   const [mode, setMode] = useLocalStorageState<'classic' | 'modern'>(
     EXAMPLES_STORAGE_KEYS.mode,
     EXAMPLES_DEFAULTS.mode,
@@ -1210,4 +1208,6 @@ export default function App() {
       setLocale={setLocale}
     />
   );
-}
+};
+
+export default App;

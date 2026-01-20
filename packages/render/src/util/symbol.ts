@@ -15,14 +15,14 @@ export type SymbolType =
   | 'none'
   | string;
 
-export function createSymbol(
+export const createSymbol = (
   type: SymbolType,
   x: number,
   y: number,
   size: number,
   style: any,
   z: number = 0,
-): ChartElement | null {
+): ChartElement | null => {
   if (type === 'none') return null;
 
   const half = size / 2;
@@ -124,4 +124,4 @@ export function createSymbol(
         z,
       });
   }
-}
+};

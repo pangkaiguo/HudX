@@ -16,11 +16,11 @@ import type { Point } from '../types';
  * @param tension Tension factor (0-1). 0 is straight lines, 1 is very loose. Default is 0.5.
  * @param close Whether to close the path
  */
-export function getSmoothPath(
+export const getSmoothPath = (
   points: Point[],
   tension: number = 0.5,
   close: boolean = false,
-): string {
+): string => {
   if (points.length < 2) return '';
 
   // ECharts default tension is 0.5, but we need to scale it for our bezier logic
@@ -92,16 +92,16 @@ export function getSmoothPath(
   }
 
   return path;
-}
+};
 
 /**
  * Generate smooth area path
  */
-export function getSmoothAreaPath(
+export const getSmoothAreaPath = (
   points: Point[],
   y0: number,
   tension: number = 0.5,
-): string {
+): string => {
   if (points.length < 2) return '';
 
   let path = getSmoothPath(points, tension, false);
@@ -114,4 +114,4 @@ export function getSmoothAreaPath(
   path += ` L ${last.x} ${y0} L ${first.x} ${y0} Z`;
 
   return path;
-}
+};

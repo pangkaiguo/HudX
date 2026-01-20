@@ -2,12 +2,12 @@ import { Locale, LocaleManager } from 'hudx-render';
 
 type Dict = Record<string, string>;
 
-export function getLocaleLabel(locale: Locale) {
+export const getLocaleLabel = (locale: Locale) => {
   if (locale === 'zh-HK') return '繁體中文（香港）';
   if (locale === 'zh-TW') return '繁體中文（台灣）';
   if (locale === 'zh-CN' || locale === 'zh') return '简体中文';
   return 'English';
-}
+};
 
 const examplesEn: Dict = {
   'examples.app.title': 'HudX Charts',
@@ -672,14 +672,14 @@ const examplesZhTW: Dict = {
   'examples.bundle.pieChart.chartTitle': '獨立 PieChart 打包',
 };
 
-function registerMergedLocale(locale: string, additions: Dict) {
+const registerMergedLocale = (locale: string, additions: Dict) => {
   const merged = { ...LocaleManager.getLocale(locale), ...additions };
   LocaleManager.registerLocale(locale, merged);
   return merged;
-}
+};
 
 let inited = false;
-export function initExamplesI18n() {
+export const initExamplesI18n = () => {
   if (inited) return;
   inited = true;
 
@@ -688,8 +688,7 @@ export function initExamplesI18n() {
   LocaleManager.registerLocale('zh-CN', zh);
   registerMergedLocale('zh-HK', examplesZhTW);
   registerMergedLocale('zh-TW', examplesZhTW);
-}
+};
 
-export function t(locale: Locale, key: string, fallback?: string) {
-  return LocaleManager.t(locale, key, fallback);
-}
+export const t = (locale: Locale, key: string, fallback?: string) =>
+  LocaleManager.t(locale, key, fallback);

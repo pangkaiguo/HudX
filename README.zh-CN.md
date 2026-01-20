@@ -2,7 +2,7 @@
 
 [English](./README.md) | 简体中文
 
-HudX 是一个基于 React 和 TypeScript 构建的高性能图表库。它的底层渲染逻辑受 [ZRender](https://github.com/ecomfe/zrender) 启发，API 设计参考 [ECharts](https://github.com/apache/echarts)，支持 Canvas 和 SVG 双渲染模式。
+HudX Charts 是一个基于 React 和 TypeScript 构建的高性能图表库。它的底层渲染逻辑受 [ZRender](https://github.com/ecomfe/zrender) 启发，API 设计参考 [ECharts](https://github.com/apache/echarts)，支持 Canvas 和 SVG 双渲染模式。
 
 ## 特性
 
