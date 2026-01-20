@@ -4,6 +4,7 @@ import type { ChartOption } from 'hudx-charts';
 import { Locale, ThemeManager, Theme } from 'hudx-render';
 import { CodeEditor } from './CodeEditor';
 import { getLocaleLabel, t } from '../i18n';
+import { EXAMPLES_LOCALES } from '../constants';
 
 interface CodeboxProps {
   initialCode: string;
@@ -275,45 +276,22 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               overflow: 'hidden',
             }}
           >
-            <button
-              onClick={() => onLocaleChange('en')}
-              style={{
-                padding: '4px 12px',
-                background: locale === 'en' ? primary : 'transparent',
-                color: locale === 'en' ? primaryText : textColor,
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 12,
-              }}
-            >
-              {getLocaleLabel('en')}
-            </button>
-            <button
-              onClick={() => onLocaleChange('zh-CN')}
-              style={{
-                padding: '4px 12px',
-                background: locale === 'zh-CN' ? primary : 'transparent',
-                color: locale === 'zh-CN' ? primaryText : textColor,
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 12,
-              }}
-            >
-              {getLocaleLabel('zh-CN')}
-            </button>
-            <button
-              onClick={() => onLocaleChange('zh-TW')}
-              style={{
-                padding: '4px 12px',
-                background: locale === 'zh-TW' ? primary : 'transparent',
-                color: locale === 'zh-TW' ? primaryText : textColor,
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 12,
-              }}
-            >
-              {getLocaleLabel('zh-TW')}
-            </button>
+            {EXAMPLES_LOCALES.map((l) => (
+              <button
+                key={l}
+                onClick={() => onLocaleChange(l)}
+                style={{
+                  padding: '4px 12px',
+                  background: locale === l ? primary : 'transparent',
+                  color: locale === l ? primaryText : textColor,
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontSize: 12,
+                }}
+              >
+                {getLocaleLabel(l)}
+              </button>
+            ))}
           </div>
         </div>
       </div>

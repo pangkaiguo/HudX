@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Renderer, Rect, Circle, Text, Locale, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
 import { t } from '../i18n';
+import { EXAMPLES_COLORS, EXAMPLES_RENDERER_CANVAS } from '../constants';
 
 export const ThemeExample = ({
   theme = 'light',
@@ -74,7 +75,7 @@ export const ThemeExample = ({
         }),
       );
 
-      renderer.resize(800, 300);
+      renderer.resize(EXAMPLES_RENDERER_CANVAS.width, EXAMPLES_RENDERER_CANVAS.height);
       renderer.flush();
     };
 
@@ -121,7 +122,7 @@ export const ThemeExample = ({
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #ddd',
+              border: `1px solid ${EXAMPLES_COLORS.controlBorder}`,
             }}
           >
             <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
@@ -132,10 +133,10 @@ export const ThemeExample = ({
       <div
         ref={containerRef}
         style={{
-          border: '1px solid #D6D8DA',
+          border: `1px solid ${EXAMPLES_COLORS.border}`,
           borderRadius: 8,
-          width: 800,
-          height: 300,
+          width: EXAMPLES_RENDERER_CANVAS.width,
+          height: EXAMPLES_RENDERER_CANVAS.height,
         }}
       />
     </div>

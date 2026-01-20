@@ -3,7 +3,8 @@ import { Locale, LocaleManager } from 'hudx-render';
 type Dict = Record<string, string>;
 
 export function getLocaleLabel(locale: Locale) {
-  if (locale === 'zh-TW') return '繁體中文';
+  if (locale === 'zh-HK') return '繁體中文（香港）';
+  if (locale === 'zh-TW') return '繁體中文（台灣）';
   if (locale === 'zh-CN' || locale === 'zh') return '简体中文';
   return 'English';
 }
@@ -16,6 +17,7 @@ const examplesEn: Dict = {
   'examples.theme.dark': 'Dark',
   'examples.locale.en': 'English',
   'examples.locale.zh-CN': '简体中文',
+  'examples.locale.zh-HK': '繁體中文（香港）',
   'examples.locale.zh-TW': '繁體中文',
   'examples.nav.categories': 'Categories',
   'examples.nav.featureDemos': 'Feature Demos',
@@ -236,6 +238,7 @@ const examplesZhCN: Dict = {
   'examples.theme.dark': '深色',
   'examples.locale.en': '英语',
   'examples.locale.zh-CN': '简体中文',
+  'examples.locale.zh-HK': '繁體中文（香港）',
   'examples.locale.zh-TW': '繁體中文',
   'examples.nav.categories': '分类',
   'examples.nav.featureDemos': '功能演示',
@@ -456,6 +459,7 @@ const examplesZhTW: Dict = {
   'examples.theme.dark': '深色',
   'examples.locale.en': '英語',
   'examples.locale.zh-CN': '簡體中文',
+  'examples.locale.zh-HK': '繁體中文（香港）',
   'examples.locale.zh-TW': '繁體中文',
   'examples.nav.categories': '分類',
   'examples.nav.featureDemos': '功能演示',
@@ -682,6 +686,7 @@ export function initExamplesI18n() {
   registerMergedLocale('en', examplesEn);
   const zh = registerMergedLocale('zh', examplesZhCN);
   LocaleManager.registerLocale('zh-CN', zh);
+  registerMergedLocale('zh-HK', examplesZhTW);
   registerMergedLocale('zh-TW', examplesZhTW);
 }
 

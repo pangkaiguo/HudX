@@ -7,6 +7,59 @@ import type { Locale, LocaleConfig } from '../types';
 export class LocaleManager {
   private static _locales: Map<Locale, LocaleConfig> = new Map();
 
+  private static normalizeLocale(locale: Locale): Locale {
+    if (typeof locale !== 'string' || !locale) return 'en';
+
+    const raw = locale.trim();
+    if (!raw) return 'en';
+
+    const normalized = raw.replace(/_/g, '-');
+    const parts = normalized.split('-').filter(Boolean);
+    if (parts.length === 0) return 'en';
+
+    const language = parts[0].toLowerCase();
+    let script: string | null = null;
+    let region: string | null = null;
+
+    if (parts.length >= 2) {
+      const p1 = parts[1];
+      if (p1.length === 4) {
+        script = p1[0].toUpperCase() + p1.slice(1).toLowerCase();
+        if (parts.length >= 3) region = parts[2].toUpperCase();
+      } else {
+        region = p1.toUpperCase();
+      }
+    }
+
+    if (language === 'zh') {
+      const regionUpper = (region || '').toUpperCase();
+      const scriptUpper = (script || '').toUpperCase();
+
+      if (scriptUpper === 'HANT') {
+        if (regionUpper === 'HK' || regionUpper === 'MO') return 'zh-HK';
+        if (regionUpper === 'TW') return 'zh-TW';
+        return 'zh-TW';
+      }
+
+      if (scriptUpper === 'HANS') {
+        if (regionUpper === 'CN' || regionUpper === 'SG') return 'zh-CN';
+        return 'zh-CN';
+      }
+
+      if (regionUpper === 'HK' || regionUpper === 'MO') return 'zh-HK';
+      if (regionUpper === 'TW') return 'zh-TW';
+      if (regionUpper === 'CN' || regionUpper === 'SG') return 'zh-CN';
+
+      const p1Upper = (parts[1] || '').toUpperCase();
+      if (p1Upper === 'CHT') return 'zh-TW';
+      if (p1Upper === 'CHS') return 'zh-CN';
+    }
+
+    if (script && region) return `${language}-${script}-${region}` as Locale;
+    if (region) return `${language}-${region}` as Locale;
+    return language as Locale;
+  }
+
   static {
     // English
     LocaleManager._locales.set('en', {
@@ -66,13 +119,14 @@ export class LocaleManager {
    * Get locale configuration
    */
   static getLocale(locale: Locale): LocaleConfig {
+    const normalizedLocale = LocaleManager.normalizeLocale(locale);
     // Try exact match first
-    if (LocaleManager._locales.has(locale)) {
-      return LocaleManager._locales.get(locale)!;
+    if (LocaleManager._locales.has(normalizedLocale)) {
+      return LocaleManager._locales.get(normalizedLocale)!;
     }
 
     // Try language code (e.g., 'zh-CN' -> 'zh')
-    const lang = locale.split('-')[0] as Locale;
+    const lang = String(normalizedLocale).split('-')[0] as Locale;
     if (LocaleManager._locales.has(lang)) {
       return LocaleManager._locales.get(lang)!;
     }

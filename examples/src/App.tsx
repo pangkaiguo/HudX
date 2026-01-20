@@ -12,6 +12,14 @@ import { Locale, Theme, ThemeManager, toRgbaWithOpacity } from 'hudx-render';
 import { Codebox } from './components/Codebox';
 import { examples, Example } from './data/examples';
 import { getLocaleLabel, t } from './i18n';
+import {
+  EXAMPLES_CATEGORIES,
+  EXAMPLES_CHART_PREVIEW,
+  EXAMPLES_DEFAULTS,
+  EXAMPLES_LAYOUT,
+  EXAMPLES_LOCALES,
+  EXAMPLES_STORAGE_KEYS,
+} from './constants';
 
 // Lazy load components for better performance
 // Root examples
@@ -212,8 +220,6 @@ const NavButton = ({
   );
 };
 
-const categories = ['line', 'bar', 'pie', 'scatter', 'sub-components', 'bundle'] as const;
-
 function useLocalStorageState<T>(key: string, initialValue: T) {
   const [value, setValue] = useState<T>(() => {
     try {
@@ -408,7 +414,7 @@ const SidebarSettingsCard = ({
             outline: 'none',
           }}
         >
-          {(['en', 'zh-CN', 'zh-TW'] as Locale[]).map((l) => (
+          {EXAMPLES_LOCALES.map((l) => (
             <option key={l} value={l}>
               {getLocaleLabel(l)}
             </option>
@@ -614,8 +620,8 @@ const ChartCard = ({
             position: 'fixed',
             left: -10000,
             top: -10000,
-            width: 600,
-            height: 400,
+            width: EXAMPLES_CHART_PREVIEW.width,
+            height: EXAMPLES_CHART_PREVIEW.height,
             opacity: 0,
             pointerEvents: 'none',
           }}
@@ -626,8 +632,8 @@ const ChartCard = ({
             theme={theme}
             locale={locale}
             renderMode='canvas'
-            width={600}
-            height={400}
+            width={EXAMPLES_CHART_PREVIEW.width}
+            height={EXAMPLES_CHART_PREVIEW.height}
           />
         </div>
       </div>
@@ -670,7 +676,7 @@ const Dashboard = ({
         overflowY: 'auto',
       }}
     >
-      <div style={{ padding: 40 }}>
+      <div style={{ padding: EXAMPLES_LAYOUT.mainPadding }}>
         <h2 style={{ margin: '0 0 20px', fontSize: 24, fontWeight: 'normal' }}>
           {categoryLabel}
         </h2>
@@ -747,14 +753,14 @@ const OldApp = memo(function OldApp({
       <nav
         aria-label='Examples navigation'
         style={{
-          width: 280,
+          width: EXAMPLES_LAYOUT.sidebarWidth,
           borderRight: `1px solid ${border}`,
-          backgroundColor: navBg,
-          color: themeObj.textColor,
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
           overflow: 'hidden',
+          backgroundColor: navBg,
+          color: themeObj.textColor,
         }}
       >
         <div
@@ -885,7 +891,7 @@ const OldApp = memo(function OldApp({
         aria-label='Example content'
         style={{
           flex: 1,
-          padding: 40,
+          padding: EXAMPLES_LAYOUT.mainPadding,
           overflowY: 'auto',
           backgroundColor: pageBg,
           color: themeObj.textColor,
@@ -943,12 +949,12 @@ const ModernApp = ({
   const hoverBg = ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
 
   const [activeCategory, setActiveCategory] = useLocalStorageState<string>(
-    'hudx.examples.modern.activeCategory',
-    'line',
+    EXAMPLES_STORAGE_KEYS.modernActiveCategory,
+    EXAMPLES_DEFAULTS.modernActiveCategory,
   );
   const [activeExampleId, setActiveExampleId] = useLocalStorageState<string | null>(
-    'hudx.examples.modern.activeExampleId',
-    null,
+    EXAMPLES_STORAGE_KEYS.modernActiveExampleId,
+    EXAMPLES_DEFAULTS.modernActiveExampleId,
   );
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [focusedCategory, setFocusedCategory] = useState<string | null>(null);
@@ -985,7 +991,7 @@ const ModernApp = ({
       <nav
         aria-label='Examples navigation'
         style={{
-          width: 280,
+          width: EXAMPLES_LAYOUT.sidebarWidth,
           borderRight: `1px solid ${border}`,
           backgroundColor: navBg,
           color: themeObj.textColor,
@@ -1080,7 +1086,7 @@ const ModernApp = ({
           >
             {t(locale, 'examples.nav.categories')}
           </h2>
-          {categories.map((categoryKey) => {
+          {EXAMPLES_CATEGORIES.map((categoryKey) => {
             const isActive = activeCategory === categoryKey;
             const isHovered = hoveredCategory === categoryKey;
             const isFocused = focusedCategory === categoryKey;
@@ -1147,20 +1153,20 @@ const ModernApp = ({
 
 export default function App() {
   const [mode, setMode] = useLocalStorageState<'classic' | 'modern'>(
-    'hudx.examples.mode',
-    'classic',
+    EXAMPLES_STORAGE_KEYS.mode,
+    EXAMPLES_DEFAULTS.mode,
   );
   const [theme, setTheme] = useLocalStorageState<Theme>(
-    'hudx.examples.theme',
-    'light',
+    EXAMPLES_STORAGE_KEYS.theme,
+    EXAMPLES_DEFAULTS.theme,
   );
   const [locale, setLocale] = useLocalStorageState<Locale>(
-    'hudx.examples.locale',
-    'zh-CN',
+    EXAMPLES_STORAGE_KEYS.locale,
+    EXAMPLES_DEFAULTS.locale,
   );
   const [activeClassicExample, setActiveClassicExample] = useLocalStorageState<string>(
-    'hudx.examples.classic.activeExample',
-    'basic-line',
+    EXAMPLES_STORAGE_KEYS.classicActiveExample,
+    EXAMPLES_DEFAULTS.classicActiveExample,
   );
 
   ThemeManager.setCurrentTheme(theme);

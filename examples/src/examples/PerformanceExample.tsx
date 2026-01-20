@@ -11,6 +11,7 @@ import {
   Theme,
 } from 'hudx-render';
 import { t } from '../i18n';
+import { EXAMPLES_COLORS, EXAMPLES_RENDERER_CANVAS } from '../constants';
 
 type ShapeType = 'circle' | 'rect' | 'line' | 'polyline' | 'polygon';
 
@@ -34,8 +35,8 @@ export const PerformanceExample = ({
     const startTime = performance.now();
     const renderer = Renderer.init(containerRef.current, mode, theme, locale);
 
-    const width = 800;
-    const height = 600;
+    const width = EXAMPLES_RENDERER_CANVAS.width;
+    const height = EXAMPLES_RENDERER_CANVAS.performanceHeight;
 
     for (let i = 0; i < count; i++) {
       const x = getUnit32RandomValues() * width;
@@ -209,10 +210,10 @@ export const PerformanceExample = ({
       <div
         ref={containerRef}
         style={{
-          border: '1px solid #D6D8DA',
+          border: `1px solid ${EXAMPLES_COLORS.border}`,
           borderRadius: 8,
-          width: 800,
-          height: 600,
+          width: EXAMPLES_RENDERER_CANVAS.width,
+          height: EXAMPLES_RENDERER_CANVAS.performanceHeight,
         }}
       />
     </div>

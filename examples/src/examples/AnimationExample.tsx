@@ -11,6 +11,7 @@ import {
 } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
 import { t } from '../i18n';
+import { EXAMPLES_COLORS, EXAMPLES_RENDERER_CANVAS } from '../constants';
 
 export const AnimationExample = ({
   theme = 'light',
@@ -45,7 +46,7 @@ export const AnimationExample = ({
 
     renderer.add(circle);
     renderer.add(rect);
-    renderer.resize(800, 300);
+    renderer.resize(EXAMPLES_RENDERER_CANVAS.width, EXAMPLES_RENDERER_CANVAS.height);
 
     const anim1 = new Animation(
       circle.shape as unknown as Record<string, unknown>,
@@ -117,7 +118,7 @@ export const AnimationExample = ({
             style={{
               padding: '4px 8px',
               borderRadius: 4,
-              border: '1px solid #ddd',
+              border: `1px solid ${EXAMPLES_COLORS.controlBorder}`,
             }}
           >
             <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
@@ -125,7 +126,7 @@ export const AnimationExample = ({
           </select>
         </label>
       </div>
-      <p style={{ marginBottom: 20, color: '#666' }}>
+      <p style={{ marginBottom: 20, color: EXAMPLES_COLORS.secondaryText }}>
         {t(
           locale,
           'examples.animation.desc',
@@ -135,10 +136,10 @@ export const AnimationExample = ({
       <div
         ref={containerRef}
         style={{
-          border: '1px solid #D6D8DA',
+          border: `1px solid ${EXAMPLES_COLORS.border}`,
           borderRadius: 8,
-          width: 800,
-          height: 300,
+          width: EXAMPLES_RENDERER_CANVAS.width,
+          height: EXAMPLES_RENDERER_CANVAS.height,
         }}
       />
     </div>

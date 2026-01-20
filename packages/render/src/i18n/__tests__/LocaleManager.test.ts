@@ -9,6 +9,16 @@ describe('LocaleManager', () => {
     expect(LocaleManager.t('zh-TW', 'data.loading')).toBe('載入中...');
   });
 
+  it('should normalize zh locale variants', () => {
+    expect(LocaleManager.t('zh-hk', 'data.loading')).toBe('載入中...');
+    expect(LocaleManager.t('zh_HK', 'data.loading')).toBe('載入中...');
+    expect(LocaleManager.t('zh-Hant-HK', 'data.loading')).toBe('載入中...');
+    expect(LocaleManager.t('zh-hant-tw', 'data.loading')).toBe('載入中...');
+    expect(LocaleManager.t('zh-hans-cn', 'data.loading')).toBe('加载中...');
+    expect(LocaleManager.t('zh-CHT', 'data.loading')).toBe('載入中...');
+    expect(LocaleManager.t('zh-CHS', 'data.loading')).toBe('加载中...');
+  });
+
   it('should fallback to language code', () => {
     expect(LocaleManager.t('zh', 'data.loading')).toBe('加载中...');
   });
@@ -22,4 +32,3 @@ describe('LocaleManager', () => {
     expect(LocaleManager.t('en', 'missing.key')).toBe('missing.key');
   });
 });
-

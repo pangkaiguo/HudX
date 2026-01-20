@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Renderer, Circle, Text, Locale, ThemeManager, Theme } from 'hudx-render';
 import type { RenderMode } from 'hudx-render';
 import { t } from '../i18n';
+import { EXAMPLES_RENDERER_CANVAS } from '../constants';
 
 export const InteractionExample = ({
   theme = 'light',
@@ -80,7 +81,7 @@ export const InteractionExample = ({
       }),
     );
 
-    renderer.resize(800, 300);
+    renderer.resize(EXAMPLES_RENDERER_CANVAS.width, EXAMPLES_RENDERER_CANVAS.height);
     renderer.flush();
 
     return () => renderer.dispose();
@@ -130,8 +131,8 @@ export const InteractionExample = ({
         style={{
           border: `1px solid ${border}`,
           borderRadius: 8,
-          width: 800,
-          height: 300,
+          width: EXAMPLES_RENDERER_CANVAS.width,
+          height: EXAMPLES_RENDERER_CANVAS.height,
         }}
       />
     </div>

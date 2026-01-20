@@ -173,7 +173,8 @@ HudX supports multiple languages with the ability to add custom languages.
 
 - **English** (en) - Default
 - **Simplified Chinese** (zh, zh-CN)
-- **Traditional Chinese** (zh-TW)
+- **Traditional Chinese (Hong Kong)** (zh-HK)
+- **Traditional Chinese (Taiwan)** (zh-TW)
 
 ### Usage
 
