@@ -36,6 +36,19 @@ export class LocaleManager {
     LocaleManager._locales.set('zh-CN', LocaleManager._locales.get('zh')!);
 
     // Chinese Traditional
+    LocaleManager._locales.set('zh-HK', {
+      'chart.title': '圖表',
+      'chart.legend': '圖例',
+      'chart.tooltip': '提示框',
+      'axis.x': 'X 軸',
+      'axis.y': 'Y 軸',
+      'series.name': '系列',
+      'data.empty': '暫無數據',
+      'data.loading': '載入中...',
+      'data.error': '數據載入錯誤',
+    });
+
+    // Chinese Traditional
     LocaleManager._locales.set('zh-TW', {
       'chart.title': '圖表',
       'chart.legend': '圖例',

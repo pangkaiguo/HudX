@@ -15,23 +15,6 @@ export default defineConfig({
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
-            }
-            return 'vendor';
-          }
-          if (id.includes('hudx-render')) {
-            if (id.includes('graphic/')) return 'hudx-shapes';
-            if (id.includes('animation/')) return 'hudx-animation';
-            if (id.includes('component/')) return 'hudx-components';
-            return 'hudx-render';
-          }
-          if (id.includes('hudx-charts')) {
-            return 'hudx-charts';
-          }
-        },
         chunkFileNames: 'assets/[name]-[hash].js',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
