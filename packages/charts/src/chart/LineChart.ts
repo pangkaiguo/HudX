@@ -374,18 +374,25 @@ export default class LineChart extends Chart {
           let xVal, yVal;
           if (xAxis?.type === 'category') {
             xVal = xDomain[index];
-            if (
+            const raw =
               typeof item === 'object' &&
               item !== null &&
-              item.value !== undefined
-            ) {
-              yVal = item.value;
-            } else {
-              yVal = item;
-            }
+              !Array.isArray(item) &&
+              'value' in item
+                ? (item as any).value
+                : item;
+            yVal = Array.isArray(raw) ? raw[1] ?? raw[0] : raw;
           } else {
-            xVal = item[0];
-            yVal = item[1];
+            const raw =
+              typeof item === 'object' &&
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
+                ? (item as any).value
+                : item;
+            if (!Array.isArray(raw)) return;
+            xVal = raw[0];
+            yVal = raw[1];
           }
 
           if (xVal !== undefined && yVal !== undefined) {
@@ -617,8 +624,12 @@ export default class LineChart extends Chart {
                 // TODO: scale logic for other shapes
 
                 const itemName =
-                  typeof item === 'object' && item.name
-                    ? item.name
+                  typeof item === 'object' &&
+                  item !== null &&
+                  !Array.isArray(item) &&
+                  'name' in item &&
+                  typeof (item as any).name === 'string'
+                    ? (item as any).name
                     : xAxis?.data?.[pointIndex] || '';
                 const itemValue = this._getDataValue(item);
 
@@ -695,7 +706,7 @@ export default class LineChart extends Chart {
             const labelText =
               typeof seriesItem.label?.formatter === 'function'
                 ? seriesItem.label.formatter(item)
-                : String(item.value || item);
+                : String(this._getDataValue(item) ?? item);
 
             const text = new Text({
               shape: { x: point.x, y: point.y - 10, text: labelText },

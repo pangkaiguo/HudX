@@ -405,31 +405,35 @@ export default class BarChart extends Chart {
           let xVal, yVal;
           if (isHorizontal) {
             yVal = yDomain[index];
-            if (
+            const raw =
               typeof item === 'object' &&
-              item !== null &&
-              item.value !== undefined
-            ) {
-              xVal = item.value;
-            } else if (Array.isArray(item)) {
-              xVal = item[0];
-            } else {
-              xVal = item;
-            }
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
+                ? (item as any).value
+                : item;
+            xVal = Array.isArray(raw) ? raw[0] : raw;
           } else if (xAxis?.type === 'category') {
             xVal = xDomain[index];
-            if (
+            const raw =
               typeof item === 'object' &&
-              item !== null &&
-              item.value !== undefined
-            ) {
-              yVal = item.value;
-            } else {
-              yVal = item;
-            }
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
+                ? (item as any).value
+                : item;
+            yVal = Array.isArray(raw) ? raw[1] ?? raw[0] : raw;
           } else {
-            xVal = item[0];
-            yVal = item[1];
+            const raw =
+              typeof item === 'object' &&
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
+                ? (item as any).value
+                : item;
+            if (!Array.isArray(raw)) return;
+            xVal = raw[0];
+            yVal = raw[1];
           }
 
           if (xVal === undefined || yVal === undefined) return;
@@ -861,8 +865,12 @@ export default class BarChart extends Chart {
                 }
 
                 const itemName =
-                  typeof item === 'object' && item.name
-                    ? item.name
+                  typeof item === 'object' &&
+                    item !== null &&
+                    !Array.isArray(item) &&
+                    'name' in item &&
+                    typeof (item as any).name === 'string'
+                    ? (item as any).name
                     : isHorizontal
                       ? yDomain[index]
                       : xAxis?.data?.[index] || '';
@@ -940,8 +948,12 @@ export default class BarChart extends Chart {
 
             rect.on('mousemove', (evt: any) => {
               const itemName =
-                typeof item === 'object' && item.name
-                  ? item.name
+                typeof item === 'object' &&
+                  item !== null &&
+                  !Array.isArray(item) &&
+                  'name' in item &&
+                  typeof (item as any).name === 'string'
+                  ? (item as any).name
                   : isHorizontal
                     ? yDomain[index]
                     : xAxis?.data?.[index] || '';

@@ -50,16 +50,16 @@ export const AdvancedPieExample = ({
       top: 10,
       icon: 'rect',
       // Demonstrating conflict/interaction between width, height and itemWidth
-      width: 400, // Limits the total width. With itemWidth 140, only 1 column fits (2nd column would overflow 200px)
+      width: 300, // Limits the total width. With itemWidth 140, only 1 column fits (2nd column would overflow 200px)
       height: 150, // Limits height, forcing wrap to 2nd column. But 2nd column is clipped by width.
-      itemWidth: 140, // Fixed width for each legend item (icon + text space)
+      itemWidth: 150, // Fixed width for each legend item (icon + text space)
     },
     series: [
       {
         name: 'Distribution',
         type: 'pie',
         radius: 200,
-        center: ['60%', '50%'],
+        center: ['50%', '50%'],
         emphasis: {
           scale: true,
           scaleSize: 1.03,

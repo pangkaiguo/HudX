@@ -559,15 +559,15 @@ option = {
     right: 10,
     top: 10,
     icon: 'rect',
-    width: 400,
+    width: 300,
     height: 150,
-    itemWidth: 140
+    itemWidth: 150
   },
   series: [{
     name: 'Distribution',
     type: 'pie',
     radius: 200,
-    center: ['60%', '50%'],
+    center: ['50%', '50%'],
     emphasis: { scale: true, scaleSize: 1.03, focus: 'self' },
     itemStyle: { borderWidth: 0, borderColor: 'transparent' },
     data: [

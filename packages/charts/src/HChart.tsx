@@ -28,35 +28,85 @@ import HalfDoughnutChart from './chart/HalfDoughnutChart';
 import ScatterChart from './chart/ScatterChart';
 
 export interface HChartProps {
-  /** Chart configuration option */
+  /**
+   * Chart option (ECharts-style).
+   *
+   * Tip: explicitly set `type` for each series to get more accurate TS IntelliSense.
+   */
   option: ChartOption;
-  /** Width in pixels */
+  /**
+   * Chart width (px).
+   *
+   * If omitted, the component uses the container element size.
+   */
   width?: number;
-  /** Height in pixels */
+  /**
+   * Chart height (px).
+   *
+   * If omitted, the component uses the container element size.
+   */
   height?: number;
-  /** CSS class name */
+  /** Container className */
   className?: string;
-  /** Inline style */
+  /** Container style */
   style?: React.CSSProperties;
-  /** Render mode: 'canvas' or 'svg' */
+  /**
+   * Render mode.
+   * @default 'svg'
+   */
   renderMode?: RenderMode;
-  /** Theme: 'light' or 'dark' */
+  /**
+   * Theme.
+   *
+   * If both `theme` and `mode` are provided, `theme` wins.
+   */
   theme?: Theme;
-  /** Mode: 'Light' or 'Dark' (for compatibility) */
+  /**
+   * Compatibility field for legacy usage: `mode: 'Light' | 'Dark'`.
+   *
+   * Internally mapped to `theme: 'light' | 'dark'`.
+   */
   mode?: string;
-  /** Locale: 'en', 'zh', etc. */
+  /**
+   * Locale (affects built-in components such as tooltip/legend and `LocaleManager.t`).
+   * @default 'en'
+   */
   locale?: Locale;
-  /** Event handlers */
+  /**
+   * Event bindings (similar to ECharts `on`).
+   *
+   * @example
+   * ```tsx
+   * <HChart
+   *   option={option}
+   *   onEvents={{
+   *     click: (e) => console.log(e.seriesName, e.value),
+   *     mousemove: (e) => {},
+   *   }}
+   * />
+   * ```
+   */
   onEvents?: {
     [eventName: string]: (event: ChartEvent) => void;
   };
-  /** Whether to merge option */
+  /**
+   * Disable merge (same meaning as ECharts `setOption` -> `notMerge`).
+   * @default false
+   */
   notMerge?: boolean;
-  /** Whether to update lazily */
+  /**
+   * Enable lazyUpdate (same meaning as ECharts `setOption` -> `lazyUpdate`).
+   * @default false
+   */
   lazyUpdate?: boolean;
 }
 
 export interface HChartRef {
+  /**
+   * Get the underlying Chart instance.
+   *
+   * Useful for low-level APIs (e.g. `getDataURL`, `setRenderMode`).
+   */
   getChartInstance: () => Chart | null;
 }
 
