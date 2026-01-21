@@ -49,6 +49,8 @@ export default class LineChart extends Chart {
 
     if (seriesIndex === -1) return;
 
+    if (this._legend && !this._legendSelected.has(name)) return;
+
     this._activeLines.forEach((item, idx) => {
       if (hovered) {
         if (idx === seriesIndex) {

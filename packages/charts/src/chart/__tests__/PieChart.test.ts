@@ -897,4 +897,42 @@ describe('PieChart', () => {
       expect(merged.series[0].radius).toEqual([30, 200]);
     });
   });
+
+  it('should ignore hover when sector is deselected (hidden)', () => {
+    vi.useFakeTimers();
+    const chart = new PieChart(container);
+    chart.setOption({
+      animation: false,
+      series: [
+        {
+          type: 'pie',
+          data: [
+            { value: 100, name: 'A' },
+            { value: 200, name: 'B' },
+          ],
+        },
+      ],
+    });
+
+    const sectors = Array.from((chart as any)._activeSectors.values()) as any[];
+    const sB = sectors.find((s: any) => s.name === 'B');
+    expect(sB.style.opacity).toBeUndefined();
+
+    const legendSelected = (chart as any)._legendSelected as Set<string>;
+    legendSelected.clear();
+    legendSelected.add('B');
+
+    (chart as any)._legend = {};
+
+    (chart as any)._onLegendHover('A', true);
+    vi.advanceTimersByTime(300);
+
+    expect(sB.style.opacity).toBeUndefined();
+
+    (chart as any)._onLegendHover('B', true);
+    vi.advanceTimersByTime(300);
+
+    expect(sB.style.opacity).toBe(1);
+    vi.useRealTimers();
+  });
 });

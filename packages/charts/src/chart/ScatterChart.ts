@@ -26,6 +26,8 @@ export default class ScatterChart extends Chart {
 
     if (seriesIndex === -1) return;
 
+    if (this._legend && !this._legendSelected.has(name)) return;
+
     this._activeScatters.forEach((circles, idx) => {
       if (hovered) {
         if (idx === seriesIndex) {
@@ -134,6 +136,17 @@ export default class ScatterChart extends Chart {
 
       series.forEach((s, seriesIndex) => {
         if (s.type !== 'scatter') return;
+
+        const name = getSeriesDisplayName(
+          (key: string, defaultValue?: string) =>
+            this.t(key, defaultValue),
+          s,
+          seriesIndex,
+        );
+
+        if (this._legend && !this._legendSelected.has(name)) {
+          return;
+        }
 
         const seriesData = s.data || [];
         const color =

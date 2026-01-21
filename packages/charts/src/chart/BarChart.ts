@@ -62,6 +62,8 @@ export default class BarChart extends Chart {
 
     if (seriesIndex === -1) return;
 
+    if (this._legend && !this._legendSelected.has(name)) return;
+
     this._activeBars.forEach((bar, key) => {
       const [sIdx] = key.split('-').map(Number);
 
@@ -895,11 +897,11 @@ export default class BarChart extends Chart {
                     !Array.isArray(item) &&
                     'name' in item &&
                     typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'name' in item &&
-                typeof item.name === 'string'
-                  ? item.name
+                    item !== null &&
+                    !Array.isArray(item) &&
+                    'name' in item &&
+                    typeof item.name === 'string'
+                    ? item.name
                     : isHorizontal
                       ? yDomain[index]
                       : xAxis?.data?.[index] || '';

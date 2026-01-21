@@ -195,10 +195,10 @@ describe('ScatterChart', () => {
         },
       ],
     });
-    
+
     const root = (chart as any)._root;
     const circles = root.children().filter((c: any) => c instanceof Circle);
-    
+
     const c1 = circles[0] as Circle;
     expect(c1).toBeDefined();
   });
@@ -268,5 +268,89 @@ describe('ScatterChart', () => {
     const params = args[3] as any;
 
     expect(params.seriesName).toBe('系列-1');
+  });
+
+  it('should hide scatter points when legend item is deselected', () => {
+    const chart = new ScatterChart(container);
+    (chart as any)._mountLegend = vi.fn();
+    (chart as any)._legend = {};
+
+    chart.setOption({
+      animation: false,
+      legend: {
+        show: true,
+        data: ['Series A', 'Series B'],
+      },
+      xAxis: {},
+      yAxis: {},
+      series: [
+        {
+          name: 'Series A',
+          type: 'scatter',
+          data: [
+            [10, 10],
+            [20, 20],
+          ],
+        },
+        {
+          name: 'Series B',
+          type: 'scatter',
+          data: [
+            [30, 30],
+            [40, 40],
+          ],
+        },
+      ],
+    });
+
+    const legendSelected = (chart as any)._legendSelected as Set<string>;
+    legendSelected.add('Series A');
+    legendSelected.add('Series B');
+
+    (chart as any)._render();
+    const activeScatters = (chart as any)._activeScatters as Map<
+      number,
+      Circle[]
+    >;
+    expect(activeScatters.size).toBe(2);
+
+    legendSelected.delete('Series A');
+
+    (chart as any)._render();
+
+    expect(activeScatters.get(0)).toBeUndefined();
+    expect(activeScatters.get(1)?.length).toBe(2);
+  });
+
+  it('should ignore hover when series is deselected (hidden)', () => {
+    const chart = new ScatterChart(container);
+    (chart as any)._mountLegend = vi.fn();
+    (chart as any)._legend = {};
+    const legendSelected = (chart as any)._legendSelected as Set<string>;
+    legendSelected.add('S1');
+    legendSelected.add('S2');
+
+    chart.setOption({
+      animation: false,
+      legend: { show: true, data: ['S1', 'S2'] },
+      xAxis: {},
+      yAxis: {},
+      series: [
+        { name: 'S1', type: 'scatter', data: [[10, 10]] },
+        { name: 'S2', type: 'scatter', data: [[20, 20]] },
+      ],
+    });
+
+    const activeScatters = (chart as any)._activeScatters as Map<number, any[]>;
+
+    const s2Circles = activeScatters.get(1);
+    expect(s2Circles).toBeDefined();
+    expect(s2Circles![0].style.opacity).toBe(0.8);
+    legendSelected.delete('S1');
+    (chart as any)._onLegendHover('S1', true);
+
+    expect(s2Circles![0].style.opacity).toBe(0.8);
+    (chart as any)._onLegendHover('S2', true);
+    expect(s2Circles![0].style.opacity).toBe(1);
   });
 });

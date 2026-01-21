@@ -1535,6 +1535,8 @@ export default class PieChart extends Chart {
 
     if (!sector) return;
 
+    if (this._legend && !this._legendSelected.has(name)) return;
+
     const cx = sector.shape.cx;
     const cy = sector.shape.cy;
 

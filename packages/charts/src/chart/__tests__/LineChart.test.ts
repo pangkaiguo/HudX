@@ -318,4 +318,33 @@ describe('LineChart', () => {
     expect(p0.marker).toContain('background-color');
     expect(typeof p0.value).toBe('number');
   });
+
+  it('should ignore hover when series is deselected (hidden)', () => {
+    const chart = new LineChart(container);
+    chart.setOption({
+      animation: false,
+      legend: { show: true, data: ['S1', 'S2'] },
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [
+        { name: 'S1', type: 'line', data: [10], itemStyle: { opacity: 0.8 } },
+        { name: 'S2', type: 'line', data: [20], itemStyle: { opacity: 0.8 } },
+      ],
+    });
+
+    const activeLines = (chart as any)._activeLines as Map<number, any>;
+    const s2 = activeLines.get(1);
+
+    expect(s2.line.style.opacity).toBeUndefined();
+
+    const legendSelected = (chart as any)._legendSelected as Set<string>;
+    legendSelected.clear();
+    legendSelected.add('S2');
+
+    (chart as any)._onLegendHover('S1', true);
+    expect(s2.line.style.opacity).toBeUndefined();
+
+    (chart as any)._onLegendHover('S2', true);
+    expect(s2.line.style.opacity).toBe(1);
+  });
 });

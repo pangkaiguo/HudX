@@ -452,4 +452,36 @@ describe('BarChart', () => {
       expect(label.style.opacity).toBeCloseTo(0.8);
     });
   });
+
+  it('should ignore hover when series is deselected (hidden)', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      animation: false,
+      legend: { show: true, data: ['S1', 'S2'] },
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [
+        { name: 'S1', type: 'bar', data: [10], itemStyle: { opacity: 0.8 } },
+        { name: 'S2', type: 'bar', data: [20], itemStyle: { opacity: 0.8 } },
+      ],
+    });
+
+    const activeBars = (chart as any)._activeBars as Map<string, any>;
+    const activeLabels = (chart as any)._activeLabels as Map<string, any>;
+
+    expect(activeBars.size).toBeGreaterThan(0);
+
+    const legendSelected = (chart as any)._legendSelected as Set<string>;
+    legendSelected.clear();
+    legendSelected.add('S2');
+
+    (chart as any)._onLegendHover('S1', true);
+
+    const s2BarKey = Array.from(activeBars.keys()).find(k => k.startsWith('1-'));
+    const s2Bar = activeBars.get(s2BarKey!);
+    expect(s2Bar.style.opacity).toBeCloseTo(0.8);
+
+    (chart as any)._onLegendHover('S2', true);
+    expect(s2Bar.style.opacity).toBeCloseTo(1);
+  });
 });
