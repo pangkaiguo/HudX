@@ -15,7 +15,45 @@ const BundleLineExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) 
       title: {
         text: t(locale, 'examples.bundle.lineChart.chartTitle', 'Independent LineChart Bundle'),
       },
-      tooltip: { show: true, trigger: 'axis' },
+      tooltip: {
+        show: true,
+        trigger: 'axis',
+        backgroundColor: '#fff',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        textStyle: {
+          color: '#333',
+        },
+        formatter: (params: any) => {
+          const items = Array.isArray(params) ? params : [params];
+          if (items.length === 0) return '';
+          const title = items[0]?.name ?? '';
+  
+          const rows = items
+            .map((item: any) => {
+              const marker = item.marker || '';
+              const label = item.seriesName || item.name || '';
+              const value = item.value ?? '-';
+              return `
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;align-items:center;">
+                    ${marker}
+                    <span style="font-weight:bold;margin-left:4px;">${label}</span>
+                  </div>
+                  <div style="padding-left:18px;">${value}</div>
+                </div>
+              `;
+            })
+            .join('');
+  
+          return `
+            <div>
+              <div style="font-weight:bold;margin-bottom:6px;">${title}</div>
+              ${rows}
+            </div>
+          `;
+        },
+      },
       xAxis: { data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
       yAxis: {},
       series: [

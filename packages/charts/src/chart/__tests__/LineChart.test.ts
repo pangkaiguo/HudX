@@ -184,4 +184,92 @@ describe('LineChart', () => {
     expect(s1.line.style.lineWidth).toBe(1);
     expect(s2.line.style.opacity).toBeCloseTo(1);
   });
+
+  it('should provide marker/name/value to tooltip formatter (item trigger)', () => {
+    const formatter = vi.fn<(params: any) => string>(() => 'x');
+    const chart = new LineChart(container);
+    chart.setOption({
+      animation: false,
+      tooltip: { show: true, trigger: 'item', formatter },
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          name: 'S1',
+          type: 'line',
+          data: [10, 20],
+          symbol: 'circle',
+          symbolSize: 8,
+          itemStyle: { color: '#5470c6' },
+        },
+      ],
+    } satisfies ChartOption);
+
+    const activeLines = (chart as any)._activeLines as Map<
+      number,
+      { symbols: any[] }
+    >;
+    const symbol = activeLines.get(0)!.symbols[0];
+    expect(symbol).toBeDefined();
+
+    symbol.trigger('mouseover');
+
+    expect(formatter).toHaveBeenCalledTimes(1);
+    const firstCall = formatter.mock.calls[0] as any;
+    expect(firstCall).toBeDefined();
+    const arg = firstCall[0] as any;
+    expect(arg.marker).toContain('background-color');
+    expect(arg.seriesName).toBe('S1');
+    expect(arg.name).toBe('A');
+    expect(arg.value).toBe(10);
+  });
+
+  it('should provide marker/name/value to tooltip formatter (axis trigger)', () => {
+    const formatter = vi.fn<(params: any) => string>(() => 'x');
+    const chart = new LineChart(container);
+    chart.setOption({
+      animation: false,
+      tooltip: { show: true, trigger: 'axis', formatter },
+      xAxis: { type: 'category', data: ['A', 'B', 'C'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          name: 'S1',
+          type: 'line',
+          data: [10, 20, 30],
+          itemStyle: { color: '#5470c6' },
+        },
+        {
+          name: 'S2',
+          type: 'line',
+          data: [5, 15, 25],
+          itemStyle: { color: '#91cc75' },
+        },
+      ],
+    } satisfies ChartOption);
+
+    const root = (chart as any)._root;
+    const children = root.children();
+    const interact = children.find(
+      (c: any) =>
+        c?.constructor?.name === 'Rect' &&
+        c.style?.fill === 'transparent' &&
+        c.cursor === 'default',
+    );
+    expect(interact).toBeDefined();
+
+    interact.trigger('mousemove', { offsetX: 120, offsetY: 120 });
+
+    expect(formatter).toHaveBeenCalledTimes(1);
+    const firstCall = formatter.mock.calls[0] as any;
+    expect(firstCall).toBeDefined();
+    const paramsList = firstCall[0] as any[];
+    expect(Array.isArray(paramsList)).toBe(true);
+    expect(paramsList.length).toBe(2);
+
+    const p0 = paramsList[0];
+    expect(p0.name).toBe('A');
+    expect(p0.marker).toContain('background-color');
+    expect(typeof p0.value).toBe('number');
+  });
 });

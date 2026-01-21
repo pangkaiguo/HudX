@@ -643,6 +643,10 @@ export default class LineChart extends Chart {
                   data: item,
                   value: itemValue,
                   color: typeof pointFill === 'string' ? pointFill : undefined,
+                  marker:
+                    typeof pointFill === 'string'
+                      ? this._getTooltipMarker(pointFill)
+                      : undefined,
                 };
 
                 const content = this._generateTooltipContent(params);
