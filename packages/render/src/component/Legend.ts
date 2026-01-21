@@ -36,8 +36,8 @@ export interface LegendItem {
 export interface LegendOption {
   show?: boolean;
   orient?: 'horizontal' | 'vertical';
-  x?: number | 'left' | 'center' | 'right';
-  y?: number | 'top' | 'middle' | 'bottom';
+  x?: number | string | 'left' | 'center' | 'right';
+  y?: number | string | 'top' | 'middle' | 'bottom';
   right?: number | string;
   bottom?: number | string;
   backgroundColor?: string;
@@ -48,11 +48,13 @@ export interface LegendOption {
   inactiveColor?: string;
   padding?: number;
   fontSize?: number;
+  fontFamily?: string;
+  fontWeight?: any;
   itemGap?: number;
   itemWidth?: number;
   iconGap?: number;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   onSelect?: (name: string, selected: boolean) => void;
   onHover?: (name: string, hovered: boolean) => void;
   selectedMode?: 'single' | 'multiple';
@@ -181,7 +183,7 @@ export default class Legend extends Group {
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d')!;
-    ctx.font = `${fontSize}px ${ThemeManager.getTheme().fontFamily}`;
+    ctx.font = `${fontSize}px ${this._option.fontFamily || ThemeManager.getTheme().fontFamily}`;
 
     const wrapText = (text: string, maxWidth: number): string[] => {
       let lines: string[] = [];
@@ -252,8 +254,26 @@ export default class Legend extends Group {
       };
     });
 
-    const containerWidth = this._option.width || this._containerWidth;
-    const containerHeight = this._option.height || this._containerHeight;
+    const resolveSize = (
+      val: number | string | undefined,
+      total: number,
+    ): number | undefined => {
+      if (val === undefined) return undefined;
+      if (typeof val === 'number') return val;
+      const str = String(val).trim();
+      if (str.endsWith('%')) {
+        const p = parseFloat(str);
+        if (!Number.isFinite(p)) return undefined;
+        return (p / 100) * total;
+      }
+      const n = parseFloat(str);
+      return Number.isFinite(n) ? n : undefined;
+    };
+
+    const containerWidth =
+      resolveSize(this._option.width, this._containerWidth) ?? this._containerWidth;
+    const containerHeight =
+      resolveSize(this._option.height, this._containerHeight) ?? this._containerHeight;
 
     const rows: { items: any[]; width: number; height: number }[] = [];
     let currentRowItems: any[] = [];
@@ -338,10 +358,8 @@ export default class Legend extends Group {
     let totalHeight = 0;
     const align = this._option.align || 'left';
 
-    // If width is specified in option, use it for alignment reference?
-    const referenceWidth = this._option.width
-      ? this._option.width - padding * 2
-      : maxLineMetric;
+    const hasExplicitWidth = this._option.width !== undefined;
+    const referenceWidth = hasExplicitWidth ? containerWidth - padding * 2 : maxLineMetric;
 
     if (this._option.orient === 'horizontal') {
       rows.forEach((row) => {
@@ -367,10 +385,7 @@ export default class Legend extends Group {
         });
         currentY += row.height + itemGap;
       });
-      totalWidth = referenceWidth + padding * 2;
-      if (!this._option.width) {
-        totalWidth = maxLineMetric + padding * 2;
-      }
+      totalWidth = hasExplicitWidth ? containerWidth : maxLineMetric + padding * 2;
       totalHeight = currentY - itemGap + padding;
     } else {
       rows.forEach((col) => {
@@ -498,8 +513,11 @@ export default class Legend extends Group {
           style: {
             fill: customTextStyle.color || this._option.textColor,
             fontSize: customTextStyle.fontSize || fontSize,
-            fontWeight: customTextStyle.fontWeight,
-            fontFamily: customTextStyle.fontFamily,
+            fontWeight: customTextStyle.fontWeight || this._option.fontWeight,
+            fontFamily:
+              customTextStyle.fontFamily ||
+              this._option.fontFamily ||
+              ThemeManager.getTheme().fontFamily,
             opacity: isSelected ? 1 : 0.5,
             textBaseline: 'middle',
           },
@@ -558,6 +576,22 @@ export default class Legend extends Group {
       this.add(interactRect);
     });
 
+    const resolveOffset = (
+      val: number | string | undefined,
+      total: number,
+    ): number | undefined => {
+      if (val === undefined) return undefined;
+      if (typeof val === 'number') return val;
+      const str = String(val).trim();
+      if (str.endsWith('%')) {
+        const p = parseFloat(str);
+        if (!Number.isFinite(p)) return undefined;
+        return (p / 100) * total;
+      }
+      const n = parseFloat(str);
+      return Number.isFinite(n) ? n : undefined;
+    };
+
     let x: number;
     if (typeof this._option.x === 'number') {
       x = this._option.x;
@@ -567,12 +601,18 @@ export default class Legend extends Group {
       x = Math.max(0, this._containerWidth - totalWidth - 10);
     } else if (this._option.x === 'center') {
       x = Math.max(0, (this._containerWidth - totalWidth) / 2);
+    } else if (typeof this._option.x === 'string') {
+      const px = resolveOffset(this._option.x, this._containerWidth);
+      if (px !== undefined) {
+        x = Math.max(0, px);
+      } else if (this._option.right !== undefined) {
+        const rightPx = resolveOffset(this._option.right, this._containerWidth) ?? 10;
+        x = Math.max(0, this._containerWidth - totalWidth - rightPx);
+      } else {
+        x = Math.max(0, this._containerWidth - totalWidth - 10);
+      }
     } else if (this._option.right !== undefined) {
-      const rightVal = this._option.right;
-      const rightPx =
-        typeof rightVal === 'number'
-          ? rightVal
-          : parseFloat(String(rightVal)) || 10;
+      const rightPx = resolveOffset(this._option.right, this._containerWidth) ?? 10;
       x = Math.max(0, this._containerWidth - totalWidth - rightPx);
     } else {
       x = Math.max(0, this._containerWidth - totalWidth - 10);
@@ -585,12 +625,22 @@ export default class Legend extends Group {
       y = 10;
     } else if (this._option.y === 'middle') {
       y = Math.max(0, (this._containerHeight - totalHeight) / 2);
+    } else if (this._option.y === 'bottom') {
+      y = Math.max(0, this._containerHeight - totalHeight - 10);
+    } else if (typeof this._option.y === 'string') {
+      const px = resolveOffset(this._option.y, this._containerHeight);
+      if (px !== undefined) {
+        y = Math.max(0, px);
+      } else if (this._option.bottom !== undefined) {
+        const bottomPx =
+          resolveOffset(this._option.bottom, this._containerHeight) ?? 10;
+        y = Math.max(0, this._containerHeight - totalHeight - bottomPx);
+      } else {
+        y = 10;
+      }
     } else if (this._option.bottom !== undefined) {
-      const bottomVal = this._option.bottom;
       const bottomPx =
-        typeof bottomVal === 'number'
-          ? bottomVal
-          : parseFloat(String(bottomVal)) || 10;
+        resolveOffset(this._option.bottom, this._containerHeight) ?? 10;
       y = Math.max(0, this._containerHeight - totalHeight - bottomPx);
     } else {
       y = 10;
@@ -638,6 +688,14 @@ export default class Legend extends Group {
     else if (opt.x === 'center') {
       s.left = '50%';
       s.transform = 'translateX(-50%)';
+    } else if (typeof opt.x === 'string') {
+      const str = opt.x.trim();
+      if (str.endsWith('%')) {
+        s.left = str;
+      } else {
+        const n = parseFloat(str);
+        if (Number.isFinite(n)) s.left = n + 'px';
+      }
     } else {
       if (opt.right !== undefined) s.right = formatSize(opt.right) || '';
       else s.right = '10px';
@@ -651,6 +709,14 @@ export default class Legend extends Group {
       s.transform = s.transform
         ? s.transform + ' translateY(-50%)'
         : 'translateY(-50%)';
+    } else if (typeof opt.y === 'string') {
+      const str = opt.y.trim();
+      if (str.endsWith('%')) {
+        s.top = str;
+      } else {
+        const n = parseFloat(str);
+        if (Number.isFinite(n)) s.top = n + 'px';
+      }
     } else {
       if (opt.bottom !== undefined) s.bottom = formatSize(opt.bottom) || '';
       else s.top = '10px';

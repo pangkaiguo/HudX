@@ -1195,6 +1195,7 @@ export default class Chart {
     const option = this._option;
     if (option.legend?.show === false) return;
     const theme = this.getThemeConfig();
+    const legendTextStyle = (option.legend as any)?.textStyle || {};
 
     if (this._legend) {
       this._legend.dispose();
@@ -1214,14 +1215,27 @@ export default class Chart {
       bottom: posBottom,
       width: option.legend?.width,
       height: option.legend?.height,
+      padding: Array.isArray(option.legend?.padding)
+        ? option.legend?.padding?.[0]
+        : option.legend?.padding,
+      itemGap: option.legend?.itemGap,
+      itemWidth: option.legend?.itemWidth,
+      inactiveColor: option.legend?.inactiveColor ?? theme.borderColor,
+      borderColor: option.legend?.borderColor ?? theme.borderColor,
+      borderWidth: option.legend?.borderWidth,
+      borderRadius: Array.isArray(option.legend?.borderRadius)
+        ? option.legend?.borderRadius?.[0]
+        : option.legend?.borderRadius,
       selectedMode: option.legend?.selectedMode ?? 'multiple',
       renderMode: option.legend?.renderMode,
       formatter: option.legend?.formatter,
       tableHead: option.legend?.tableHead,
       itemMaxWidth: option.legend?.itemMaxWidth,
       align: option.legend?.align,
-      textColor: theme.legendTextColor,
-      fontSize: option.legend?.fontSize ?? theme.fontSize,
+      textColor: legendTextStyle.color ?? theme.legendTextColor,
+      fontSize: legendTextStyle.fontSize ?? option.legend?.fontSize ?? theme.fontSize,
+      fontFamily: legendTextStyle.fontFamily ?? theme.fontFamily,
+      fontWeight: legendTextStyle.fontWeight,
       backgroundColor: option.legend?.backgroundColor ?? theme.backgroundColor,
       onSelect: (name: string, selected: boolean) => {
         if (this._legend) {
@@ -1284,8 +1298,17 @@ export default class Chart {
       });
     }
 
-    if (!this._hasInitLegend) {
-      finalItems.forEach((item) => this._legendSelected.add(item.name));
+    if (option.legend?.selected && typeof option.legend.selected === 'object') {
+      const all = new Set(finalItems.map((i: any) => i.name));
+      const selMap = option.legend.selected as Record<string, boolean>;
+      Object.keys(selMap).forEach((name) => {
+        if (selMap[name] === false) all.delete(name);
+        else if (selMap[name] === true) all.add(name);
+      });
+      this._legendSelected = all;
+      this._hasInitLegend = true;
+    } else if (!this._hasInitLegend) {
+      finalItems.forEach((item: any) => this._legendSelected.add(item.name));
       this._hasInitLegend = true;
     }
 

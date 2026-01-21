@@ -56,6 +56,9 @@ class TestChart extends Chart {
   public testGenerateTooltipContent(params: any): string {
     return this._generateTooltipContent(params);
   }
+  public testMountLegend(items: any[]): void {
+    this._mountLegend(items);
+  }
   protected _render(): void { }
 }
 
@@ -218,7 +221,7 @@ describe('Chart (Core)', () => {
       expect(handler).toHaveBeenCalledTimes(2);
       expect(handler.mock.calls[1][0].show).toBe(false);
     });
-
+ 
     it('should localize loading text based on locale', () => {
       const chart = new TestChart(document.createElement('div'));
       const handler = vi.fn();
@@ -232,6 +235,105 @@ describe('Chart (Core)', () => {
       chart.setLocale('zh-TW');
       chart.showLoading();
       expect(handler.mock.calls[0][0].text).toBe('載入中...');
+    });
+  });
+
+  describe('Legend', () => {
+    it('should apply legend options from ChartOption', () => {
+      const dom = document.createElement('div');
+      Object.defineProperty(dom, 'clientWidth', { value: 400 });
+      Object.defineProperty(dom, 'clientHeight', { value: 300 });
+      const chart = new TestChart(dom);
+
+      chart.setOption({
+        legend: {
+          show: true,
+          orient: 'horizontal',
+          right: '10%',
+          top: '20%',
+          itemGap: 12,
+          itemWidth: 80,
+          padding: 10,
+          inactiveColor: '#999',
+          borderColor: '#123',
+          borderWidth: 2,
+          borderRadius: 4,
+          selectedMode: 'multiple',
+          selected: { A: true, B: false },
+          textStyle: {
+            color: 'rgb(1,2,3)',
+            fontSize: 16,
+            fontFamily: 'serif',
+            fontWeight: 'bold',
+          },
+        },
+      } satisfies ChartOption);
+
+      chart.testMountLegend([
+        { name: 'A', color: 'red', icon: 'rect' },
+        { name: 'B', color: 'blue', icon: 'rect' },
+      ]);
+
+      const legend = (chart as any)._legend;
+      expect(legend).toBeDefined();
+
+      const bg = legend
+        .children()
+        .find(
+          (c: any) =>
+            c?.constructor?.name === 'Rect' && c.style?.stroke === '#123',
+        );
+      expect(bg).toBeDefined();
+
+      const totalWidth = bg.shape.width as number;
+      const t = legend.attr('transform');
+      expect(t.y).toBeCloseTo(60);
+      expect(t.x).toBeCloseTo(400 - totalWidth - 40, 2);
+
+      const itemRects = (legend as any)._itemRects as Map<string, any>;
+      expect(itemRects.get('A').style.fill).toBe('red');
+      expect(itemRects.get('B').style.fill).toBe('#999');
+
+      const texts = legend
+        .children()
+        .filter((c: any) => c?.constructor?.name === 'Text');
+      expect(texts.length).toBeGreaterThan(0);
+      const firstText = texts[0];
+      expect(firstText.style.fill).toBe('rgb(1,2,3)');
+      expect(firstText.style.fontSize).toBe(16);
+      expect(firstText.style.fontFamily).toBe('serif');
+      expect(firstText.style.fontWeight).toBe('bold');
+
+      const interactRects = legend
+        .children()
+        .filter((c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer');
+      expect(interactRects.length).toBe(2);
+      const [r1, r2] = interactRects.sort((a: any, b: any) => a.shape.x - b.shape.x);
+      const gap = r2.shape.x - (r1.shape.x + r1.shape.width);
+      expect(gap).toBeCloseTo(12, 2);
+    });
+
+    it('should support percent left/top positioning', () => {
+      const dom = document.createElement('div');
+      Object.defineProperty(dom, 'clientWidth', { value: 400 });
+      Object.defineProperty(dom, 'clientHeight', { value: 300 });
+      const chart = new TestChart(dom);
+
+      chart.setOption({
+        legend: {
+          show: true,
+          orient: 'vertical',
+          left: '10%',
+          top: '20%',
+        },
+      } satisfies ChartOption);
+
+      chart.testMountLegend([{ name: 'A', color: 'red', icon: 'rect' }]);
+
+      const legend = (chart as any)._legend;
+      const t = legend.attr('transform');
+      expect(t.x).toBeCloseTo(40, 2);
+      expect(t.y).toBeCloseTo(60, 2);
     });
   });
 
