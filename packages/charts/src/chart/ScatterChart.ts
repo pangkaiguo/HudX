@@ -1,4 +1,10 @@
-import { Chart } from 'hudx-render';
+import {
+  Chart,
+  type SeriesOption,
+  type ChartData,
+  type AxisOption,
+  type ChartEvent,
+} from 'hudx-render';
 import {
   createLinearScale,
   createOrdinalScale,
@@ -69,7 +75,7 @@ export default class ScatterChart extends Chart {
         ? option.yAxis[0]
         : option.yAxis;
 
-      let data: any[] = [];
+      let data: ChartData[] = [];
       series.forEach((s) => {
         if (s.type === 'scatter' && s.show !== false) {
           data = data.concat(s.data || []);
@@ -92,7 +98,7 @@ export default class ScatterChart extends Chart {
           : createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
       try {
-        this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, {
+        this._renderAxes((xAxis || {}) as AxisOption, (yAxis || {}) as AxisOption, plotX, plotY, plotWidth, plotHeight, {
           x: xScale,
           y: yScale,
         });
@@ -104,9 +110,9 @@ export default class ScatterChart extends Chart {
         const aria = option.aria;
         const ariaDecals =
           aria?.enabled && aria?.decal?.show ? aria.decal.decals || [] : [];
-        const items = (series as any[])
-          .filter((s: any) => s.type === 'scatter' && s.show !== false)
-          .map((s: any, i: number) => ({
+        const items = (series as SeriesOption[])
+          .filter((s) => s.type === 'scatter' && s.show !== false)
+          .map((s, i) => ({
             name: getSeriesDisplayName(
               (key: string, defaultValue?: string) =>
                 this.t(key, defaultValue),
@@ -126,12 +132,14 @@ export default class ScatterChart extends Chart {
         this._mountLegend(items);
       }
 
-      series.forEach((s: any, seriesIndex: number) => {
+      series.forEach((s, seriesIndex) => {
         if (s.type !== 'scatter') return;
 
         const seriesData = s.data || [];
         const color =
           s.itemStyle?.color || s.color || this._getSeriesColor(seriesIndex);
+        const opacity =
+          s.itemStyle?.opacity !== undefined ? s.itemStyle.opacity : 0.8;
         const symbolSize = s.symbolSize || 10;
 
         seriesData.forEach((item: any, index: number) => {
@@ -190,7 +198,7 @@ export default class ScatterChart extends Chart {
             },
             style: {
               fill: color,
-              opacity: 0.8,
+              opacity: opacity,
             },
             z: Z_SERIES,
           });
@@ -207,8 +215,9 @@ export default class ScatterChart extends Chart {
               circle.attr('style', { opacity: 1 });
 
               const itemName =
-                typeof item === 'object' && item.name ? item.name : '';
+                typeof item === 'object' && item !== null && 'name' in item ? item.name : '';
               const params = {
+                type: 'showTip',
                 componentType: 'series',
                 seriesType: 'scatter',
                 seriesIndex,
@@ -242,7 +251,7 @@ export default class ScatterChart extends Chart {
 
             circle.on('mouseout', () => {
               circle.attr('shape', { r: symbolSize / 2 });
-              circle.attr('style', { opacity: 0.8 });
+              circle.attr('style', { opacity: opacity });
               this._tooltip!.hide();
             });
           }

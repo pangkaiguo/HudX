@@ -158,6 +158,51 @@ describe('ScatterChart', () => {
     expect(c2.shape.r).toBe(15);
   });
 
+  it('should support itemStyle properties', () => {
+    const chart = new ScatterChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'value' },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'scatter',
+          data: [[10, 10]],
+          itemStyle: {
+            color: 'red',
+            opacity: 0.5,
+          },
+        },
+      ],
+    });
+
+    const root = (chart as any)._root;
+    const circle = root.children().find((c: any) => c instanceof Circle);
+    expect(circle.style.fill).toBe('red');
+    expect(circle.style.opacity).toBe(0.5);
+  });
+
+  it('should support scale option on axes', () => {
+    const chart = new ScatterChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'value', scale: true },
+      yAxis: { type: 'value', scale: true },
+      series: [
+        {
+          type: 'scatter',
+          data: [[100, 100], [200, 200]],
+        },
+      ],
+    });
+    
+    const root = (chart as any)._root;
+    const circles = root.children().filter((c: any) => c instanceof Circle);
+    
+    const c1 = circles[0] as Circle;
+    expect(c1).toBeDefined();
+  });
+
   it('should show tooltip with default series name when series name is missing', () => {
     const chart = new ScatterChart(container);
     const option: ChartOption = {

@@ -12,6 +12,21 @@ import {
   EventHelper,
 } from 'hudx-render';
 
+interface PieSector extends Sector {
+  __baseR?: number;
+  __initialStyle?: Record<string, any>;
+  __seriesItem?: SeriesOption;
+  __label?: Text;
+  __labelLine?: Polyline;
+  __targetShape?: {
+    startAngle: number;
+    endAngle: number;
+    r: number;
+    r0: number;
+  };
+  __hoverOpacityOverride?: number;
+}
+
 /**
  * PieChart - Pie chart implementation
  *
@@ -27,7 +42,7 @@ import {
 // Currently relying on monkey-patching properties like __initialStyle, __label, etc.
 
 export default class PieChart extends Chart {
-  private _activeSectors: Map<string, Sector> = new Map();
+  private _activeSectors: Map<string, PieSector> = new Map();
   private _centerLabel: Text | null = null;
   private _restoreTimeout: any = null;
   private _prevRoseType: boolean | string = false;
@@ -102,7 +117,7 @@ export default class PieChart extends Chart {
 
   // --- Render Helpers ---
 
-  private _resetChartState(): Map<string, Sector> {
+  private _resetChartState(): Map<string, PieSector> {
     if (this._legend) {
       this._root.remove(this._legend);
     }
@@ -193,25 +208,23 @@ export default class PieChart extends Chart {
   private _getIconShape(type: string | undefined): string {
     if (type === 'rect') return 'border-radius:2px;';
     if (type === 'circle') return 'border-radius:50%;';
-    if (type === 'line') return 'height:2px;margin-top:4px;'; // simplified
-    // Default to Legend's default behavior if not specified, but here we return CSS for tooltip
+    if (type === 'line') return 'height:2px;margin-top:4px;';
     return 'border-radius:50%;';
   }
 
   protected _getTooltipMarker(color: string): string {
-    // Try to sync with legend icon
     const legendIcon = this._option.legend?.icon || 'circle';
     let borderRadius = '50%'; // Default circle
-    let sizeStyle = 'width:10px;height:10px;';
+    let sizeStyle = 'width:12px;height:12px;';
 
     if (legendIcon === 'rect') {
       borderRadius = '2px';
     } else if (legendIcon === 'line') {
       borderRadius = '0';
-      sizeStyle = 'width:12px;height:2px;margin-top:4px;'; // Center vertically roughly
+      sizeStyle = 'width:12px;height:2px;margin-top:4px;';
     }
 
-    return `<span style="display:inline-block;margin-right:4px;${sizeStyle}border-radius:${borderRadius};background-color:${color};"></span>`;
+    return `<span style="display:inline-block;margin-right:8px;${sizeStyle}border-radius:${borderRadius};background-color:${color};"></span>`;
   }
 
   private _getMaxValueForRoseType(seriesItem: any, data: any[]): number {
@@ -260,7 +273,7 @@ export default class PieChart extends Chart {
     r: number;
     r0: number;
     maxValue: number;
-    oldSectors: Map<string, Sector>;
+    oldSectors: Map<string, PieSector>;
   }): any[] {
     const {
       data,
@@ -276,8 +289,13 @@ export default class PieChart extends Chart {
       oldSectors,
     } = params;
     const labelLayoutList: any[] = [];
-    let currentAngle = startAngle;
 
+    // Pre-calculate angles to handle minAngle
+    const count = data.length;
+    const angles: number[] = new Array(count).fill(0);
+    const itemRs: number[] = new Array(count).fill(r);
+
+    // 1. Calculate raw angles and radius
     data.forEach((item: ChartData, index: number) => {
       const value = this._getDataValue(item);
       if (typeof value !== 'number') return;
@@ -288,11 +306,61 @@ export default class PieChart extends Chart {
         value,
         percent,
         totalAngle,
-        data.length,
+        count,
         r,
         r0,
         maxValue,
       );
+      angles[index] = angle;
+      itemRs[index] = itemR;
+    });
+
+    // 2. Apply minAngle (only for non-roseType)
+    if (!seriesItem.roseType && seriesItem.minAngle) {
+      const minAngleRad = (seriesItem.minAngle * Math.PI) / 180;
+      let angleSum = 0;
+      let restAngle = totalAngle;
+      let restCount = count;
+
+      // First pass: identify sectors needing minAngle
+      const needsFix: number[] = [];
+      angles.forEach((a, i) => {
+        if (a < minAngleRad) {
+          needsFix.push(i);
+          restAngle -= minAngleRad;
+          restCount--;
+        } else {
+          angleSum += a;
+        }
+      });
+
+      if (restAngle < 0) {
+        const scale = totalAngle / (needsFix.length * minAngleRad + angleSum);
+      } else {
+        needsFix.forEach(i => {
+          angles[i] = minAngleRad;
+        });
+        if (angleSum > 0) {
+          const scale = restAngle / angleSum;
+          angles.forEach((a, i) => {
+            if (!needsFix.includes(i)) {
+              angles[i] *= scale;
+            }
+          });
+        }
+      }
+    }
+
+    let currentAngle = startAngle;
+    const clockwise = seriesItem.clockwise !== false;
+
+    data.forEach((item: ChartData, index: number) => {
+      const value = this._getDataValue(item);
+      if (typeof value !== 'number') return;
+
+      const angle = angles[index];
+      const itemR = itemRs[index];
+      const percent = total > 0 ? value / total : 0;
 
       let itemName = `item-${index + 1}`;
       if (
@@ -309,8 +377,18 @@ export default class PieChart extends Chart {
         return;
       }
 
-      const targetStart = currentAngle;
-      const targetEnd = currentAngle + angle;
+      let targetStart: number;
+      let targetEnd: number;
+
+      if (clockwise) {
+        targetStart = currentAngle;
+        targetEnd = currentAngle + angle;
+        currentAngle += angle;
+      } else {
+        targetStart = currentAngle;
+        targetEnd = currentAngle - angle;
+        currentAngle -= angle;
+      }
 
       // Animation Logic
       let initialStart = targetStart;
@@ -327,6 +405,8 @@ export default class PieChart extends Chart {
         initialR0 = oldSector.shape.r0;
       }
 
+      const realAngle = targetEnd - targetStart;
+
       const sector = this._createSector({
         item,
         index,
@@ -338,8 +418,10 @@ export default class PieChart extends Chart {
         r0,
         currentAngle: initialStart,
         angle: initialEnd - initialStart,
+        clockwise,
+        anticlockwise: realAngle < 0,
       });
-      (sector as any).__targetShape = {
+      sector.__targetShape = {
         startAngle: targetStart,
         endAngle: targetEnd,
         r: itemR,
@@ -351,28 +433,10 @@ export default class PieChart extends Chart {
         sector.shape.r = initialR;
         sector.shape.r0 = initialR0;
       } else {
-        // Entry animation (grow from 0 angle)
-        // initialStart = targetStart;
-        // initialEnd = targetStart;
-        // Already set above.
-        // For Rose Chart, we also want to animate radius from r0 (or 0) to targetR?
-        // ECharts roseType animation: sectors grow out.
-        // Current logic: animate startAngle/endAngle.
-        // If roseType, radius is variable.
         if (seriesItem.roseType) {
           sector.shape.r = r0; // Start from inner radius
         }
       }
-
-      // Important: if we have entry animation, we should probably hide label initially?
-      // Or just let it layout normally.
-      // The issue is likely that label layout uses current sector shape.
-      // If sector shape is animating (e.g. radius is small), label might be placed incorrectly.
-      // But we calculate label position in _layoutLabels later, using 'r' and 'r0' passed to it,
-      // NOT sector.shape.r.
-      // Wait, _layoutLabels uses passed 'r', which is the FINAL radius.
-      // So labels are calculated for the final position.
-      // But the sector is animating.
 
       this._root.add(sector);
       this._activeSectors.set(itemName, sector);
@@ -448,6 +512,7 @@ export default class PieChart extends Chart {
       } else {
         sector.shape.startAngle = targetStart;
         sector.shape.endAngle = targetEnd;
+        sector.shape.anticlockwise = targetEnd - targetStart < 0;
         sector.shape.r = itemR;
         sector.shape.r0 = r0;
       }
@@ -484,17 +549,11 @@ export default class PieChart extends Chart {
         // Fix: Initially hide label if entry animation is active
         if (shouldAnimate && !oldSector && labelConfig.isVisible) {
           labelConfig.isVisible = false;
-          // We can fade it in after animation or just let it appear?
-          // For now, let's just make it invisible if it's entry animation,
-          // and then fade in?
-          // Better approach: animate opacity from 0 to 1
           labelConfig.opacity = 0;
           labelConfig.fadeIn = true;
         }
         labelLayoutList.push(labelConfig);
       }
-
-      currentAngle += angle;
     });
 
     return labelLayoutList;
@@ -539,7 +598,9 @@ export default class PieChart extends Chart {
     r0: number;
     currentAngle: number;
     angle: number;
-  }) {
+    clockwise?: boolean;
+    anticlockwise?: boolean;
+  }): PieSector {
     const {
       item,
       index,
@@ -551,6 +612,8 @@ export default class PieChart extends Chart {
       r0,
       currentAngle,
       angle,
+      clockwise,
+      anticlockwise,
     } = params;
 
     const itemStyle = seriesItem.itemStyle || {};
@@ -588,7 +651,7 @@ export default class PieChart extends Chart {
         r0,
         startAngle: currentAngle,
         endAngle: currentAngle + angle,
-        anticlockwise: false,
+        anticlockwise: anticlockwise,
       },
       style: {
         fill: fillStyle,
@@ -606,18 +669,18 @@ export default class PieChart extends Chart {
       },
       z: Z_SERIES,
       cursor: this._tooltip || seriesItem.emphasis ? 'pointer' : 'default',
-    });
+    }) as PieSector;
 
     // TODO: Replace these monkey-patched properties with a proper storage or extended class
-    (sector as any).__baseR = itemR;
-    (sector as any).__initialStyle = { ...sector.style };
-    (sector as any).__seriesItem = seriesItem;
+    sector.__baseR = itemR;
+    sector.__initialStyle = { ...sector.style };
+    sector.__seriesItem = seriesItem;
 
     return sector;
   }
 
   private _bindSectorEvents(
-    sector: Sector,
+    sector: PieSector,
     seriesItem: any,
     item: any,
     index: number,
@@ -723,8 +786,6 @@ export default class PieChart extends Chart {
         rafId = null;
 
         const currentEnd = sector.shape.endAngle;
-        // Calculate percent based on angle for tooltip dynamic update?
-        // Or just use static percent? Original code calculated partPercent.
         const partPercent =
           ((currentEnd - sector.shape.startAngle) / (Math.PI * 2)) * 100;
 
@@ -738,8 +799,7 @@ export default class PieChart extends Chart {
         );
         const content = this._generateTooltipContent(params);
 
-        // Check if we need to ensure emphasis is applied (e.g. if onMouseOver missed or tooltip blocked it)
-        const label = (sector as any).__label;
+        const label = sector.__label;
         const showOnHover = seriesItem?.label?.showOnHover;
         const needsEmphasis =
           showOnHover &&
@@ -783,7 +843,7 @@ export default class PieChart extends Chart {
     percent: number;
     currentAngle: number;
     angle: number;
-    sector: Sector;
+    sector: PieSector;
     handlers: any;
     color: string;
   }) {
@@ -875,6 +935,7 @@ export default class PieChart extends Chart {
       itemName = item.name;
     }
     return {
+      type: 'showTip',
       componentType: 'series',
       seriesType: 'pie',
       seriesIndex: 0,
@@ -1190,7 +1251,7 @@ export default class PieChart extends Chart {
         invisible: !label.isVisible && !label.fadeIn, // Keep visible if fading in
       });
       this._root.add(text);
-      (label.sector as any).__label = text;
+      (label.sector as PieSector).__label = text;
       (text as any).__initialStyle = {
         ...text.style,
         opacity: label.fadeIn ? 1 : text.style.opacity,
@@ -1244,8 +1305,8 @@ export default class PieChart extends Chart {
           invisible: !label.isVisible && !label.fadeIn,
         });
         this._root.add(line);
-        (label.sector as any).__labelLine = line;
-        (line as any).__initialStyle = {
+        (label.sector as PieSector).__labelLine = line;
+        (line as unknown as { __initialStyle: any }).__initialStyle = {
           ...line.style,
           opacity: label.fadeIn ? 1 : line.style.opacity,
         };
@@ -1322,7 +1383,7 @@ export default class PieChart extends Chart {
       invisible: !isVisible,
     });
     this._root.add(text);
-    (label.sector as any).__label = text;
+    (label.sector as PieSector).__label = text;
     (text as any).__initialStyle = { ...text.style };
 
     if (label.handlers) {
@@ -1532,7 +1593,7 @@ export default class PieChart extends Chart {
   }
 
   private _applyEmphasisAnimation(
-    sector: Sector,
+    sector: PieSector,
     emphasis: EmphasisOption | undefined,
     isEnter: boolean,
   ): void {
@@ -1544,10 +1605,10 @@ export default class PieChart extends Chart {
   }
 
   private _applyEnterEmphasis(
-    sector: Sector,
+    sector: PieSector,
     emphasis: EmphasisOption | undefined,
   ) {
-    const seriesItem = (sector as any).__seriesItem;
+    const seriesItem = sector.__seriesItem;
     const showOnHover = seriesItem?.label?.showOnHover;
     const focus = emphasis?.focus || 'none';
 
@@ -1559,11 +1620,11 @@ export default class PieChart extends Chart {
           s.markRedraw();
         }
 
-        const seriesType = (s as any).__seriesItem?.type || 'pie';
+        const seriesType = s.__seriesItem?.type || 'pie';
         const isDoughnut =
           seriesType === 'doughnut' || seriesType === 'half-doughnut';
         if (isDoughnut) {
-          const baseR = (s as any).__baseR;
+          const baseR = s.__baseR;
           if (baseR !== undefined && s.shape && typeof s.shape === 'object') {
             (s.shape as any).r = baseR;
             s.markRedraw();
@@ -1605,8 +1666,6 @@ export default class PieChart extends Chart {
       emphasis?.label?.fontWeight ||
       emphasis?.label?.color
     ) {
-      // Font changes cannot be animated smoothly in canvas usually, just set them?
-      // Or animate fill color
       if (emphasis.label.color) {
         // this._animator.animate(label.style, 'fill', emphasis.label.color, { duration: 200, onUpdate: () => label.markRedraw() }).start();
         // Color animation is complex, let's just set it for now or implement color tweening later
@@ -1651,16 +1710,16 @@ export default class PieChart extends Chart {
   }
 
   private _animateLabelAndLineOpacity(
-    sector: Sector,
+    sector: PieSector,
     focus: string,
     showOnHover: boolean | undefined,
     isCurrent: boolean,
   ) {
-    const label = (sector as any).__label;
-    const labelLine = (sector as any).__labelLine;
+    const label = sector.__label;
+    const labelLine = sector.__labelLine;
 
     if (label) {
-      const initLabelOpacity = label.__initialStyle?.opacity ?? 1;
+      const initLabelOpacity = (label as any).__initialStyle?.opacity ?? 1;
       let targetOpacity = initLabelOpacity;
 
       if (!isCurrent) {
@@ -1677,7 +1736,7 @@ export default class PieChart extends Chart {
     }
 
     if (labelLine) {
-      const initLineOpacity = labelLine.__initialStyle?.opacity ?? 1;
+      const initLineOpacity = (labelLine as unknown as { __initialStyle: any }).__initialStyle?.opacity ?? 1;
       let targetOpacity = initLineOpacity;
 
       if (!isCurrent) {
@@ -1695,12 +1754,12 @@ export default class PieChart extends Chart {
     this._renderer.refresh();
   }
 
-  private _restoreLabelAndLine(sector: Sector) {
-    const label = (sector as any).__label;
-    const labelLine = (sector as any).__labelLine;
+  private _restoreLabelAndLine(sector: PieSector) {
+    const label = sector.__label;
+    const labelLine = sector.__labelLine;
 
     if (label) {
-      const initLabelOpacity = label.__initialStyle?.opacity ?? 1;
+      const initLabelOpacity = (label as any).__initialStyle?.opacity ?? 1;
       label.style.opacity = initLabelOpacity;
       label.invisible = initLabelOpacity === 0;
       (label as any).__hoverOpacityOverride = initLabelOpacity;
@@ -1708,8 +1767,8 @@ export default class PieChart extends Chart {
     }
 
     if (labelLine) {
-      const initLineOpacity = labelLine.__initialStyle?.opacity ?? 1;
-      labelLine.style.opacity = initLineOpacity;
+      const initLineOpacity = (labelLine as unknown as { __initialStyle: any }).__initialStyle?.opacity ?? 1;
+      let targetOpacity = initLineOpacity;
       labelLine.invisible = initLineOpacity === 0;
       (labelLine as any).__hoverOpacityOverride = initLineOpacity;
       labelLine.markRedraw();
@@ -1718,12 +1777,12 @@ export default class PieChart extends Chart {
   }
 
   private _animateCurrentLabel(
-    sector: Sector,
+    sector: PieSector,
     emphasis: EmphasisOption | undefined,
     showOnHover: boolean | undefined,
   ) {
-    const label = (sector as any).__label;
-    const labelLine = (sector as any).__labelLine;
+    const label = sector.__label;
+    const labelLine = sector.__labelLine;
     if (!label) return;
 
     const empLabel = emphasis?.label || {};
@@ -1731,7 +1790,7 @@ export default class PieChart extends Chart {
     // Fallback logic: if showOnHover is undefined, try to retrieve it from sector
     let finalShowOnHover = showOnHover;
     if (finalShowOnHover === undefined) {
-      finalShowOnHover = (sector as any).__seriesItem?.label?.showOnHover;
+      finalShowOnHover = sector.__seriesItem?.label?.showOnHover;
     }
 
     if (empLabel.show !== undefined) {
@@ -1830,18 +1889,18 @@ export default class PieChart extends Chart {
   }
 
   private _applyScaleAnimation(
-    sector: Sector,
+    sector: PieSector,
     emphasis: EmphasisOption | undefined,
     isEnter: boolean,
   ) {
     const scaleSize = isEnter && emphasis ? emphasis.scaleSize || 1.1 : 1;
     const duration = isEnter ? 160 : 220;
 
-    const seriesType = (sector as any).__seriesItem?.type || 'pie';
+    const seriesType = sector.__seriesItem?.type || 'pie';
     const isDoughnut =
       seriesType === 'doughnut' || seriesType === 'half-doughnut';
     if (isDoughnut) {
-      const baseR = (sector as any).__baseR;
+      const baseR = sector.__baseR;
       if (baseR !== undefined && sector.shape && typeof sector.shape === 'object') {
         if (sector.transform) {
           sector.transform.scaleX = 1;

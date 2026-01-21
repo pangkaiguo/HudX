@@ -19,8 +19,9 @@ import Circle from '../graphic/Circle';
 import Line from '../graphic/Line';
 import { COLOR_TRANSPARENT, DEFAULT_BORDER_RADIUS, Z_LEGEND } from '../constants';
 import { createDecalPattern } from '../util/pattern';
-import type { DecalObject } from '../types';
+import type { DecalObject, TextStyle } from '../types';
 import { ThemeManager } from '../theme/ThemeManager';
+import ChartElement from '../ChartElement';
 
 export interface LegendItem {
   name: string;
@@ -29,8 +30,8 @@ export interface LegendItem {
   decal?: DecalObject;
   value?: number;
   percent?: number;
-  data?: any;
-  textStyle?: any; // Allow custom text style per item
+  data?: unknown;
+  textStyle?: TextStyle; // Allow custom text style per item
 }
 
 export interface LegendOption {
@@ -49,7 +50,7 @@ export interface LegendOption {
   padding?: number;
   fontSize?: number;
   fontFamily?: string;
-  fontWeight?: any;
+  fontWeight?: string | number;
   itemGap?: number;
   itemWidth?: number;
   iconGap?: number;
@@ -57,7 +58,7 @@ export interface LegendOption {
   height?: number | string;
   onSelect?: (name: string, selected: boolean) => void;
   onHover?: (name: string, hovered: boolean) => void;
-  selectedMode?: 'single' | 'multiple';
+  selectedMode?: 'single' | 'multiple' | boolean;
   formatter?: string | ((name: string, item: LegendItem) => string | string[]);
   renderMode?: 'canvas' | 'html';
   itemMaxWidth?: number;
@@ -70,7 +71,7 @@ export default class Legend extends Group {
   private _option: LegendOption;
   private _items: LegendItem[] = [];
   private _selectedItems: Set<string> = new Set();
-  private _itemRects: Map<string, any> = new Map();
+  private _itemRects: Map<string, ChartElement> = new Map();
   private _containerWidth: number = 800;
   private _containerHeight: number = 600;
   private _htmlEl: HTMLElement | null = null;
@@ -275,8 +276,8 @@ export default class Legend extends Group {
     const containerHeight =
       resolveSize(this._option.height, this._containerHeight) ?? this._containerHeight;
 
-    const rows: { items: any[]; width: number; height: number }[] = [];
-    let currentRowItems: any[] = [];
+    const rows: { items: { item: LegendItem; itemW: number; itemH: number; lines: string[]; lineHeight: number }[]; width: number; height: number }[] = [];
+    let currentRowItems: { item: LegendItem; itemW: number; itemH: number; lines: string[]; lineHeight: number }[] = [];
     let currentRowWidth = 0;
     let currentRowHeight = 0;
 
@@ -447,7 +448,7 @@ export default class Legend extends Group {
       const contentY = y + itemPadding;
 
       const icon = item.icon || 'rect';
-      let iconElement: any;
+      let iconElement: ChartElement;
 
       let fillStyle: string | CanvasPattern = item.color;
       let strokeStyle: string | CanvasPattern = item.color;
@@ -528,10 +529,11 @@ export default class Legend extends Group {
       const interactRect = new Rect({
         shape: { x, y, width: width, height: height },
         style: { fill: COLOR_TRANSPARENT },
-        cursor: 'pointer',
+        cursor: this._option.selectedMode === false ? 'default' : 'pointer',
       });
 
       (interactRect as any).on('click', () => {
+        if (this._option.selectedMode === false) return;
         if (this._option.selectedMode === 'single') {
           if (
             this._selectedItems.has(item.name) &&

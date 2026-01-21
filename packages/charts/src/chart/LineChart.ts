@@ -2,6 +2,8 @@ import {
   Chart,
   type SeriesOption,
   type ChartData,
+  type AxisOption,
+  type ChartEvent,
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
@@ -116,7 +118,7 @@ export default class LineChart extends Chart {
         ? option.yAxis[0]
         : option.yAxis;
 
-      let data: any[] = [];
+      let data: ChartData[] = [];
       series.forEach((s) => {
         if (s.type === 'line' && s.show !== false) {
           data = data.concat(s.data || []);
@@ -129,7 +131,7 @@ export default class LineChart extends Chart {
       const yValues: number[] = [];
       series.forEach((s) => {
         if (s.type === 'line' && s.show !== false) {
-          (s.data || []).forEach((item: any) => {
+          (s.data || []).forEach((item: ChartData) => {
             if (typeof item === 'number') {
               yValues.push(item);
             } else if (Array.isArray(item)) {
@@ -170,7 +172,7 @@ export default class LineChart extends Chart {
 
       const yScale = createLinearScale(yDomain, yRange);
 
-      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, {
+      this._renderAxes((xAxis || {}) as AxisOption, (yAxis || {}) as AxisOption, plotX, plotY, plotWidth, plotHeight, {
         x: xScale,
         y: yScale,
       });
@@ -208,7 +210,7 @@ export default class LineChart extends Chart {
             : xDomain;
         let lastX = -1;
         let lastY = -1;
-        (interact as any).on('mousemove', (evt: any) => {
+        interact.on('mousemove', (evt: any) => {
           const mx = evt.offsetX;
           const my = evt.offsetY;
           lastX = mx;
@@ -229,7 +231,7 @@ export default class LineChart extends Chart {
           let currentX = mx;
 
           if (xAxis?.type === 'category') {
-            const label = (xScale as any).invert(mx);
+            const label = xScale.invert!(mx);
             idx = domain.indexOf(label);
             name = label;
             // Snap to band center
@@ -237,22 +239,21 @@ export default class LineChart extends Chart {
               currentX = xScale(label);
             }
           } else {
-            const xv = (xScale as any).invert(mx);
+            const xv = xScale.invert!(mx);
+            const x0 = xDomain[0] as number;
+            const x1 = xDomain[1] as number;
             idx = Math.max(
               0,
               Math.min(
-                Math.round((xv - xDomain[0]) / (xDomain[1] - xDomain[0] || 1)),
+                Math.round(((xv as number) - x0) / (x1 - x0 || 1)),
                 domain.length - 1,
               ),
             );
             name = xv;
-            // Snap to data point? Or keep raw for value axis?
-            // Usually value axis snaps to data point x
             if (idx >= 0 && idx < data.length) {
               // Assuming data is sorted/linear for simple line chart
               // currentX = xScale(xv);
             }
-            // For value axis, just use mouse X usually, or snap to nearest data x
             currentX = mx;
           }
 
@@ -266,7 +267,7 @@ export default class LineChart extends Chart {
           axisPointerLine.attr('shape', { x1: currentX, x2: currentX });
           axisPointerLine.attr('invisible', false);
 
-          const paramsList: any[] = [];
+          const paramsList: ChartEvent[] = [];
           series.forEach((s, sIndex) => {
             if (s.type !== 'line' || s.show === false) return;
             const item = (s.data || [])[idx];
@@ -274,7 +275,6 @@ export default class LineChart extends Chart {
 
             let val = this._getDataValue(item);
 
-            // Fallback for single value array [120] which is common in some chart libraries
             if (
               val === undefined &&
               Array.isArray(item) &&
@@ -290,6 +290,7 @@ export default class LineChart extends Chart {
                 s.itemStyle?.color || s.color || this._getSeriesColor(sIndex);
 
               paramsList.push({
+                type: 'showTip',
                 componentType: 'series',
                 seriesType: 'line',
                 seriesIndex: sIndex,
@@ -320,18 +321,18 @@ export default class LineChart extends Chart {
             this._tooltip!.show(mx + 12, my - 16, content, paramsList);
           }
         });
-        (interact as any).on('mouseout', () => {
+        interact.on('mouseout', () => {
           this._tooltip!.hide();
           axisPointerLine.attr('invisible', true);
         });
-        this._root.add(interact as any);
+        this._root.add(interact);
       }
 
       if (option.legend?.show !== false) {
         const aria = option.aria;
         const ariaDecals =
           aria?.enabled && aria?.decal?.show ? aria.decal.decals || [] : [];
-        const items = (series as any[])
+        const items = (series as SeriesOption[])
           .filter((s) => s.type === 'line' && s.show !== false)
           .map((s, i) => ({
             name: getSeriesDisplayName(
@@ -501,11 +502,6 @@ export default class LineChart extends Chart {
           const item = this._activeLines.get(seriesIndex)!;
           item.line = line;
           item.area = area;
-          // Clear old symbols if any, they will be re-added below
-          // Actually we are re-rendering, so old symbols are gone with this._root.clear() implicitly if we cleared root?
-          // Wait, this._root is NOT cleared. But this._activeLines.clear() was called?
-          // No, this._activeLines.clear() clears the map, but doesn't remove elements from root.
-          // The base Chart._render() calls this._root.clear()! So we are safe.
           item.symbols = [];
         }
 
@@ -611,7 +607,7 @@ export default class LineChart extends Chart {
 
             if (!symbol) return;
 
-            (symbol as any).cursor = this._tooltip ? 'pointer' : 'default';
+            symbol.attr('cursor', this._tooltip ? 'pointer' : 'default');
 
             this._root.add(symbol);
             this._activeLines.get(seriesIndex)?.symbols.push(symbol);
@@ -634,6 +630,7 @@ export default class LineChart extends Chart {
                 const itemValue = this._getDataValue(item);
 
                 const params = {
+                  type: 'showTip',
                   componentType: 'series',
                   seriesType: 'line',
                   seriesIndex,

@@ -3,6 +3,7 @@
  */
 
 import { ThemeManager } from '../theme/ThemeManager';
+import type { ChartEvent, BoundingRect } from '../types';
 import {
   DEFAULT_BORDER_RADIUS,
   DEFAULT_TOOLTIP_LINE_HEIGHT,
@@ -15,7 +16,7 @@ import {
 export interface TooltipOption {
   show?: boolean;
   trigger?: 'item' | 'axis' | 'none';
-  formatter?: string | ((params: any) => string);
+  formatter?: string | ((params: ChartEvent | ChartEvent[]) => string);
   backgroundColor?: string;
   borderColor?: string;
   borderWidth?: number;
@@ -24,7 +25,7 @@ export interface TooltipOption {
     color?: string;
     fontSize?: number;
     fontFamily?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
   extraCssText?: string;
   className?: string;
@@ -36,10 +37,10 @@ export interface TooltipOption {
   | number[]
   | ((
     point: number[],
-    params: any,
+    params: ChartEvent | ChartEvent[],
     dom: HTMLElement,
-    rect: any,
-    size: any,
+    rect: BoundingRect,
+    size: { contentSize: [number, number]; viewSize: [number, number] },
   ) => number[]);
   showContent?: boolean;
   alwaysShowContent?: boolean;
@@ -179,8 +180,8 @@ export default class Tooltip {
     x: number,
     y: number,
     content: string | HTMLElement,
-    params?: any,
-    targetRect?: any,
+    params?: ChartEvent | ChartEvent[],
+    targetRect?: BoundingRect,
   ): void {
     if (!this._option.showContent || !this._container) return;
 
@@ -261,10 +262,10 @@ export default class Tooltip {
         customPosition = true;
       } else if (typeof pos === 'function') {
         const size = {
-          contentSize: [elWidth, elHeight],
-          viewSize: [viewWidth, viewHeight],
+          contentSize: [elWidth, elHeight] as [number, number],
+          viewSize: [viewWidth, viewHeight] as [number, number],
         };
-        const result = pos([x, y], params, this._el, targetRect, size);
+        const result = pos([x, y], params!, this._el, targetRect!, size);
         if (Array.isArray(result)) {
           left = this._parsePercent(result[0], viewWidth);
           top = this._parsePercent(result[1], viewHeight);

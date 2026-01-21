@@ -13,6 +13,9 @@ import {
   Z_SERIES,
   Z_AXIS,
   toRgbaWithOpacity,
+  SeriesOption,
+  ChartData,
+  AxisOption,
 } from 'hudx-render';
 import { EventHelper } from 'hudx-render';
 import {
@@ -20,6 +23,10 @@ import {
   getSeriesDisplayName,
   resolveAnimationDelay,
 } from './chartUtils';
+
+interface BarRect extends Rect {
+  __isPositive?: boolean;
+}
 
 /**
  * BarChart - Bar chart implementation
@@ -33,7 +40,7 @@ import {
  * - Manages coordinate mapping from data domain to pixel space.
  */
 export default class BarChart extends Chart {
-  private _activeBars: Map<string, Rect> = new Map();
+  private _activeBars: Map<string, BarRect> = new Map();
   private _activeLabels: Map<string, Text> = new Map();
   private _baseBarOpacity: Map<string, number> = new Map();
   private _baseLabelOpacity: Map<string, number> = new Map();
@@ -126,7 +133,7 @@ export default class BarChart extends Chart {
         : option.yAxis;
       const isHorizontal = yAxis?.type === 'category';
 
-      let data: any[] = [];
+      let data: ChartData[] = [];
       series.forEach((s) => {
         if (s.type === 'bar' && s.show !== false) {
           data = data.concat(s.data || []);
@@ -148,11 +155,11 @@ export default class BarChart extends Chart {
           if (s.type !== 'bar' || s.show === false) return;
           const stackId = s.stack || `__no_stack_${s.name || Math.random()}`;
           const sData = s.data || [];
-          sData.forEach((val: any, idx: number) => {
+          sData.forEach((val: ChartData, idx: number) => {
             const value =
-              typeof val === 'object' && val !== null && val.value !== undefined
-                ? val.value
-                : val;
+              typeof val === 'object' && val !== null && 'value' in val
+                ? (Array.isArray(val.value) ? val.value[0] : val.value)
+                : (typeof val === 'number' ? val : 0);
             if (typeof value !== 'number') return;
 
             if (!stackTotals[idx]) stackTotals[idx] = {};
@@ -178,8 +185,8 @@ export default class BarChart extends Chart {
       const xDataForDomain = isHorizontal ? finalData : data;
       const yDataForDomain = isHorizontal ? data : finalData;
 
-      const xDomain = calculateDomain(xAxis || {}, xDataForDomain, true);
-      const yDomain = calculateDomain(yAxis || {}, yDataForDomain, false);
+      const xDomain = calculateDomain((xAxis || {}) as AxisOption, xDataForDomain, true);
+      const yDomain = calculateDomain((yAxis || {}) as AxisOption, yDataForDomain, false);
 
       const xRange = xAxis?.inverse
         ? [plotX + plotWidth, plotX]
@@ -215,7 +222,7 @@ export default class BarChart extends Chart {
         categoryCount = data.length;
       }
 
-      const stacks: Record<string, any[]> = {};
+      const stacks: Record<string, SeriesOption[]> = {};
       series.forEach((s, i) => {
         if (s.type !== 'bar' || s.show === false) return;
         const seriesName = getSeriesDisplayName(
@@ -345,7 +352,7 @@ export default class BarChart extends Chart {
         const aria = option.aria;
         const ariaDecals =
           aria?.enabled && aria?.decal?.show ? aria.decal.decals || [] : [];
-        const items = (series as any[])
+        const items = series
           .filter((s) => s.type === 'bar' && s.show !== false)
           .map((s, i) => ({
             name: getSeriesDisplayName(
@@ -412,7 +419,7 @@ export default class BarChart extends Chart {
                 item !== null &&
                 !Array.isArray(item) &&
                 'value' in item
-                ? (item as any).value
+                ? item.value
                 : item;
             xVal = Array.isArray(raw) ? raw[0] : raw;
           } else if (xAxis?.type === 'category') {
@@ -422,7 +429,7 @@ export default class BarChart extends Chart {
                 item !== null &&
                 !Array.isArray(item) &&
                 'value' in item
-                ? (item as any).value
+                ? item.value
                 : item;
             yVal = Array.isArray(raw) ? raw[1] ?? raw[0] : raw;
           } else {
@@ -431,7 +438,7 @@ export default class BarChart extends Chart {
                 item !== null &&
                 !Array.isArray(item) &&
                 'value' in item
-                ? (item as any).value
+                ? item.value
                 : item;
             if (!Array.isArray(raw)) return;
             xVal = raw[0];
@@ -532,19 +539,6 @@ export default class BarChart extends Chart {
               z: Z_SERIES - 1, // Behind bars
               silent: true,
             });
-            // Only add background once per category stack group (simplify to once per series per category for now)
-            // But wait, if stacked, we might draw multiple backgrounds.
-            // Usually showBackground is for non-stacked. If stacked, it's ambiguous.
-            // Let's assume per-bar background.
-            // Optimization: Use a map to check if background already drawn for this category/stack position?
-            // Or just draw it.
-            // Since we iterate series -> data, if we have multiple series in same stack group (stacked),
-            // we should only draw background once for the group?
-            // ECharts draws background for the "axis column", not per series.
-            // But here seriesItem has showBackground.
-            // Let's check if we are the first item in the stack to draw?
-            // Simplified: just draw it. If multiple series have it, multiple backgrounds (alpha blending issues).
-            // Better: Check if baseValue == 0 (first in stack)?
             if (Math.abs(baseValue) < 1e-9) {
               this._root.add(bgRect);
             }
@@ -608,8 +602,8 @@ export default class BarChart extends Chart {
             },
             z: Z_SERIES,
             cursor: this._tooltip ? 'pointer' : 'default',
-          });
-          (rect as any).__isPositive = isPositive;
+          }) as BarRect;
+          rect.__isPositive = isPositive;
 
           // Update lastBars for the next item in the stack
           if (!lastBars[catKey]) {
@@ -630,8 +624,8 @@ export default class BarChart extends Chart {
 
           const seriesLabel = seriesItem.label;
           const itemLabel =
-            typeof item === 'object' && item !== null ? (item as any).label : undefined;
-          const labelOpt = { ...(seriesLabel || {}), ...(itemLabel || {}) } as any;
+            typeof item === 'object' && item !== null && 'label' in item ? item.label : undefined;
+          const labelOpt = { ...(seriesLabel || {}), ...(itemLabel || {}) };
           const showLabel = labelOpt && labelOpt.show === true;
 
           if (showLabel) {
@@ -639,8 +633,8 @@ export default class BarChart extends Chart {
             const position = (labelOpt.position || 'outside') as string;
             const value = this._getDataValue(item);
             const itemName =
-              typeof item === 'object' && (item as any).name
-                ? (item as any).name
+              typeof item === 'object' && item !== null && 'name' in item
+                ? item.name
                 : isHorizontal
                   ? yDomain[index]
                   : xAxis?.data?.[index] || '';
@@ -793,15 +787,15 @@ export default class BarChart extends Chart {
 
             const label = new Text({
               shape: {
-                x: oldLabel ? (oldLabel.shape as any).x : initialLayout.x,
-                y: oldLabel ? (oldLabel.shape as any).y : initialLayout.y,
+                x: oldLabel ? oldLabel.shape.x : initialLayout.x,
+                y: oldLabel ? oldLabel.shape.y : initialLayout.y,
                 text: labelText,
               },
               style: {
                 fill:
                   labelOpt.color ||
                   (isInside
-                    ? (theme.token as any)?.colorTextOnSeries || '#fff'
+                    ? theme.token?.colorTextOnSeries || '#fff'
                     : theme.axisLabelColor || theme.textColor),
                 fontSize: labelOpt.fontSize ?? theme.fontSize,
                 fontFamily: theme.fontFamily,
@@ -900,14 +894,19 @@ export default class BarChart extends Chart {
                     item !== null &&
                     !Array.isArray(item) &&
                     'name' in item &&
-                    typeof (item as any).name === 'string'
-                    ? (item as any).name
+                    typeof item === 'object' &&
+                item !== null &&
+                !Array.isArray(item) &&
+                'name' in item &&
+                typeof item.name === 'string'
+                  ? item.name
                     : isHorizontal
                       ? yDomain[index]
                       : xAxis?.data?.[index] || '';
                 const itemValue = this._getDataValue(item);
 
                 const params = {
+                  type: 'showTip',
                   componentType: 'series',
                   seriesType: 'bar',
                   seriesIndex,
@@ -982,14 +981,15 @@ export default class BarChart extends Chart {
                   item !== null &&
                   !Array.isArray(item) &&
                   'name' in item &&
-                  typeof (item as any).name === 'string'
-                  ? (item as any).name
+                  typeof item.name === 'string'
+                  ? item.name
                   : isHorizontal
                     ? yDomain[index]
                     : xAxis?.data?.[index] || '';
               const itemValue = this._getDataValue(item);
 
               const params = {
+                type: 'showTip',
                 componentType: 'series',
                 seriesType: 'bar',
                 seriesIndex,
@@ -1158,10 +1158,18 @@ export default class BarChart extends Chart {
         }
       });
 
-      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight, {
-        x: xScale,
-        y: yScale,
-      });
+      this._renderAxes(
+        (xAxis || {}) as AxisOption,
+        (yAxis || {}) as AxisOption,
+        plotX,
+        plotY,
+        plotWidth,
+        plotHeight,
+        {
+          x: xScale,
+          y: yScale,
+        },
+      );
 
       this._renderer.flush();
     } catch (e) {

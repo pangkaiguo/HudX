@@ -119,22 +119,68 @@ describe('LineChart', () => {
 
     const activeLines = (chart as any)._activeLines;
     expect(activeLines.size).toBe(1);
-
     const seriesItem = activeLines.get(0);
     expect(seriesItem).toBeDefined();
-
-    // Check if line is Path (smooth) instead of Polyline
-    // We imported Polyline and Path in source, but here we can check constructor name or type
     expect(seriesItem.line.constructor.name).toBe('Path');
-
-    // Check area existence
     expect(seriesItem.area).toBeDefined();
     expect(seriesItem.area.constructor.name).toBe('Path');
-
-    // Check symbols
     expect(seriesItem.symbols.length).toBe(2);
-    // Rect symbol should be created
     expect(seriesItem.symbols[0].constructor.name).toBe('Rect');
+  });
+
+  it('should support symbolSize as function', () => {
+    const chart = new LineChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'line',
+          data: [10, 20],
+          symbolSize: (val: any) => val * 2,
+        },
+      ],
+    });
+
+    const activeLines = (chart as any)._activeLines;
+    const symbols = activeLines.get(0).symbols;
+    expect(symbols[0].shape.r).toBeCloseTo(10);
+    expect(symbols[0].shape.r).toBe(10);
+    expect(symbols[1].shape.r).toBe(20);
+  });
+
+  it('should support itemStyle for line', () => {
+    const chart = new LineChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'line',
+          data: [10, 20],
+          itemStyle: {
+            color: 'red',
+            borderWidth: 5, // symbol border width
+          },
+          lineStyle: {
+            width: 3,
+            type: 'dashed',
+          },
+        },
+      ],
+    });
+
+    const activeLines = (chart as any)._activeLines;
+    const seriesItem = activeLines.get(0);
+
+    // Line style
+    expect(seriesItem.line.style.stroke).toBe('red');
+    expect(seriesItem.line.style.lineWidth).toBe(3);
+    const symbol = seriesItem.symbols[0];
+    expect(symbol.style.fill).toBe('red');
+    expect(symbol.style.lineWidth).toBe(2);
   });
 
   it('should highlight area on hover like legend hover', () => {

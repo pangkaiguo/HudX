@@ -45,6 +45,9 @@ class ChartElement extends Eventful {
   shape: unknown = {};
   /** Transform properties */
   transform: Transform = {};
+  
+  /** Parent container */
+  __parent?: ChartElement;
 
   private _dirty: boolean = true;
   private _clipPath?: ChartElement;
@@ -134,7 +137,7 @@ class ChartElement extends Eventful {
     this._dirty = true;
     this.trigger('dirty');
     // Propagate dirty flag to parent
-    const parent = (this as any).__parent;
+    const parent = this.__parent;
     if (parent && parent.markRedraw) {
       parent.markRedraw();
     }
@@ -202,11 +205,11 @@ class ChartElement extends Eventful {
    */
   getGlobalTransform(): Matrix {
     let m = this.getLocalTransform();
-    let parent = (this as any).__parent;
+    let parent = this.__parent;
     while (parent) {
       const pm = parent.getLocalTransform();
       m = multiplyMatrix(pm, m);
-      parent = (parent as any).__parent;
+      parent = parent.__parent;
     }
     return m;
   }

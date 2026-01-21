@@ -13,17 +13,19 @@
 
 import type { AxisOption, ChartData, Coordinate } from '../types';
 
+export type ScaleValue = number | string | Date | { value: number | string;[key: string]: any };
+
 export interface Scale {
-  (value: any): number;
-  invert?(value: number): any;
-  domain(): any[];
+  (value: ScaleValue): number;
+  invert?(value: number): ScaleValue;
+  domain(): ScaleValue[];
   range(): number[];
-  domain(domain: any[]): Scale;
+  domain(domain: ScaleValue[]): Scale;
   range(range: number[]): Scale;
   /** Alias for getPixel (ECharts compatibility) */
-  getPixel?(value: any): number;
+  getPixel?(value: ScaleValue): number;
   /** Alias for invert (ECharts compatibility) */
-  getValue?(pixel: number): any;
+  getValue?(pixel: number): ScaleValue;
 }
 
 /**
@@ -53,9 +55,9 @@ export const createLinearScale = (domain: number[], range: number[]): Scale => {
   scale.getPixel = scale;
   scale.getValue = scale.invert;
 
-  scale.domain = (newDomain?: number[]): any => {
+  scale.domain = (newDomain?: ScaleValue[]): any => {
     if (newDomain) {
-      return createLinearScale(newDomain, range);
+      return createLinearScale(newDomain as number[], range);
     }
     return domain;
   };
@@ -74,13 +76,13 @@ export const createLinearScale = (domain: number[], range: number[]): Scale => {
  * Create ordinal scale (for categories)
  * Maps discrete values to a continuous range (bands)
  */
-export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
-  const domainMap = new Map<any, number>();
+export const createOrdinalScale = (domain: ScaleValue[], range: number[]): Scale => {
+  const domainMap = new Map<ScaleValue, number>();
   domain.forEach((d, i) => {
     domainMap.set(d, i);
   });
 
-  const scale = ((value: any): number => {
+  const scale = ((value: ScaleValue): number => {
     const index = domainMap.get(value);
     if (index === undefined) {
       return range[0];
@@ -91,7 +93,7 @@ export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
     return range[0] + (index + 0.5) * step;
   }) as Scale;
 
-  scale.invert = (value: number): any => {
+  scale.invert = (value: number): ScaleValue => {
     const total = Math.max(1, domain.length);
     const step = (range[range.length - 1] - range[0]) / total;
     const index = Math.floor((value - range[0]) / step);
@@ -101,7 +103,7 @@ export const createOrdinalScale = (domain: any[], range: number[]): Scale => {
   scale.getPixel = scale;
   scale.getValue = scale.invert;
 
-  scale.domain = (newDomain?: any[]): any => {
+  scale.domain = (newDomain?: ScaleValue[]): any => {
     if (newDomain) {
       return createOrdinalScale(newDomain, range);
     }

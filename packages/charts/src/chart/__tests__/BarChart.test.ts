@@ -29,8 +29,6 @@ const mockContext = {
   font: '',
 } as unknown as CanvasRenderingContext2D;
 
-// We don't stub global document/window aggressively to keep happy-dom functionality
-// We only patch what we need
 beforeAll(() => {
   Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
     value: () => mockContext,
@@ -85,17 +83,182 @@ describe('BarChart', () => {
     const activeBars = (chart as any)._activeBars;
     expect(activeBars.size).toBeGreaterThan(0);
 
-    // Check if bars have correct width logic (roughly)
     const firstBar = activeBars.values().next().value;
     expect(firstBar.shape.width).toBe(20);
 
-    // Verify background rect creation (checking internal root children)
-    // Backgrounds are added to root but not stored in _activeBars map directly in the same way
-    // We can check if root has more elements than bars + axis lines
     const root = (chart as any)._root;
-    // 2 bars + 2 backgrounds + axis lines/ticks...
-    // Just checking it runs without error and produces output is a basic check.
-    // For more detail, we'd need to spy on Rect constructor or check root children types.
+  });
+
+  it('should support barCategoryGap and barGap', () => {
+    const chart = new BarChart(container);
+    const option: ChartOption = {
+      animation: false,
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'bar',
+          data: [10],
+          barCategoryGap: '50%',
+          barGap: '0%',
+        },
+      ],
+    };
+    chart.setOption(option);
+
+    const activeBars = (chart as any)._activeBars;
+    const bar = activeBars.values().next().value;
+    // Category width = 800 (1 category) -> actually plot width is ~700 due to padding (50px each side)
+    // Gap = 50%
+    // Bar width = 50% of 700 = 350
+    expect(bar.shape.width).toBeCloseTo(350);
+
+    // Test with barGap
+    const chart2 = new BarChart(document.createElement('div'));
+    chart2.resize(800, 600);
+    chart2.setOption({
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [
+        { type: 'bar', data: [10], barCategoryGap: '20%', barGap: '100%' }, // 100% gap between bars
+        { type: 'bar', data: [20] },
+      ],
+    });
+    // Category width = 700
+    // Category gap = 20% = 140. Available = 560.
+    // 2 bars + 1 gap (100% of bar width)
+    // W + W + W = 3W = 560 => W = 186.66
+    const bars = Array.from((chart2 as any)._activeBars.values()) as any[];
+    expect(bars[0].shape.width).toBeCloseTo(560 / 3, 1);
+  });
+
+  it('should support stacking (positive and negative)', () => {
+    const chart = new BarChart(container);
+    const option: ChartOption = {
+      animation: false,
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [
+        { type: 'bar', stack: 'total', data: [10] },
+        { type: 'bar', stack: 'total', data: [20] },
+        { type: 'bar', stack: 'total', data: [-10] },
+      ],
+    };
+    chart.setOption(option);
+
+    const bars = Array.from((chart as any)._activeBars.values()) as any[];
+    const b1 = bars.find((b: any) => b.style.fill === (option.series![0] as any).color || b.style.fill !== undefined);
+
+    const bar0 = (chart as any)._activeBars.get('0-0');
+    const bar1 = (chart as any)._activeBars.get('1-0');
+    const bar2 = (chart as any)._activeBars.get('2-0');
+
+    expect(bar0).toBeDefined();
+    expect(bar1).toBeDefined();
+    expect(bar2).toBeDefined();
+    expect(bar1.shape.y + bar1.shape.height).toBeCloseTo(bar0.shape.y, 1);
+    expect(bar2.shape.y).toBeCloseTo(bar0.shape.y + bar0.shape.height, 1);
+  });
+
+  it('should support itemStyle properties', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'bar',
+          data: [10],
+          itemStyle: {
+            borderColor: 'red',
+            borderWidth: 2,
+            borderRadius: [5, 5, 0, 0],
+            opacity: 0.5,
+          },
+        },
+      ],
+    });
+
+    const bar = (chart as any)._activeBars.get('0-0');
+    expect(bar.style.stroke).toBe('red');
+    expect(bar.style.lineWidth).toBe(2);
+    expect(bar.style.opacity).toBe(0.5);
+    expect(bar.shape.r).toEqual([5, 5, 0, 0]);
+  });
+
+  it('should support backgroundStyle options', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'bar',
+          data: [10],
+          showBackground: true,
+          backgroundStyle: {
+            color: 'blue',
+            borderColor: 'green',
+            borderWidth: 3,
+            opacity: 0.3,
+          },
+        },
+      ],
+    });
+
+    const root = (chart as any)._root;
+    // Find background rect (usually z is lower)
+    const children = root.children();
+    const bgRect = children.find((c: any) => c.style.fill === 'blue');
+    expect(bgRect).toBeDefined();
+    expect(bgRect.style.stroke).toBe('green');
+    expect(bgRect.style.lineWidth).toBe(3);
+    expect(bgRect.style.opacity).toBe(0.3);
+  });
+
+  it('should support label formatter with templates', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'category', data: ['CatA'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          name: 'SeriesA',
+          type: 'bar',
+          data: [100],
+          label: {
+            show: true,
+            formatter: '{a} - {b}: {c}',
+          },
+        },
+      ],
+    });
+
+    const label = (chart as any)._activeLabels.get('0-0');
+    expect(label).toBeDefined();
+    expect(label.shape.text).toBe('SeriesA - CatA: 100');
+  });
+
+  it('should support barMaxWidth', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'bar',
+          data: [10],
+          barMaxWidth: 10,
+        },
+      ],
+    });
+
+    const bar = (chart as any)._activeBars.get('0-0');
+    expect(bar.shape.width).toBe(10);
   });
 
   it('should support inverse axis', () => {
@@ -108,7 +271,6 @@ describe('BarChart', () => {
     };
     chart.setOption(option);
 
-    // Basic execution check
     const activeBars = (chart as any)._activeBars;
     expect(activeBars.size).toBe(2);
   });
