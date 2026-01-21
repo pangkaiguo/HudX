@@ -35,6 +35,8 @@ import {
 export default class BarChart extends Chart {
   private _activeBars: Map<string, Rect> = new Map();
   private _activeLabels: Map<string, Text> = new Map();
+  private _baseBarOpacity: Map<string, number> = new Map();
+  private _baseLabelOpacity: Map<string, number> = new Map();
 
   setRenderMode(renderMode: RenderMode): void {
     if (this.getRenderMode() === renderMode) {
@@ -42,6 +44,8 @@ export default class BarChart extends Chart {
     }
     this._activeBars = new Map();
     this._activeLabels = new Map();
+    this._baseBarOpacity = new Map();
+    this._baseLabelOpacity = new Map();
     super.setRenderMode(renderMode);
   }
 
@@ -56,25 +60,21 @@ export default class BarChart extends Chart {
 
       if (hovered) {
         if (sIdx === seriesIndex) {
-          // Highlight target series
           bar.attr('style', { opacity: 1 });
-          // Optional: Add scale effect or brightness
         } else {
-          // Dim others
-          bar.attr('style', { opacity: 0.1 });
+          bar.attr('style', { opacity: 0.2 });
         }
       } else {
-        // Restore all
-        bar.attr('style', { opacity: 1 });
+        bar.attr('style', { opacity: this._baseBarOpacity.get(key) ?? 1 });
       }
     });
 
     this._activeLabels.forEach((label, key) => {
       const [sIdx] = key.split('-').map(Number);
       if (hovered) {
-        label.attr('style', { opacity: sIdx === seriesIndex ? 1 : 0.1 });
+        label.attr('style', { opacity: sIdx === seriesIndex ? 1 : 0.2 });
       } else {
-        label.attr('style', { opacity: 1 });
+        label.attr('style', { opacity: this._baseLabelOpacity.get(key) ?? 1 });
       }
     });
   }
@@ -89,12 +89,14 @@ export default class BarChart extends Chart {
 
       const oldBars = this._forceReinitOnNextRender ? new Map() : this._activeBars;
       this._activeBars = new Map();
+      this._baseBarOpacity = new Map();
 
       if (!this._activeLabels) {
         this._activeLabels = new Map();
       }
       const oldLabels = this._forceReinitOnNextRender ? new Map() : this._activeLabels;
       this._activeLabels = new Map();
+      this._baseLabelOpacity = new Map();
 
       const option = this._option;
       const series = option.series || [];
@@ -602,6 +604,7 @@ export default class BarChart extends Chart {
               stroke:
                 itemStyle.borderColor || this.getThemeConfig().borderColor,
               lineWidth: itemStyle.borderWidth || 0,
+              opacity: itemStyle.opacity ?? 1,
             },
             z: Z_SERIES,
             cursor: this._tooltip ? 'pointer' : 'default',
@@ -623,6 +626,7 @@ export default class BarChart extends Chart {
 
           this._root.add(rect);
           this._activeBars.set(barKey, rect);
+          this._baseBarOpacity.set(barKey, rect.attr('style')?.opacity ?? 1);
 
           const seriesLabel = seriesItem.label;
           const itemLabel =
@@ -803,7 +807,7 @@ export default class BarChart extends Chart {
                 fontFamily: theme.fontFamily,
                 textAlign: finalLayout.textAlign,
                 textBaseline: finalLayout.textBaseline,
-                opacity: 1,
+                opacity: labelOpt.opacity ?? 1,
               },
               z: Z_SERIES + 1,
               silent: true,
@@ -811,6 +815,7 @@ export default class BarChart extends Chart {
 
             this._root.add(label);
             this._activeLabels.set(barKey, label);
+            this._baseLabelOpacity.set(barKey, label.attr('style')?.opacity ?? 1);
 
             if (shouldAnimate) {
               this._animator
@@ -835,34 +840,60 @@ export default class BarChart extends Chart {
           }
 
           if (this._tooltip) {
+            const restoreAllOpacities = () => {
+              this._activeBars.forEach((bar, key) => {
+                bar.attr('style', { opacity: this._baseBarOpacity.get(key) ?? 1 });
+              });
+              this._activeLabels.forEach((label, key) => {
+                label.attr('style', {
+                  opacity: this._baseLabelOpacity.get(key) ?? 1,
+                });
+              });
+            };
+
+            const applyHoverEmphasis = () => {
+              const emphasis = seriesItem.emphasis || {};
+              const focus = emphasis.focus;
+
+              if (focus === 'series') {
+                this._activeBars.forEach((bar, key) => {
+                  const [sIdx] = key.split('-').map(Number);
+                  if (sIdx === seriesIndex) {
+                    bar.attr('style', { opacity: 1 });
+                  } else {
+                    bar.attr('style', { opacity: 0.2 });
+                  }
+                });
+                this._activeLabels.forEach((label, key) => {
+                  const [sIdx] = key.split('-').map(Number);
+                  if (sIdx === seriesIndex) {
+                    label.attr('style', { opacity: 1 });
+                  } else {
+                    label.attr('style', { opacity: 0.2 });
+                  }
+                });
+                return;
+              }
+
+              if (focus === 'self') {
+                this._activeBars.forEach((bar, key) => {
+                  bar.attr('style', { opacity: key === barKey ? 1 : 0.2 });
+                });
+                this._activeLabels.forEach((label, key) => {
+                  label.attr('style', { opacity: key === barKey ? 1 : 0.2 });
+                });
+                return;
+              }
+
+              rect.attr('style', { opacity: 0.8 });
+              const label = this._activeLabels.get(barKey);
+              if (label) label.attr('style', { opacity: 0.8 });
+            };
+
             EventHelper.bindHoverEvents(
               rect,
               (evt: any) => {
-                const emphasis = seriesItem.emphasis || {};
-                const focus = emphasis.focus;
-
-                if (focus === 'series') {
-                  this._activeBars.forEach((bar, key) => {
-                    const [sIdx] = key.split('-').map(Number);
-                    if (sIdx === seriesIndex) {
-                      bar.attr('style', { opacity: 1 });
-                    } else {
-                      bar.attr('style', { opacity: 0.2 });
-                    }
-                  });
-                  this._activeLabels.forEach((label, key) => {
-                    const [sIdx] = key.split('-').map(Number);
-                    if (sIdx === seriesIndex) {
-                      label.attr('style', { opacity: 1 });
-                    } else {
-                      label.attr('style', { opacity: 0.2 });
-                    }
-                  });
-                } else {
-                  rect.attr('style', { opacity: 0.8 });
-                  const label = this._activeLabels.get(barKey);
-                  if (label) label.attr('style', { opacity: 0.8 });
-                }
+                applyHoverEmphasis();
 
                 const itemName =
                   typeof item === 'object' &&
@@ -927,17 +958,16 @@ export default class BarChart extends Chart {
                 const emphasis = seriesItem.emphasis || {};
                 const focus = emphasis.focus;
 
-                if (focus === 'series') {
-                  this._activeBars.forEach((bar) => {
-                    bar.attr('style', { opacity: 1 });
-                  });
-                  this._activeLabels.forEach((label) => {
-                    label.attr('style', { opacity: 1 });
-                  });
+                if (focus === 'series' || focus === 'self') {
+                  restoreAllOpacities();
                 } else {
-                  rect.attr('style', { opacity: 1 });
+                  rect.attr('style', { opacity: this._baseBarOpacity.get(barKey) ?? 1 });
                   const label = this._activeLabels.get(barKey);
-                  if (label) label.attr('style', { opacity: 1 });
+                  if (label) {
+                    label.attr('style', {
+                      opacity: this._baseLabelOpacity.get(barKey) ?? 1,
+                    });
+                  }
                 }
                 this._tooltip!.hide();
                 if (axisPointerLine) {
@@ -981,30 +1011,7 @@ export default class BarChart extends Chart {
 
               if (this._tooltip) {
                 if (!this._tooltip.isVisible()) {
-                  const emphasis = seriesItem.emphasis || {};
-                  const focus = emphasis.focus;
-                  if (focus === 'series') {
-                    this._activeBars.forEach((bar, key) => {
-                      const [sIdx] = key.split('-').map(Number);
-                      if (sIdx === seriesIndex) {
-                        bar.attr('style', { opacity: 1 });
-                      } else {
-                        bar.attr('style', { opacity: 0.2 });
-                      }
-                    });
-                    this._activeLabels.forEach((label, key) => {
-                      const [sIdx] = key.split('-').map(Number);
-                      if (sIdx === seriesIndex) {
-                        label.attr('style', { opacity: 1 });
-                      } else {
-                        label.attr('style', { opacity: 0.2 });
-                      }
-                    });
-                  } else {
-                    rect.attr('style', { opacity: 0.8 });
-                    const label = this._activeLabels.get(barKey);
-                    if (label) label.attr('style', { opacity: 0.8 });
-                  }
+                  applyHoverEmphasis();
                 }
                 this._tooltip.show(mx, my, content, params, rect.attr('shape'));
 

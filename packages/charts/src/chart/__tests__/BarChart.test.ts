@@ -218,4 +218,76 @@ describe('BarChart', () => {
     const activeLabels = (chart as any)._activeLabels;
     expect(activeLabels.size).toBe(9);
   });
+
+  it('should highlight hovered bar series and dim others to 0.2 (sync with legend hover)', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      animation: false,
+      tooltip: { show: true, trigger: 'item' },
+      xAxis: { type: 'category', data: ['A', 'B', 'C'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          name: 'S1',
+          type: 'bar',
+          data: [10, 20, 30],
+          itemStyle: { opacity: 0.8 },
+          label: { show: true, opacity: 0.8 },
+          emphasis: { focus: 'series' },
+        },
+        {
+          name: 'S2',
+          type: 'bar',
+          data: [5, 15, 25],
+          itemStyle: { opacity: 0.8 },
+          label: { show: true, opacity: 0.8 },
+          emphasis: { focus: 'series' },
+        },
+      ],
+    } satisfies ChartOption);
+
+    const activeBars = (chart as any)._activeBars as Map<string, any>;
+    const activeLabels = (chart as any)._activeLabels as Map<string, any>;
+    expect(activeBars.size).toBe(6);
+    expect(activeLabels.size).toBe(6);
+
+    const s1Bar0 = activeBars.get('0-0');
+    expect(s1Bar0).toBeDefined();
+
+    s1Bar0.trigger('mouseover', { offsetX: 0, offsetY: 0 });
+    activeBars.forEach((bar, key) => {
+      const expected = key.startsWith('0-') ? 1 : 0.2;
+      expect(bar.style.opacity).toBeCloseTo(expected);
+    });
+    activeLabels.forEach((label, key) => {
+      const expected = key.startsWith('0-') ? 1 : 0.2;
+      expect(label.style.opacity).toBeCloseTo(expected);
+    });
+
+    s1Bar0.trigger('mouseout');
+    activeBars.forEach((bar) => {
+      expect(bar.style.opacity).toBeCloseTo(0.8);
+    });
+    activeLabels.forEach((label) => {
+      expect(label.style.opacity).toBeCloseTo(0.8);
+    });
+
+    (chart as any)._onLegendHover('S2', true);
+    activeBars.forEach((bar, key) => {
+      const expected = key.startsWith('1-') ? 1 : 0.2;
+      expect(bar.style.opacity).toBeCloseTo(expected);
+    });
+    activeLabels.forEach((label, key) => {
+      const expected = key.startsWith('1-') ? 1 : 0.2;
+      expect(label.style.opacity).toBeCloseTo(expected);
+    });
+
+    (chart as any)._onLegendHover('S2', false);
+    activeBars.forEach((bar) => {
+      expect(bar.style.opacity).toBeCloseTo(0.8);
+    });
+    activeLabels.forEach((label) => {
+      expect(label.style.opacity).toBeCloseTo(0.8);
+    });
+  });
 });

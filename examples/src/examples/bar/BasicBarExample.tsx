@@ -99,6 +99,12 @@ export const BasicBarExample = ({
         type: 'bar',
         data: [120, 200, 150, 80, 70, 110, 130],
         label: { show: true, position: 'outside', formatter: '{b}: {c}' },
+        emphasis: {
+          focus: 'self',
+          itemStyle: {
+            opacity: 1,
+          },
+        },
         barWidth: barWidth === 'auto' ? undefined : barWidth,
         showBackground: showBackground,
         backgroundStyle: {

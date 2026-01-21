@@ -80,6 +80,7 @@ const DivergingHorizontalBarExample = ({
         type: 'bar',
         data: profit,
         label: { show: true, position: 'inside', formatter: '{c}', color: '#fff' },
+        emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
         itemStyle: { color: themeObj.seriesColors?.[0], borderWidth: 0 },
       },
       {
@@ -87,6 +88,7 @@ const DivergingHorizontalBarExample = ({
         type: 'bar',
         data: expenses,
         label: { show: true, position: 'outside', formatter: '{c}' },
+        emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
         itemStyle: { color: themeObj.seriesColors?.[3] || '#4b4f6a', borderWidth: 0 },
       },
       {
@@ -94,6 +96,7 @@ const DivergingHorizontalBarExample = ({
         type: 'bar',
         data: income,
         label: { show: true, position: 'inside', formatter: '{c}', color: '#222' },
+        emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
         itemStyle: { color: themeObj.seriesColors?.[2], borderWidth: 0 },
       },
     ],
