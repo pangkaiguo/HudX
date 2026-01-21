@@ -52,7 +52,7 @@ export const AdvancedPieExample = ({
       // Demonstrating conflict/interaction between width, height and itemWidth
       width: 300, // Limits the total width. With itemWidth 140, only 1 column fits (2nd column would overflow 200px)
       height: 150, // Limits height, forcing wrap to 2nd column. But 2nd column is clipped by width.
-      itemWidth: 150, // Fixed width for each legend item (icon + text space)
+      itemWidth: 130, // Fixed width for each legend item (icon + text space)
     },
     series: [
       {

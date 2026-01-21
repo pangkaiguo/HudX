@@ -205,44 +205,40 @@ export default class Legend extends Group {
     };
 
     const measurements = this._items.map((item) => {
-      let currentItemWidth = itemWidth;
-      let currentTextMaxWidth = Math.max(
-        10,
-        currentItemWidth - iconWidth - iconGap,
-      );
+      const paddingX = this._option.itemPadding ?? 8;
+      const paddingY = this._option.itemPadding ?? 8;
+
+      // itemWidth defaults to 100 if undefined (consistent with previous behavior)
+      // AND it is treated as TOTAL width (Border-Box model)
+      const totalItemWidth = this._option.itemWidth ?? 100;
+
+      // Calculate available content width
+      let currentItemWidth = Math.max(0, totalItemWidth - paddingX * 2);
+      let currentTextMaxWidth = Math.max(10, currentItemWidth - iconWidth - iconGap);
 
       if (this._option.itemMaxWidth) {
-        const textWidth = ctx.measureText(item.name).width;
-        const maxAvailableTextWidth =
-          this._option.itemMaxWidth - iconWidth - iconGap;
+        // itemMaxWidth is also treated as TOTAL width
+        const maxContentWidth = Math.max(0, this._option.itemMaxWidth - paddingX * 2);
+        const maxAvailableTextWidth = Math.max(10, maxContentWidth - iconWidth - iconGap);
 
-        if (textWidth <= maxAvailableTextWidth) {
-          currentTextMaxWidth = maxAvailableTextWidth; // Allow wrapping if somehow needed, but width is auto
-          currentItemWidth = textWidth + iconWidth + iconGap;
-        } else {
+        if (currentTextMaxWidth > maxAvailableTextWidth) {
           currentTextMaxWidth = maxAvailableTextWidth;
-          currentItemWidth = this._option.itemMaxWidth;
+          currentItemWidth = maxContentWidth;
         }
       }
 
       const lines = wrapText(item.name, currentTextMaxWidth);
 
-      // Re-calculate width if using maxWidth (auto width behavior)
-      if (this._option.itemMaxWidth) {
-        let maxLineWidth = 0;
-        lines.forEach(
-          (l) =>
-            (maxLineWidth = Math.max(maxLineWidth, ctx.measureText(l).width)),
-        );
-        currentItemWidth = maxLineWidth + iconWidth + iconGap;
-      }
+      // If we are strictly using fixed width (which is always true now due to default),
+      // currentItemWidth remains as calculated. 
+      // EXCEPT if itemMaxWidth forced a constraint? 
+      // Actually, if itemWidth is set (or default 100), we stick to it.
+      // itemMaxWidth only reduces it if itemMaxWidth < itemWidth?
+      // Logic above: `if (currentTextMaxWidth > maxAvailableTextWidth)` implies narrowing.
 
       const lineHeight = fontSize + 4;
       const textHeight = lines.length * lineHeight;
       const itemH = Math.max(16, textHeight);
-
-      const paddingX = this._option.itemPadding ?? 8;
-      const paddingY = this._option.itemPadding ?? 8;
 
       return {
         item,
@@ -429,7 +425,7 @@ export default class Legend extends Group {
         y: 0,
         width: totalWidth,
         height: totalHeight,
-        r: this._option.borderRadius ?? 0,
+        r: this._option.borderRadius ?? DEFAULT_BORDER_RADIUS,
       },
       style: {
         fill: this._option.backgroundColor,
