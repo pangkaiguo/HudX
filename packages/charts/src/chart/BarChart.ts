@@ -493,7 +493,7 @@ export default class BarChart extends Chart {
             pixelState.neg = barValueEnd;
           }
 
-          let barX, barY, barWidth, barHeight;
+          let barX: number, barY: number, barWidth: number, barHeight: number;
 
           if (isHorizontal) {
             barX = Math.min(barValueStart, barValueEnd);

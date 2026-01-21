@@ -369,8 +369,7 @@ export const examples: Example[] = [
       itemStyle: { color: '#91cc75' },
       lineStyle: { width: 1 },
       showSymbol: true,
-      symbol: 'rect',
-      symbolSize: 8
+      symbol: 'circle'
     },
     {
       name: 'Series C',
@@ -379,8 +378,7 @@ export const examples: Example[] = [
       itemStyle: { color: '#fac858' },
       lineStyle: { width: 1 },
       showSymbol: true,
-      symbol: 'triangle',
-      symbolSize: 10
+      symbol: 'circle'
     }
   ],
   animation: true,

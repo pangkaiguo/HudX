@@ -376,18 +376,18 @@ export default class LineChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item) &&
-              'value' in item
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
                 ? (item as any).value
                 : item;
             yVal = Array.isArray(raw) ? raw[1] ?? raw[0] : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item) &&
-              'value' in item
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
                 ? (item as any).value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -566,7 +566,7 @@ export default class LineChart extends Chart {
         if (seriesItem.showSymbol !== false) {
           const itemStyle = seriesItem.itemStyle || {};
           const pointColor = itemStyle.color || lineColor;
-          const pointSize = seriesItem.symbolSize || itemStyle.borderWidth || 4; // Use symbolSize if available
+          const pointSize = seriesItem.symbolSize || itemStyle.borderWidth || 2; // Use symbolSize if available
           const symbolType = seriesItem.symbol || 'circle';
 
           let pointFill: string | CanvasPattern = pointColor;
@@ -625,10 +625,10 @@ export default class LineChart extends Chart {
 
                 const itemName =
                   typeof item === 'object' &&
-                  item !== null &&
-                  !Array.isArray(item) &&
-                  'name' in item &&
-                  typeof (item as any).name === 'string'
+                    item !== null &&
+                    !Array.isArray(item) &&
+                    'name' in item &&
+                    typeof (item as any).name === 'string'
                     ? (item as any).name
                     : xAxis?.data?.[pointIndex] || '';
                 const itemValue = this._getDataValue(item);
