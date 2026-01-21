@@ -144,6 +144,9 @@ export default class Chart {
     });
     this._tooltip.setContainer(this.getDom());
     this.setOption(this._option);
+    if (typeof ResizeObserver !== 'undefined') {
+      this.makeResponsive();
+    }
   }
 
   mount(): this {
@@ -1104,14 +1107,27 @@ export default class Chart {
   }
 
   makeResponsive(): this {
-    const resizeObserver = new ResizeObserver(() => {
-      this.resize();
-    });
+    if ((this as any)._resizeObserver || (this as any)._windowResizeHandler) {
+      return this;
+    }
 
-    resizeObserver.observe(this._renderer.getDom());
+    if (typeof ResizeObserver !== 'undefined') {
+      const resizeObserver = new ResizeObserver(() => {
+        this.resize();
+      });
 
-    // Store observer for cleanup
-    (this as any)._resizeObserver = resizeObserver;
+      resizeObserver.observe(this._renderer.getDom());
+
+      (this as any)._resizeObserver = resizeObserver;
+      return this;
+    }
+
+    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+      const handler = () => this.resize();
+      window.addEventListener('resize', handler);
+      (this as any)._windowResizeHandler = handler;
+      return this;
+    }
 
     return this;
   }
@@ -1120,6 +1136,10 @@ export default class Chart {
     if ((this as any)._resizeObserver) {
       (this as any)._resizeObserver.disconnect();
       delete (this as any)._resizeObserver;
+    }
+    if ((this as any)._windowResizeHandler && typeof window !== 'undefined') {
+      window.removeEventListener('resize', (this as any)._windowResizeHandler);
+      delete (this as any)._windowResizeHandler;
     }
     return this;
   }

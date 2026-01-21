@@ -98,6 +98,52 @@ describe('PieChart', () => {
     expect(chart).toBeDefined();
   });
 
+  it('should render grid background and layout pie within grid bounds', () => {
+    const chart = new PieChart(container);
+    chart.setOption({
+      animation: false,
+      legend: { show: false },
+      grid: {
+        show: true,
+        left: 50,
+        right: 30,
+        top: 40,
+        bottom: 20,
+        backgroundColor: '#abcdef',
+        borderColor: '#123456',
+        borderWidth: 2,
+      },
+      series: [
+        {
+          type: 'pie',
+          data: [
+            { value: 10, name: 'A' },
+            { value: 20, name: 'B' },
+          ],
+        },
+      ],
+    });
+
+    const root = (chart as any)._root;
+    const rect = root
+      .children()
+      .find((c: any) => c?.constructor?.name === 'Rect' && c.style?.fill === '#abcdef');
+    expect(rect).toBeDefined();
+    expect(rect.style.stroke).toBe('#123456');
+    expect(rect.style.lineWidth).toBe(2);
+    expect(rect.shape.x).toBe(50);
+    expect(rect.shape.y).toBe(40);
+    expect(rect.shape.width).toBe(800 - 50 - 30);
+    expect(rect.shape.height).toBe(600 - 40 - 20);
+
+    const sectors = Array.from((chart as any)._activeSectors.values()) as any[];
+    expect(sectors.length).toBe(2);
+    const cxExpected = 50 + (800 - 50 - 30) / 2;
+    const cyExpected = 40 + (600 - 40 - 20) / 2;
+    expect(sectors[0].shape.cx).toBeCloseTo(cxExpected, 2);
+    expect(sectors[0].shape.cy).toBeCloseTo(cyExpected, 2);
+  });
+
   it('should support roseType', () => {
     const chart = new PieChart(container);
     const option: ChartOption = {

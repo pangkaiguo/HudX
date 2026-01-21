@@ -4,6 +4,19 @@ import type { ChartOption } from '../types';
 
 // Mock Canvas
 beforeAll(() => {
+  const observeSpy = vi.fn();
+  const disconnectSpy = vi.fn();
+  vi.stubGlobal(
+    'ResizeObserver',
+    class ResizeObserverMock {
+      constructor(_cb: any) { }
+      observe = observeSpy;
+      disconnect = disconnectSpy;
+    } as any,
+  );
+  vi.stubGlobal('__ro_observeSpy', observeSpy as any);
+  vi.stubGlobal('__ro_disconnectSpy', disconnectSpy as any);
+
   const mockContext = {
     measureText: (text: string) => ({ width: text.length * 10 }),
     fillText: vi.fn(),
@@ -63,6 +76,28 @@ class TestChart extends Chart {
 }
 
 describe('Chart (Core)', () => {
+  const getObserveSpy = () => (globalThis as any).__ro_observeSpy as ReturnType<typeof vi.fn>;
+  const getDisconnectSpy = () =>
+    (globalThis as any).__ro_disconnectSpy as ReturnType<typeof vi.fn>;
+
+  describe('Responsive', () => {
+    it('should auto observe container resize and cleanup on dispose', () => {
+      const dom = document.createElement('div');
+      const observeSpy = getObserveSpy();
+      const disconnectSpy = getDisconnectSpy();
+      observeSpy.mockClear();
+      disconnectSpy.mockClear();
+
+      const chart = new TestChart(dom);
+      expect(observeSpy).toHaveBeenCalled();
+      const observedTargets = observeSpy.mock.calls.map((c) => c[0]);
+      expect(observedTargets).toContain(dom);
+
+      chart.dispose();
+      expect(disconnectSpy).toHaveBeenCalled();
+    });
+  });
+
   describe('Lifecycle', () => {
     it('should initialize correctly', () => {
       const dom = document.createElement('div');

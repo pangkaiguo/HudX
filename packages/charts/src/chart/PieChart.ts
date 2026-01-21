@@ -3,6 +3,7 @@ import type { SeriesOption, ChartData, EmphasisOption, RenderMode } from 'hudx-r
 import { resolveAnimationDelay } from './chartUtils';
 import {
   Sector,
+  Rect,
   Text,
   Polyline,
   createDecalPattern,
@@ -53,6 +54,9 @@ export default class PieChart extends Chart {
 
       const { seriesItem, data } = this._getValidSeriesAndData();
       if (!seriesItem || !data) return;
+
+      const bounds = this._getPieBounds();
+      this._renderGridBackground(bounds);
 
       const total = this._calculateTotal(data);
 
@@ -1333,23 +1337,25 @@ export default class PieChart extends Chart {
   // --- Geometry Helpers ---
 
   private _getCenter(seriesItem: SeriesOption): [number, number] {
+    const bounds = this._getPieBounds();
     const center = (seriesItem as any).center;
     if (Array.isArray(center)) {
       return [
         typeof center[0] === 'string'
-          ? this._parsePercent(center[0], this._width)
+          ? bounds.x + this._parsePercent(center[0], bounds.width)
           : center[0],
         typeof center[1] === 'string'
-          ? this._parsePercent(center[1], this._height)
+          ? bounds.y + this._parsePercent(center[1], bounds.height)
           : center[1],
       ];
     }
-    return [this._width / 2, this._height / 2];
+    return [bounds.x + bounds.width / 2, bounds.y + bounds.height / 2];
   }
 
   private _getRadius(seriesItem: SeriesOption): [number, number] {
     const radius = (seriesItem as any).radius;
-    const maxRadius = Math.min(this._width, this._height) / 2;
+    const bounds = this._getPieBounds();
+    const maxRadius = Math.min(bounds.width, bounds.height) / 2;
 
     if (Array.isArray(radius)) {
       return [
@@ -1381,6 +1387,69 @@ export default class PieChart extends Chart {
       return [maxRadius * 0.4, maxRadius * 0.8];
     }
     return [0, maxRadius * 0.8];
+  }
+
+  private _getPieBounds(): { x: number; y: number; width: number; height: number } {
+    const grid = Array.isArray(this._option.grid) ? this._option.grid[0] : this._option.grid;
+    if (!grid) {
+      return { x: 0, y: 0, width: this._width, height: this._height };
+    }
+
+    const parse = (v: any, total: number, defaultVal: number): number => {
+      if (v === undefined || v === null) return defaultVal;
+      if (typeof v === 'number') return v;
+      const str = String(v).trim();
+      if (str.endsWith('%')) {
+        const p = parseFloat(str);
+        return Number.isFinite(p) ? (p / 100) * total : defaultVal;
+      }
+      const n = parseFloat(str);
+      return Number.isFinite(n) ? n : defaultVal;
+    };
+
+    const left = parse((grid as any).left, this._width, 0);
+    const right = parse((grid as any).right, this._width, 0);
+    const top = parse((grid as any).top, this._height, 0);
+    const bottom = parse((grid as any).bottom, this._height, 0);
+
+    const width = Math.max(0, this._width - left - right);
+    const height = Math.max(0, this._height - top - bottom);
+    return { x: left, y: top, width, height };
+  }
+
+  private _renderGridBackground(bounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }): void {
+    const grid = Array.isArray(this._option.grid) ? this._option.grid[0] : this._option.grid;
+    if (!grid) return;
+
+    const show = (grid as any).show === true;
+    const fill =
+      (grid as any).backgroundColor !== undefined
+        ? (grid as any).backgroundColor
+        : 'transparent';
+    const stroke =
+      (grid as any).borderColor !== undefined
+        ? (grid as any).borderColor
+        : show
+          ? this.getThemeConfig().borderColor
+          : 'transparent';
+    const lineWidth =
+      (grid as any).borderWidth !== undefined ? (grid as any).borderWidth : show ? 1 : 0;
+
+    if (!show && fill === 'transparent' && (stroke === 'transparent' || lineWidth === 0)) {
+      return;
+    }
+
+    const rect = new Rect({
+      shape: { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height, r: 0 },
+      style: { fill, stroke, lineWidth },
+      z: 0,
+    });
+    this._root.add(rect);
   }
 
   private _parsePercent(value: string | number, base: number): number {
