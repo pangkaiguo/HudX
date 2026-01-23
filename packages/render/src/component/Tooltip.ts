@@ -5,7 +5,7 @@
 import { ThemeManager } from '../theme/ThemeManager';
 import type { ChartEvent, BoundingRect } from '../types';
 import {
-  DEFAULT_BORDER_RADIUS,
+  TOOLTIP_DEFAULT_BORDER_RADIUS,
   DEFAULT_TOOLTIP_LINE_HEIGHT,
   DEFAULT_TOOLTIP_PADDING,
   TOOLTIP_DEFAULT_PADDING_PX,
@@ -138,7 +138,7 @@ export default class Tooltip {
       });
     }
 
-    s.borderRadius = `${DEFAULT_BORDER_RADIUS}px`;
+    s.borderRadius = `${TOOLTIP_DEFAULT_BORDER_RADIUS}px`;
 
     if (opt.extraCssText) {
       this._el.style.cssText += opt.extraCssText;

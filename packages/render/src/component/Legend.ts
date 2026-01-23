@@ -17,7 +17,7 @@ import Rect from '../graphic/Rect';
 import Text from '../graphic/Text';
 import Circle from '../graphic/Circle';
 import Line from '../graphic/Line';
-import { COLOR_TRANSPARENT, DEFAULT_BORDER_RADIUS, Z_LEGEND } from '../constants';
+import { COLOR_TRANSPARENT, TOOLTIP_DEFAULT_BORDER_RADIUS, Z_LEGEND } from '../constants';
 import { createDecalPattern } from '../util/pattern';
 import type { DecalObject, TextStyle } from '../types';
 import { ThemeManager } from '../theme/ThemeManager';
@@ -90,7 +90,7 @@ export default class Legend extends Group {
       backgroundColor: theme.backgroundColor,
       borderColor: theme.borderColor,
       borderWidth: 1,
-      borderRadius: DEFAULT_BORDER_RADIUS,
+      borderRadius: TOOLTIP_DEFAULT_BORDER_RADIUS,
       textColor: theme.legendTextColor,
       inactiveColor: theme.borderColor,
       padding: 8,
@@ -425,7 +425,7 @@ export default class Legend extends Group {
         y: 0,
         width: totalWidth,
         height: totalHeight,
-        r: this._option.borderRadius ?? DEFAULT_BORDER_RADIUS,
+        r: this._option.borderRadius ?? TOOLTIP_DEFAULT_BORDER_RADIUS,
       },
       style: {
         fill: this._option.backgroundColor,
@@ -664,7 +664,7 @@ export default class Legend extends Group {
     s.padding = (opt.padding || 8) + 'px';
     s.fontSize = (opt.fontSize || 12) + 'px';
     s.color = String(opt.textColor ?? theme.legendTextColor);
-    s.borderRadius = `${opt.borderRadius ?? DEFAULT_BORDER_RADIUS}px`;
+    s.borderRadius = `${opt.borderRadius ?? TOOLTIP_DEFAULT_BORDER_RADIUS}px`;
     s.pointerEvents = 'auto';
     s.display = 'block';
 

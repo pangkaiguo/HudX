@@ -12,15 +12,15 @@ export const Z_TOOLTIP = 100;
 
 export const COLOR_TRANSPARENT = 'transparent';
 export const CSS_PX = 'px';
-export const DEFAULT_BORDER_RADIUS = 4;
 export const DEFAULT_TOOLTIP_PADDING: [number, number, number, number] = [
-  10, 10, 10, 10,
+  10, 10, 24, 10,
 ];
 export const DEFAULT_TOOLTIP_LINE_HEIGHT = 20;
 
 export const TOOLTIP_DOM_Z_INDEX = 9_999_999;
 export const TOOLTIP_TRANSITION_BEZIER = 'cubic-bezier(0.23, 1, 0.32, 1)';
 export const TOOLTIP_DEFAULT_PADDING_PX = 5;
+export const TOOLTIP_DEFAULT_BORDER_RADIUS = 2;
 
 export const DECAL_AUTO_FG_ALPHA = 0.35;
 export const DECAL_AUTO_FG_LUMINANCE_THRESHOLD = 0.35;
