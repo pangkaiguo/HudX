@@ -27,7 +27,7 @@ export const BasicBarExample = ({
   // const [inverse, setInverse] = useState(false);
   const [xGridType, setXGridType] = useState<'solid' | 'dashed'>('dashed');
   const [yGridType, setYGridType] = useState<'solid' | 'dashed'>('solid');
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const [barWidth, setBarWidth] = useState<number | 'auto'>('auto');
 
   const themeObj = ThemeManager.getTheme(theme);

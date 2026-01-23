@@ -16,7 +16,7 @@ export const SmoothLineExample = ({
   const border = ui.colorBorderSecondary || themeObj.borderColor;
   const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
 
-  const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = React.useState<RenderMode>('svg');
   const [showGrid, setShowGrid] = React.useState(true);
   const [gridTop, setGridTop] = React.useState(60);
   const [splitNumber, setSplitNumber] = React.useState(5);

@@ -21,7 +21,7 @@ export const BasicLineExample = ({
   const [gridTop, setGridTop] = React.useState(40);
   const [splitNumber, setSplitNumber] = React.useState(10);
   const [xSplitNumber, setXSplitNumber] = React.useState(10);
-  const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = React.useState<RenderMode>('svg');
 
   const option: ChartOption = {
     tooltip: {

@@ -16,7 +16,7 @@ const ScatterChartExample = ({
   const [gridTop, setGridTop] = React.useState(80);
   const [splitNumber, setSplitNumber] = React.useState(10);
   const [xSplitNumber, setXSplitNumber] = React.useState(10);
-  const [renderMode, setRenderMode] = React.useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = React.useState<RenderMode>('svg');
   const [xGridType, setXGridType] = React.useState<'solid' | 'dashed'>(
     'dashed',
   );

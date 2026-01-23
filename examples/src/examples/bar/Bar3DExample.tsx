@@ -18,7 +18,7 @@ export const Bar3DExample = ({
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(10);
   const [xSplitNumber, setXSplitNumber] = useState(10);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
 
   const option = useMemo<ChartOption>(
     () => ({

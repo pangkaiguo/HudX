@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { HChart, type ChartOption } from 'hudx-charts';
-import { Locale, ThemeManager, Theme } from 'hudx-render';
+import { Locale, ThemeManager, Theme, type RenderMode } from 'hudx-render';
 import { CodeEditor } from './CodeEditor';
 import { getLocaleLabel, t } from '../i18n';
 import { EXAMPLES_LOCALES } from '../constants';
@@ -31,7 +31,7 @@ export const CodeBox: React.FC<CodeBoxProps> = ({
   const [code, setCode] = useState(initialCode);
   const [option, setOption] = useState<ChartOption>({});
   const [error, setError] = useState<string | null>(null);
-  const [renderMode, setRenderMode] = useState<'canvas' | 'svg'>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const [activeTab, setActiveTab] = useState<'JS' | 'TS'>('JS');
   const chartContainerRef = React.useRef<HTMLDivElement>(null);
 

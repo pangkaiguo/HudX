@@ -11,7 +11,7 @@ export const HalfDoughnutExample = ({
   locale?: Locale;
 }) => {
   const [isDecal, setIsDecal] = useState(false);
-  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
+  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 

@@ -9,6 +9,7 @@ import {
   getUnit32RandomValues,
   Locale,
   Theme,
+  type RenderMode,
 } from 'hudx-render';
 import { t } from '../i18n';
 import { EXAMPLES_COLORS, EXAMPLES_RENDERER_CANVAS } from '../constants';
@@ -25,7 +26,7 @@ export const PerformanceExample = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(1000);
   const [renderTime, setRenderTime] = useState(0);
-  const [mode, setMode] = useState<'canvas' | 'svg'>('canvas');
+  const [mode, setMode] = useState<RenderMode>('svg');
   const [shapeType, setShapeType] = useState<ShapeType>('circle');
   const normalizedTheme = (theme || 'light').toLowerCase();
 
