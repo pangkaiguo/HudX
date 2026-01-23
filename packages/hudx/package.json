@@ -19,7 +19,8 @@
   "scripts": {
     "build": "vite build && node scripts/build-hudx.js && pnpm pack",
     "dev": "vite build --watch",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore",
+    "lint": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path ../../.prettierignore"
   },
   "dependencies": {
     "hudx-charts": "workspace:*",

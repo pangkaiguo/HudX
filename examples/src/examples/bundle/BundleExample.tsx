@@ -99,7 +99,9 @@ export const BundleExample: React.FC<{ theme?: any; locale?: Locale }> = ({
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>{t(locale, 'examples.bundle.unified.title', 'Unified Bundle Example')}</h1>
+      <h1>
+        {t(locale, 'examples.bundle.unified.title', 'Unified Bundle Example')}
+      </h1>
       <p>
         {t(
           locale,
@@ -112,7 +114,11 @@ export const BundleExample: React.FC<{ theme?: any; locale?: Locale }> = ({
 
       <div style={{ marginBottom: 40 }}>
         <h2>
-          {t(locale, 'examples.bundle.unified.section1', "1. HChart Component imported from 'hudx'")}
+          {t(
+            locale,
+            'examples.bundle.unified.section1',
+            "1. HChart Component imported from 'hudx'",
+          )}
         </h2>
         <div style={{ border: '1px solid #ccc', display: 'inline-block' }}>
           <HChart

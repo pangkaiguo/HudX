@@ -82,7 +82,10 @@ export const ThemeExample = ({
         }),
       );
 
-      renderer.resize(EXAMPLES_RENDERER_CANVAS.width, EXAMPLES_RENDERER_CANVAS.height);
+      renderer.resize(
+        EXAMPLES_RENDERER_CANVAS.width,
+        EXAMPLES_RENDERER_CANVAS.height,
+      );
       renderer.flush();
     };
 
@@ -108,21 +111,31 @@ export const ThemeExample = ({
         <div style={{ display: 'flex', gap: 10 }}>
           <button
             onClick={() => setThemeName('light')}
-            aria-label={t(locale, 'examples.themeExample.switchToLight', 'Switch to light theme')}
+            aria-label={t(
+              locale,
+              'examples.themeExample.switchToLight',
+              'Switch to light theme',
+            )}
             style={{ padding: '8px 16px', cursor: 'pointer' }}
           >
             {t(locale, 'examples.theme.light', 'Light')}
           </button>
           <button
             onClick={() => setThemeName('dark')}
-            aria-label={t(locale, 'examples.themeExample.switchToDark', 'Switch to dark theme')}
+            aria-label={t(
+              locale,
+              'examples.themeExample.switchToDark',
+              'Switch to dark theme',
+            )}
             style={{ padding: '8px 16px', cursor: 'pointer' }}
           >
             {t(locale, 'examples.theme.dark', 'Dark')}
           </button>
         </div>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -132,8 +145,12 @@ export const ThemeExample = ({
               border: `1px solid ${EXAMPLES_COLORS.controlBorder}`,
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
       </div>

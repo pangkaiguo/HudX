@@ -79,17 +79,33 @@ const ScatterChartExample = lazy(
 );
 
 // Sub components
-const AxisLabelExample = lazy(() => import('./examples/sub-components/AxisLabelExample'));
-const TitleExample = lazy(() => import('./examples/sub-components/TitleExample'));
-const LegendExample = lazy(() => import('./examples/sub-components/LegendExample'));
-const TooltipExample = lazy(() => import('./examples/sub-components/TooltipExample'));
-const RichTextExample = lazy(() => import('./examples/sub-components/RichTextExample'));
+const AxisLabelExample = lazy(
+  () => import('./examples/sub-components/AxisLabelExample'),
+);
+const TitleExample = lazy(
+  () => import('./examples/sub-components/TitleExample'),
+);
+const LegendExample = lazy(
+  () => import('./examples/sub-components/LegendExample'),
+);
+const TooltipExample = lazy(
+  () => import('./examples/sub-components/TooltipExample'),
+);
+const RichTextExample = lazy(
+  () => import('./examples/sub-components/RichTextExample'),
+);
 
 // Bundle examples
 const BundleExample = lazy(() => import('./examples/bundle/BundleExample'));
-const BundleBarExample = lazy(() => import('./examples/bundle/BundleBarExample'));
-const BundleLineExample = lazy(() => import('./examples/bundle/BundleLineExample'));
-const BundlePieExample = lazy(() => import('./examples/bundle/BundlePieExample'));
+const BundleBarExample = lazy(
+  () => import('./examples/bundle/BundleBarExample'),
+);
+const BundleLineExample = lazy(
+  () => import('./examples/bundle/BundleLineExample'),
+);
+const BundlePieExample = lazy(
+  () => import('./examples/bundle/BundlePieExample'),
+);
 
 type ClassicExample = { id: string; component: React.ComponentType<any> };
 type ClassicSection = { categoryKey: string; items: ClassicExample[] };
@@ -99,7 +115,10 @@ const chartExamples: ClassicSection[] = [
     categoryKey: 'bar',
     items: [
       { id: 'basic-bar', component: BasicBarExample },
-      { id: 'diverging-horizontal-bar', component: DivergingHorizontalBarExample },
+      {
+        id: 'diverging-horizontal-bar',
+        component: DivergingHorizontalBarExample,
+      },
       { id: 'diverging-vertical-bar', component: DivergingVerticalBarExample },
       { id: 'stack-bar', component: StackBarExample },
       { id: 'stack-horizontal-bar', component: StackHorizontalBarExample },
@@ -150,7 +169,10 @@ const chartExamples: ClassicSection[] = [
   },
 ];
 
-const featureExamples: Array<{ id: string; component: React.ComponentType<any> }> = [
+const featureExamples: Array<{
+  id: string;
+  component: React.ComponentType<any>;
+}> = [
   { id: 'shape', component: ShapeExample },
   { id: 'themes', component: ThemeExample },
   { id: 'interaction', component: InteractionExample },
@@ -180,9 +202,11 @@ const NavButton = ({
   const [isFocused, setIsFocused] = useState(false);
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
   const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
-  const hoverBg = ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
+  const hoverBg =
+    ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
   const isActive = activeExample === example.id;
 
   return (
@@ -197,7 +221,11 @@ const NavButton = ({
         marginBottom: 4,
         border: `2px solid ${isFocused ? String(primary) : 'transparent'}`,
         borderRadius: 6,
-        backgroundColor: isActive ? primary : isHovered ? String(hoverBg) : 'transparent',
+        backgroundColor: isActive
+          ? primary
+          : isHovered
+            ? String(hoverBg)
+            : 'transparent',
         color: isActive ? primaryText : themeObj.textColor,
         cursor: 'pointer',
         textAlign: 'left',
@@ -276,7 +304,8 @@ const SegmentedControl = ({
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const border = ui.colorBorderSecondary || themeObj.borderColor;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
   const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
 
   return (
@@ -349,7 +378,10 @@ const SidebarSettingsCard = ({
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const border = ui.colorBorderSecondary || themeObj.borderColor;
-  const cardBg = ui.colorFillContainerAlt || ui.colorFillContainer || themeObj.backgroundColor;
+  const cardBg =
+    ui.colorFillContainerAlt ||
+    ui.colorFillContainer ||
+    themeObj.backgroundColor;
   const inputBg = ui.colorFillContainer || themeObj.backgroundColor;
   const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
 
@@ -439,9 +471,16 @@ const SettingsPopover = ({
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const border = ui.colorBorderSecondary || themeObj.borderColor;
-  const cardBg = ui.colorFillContainerAlt || ui.colorFillContainer || themeObj.backgroundColor;
+  const cardBg =
+    ui.colorFillContainerAlt ||
+    ui.colorFillContainer ||
+    themeObj.backgroundColor;
 
-  const [pos, setPos] = useState<{ left: number; top: number; maxHeight: number }>({
+  const [pos, setPos] = useState<{
+    left: number;
+    top: number;
+    maxHeight: number;
+  }>({
     left: 8,
     top: 8,
     maxHeight: 300,
@@ -457,9 +496,9 @@ const SettingsPopover = ({
 
       const left = rect
         ? Math.min(
-          Math.max(gap, rect.right - width),
-          window.innerWidth - width - gap,
-        )
+            Math.max(gap, rect.right - width),
+            window.innerWidth - width - gap,
+          )
         : gap;
       const top = rect ? rect.bottom + gap : gap;
       const maxHeight = Math.max(120, window.innerHeight - top - gap);
@@ -531,8 +570,16 @@ const ChartCard = ({
   theme: Theme;
   locale: Locale;
 }) => {
-  const titleText = t(locale, `examples.list.${example.id}.title`, example.title);
-  const subtitleText = t(locale, `examples.list.${example.id}.subtitle`, example.subtitle);
+  const titleText = t(
+    locale,
+    `examples.list.${example.id}.title`,
+    example.title,
+  );
+  const subtitleText = t(
+    locale,
+    `examples.list.${example.id}.subtitle`,
+    example.subtitle,
+  );
   const option = useMemo(() => parseOption(example.code), [example.code]);
   const previewOption = useMemo(
     () => ({
@@ -659,7 +706,11 @@ const Dashboard = ({
   const pageBg = ui.colorFillPage || themeObj.backgroundColor;
   const hintText = ui.colorTextTertiary || themeObj.axisLabelColor;
 
-  const categoryLabel = t(locale, `examples.category.${activeCategory}`, activeCategory);
+  const categoryLabel = t(
+    locale,
+    `examples.category.${activeCategory}`,
+    activeCategory,
+  );
   const filteredExamples = examples.filter(
     (e) => e.category === activeCategory,
   );
@@ -703,221 +754,233 @@ const Dashboard = ({
   );
 };
 
-const OldApp = memo(({
-  theme,
-  setTheme,
-  setMode,
-  locale,
-  setLocale,
-  activeExample,
-  setActiveExample,
-}: {
-  theme: 'Light' | 'Dark';
-  setTheme: (t: 'Light' | 'Dark') => void;
-  setMode: (m: 'classic' | 'modern') => void;
-  locale: Locale;
-  setLocale: (l: Locale) => void;
-  activeExample: string;
-  setActiveExample: (id: string) => void;
-}) => {
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const settingsButtonRef = React.useRef<HTMLButtonElement>(null);
-  const themeKey = theme.toLowerCase() as Theme;
-  const themeObj = ThemeManager.getTheme(themeKey);
-  const ui = themeObj.token as any;
-  const border = ui.colorBorderSecondary || themeObj.borderColor;
-  const pageBg = ui.colorFillPage || themeObj.backgroundColor;
-  const navBg = ui.colorFillContainer || themeObj.backgroundColor;
-  const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
-  const textTertiary = ui.colorTextTertiary || themeObj.axisLabelColor;
+const OldApp = memo(
+  ({
+    theme,
+    setTheme,
+    setMode,
+    locale,
+    setLocale,
+    activeExample,
+    setActiveExample,
+  }: {
+    theme: 'Light' | 'Dark';
+    setTheme: (t: 'Light' | 'Dark') => void;
+    setMode: (m: 'classic' | 'modern') => void;
+    locale: Locale;
+    setLocale: (l: Locale) => void;
+    activeExample: string;
+    setActiveExample: (id: string) => void;
+  }) => {
+    const [settingsOpen, setSettingsOpen] = useState(false);
+    const settingsButtonRef = React.useRef<HTMLButtonElement>(null);
+    const themeKey = theme.toLowerCase() as Theme;
+    const themeObj = ThemeManager.getTheme(themeKey);
+    const ui = themeObj.token as any;
+    const border = ui.colorBorderSecondary || themeObj.borderColor;
+    const pageBg = ui.colorFillPage || themeObj.backgroundColor;
+    const navBg = ui.colorFillContainer || themeObj.backgroundColor;
+    const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
+    const textTertiary = ui.colorTextTertiary || themeObj.axisLabelColor;
 
-  const ActiveComponent = useMemo(
-    () =>
-      allExamples.find((e) => e.id === activeExample)?.component ||
-      AdvancedPieChartExample,
-    [activeExample],
-  );
+    const ActiveComponent = useMemo(
+      () =>
+        allExamples.find((e) => e.id === activeExample)?.component ||
+        AdvancedPieChartExample,
+      [activeExample],
+    );
 
-  return (
-    <div
-      style={{
-        display: 'flex',
-        height: '100vh',
-        backgroundColor: pageBg,
-      }}
-    >
-      <nav
-        aria-label='Examples navigation'
+    return (
+      <div
         style={{
-          width: EXAMPLES_LAYOUT.sidebarWidth,
-          borderRight: `1px solid ${border}`,
           display: 'flex',
-          flexDirection: 'column',
           height: '100vh',
-          overflow: 'hidden',
-          backgroundColor: navBg,
-          color: themeObj.textColor,
+          backgroundColor: pageBg,
         }}
       >
-        <div
+        <nav
+          aria-label='Examples navigation'
           style={{
-            position: 'sticky',
-            top: 0,
-            zIndex: 2,
+            width: EXAMPLES_LAYOUT.sidebarWidth,
+            borderRight: `1px solid ${border}`,
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100vh',
+            overflow: 'hidden',
             backgroundColor: navBg,
-            padding: '20px 20px 12px',
-            borderBottom: `1px solid ${border}`,
+            color: themeObj.textColor,
           }}
         >
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 8,
+              position: 'sticky',
+              top: 0,
+              zIndex: 2,
+              backgroundColor: navBg,
+              padding: '20px 20px 12px',
+              borderBottom: `1px solid ${border}`,
             }}
           >
-            <h1
-              style={{
-                fontSize: 20,
-                margin: 0,
-                color: themeObj.textColor,
-                lineHeight: '24px',
-              }}
-            >
-              {t(locale, 'examples.app.title')}
-            </h1>
-            <button
-              ref={settingsButtonRef}
-              onClick={() => setSettingsOpen(true)}
-              aria-label={t(locale, 'examples.sidebar.settings', 'Settings')}
-              aria-haspopup='dialog'
-              aria-expanded={settingsOpen}
-              style={{
-                width: 32,
-                height: 32,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 8,
-                border: `1px solid ${border}`,
-                backgroundColor: 'transparent',
-                color: themeObj.textColor,
-                cursor: 'pointer',
-                fontSize: 16,
-                lineHeight: '16px',
-              }}
-            >
-              ⚙︎
-            </button>
-          </div>
-          <SettingsPopover
-            open={settingsOpen}
-            onClose={() => setSettingsOpen(false)}
-            anchorRef={settingsButtonRef}
-            theme={themeKey}
-          >
-            <SidebarSettingsCard
-              theme={themeKey}
-              mode='classic'
-              onModeChange={(next) => {
-                setSettingsOpen(false);
-                setMode(next);
-              }}
-              themeValue={theme}
-              themeLeftValue='Light'
-              themeRightValue='Dark'
-              onThemeChange={(next) => setTheme(next as 'Light' | 'Dark')}
-              locale={locale}
-              onLocaleChange={setLocale}
-            />
-          </SettingsPopover>
-        </div>
-
-        <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}>
-          {chartExamples.map((category) => (
-            <React.Fragment key={category.categoryKey}>
-              <h2
-                style={{
-                  fontSize: 14,
-                  fontWeight: 'bold',
-                  margin: '20px 0 10px',
-                  color: textSecondary,
-                }}
-              >
-                {t(locale, `examples.category.${category.categoryKey}`, category.categoryKey)}
-              </h2>
-              {category.items.map((example) => (
-                <NavButton
-                  key={example.id}
-                  example={example}
-                  label={t(locale, `examples.list.${example.id}.title`, example.id)}
-                  activeExample={activeExample}
-                  setActiveExample={setActiveExample}
-                  theme={themeKey}
-                />
-              ))}
-            </React.Fragment>
-          ))}
-
-          <h2
-            style={{
-              fontSize: 14,
-              fontWeight: 'bold',
-              margin: '20px 0 10px',
-              color: textSecondary,
-            }}
-          >
-            {t(locale, 'examples.nav.featureDemos')}
-          </h2>
-          {featureExamples.map((example) => (
-            <NavButton
-              key={example.id}
-              example={example}
-              label={t(locale, `examples.feature.${example.id}`, example.id)}
-              activeExample={activeExample}
-              setActiveExample={setActiveExample}
-              theme={themeKey}
-            />
-          ))}
-        </div>
-      </nav>
-      <main
-        role='main'
-        aria-label='Example content'
-        style={{
-          flex: 1,
-          padding: EXAMPLES_LAYOUT.mainPadding,
-          overflowY: 'auto',
-          backgroundColor: pageBg,
-          color: themeObj.textColor,
-        }}
-      >
-        <Suspense
-          fallback={
             <div
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                height: '400px',
-                color: textTertiary,
-                fontSize: '16px',
-                willChange: 'contents',
+                justifyContent: 'space-between',
+                gap: 8,
               }}
             >
-              {t(locale, 'examples.loading')}
+              <h1
+                style={{
+                  fontSize: 20,
+                  margin: 0,
+                  color: themeObj.textColor,
+                  lineHeight: '24px',
+                }}
+              >
+                {t(locale, 'examples.app.title')}
+              </h1>
+              <button
+                ref={settingsButtonRef}
+                onClick={() => setSettingsOpen(true)}
+                aria-label={t(locale, 'examples.sidebar.settings', 'Settings')}
+                aria-haspopup='dialog'
+                aria-expanded={settingsOpen}
+                style={{
+                  width: 32,
+                  height: 32,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 8,
+                  border: `1px solid ${border}`,
+                  backgroundColor: 'transparent',
+                  color: themeObj.textColor,
+                  cursor: 'pointer',
+                  fontSize: 16,
+                  lineHeight: '16px',
+                }}
+              >
+                ⚙︎
+              </button>
             </div>
-          }
-        >
-          <div style={{ contain: 'layout style paint' }}>
-            <ActiveComponent theme={theme} locale={locale} />
+            <SettingsPopover
+              open={settingsOpen}
+              onClose={() => setSettingsOpen(false)}
+              anchorRef={settingsButtonRef}
+              theme={themeKey}
+            >
+              <SidebarSettingsCard
+                theme={themeKey}
+                mode='classic'
+                onModeChange={(next) => {
+                  setSettingsOpen(false);
+                  setMode(next);
+                }}
+                themeValue={theme}
+                themeLeftValue='Light'
+                themeRightValue='Dark'
+                onThemeChange={(next) => setTheme(next as 'Light' | 'Dark')}
+                locale={locale}
+                onLocaleChange={setLocale}
+              />
+            </SettingsPopover>
           </div>
-        </Suspense>
-      </main>
-    </div>
-  );
-});
+
+          <div
+            style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}
+          >
+            {chartExamples.map((category) => (
+              <React.Fragment key={category.categoryKey}>
+                <h2
+                  style={{
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                    margin: '20px 0 10px',
+                    color: textSecondary,
+                  }}
+                >
+                  {t(
+                    locale,
+                    `examples.category.${category.categoryKey}`,
+                    category.categoryKey,
+                  )}
+                </h2>
+                {category.items.map((example) => (
+                  <NavButton
+                    key={example.id}
+                    example={example}
+                    label={t(
+                      locale,
+                      `examples.list.${example.id}.title`,
+                      example.id,
+                    )}
+                    activeExample={activeExample}
+                    setActiveExample={setActiveExample}
+                    theme={themeKey}
+                  />
+                ))}
+              </React.Fragment>
+            ))}
+
+            <h2
+              style={{
+                fontSize: 14,
+                fontWeight: 'bold',
+                margin: '20px 0 10px',
+                color: textSecondary,
+              }}
+            >
+              {t(locale, 'examples.nav.featureDemos')}
+            </h2>
+            {featureExamples.map((example) => (
+              <NavButton
+                key={example.id}
+                example={example}
+                label={t(locale, `examples.feature.${example.id}`, example.id)}
+                activeExample={activeExample}
+                setActiveExample={setActiveExample}
+                theme={themeKey}
+              />
+            ))}
+          </div>
+        </nav>
+        <main
+          role='main'
+          aria-label='Example content'
+          style={{
+            flex: 1,
+            padding: EXAMPLES_LAYOUT.mainPadding,
+            overflowY: 'auto',
+            backgroundColor: pageBg,
+            color: themeObj.textColor,
+          }}
+        >
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '400px',
+                  color: textTertiary,
+                  fontSize: '16px',
+                  willChange: 'contents',
+                }}
+              >
+                {t(locale, 'examples.loading')}
+              </div>
+            }
+          >
+            <div style={{ contain: 'layout style paint' }}>
+              <ActiveComponent theme={theme} locale={locale} />
+            </div>
+          </Suspense>
+        </main>
+      </div>
+    );
+  },
+);
 OldApp.displayName = 'OldApp';
 
 const ModernApp = ({
@@ -941,15 +1004,19 @@ const ModernApp = ({
   const pageBg = ui.colorFillPage || themeObj.backgroundColor;
   const navBg = ui.colorFillContainer || themeObj.backgroundColor;
   const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
   const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
-  const hoverBg = ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
+  const hoverBg =
+    ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
 
   const [activeCategory, setActiveCategory] = useLocalStorageState<string>(
     EXAMPLES_STORAGE_KEYS.modernActiveCategory,
     EXAMPLES_DEFAULTS.modernActiveCategory,
   );
-  const [activeExampleId, setActiveExampleId] = useLocalStorageState<string | null>(
+  const [activeExampleId, setActiveExampleId] = useLocalStorageState<
+    string | null
+  >(
     EXAMPLES_STORAGE_KEYS.modernActiveExampleId,
     EXAMPLES_DEFAULTS.modernActiveExampleId,
   );
@@ -971,7 +1038,11 @@ const ModernApp = ({
     return (
       <CodeBox
         initialCode={activeExample.code}
-        title={t(locale, `examples.list.${activeExample.id}.title`, activeExample.title)}
+        title={t(
+          locale,
+          `examples.list.${activeExample.id}.title`,
+          activeExample.title,
+        )}
         onBack={() => setActiveExampleId(null)}
         theme={theme}
         onThemeChange={setTheme}
@@ -1167,10 +1238,11 @@ const App = () => {
     EXAMPLES_STORAGE_KEYS.locale,
     EXAMPLES_DEFAULTS.locale,
   );
-  const [activeClassicExample, setActiveClassicExample] = useLocalStorageState<string>(
-    EXAMPLES_STORAGE_KEYS.classicActiveExample,
-    EXAMPLES_DEFAULTS.classicActiveExample,
-  );
+  const [activeClassicExample, setActiveClassicExample] =
+    useLocalStorageState<string>(
+      EXAMPLES_STORAGE_KEYS.classicActiveExample,
+      EXAMPLES_DEFAULTS.classicActiveExample,
+    );
 
   ThemeManager.setCurrentTheme(theme);
   const setThemeAndSync = (nextTheme: Theme) => {

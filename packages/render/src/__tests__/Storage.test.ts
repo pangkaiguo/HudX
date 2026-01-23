@@ -84,7 +84,11 @@ describe('Storage', () => {
     storage.addRoot(r2);
     storage.addRoot(r3);
 
-    expect(storage.getElementsList().map((r) => r.id)).toEqual(['r2', 'r3', 'r1']);
+    expect(storage.getElementsList().map((r) => r.id)).toEqual([
+      'r2',
+      'r3',
+      'r1',
+    ]);
   });
 
   it('should build display list and optionally include invisible elements', () => {
@@ -98,7 +102,10 @@ describe('Storage', () => {
     root.add(invisible);
     storage.addRoot(root);
 
-    expect(storage.getDisplayList().map((e) => e.id)).toEqual(['root', 'visible']);
+    expect(storage.getDisplayList().map((e) => e.id)).toEqual([
+      'root',
+      'visible',
+    ]);
     expect(storage.getDisplayList(true).map((e) => e.id)).toEqual([
       'root',
       'visible',

@@ -5,7 +5,9 @@ import type { ChartOption } from 'hudx-charts';
 import type { Locale } from 'hudx-render';
 import { t } from '../../i18n';
 
-const BundleBarExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) => {
+const BundleBarExample: React.FC<{ locale?: Locale }> = ({
+  locale = 'zh-CN',
+}) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,7 +15,11 @@ const BundleBarExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) =
 
     const option: ChartOption = {
       title: {
-        text: t(locale, 'examples.bundle.barChart.chartTitle', 'Independent BarChart Bundle'),
+        text: t(
+          locale,
+          'examples.bundle.barChart.chartTitle',
+          'Independent BarChart Bundle',
+        ),
       },
       tooltip: { show: true },
       xAxis: { data: ['A', 'B', 'C', 'D', 'E'] },
@@ -27,7 +33,13 @@ const BundleBarExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) =
       ],
     };
 
-    const chart = new BarChart(chartRef.current, option, 'svg', undefined, locale);
+    const chart = new BarChart(
+      chartRef.current,
+      option,
+      'svg',
+      undefined,
+      locale,
+    );
 
     return () => {
       chart.dispose();
@@ -36,11 +48,16 @@ const BundleBarExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) =
 
   return (
     <div style={{ padding: 20 }}>
-      <h3>{t(locale, 'examples.bundle.barChart.title', 'BarChart Bundle Import')}</h3>
+      <h3>
+        {t(locale, 'examples.bundle.barChart.title', 'BarChart Bundle Import')}
+      </h3>
       <p style={{ fontSize: 12, color: '#666' }}>
         <code>import BarChart from 'hudx-charts/chart/BarChart';</code>
       </p>
-      <div ref={chartRef} style={{ width: '100%', height: 300, border: '1px solid #eee' }} />
+      <div
+        ref={chartRef}
+        style={{ width: '100%', height: 300, border: '1px solid #eee' }}
+      />
     </div>
   );
 };

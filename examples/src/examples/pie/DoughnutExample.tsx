@@ -150,7 +150,9 @@ export const DoughnutExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -160,8 +162,12 @@ export const DoughnutExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
         <label

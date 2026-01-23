@@ -13,8 +13,4 @@ export { default as ScatterChart } from './chart/ScatterChart';
 export { default as HeatmapChart } from './chart/HeatmapChart';
 
 // React components
-export {
-  default as HChart,
-  type HChartProps,
-  type HChartRef,
-} from './HChart';
+export { default as HChart, type HChartProps, type HChartRef } from './HChart';

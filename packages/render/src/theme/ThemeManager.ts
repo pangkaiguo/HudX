@@ -164,8 +164,14 @@ export class ThemeManager {
 
     // Map token to theme config
     const config: ThemeConfig = {
-      backgroundColor: toStringOr(resolvedToken.colorBackground, String(baseToken.colorBackground)),
-      textColor: toStringOr(resolvedToken.colorText, String(baseToken.colorText)),
+      backgroundColor: toStringOr(
+        resolvedToken.colorBackground,
+        String(baseToken.colorBackground),
+      ),
+      textColor: toStringOr(
+        resolvedToken.colorText,
+        String(baseToken.colorText),
+      ),
       textColorSecondary: toStringOr(
         resolvedToken.colorTextSecondary,
         toStringOr(baseToken.colorTextSecondary, ''),
@@ -174,15 +180,30 @@ export class ThemeManager {
         resolvedToken.colorTextTertiary,
         toStringOr(baseToken.colorTextTertiary, ''),
       ),
-      borderColor: toStringOr(resolvedToken.colorBorder, String(baseToken.colorBorder)),
+      borderColor: toStringOr(
+        resolvedToken.colorBorder,
+        String(baseToken.colorBorder),
+      ),
       borderSecondaryColor: toStringOr(
         resolvedToken.colorBorderSecondary,
         toStringOr(baseToken.colorBorderSecondary, ''),
       ),
-      gridColor: toStringOr(resolvedToken.colorGrid, String(baseToken.colorGrid)),
-      axisLineColor: toStringOr(resolvedToken.colorAxisLine, String(baseToken.colorAxisLine)),
-      axisLabelColor: toStringOr(resolvedToken.colorAxisLabel, String(baseToken.colorAxisLabel)),
-      splitLineColor: toStringOr(resolvedToken.colorGrid, String(baseToken.colorGrid)),
+      gridColor: toStringOr(
+        resolvedToken.colorGrid,
+        String(baseToken.colorGrid),
+      ),
+      axisLineColor: toStringOr(
+        resolvedToken.colorAxisLine,
+        String(baseToken.colorAxisLine),
+      ),
+      axisLabelColor: toStringOr(
+        resolvedToken.colorAxisLabel,
+        String(baseToken.colorAxisLabel),
+      ),
+      splitLineColor: toStringOr(
+        resolvedToken.colorGrid,
+        String(baseToken.colorGrid),
+      ),
       seriesColors,
       color: seriesColors,
       heatmapColors,
@@ -230,9 +251,18 @@ export class ThemeManager {
         resolvedToken.colorPrimaryText,
         toStringOr(baseToken.colorPrimaryText, ''),
       ),
-      shadowColor: toStringOr(resolvedToken.colorShadow, String(baseToken.colorShadow)),
-      maskColor: toStringOr(resolvedToken.colorMask, String(baseToken.colorMask)),
-      decalColor: toStringOr(resolvedToken.colorDecal, String(baseToken.colorDecal)),
+      shadowColor: toStringOr(
+        resolvedToken.colorShadow,
+        String(baseToken.colorShadow),
+      ),
+      maskColor: toStringOr(
+        resolvedToken.colorMask,
+        String(baseToken.colorMask),
+      ),
+      decalColor: toStringOr(
+        resolvedToken.colorDecal,
+        String(baseToken.colorDecal),
+      ),
       tooltipBackgroundColor: toStringOr(
         resolvedToken.colorTooltipBackground,
         String(baseToken.colorTooltipBackground),
@@ -243,7 +273,10 @@ export class ThemeManager {
       ),
       tooltipBorderColor: toStringOr(
         resolvedToken.colorTooltipBorder,
-        toStringOr(baseToken.colorTooltipBorder, String(baseToken.colorBorderSecondary)),
+        toStringOr(
+          baseToken.colorTooltipBorder,
+          String(baseToken.colorBorderSecondary),
+        ),
       ),
       tooltipBoxShadow: toStringOr(
         resolvedToken.boxShadowTooltip,
@@ -251,15 +284,24 @@ export class ThemeManager {
       ),
       tooltipSeriesNameColor: toStringOr(
         resolvedToken.colorTooltipSeriesName,
-        toStringOr(baseToken.colorTooltipSeriesName, String(resolvedToken.colorTooltipText)),
+        toStringOr(
+          baseToken.colorTooltipSeriesName,
+          String(resolvedToken.colorTooltipText),
+        ),
       ),
       tooltipSubitemNameColor: toStringOr(
         resolvedToken.colorTooltipSubitemName,
-        toStringOr(baseToken.colorTooltipSubitemName, String(resolvedToken.colorTooltipText)),
+        toStringOr(
+          baseToken.colorTooltipSubitemName,
+          String(resolvedToken.colorTooltipText),
+        ),
       ),
       tooltipValueColor: toStringOr(
         resolvedToken.colorTooltipValue,
-        toStringOr(baseToken.colorTooltipValue, String(resolvedToken.colorTooltipText)),
+        toStringOr(
+          baseToken.colorTooltipValue,
+          String(resolvedToken.colorTooltipText),
+        ),
       ),
       legendTextColor: toStringOr(
         resolvedToken.colorLegendText,
@@ -301,7 +343,9 @@ export class ThemeManager {
       typeof theme === 'string' ? (theme.toLowerCase() as Theme) : theme;
     if (ThemeManager._currentTheme === normalizedTheme) return;
     ThemeManager._currentTheme = normalizedTheme;
-    ThemeManager._themeListeners.forEach((listener) => listener(normalizedTheme));
+    ThemeManager._themeListeners.forEach((listener) =>
+      listener(normalizedTheme),
+    );
   }
 
   static onThemeChange(listener: (theme: Theme) => void): () => void {

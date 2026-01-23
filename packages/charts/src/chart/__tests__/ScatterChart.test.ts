@@ -191,7 +191,10 @@ describe('ScatterChart', () => {
       series: [
         {
           type: 'scatter',
-          data: [[100, 100], [200, 200]],
+          data: [
+            [100, 100],
+            [200, 200],
+          ],
         },
       ],
     });

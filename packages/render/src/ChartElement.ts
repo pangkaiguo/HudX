@@ -45,7 +45,7 @@ class ChartElement extends Eventful {
   shape: unknown = {};
   /** Transform properties */
   transform: Transform = {};
-  
+
   /** Parent container */
   __parent?: ChartElement;
 

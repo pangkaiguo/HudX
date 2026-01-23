@@ -17,6 +17,7 @@ import IPainter from './IPainter';
 import type { DataURLOpts } from '../types';
 import type { CanvasPatternWithMeta, DecalPatternMeta } from '../util/pattern';
 import { ThemeManager } from '../theme/ThemeManager';
+import { parseColor } from '../util/color';
 
 export default class SVGPainter implements IPainter {
   private _dom: HTMLElement;
@@ -29,6 +30,8 @@ export default class SVGPainter implements IPainter {
   private _dirty: boolean = true;
   private _animationFrameId?: number;
   private _elementMap: Map<ChartElement, SVGElement> = new Map();
+  private _shadowFilterCache: Map<string, string> = new Map();
+  private _shadowFilterIdCounter: number = 0;
 
   constructor(dom: HTMLElement, storage: Storage) {
     this._dom = dom;
@@ -124,6 +127,8 @@ export default class SVGPainter implements IPainter {
       this._defs.removeChild(this._defs.firstChild);
     }
     this._elementMap.clear();
+    this._shadowFilterCache.clear();
+    this._shadowFilterIdCounter = 0;
 
     // Get all elements sorted by zlevel and z
     const elements = this._storage.getElementsList();
@@ -232,6 +237,11 @@ export default class SVGPainter implements IPainter {
 
       if (style.lineDash) {
         group.setAttribute('stroke-dasharray', style.lineDash.join(' '));
+      }
+
+      const shadowFilterId = this._getShadowFilterId(style);
+      if (shadowFilterId) {
+        group.setAttribute('filter', `url(#${shadowFilterId})`);
       }
     }
 
@@ -604,7 +614,8 @@ export default class SVGPainter implements IPainter {
                 'http://www.w3.org/2000/svg',
                 'text',
               );
-              const contentX = currentX + element.getPaddingLeft(fStyle.padding);
+              const contentX =
+                currentX + element.getPaddingLeft(fStyle.padding);
 
               text.setAttribute('x', String(contentX));
               text.setAttribute('y', String(centerY));
@@ -773,12 +784,129 @@ export default class SVGPainter implements IPainter {
     }
   }
 
+  private _getShadowFilterId(style: Record<string, any>): string | null {
+    const blur = Number(style.shadowBlur ?? 0);
+    const dx = Number(style.shadowOffsetX ?? 0);
+    const dy = Number(style.shadowOffsetY ?? 0);
+
+    if (!isFinite(blur) || !isFinite(dx) || !isFinite(dy)) {
+      return null;
+    }
+
+    const rawColor =
+      typeof style.shadowColor === 'string' ? style.shadowColor : undefined;
+    const color = rawColor?.trim?.() ?? '';
+    if (!color) return null;
+
+    const rgba = parseColor(color);
+    if (rgba && rgba[3] <= 0) return null;
+    if (!rgba && color.toLowerCase() === 'transparent') return null;
+
+    if (
+      Math.abs(blur) < 0.001 &&
+      Math.abs(dx) < 0.001 &&
+      Math.abs(dy) < 0.001
+    ) {
+      return null;
+    }
+
+    const key = `${blur}|${dx}|${dy}|${color}`;
+    const cached = this._shadowFilterCache.get(key);
+    if (cached) return cached;
+
+    const id = `shadow_${this._hashString(key)}_${this._shadowFilterIdCounter++}`;
+    const filter = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'filter',
+    );
+    filter.setAttribute('id', id);
+    filter.setAttribute('x', '-50%');
+    filter.setAttribute('y', '-50%');
+    filter.setAttribute('primitiveUnits', 'userSpaceOnUse');
+
+    const stdDeviation = Math.max(0, blur / 2);
+
+    const feGaussianBlur = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'feGaussianBlur',
+    );
+    feGaussianBlur.setAttribute('in', 'SourceAlpha');
+    feGaussianBlur.setAttribute('stdDeviation', String(stdDeviation));
+    feGaussianBlur.setAttribute('result', 'blur');
+    filter.appendChild(feGaussianBlur);
+
+    const feOffset = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'feOffset',
+    );
+    feOffset.setAttribute('in', 'blur');
+    feOffset.setAttribute('dx', String(dx));
+    feOffset.setAttribute('dy', String(dy));
+    feOffset.setAttribute('result', 'offsetBlur');
+    filter.appendChild(feOffset);
+
+    const feFlood = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'feFlood',
+    );
+    if (rgba) {
+      feFlood.setAttribute(
+        'flood-color',
+        `rgb(${rgba[0]}, ${rgba[1]}, ${rgba[2]})`,
+      );
+      feFlood.setAttribute('flood-opacity', String(rgba[3]));
+    } else {
+      feFlood.setAttribute('flood-color', color);
+    }
+    feFlood.setAttribute('result', 'flood');
+    filter.appendChild(feFlood);
+
+    const feComposite = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'feComposite',
+    );
+    feComposite.setAttribute('in', 'flood');
+    feComposite.setAttribute('in2', 'offsetBlur');
+    feComposite.setAttribute('operator', 'in');
+    feComposite.setAttribute('result', 'shadow');
+    filter.appendChild(feComposite);
+
+    const feMerge = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'feMerge',
+    );
+    const feMergeNodeShadow = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'feMergeNode',
+    );
+    feMergeNodeShadow.setAttribute('in', 'shadow');
+    const feMergeNodeGraphic = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'feMergeNode',
+    );
+    feMergeNodeGraphic.setAttribute('in', 'SourceGraphic');
+    feMerge.appendChild(feMergeNodeShadow);
+    feMerge.appendChild(feMergeNodeGraphic);
+    filter.appendChild(feMerge);
+
+    this._defs.appendChild(filter);
+    this._shadowFilterCache.set(key, id);
+    return id;
+  }
+
+  private _hashString(input: string): string {
+    let hash = 0;
+    for (let i = 0; i < input.length; i++) {
+      hash = (hash << 5) - hash + input.charCodeAt(i);
+      hash |= 0;
+    }
+    return (hash >>> 0).toString(36);
+  }
+
   /**
    * Create SVG pattern from canvas
    */
-  private _createSVGPattern(
-    patternObj: CanvasPatternWithMeta,
-  ): string {
+  private _createSVGPattern(patternObj: CanvasPatternWithMeta): string {
     const canvas = patternObj._canvas;
     const rotation = patternObj._rotation || 0;
     const dpr = patternObj._dpr || 1;
@@ -826,7 +954,10 @@ export default class SVGPainter implements IPainter {
         const s = meta.symbol;
         const half = meta.symbolSize / 2;
         if (s === 'line') {
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'line',
+          );
           el.setAttribute('x1', String(-meta.unitSize / 2));
           el.setAttribute('y1', '0');
           el.setAttribute('x2', String(meta.unitSize / 2));
@@ -837,7 +968,10 @@ export default class SVGPainter implements IPainter {
           return el;
         }
         if (s === 'cross') {
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'path',
+          );
           el.setAttribute(
             'd',
             `M ${-meta.unitSize / 2} 0 L ${meta.unitSize / 2} 0 M 0 ${-meta.unitSize / 2} L 0 ${meta.unitSize / 2}`,
@@ -849,7 +983,10 @@ export default class SVGPainter implements IPainter {
           return el;
         }
         if (s === 'circle' || s === 'pin') {
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'circle',
+          );
           el.setAttribute('cx', '0');
           el.setAttribute('cy', '0');
           el.setAttribute('r', String(half));
@@ -857,7 +994,10 @@ export default class SVGPainter implements IPainter {
           return el;
         }
         if (s === 'rect' || s === 'square') {
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'rect',
+          );
           el.setAttribute('x', String(-half));
           el.setAttribute('y', String(-half));
           el.setAttribute('width', String(meta.symbolSize));
@@ -866,7 +1006,10 @@ export default class SVGPainter implements IPainter {
           return el;
         }
         if (s === 'roundRect') {
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'rect',
+          );
           const r = Math.min(2, meta.symbolSize / 4);
           el.setAttribute('x', String(-half));
           el.setAttribute('y', String(-half));
@@ -878,7 +1021,10 @@ export default class SVGPainter implements IPainter {
           return el;
         }
         if (s === 'triangle') {
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'path',
+          );
           el.setAttribute(
             'd',
             `M 0 ${-half} L ${half} ${half} L ${-half} ${half} Z`,
@@ -887,7 +1033,10 @@ export default class SVGPainter implements IPainter {
           return el;
         }
         if (s === 'diamond') {
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'path',
+          );
           el.setAttribute(
             'd',
             `M 0 ${-half} L ${half} 0 L 0 ${half} L ${-half} 0 Z`,
@@ -896,7 +1045,10 @@ export default class SVGPainter implements IPainter {
           return el;
         }
         if (s === 'arrow') {
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'path',
+          );
           el.setAttribute(
             'd',
             `M 0 ${-half} L ${half} ${half} L 0 ${half * 0.36} L ${-half} ${half} Z`,
@@ -911,12 +1063,18 @@ export default class SVGPainter implements IPainter {
             const ang = -Math.PI / 2 + (k * 2 * Math.PI) / 5;
             pts.push(`${r * Math.cos(ang)} ${r * Math.sin(ang)}`);
           }
-          const el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          const el = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'polygon',
+          );
           el.setAttribute('points', pts.join(' '));
           el.setAttribute('fill', meta.fgColor);
           return el;
         }
-        const el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        const el = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'circle',
+        );
         el.setAttribute('cx', '0');
         el.setAttribute('cy', '0');
         el.setAttribute('r', String(half));
@@ -953,7 +1111,9 @@ export default class SVGPainter implements IPainter {
     return id;
   }
 
-  private _isCanvasPatternWithMeta(value: unknown): value is CanvasPatternWithMeta {
+  private _isCanvasPatternWithMeta(
+    value: unknown,
+  ): value is CanvasPatternWithMeta {
     if (typeof value !== 'object' || value === null) return false;
     return '_canvas' in value;
   }
@@ -968,9 +1128,14 @@ export default class SVGPainter implements IPainter {
 
     const raf =
       typeof (globalThis as any).requestAnimationFrame === 'function'
-        ? ((globalThis as any).requestAnimationFrame as (cb: FrameRequestCallback) => number)
+        ? ((globalThis as any).requestAnimationFrame as (
+            cb: FrameRequestCallback,
+          ) => number)
         : (cb: FrameRequestCallback) =>
-          (globalThis.setTimeout(() => cb(Date.now()), 16) as unknown as number);
+            globalThis.setTimeout(
+              () => cb(Date.now()),
+              16,
+            ) as unknown as number;
 
     this._animationFrameId = raf(() => {
       this._animationFrameId = undefined;

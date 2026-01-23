@@ -73,7 +73,13 @@ export const SmoothLineExample = ({
         `;
       },
     },
-    legend: { show: true, orient: 'vertical', right: 10, top: 10, icon: 'rect' },
+    legend: {
+      show: true,
+      orient: 'vertical',
+      right: 10,
+      top: 10,
+      icon: 'rect',
+    },
     grid: { left: 60, right: 40, top: gridTop, bottom: 60 },
     xAxis: {
       type: 'category',
@@ -148,7 +154,9 @@ export const SmoothLineExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -158,8 +166,12 @@ export const SmoothLineExample = ({
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
@@ -181,7 +193,8 @@ export const SmoothLineExample = ({
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>
-            {t(locale, 'examples.control.tension', 'Tension')}: {tension.toFixed(2)}
+            {t(locale, 'examples.control.tension', 'Tension')}:{' '}
+            {tension.toFixed(2)}
           </span>
           <input
             type='range'
@@ -244,7 +257,8 @@ export const SmoothLineExample = ({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>
-                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+                {t(locale, 'examples.control.xSplit', 'X Split')}:{' '}
+                {xSplitNumber}
               </span>
               <input
                 type='range'

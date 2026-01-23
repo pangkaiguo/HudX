@@ -25,7 +25,13 @@ const TooltipExample = ({
   // 1. Trigger Types
   const itemTriggerOption: ChartOption = {
     ...baseData,
-    title: { text: t(locale, 'examples.tooltip.chartTitle.itemTrigger', 'Item Trigger') },
+    title: {
+      text: t(
+        locale,
+        'examples.tooltip.chartTitle.itemTrigger',
+        'Item Trigger',
+      ),
+    },
     tooltip: {
       show: true,
       trigger: 'item',
@@ -34,7 +40,13 @@ const TooltipExample = ({
 
   const axisTriggerOption: ChartOption = {
     ...baseData,
-    title: { text: t(locale, 'examples.tooltip.chartTitle.axisShadow', 'Axis Trigger (Shadow Pointer)') },
+    title: {
+      text: t(
+        locale,
+        'examples.tooltip.chartTitle.axisShadow',
+        'Axis Trigger (Shadow Pointer)',
+      ),
+    },
     tooltip: {
       show: true,
       trigger: 'axis',
@@ -50,7 +62,13 @@ const TooltipExample = ({
   // 2. Formatting
   const formatOption: ChartOption = {
     ...baseData,
-    title: { text: t(locale, 'examples.tooltip.chartTitle.customHtml', 'Custom HTML Formatter') },
+    title: {
+      text: t(
+        locale,
+        'examples.tooltip.chartTitle.customHtml',
+        'Custom HTML Formatter',
+      ),
+    },
     tooltip: {
       show: true,
       trigger: 'axis',
@@ -61,13 +79,15 @@ const TooltipExample = ({
         // params is array for axis trigger
         const items = Array.isArray(params) ? params : [params];
         const title = items[0].name;
-        const rows = items.map((item: any) => {
-          return `<div style="display:flex; justify-content:space-between; width:120px;">
+        const rows = items
+          .map((item: any) => {
+            return `<div style="display:flex; justify-content:space-between; width:120px;">
             <span>${item.marker} ${item.seriesName}</span>
             <span style="font-weight:bold">${item.value}</span>
           </div>`;
-        }).join('');
-        
+          })
+          .join('');
+
         return `<div style="font-size:12px">
           <div style="border-bottom:1px solid #777; margin-bottom:4px; padding-bottom:2px">${title}</div>
           ${rows}
@@ -79,7 +99,13 @@ const TooltipExample = ({
   // 3. Styling & Layout
   const styleOption: ChartOption = {
     ...baseData,
-    title: { text: t(locale, 'examples.tooltip.chartTitle.customStyle', 'Custom Style & Confine') },
+    title: {
+      text: t(
+        locale,
+        'examples.tooltip.chartTitle.customStyle',
+        'Custom Style & Confine',
+      ),
+    },
     tooltip: {
       show: true,
       trigger: 'axis',
@@ -99,41 +125,92 @@ const TooltipExample = ({
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>{t(locale, 'examples.tooltip.pageTitle', 'Tooltip Configuration')}</h1>
+      <h1>
+        {t(locale, 'examples.tooltip.pageTitle', 'Tooltip Configuration')}
+      </h1>
       <p style={{ color: '#666' }}>
-        {t(locale, 'examples.tooltip.pageDesc.prefix', 'Matching')} <code>TooltipOption</code>{' '}
+        {t(locale, 'examples.tooltip.pageDesc.prefix', 'Matching')}{' '}
+        <code>TooltipOption</code>{' '}
         {t(locale, 'examples.tooltip.pageDesc.suffix', 'interface.')}
       </p>
-      
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <div style={{ border: '1px solid #eee', padding: 10 }}>
-          <h3>{t(locale, 'examples.tooltip.section.itemTrigger', 'Item Trigger')}</h3>
-          <p style={{ fontSize: 12 }}>{t(locale, 'examples.tooltip.section.itemTrigger.desc', "trigger: 'item'")}</p>
-          <HChart option={itemTriggerOption} height={300} theme={theme} locale={locale} />
-        </div>
-        
-        <div style={{ border: '1px solid #eee', padding: 10 }}>
-          <h3>{t(locale, 'examples.tooltip.section.axisTrigger', 'Axis Trigger')}</h3>
+          <h3>
+            {t(locale, 'examples.tooltip.section.itemTrigger', 'Item Trigger')}
+          </h3>
           <p style={{ fontSize: 12 }}>
-            {t(locale, 'examples.tooltip.section.axisTrigger.desc', "trigger: 'axis', axisPointer: 'shadow'")}
+            {t(
+              locale,
+              'examples.tooltip.section.itemTrigger.desc',
+              "trigger: 'item'",
+            )}
           </p>
-          <HChart option={axisTriggerOption} height={300} theme={theme} locale={locale} />
+          <HChart
+            option={itemTriggerOption}
+            height={300}
+            theme={theme}
+            locale={locale}
+          />
         </div>
 
         <div style={{ border: '1px solid #eee', padding: 10 }}>
-          <h3>{t(locale, 'examples.tooltip.section.customFormatter', 'Custom Formatter')}</h3>
+          <h3>
+            {t(locale, 'examples.tooltip.section.axisTrigger', 'Axis Trigger')}
+          </h3>
           <p style={{ fontSize: 12 }}>
-            {t(locale, 'examples.tooltip.section.customFormatter.desc', 'formatter function returning HTML')}
+            {t(
+              locale,
+              'examples.tooltip.section.axisTrigger.desc',
+              "trigger: 'axis', axisPointer: 'shadow'",
+            )}
           </p>
-          <HChart option={formatOption} height={300} theme={theme} locale={locale} />
+          <HChart
+            option={axisTriggerOption}
+            height={300}
+            theme={theme}
+            locale={locale}
+          />
+        </div>
+
+        <div style={{ border: '1px solid #eee', padding: 10 }}>
+          <h3>
+            {t(
+              locale,
+              'examples.tooltip.section.customFormatter',
+              'Custom Formatter',
+            )}
+          </h3>
+          <p style={{ fontSize: 12 }}>
+            {t(
+              locale,
+              'examples.tooltip.section.customFormatter.desc',
+              'formatter function returning HTML',
+            )}
+          </p>
+          <HChart
+            option={formatOption}
+            height={300}
+            theme={theme}
+            locale={locale}
+          />
         </div>
 
         <div style={{ border: '1px solid #eee', padding: 10 }}>
           <h3>{t(locale, 'examples.tooltip.section.styling', 'Styling')}</h3>
           <p style={{ fontSize: 12 }}>
-            {t(locale, 'examples.tooltip.section.styling.desc', 'backgroundColor, border, textStyle, confine')}
+            {t(
+              locale,
+              'examples.tooltip.section.styling.desc',
+              'backgroundColor, border, textStyle, confine',
+            )}
           </p>
-          <HChart option={styleOption} height={300} theme={theme} locale={locale} />
+          <HChart
+            option={styleOption}
+            height={300}
+            theme={theme}
+            locale={locale}
+          />
         </div>
       </div>
     </div>

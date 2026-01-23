@@ -46,7 +46,10 @@ export const AnimationExample = ({
 
     renderer.add(circle);
     renderer.add(rect);
-    renderer.resize(EXAMPLES_RENDERER_CANVAS.width, EXAMPLES_RENDERER_CANVAS.height);
+    renderer.resize(
+      EXAMPLES_RENDERER_CANVAS.width,
+      EXAMPLES_RENDERER_CANVAS.height,
+    );
 
     const anim1 = new Animation(
       circle.shape as unknown as Record<string, unknown>,
@@ -111,7 +114,9 @@ export const AnimationExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -121,8 +126,12 @@ export const AnimationExample = ({
               border: `1px solid ${EXAMPLES_COLORS.controlBorder}`,
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
       </div>

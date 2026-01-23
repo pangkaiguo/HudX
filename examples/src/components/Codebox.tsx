@@ -26,7 +26,8 @@ export const CodeBox: React.FC<CodeBoxProps> = ({
 }) => {
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
   const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
   const [code, setCode] = useState(initialCode);
   const [option, setOption] = useState<ChartOption>({});
@@ -86,7 +87,9 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
           canvas.height = svg.clientHeight;
           const ctx = canvas.getContext('2d');
           if (ctx) {
-            ctx.fillStyle = String(ui.colorFillPage || themeObj.backgroundColor);
+            ctx.fillStyle = String(
+              ui.colorFillPage || themeObj.backgroundColor,
+            );
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0);
 
@@ -155,7 +158,10 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
   const textColor = themeObj.textColor;
   const borderColor = ui.colorBorderSecondary || themeObj.borderColor;
   const toolbarBg = ui.colorFillContainer || themeObj.backgroundColor;
-  const toolbarAltBg = ui.colorCodeGutterBackground || ui.colorFillContainerAlt || themeObj.gridColor;
+  const toolbarAltBg =
+    ui.colorCodeGutterBackground ||
+    ui.colorFillContainerAlt ||
+    themeObj.gridColor;
 
   return (
     <div
@@ -320,10 +326,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               style={{
                 padding: '0 15px',
                 height: '100%',
-                background:
-                  activeTab === 'JS'
-                    ? toolbarBg
-                    : 'transparent',
+                background: activeTab === 'JS' ? toolbarBg : 'transparent',
                 border: 'none',
                 color: textColor,
                 cursor: 'pointer',
@@ -337,10 +340,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               style={{
                 padding: '0 15px',
                 height: '100%',
-                background:
-                  activeTab === 'TS'
-                    ? toolbarBg
-                    : 'transparent',
+                background: activeTab === 'TS' ? toolbarBg : 'transparent',
                 border: 'none',
                 color: textColor,
                 cursor: 'pointer',
@@ -391,7 +391,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
           </div>
           <CodeEditor
             code={activeTab === 'TS' ? getTsCode(code) : code}
-            onChange={activeTab === 'TS' ? () => { } : setCode}
+            onChange={activeTab === 'TS' ? () => {} : setCode}
             theme={theme === 'dark' ? 'dark' : 'light'}
           />
           {error && (

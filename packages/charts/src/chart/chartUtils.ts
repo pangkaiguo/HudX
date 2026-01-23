@@ -4,7 +4,8 @@ export const getSeriesDisplayName = (
   seriesIndex: number,
 ): string => {
   return (
-    seriesItem?.name || `${t('series.name', 'Series')}-${String(seriesIndex + 1)}`
+    seriesItem?.name ||
+    `${t('series.name', 'Series')}-${String(seriesIndex + 1)}`
   );
 };
 
@@ -13,7 +14,9 @@ export const findSeriesIndexByDisplayName = (
   series: any[],
   name: string,
 ): number => {
-  return (series || []).findIndex((s, i) => getSeriesDisplayName(t, s, i) === name);
+  return (series || []).findIndex(
+    (s, i) => getSeriesDisplayName(t, s, i) === name,
+  );
 };
 
 export const resolveAnimationDelay = (

@@ -32,15 +32,15 @@ export interface TooltipOption {
   confine?: boolean;
   transitionDuration?: number;
   position?:
-  | string
-  | number[]
-  | ((
-    point: number[],
-    params: ChartEvent | ChartEvent[],
-    dom: HTMLElement,
-    rect: BoundingRect,
-    size: { contentSize: [number, number]; viewSize: [number, number] },
-  ) => number[]);
+    | string
+    | number[]
+    | ((
+        point: number[],
+        params: ChartEvent | ChartEvent[],
+        dom: HTMLElement,
+        rect: BoundingRect,
+        size: { contentSize: [number, number]; viewSize: [number, number] },
+      ) => number[]);
   showContent?: boolean;
   alwaysShowContent?: boolean;
   triggerOn?: 'mousemove' | 'click' | 'mousemove|click' | 'none';
@@ -68,9 +68,13 @@ export default class Tooltip {
   private _useThemeFontFamily: boolean = false;
 
   constructor(option: TooltipOption = {}) {
-    const theme = ThemeManager.getTheme(option.theme ?? ThemeManager.getCurrentTheme());
+    const theme = ThemeManager.getTheme(
+      option.theme ?? ThemeManager.getCurrentTheme(),
+    );
     const size =
-      option.size === 'small' || option.size === 'medium' || option.size === 'medium-small'
+      option.size === 'small' ||
+      option.size === 'medium' ||
+      option.size === 'medium-small'
         ? option.size
         : 'medium-small';
     const baseFontSize = size === 'small' ? 12 : 14;
@@ -79,9 +83,11 @@ export default class Tooltip {
     this._useThemeTextColor = textStyle.color === undefined;
     this._useThemeFontFamily = textStyle.fontFamily === undefined;
     if (textStyle.color === undefined) textStyle.color = theme.tooltipTextColor;
-    if (textStyle.fontFamily === undefined) textStyle.fontFamily = theme.fontFamily;
+    if (textStyle.fontFamily === undefined)
+      textStyle.fontFamily = theme.fontFamily;
     if (textStyle.fontSize === undefined) textStyle.fontSize = baseFontSize;
-    if (textStyle.lineHeight === undefined) textStyle.lineHeight = baseLineHeight;
+    if (textStyle.lineHeight === undefined)
+      textStyle.lineHeight = baseLineHeight;
     this._useThemeBackground = option.backgroundColor === undefined;
     this._useThemeBorderColor = option.borderColor === undefined;
     this._option = {
@@ -123,7 +129,9 @@ export default class Tooltip {
     });
   }
 
-  private _applyThemeDefaults(theme: ReturnType<typeof ThemeManager.getTheme>): void {
+  private _applyThemeDefaults(
+    theme: ReturnType<typeof ThemeManager.getTheme>,
+  ): void {
     if (this._useThemeBackground) {
       this._option.backgroundColor = theme.tooltipBackgroundColor;
     }
@@ -158,17 +166,23 @@ export default class Tooltip {
 
   updateStyle(): void {
     const opt = this._option;
-    const theme = ThemeManager.getTheme(opt.theme ?? ThemeManager.getCurrentTheme());
+    const theme = ThemeManager.getTheme(
+      opt.theme ?? ThemeManager.getCurrentTheme(),
+    );
     this._applyThemeDefaults(theme);
     const s = this._el.style;
     const size =
-      opt.size === 'small' || opt.size === 'medium' || opt.size === 'medium-small'
+      opt.size === 'small' ||
+      opt.size === 'medium' ||
+      opt.size === 'medium-small'
         ? opt.size
         : 'medium-small';
     const baseFontSize = size === 'small' ? 12 : 14;
     const baseLineHeight = size === 'small' ? 16 : 20;
 
-    s.backgroundColor = String(opt.backgroundColor ?? theme.tooltipBackgroundColor);
+    s.backgroundColor = String(
+      opt.backgroundColor ?? theme.tooltipBackgroundColor,
+    );
     s.borderColor = String(opt.borderColor ?? theme.tooltipBorderColor);
     s.borderWidth = (opt.borderWidth ?? TOOLTIP_DEFAULT_BORDER_WIDTH) + 'px';
     s.boxShadow = theme.tooltipBoxShadow;

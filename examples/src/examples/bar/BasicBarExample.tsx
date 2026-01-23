@@ -33,7 +33,8 @@ export const BasicBarExample = ({
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const border = ui.colorBorderSecondary || themeObj.borderColor;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
   const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
   const chartRef = useRef<HChartRef>(null);
 
@@ -146,7 +147,13 @@ export const BasicBarExample = ({
       <h2 style={{ marginBottom: 10 }}>
         {t(locale, 'examples.list.basic-bar.title', 'Bar Chart')}
       </h2>
-      <p style={{ marginBottom: 20, color: ui.colorTextSecondary || themeObj.axisLabelColor, fontSize: 14 }}>
+      <p
+        style={{
+          marginBottom: 20,
+          color: ui.colorTextSecondary || themeObj.axisLabelColor,
+          fontSize: 14,
+        }}
+      >
         {t(
           locale,
           'examples.list.basic-bar.subtitle',
@@ -163,7 +170,9 @@ export const BasicBarExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -173,8 +182,12 @@ export const BasicBarExample = ({
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
@@ -277,7 +290,8 @@ export const BasicBarExample = ({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>
-                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+                {t(locale, 'examples.control.xSplit', 'X Split')}:{' '}
+                {xSplitNumber}
               </span>
               <input
                 type='range'
@@ -303,12 +317,15 @@ export const BasicBarExample = ({
                   checked={xAutoInterval}
                   onChange={(e) => setXAutoInterval(e.target.checked)}
                 />
-                <span>{t(locale, 'examples.control.autoInterval', 'Auto Interval')}</span>
+                <span>
+                  {t(locale, 'examples.control.autoInterval', 'Auto Interval')}
+                </span>
               </label>
               {!xAutoInterval && (
                 <>
                   <span>
-                    {t(locale, 'examples.control.intervalValue', 'Val')}: {xInterval}
+                    {t(locale, 'examples.control.intervalValue', 'Val')}:{' '}
+                    {xInterval}
                   </span>
                   <input
                     type='range'
@@ -318,7 +335,11 @@ export const BasicBarExample = ({
                     value={xInterval}
                     onChange={(e) => setXInterval(Number(e.target.value))}
                     style={{ width: 80 }}
-                    title={t(locale, 'examples.control.intervalHelp', '0: All, 1: Every 2nd, etc.')}
+                    title={t(
+                      locale,
+                      'examples.control.intervalHelp',
+                      '0: All, 1: Every 2nd, etc.',
+                    )}
                   />
                 </>
               )}
@@ -350,8 +371,12 @@ export const BasicBarExample = ({
                   border: `1px solid ${border}`,
                 }}
               >
-                <option value='solid'>{t(locale, 'examples.control.solid', 'Solid')}</option>
-                <option value='dashed'>{t(locale, 'examples.control.dashed', 'Dashed')}</option>
+                <option value='solid'>
+                  {t(locale, 'examples.control.solid', 'Solid')}
+                </option>
+                <option value='dashed'>
+                  {t(locale, 'examples.control.dashed', 'Dashed')}
+                </option>
               </select>
             </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -410,7 +435,7 @@ export const BasicBarExample = ({
           )}
         </button>
       </div>
-    </div >
+    </div>
   );
 };
 

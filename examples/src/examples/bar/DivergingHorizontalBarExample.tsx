@@ -77,7 +77,12 @@ const DivergingHorizontalBarExample = ({
         name: 'Profit',
         type: 'bar',
         data: profit,
-        label: { show: true, position: 'inside', formatter: '{c}', color: '#fff' },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          color: '#fff',
+        },
         emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
         itemStyle: { color: themeObj.seriesColors?.[0], borderWidth: 0 },
       },
@@ -87,13 +92,21 @@ const DivergingHorizontalBarExample = ({
         data: expenses,
         label: { show: true, position: 'outside', formatter: '{c}' },
         emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
-        itemStyle: { color: themeObj.seriesColors?.[3] || '#4b4f6a', borderWidth: 0 },
+        itemStyle: {
+          color: themeObj.seriesColors?.[3] || '#4b4f6a',
+          borderWidth: 0,
+        },
       },
       {
         name: 'Income',
         type: 'bar',
         data: income,
-        label: { show: true, position: 'inside', formatter: '{c}', color: '#222' },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          color: '#222',
+        },
         emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
         itemStyle: { color: themeObj.seriesColors?.[2], borderWidth: 0 },
       },
@@ -104,14 +117,22 @@ const DivergingHorizontalBarExample = ({
   const handleUpdateSeries = () => {
     const chartInstance = chartRef.current?.getChartInstance();
     if (chartInstance) {
-      const nextProfit = profit.map(() => Math.floor(Math.random() * 260) + 100);
-      const nextIncome = income.map(() => Math.floor(Math.random() * 300) + 200);
+      const nextProfit = profit.map(
+        () => Math.floor(Math.random() * 260) + 100,
+      );
+      const nextIncome = income.map(
+        () => Math.floor(Math.random() * 300) + 200,
+      );
       const nextExpenses = expenses.map(
         () => -1 * (Math.floor(Math.random() * 180) + 80),
       );
 
       chartInstance.setOption({
-        series: [{ data: nextProfit }, { data: nextExpenses }, { data: nextIncome }],
+        series: [
+          { data: nextProfit },
+          { data: nextExpenses },
+          { data: nextIncome },
+        ],
       });
     }
   };
@@ -143,7 +164,9 @@ const DivergingHorizontalBarExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -156,7 +179,9 @@ const DivergingHorizontalBarExample = ({
             <option value='canvas'>
               {t(locale, 'examples.control.canvas', 'Canvas')}
             </option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 

@@ -13,7 +13,8 @@ export const BasicLineExample = ({
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const border = ui.colorBorderSecondary || themeObj.borderColor;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
   const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
   const textSecondary = ui.colorTextSecondary || themeObj.axisLabelColor;
   const chartRef = useRef<HChartRef>(null);
@@ -154,7 +155,9 @@ export const BasicLineExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -164,8 +167,12 @@ export const BasicLineExample = ({
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
@@ -202,7 +209,8 @@ export const BasicLineExample = ({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>
-                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+                {t(locale, 'examples.control.xSplit', 'X Split')}:{' '}
+                {xSplitNumber}
               </span>
               <input
                 type='range'

@@ -20,7 +20,7 @@ describe('Tooltip', () => {
       bottom: 500,
       x: 0,
       y: 0,
-      toJSON: () => { },
+      toJSON: () => {},
     });
   });
 
@@ -40,8 +40,12 @@ describe('Tooltip', () => {
     expect(el).toBeDefined();
     expect(el.style.position).toBe('absolute');
     expect(el.style.display).toBe('none');
-    expect(el.style.backgroundColor).toBe(ThemeManager.getTheme().tooltipBackgroundColor);
-    expect(el.style.borderColor).toBe(ThemeManager.getTheme().tooltipBorderColor);
+    expect(el.style.backgroundColor).toBe(
+      ThemeManager.getTheme().tooltipBackgroundColor,
+    );
+    expect(el.style.borderColor).toBe(
+      ThemeManager.getTheme().tooltipBorderColor,
+    );
     expect(el.style.borderWidth).toBe('1px');
     expect(el.style.borderRadius).toBe('4px');
     expect(el.style.boxShadow).toBe(ThemeManager.getTheme().tooltipBoxShadow);
@@ -105,16 +109,30 @@ describe('Tooltip', () => {
     tooltip = new Tooltip();
     const el = (tooltip as any)._el as HTMLElement;
 
-    expect(el.style.backgroundColor).toBe(ThemeManager.getTheme('light').tooltipBackgroundColor);
-    expect(el.style.borderColor).toBe(ThemeManager.getTheme('light').tooltipBorderColor);
-    expect(el.style.color).toBe(ThemeManager.getTheme('light').tooltipTextColor);
-    expect(el.style.boxShadow).toBe(ThemeManager.getTheme('light').tooltipBoxShadow);
+    expect(el.style.backgroundColor).toBe(
+      ThemeManager.getTheme('light').tooltipBackgroundColor,
+    );
+    expect(el.style.borderColor).toBe(
+      ThemeManager.getTheme('light').tooltipBorderColor,
+    );
+    expect(el.style.color).toBe(
+      ThemeManager.getTheme('light').tooltipTextColor,
+    );
+    expect(el.style.boxShadow).toBe(
+      ThemeManager.getTheme('light').tooltipBoxShadow,
+    );
 
     ThemeManager.setCurrentTheme('dark');
-    expect(el.style.backgroundColor).toBe(ThemeManager.getTheme('dark').tooltipBackgroundColor);
-    expect(el.style.borderColor).toBe(ThemeManager.getTheme('dark').tooltipBorderColor);
+    expect(el.style.backgroundColor).toBe(
+      ThemeManager.getTheme('dark').tooltipBackgroundColor,
+    );
+    expect(el.style.borderColor).toBe(
+      ThemeManager.getTheme('dark').tooltipBorderColor,
+    );
     expect(el.style.color).toBe(ThemeManager.getTheme('dark').tooltipTextColor);
-    expect(el.style.boxShadow).toBe(ThemeManager.getTheme('dark').tooltipBoxShadow);
+    expect(el.style.boxShadow).toBe(
+      ThemeManager.getTheme('dark').tooltipBoxShadow,
+    );
 
     tooltip.dispose();
     tooltip = new Tooltip({ backgroundColor: '#ff0000' });
@@ -123,14 +141,20 @@ describe('Tooltip', () => {
 
     ThemeManager.setCurrentTheme('light');
     expect(el2.style.backgroundColor).toBe('#ff0000');
-    expect(el2.style.borderColor).toBe(ThemeManager.getTheme('light').tooltipBorderColor);
+    expect(el2.style.borderColor).toBe(
+      ThemeManager.getTheme('light').tooltipBorderColor,
+    );
 
     tooltip.dispose();
     tooltip = new Tooltip({ theme: 'light' });
     const el3 = (tooltip as any)._el as HTMLElement;
     ThemeManager.setCurrentTheme('dark');
-    expect(el3.style.backgroundColor).toBe(ThemeManager.getTheme('light').tooltipBackgroundColor);
-    expect(el3.style.borderColor).toBe(ThemeManager.getTheme('light').tooltipBorderColor);
+    expect(el3.style.backgroundColor).toBe(
+      ThemeManager.getTheme('light').tooltipBackgroundColor,
+    );
+    expect(el3.style.borderColor).toBe(
+      ThemeManager.getTheme('light').tooltipBorderColor,
+    );
   });
 
   it('should handle showContent option', () => {

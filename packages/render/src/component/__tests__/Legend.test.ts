@@ -5,7 +5,10 @@ import Circle from '../../graphic/Circle';
 import Rect from '../../graphic/Rect';
 import Text from '../../graphic/Text';
 import { ThemeManager } from '../../theme/ThemeManager';
-import { TOOLTIP_DEFAULT_BORDER_RADIUS, TOOLTIP_DEFAULT_BORDER_WIDTH } from '../../constants';
+import {
+  TOOLTIP_DEFAULT_BORDER_RADIUS,
+  TOOLTIP_DEFAULT_BORDER_WIDTH,
+} from '../../constants';
 
 describe('Legend', () => {
   beforeAll(() => {
@@ -419,13 +422,13 @@ describe('Legend', () => {
         textStyle: {
           color: 'blue',
           fontSize: 20,
-          fontWeight: 'bold'
-        }
-      }
+          fontWeight: 'bold',
+        },
+      },
     ]);
 
     const children = legend.children();
-    const text = children.find(c => c instanceof Text) as Text;
+    const text = children.find((c) => c instanceof Text) as Text;
 
     expect(text).toBeDefined();
     expect(text.style.fill).toBe('blue');

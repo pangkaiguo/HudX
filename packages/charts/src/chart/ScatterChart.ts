@@ -21,7 +21,11 @@ export default class ScatterChart extends Chart {
 
   protected _onLegendHover(name: string, hovered: boolean): void {
     const t = (key: string, defaultValue?: string) => this.t(key, defaultValue);
-    const seriesIndex = findSeriesIndexByDisplayName(t, this._option.series || [], name);
+    const seriesIndex = findSeriesIndexByDisplayName(
+      t,
+      this._option.series || [],
+      name,
+    );
 
     if (seriesIndex === -1) return;
 
@@ -99,10 +103,18 @@ export default class ScatterChart extends Chart {
           : createLinearScale(yDomain, [plotY + plotHeight, plotY]);
 
       try {
-        this._renderAxes((xAxis || {}) as AxisOption, (yAxis || {}) as AxisOption, plotX, plotY, plotWidth, plotHeight, {
-          x: xScale,
-          y: yScale,
-        });
+        this._renderAxes(
+          (xAxis || {}) as AxisOption,
+          (yAxis || {}) as AxisOption,
+          plotX,
+          plotY,
+          plotWidth,
+          plotHeight,
+          {
+            x: xScale,
+            y: yScale,
+          },
+        );
       } catch (e) {
         console.error('[ScatterChart] Error rendering axes:', e);
       }
@@ -115,8 +127,7 @@ export default class ScatterChart extends Chart {
           .filter((s) => s.type === 'scatter' && s.show !== false)
           .map((s, i) => ({
             name: getSeriesDisplayName(
-              (key: string, defaultValue?: string) =>
-                this.t(key, defaultValue),
+              (key: string, defaultValue?: string) => this.t(key, defaultValue),
               s,
               i,
             ),
@@ -137,8 +148,7 @@ export default class ScatterChart extends Chart {
         if (s.type !== 'scatter') return;
 
         const name = getSeriesDisplayName(
-          (key: string, defaultValue?: string) =>
-            this.t(key, defaultValue),
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
           s,
           seriesIndex,
         );
@@ -206,7 +216,10 @@ export default class ScatterChart extends Chart {
           if (typeof pointSize === 'number') finalSize = pointSize;
           else if (Array.isArray(pointSize)) finalSize = pointSize[0];
           else if (typeof pointSize === 'function')
-            finalSize = (pointSize as any)(item, { dataIndex: index, seriesIndex });
+            finalSize = (pointSize as any)(item, {
+              dataIndex: index,
+              seriesIndex,
+            });
 
           if (!Number.isFinite(finalSize)) finalSize = 10;
           const baseR = finalSize / 2;
@@ -236,7 +249,9 @@ export default class ScatterChart extends Chart {
               circle.attr('style', { opacity: 1 });
 
               const itemName =
-                typeof item === 'object' && item !== null && 'name' in item ? item.name : '';
+                typeof item === 'object' && item !== null && 'name' in item
+                  ? item.name
+                  : '';
               const params = {
                 type: 'showTip',
                 componentType: 'series',
@@ -278,8 +293,7 @@ export default class ScatterChart extends Chart {
           }
 
           if (this._isAnimationEnabled()) {
-            const baseDelay =
-              resolveAnimationDelay(s.animationDelay, index);
+            const baseDelay = resolveAnimationDelay(s.animationDelay, index);
             const delay = baseDelay;
             const duration = this._getAnimationDuration() / 2;
 

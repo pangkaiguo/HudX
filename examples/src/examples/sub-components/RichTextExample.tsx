@@ -11,7 +11,8 @@ export const RichTextExample = ({
 }) => {
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
   const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
 
   const option: ChartOption = {
@@ -96,7 +97,13 @@ export const RichTextExample = ({
       <h2 style={{ marginBottom: 10 }}>
         {t(locale, 'examples.richText.title', 'Rich Text Pie Chart')}
       </h2>
-      <p style={{ marginBottom: 20, color: ui.colorTextSecondary || themeObj.axisLabelColor, fontSize: 14 }}>
+      <p
+        style={{
+          marginBottom: 20,
+          color: ui.colorTextSecondary || themeObj.axisLabelColor,
+          fontSize: 14,
+        }}
+      >
         {t(
           locale,
           'examples.richText.desc',

@@ -5,7 +5,9 @@ import type { ChartOption } from 'hudx-charts';
 import type { Locale } from 'hudx-render';
 import { t } from '../../i18n';
 
-const BundleLineExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) => {
+const BundleLineExample: React.FC<{ locale?: Locale }> = ({
+  locale = 'zh-CN',
+}) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,7 +15,11 @@ const BundleLineExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) 
 
     const option: ChartOption = {
       title: {
-        text: t(locale, 'examples.bundle.lineChart.chartTitle', 'Independent LineChart Bundle'),
+        text: t(
+          locale,
+          'examples.bundle.lineChart.chartTitle',
+          'Independent LineChart Bundle',
+        ),
       },
       tooltip: {
         show: true,
@@ -60,7 +66,13 @@ const BundleLineExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) 
       ],
     };
 
-    const chart = new LineChart(chartRef.current, option, 'svg', undefined, locale);
+    const chart = new LineChart(
+      chartRef.current,
+      option,
+      'svg',
+      undefined,
+      locale,
+    );
 
     return () => {
       chart.dispose();
@@ -69,11 +81,20 @@ const BundleLineExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) 
 
   return (
     <div style={{ padding: 20 }}>
-      <h3>{t(locale, 'examples.bundle.lineChart.title', 'LineChart Bundle Import')}</h3>
+      <h3>
+        {t(
+          locale,
+          'examples.bundle.lineChart.title',
+          'LineChart Bundle Import',
+        )}
+      </h3>
       <p style={{ fontSize: 12, color: '#666' }}>
         <code>import LineChart from 'hudx-charts/chart/LineChart';</code>
       </p>
-      <div ref={chartRef} style={{ width: '100%', height: 300, border: '1px solid #eee' }} />
+      <div
+        ref={chartRef}
+        style={{ width: '100%', height: 300, border: '1px solid #eee' }}
+      />
     </div>
   );
 };

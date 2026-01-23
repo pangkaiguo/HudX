@@ -26,11 +26,17 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
-  const bgColor = ui.colorCodeBackground || ui.colorFillContainerAlt || themeObj.backgroundColor;
+  const bgColor =
+    ui.colorCodeBackground ||
+    ui.colorFillContainerAlt ||
+    themeObj.backgroundColor;
   const textColor = ui.colorCodeText || themeObj.textColor;
   const gutterBg =
-    ui.colorCodeGutterBackground || ui.colorBorderSecondary || themeObj.borderColor;
-  const gutterColor = ui.colorCodeGutterText || ui.colorTextTertiary || themeObj.axisLabelColor;
+    ui.colorCodeGutterBackground ||
+    ui.colorBorderSecondary ||
+    themeObj.borderColor;
+  const gutterColor =
+    ui.colorCodeGutterText || ui.colorTextTertiary || themeObj.axisLabelColor;
 
   return (
     <div

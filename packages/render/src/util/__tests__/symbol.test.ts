@@ -53,28 +53,63 @@ describe('symbol utility', () => {
 describe('Polygon', () => {
   it('should compute bounding rect for number[][] points', () => {
     const poly = new Polygon({
-      shape: { points: [[-1, 2], [3, 4], [2, -2]] },
+      shape: {
+        points: [
+          [-1, 2],
+          [3, 4],
+          [2, -2],
+        ],
+      },
     });
-    expect(poly.getBoundingRect()).toEqual({ x: -1, y: -2, width: 4, height: 6 });
+    expect(poly.getBoundingRect()).toEqual({
+      x: -1,
+      y: -2,
+      width: 4,
+      height: 6,
+    });
   });
 
   it('should compute bounding rect for Point[] points', () => {
     const poly = new Polygon({
-      shape: { points: [{ x: 0, y: 0 }, { x: 10, y: 5 }, { x: 2, y: -3 }] },
+      shape: {
+        points: [
+          { x: 0, y: 0 },
+          { x: 10, y: 5 },
+          { x: 2, y: -3 },
+        ],
+      },
     });
-    expect(poly.getBoundingRect()).toEqual({ x: 0, y: -3, width: 10, height: 8 });
+    expect(poly.getBoundingRect()).toEqual({
+      x: 0,
+      y: -3,
+      width: 10,
+      height: 8,
+    });
   });
 
   it('should determine containment via ray casting', () => {
     const poly = new Polygon({
-      shape: { points: [[0, 0], [10, 0], [0, 10]] },
+      shape: {
+        points: [
+          [0, 0],
+          [10, 0],
+          [0, 10],
+        ],
+      },
     });
     expect(poly.contain(2, 2)).toBe(true);
     expect(poly.contain(9, 9)).toBe(false);
   });
 
   it('should not contain when fewer than 3 points', () => {
-    const poly = new Polygon({ shape: { points: [[0, 0], [1, 1]] } });
+    const poly = new Polygon({
+      shape: {
+        points: [
+          [0, 0],
+          [1, 1],
+        ],
+      },
+    });
     expect(poly.contain(0.5, 0.5)).toBe(false);
   });
 
@@ -103,7 +138,13 @@ describe('Polygon', () => {
     } as unknown as CanvasRenderingContext2D;
 
     const poly = new Polygon({
-      shape: { points: [[0, 0], [10, 0], [0, 10]] },
+      shape: {
+        points: [
+          [0, 0],
+          [10, 0],
+          [0, 10],
+        ],
+      },
       style: { fill: 'red', stroke: 'blue', lineWidth: 2 },
     });
     poly.render(ctx);
@@ -218,14 +259,11 @@ describe('Path', () => {
   });
 
   it('should handle invalid path data gracefully', () => {
-    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.unstubAllGlobals();
-    vi.stubGlobal(
-      'Path2D',
-      function Path2DThrows() {
-        throw new Error('bad path');
-      } as any,
-    );
+    vi.stubGlobal('Path2D', function Path2DThrows() {
+      throw new Error('bad path');
+    } as any);
 
     const path = new Path({ shape: { d: 'bad' } });
     expect(path.contain(0, 0)).toBe(false);

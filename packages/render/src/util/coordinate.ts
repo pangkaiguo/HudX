@@ -13,7 +13,11 @@
 
 import type { AxisOption, ChartData, Coordinate } from '../types';
 
-export type ScaleValue = number | string | Date | { value: number | string;[key: string]: any };
+export type ScaleValue =
+  | number
+  | string
+  | Date
+  | { value: number | string; [key: string]: any };
 
 export interface Scale {
   (value: ScaleValue): number;
@@ -76,7 +80,10 @@ export const createLinearScale = (domain: number[], range: number[]): Scale => {
  * Create ordinal scale (for categories)
  * Maps discrete values to a continuous range (bands)
  */
-export const createOrdinalScale = (domain: ScaleValue[], range: number[]): Scale => {
+export const createOrdinalScale = (
+  domain: ScaleValue[],
+  range: number[],
+): Scale => {
   const domainMap = new Map<ScaleValue, number>();
   domain.forEach((d, i) => {
     domainMap.set(d, i);

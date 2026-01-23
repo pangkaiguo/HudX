@@ -56,7 +56,11 @@ export default class BarChart extends Chart {
 
   protected _onLegendHover(name: string, hovered: boolean): void {
     const t = (key: string, defaultValue?: string) => this.t(key, defaultValue);
-    const seriesIndex = findSeriesIndexByDisplayName(t, this._option.series || [], name);
+    const seriesIndex = findSeriesIndexByDisplayName(
+      t,
+      this._option.series || [],
+      name,
+    );
 
     if (seriesIndex === -1) return;
 
@@ -94,14 +98,18 @@ export default class BarChart extends Chart {
         this._activeBars = new Map();
       }
 
-      const oldBars = this._forceReinitOnNextRender ? new Map() : this._activeBars;
+      const oldBars = this._forceReinitOnNextRender
+        ? new Map()
+        : this._activeBars;
       this._activeBars = new Map();
       this._baseBarOpacity = new Map();
 
       if (!this._activeLabels) {
         this._activeLabels = new Map();
       }
-      const oldLabels = this._forceReinitOnNextRender ? new Map() : this._activeLabels;
+      const oldLabels = this._forceReinitOnNextRender
+        ? new Map()
+        : this._activeLabels;
       this._activeLabels = new Map();
       this._baseLabelOpacity = new Map();
 
@@ -158,8 +166,12 @@ export default class BarChart extends Chart {
           sData.forEach((val: ChartData, idx: number) => {
             const value =
               typeof val === 'object' && val !== null && 'value' in val
-                ? (Array.isArray(val.value) ? val.value[0] : val.value)
-                : (typeof val === 'number' ? val : 0);
+                ? Array.isArray(val.value)
+                  ? val.value[0]
+                  : val.value
+                : typeof val === 'number'
+                  ? val
+                  : 0;
             if (typeof value !== 'number') return;
 
             if (!stackTotals[idx]) stackTotals[idx] = {};
@@ -185,8 +197,16 @@ export default class BarChart extends Chart {
       const xDataForDomain = isHorizontal ? finalData : data;
       const yDataForDomain = isHorizontal ? data : finalData;
 
-      const xDomain = calculateDomain((xAxis || {}) as AxisOption, xDataForDomain, true);
-      const yDomain = calculateDomain((yAxis || {}) as AxisOption, yDataForDomain, false);
+      const xDomain = calculateDomain(
+        (xAxis || {}) as AxisOption,
+        xDataForDomain,
+        true,
+      );
+      const yDomain = calculateDomain(
+        (yAxis || {}) as AxisOption,
+        yDataForDomain,
+        false,
+      );
 
       const xRange = xAxis?.inverse
         ? [plotX + plotWidth, plotX]
@@ -356,8 +376,7 @@ export default class BarChart extends Chart {
           .filter((s) => s.type === 'bar' && s.show !== false)
           .map((s, i) => ({
             name: getSeriesDisplayName(
-              (key: string, defaultValue?: string) =>
-                this.t(key, defaultValue),
+              (key: string, defaultValue?: string) => this.t(key, defaultValue),
               s,
               i,
             ),
@@ -416,9 +435,9 @@ export default class BarChart extends Chart {
             yVal = yDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
             xVal = Array.isArray(raw) ? raw[0] : raw;
@@ -426,18 +445,18 @@ export default class BarChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
-            yVal = Array.isArray(raw) ? raw[1] ?? raw[0] : raw;
+            yVal = Array.isArray(raw) ? (raw[1] ?? raw[0]) : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -624,7 +643,9 @@ export default class BarChart extends Chart {
 
           const seriesLabel = seriesItem.label;
           const itemLabel =
-            typeof item === 'object' && item !== null && 'label' in item ? item.label : undefined;
+            typeof item === 'object' && item !== null && 'label' in item
+              ? item.label
+              : undefined;
           const labelOpt = { ...(seriesLabel || {}), ...(itemLabel || {}) };
           const showLabel = labelOpt && labelOpt.show === true;
 
@@ -662,7 +683,8 @@ export default class BarChart extends Chart {
             };
 
             const formatLabel = (formatter: any): string => {
-              if (typeof formatter === 'function') return formatter(paramsForLabel);
+              if (typeof formatter === 'function')
+                return formatter(paramsForLabel);
               if (typeof formatter === 'string') {
                 let result = formatter
                   .replace(/\{a\}/g, String(seriesName ?? ''))
@@ -675,7 +697,10 @@ export default class BarChart extends Chart {
                   Object.keys(item).forEach((k) => {
                     const v = (item as any)[k];
                     if (typeof v === 'string' || typeof v === 'number') {
-                      result = result.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v));
+                      result = result.replace(
+                        new RegExp(`\\{${k}\\}`, 'g'),
+                        String(v),
+                      );
                     }
                   });
                 }
@@ -771,7 +796,8 @@ export default class BarChart extends Chart {
             const finalLayout = getLabelLayout(barX, barY, barWidth, barHeight);
 
             const oldLabel = oldLabels.get(barKey);
-            const shouldAnimate = this._shouldAnimateFor(seriesName) || oldLabel;
+            const shouldAnimate =
+              this._shouldAnimateFor(seriesName) || oldLabel;
             const isUpdate = !!oldLabel;
             const hasOldLabels = oldLabels.size > 0;
             const delay =
@@ -795,7 +821,9 @@ export default class BarChart extends Chart {
                 fill:
                   labelOpt.color ||
                   (isInside
-                    ? theme.textColorOnSeries || theme.token.colorTextOnSeries || '#fff'
+                    ? theme.textColorOnSeries ||
+                      theme.token.colorTextOnSeries ||
+                      '#fff'
                     : theme.axisLabelColor || theme.textColor),
                 fontSize: labelOpt.fontSize ?? theme.fontSize,
                 fontFamily: theme.fontFamily,
@@ -809,7 +837,10 @@ export default class BarChart extends Chart {
 
             this._root.add(label);
             this._activeLabels.set(barKey, label);
-            this._baseLabelOpacity.set(barKey, label.attr('style')?.opacity ?? 1);
+            this._baseLabelOpacity.set(
+              barKey,
+              label.attr('style')?.opacity ?? 1,
+            );
 
             if (shouldAnimate) {
               this._animator
@@ -836,7 +867,9 @@ export default class BarChart extends Chart {
           if (this._tooltip) {
             const restoreAllOpacities = () => {
               this._activeBars.forEach((bar, key) => {
-                bar.attr('style', { opacity: this._baseBarOpacity.get(key) ?? 1 });
+                bar.attr('style', {
+                  opacity: this._baseBarOpacity.get(key) ?? 1,
+                });
               });
               this._activeLabels.forEach((label, key) => {
                 label.attr('style', {
@@ -895,7 +928,8 @@ export default class BarChart extends Chart {
                 return typeof v === 'number' ? v : undefined;
               }
               if (typeof dataItem === 'object' && dataItem !== null) {
-                const raw = 'value' in dataItem ? (dataItem as any).value : undefined;
+                const raw =
+                  'value' in dataItem ? (dataItem as any).value : undefined;
                 if (typeof raw === 'number') return raw;
                 if (Array.isArray(raw)) {
                   if (isHorizontal) {
@@ -915,7 +949,8 @@ export default class BarChart extends Chart {
               const my = evt?.offsetY ?? barY + barHeight / 2;
 
               const isAxisTrigger = option.tooltip?.trigger === 'axis';
-              const hasCategoryAxis = isHorizontal || xAxis?.type === 'category';
+              const hasCategoryAxis =
+                isHorizontal || xAxis?.type === 'category';
 
               if (isAxisTrigger && hasCategoryAxis) {
                 const axisName = isHorizontal
@@ -971,10 +1006,10 @@ export default class BarChart extends Chart {
 
               const itemName =
                 typeof item === 'object' &&
-                  item !== null &&
-                  !Array.isArray(item) &&
-                  'name' in item &&
-                  typeof item.name === 'string'
+                item !== null &&
+                !Array.isArray(item) &&
+                'name' in item &&
+                typeof item.name === 'string'
                   ? item.name
                   : isHorizontal
                     ? yDomain[index]
@@ -993,7 +1028,9 @@ export default class BarChart extends Chart {
                 value: itemValue,
                 color: typeof barColor === 'string' ? barColor : undefined,
                 marker:
-                  typeof barColor === 'string' ? this._getTooltipMarker(barColor) : undefined,
+                  typeof barColor === 'string'
+                    ? this._getTooltipMarker(barColor)
+                    : undefined,
               };
               const content = this._generateTooltipContent(params);
               this._tooltip.show(mx, my, content, params, rect.attr('shape'));
@@ -1031,7 +1068,9 @@ export default class BarChart extends Chart {
                 if (focus === 'series' || focus === 'self') {
                   restoreAllOpacities();
                 } else {
-                  rect.attr('style', { opacity: this._baseBarOpacity.get(barKey) ?? 1 });
+                  rect.attr('style', {
+                    opacity: this._baseBarOpacity.get(barKey) ?? 1,
+                  });
                   const label = this._activeLabels.get(barKey);
                   if (label) {
                     label.attr('style', {
@@ -1060,7 +1099,10 @@ export default class BarChart extends Chart {
             const isUpdate = !!oldBar;
             // If chart has existing bars (update scenario), skip staggered delay to ensure sync
             const hasOldBars = oldBars.size > 0;
-            const delay = isUpdate || hasOldBars ? 0 : resolveAnimationDelay(seriesItem.animationDelay, index);
+            const delay =
+              isUpdate || hasOldBars
+                ? 0
+                : resolveAnimationDelay(seriesItem.animationDelay, index);
             const duration = this._getAnimationDuration(isUpdate);
 
             // Animate properties

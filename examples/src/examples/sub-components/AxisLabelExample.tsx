@@ -216,9 +216,15 @@ export const AxisLabelExample = ({
                 border: '1px solid #ddd',
               }}
             >
-              <option value='break'>{t(locale, 'examples.axisLabel.overflow.break', 'Break')}</option>
-              <option value='truncate'>{t(locale, 'examples.axisLabel.overflow.truncate', 'Truncate')}</option>
-              <option value='none'>{t(locale, 'examples.axisLabel.overflow.none', 'None')}</option>
+              <option value='break'>
+                {t(locale, 'examples.axisLabel.overflow.break', 'Break')}
+              </option>
+              <option value='truncate'>
+                {t(locale, 'examples.axisLabel.overflow.truncate', 'Truncate')}
+              </option>
+              <option value='none'>
+                {t(locale, 'examples.axisLabel.overflow.none', 'None')}
+              </option>
             </select>
           </label>
         </div>
@@ -282,9 +288,15 @@ export const AxisLabelExample = ({
                 border: '1px solid #ddd',
               }}
             >
-              <option value='break'>{t(locale, 'examples.axisLabel.overflow.break', 'Break')}</option>
-              <option value='truncate'>{t(locale, 'examples.axisLabel.overflow.truncate', 'Truncate')}</option>
-              <option value='none'>{t(locale, 'examples.axisLabel.overflow.none', 'None')}</option>
+              <option value='break'>
+                {t(locale, 'examples.axisLabel.overflow.break', 'Break')}
+              </option>
+              <option value='truncate'>
+                {t(locale, 'examples.axisLabel.overflow.truncate', 'Truncate')}
+              </option>
+              <option value='none'>
+                {t(locale, 'examples.axisLabel.overflow.none', 'None')}
+              </option>
             </select>
           </label>
         </div>

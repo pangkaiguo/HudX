@@ -24,7 +24,10 @@ import {
   createSymbol,
   toRgbaWithOpacity,
 } from 'hudx-render';
-import { findSeriesIndexByDisplayName, getSeriesDisplayName } from './chartUtils';
+import {
+  findSeriesIndexByDisplayName,
+  getSeriesDisplayName,
+} from './chartUtils';
 
 /**
  * LineChart - Line chart implementation
@@ -45,7 +48,11 @@ export default class LineChart extends Chart {
 
   protected _onLegendHover(name: string, hovered: boolean): void {
     const t = (key: string, defaultValue?: string) => this.t(key, defaultValue);
-    const seriesIndex = findSeriesIndexByDisplayName(t, this._option.series || [], name);
+    const seriesIndex = findSeriesIndexByDisplayName(
+      t,
+      this._option.series || [],
+      name,
+    );
 
     if (seriesIndex === -1) return;
 
@@ -174,10 +181,18 @@ export default class LineChart extends Chart {
 
       const yScale = createLinearScale(yDomain, yRange);
 
-      this._renderAxes((xAxis || {}) as AxisOption, (yAxis || {}) as AxisOption, plotX, plotY, plotWidth, plotHeight, {
-        x: xScale,
-        y: yScale,
-      });
+      this._renderAxes(
+        (xAxis || {}) as AxisOption,
+        (yAxis || {}) as AxisOption,
+        plotX,
+        plotY,
+        plotWidth,
+        plotHeight,
+        {
+          x: xScale,
+          y: yScale,
+        },
+      );
 
       if (this._tooltip && option.tooltip?.trigger === 'axis') {
         const interact = new Rect({
@@ -190,7 +205,7 @@ export default class LineChart extends Chart {
           },
           style: { fill: 'transparent' },
           silent: false,
-          cursor: 'default',//'crosshair',
+          cursor: 'default', //'crosshair',
         });
 
         // Axis Pointer Line
@@ -338,8 +353,7 @@ export default class LineChart extends Chart {
           .filter((s) => s.type === 'line' && s.show !== false)
           .map((s, i) => ({
             name: getSeriesDisplayName(
-              (key: string, defaultValue?: string) =>
-                this.t(key, defaultValue),
+              (key: string, defaultValue?: string) => this.t(key, defaultValue),
               s,
               i,
             ),
@@ -379,18 +393,18 @@ export default class LineChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? (item as any).value
                 : item;
-            yVal = Array.isArray(raw) ? raw[1] ?? raw[0] : raw;
+            yVal = Array.isArray(raw) ? (raw[1] ?? raw[0]) : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? (item as any).value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -623,10 +637,10 @@ export default class LineChart extends Chart {
 
                 const itemName =
                   typeof item === 'object' &&
-                    item !== null &&
-                    !Array.isArray(item) &&
-                    'name' in item &&
-                    typeof (item as any).name === 'string'
+                  item !== null &&
+                  !Array.isArray(item) &&
+                  'name' in item &&
+                  typeof (item as any).name === 'string'
                     ? (item as any).name
                     : xAxis?.data?.[pointIndex] || '';
                 const itemValue = this._getDataValue(item);

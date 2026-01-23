@@ -173,7 +173,9 @@ export const BasicPieExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -183,8 +185,12 @@ export const BasicPieExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
@@ -221,9 +227,15 @@ export const BasicPieExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='false'>{t(locale, 'examples.control.none', 'None')}</option>
-            <option value='radius'>{t(locale, 'examples.control.roseType.radius', 'Radius')}</option>
-            <option value='area'>{t(locale, 'examples.control.roseType.area', 'Area')}</option>
+            <option value='false'>
+              {t(locale, 'examples.control.none', 'None')}
+            </option>
+            <option value='radius'>
+              {t(locale, 'examples.control.roseType.radius', 'Radius')}
+            </option>
+            <option value='area'>
+              {t(locale, 'examples.control.roseType.area', 'Area')}
+            </option>
           </select>
         </label>
       </div>

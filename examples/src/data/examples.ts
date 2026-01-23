@@ -7,7 +7,6 @@ export interface Example {
 }
 
 export const examples: Example[] = [
-
   {
     id: 'basic-bar',
     category: 'bar',

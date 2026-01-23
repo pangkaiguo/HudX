@@ -131,7 +131,9 @@ export const PerformanceExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as 'canvas' | 'svg')}
@@ -141,13 +143,19 @@ export const PerformanceExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.performance.elementCount', 'Element Count')}:</span>
+          <span>
+            {t(locale, 'examples.performance.elementCount', 'Element Count')}:
+          </span>
           <input
             type='number'
             value={count}
@@ -162,7 +170,9 @@ export const PerformanceExample = ({
         </label>
 
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.performance.shapeType', 'Shape Type')}:</span>
+          <span>
+            {t(locale, 'examples.performance.shapeType', 'Shape Type')}:
+          </span>
           <select
             value={shapeType}
             onChange={(e) => setShapeType(e.target.value as ShapeType)}
@@ -172,11 +182,21 @@ export const PerformanceExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='circle'>{t(locale, 'examples.shape.circle', 'Circle')}</option>
-            <option value='rect'>{t(locale, 'examples.shape.rect', 'Rect')}</option>
-            <option value='line'>{t(locale, 'examples.shape.line', 'Line')}</option>
-            <option value='polyline'>{t(locale, 'examples.shape.polyline', 'Polyline')}</option>
-            <option value='polygon'>{t(locale, 'examples.shape.polygon', 'Polygon')}</option>
+            <option value='circle'>
+              {t(locale, 'examples.shape.circle', 'Circle')}
+            </option>
+            <option value='rect'>
+              {t(locale, 'examples.shape.rect', 'Rect')}
+            </option>
+            <option value='line'>
+              {t(locale, 'examples.shape.line', 'Line')}
+            </option>
+            <option value='polyline'>
+              {t(locale, 'examples.shape.polyline', 'Polyline')}
+            </option>
+            <option value='polygon'>
+              {t(locale, 'examples.shape.polygon', 'Polygon')}
+            </option>
           </select>
         </label>
       </div>
@@ -190,8 +210,14 @@ export const PerformanceExample = ({
           borderRadius: 8,
         }}
       >
-        <strong>{t(locale, 'examples.performance.renderTime', 'Render Time')}:</strong> {renderTime}ms |{' '}
-        <strong>{t(locale, 'examples.performance.elements', 'Elements')}:</strong> {count} |{' '}
+        <strong>
+          {t(locale, 'examples.performance.renderTime', 'Render Time')}:
+        </strong>{' '}
+        {renderTime}ms |{' '}
+        <strong>
+          {t(locale, 'examples.performance.elements', 'Elements')}:
+        </strong>{' '}
+        {count} |{' '}
         <strong>{t(locale, 'examples.performance.mode', 'Mode')}:</strong>{' '}
         {mode === 'canvas'
           ? t(locale, 'examples.control.canvas', 'Canvas')

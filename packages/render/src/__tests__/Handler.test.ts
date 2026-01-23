@@ -25,7 +25,9 @@ describe('Handler', () => {
     const storage = new Storage();
     const handler = new Handler(painter, storage);
 
-    expect((handler as any)._getEventPoint(new MouseEvent('mousemove'))).toEqual({
+    expect(
+      (handler as any)._getEventPoint(new MouseEvent('mousemove')),
+    ).toEqual({
       x: 0,
       y: 0,
     });
@@ -66,7 +68,9 @@ describe('Handler', () => {
     el.on('mouseover', mouseover);
     el.on('mouseout', mouseout);
 
-    (handler as any)._onMouseMove(new MouseEvent('mousemove', { clientX: 10, clientY: 10 }));
+    (handler as any)._onMouseMove(
+      new MouseEvent('mousemove', { clientX: 10, clientY: 10 }),
+    );
     expect(mouseover).toHaveBeenCalledTimes(1);
     expect(canvas.style.cursor).toBe('pointer');
 
@@ -99,7 +103,11 @@ describe('Handler', () => {
     const storage = new Storage();
     const root = new Group({ id: 'root' });
     root.silent = true;
-    const el = new Box({ id: 'box', draggable: true, transform: { x: 1, y: 2 } });
+    const el = new Box({
+      id: 'box',
+      draggable: true,
+      transform: { x: 1, y: 2 },
+    });
     root.add(el);
     storage.addRoot(root);
 
@@ -110,15 +118,21 @@ describe('Handler', () => {
     el.on('drag', drag);
     el.on('dragend', dragend);
 
-    (handler as any)._onMouseDown(new MouseEvent('mousedown', { clientX: 10, clientY: 10 }));
-    (handler as any)._onMouseMove(new MouseEvent('mousemove', { clientX: 15, clientY: 20 }));
+    (handler as any)._onMouseDown(
+      new MouseEvent('mousedown', { clientX: 10, clientY: 10 }),
+    );
+    (handler as any)._onMouseMove(
+      new MouseEvent('mousemove', { clientX: 15, clientY: 20 }),
+    );
 
     expect(markDirty).toHaveBeenCalled();
     expect(el.transform.x).toBe(6);
     expect(el.transform.y).toBe(12);
     expect(drag).toHaveBeenCalledTimes(1);
 
-    (handler as any)._onMouseUp(new MouseEvent('mouseup', { clientX: 15, clientY: 20 }));
+    (handler as any)._onMouseUp(
+      new MouseEvent('mouseup', { clientX: 15, clientY: 20 }),
+    );
     expect(dragend).toHaveBeenCalledTimes(1);
     expect((handler as any)._dragging).toBeNull();
   });
@@ -156,7 +170,9 @@ describe('Handler', () => {
     });
     el.on('click', click);
 
-    (handler as any)._onClick(new MouseEvent('click', { clientX: 5, clientY: 5 }));
+    (handler as any)._onClick(
+      new MouseEvent('click', { clientX: 5, clientY: 5 }),
+    );
     expect(click).toHaveBeenCalledTimes(1);
   });
 
@@ -244,7 +260,9 @@ describe('Handler', () => {
     );
     expect(canvas.style.cursor).toBe('pointer');
 
-    (handler as any)._onDblClick(new MouseEvent('dblclick', { clientX: 1, clientY: 1 }));
+    (handler as any)._onDblClick(
+      new MouseEvent('dblclick', { clientX: 1, clientY: 1 }),
+    );
     (handler as any)._onContextMenu(
       new MouseEvent('contextmenu', { clientX: 1, clientY: 1 }),
     );
@@ -255,7 +273,9 @@ describe('Handler', () => {
     expect(ctx).toHaveBeenCalledTimes(1);
     expect(wh).toHaveBeenCalledTimes(1);
 
-    (handler as any)._onMouseOut(new MouseEvent('mouseout', { clientX: 1, clientY: 1 }));
+    (handler as any)._onMouseOut(
+      new MouseEvent('mouseout', { clientX: 1, clientY: 1 }),
+    );
     expect(out).toHaveBeenCalledTimes(1);
     expect(canvas.style.cursor).toBe('default');
   });

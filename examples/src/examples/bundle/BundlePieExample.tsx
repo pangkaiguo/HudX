@@ -5,7 +5,9 @@ import type { ChartOption } from 'hudx-charts';
 import type { Locale } from 'hudx-render';
 import { t } from '../../i18n';
 
-const BundlePieExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) => {
+const BundlePieExample: React.FC<{ locale?: Locale }> = ({
+  locale = 'zh-CN',
+}) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,7 +15,11 @@ const BundlePieExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) =
 
     const option: ChartOption = {
       title: {
-        text: t(locale, 'examples.bundle.pieChart.chartTitle', 'Independent PieChart Bundle'),
+        text: t(
+          locale,
+          'examples.bundle.pieChart.chartTitle',
+          'Independent PieChart Bundle',
+        ),
         left: 'center',
       },
       tooltip: { trigger: 'item' },
@@ -39,7 +45,13 @@ const BundlePieExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) =
       ],
     };
 
-    const chart = new PieChart(chartRef.current, option, 'svg', undefined, locale);
+    const chart = new PieChart(
+      chartRef.current,
+      option,
+      'svg',
+      undefined,
+      locale,
+    );
 
     return () => {
       chart.dispose();
@@ -48,11 +60,16 @@ const BundlePieExample: React.FC<{ locale?: Locale }> = ({ locale = 'zh-CN' }) =
 
   return (
     <div style={{ padding: 20 }}>
-      <h3>{t(locale, 'examples.bundle.pieChart.title', 'PieChart Bundle Import')}</h3>
+      <h3>
+        {t(locale, 'examples.bundle.pieChart.title', 'PieChart Bundle Import')}
+      </h3>
       <p style={{ fontSize: 12, color: '#666' }}>
         <code>import PieChart from 'hudx-charts/chart/PieChart';</code>
       </p>
-      <div ref={chartRef} style={{ width: '100%', height: 300, border: '1px solid #eee' }} />
+      <div
+        ref={chartRef}
+        style={{ width: '100%', height: 300, border: '1px solid #eee' }}
+      />
     </div>
   );
 };

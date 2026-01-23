@@ -185,7 +185,9 @@ export const AreaLineChartExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -198,7 +200,9 @@ export const AreaLineChartExample = ({
             <option value='canvas'>
               {t(locale, 'examples.control.canvas', 'Canvas')}
             </option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
@@ -251,7 +255,8 @@ export const AreaLineChartExample = ({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>
-                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+                {t(locale, 'examples.control.xSplit', 'X Split')}:{' '}
+                {xSplitNumber}
               </span>
               <input
                 type='range'

@@ -28,11 +28,11 @@ describe('CanvasPainter', () => {
     storage = new Storage();
 
     const originalCreateElement = document.createElement.bind(document);
-    createElementSpy = vi.spyOn(document, 'createElement').mockImplementation(
-      (tag: string, options?: ElementCreationOptions) => {
+    createElementSpy = vi
+      .spyOn(document, 'createElement')
+      .mockImplementation((tag: string, options?: ElementCreationOptions) => {
         return originalCreateElement(tag, options);
-      },
-    );
+      });
 
     getContextSpy = vi
       .spyOn(HTMLCanvasElement.prototype, 'getContext')

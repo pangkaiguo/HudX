@@ -154,9 +154,14 @@ export default class CanvasPainter implements IPainter {
 
     const raf =
       typeof (globalThis as any).requestAnimationFrame === 'function'
-        ? ((globalThis as any).requestAnimationFrame as (cb: FrameRequestCallback) => number)
+        ? ((globalThis as any).requestAnimationFrame as (
+            cb: FrameRequestCallback,
+          ) => number)
         : (cb: FrameRequestCallback) =>
-          (globalThis.setTimeout(() => cb(Date.now()), 16) as unknown as number);
+            globalThis.setTimeout(
+              () => cb(Date.now()),
+              16,
+            ) as unknown as number;
 
     this._animationFrameId = raf(() => {
       this._animationFrameId = undefined;

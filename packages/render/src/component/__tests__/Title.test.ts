@@ -1,4 +1,12 @@
-import { describe, it, expect, vi, beforeAll, afterAll, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeAll,
+  afterAll,
+  afterEach,
+} from 'vitest';
 import Title from '../Title';
 import Rect from '../../graphic/Rect';
 import Text from '../../graphic/Text';
@@ -129,8 +137,9 @@ describe('Title', () => {
     });
 
     title.setContainer(200, 100);
-    const beforeMainX = (title.children().find((c) => c instanceof Text) as Text)
-      .shape.x;
+    const beforeMainX = (
+      title.children().find((c) => c instanceof Text) as Text
+    ).shape.x;
 
     title.updateOption({ left: 'right', right: 10 });
     const afterMainX = (title.children().find((c) => c instanceof Text) as Text)

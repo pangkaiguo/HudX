@@ -1,4 +1,12 @@
-import { describe, it, expect, vi, beforeEach, beforeAll, afterAll } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  beforeAll,
+  afterAll,
+} from 'vitest';
 import { createDecalPattern } from '../pattern';
 import { DecalObject } from '../../types';
 
@@ -111,9 +119,9 @@ describe('createDecalPattern', () => {
     const decal: DecalObject = { symbol: 'line', rotation: Math.PI / 4 };
     const pattern = createDecalPattern(decal, '#000');
 
-    expect((pattern as unknown as { _rotation?: number })._rotation).toBeCloseTo(
-      Math.PI / 4,
-    );
+    expect(
+      (pattern as unknown as { _rotation?: number })._rotation,
+    ).toBeCloseTo(Math.PI / 4);
   });
 
   describe('Presets verification', () => {

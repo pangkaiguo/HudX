@@ -408,7 +408,7 @@ export default class PieChart extends Chart {
           }
         });
       } else {
-        needsFix.forEach(i => {
+        needsFix.forEach((i) => {
           angles[i] = minAngleRad;
         });
         if (angleSum > 0) {
@@ -508,7 +508,9 @@ export default class PieChart extends Chart {
       // Animate
       const shouldAnimate = this._shouldAnimateFor(itemName);
       if (shouldAnimate) {
-        const delay = oldSector ? 0 : resolveAnimationDelay(seriesItem.animationDelay, index);
+        const delay = oldSector
+          ? 0
+          : resolveAnimationDelay(seriesItem.animationDelay, index);
         const duration = seriesItem.animationDuration || 500;
         const easing = seriesItem.animationEasing || 'cubicOut';
 
@@ -717,7 +719,8 @@ export default class PieChart extends Chart {
       style: {
         fill: fillStyle,
         stroke:
-          seriesItem.itemStyle?.borderColor || this.getThemeConfig().backgroundColor,
+          seriesItem.itemStyle?.borderColor ||
+          this.getThemeConfig().backgroundColor,
         lineWidth: seriesItem.itemStyle?.borderWidth ?? 0,
       },
       transform: {
@@ -757,7 +760,10 @@ export default class PieChart extends Chart {
 
     const emphasis = seriesItem.emphasis;
     const itemName =
-      typeof item === 'object' && item !== null && !Array.isArray(item) && item.name
+      typeof item === 'object' &&
+      item !== null &&
+      !Array.isArray(item) &&
+      item.name
         ? String(item.name)
         : `item-${index + 1}`;
 
@@ -911,7 +917,6 @@ export default class PieChart extends Chart {
       });
     });
 
-
     return { onMouseOver, onMouseOut };
   }
 
@@ -977,9 +982,9 @@ export default class PieChart extends Chart {
         seriesItem.label?.color ||
         (isOutside || isCenter
           ? this.getThemeConfig().textColor
-          : (this.getThemeConfig().textColorOnSeries ||
+          : this.getThemeConfig().textColorOnSeries ||
             this.getThemeConfig().token.colorTextOnSeries ||
-            this.getThemeConfig().tooltipTextColor)),
+            this.getThemeConfig().tooltipTextColor),
       itemColor: color,
       seriesItem,
       handlers,
@@ -1079,7 +1084,9 @@ export default class PieChart extends Chart {
     let rich = emphasis?.label?.rich || seriesItem.label?.rich;
     let style: any = {
       fill:
-        emphasis?.label?.color || seriesItem.label?.color || this.getThemeConfig().textColor,
+        emphasis?.label?.color ||
+        seriesItem.label?.color ||
+        this.getThemeConfig().textColor,
       fontSize: emphasis?.label?.fontSize || 20,
       fontWeight: emphasis?.label?.fontWeight || 'bold',
       textAlign: 'center',
@@ -1534,8 +1541,15 @@ export default class PieChart extends Chart {
     return [0, maxRadius * 0.8];
   }
 
-  private _getPieBounds(): { x: number; y: number; width: number; height: number } {
-    const grid = Array.isArray(this._option.grid) ? this._option.grid[0] : this._option.grid;
+  private _getPieBounds(): {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } {
+    const grid = Array.isArray(this._option.grid)
+      ? this._option.grid[0]
+      : this._option.grid;
     if (!grid) {
       return { x: 0, y: 0, width: this._width, height: this._height };
     }
@@ -1568,7 +1582,9 @@ export default class PieChart extends Chart {
     width: number;
     height: number;
   }): void {
-    const grid = Array.isArray(this._option.grid) ? this._option.grid[0] : this._option.grid;
+    const grid = Array.isArray(this._option.grid)
+      ? this._option.grid[0]
+      : this._option.grid;
     if (!grid) return;
 
     const show = (grid as any).show === true;
@@ -1583,14 +1599,28 @@ export default class PieChart extends Chart {
           ? this.getThemeConfig().borderColor
           : 'transparent';
     const lineWidth =
-      (grid as any).borderWidth !== undefined ? (grid as any).borderWidth : show ? 1 : 0;
+      (grid as any).borderWidth !== undefined
+        ? (grid as any).borderWidth
+        : show
+          ? 1
+          : 0;
 
-    if (!show && fill === 'transparent' && (stroke === 'transparent' || lineWidth === 0)) {
+    if (
+      !show &&
+      fill === 'transparent' &&
+      (stroke === 'transparent' || lineWidth === 0)
+    ) {
       return;
     }
 
     const rect = new Rect({
-      shape: { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height, r: 0 },
+      shape: {
+        x: bounds.x,
+        y: bounds.y,
+        width: bounds.width,
+        height: bounds.height,
+        r: 0,
+      },
       style: { fill, stroke, lineWidth },
       z: 0,
     });
@@ -1887,13 +1917,17 @@ export default class PieChart extends Chart {
     // Fallback logic: if showOnHover is undefined, try to retrieve it from sector
     let finalShowOnHover = showOnHover;
     if (finalShowOnHover === undefined) {
-      finalShowOnHover = this._getSectorState(sector)?.seriesItem?.label?.showOnHover;
+      finalShowOnHover =
+        this._getSectorState(sector)?.seriesItem?.label?.showOnHover;
     }
 
     if (empLabel.show !== undefined) {
       label.invisible = !empLabel.show;
       label.style.opacity = empLabel.show ? 1 : 0;
-      this._setElementHoverOpacityOverride(label, label.style.opacity as number);
+      this._setElementHoverOpacityOverride(
+        label,
+        label.style.opacity as number,
+      );
     } else if (finalShowOnHover) {
       label.invisible = false;
       label.style.opacity = 1;
@@ -1998,7 +2032,11 @@ export default class PieChart extends Chart {
       seriesType === 'doughnut' || seriesType === 'half-doughnut';
     if (isDoughnut) {
       const baseR = this._getSectorState(sector)?.baseR;
-      if (baseR !== undefined && sector.shape && typeof sector.shape === 'object') {
+      if (
+        baseR !== undefined &&
+        sector.shape &&
+        typeof sector.shape === 'object'
+      ) {
         if (sector.transform) {
           sector.transform.scaleX = 1;
           sector.transform.scaleY = 1;

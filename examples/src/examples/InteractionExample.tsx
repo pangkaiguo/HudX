@@ -75,7 +75,11 @@ export const InteractionExample = ({
     renderer.add(
       new Text({
         shape: {
-          text: t(locale, 'examples.interaction.instruction', 'Click circles to interact'),
+          text: t(
+            locale,
+            'examples.interaction.instruction',
+            'Click circles to interact',
+          ),
           x: 400,
           y: 50,
         },
@@ -88,7 +92,10 @@ export const InteractionExample = ({
       }),
     );
 
-    renderer.resize(EXAMPLES_RENDERER_CANVAS.width, EXAMPLES_RENDERER_CANVAS.height);
+    renderer.resize(
+      EXAMPLES_RENDERER_CANVAS.width,
+      EXAMPLES_RENDERER_CANVAS.height,
+    );
     renderer.flush();
 
     return () => renderer.dispose();
@@ -109,7 +116,9 @@ export const InteractionExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -119,13 +128,18 @@ export const InteractionExample = ({
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
       </div>
       <p style={{ marginBottom: 20, color: textSecondary }}>
-        {t(locale, 'examples.interaction.clickCount', 'Click Count')}: {clickCount}
+        {t(locale, 'examples.interaction.clickCount', 'Click Count')}:{' '}
+        {clickCount}
       </p>
       <div
         ref={containerRef}

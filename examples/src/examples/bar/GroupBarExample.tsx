@@ -155,7 +155,9 @@ export const GroupBarExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -168,7 +170,9 @@ export const GroupBarExample = ({
             <option value='canvas'>
               {t(locale, 'examples.control.canvas', 'Canvas')}
             </option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
@@ -207,7 +211,9 @@ export const GroupBarExample = ({
             <option value='percent'>
               {t(locale, 'examples.control.percent', 'Percent')}
             </option>
-            <option value='pixel'>{t(locale, 'examples.control.pixel', 'Pixel')}</option>
+            <option value='pixel'>
+              {t(locale, 'examples.control.pixel', 'Pixel')}
+            </option>
           </select>
 
           {typeof barGap === 'number' ? (
@@ -260,7 +266,8 @@ export const GroupBarExample = ({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>
-                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+                {t(locale, 'examples.control.xSplit', 'X Split')}:{' '}
+                {xSplitNumber}
               </span>
               <input
                 type='range'

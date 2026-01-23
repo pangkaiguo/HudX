@@ -10,7 +10,7 @@ beforeAll(() => {
   vi.stubGlobal(
     'ResizeObserver',
     class ResizeObserverMock {
-      constructor(_cb: any) { }
+      constructor(_cb: any) {}
       observe = observeSpy;
       disconnect = disconnectSpy;
     } as any,
@@ -76,11 +76,12 @@ class TestChart extends Chart {
   public testMountLegend(items: any[]): void {
     this._mountLegend(items);
   }
-  protected _render(): void { }
+  protected _render(): void {}
 }
 
 describe('Chart (Core)', () => {
-  const getObserveSpy = () => (globalThis as any).__ro_observeSpy as ReturnType<typeof vi.fn>;
+  const getObserveSpy = () =>
+    (globalThis as any).__ro_observeSpy as ReturnType<typeof vi.fn>;
   const getDisconnectSpy = () =>
     (globalThis as any).__ro_disconnectSpy as ReturnType<typeof vi.fn>;
 
@@ -242,7 +243,7 @@ describe('Chart (Core)', () => {
       vi.stubGlobal('cancelAnimationFrame', cafSpy as any);
 
       class ScheduleChart extends Chart {
-        protected _render(): void { }
+        protected _render(): void {}
       }
       const chart = new ScheduleChart(document.createElement('div'));
       (chart as any)._scheduleRender();
@@ -260,7 +261,7 @@ describe('Chart (Core)', () => {
       vi.stubGlobal('requestAnimationFrame', rafSpy as any);
 
       class ScheduleChart extends Chart {
-        protected _render(): void { }
+        protected _render(): void {}
       }
       const chart = new ScheduleChart(document.createElement('div'));
       (chart as any)._animationId = null;
@@ -383,9 +384,13 @@ describe('Chart (Core)', () => {
 
       const interactRects = legend
         .children()
-        .filter((c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer');
+        .filter(
+          (c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer',
+        );
       expect(interactRects.length).toBe(2);
-      const [r1, r2] = interactRects.sort((a: any, b: any) => a.shape.x - b.shape.x);
+      const [r1, r2] = interactRects.sort(
+        (a: any, b: any) => a.shape.x - b.shape.x,
+      );
       const gap = r2.shape.x - (r1.shape.x + r1.shape.width);
       expect(gap).toBeCloseTo(12, 2);
     });
@@ -471,7 +476,9 @@ describe('Chart (Core)', () => {
       const legend = (chart as any)._legend;
       const interactRects = legend
         .children()
-        .filter((c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer')
+        .filter(
+          (c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer',
+        )
         .sort((a: any, b: any) => a.shape.x - b.shape.x);
 
       const [aRect] = interactRects;
@@ -534,7 +541,9 @@ describe('Chart (Core)', () => {
       const legend = (chart as any)._legend;
       const interactRects = legend
         .children()
-        .filter((c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer')
+        .filter(
+          (c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer',
+        )
         .sort((a: any, b: any) => a.shape.x - b.shape.x);
 
       const [aRect] = interactRects;
@@ -846,7 +855,9 @@ describe('Chart (Core)', () => {
       }
 
       const dom = document.createElement('div');
-      const chart = new TitleChart(dom, { title: { show: false, text: 'Hello' } } as any);
+      const chart = new TitleChart(dom, {
+        title: { show: false, text: 'Hello' },
+      } as any);
       const root = (chart as any)._root;
       const title = root.children().find((c: any) => c instanceof Title);
       expect(title).toBeUndefined();

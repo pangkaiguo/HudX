@@ -55,7 +55,9 @@ export default class Renderer {
     this._storage.addRoot(this._root);
     this._renderMode = renderMode;
     this._followGlobalTheme = theme === undefined;
-    this._theme = this._followGlobalTheme ? ThemeManager.getCurrentTheme() : (theme as Theme);
+    this._theme = this._followGlobalTheme
+      ? ThemeManager.getCurrentTheme()
+      : (theme as Theme);
     this._locale = locale;
 
     // Create painter based on render mode
@@ -257,7 +259,9 @@ export default class Renderer {
   getDataURL(opts: DataURLOpts = {}): string {
     const themeConfig = ThemeManager.getTheme(this._theme);
     const backgroundColor =
-      opts.backgroundColor ?? this._backgroundColorOverride ?? themeConfig.backgroundColor;
+      opts.backgroundColor ??
+      this._backgroundColorOverride ??
+      themeConfig.backgroundColor;
     return this._painter.getDataURL({ ...opts, backgroundColor });
   }
 

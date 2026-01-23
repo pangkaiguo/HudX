@@ -11,7 +11,10 @@ try {
   if (fs.existsSync(srcDtsPath)) {
     let content = fs.readFileSync(srcDtsPath, 'utf-8');
 
-    content = content.replace(/(\.\.\/)+render\/src\/index(\.ts)?/g, 'hudx-render');
+    content = content.replace(
+      /(\.\.\/)+render\/src\/index(\.ts)?/g,
+      'hudx-render',
+    );
     content = content.replace(
       /(\.\.\/)+charts\/src\/index(\.ts)?/g,
       'hudx-charts',

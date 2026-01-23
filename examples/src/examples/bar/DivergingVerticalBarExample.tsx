@@ -24,7 +24,13 @@ const DivergingVerticalBarExample = ({
   const option: ChartOption = {
     tooltip: { show: true, trigger: 'axis', axisPointer: { type: 'shadow' } },
     legend: { show: true, orient: 'vertical', right: 10, top: 10 },
-    grid: { left: '15%', right: '4%', bottom: '10%', top: 40, containLabel: true },
+    grid: {
+      left: '15%',
+      right: '4%',
+      bottom: '10%',
+      top: 40,
+      containLabel: true,
+    },
     aria: {
       enabled: true,
       decal: {
@@ -60,7 +66,12 @@ const DivergingVerticalBarExample = ({
         name: 'Profit',
         type: 'bar',
         data: profit,
-        label: { show: true, position: 'inside', formatter: '{c}', color: '#fff' },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          color: '#fff',
+        },
         emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
         itemStyle: { color: themeObj.seriesColors?.[0], borderWidth: 0 },
       },
@@ -70,13 +81,21 @@ const DivergingVerticalBarExample = ({
         data: expenses,
         label: { show: true, position: 'outside', formatter: '{c}' },
         emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
-        itemStyle: { color: themeObj.seriesColors?.[3] || '#4b4f6a', borderWidth: 0 },
+        itemStyle: {
+          color: themeObj.seriesColors?.[3] || '#4b4f6a',
+          borderWidth: 0,
+        },
       },
       {
         name: 'Income',
         type: 'bar',
         data: income,
-        label: { show: true, position: 'inside', formatter: '{c}', color: '#222' },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          color: '#222',
+        },
         emphasis: { focus: 'series', itemStyle: { opacity: 1 } },
         itemStyle: { color: themeObj.seriesColors?.[2], borderWidth: 0 },
       },
@@ -87,14 +106,22 @@ const DivergingVerticalBarExample = ({
   const handleUpdateSeries = () => {
     const chartInstance = chartRef.current?.getChartInstance();
     if (chartInstance) {
-      const nextProfit = profit.map(() => Math.floor(Math.random() * 260) + 100);
-      const nextIncome = income.map(() => Math.floor(Math.random() * 300) + 200);
+      const nextProfit = profit.map(
+        () => Math.floor(Math.random() * 260) + 100,
+      );
+      const nextIncome = income.map(
+        () => Math.floor(Math.random() * 300) + 200,
+      );
       const nextExpenses = expenses.map(
         () => -1 * (Math.floor(Math.random() * 180) + 80),
       );
 
       chartInstance.setOption({
-        series: [{ data: nextProfit }, { data: nextExpenses }, { data: nextIncome }],
+        series: [
+          { data: nextProfit },
+          { data: nextExpenses },
+          { data: nextIncome },
+        ],
       });
     }
   };
@@ -102,7 +129,11 @@ const DivergingVerticalBarExample = ({
   return (
     <div>
       <h2 style={{ marginBottom: 10 }}>
-        {t(locale, 'examples.list.diverging-vertical-bar.title', 'Diverging Vertical Bar')}
+        {t(
+          locale,
+          'examples.list.diverging-vertical-bar.title',
+          'Diverging Vertical Bar',
+        )}
       </h2>
       <p style={{ marginBottom: 20, color: '#666', fontSize: 14 }}>
         {t(
@@ -122,7 +153,9 @@ const DivergingVerticalBarExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -132,8 +165,12 @@ const DivergingVerticalBarExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 

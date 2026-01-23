@@ -81,7 +81,12 @@ export const StackHorizontalBarExample = ({
         name: 'Direct',
         type: 'bar',
         stack: 'total',
-        label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          fontSize: 10,
+        },
         emphasis: { focus: 'series' },
         data: [320, 302, 301, 334, 390, 330, 320],
         itemStyle: { borderWidth: 0 },
@@ -90,7 +95,12 @@ export const StackHorizontalBarExample = ({
         name: 'Mail Ad',
         type: 'bar',
         stack: 'total',
-        label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          fontSize: 10,
+        },
         emphasis: { focus: 'series' },
         data: [120, 132, 101, 134, 90, 230, 210],
         itemStyle: { borderWidth: 0 },
@@ -99,7 +109,12 @@ export const StackHorizontalBarExample = ({
         name: 'Affiliate Ad',
         type: 'bar',
         stack: 'total',
-        label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          fontSize: 10,
+        },
         emphasis: { focus: 'series' },
         data: [220, 182, 191, 234, 290, 330, 310],
         itemStyle: { borderWidth: 0 },
@@ -108,7 +123,12 @@ export const StackHorizontalBarExample = ({
         name: 'Video Ad',
         type: 'bar',
         stack: 'total',
-        label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          fontSize: 10,
+        },
         emphasis: { focus: 'series' },
         data: [150, 212, 201, 154, 190, 330, 410],
         itemStyle: { borderWidth: 0 },
@@ -117,7 +137,12 @@ export const StackHorizontalBarExample = ({
         name: 'Search Engine',
         type: 'bar',
         stack: 'total',
-        label: { show: true, position: 'inside', formatter: '{c}', fontSize: 10 },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          fontSize: 10,
+        },
         emphasis: { focus: 'series' },
         data: [820, 832, 901, 934, 1290, 1330, 1320],
         itemStyle: { borderWidth: 0 },
@@ -165,7 +190,9 @@ export const StackHorizontalBarExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -175,8 +202,12 @@ export const StackHorizontalBarExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
@@ -229,7 +260,8 @@ export const StackHorizontalBarExample = ({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>
-                {t(locale, 'examples.control.xSplit', 'X Split')}: {xSplitNumber}
+                {t(locale, 'examples.control.xSplit', 'X Split')}:{' '}
+                {xSplitNumber}
               </span>
               <input
                 type='range'

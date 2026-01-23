@@ -38,11 +38,11 @@ beforeAll(() => {
   vi.stubGlobal(
     'Path2D',
     class Path2D {
-      constructor(d?: string | Path2D) { }
-      addPath(path: Path2D, transform?: DOMMatrix2DInit) { }
-      closePath() { }
-      moveTo(x: number, y: number) { }
-      lineTo(x: number, y: number) { }
+      constructor(d?: string | Path2D) {}
+      addPath(path: Path2D, transform?: DOMMatrix2DInit) {}
+      closePath() {}
+      moveTo(x: number, y: number) {}
+      lineTo(x: number, y: number) {}
       bezierCurveTo(
         cp1x: number,
         cp1y: number,
@@ -50,8 +50,8 @@ beforeAll(() => {
         cp2y: number,
         x: number,
         y: number,
-      ) { }
-      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) { }
+      ) {}
+      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) {}
       arc(
         x: number,
         y: number,
@@ -59,8 +59,8 @@ beforeAll(() => {
         startAngle: number,
         endAngle: number,
         counterclockwise?: boolean,
-      ) { }
-      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) { }
+      ) {}
+      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {}
       ellipse(
         x: number,
         y: number,
@@ -70,8 +70,8 @@ beforeAll(() => {
         startAngle: number,
         endAngle: number,
         counterclockwise?: boolean,
-      ) { }
-      rect(x: number, y: number, w: number, h: number) { }
+      ) {}
+      rect(x: number, y: number, w: number, h: number) {}
     },
   );
 });
@@ -127,7 +127,10 @@ describe('PieChart', () => {
     const root = (chart as any)._root;
     const rect = root
       .children()
-      .find((c: any) => c?.constructor?.name === 'Rect' && c.style?.fill === '#abcdef');
+      .find(
+        (c: any) =>
+          c?.constructor?.name === 'Rect' && c.style?.fill === '#abcdef',
+      );
     expect(rect).toBeDefined();
     expect(rect.style.stroke).toBe('#123456');
     expect(rect.style.lineWidth).toBe(2);
@@ -241,12 +244,16 @@ describe('PieChart', () => {
     });
 
     const sector = Array.from((chart as any)._activeSectors.values())[0] as any;
-    expect(sector.__label.style.fill).toBe(ThemeManager.getTheme('light').textColor);
+    expect(sector.__label.style.fill).toBe(
+      ThemeManager.getTheme('light').textColor,
+    );
 
     ThemeManager.setCurrentTheme('dark');
     vi.advanceTimersByTime(50);
 
-    const sectorAfter = Array.from((chart as any)._activeSectors.values())[0] as any;
+    const sectorAfter = Array.from(
+      (chart as any)._activeSectors.values(),
+    )[0] as any;
     expect(sectorAfter.__label.style.fill).toBe(
       ThemeManager.getTheme('dark').textColor,
     );
@@ -609,20 +616,28 @@ describe('PieChart', () => {
 
     vi.advanceTimersByTime(400);
 
-    const sectorsBefore = Array.from((chart as any)._activeSectors.values()) as any[];
+    const sectorsBefore = Array.from(
+      (chart as any)._activeSectors.values(),
+    ) as any[];
     expect(sectorsBefore.length).toBe(2);
     const aBefore = sectorsBefore.find((s: any) => s.name === 'A') as any;
     expect(aBefore).toBeDefined();
-    expect(aBefore.shape.endAngle - aBefore.shape.startAngle).toBeGreaterThan(0.01);
+    expect(aBefore.shape.endAngle - aBefore.shape.startAngle).toBeGreaterThan(
+      0.01,
+    );
 
     const nextMode = chart.getRenderMode() === 'svg' ? 'canvas' : 'svg';
     chart.setRenderMode(nextMode);
 
-    const sectorsAfter = Array.from((chart as any)._activeSectors.values()) as any[];
+    const sectorsAfter = Array.from(
+      (chart as any)._activeSectors.values(),
+    ) as any[];
     expect(sectorsAfter.length).toBe(2);
     const aAfter = sectorsAfter.find((s: any) => s.name === 'A') as any;
     expect(aAfter).toBeDefined();
-    expect(Math.abs(aAfter.shape.endAngle - aAfter.shape.startAngle)).toBeLessThan(0.001);
+    expect(
+      Math.abs(aAfter.shape.endAngle - aAfter.shape.startAngle),
+    ).toBeLessThan(0.001);
 
     vi.useRealTimers();
   });
@@ -963,7 +978,8 @@ describe('PieChart', () => {
     sector.trigger('mouseover', { offsetX: 10, offsetY: 20 });
 
     expect(tooltip.show).toHaveBeenCalled();
-    const [mx, my, content, params, targetRect] = tooltip.show.mock.calls[0] as any;
+    const [mx, my, content, params, targetRect] = tooltip.show.mock
+      .calls[0] as any;
     expect(mx).toBe(10);
     expect(my).toBe(20);
     expect(String(content)).toContain('Search Engine');
@@ -987,7 +1003,7 @@ describe('PieChart', () => {
       .mockImplementation(() => 123);
     const cafSpy = vi
       .spyOn(globalThis as any, 'cancelAnimationFrame')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     chart.setOption({
       series: [

@@ -291,7 +291,11 @@ export const AdvancedDoughnutExample = ({
   return (
     <div style={{ padding: 20 }}>
       <h2 style={{ marginBottom: 20 }}>
-        {t(locale, 'examples.list.advanced-doughnut.title', 'Advanced Doughnut Charts')}
+        {t(
+          locale,
+          'examples.list.advanced-doughnut.title',
+          'Advanced Doughnut Charts',
+        )}
       </h2>
       <p style={{ marginBottom: 20, color: '#666' }}>
         {t(

@@ -147,7 +147,11 @@ describe('BarChart', () => {
     chart.setOption(option);
 
     const bars = Array.from((chart as any)._activeBars.values()) as any[];
-    const b1 = bars.find((b: any) => b.style.fill === (option.series![0] as any).color || b.style.fill !== undefined);
+    const b1 = bars.find(
+      (b: any) =>
+        b.style.fill === (option.series![0] as any).color ||
+        b.style.fill !== undefined,
+    );
 
     const bar0 = (chart as any)._activeBars.get('0-0');
     const bar1 = (chart as any)._activeBars.get('1-0');
@@ -477,7 +481,9 @@ describe('BarChart', () => {
 
     (chart as any)._onLegendHover('S1', true);
 
-    const s2BarKey = Array.from(activeBars.keys()).find(k => k.startsWith('1-'));
+    const s2BarKey = Array.from(activeBars.keys()).find((k) =>
+      k.startsWith('1-'),
+    );
     const s2Bar = activeBars.get(s2BarKey!);
     expect(s2Bar.style.opacity).toBeCloseTo(0.8);
 

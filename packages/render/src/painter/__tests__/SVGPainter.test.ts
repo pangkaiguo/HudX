@@ -154,7 +154,7 @@ describe('SVGPainter', () => {
     // Let's find the group with transform
     const groups = rootGroup.querySelectorAll('g');
     let targetG: SVGGElement | null = null;
-    groups.forEach(g => {
+    groups.forEach((g) => {
       if (g.getAttribute('transform')) targetG = g;
     });
 
@@ -183,7 +183,7 @@ describe('SVGPainter', () => {
     const rootGroup = painter.getRootGroup();
     const groups = rootGroup.querySelectorAll('g');
     let targetG: SVGGElement | null = null;
-    groups.forEach(g => {
+    groups.forEach((g) => {
       if (g.getAttribute('transform')) targetG = g;
     });
 
@@ -223,7 +223,13 @@ describe('SVGPainter', () => {
 
   it('should render polyline points for number[][] polygons', () => {
     const poly = new Polygon({
-      shape: { points: [[0, 0], [1, 2], [3, 4]] },
+      shape: {
+        points: [
+          [0, 0],
+          [1, 2],
+          [3, 4],
+        ],
+      },
     });
     const root = new Group();
     root.add(poly);
@@ -301,6 +307,72 @@ describe('SVGPainter', () => {
     expect(ds.some((d) => d.includes(' C '))).toBe(true);
   });
 
+  it('should apply shadow filter when shadow style is present', () => {
+    const c1 = new Circle({
+      shape: { cx: 10, cy: 10, r: 5 },
+      style: {
+        fill: 'red',
+        shadowBlur: 10,
+        shadowColor: 'rgba(0, 0, 0, 0.5)',
+        shadowOffsetX: 2,
+        shadowOffsetY: 3,
+      },
+    });
+    const c2 = new Circle({
+      shape: { cx: 30, cy: 10, r: 5 },
+      style: {
+        fill: 'blue',
+        shadowBlur: 10,
+        shadowColor: 'rgba(0, 0, 0, 0.5)',
+        shadowOffsetX: 2,
+        shadowOffsetY: 3,
+      },
+    });
+
+    const root = new Group();
+    root.add(c1);
+    root.add(c2);
+    storage.addRoot(root);
+
+    painter.paint();
+
+    const svg = painter.getSVG();
+    const filters = svg.querySelectorAll('defs filter');
+    expect(filters.length).toBe(1);
+
+    const circles = painter.getRootGroup().querySelectorAll('circle');
+    expect(circles.length).toBe(2);
+
+    const g1 = circles[0].parentElement as SVGGElement | null;
+    const g2 = circles[1].parentElement as SVGGElement | null;
+    expect(g1?.getAttribute('filter') || '').toMatch(/^url\(#shadow_/);
+    expect(g1?.getAttribute('filter')).toBe(g2?.getAttribute('filter'));
+  });
+
+  it('should not apply shadow filter when shadow color is fully transparent', () => {
+    const c1 = new Circle({
+      shape: { cx: 10, cy: 10, r: 5 },
+      style: {
+        fill: 'red',
+        shadowBlur: 10,
+        shadowColor: 'transparent',
+      },
+    });
+
+    const root = new Group();
+    root.add(c1);
+    storage.addRoot(root);
+
+    painter.paint();
+
+    const svg = painter.getSVG();
+    const filters = svg.querySelectorAll('defs filter');
+    expect(filters.length).toBe(0);
+
+    const circle = painter.getRootGroup().querySelector('circle');
+    expect(circle?.parentElement?.getAttribute('filter')).toBeNull();
+  });
+
   it('should create svg patterns for meta and non-meta pattern fills', () => {
     const canvas = document.createElement('canvas');
     vi.spyOn(canvas, 'toDataURL').mockReturnValue('data:image/png;base64,pat');
@@ -374,8 +446,16 @@ describe('SVGPainter', () => {
 
     const gEls = painter.getRootGroup().querySelectorAll('g[fill], g[stroke]');
     expect(gEls.length).toBeGreaterThan(0);
-    expect(Array.from(gEls).some((g) => (g.getAttribute('fill') || '').startsWith('url(#pattern_'))).toBe(true);
-    expect(Array.from(gEls).some((g) => (g.getAttribute('stroke') || '').startsWith('url(#pattern_'))).toBe(true);
+    expect(
+      Array.from(gEls).some((g) =>
+        (g.getAttribute('fill') || '').startsWith('url(#pattern_'),
+      ),
+    ).toBe(true);
+    expect(
+      Array.from(gEls).some((g) =>
+        (g.getAttribute('stroke') || '').startsWith('url(#pattern_'),
+      ),
+    ).toBe(true);
   });
 
   it('should return svg-based data url for non-svg types and include background style', () => {

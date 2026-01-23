@@ -97,7 +97,8 @@ export default class Handler {
 
     const anyEvent = e as any;
     const isTouchEvent =
-      Array.isArray(anyEvent?.touches) || Array.isArray(anyEvent?.changedTouches);
+      Array.isArray(anyEvent?.touches) ||
+      Array.isArray(anyEvent?.changedTouches);
 
     if (isTouchEvent) {
       const touch = anyEvent?.touches?.[0] ?? anyEvent?.changedTouches?.[0];

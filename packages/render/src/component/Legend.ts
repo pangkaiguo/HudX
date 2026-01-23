@@ -216,11 +216,20 @@ export default class Legend extends Group {
       const totalItemWidth = this._option.itemWidth ?? 100;
 
       let currentItemWidth = Math.max(0, totalItemWidth - paddingX * 2);
-      let currentTextMaxWidth = Math.max(10, currentItemWidth - iconWidth - iconGap);
+      let currentTextMaxWidth = Math.max(
+        10,
+        currentItemWidth - iconWidth - iconGap,
+      );
 
       if (this._option.itemMaxWidth) {
-        const maxContentWidth = Math.max(0, this._option.itemMaxWidth - paddingX * 2);
-        const maxAvailableTextWidth = Math.max(10, maxContentWidth - iconWidth - iconGap);
+        const maxContentWidth = Math.max(
+          0,
+          this._option.itemMaxWidth - paddingX * 2,
+        );
+        const maxAvailableTextWidth = Math.max(
+          10,
+          maxContentWidth - iconWidth - iconGap,
+        );
 
         if (currentTextMaxWidth > maxAvailableTextWidth) {
           currentTextMaxWidth = maxAvailableTextWidth;
@@ -262,12 +271,30 @@ export default class Legend extends Group {
     };
 
     const containerWidth =
-      resolveSize(this._option.width, this._containerWidth) ?? this._containerWidth;
+      resolveSize(this._option.width, this._containerWidth) ??
+      this._containerWidth;
     const containerHeight =
-      resolveSize(this._option.height, this._containerHeight) ?? this._containerHeight;
+      resolveSize(this._option.height, this._containerHeight) ??
+      this._containerHeight;
 
-    const rows: { items: { item: LegendItem; itemW: number; itemH: number; lines: string[]; lineHeight: number }[]; width: number; height: number }[] = [];
-    let currentRowItems: { item: LegendItem; itemW: number; itemH: number; lines: string[]; lineHeight: number }[] = [];
+    const rows: {
+      items: {
+        item: LegendItem;
+        itemW: number;
+        itemH: number;
+        lines: string[];
+        lineHeight: number;
+      }[];
+      width: number;
+      height: number;
+    }[] = [];
+    let currentRowItems: {
+      item: LegendItem;
+      itemW: number;
+      itemH: number;
+      lines: string[];
+      lineHeight: number;
+    }[] = [];
     let currentRowWidth = 0;
     let currentRowHeight = 0;
 
@@ -350,7 +377,9 @@ export default class Legend extends Group {
     const align = this._option.align || 'left';
 
     const hasExplicitWidth = this._option.width !== undefined;
-    const referenceWidth = hasExplicitWidth ? containerWidth - padding * 2 : maxLineMetric;
+    const referenceWidth = hasExplicitWidth
+      ? containerWidth - padding * 2
+      : maxLineMetric;
 
     if (this._option.orient === 'horizontal') {
       rows.forEach((row) => {
@@ -376,7 +405,9 @@ export default class Legend extends Group {
         });
         currentY += row.height + itemGap;
       });
-      totalWidth = hasExplicitWidth ? containerWidth : maxLineMetric + padding * 2;
+      totalWidth = hasExplicitWidth
+        ? containerWidth
+        : maxLineMetric + padding * 2;
       totalHeight = currentY - itemGap + padding;
     } else {
       rows.forEach((col) => {
@@ -456,7 +487,9 @@ export default class Legend extends Group {
         iconElement = new Circle({
           shape: { cx: contentX + 6, cy: firstLineCenterY, r: 4 },
           style: {
-            fill: isSelected ? fillStyle : this._option.inactiveColor || item.color,
+            fill: isSelected
+              ? fillStyle
+              : this._option.inactiveColor || item.color,
             opacity: isSelected ? 1 : 0.3,
           },
         });
@@ -469,7 +502,9 @@ export default class Legend extends Group {
             y2: firstLineCenterY,
           },
           style: {
-            stroke: isSelected ? strokeStyle : this._option.inactiveColor || item.color,
+            stroke: isSelected
+              ? strokeStyle
+              : this._option.inactiveColor || item.color,
             lineWidth: 2,
             opacity: isSelected ? 1 : 0.3,
           },
@@ -484,7 +519,9 @@ export default class Legend extends Group {
             r: 2,
           },
           style: {
-            fill: isSelected ? fillStyle : this._option.inactiveColor || item.color,
+            fill: isSelected
+              ? fillStyle
+              : this._option.inactiveColor || item.color,
             opacity: isSelected ? 1 : 0.3,
           },
         });
@@ -598,13 +635,15 @@ export default class Legend extends Group {
       if (px !== undefined) {
         x = Math.max(0, px);
       } else if (this._option.right !== undefined) {
-        const rightPx = resolveOffset(this._option.right, this._containerWidth) ?? 10;
+        const rightPx =
+          resolveOffset(this._option.right, this._containerWidth) ?? 10;
         x = Math.max(0, this._containerWidth - totalWidth - rightPx);
       } else {
         x = Math.max(0, this._containerWidth - totalWidth - 10);
       }
     } else if (this._option.right !== undefined) {
-      const rightPx = resolveOffset(this._option.right, this._containerWidth) ?? 10;
+      const rightPx =
+        resolveOffset(this._option.right, this._containerWidth) ?? 10;
       x = Math.max(0, this._containerWidth - totalWidth - rightPx);
     } else {
       x = Math.max(0, this._containerWidth - totalWidth - 10);
@@ -654,7 +693,9 @@ export default class Legend extends Group {
     const opt = this._option;
     const theme = ThemeManager.getTheme();
     const s = this._htmlEl.style;
-    s.backgroundColor = String(opt.backgroundColor ?? theme.tooltipBackgroundColor);
+    s.backgroundColor = String(
+      opt.backgroundColor ?? theme.tooltipBackgroundColor,
+    );
     s.padding = (opt.padding || 8) + 'px';
     s.fontSize = (opt.fontSize || 12) + 'px';
     s.color = String(opt.textColor ?? theme.legendTextColor);

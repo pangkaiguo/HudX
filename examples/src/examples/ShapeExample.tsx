@@ -51,7 +51,11 @@ export const ShapeExample = ({
     );
     renderer.add(
       new Text({
-        shape: { text: t(locale, 'examples.shape.circle', 'Circle'), x: 100, y: 160 },
+        shape: {
+          text: t(locale, 'examples.shape.circle', 'Circle'),
+          x: 100,
+          y: 160,
+        },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
@@ -64,7 +68,11 @@ export const ShapeExample = ({
     );
     renderer.add(
       new Text({
-        shape: { text: t(locale, 'examples.shape.rect', 'Rect'), x: 240, y: 160 },
+        shape: {
+          text: t(locale, 'examples.shape.rect', 'Rect'),
+          x: 240,
+          y: 160,
+        },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
@@ -77,7 +85,11 @@ export const ShapeExample = ({
     );
     renderer.add(
       new Text({
-        shape: { text: t(locale, 'examples.shape.line', 'Line'), x: 360, y: 160 },
+        shape: {
+          text: t(locale, 'examples.shape.line', 'Line'),
+          x: 360,
+          y: 160,
+        },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
@@ -97,7 +109,11 @@ export const ShapeExample = ({
     );
     renderer.add(
       new Text({
-        shape: { text: t(locale, 'examples.shape.polyline', 'Polyline'), x: 500, y: 160 },
+        shape: {
+          text: t(locale, 'examples.shape.polyline', 'Polyline'),
+          x: 500,
+          y: 160,
+        },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
@@ -118,14 +134,22 @@ export const ShapeExample = ({
     );
     renderer.add(
       new Text({
-        shape: { text: t(locale, 'examples.shape.polygon', 'Polygon'), x: 640, y: 160 },
+        shape: {
+          text: t(locale, 'examples.shape.polygon', 'Polygon'),
+          x: 640,
+          y: 160,
+        },
         style: { textAlign: 'center', fill: textColor, fontSize: 12 },
       }),
     );
 
     renderer.add(
       new Text({
-        shape: { text: t(locale, 'examples.shape.title', 'Core API Shapes'), x: 400, y: 30 },
+        shape: {
+          text: t(locale, 'examples.shape.title', 'Core API Shapes'),
+          x: 400,
+          y: 30,
+        },
         style: {
           textAlign: 'center',
           fill: textColor,
@@ -156,7 +180,9 @@ export const ShapeExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -166,8 +192,12 @@ export const ShapeExample = ({
               border: `1px solid ${border}`,
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
       </div>

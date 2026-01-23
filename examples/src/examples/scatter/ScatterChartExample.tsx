@@ -159,7 +159,9 @@ const ScatterChartExample = ({
         }}
       >
         <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span>{t(locale, 'examples.control.renderMode', 'Render Mode:')}</span>
+          <span>
+            {t(locale, 'examples.control.renderMode', 'Render Mode:')}
+          </span>
           <select
             value={renderMode}
             onChange={(e) => setRenderMode(e.target.value as RenderMode)}
@@ -169,8 +171,12 @@ const ScatterChartExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='canvas'>{t(locale, 'examples.control.canvas', 'Canvas')}</option>
-            <option value='svg'>{t(locale, 'examples.control.svg', 'SVG')}</option>
+            <option value='canvas'>
+              {t(locale, 'examples.control.canvas', 'Canvas')}
+            </option>
+            <option value='svg'>
+              {t(locale, 'examples.control.svg', 'SVG')}
+            </option>
           </select>
         </label>
 
@@ -245,8 +251,12 @@ const ScatterChartExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='solid'>{t(locale, 'examples.control.solid', 'Solid')}</option>
-            <option value='dashed'>{t(locale, 'examples.control.dashed', 'Dashed')}</option>
+            <option value='solid'>
+              {t(locale, 'examples.control.solid', 'Solid')}
+            </option>
+            <option value='dashed'>
+              {t(locale, 'examples.control.dashed', 'Dashed')}
+            </option>
           </select>
         </label>
 
@@ -261,8 +271,12 @@ const ScatterChartExample = ({
               border: '1px solid #ddd',
             }}
           >
-            <option value='solid'>{t(locale, 'examples.control.solid', 'Solid')}</option>
-            <option value='dashed'>{t(locale, 'examples.control.dashed', 'Dashed')}</option>
+            <option value='solid'>
+              {t(locale, 'examples.control.solid', 'Solid')}
+            </option>
+            <option value='dashed'>
+              {t(locale, 'examples.control.dashed', 'Dashed')}
+            </option>
           </select>
         </label>
       </div>

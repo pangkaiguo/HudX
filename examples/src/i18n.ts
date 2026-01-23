@@ -59,13 +59,19 @@ const examplesEn: Dict = {
   'examples.control.none': 'None',
   'examples.control.roseType.radius': 'Radius',
   'examples.control.roseType.area': 'Area',
-  'examples.stack-line.features': 'Features: Smooth animations on load, Interactive legend (click to toggle), Hover tooltips with data details',
+  'examples.stack-line.features':
+    'Features: Smooth animations on load, Interactive legend (click to toggle), Hover tooltips with data details',
   'examples.scatter-chart.hint': 'Hover over points to see coordinates',
-  'examples.basic-pie.hint': 'Hover over slices to see details, Click legend to toggle',
-  'examples.doughnut.hint': 'Standard doughnut chart with inner radius configuration',
-  'examples.half-doughnut.hint': 'Half-doughnut / Gauge style chart (180 degree arc)',
-  'examples.advanced-pie.features': 'Features: Smooth pie slice animations, Percentage display, Interactive legend, Hover tooltips',
-  'examples.advanced-doughnut.desc': 'Demonstrating various center label configurations and nested layouts.',
+  'examples.basic-pie.hint':
+    'Hover over slices to see details, Click legend to toggle',
+  'examples.doughnut.hint':
+    'Standard doughnut chart with inner radius configuration',
+  'examples.half-doughnut.hint':
+    'Half-doughnut / Gauge style chart (180 degree arc)',
+  'examples.advanced-pie.features':
+    'Features: Smooth pie slice animations, Percentage display, Interactive legend, Hover tooltips',
+  'examples.advanced-doughnut.desc':
+    'Demonstrating various center label configurations and nested layouts.',
   'examples.stack-bar.hint': 'Hover over bars to see values',
   'examples.area-line.updateData': 'Update Data (Random 30 points)',
   'examples.bar-3d.title': '3D Bar Chart',
@@ -96,55 +102,76 @@ const examplesEn: Dict = {
   'examples.category.sub-components': 'Sub Components',
   'examples.category.bundle': 'Bundle',
   'examples.list.basic-line.title': 'Basic Line Chart',
-  'examples.list.basic-line.subtitle': 'Basic line with tooltip, legend and optional grid lines',
+  'examples.list.basic-line.subtitle':
+    'Basic line with tooltip, legend and optional grid lines',
   'examples.list.stack-line.title': 'Stack Line Chart',
-  'examples.list.stack-line.subtitle': 'Multi-series line with symbols and dashed grid',
+  'examples.list.stack-line.subtitle':
+    'Multi-series line with symbols and dashed grid',
   'examples.list.area-line.title': 'Area Line Chart',
-  'examples.list.area-line.subtitle': 'Area fill + smooth curves + denser x-axis labels',
+  'examples.list.area-line.subtitle':
+    'Area fill + smooth curves + denser x-axis labels',
   'examples.list.smooth-line.title': 'Smooth Line Chart',
   'examples.list.smooth-line.subtitle': 'Smooth line with tension control',
   'examples.list.basic-bar.title': 'Basic Bar Chart',
-  'examples.list.basic-bar.subtitle': 'Axis tooltip + optional grid + optional background',
+  'examples.list.basic-bar.subtitle':
+    'Axis tooltip + optional grid + optional background',
   'examples.list.group-bar.title': 'Group Bar Chart',
-  'examples.list.group-bar.subtitle': 'Grouped bars with configurable barGap and optional decals',
+  'examples.list.group-bar.subtitle':
+    'Grouped bars with configurable barGap and optional decals',
   'examples.list.diverging-horizontal-bar.title': 'Diverging Horizontal Bar',
-  'examples.list.diverging-horizontal-bar.subtitle': 'Horizontal grouped bars with positive/negative values',
+  'examples.list.diverging-horizontal-bar.subtitle':
+    'Horizontal grouped bars with positive/negative values',
   'examples.list.diverging-vertical-bar.title': 'Diverging Vertical Bar',
-  'examples.list.diverging-vertical-bar.subtitle': 'Vertical grouped bars with positive/negative values',
+  'examples.list.diverging-vertical-bar.subtitle':
+    'Vertical grouped bars with positive/negative values',
   'examples.list.stack-bar.title': 'Stack Bar Chart',
-  'examples.list.stack-bar.subtitle': 'Stacked bars with axisPointer and markLine',
+  'examples.list.stack-bar.subtitle':
+    'Stacked bars with axisPointer and markLine',
   'examples.list.stack-horizontal-bar.title': 'Stacked Horizontal Bar Chart',
-  'examples.list.stack-horizontal-bar.subtitle': 'Horizontal stacked bars with labels',
+  'examples.list.stack-horizontal-bar.subtitle':
+    'Horizontal stacked bars with labels',
   'examples.list.basic-pie.title': 'Pie Chart',
-  'examples.list.basic-pie.subtitle': 'Pie / roseType + tooltip formatter + optional decals',
+  'examples.list.basic-pie.subtitle':
+    'Pie / roseType + tooltip formatter + optional decals',
   'examples.list.advanced-pie.title': 'Advanced Pie Chart',
-  'examples.list.advanced-pie.subtitle': 'Legend wrap + tooltip formatter + optional decals',
+  'examples.list.advanced-pie.subtitle':
+    'Legend wrap + tooltip formatter + optional decals',
   'examples.list.doughnut.title': 'Doughnut Chart',
-  'examples.list.doughnut.subtitle': 'Doughnut type + rich centerLabel + hover emphasis',
+  'examples.list.doughnut.subtitle':
+    'Doughnut type + rich centerLabel + hover emphasis',
   'examples.list.advanced-doughnut.title': 'Advanced Doughnut',
-  'examples.list.advanced-doughnut.subtitle': 'Doughnut centerLabel + emphasis rich text (portion demo)',
+  'examples.list.advanced-doughnut.subtitle':
+    'Doughnut centerLabel + emphasis rich text (portion demo)',
   'examples.list.half-doughnut.title': 'Half Doughnut',
   'examples.list.half-doughnut.subtitle': 'Half-doughnut type (180° arc)',
   'examples.list.scatter-chart.title': 'Scatter Chart',
-  'examples.list.scatter-chart.subtitle': 'Two scatter series with legend and grid lines',
+  'examples.list.scatter-chart.subtitle':
+    'Two scatter series with legend and grid lines',
   'examples.list.axis-label.title': 'Axis Label',
   'examples.list.axis-label.subtitle': 'AxisLabel rotate/width/overflow',
   'examples.list.title-example.title': 'Title',
   'examples.list.title-example.subtitle': 'TitleOption styling demo (subset)',
   'examples.list.legend-example.title': 'Legend',
-  'examples.list.legend-example.subtitle': 'LegendOption orientation & style (subset)',
+  'examples.list.legend-example.subtitle':
+    'LegendOption orientation & style (subset)',
   'examples.list.tooltip-example.title': 'Tooltip',
-  'examples.list.tooltip-example.subtitle': 'TooltipOption formatter & style (subset)',
+  'examples.list.tooltip-example.subtitle':
+    'TooltipOption formatter & style (subset)',
   'examples.list.rich-text-example.title': 'Rich Text',
-  'examples.list.rich-text-example.subtitle': 'Rich text label formatter for pie chart',
+  'examples.list.rich-text-example.subtitle':
+    'Rich text label formatter for pie chart',
   'examples.list.bundle-test.title': 'Unified Bundle',
-  'examples.list.bundle-test.subtitle': 'Import from the single hudx package (HChart + Core)',
+  'examples.list.bundle-test.subtitle':
+    'Import from the single hudx package (HChart + Core)',
   'examples.list.bundle-bar.title': 'BarChart Import',
-  'examples.list.bundle-bar.subtitle': "import BarChart from 'hudx-charts/chart/BarChart'",
+  'examples.list.bundle-bar.subtitle':
+    "import BarChart from 'hudx-charts/chart/BarChart'",
   'examples.list.bundle-line.title': 'LineChart Import',
-  'examples.list.bundle-line.subtitle': "import LineChart from 'hudx-charts/chart/LineChart'",
+  'examples.list.bundle-line.subtitle':
+    "import LineChart from 'hudx-charts/chart/LineChart'",
   'examples.list.bundle-pie.title': 'PieChart Import',
-  'examples.list.bundle-pie.subtitle': "import PieChart from 'hudx-charts/chart/PieChart'",
+  'examples.list.bundle-pie.subtitle':
+    "import PieChart from 'hudx-charts/chart/PieChart'",
   'examples.feature.shape': 'Shape',
   'examples.feature.themes': 'Theme',
   'examples.feature.interaction': 'Interaction',
@@ -154,9 +181,11 @@ const examplesEn: Dict = {
   'examples.legend.pageDesc.prefix': 'Matching',
   'examples.legend.pageDesc.suffix': 'interface.',
   'examples.legend.section.orient': 'Orientation & Position',
-  'examples.legend.section.orient.desc': 'vertical, right, top, border, background',
+  'examples.legend.section.orient.desc':
+    'vertical, right, top, border, background',
   'examples.legend.section.style': 'Item Styling',
-  'examples.legend.section.style.desc': 'itemGap, itemWidth, itemHeight, textStyle',
+  'examples.legend.section.style.desc':
+    'itemGap, itemWidth, itemHeight, textStyle',
   'examples.legend.section.customData': 'Custom Data',
   'examples.legend.section.customData.desc': 'per-item icon and textStyle',
   'examples.legend.chartTitle.verticalRight': 'Vertical Right',
@@ -167,7 +196,8 @@ const examplesEn: Dict = {
   'examples.title.pageDesc.suffix': 'interface.',
   'examples.title.section.positioning': '1. Positioning',
   'examples.title.section.advanced': '2. Advanced Styling',
-  'examples.title.section.advanced.desc1': 'textStyle, subtextStyle, backgroundColor, border, padding',
+  'examples.title.section.advanced.desc1':
+    'textStyle, subtextStyle, backgroundColor, border, padding',
   'examples.title.section.advanced.desc2': 'itemGap (30px), subtext color',
   'examples.title.hint.topLeft': "left: 'left', top: 'top'",
   'examples.title.hint.topCenter': "left: 'center', top: 'top'",
@@ -182,18 +212,22 @@ const examplesEn: Dict = {
   'examples.title.chartTitle.mainTitle': 'Main Title',
   'examples.title.chartTitle.subTitleCustom': 'Subtitle with custom style',
   'examples.title.chartTitle.largeGap': 'Title with Large Gap',
-  'examples.title.chartTitle.largeGapDesc': 'Distance between title and subtitle is 30px',
+  'examples.title.chartTitle.largeGapDesc':
+    'Distance between title and subtitle is 30px',
   'examples.tooltip.pageTitle': 'Tooltip Configuration',
   'examples.tooltip.pageDesc.prefix': 'Matching',
   'examples.tooltip.pageDesc.suffix': 'interface.',
   'examples.tooltip.section.itemTrigger': 'Item Trigger',
   'examples.tooltip.section.itemTrigger.desc': "trigger: 'item'",
   'examples.tooltip.section.axisTrigger': 'Axis Trigger',
-  'examples.tooltip.section.axisTrigger.desc': "trigger: 'axis', axisPointer: 'shadow'",
+  'examples.tooltip.section.axisTrigger.desc':
+    "trigger: 'axis', axisPointer: 'shadow'",
   'examples.tooltip.section.customFormatter': 'Custom Formatter',
-  'examples.tooltip.section.customFormatter.desc': 'formatter function returning HTML',
+  'examples.tooltip.section.customFormatter.desc':
+    'formatter function returning HTML',
   'examples.tooltip.section.styling': 'Styling',
-  'examples.tooltip.section.styling.desc': 'backgroundColor, border, textStyle, confine',
+  'examples.tooltip.section.styling.desc':
+    'backgroundColor, border, textStyle, confine',
   'examples.tooltip.chartTitle.itemTrigger': 'Item Trigger',
   'examples.tooltip.chartTitle.axisShadow': 'Axis Trigger (Shadow Pointer)',
   'examples.tooltip.chartTitle.customHtml': 'Custom HTML Formatter',
@@ -207,9 +241,11 @@ const examplesEn: Dict = {
   'examples.axisLabel.overflow.break': 'Break',
   'examples.axisLabel.overflow.truncate': 'Truncate',
   'examples.axisLabel.overflow.none': 'None',
-  'examples.axisLabel.combined.title': 'Combined Axis Settings (Uses both X and Y settings above)',
+  'examples.axisLabel.combined.title':
+    'Combined Axis Settings (Uses both X and Y settings above)',
   'examples.richText.title': 'Rich Text Pie Chart',
-  'examples.richText.desc': 'Demonstrating rich text labels and auto-colored label lines.',
+  'examples.richText.desc':
+    'Demonstrating rich text labels and auto-colored label lines.',
   'examples.shape.title': 'Core API Shapes',
   'examples.shape.circle': 'Circle',
   'examples.shape.rect': 'Rect',
@@ -218,10 +254,13 @@ const examplesEn: Dict = {
   'examples.shape.polygon': 'Polygon',
   'examples.shape.desc': 'Demonstrates basic shapes from hudx-render',
   'examples.bundle.unified.title': 'Unified Bundle Example',
-  'examples.bundle.unified.desc.prefix': 'This example demonstrates importing both Charts and Core components from the single',
+  'examples.bundle.unified.desc.prefix':
+    'This example demonstrates importing both Charts and Core components from the single',
   'examples.bundle.unified.desc.suffix': 'package.',
-  'examples.bundle.unified.section1': "1. HChart Component imported from 'hudx'",
-  'examples.bundle.unified.section2': "2. Core Shapes (Rect, Circle) imported from 'hudx'",
+  'examples.bundle.unified.section1':
+    "1. HChart Component imported from 'hudx'",
+  'examples.bundle.unified.section2':
+    "2. Core Shapes (Rect, Circle) imported from 'hudx'",
   'examples.bundle.barChart.title': 'BarChart Bundle Import',
   'examples.bundle.barChart.chartTitle': 'Independent BarChart Bundle',
   'examples.bundle.lineChart.title': 'LineChart Bundle Import',
@@ -280,12 +319,14 @@ const examplesZhCN: Dict = {
   'examples.control.none': '无',
   'examples.control.roseType.radius': '半径',
   'examples.control.roseType.area': '面积',
-  'examples.stack-line.features': '特性：加载动画平滑、可交互图例（点击开关）、悬浮提示展示数据详情',
+  'examples.stack-line.features':
+    '特性：加载动画平滑、可交互图例（点击开关）、悬浮提示展示数据详情',
   'examples.scatter-chart.hint': '悬浮数据点查看坐标',
   'examples.basic-pie.hint': '悬浮扇区查看详情，点击图例开关',
   'examples.doughnut.hint': '标准环形图（可配置内半径）',
   'examples.half-doughnut.hint': '半环形 / 仪表盘风格（180°）',
-  'examples.advanced-pie.features': '特性：平滑扇区动画、百分比显示、可交互图例、悬浮提示框',
+  'examples.advanced-pie.features':
+    '特性：平滑扇区动画、百分比显示、可交互图例、悬浮提示框',
   'examples.advanced-doughnut.desc': '展示不同的中心标签配置与嵌套布局。',
   'examples.stack-bar.hint': '悬浮柱子查看数值',
   'examples.area-line.updateData': '更新数据（随机 30 个点）',
@@ -343,7 +384,8 @@ const examplesZhCN: Dict = {
   'examples.list.doughnut.title': '环形图',
   'examples.list.doughnut.subtitle': '环形图 + 富文本中心标签 + 悬浮强调',
   'examples.list.advanced-doughnut.title': '高级环形图',
-  'examples.list.advanced-doughnut.subtitle': '中心标签 + 富文本强调（portion 示例）',
+  'examples.list.advanced-doughnut.subtitle':
+    '中心标签 + 富文本强调（portion 示例）',
   'examples.list.half-doughnut.title': '半环形图',
   'examples.list.half-doughnut.subtitle': '半环形（180°）',
   'examples.list.scatter-chart.title': '散点图',
@@ -355,17 +397,21 @@ const examplesZhCN: Dict = {
   'examples.list.legend-example.title': '图例',
   'examples.list.legend-example.subtitle': 'LegendOption 布局与样式（子集）',
   'examples.list.tooltip-example.title': '提示框',
-  'examples.list.tooltip-example.subtitle': 'TooltipOption 格式化与样式（子集）',
+  'examples.list.tooltip-example.subtitle':
+    'TooltipOption 格式化与样式（子集）',
   'examples.list.rich-text-example.title': '富文本',
   'examples.list.rich-text-example.subtitle': '饼图富文本标签格式化',
   'examples.list.bundle-test.title': '统一打包',
   'examples.list.bundle-test.subtitle': '从单一 hudx 包导入（HChart + Core）',
   'examples.list.bundle-bar.title': 'BarChart 导入',
-  'examples.list.bundle-bar.subtitle': "import BarChart from 'hudx-charts/chart/BarChart'",
+  'examples.list.bundle-bar.subtitle':
+    "import BarChart from 'hudx-charts/chart/BarChart'",
   'examples.list.bundle-line.title': 'LineChart 导入',
-  'examples.list.bundle-line.subtitle': "import LineChart from 'hudx-charts/chart/LineChart'",
+  'examples.list.bundle-line.subtitle':
+    "import LineChart from 'hudx-charts/chart/LineChart'",
   'examples.list.bundle-pie.title': 'PieChart 导入',
-  'examples.list.bundle-pie.subtitle': "import PieChart from 'hudx-charts/chart/PieChart'",
+  'examples.list.bundle-pie.subtitle':
+    "import PieChart from 'hudx-charts/chart/PieChart'",
   'examples.feature.shape': '图形',
   'examples.feature.themes': '主题',
   'examples.feature.interaction': '交互',
@@ -377,7 +423,8 @@ const examplesZhCN: Dict = {
   'examples.legend.section.orient': '方向与位置',
   'examples.legend.section.orient.desc': '纵向、右侧、顶部、边框、背景',
   'examples.legend.section.style': '条目样式',
-  'examples.legend.section.style.desc': 'itemGap、itemWidth、itemHeight、textStyle',
+  'examples.legend.section.style.desc':
+    'itemGap、itemWidth、itemHeight、textStyle',
   'examples.legend.section.customData': '自定义数据',
   'examples.legend.section.customData.desc': '按条目设置 icon 与 textStyle',
   'examples.legend.chartTitle.verticalRight': '右侧纵向',
@@ -388,7 +435,8 @@ const examplesZhCN: Dict = {
   'examples.title.pageDesc.suffix': '接口。',
   'examples.title.section.positioning': '1. 定位',
   'examples.title.section.advanced': '2. 高级样式',
-  'examples.title.section.advanced.desc1': 'textStyle、subtextStyle、backgroundColor、border、padding',
+  'examples.title.section.advanced.desc1':
+    'textStyle、subtextStyle、backgroundColor、border、padding',
   'examples.title.section.advanced.desc2': 'itemGap（30px）、subtext 颜色',
   'examples.title.hint.topLeft': "left: 'left', top: 'top'",
   'examples.title.hint.topCenter': "left: 'center', top: 'top'",
@@ -410,11 +458,13 @@ const examplesZhCN: Dict = {
   'examples.tooltip.section.itemTrigger': '数据项触发',
   'examples.tooltip.section.itemTrigger.desc': "trigger: 'item'",
   'examples.tooltip.section.axisTrigger': '坐标轴触发',
-  'examples.tooltip.section.axisTrigger.desc': "trigger: 'axis', axisPointer: 'shadow'",
+  'examples.tooltip.section.axisTrigger.desc':
+    "trigger: 'axis', axisPointer: 'shadow'",
   'examples.tooltip.section.customFormatter': '自定义格式化',
   'examples.tooltip.section.customFormatter.desc': 'formatter 函数返回 HTML',
   'examples.tooltip.section.styling': '样式',
-  'examples.tooltip.section.styling.desc': 'backgroundColor、border、textStyle、confine',
+  'examples.tooltip.section.styling.desc':
+    'backgroundColor、border、textStyle、confine',
   'examples.tooltip.chartTitle.itemTrigger': '数据项触发',
   'examples.tooltip.chartTitle.axisShadow': '坐标轴触发（阴影指示器）',
   'examples.tooltip.chartTitle.customHtml': '自定义 HTML 格式化',
@@ -442,7 +492,8 @@ const examplesZhCN: Dict = {
   'examples.bundle.unified.desc.prefix': '该示例展示如何从单一',
   'examples.bundle.unified.desc.suffix': '包导入 Charts 与 Core 组件。',
   'examples.bundle.unified.section1': "1. 从 'hudx' 导入 HChart 组件",
-  'examples.bundle.unified.section2': "2. 从 'hudx' 导入核心图形（Rect、Circle）",
+  'examples.bundle.unified.section2':
+    "2. 从 'hudx' 导入核心图形（Rect、Circle）",
   'examples.bundle.barChart.title': 'BarChart 打包导入',
   'examples.bundle.barChart.chartTitle': '独立 BarChart 打包',
   'examples.bundle.lineChart.title': 'LineChart 打包导入',
@@ -501,12 +552,14 @@ const examplesZhTW: Dict = {
   'examples.control.none': '無',
   'examples.control.roseType.radius': '半徑',
   'examples.control.roseType.area': '面積',
-  'examples.stack-line.features': '特性：載入動畫平滑、可互動圖例（點擊開關）、懸浮提示展示資料詳情',
+  'examples.stack-line.features':
+    '特性：載入動畫平滑、可互動圖例（點擊開關）、懸浮提示展示資料詳情',
   'examples.scatter-chart.hint': '懸浮資料點查看座標',
   'examples.basic-pie.hint': '懸浮扇區查看詳情，點擊圖例開關',
   'examples.doughnut.hint': '標準環形圖（可配置內半徑）',
   'examples.half-doughnut.hint': '半環形 / 儀表盤風格（180°）',
-  'examples.advanced-pie.features': '特性：平滑扇區動畫、百分比顯示、可互動圖例、懸浮提示框',
+  'examples.advanced-pie.features':
+    '特性：平滑扇區動畫、百分比顯示、可互動圖例、懸浮提示框',
   'examples.advanced-doughnut.desc': '展示不同的中心標籤配置與巢狀佈局。',
   'examples.stack-bar.hint': '懸浮柱子查看數值',
   'examples.area-line.updateData': '更新資料（隨機 30 個點）',
@@ -564,7 +617,8 @@ const examplesZhTW: Dict = {
   'examples.list.doughnut.title': '環形圖',
   'examples.list.doughnut.subtitle': '環形圖 + 富文字中心標籤 + 懸浮強調',
   'examples.list.advanced-doughnut.title': '進階環形圖',
-  'examples.list.advanced-doughnut.subtitle': '中心標籤 + 富文字強調（portion 示例）',
+  'examples.list.advanced-doughnut.subtitle':
+    '中心標籤 + 富文字強調（portion 示例）',
   'examples.list.half-doughnut.title': '半環形圖',
   'examples.list.half-doughnut.subtitle': '半環形（180°）',
   'examples.list.scatter-chart.title': '散點圖',
@@ -576,17 +630,21 @@ const examplesZhTW: Dict = {
   'examples.list.legend-example.title': '圖例',
   'examples.list.legend-example.subtitle': 'LegendOption 佈局與樣式（子集）',
   'examples.list.tooltip-example.title': '提示框',
-  'examples.list.tooltip-example.subtitle': 'TooltipOption 格式化與樣式（子集）',
+  'examples.list.tooltip-example.subtitle':
+    'TooltipOption 格式化與樣式（子集）',
   'examples.list.rich-text-example.title': '富文字',
   'examples.list.rich-text-example.subtitle': '餅圖富文字標籤格式化',
   'examples.list.bundle-test.title': '統一打包',
   'examples.list.bundle-test.subtitle': '從單一 hudx 套件匯入（HChart + Core）',
   'examples.list.bundle-bar.title': 'BarChart 匯入',
-  'examples.list.bundle-bar.subtitle': "import BarChart from 'hudx-charts/chart/BarChart'",
+  'examples.list.bundle-bar.subtitle':
+    "import BarChart from 'hudx-charts/chart/BarChart'",
   'examples.list.bundle-line.title': 'LineChart 匯入',
-  'examples.list.bundle-line.subtitle': "import LineChart from 'hudx-charts/chart/LineChart'",
+  'examples.list.bundle-line.subtitle':
+    "import LineChart from 'hudx-charts/chart/LineChart'",
   'examples.list.bundle-pie.title': 'PieChart 匯入',
-  'examples.list.bundle-pie.subtitle': "import PieChart from 'hudx-charts/chart/PieChart'",
+  'examples.list.bundle-pie.subtitle':
+    "import PieChart from 'hudx-charts/chart/PieChart'",
   'examples.feature.shape': '圖形',
   'examples.feature.themes': '主題',
   'examples.feature.interaction': '互動',
@@ -598,7 +656,8 @@ const examplesZhTW: Dict = {
   'examples.legend.section.orient': '方向與位置',
   'examples.legend.section.orient.desc': '縱向、右側、頂部、邊框、背景',
   'examples.legend.section.style': '條目樣式',
-  'examples.legend.section.style.desc': 'itemGap、itemWidth、itemHeight、textStyle',
+  'examples.legend.section.style.desc':
+    'itemGap、itemWidth、itemHeight、textStyle',
   'examples.legend.section.customData': '自訂資料',
   'examples.legend.section.customData.desc': '按條目設定 icon 與 textStyle',
   'examples.legend.chartTitle.verticalRight': '右側縱向',
@@ -609,7 +668,8 @@ const examplesZhTW: Dict = {
   'examples.title.pageDesc.suffix': '介面。',
   'examples.title.section.positioning': '1. 定位',
   'examples.title.section.advanced': '2. 進階樣式',
-  'examples.title.section.advanced.desc1': 'textStyle、subtextStyle、backgroundColor、border、padding',
+  'examples.title.section.advanced.desc1':
+    'textStyle、subtextStyle、backgroundColor、border、padding',
   'examples.title.section.advanced.desc2': 'itemGap（30px）、subtext 顏色',
   'examples.title.hint.topLeft': "left: 'left', top: 'top'",
   'examples.title.hint.topCenter': "left: 'center', top: 'top'",
@@ -631,11 +691,13 @@ const examplesZhTW: Dict = {
   'examples.tooltip.section.itemTrigger': '資料項觸發',
   'examples.tooltip.section.itemTrigger.desc': "trigger: 'item'",
   'examples.tooltip.section.axisTrigger': '座標軸觸發',
-  'examples.tooltip.section.axisTrigger.desc': "trigger: 'axis', axisPointer: 'shadow'",
+  'examples.tooltip.section.axisTrigger.desc':
+    "trigger: 'axis', axisPointer: 'shadow'",
   'examples.tooltip.section.customFormatter': '自訂格式化',
   'examples.tooltip.section.customFormatter.desc': 'formatter 函式回傳 HTML',
   'examples.tooltip.section.styling': '樣式',
-  'examples.tooltip.section.styling.desc': 'backgroundColor、border、textStyle、confine',
+  'examples.tooltip.section.styling.desc':
+    'backgroundColor、border、textStyle、confine',
   'examples.tooltip.chartTitle.itemTrigger': '資料項觸發',
   'examples.tooltip.chartTitle.axisShadow': '座標軸觸發（陰影指示器）',
   'examples.tooltip.chartTitle.customHtml': '自訂 HTML 格式化',
@@ -663,7 +725,8 @@ const examplesZhTW: Dict = {
   'examples.bundle.unified.desc.prefix': '此示例展示如何從單一',
   'examples.bundle.unified.desc.suffix': '套件匯入 Charts 與 Core 元件。',
   'examples.bundle.unified.section1': "1. 從 'hudx' 匯入 HChart 元件",
-  'examples.bundle.unified.section2': "2. 從 'hudx' 匯入核心圖形（Rect、Circle）",
+  'examples.bundle.unified.section2':
+    "2. 從 'hudx' 匯入核心圖形（Rect、Circle）",
   'examples.bundle.barChart.title': 'BarChart 打包匯入',
   'examples.bundle.barChart.chartTitle': '獨立 BarChart 打包',
   'examples.bundle.lineChart.title': 'LineChart 打包匯入',

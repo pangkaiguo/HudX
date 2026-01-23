@@ -97,7 +97,10 @@ describe('Renderer background behavior', () => {
     const markDirtySpy = vi.spyOn(painter, 'markDirty');
     const paintSpy = vi.spyOn(painter, 'paint');
 
-    const r = new Rect({ id: 'r1', shape: { x: 0, y: 0, width: 1, height: 1 } });
+    const r = new Rect({
+      id: 'r1',
+      shape: { x: 0, y: 0, width: 1, height: 1 },
+    });
     renderer.add(r);
     expect(markDirtySpy).toHaveBeenCalled();
     expect(renderer.getElementById('r1')).toBeDefined();

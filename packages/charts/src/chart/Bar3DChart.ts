@@ -33,7 +33,9 @@ export default class Bar3DChart extends Chart {
       if (!this._activeGroups) {
         this._activeGroups = new Map();
       }
-      const oldGroups = this._forceReinitOnNextRender ? new Map() : this._activeGroups;
+      const oldGroups = this._forceReinitOnNextRender
+        ? new Map()
+        : this._activeGroups;
       this._activeGroups = new Map();
 
       const option = this._option;
@@ -141,8 +143,7 @@ export default class Bar3DChart extends Chart {
           .filter((s) => s.type === 'bar3D' && s.show !== false)
           .map((s, i) => ({
             name: getSeriesDisplayName(
-              (key: string, defaultValue?: string) =>
-                this.t(key, defaultValue),
+              (key: string, defaultValue?: string) => this.t(key, defaultValue),
               s,
               i,
             ),
@@ -349,7 +350,9 @@ export default class Bar3DChart extends Chart {
           const animateHeight = (targetHeight: number) => {
             if (this._shouldAnimateFor(seriesName) || oldGroup) {
               const isUpdate = !!oldGroup;
-              const delay = isUpdate ? 0 : resolveAnimationDelay(seriesItem.animationDelay, index);
+              const delay = isUpdate
+                ? 0
+                : resolveAnimationDelay(seriesItem.animationDelay, index);
               const duration = this._getAnimationDuration(isUpdate);
 
               const animatorObj = { height: initialHeight };

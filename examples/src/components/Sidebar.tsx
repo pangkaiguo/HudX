@@ -16,8 +16,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const ui = themeObj.token as any;
   const border = ui.colorBorderSecondary || themeObj.borderColor;
   const bg = ui.colorFillContainer || themeObj.backgroundColor;
-  const primary = ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
-  const hoverBg = ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+  const hoverBg =
+    ui.colorFillHover || ui.colorFillContainerAlt || themeObj.gridColor;
 
   return (
     <div
@@ -79,8 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 width: 4,
                 height: 4,
                 borderRadius: '50%',
-                backgroundColor:
-                  activeCategory === cat.key ? primary : border,
+                backgroundColor: activeCategory === cat.key ? primary : border,
               }}
             />
             {cat.label}

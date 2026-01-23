@@ -3,8 +3,11 @@ import Animator from '../Animator';
 
 describe('Animator', () => {
   beforeAll(() => {
-    vi.stubGlobal('requestAnimationFrame', (_callback: FrameRequestCallback) => 1);
-    vi.stubGlobal('cancelAnimationFrame', (_id: number) => { });
+    vi.stubGlobal(
+      'requestAnimationFrame',
+      (_callback: FrameRequestCallback) => 1,
+    );
+    vi.stubGlobal('cancelAnimationFrame', (_id: number) => {});
   });
 
   afterAll(() => {
@@ -65,4 +68,3 @@ describe('Animator', () => {
     expect(animator.getAnimationCount()).toBe(0);
   });
 });
-

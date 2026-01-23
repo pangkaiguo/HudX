@@ -34,7 +34,12 @@ import {
   TOOLTIP_MARKER_BORDER_RADIUS,
   Z_AXIS,
 } from './constants';
-import type { ChartOption, ChartEvent, AxisOption, EventCallback } from './types';
+import type {
+  ChartOption,
+  ChartEvent,
+  AxisOption,
+  EventCallback,
+} from './types';
 import {
   createLinearScale,
   createOrdinalScale,
@@ -74,12 +79,7 @@ export default class Chart {
     locale: Locale = 'en',
   ) {
     this._followGlobalTheme = theme === undefined;
-    this._renderer = Renderer.init(
-      dom,
-      renderMode,
-      theme,
-      locale,
-    );
+    this._renderer = Renderer.init(dom, renderMode, theme, locale);
     this._option = option;
     this._root = this._renderer.getRoot();
     this._init();
@@ -141,8 +141,8 @@ export default class Chart {
     const tooltipOpt = this._option?.tooltip || {};
     const tooltipSize =
       tooltipOpt.size === 'small' ||
-        tooltipOpt.size === 'medium' ||
-        tooltipOpt.size === 'medium-small'
+      tooltipOpt.size === 'medium' ||
+      tooltipOpt.size === 'medium-small'
         ? tooltipOpt.size
         : 'medium-small';
     this._tooltip = new Tooltip({
@@ -200,10 +200,10 @@ export default class Chart {
     notMerge?:
       | boolean
       | {
-        notMerge?: boolean;
-        lazyUpdate?: boolean;
-        silent?: boolean;
-      },
+          notMerge?: boolean;
+          lazyUpdate?: boolean;
+          silent?: boolean;
+        },
     lazyUpdate?: boolean,
   ): this {
     // Handle parameter overloading
@@ -480,13 +480,14 @@ export default class Chart {
             },
             style: {
               stroke:
-                xAxis.splitLine?.lineStyle?.color || this.getThemeConfig().gridColor,
+                xAxis.splitLine?.lineStyle?.color ||
+                this.getThemeConfig().gridColor,
               lineWidth: xAxis.splitLine?.lineStyle?.width || 1,
               lineDash:
                 xAxis.splitLine?.lineStyle?.type === 'solid'
                   ? undefined
                   : xAxis.splitLine?.lineStyle?.type === 'dashed' ||
-                    !xAxis.splitLine?.lineStyle?.type
+                      !xAxis.splitLine?.lineStyle?.type
                     ? [4, 4]
                     : undefined,
             },
@@ -498,14 +499,21 @@ export default class Chart {
         if (scales?.x && xAxis.type === 'value') {
           const domain = scales.x.domain();
           const tickCount = xAxis.splitNumber ?? 10;
-          const ticks = calculateNiceTicks(domain[0] as number, domain[1] as number, tickCount);
+          const ticks = calculateNiceTicks(
+            domain[0] as number,
+            domain[1] as number,
+            tickCount,
+          );
 
           ticks.forEach((tick) => {
             const x = scales.x!(tick as any);
             if (x < plotX - 0.1 || x > plotX + width + 0.1) return;
             addSplitLine(x);
           });
-        } else if (typeof xAxis.splitNumber === 'number' && xAxis.splitNumber > 0) {
+        } else if (
+          typeof xAxis.splitNumber === 'number' &&
+          xAxis.splitNumber > 0
+        ) {
           const count = xAxis.splitNumber;
           for (let i = 1; i <= count; i++) {
             const ratio = i / (count + 1);
@@ -585,7 +593,9 @@ export default class Chart {
 
           let textAlign: CanvasTextAlign = 'center';
           let textBaseline: CanvasTextBaseline = 'top';
-          let transform: { x: number; y: number; rotation: number } | undefined = undefined;
+          let transform:
+            | { x: number; y: number; rotation: number }
+            | undefined = undefined;
           let shapeX = x;
           let shapeY = plotY + height + 10; // Default gap
 
@@ -630,7 +640,11 @@ export default class Chart {
         const fontFamily = this.getThemeConfig().fontFamily;
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
-        const ticks = calculateNiceTicks(domain[0] as number, domain[1] as number, tickCount);
+        const ticks = calculateNiceTicks(
+          domain[0] as number,
+          domain[1] as number,
+          tickCount,
+        );
         const interval = axisLabel.interval;
 
         ticks.forEach((tick, index) => {
@@ -718,7 +732,11 @@ export default class Chart {
         if (scales?.y && yAxis.type === 'value') {
           const domain = scales.y.domain();
           const tickCount = yAxis.splitNumber ?? 10;
-          const ticks = calculateNiceTicks(domain[0] as number, domain[1] as number, tickCount);
+          const ticks = calculateNiceTicks(
+            domain[0] as number,
+            domain[1] as number,
+            tickCount,
+          );
 
           ticks.forEach((tick) => {
             const y = scales.y!(tick as any);
@@ -734,13 +752,14 @@ export default class Chart {
               },
               style: {
                 stroke:
-                  yAxis.splitLine?.lineStyle?.color || this.getThemeConfig().gridColor,
+                  yAxis.splitLine?.lineStyle?.color ||
+                  this.getThemeConfig().gridColor,
                 lineWidth: yAxis.splitLine?.lineStyle?.width || 1,
                 lineDash:
                   yAxis.splitLine?.lineStyle?.type === 'solid'
                     ? undefined
                     : yAxis.splitLine?.lineStyle?.type === 'dashed' ||
-                      !yAxis.splitLine?.lineStyle?.type
+                        !yAxis.splitLine?.lineStyle?.type
                       ? [4, 4]
                       : undefined,
               },
@@ -762,13 +781,14 @@ export default class Chart {
               },
               style: {
                 stroke:
-                  yAxis.splitLine?.lineStyle?.color || this.getThemeConfig().gridColor,
+                  yAxis.splitLine?.lineStyle?.color ||
+                  this.getThemeConfig().gridColor,
                 lineWidth: yAxis.splitLine?.lineStyle?.width || 1,
                 lineDash:
                   yAxis.splitLine?.lineStyle?.type === 'solid'
                     ? undefined
                     : yAxis.splitLine?.lineStyle?.type === 'dashed' ||
-                      !yAxis.splitLine?.lineStyle?.type
+                        !yAxis.splitLine?.lineStyle?.type
                       ? [4, 4]
                       : undefined,
               },
@@ -819,7 +839,9 @@ export default class Chart {
 
           let textAlign: CanvasTextAlign = 'right';
           let textBaseline: CanvasTextBaseline = 'middle';
-          let transform: { x: number; y: number; rotation: number } | undefined = undefined;
+          let transform:
+            | { x: number; y: number; rotation: number }
+            | undefined = undefined;
           let shapeX = plotX - 10;
           let shapeY = y;
 
@@ -862,7 +884,11 @@ export default class Chart {
         const fontFamily = this.getThemeConfig().fontFamily;
         const color = axisLabel.color || this.getThemeConfig().axisLabelColor;
 
-        const ticks = calculateNiceTicks(domain[0] as number, domain[1] as number, tickCount);
+        const ticks = calculateNiceTicks(
+          domain[0] as number,
+          domain[1] as number,
+          tickCount,
+        );
         const interval = axisLabel.interval;
 
         ticks.forEach((tick, index) => {
@@ -1161,7 +1187,10 @@ export default class Chart {
       return this;
     }
 
-    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    if (
+      typeof window !== 'undefined' &&
+      typeof window.addEventListener === 'function'
+    ) {
       const handler = () => this.resize();
       window.addEventListener('resize', handler);
       this._windowResizeHandler = handler;
@@ -1229,7 +1258,10 @@ export default class Chart {
     });
   }
 
-  protected _formatDate(date: Date, format: 'short' | 'medium' | 'long' | 'full' = 'short'): string {
+  protected _formatDate(
+    date: Date,
+    format: 'short' | 'medium' | 'long' | 'full' = 'short',
+  ): string {
     return date.toLocaleDateString(this.getLocale(), {
       dateStyle: format,
     });
@@ -1258,8 +1290,8 @@ export default class Chart {
     const tooltipOpt = this._option?.tooltip || {};
     const tooltipSize =
       tooltipOpt.size === 'small' ||
-        tooltipOpt.size === 'medium' ||
-        tooltipOpt.size === 'medium-small'
+      tooltipOpt.size === 'medium' ||
+      tooltipOpt.size === 'medium-small'
         ? tooltipOpt.size
         : 'medium-small';
     const tooltipBaseFontSize = tooltipSize === 'small' ? 12 : 14;
@@ -1305,8 +1337,10 @@ export default class Chart {
         option.legend?.fontSize ??
         tooltipBaseFontSize,
       fontFamily: legendTextStyle.fontFamily ?? theme.fontFamily,
-      fontWeight: legendTextStyle.fontWeight ?? option.legend?.fontWeight ?? 'normal',
-      backgroundColor: option.legend?.backgroundColor ?? theme.tooltipBackgroundColor,
+      fontWeight:
+        legendTextStyle.fontWeight ?? option.legend?.fontWeight ?? 'normal',
+      backgroundColor:
+        option.legend?.backgroundColor ?? theme.tooltipBackgroundColor,
       onSelect: (name: string, selected: boolean) => {
         if (this._legend) {
           const currentSelected = this._legend.getSelected();
@@ -1354,7 +1388,7 @@ export default class Chart {
           return {
             ...seriesItem,
             icon: customItem.icon || seriesItem.icon,
-            textStyle: customItem.textStyle
+            textStyle: customItem.textStyle,
           };
         }
 
@@ -1363,7 +1397,7 @@ export default class Chart {
           color: this.getThemeConfig().borderColor,
           icon: customItem.icon || option.legend?.icon || 'rect',
           textColor: this.getThemeConfig().legendTextColor,
-          textStyle: customItem.textStyle
+          textStyle: customItem.textStyle,
         };
       });
     }
@@ -1457,7 +1491,8 @@ export default class Chart {
     if (paramsList.length === 0) return '';
 
     const theme = this.getThemeConfig();
-    const tooltipSize = this._option.tooltip?.size === 'small' ? 'small' : 'medium-small';
+    const tooltipSize =
+      this._option.tooltip?.size === 'small' ? 'small' : 'medium-small';
     const fontSize = tooltipSize === 'small' ? 12 : 14;
     const palette = {
       series: theme.tooltipSeriesNameColor,
@@ -1472,7 +1507,9 @@ export default class Chart {
     const firstParam = paramsList[0];
     const useSeriesHeader =
       firstParam.seriesType === 'pie' ||
-      (paramsList.length === 1 && typeof firstParam.seriesName === 'string' && firstParam.seriesName);
+      (paramsList.length === 1 &&
+        typeof firstParam.seriesName === 'string' &&
+        firstParam.seriesName);
     if (useSeriesHeader) {
       headerTitle = firstParam.seriesName;
     } else {
@@ -1512,7 +1549,10 @@ export default class Chart {
     param: any,
     labelText: string,
     labelKind: 'series' | 'name',
-    visual: { fontSize: number; palette: { series: string; name: string; value: string } },
+    visual: {
+      fontSize: number;
+      palette: { series: string; name: string; value: string };
+    },
   ): string {
     const color = param.color;
     const value = param.value;
@@ -1532,9 +1572,9 @@ export default class Chart {
     const percent =
       param.percent !== undefined
         ? ` (${(typeof param.percent === 'number'
-          ? param.percent
-          : Number(param.percent)
-        ).toFixed(2)}%)`
+            ? param.percent
+            : Number(param.percent)
+          ).toFixed(2)}%)`
         : '';
     const marker = param.marker || (color ? this._getTooltipMarker(color) : '');
 
@@ -1550,8 +1590,7 @@ export default class Chart {
     const defaultStyles = {
       // Containers
       row: 'display:flex;align-items:center;justify-content:space-between;line-height:20px;min-width:120px;',
-      blockContainer:
-        'line-height:20px;min-width:120px;margin-bottom:8px;',
+      blockContainer: 'line-height:20px;min-width:120px;margin-bottom:8px;',
       labelContainer: 'display:flex;align-items:center;',
 
       // Elements

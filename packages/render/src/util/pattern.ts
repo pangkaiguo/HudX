@@ -179,7 +179,8 @@ const autoForegroundColor = (baseColor: string): string => {
 };
 
 const normalizeDash = (dash: number[] | number | undefined): number[] => {
-  if (dash === undefined) return [DECAL_DEFAULT_DASH_SEGMENT, DECAL_DEFAULT_DASH_SEGMENT];
+  if (dash === undefined)
+    return [DECAL_DEFAULT_DASH_SEGMENT, DECAL_DEFAULT_DASH_SEGMENT];
   if (typeof dash === 'number') {
     return dash > 0
       ? [dash, dash]
@@ -211,7 +212,8 @@ const getOnSegmentCenters = (dash: number[]): number[] => {
 const getUnitSize = (dashX: number[], dashY: number[]): number => {
   const onX = dashX.filter((_, i) => i % 2 === 0).map((v) => Math.max(1, v));
   const onY = dashY.filter((_, i) => i % 2 === 0).map((v) => Math.max(1, v));
-  const avg = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / Math.max(1, arr.length);
+  const avg = (arr: number[]) =>
+    arr.reduce((a, b) => a + b, 0) / Math.max(1, arr.length);
   return Math.max(1, Math.min(avg(onX), avg(onY)));
 };
 

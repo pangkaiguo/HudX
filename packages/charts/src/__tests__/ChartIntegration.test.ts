@@ -92,6 +92,53 @@ describe('Chart Integration', () => {
       const paths = svg?.querySelectorAll('path');
       expect(paths?.length).toBeGreaterThan(0);
     });
+
+    it('doughnut hover should apply shadow filter in svg mode', () => {
+      vi.useFakeTimers();
+      const dom = document.createElement('div');
+      const chart = new PieChart(dom);
+      chart.setRenderMode('svg');
+
+      chart.setOption({
+        animation: false,
+        series: [
+          {
+            type: 'doughnut',
+            data: [
+              { value: 10, name: 'A' },
+              { value: 20, name: 'B' },
+            ],
+            emphasis: {
+              focus: 'self',
+              itemStyle: {
+                shadowBlur: 10,
+                shadowColor: 'rgba(0, 0, 0, 0.4)',
+                shadowOffsetX: 2,
+                shadowOffsetY: 2,
+              },
+            },
+          },
+        ],
+      } as ChartOption);
+
+      (chart as any)._render();
+      (chart as any)._renderer.flush();
+
+      (chart as any)._onLegendHover('A', true);
+      vi.advanceTimersByTime(1);
+      (chart as any)._renderer.flush();
+
+      const svg = chart.getDom().querySelector('svg');
+      expect(svg).not.toBeNull();
+
+      const filters = svg?.querySelectorAll('defs filter') || [];
+      expect(filters.length).toBeGreaterThan(0);
+
+      const filteredGroups = svg?.querySelectorAll('g[filter]') || [];
+      expect(filteredGroups.length).toBeGreaterThan(0);
+
+      vi.useRealTimers();
+    });
   });
 
   describe('Axis Pointer', () => {

@@ -26,7 +26,13 @@ const LegendExample = ({
   // 1. Orientation & Position
   const orientOption: ChartOption = {
     ...baseData,
-    title: { text: t(locale, 'examples.legend.chartTitle.verticalRight', 'Vertical Right') },
+    title: {
+      text: t(
+        locale,
+        'examples.legend.chartTitle.verticalRight',
+        'Vertical Right',
+      ),
+    },
     legend: {
       show: true,
       orient: 'vertical',
@@ -39,7 +45,13 @@ const LegendExample = ({
   // 2. Styling (Item gap, width, height)
   const styleOption: ChartOption = {
     ...baseData,
-    title: { text: t(locale, 'examples.legend.chartTitle.customItemStyle', 'Custom Item Style') },
+    title: {
+      text: t(
+        locale,
+        'examples.legend.chartTitle.customItemStyle',
+        'Custom Item Style',
+      ),
+    },
     legend: {
       show: true,
       orient: 'vertical',
@@ -59,7 +71,13 @@ const LegendExample = ({
   // 3. Data Format (Custom Icons)
   const dataOption: ChartOption = {
     ...baseData,
-    title: { text: t(locale, 'examples.legend.chartTitle.customDataIcons', 'Custom Data Icons') },
+    title: {
+      text: t(
+        locale,
+        'examples.legend.chartTitle.customDataIcons',
+        'Custom Data Icons',
+      ),
+    },
     legend: {
       show: true,
       orient: 'vertical',
@@ -77,33 +95,69 @@ const LegendExample = ({
     <div style={{ padding: 20 }}>
       <h1>{t(locale, 'examples.legend.pageTitle', 'Legend Configuration')}</h1>
       <p style={{ color: '#666' }}>
-        {t(locale, 'examples.legend.pageDesc.prefix', 'Matching')} <code>LegendOption</code>{' '}
+        {t(locale, 'examples.legend.pageDesc.prefix', 'Matching')}{' '}
+        <code>LegendOption</code>{' '}
         {t(locale, 'examples.legend.pageDesc.suffix', 'interface.')}
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <div style={{ border: '1px solid #eee', padding: 10 }}>
-          <h3>{t(locale, 'examples.legend.section.orient', 'Orientation & Position')}</h3>
+          <h3>
+            {t(
+              locale,
+              'examples.legend.section.orient',
+              'Orientation & Position',
+            )}
+          </h3>
           <p style={{ fontSize: 12 }}>
-            {t(locale, 'examples.legend.section.orient.desc', 'vertical, right, top, border, background')}
+            {t(
+              locale,
+              'examples.legend.section.orient.desc',
+              'vertical, right, top, border, background',
+            )}
           </p>
-          <HChart option={orientOption} height={300} theme={theme} locale={locale} />
+          <HChart
+            option={orientOption}
+            height={300}
+            theme={theme}
+            locale={locale}
+          />
         </div>
 
         <div style={{ border: '1px solid #eee', padding: 10 }}>
           <h3>{t(locale, 'examples.legend.section.style', 'Item Styling')}</h3>
           <p style={{ fontSize: 12 }}>
-            {t(locale, 'examples.legend.section.style.desc', 'itemGap, itemWidth, itemHeight, textStyle')}
+            {t(
+              locale,
+              'examples.legend.section.style.desc',
+              'itemGap, itemWidth, itemHeight, textStyle',
+            )}
           </p>
-          <HChart option={styleOption} height={300} theme={theme} locale={locale} />
+          <HChart
+            option={styleOption}
+            height={300}
+            theme={theme}
+            locale={locale}
+          />
         </div>
 
         <div style={{ border: '1px solid #eee', padding: 10 }}>
-          <h3>{t(locale, 'examples.legend.section.customData', 'Custom Data')}</h3>
+          <h3>
+            {t(locale, 'examples.legend.section.customData', 'Custom Data')}
+          </h3>
           <p style={{ fontSize: 12 }}>
-            {t(locale, 'examples.legend.section.customData.desc', 'per-item icon and textStyle')}
+            {t(
+              locale,
+              'examples.legend.section.customData.desc',
+              'per-item icon and textStyle',
+            )}
           </p>
-          <HChart option={dataOption} height={300} theme={theme} locale={locale} />
+          <HChart
+            option={dataOption}
+            height={300}
+            theme={theme}
+            locale={locale}
+          />
         </div>
       </div>
     </div>
