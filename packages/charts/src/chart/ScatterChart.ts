@@ -153,7 +153,7 @@ export default class ScatterChart extends Chart {
           s.itemStyle?.color || s.color || this._getSeriesColor(seriesIndex);
         const opacity =
           s.itemStyle?.opacity !== undefined ? s.itemStyle.opacity : 0.8;
-        const symbolSize = s.symbolSize || 10;
+        const pointSize = s.symbolSize;
 
         seriesData.forEach((item: any, index: number) => {
           let xVal: any, yVal: any;
@@ -203,11 +203,20 @@ export default class ScatterChart extends Chart {
             return;
           }
 
+          let finalSize = 10;
+          if (typeof pointSize === 'number') finalSize = pointSize;
+          else if (Array.isArray(pointSize)) finalSize = pointSize[0];
+          else if (typeof pointSize === 'function')
+            finalSize = (pointSize as any)(item, { dataIndex: index, seriesIndex });
+
+          if (!Number.isFinite(finalSize)) finalSize = 10;
+          const baseR = finalSize / 2;
+
           const circle = new Circle({
             shape: {
               cx,
               cy,
-              r: symbolSize / 2,
+              r: baseR,
             },
             style: {
               fill: color,
@@ -224,7 +233,7 @@ export default class ScatterChart extends Chart {
 
           if (this._tooltip) {
             circle.on('mouseover', (evt: any) => {
-              circle.attr('shape', { r: symbolSize / 2 + 3 });
+              circle.attr('shape', { r: baseR + 3 });
               circle.attr('style', { opacity: 1 });
 
               const itemName =
@@ -249,7 +258,7 @@ export default class ScatterChart extends Chart {
               };
               const content = this._generateTooltipContent(params);
 
-              const r = symbolSize / 2 + 3;
+              const r = baseR + 3;
               const targetRect = {
                 x: cx - r,
                 y: cy - r,
@@ -263,7 +272,7 @@ export default class ScatterChart extends Chart {
             });
 
             circle.on('mouseout', () => {
-              circle.attr('shape', { r: symbolSize / 2 });
+              circle.attr('shape', { r: baseR });
               circle.attr('style', { opacity: opacity });
               this._tooltip!.hide();
             });
@@ -277,14 +286,14 @@ export default class ScatterChart extends Chart {
 
             circle.shape.r = 0;
 
-            this._animator.animate(circle.shape, 'r', symbolSize / 2, {
+            this._animator.animate(circle.shape, 'r', baseR, {
               duration,
               delay,
               easing: 'elasticOut',
               onUpdate: () => circle.markRedraw(),
             });
           } else {
-            circle.shape.r = symbolSize / 2;
+            circle.shape.r = baseR;
             circle.markRedraw();
           }
 

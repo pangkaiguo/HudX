@@ -60,11 +60,15 @@ export default class HeatmapChart extends Chart {
               const xName = s.xAxisData?.[colIndex] || colIndex;
               const yName = s.yAxisData?.[rowIndex] || rowIndex;
 
+              const columnCount =
+                (s.xAxisData?.length ?? (Array.isArray(row) ? row.length : 0)) || 0;
               const params = {
+                type: 'showTip',
                 componentType: 'series',
                 seriesType: 'heatmap',
                 seriesName: s.name,
-                dataIndex: [rowIndex, colIndex],
+                dataIndex: rowIndex * columnCount + colIndex,
+                cellIndex: [rowIndex, colIndex],
                 value: value,
                 name: `${xName}, ${yName}`,
               };

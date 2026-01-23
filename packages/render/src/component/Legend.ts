@@ -178,7 +178,6 @@ export default class Legend extends Group {
     const padding = this._option.padding || 8;
     const fontSize = this._option.fontSize || 12;
     const itemGap = this._option.itemGap ?? 0;
-    const itemWidth = this._option.itemWidth || 100;
     const iconGap = this._option.iconGap || 8;
     const iconWidth = 12;
 
@@ -208,16 +207,12 @@ export default class Legend extends Group {
       const paddingX = this._option.itemPadding ?? 8;
       const paddingY = this._option.itemPadding ?? 8;
 
-      // itemWidth defaults to 100 if undefined (consistent with previous behavior)
-      // AND it is treated as TOTAL width (Border-Box model)
       const totalItemWidth = this._option.itemWidth ?? 100;
 
-      // Calculate available content width
       let currentItemWidth = Math.max(0, totalItemWidth - paddingX * 2);
       let currentTextMaxWidth = Math.max(10, currentItemWidth - iconWidth - iconGap);
 
       if (this._option.itemMaxWidth) {
-        // itemMaxWidth is also treated as TOTAL width
         const maxContentWidth = Math.max(0, this._option.itemMaxWidth - paddingX * 2);
         const maxAvailableTextWidth = Math.max(10, maxContentWidth - iconWidth - iconGap);
 
@@ -228,13 +223,6 @@ export default class Legend extends Group {
       }
 
       const lines = wrapText(item.name, currentTextMaxWidth);
-
-      // If we are strictly using fixed width (which is always true now due to default),
-      // currentItemWidth remains as calculated. 
-      // EXCEPT if itemMaxWidth forced a constraint? 
-      // Actually, if itemWidth is set (or default 100), we stick to it.
-      // itemMaxWidth only reduces it if itemMaxWidth < itemWidth?
-      // Logic above: `if (currentTextMaxWidth > maxAvailableTextWidth)` implies narrowing.
 
       const lineHeight = fontSize + 4;
       const textHeight = lines.length * lineHeight;

@@ -123,7 +123,14 @@ export default class Bar3DChart extends Chart {
       const groupInnerWidth =
         seriesCount * barWidthPerSeries + (seriesCount - 1) * gapWidth;
 
-      this._renderAxes(xAxis, yAxis, plotX, plotY, plotWidth, plotHeight);
+      this._renderAxes(
+        xAxis ?? {},
+        yAxis ?? {},
+        plotX,
+        plotY,
+        plotWidth,
+        plotHeight,
+      );
 
       // Legend
       if (option.legend?.show !== false) {
@@ -287,6 +294,7 @@ export default class Bar3DChart extends Chart {
                     ? item.name
                     : xAxis?.data?.[index] || '';
                 const params = {
+                  type: 'showTip',
                   componentType: 'series',
                   seriesType: 'bar3D',
                   seriesIndex,
