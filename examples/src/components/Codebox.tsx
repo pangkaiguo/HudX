@@ -32,7 +32,7 @@ export const CodeBox: React.FC<CodeBoxProps> = ({
   const [code, setCode] = useState(initialCode);
   const [option, setOption] = useState<ChartOption>({});
   const [error, setError] = useState<string | null>(null);
-  const [renderMode, setRenderMode] = useState<'canvas' | 'svg'>('svg');
+  const [renderMode, setRenderMode] = useState<'canvas' | 'svg'>('canvas');
   const [activeTab, setActiveTab] = useState<'JS' | 'TS'>('JS');
   const chartContainerRef = React.useRef<HTMLDivElement>(null);
 

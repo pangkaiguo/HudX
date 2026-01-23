@@ -13,7 +13,7 @@ export const BasicPieExample = ({
   locale?: Locale;
 }) => {
   const [isDecal, setIsDecal] = useState(false);
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const [roseType, setRoseType] = useState<boolean | 'radius' | 'area'>(false);
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);

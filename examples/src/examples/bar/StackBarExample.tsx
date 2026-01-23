@@ -17,7 +17,7 @@ export const StackBarExample = ({
   const [gridTop, setGridTop] = useState(40);
   const [splitNumber, setSplitNumber] = useState(10);
   const [xSplitNumber, setXSplitNumber] = useState(10);
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 

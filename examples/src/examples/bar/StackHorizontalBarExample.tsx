@@ -16,7 +16,7 @@ export const StackHorizontalBarExample = ({
   const [showGrid, setShowGrid] = useState(false);
   const [gridTop, setGridTop] = useState(80);
   const [xSplitNumber, setXSplitNumber] = useState(10);
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 

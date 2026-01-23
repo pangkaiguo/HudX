@@ -14,7 +14,7 @@ const DivergingHorizontalBarExample = ({
 }) => {
   const [isDecal, setIsDecal] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const themeObj = ThemeManager.getTheme(theme);
   const chartRef = useRef<HChartRef>(null);
 

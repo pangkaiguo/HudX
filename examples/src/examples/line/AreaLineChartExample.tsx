@@ -18,7 +18,7 @@ export const AreaLineChartExample = ({
   const [gridTop, setGridTop] = useState(60);
   const [splitNumber, setSplitNumber] = useState(10);
   const [xSplitNumber, setXSplitNumber] = useState(10);
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const [isSmooth, setIsSmooth] = useState(true);
 
   // Generate more data points (e.g. 100)

@@ -32,7 +32,7 @@ import { Renderer } from 'hudx-render';
 // 初始化渲染器
 const renderer = Renderer.init(
   dom: HTMLElement,           // 容器 DOM
-  renderMode?: 'canvas' | 'svg', // 渲染模式，默认 'svg'
+  renderMode?: 'canvas' | 'svg', // 渲染模式，默认 'canvas'
   theme?: string | object,    // 主题，默认 'light'
   locale?: string             // 语言，默认 'en'
 );

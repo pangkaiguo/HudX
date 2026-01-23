@@ -16,7 +16,7 @@ export const ThemeExample = ({
   const [themeName, setThemeName] = useState<'light' | 'dark'>(
     theme as 'light' | 'dark',
   );
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
     setThemeName(theme as 'light' | 'dark');

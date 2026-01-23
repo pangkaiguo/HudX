@@ -25,7 +25,7 @@ export const PerformanceExample = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(1000);
   const [renderTime, setRenderTime] = useState(0);
-  const [mode, setMode] = useState<'canvas' | 'svg'>('svg');
+  const [mode, setMode] = useState<'canvas' | 'svg'>('canvas');
   const [shapeType, setShapeType] = useState<ShapeType>('circle');
   const normalizedTheme = (theme || 'light').toLowerCase();
 

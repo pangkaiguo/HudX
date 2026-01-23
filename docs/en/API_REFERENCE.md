@@ -32,7 +32,7 @@ import { Renderer } from 'hudx-render';
 // Initialize renderer
 const renderer = Renderer.init(
   dom: HTMLElement,           // Container DOM
-  renderMode?: 'canvas' | 'svg', // Render mode, default 'svg'
+  renderMode?: 'canvas' | 'svg', // Render mode, default 'canvas'
   theme?: string | object,    // Theme, default 'light'
   locale?: string             // Locale, default 'en'
 );

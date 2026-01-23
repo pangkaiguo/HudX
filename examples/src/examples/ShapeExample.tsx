@@ -22,7 +22,7 @@ export const ShapeExample = ({
   locale?: Locale;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const textColor = themeObj.textColor;

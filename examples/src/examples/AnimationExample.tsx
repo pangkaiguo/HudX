@@ -21,7 +21,7 @@ export const AnimationExample = ({
   locale?: Locale;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [renderMode, setRenderMode] = useState<RenderMode>('svg');
+  const [renderMode, setRenderMode] = useState<RenderMode>('canvas');
 
   useEffect(() => {
     if (!containerRef.current) return;
