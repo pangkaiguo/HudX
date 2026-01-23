@@ -388,16 +388,7 @@ export default class StackBar3DChart extends Chart {
               const content = this._generateTooltipContent(params);
               const mx = evt?.offsetX ?? barX + barWidth / 2;
               const my = evt?.offsetY ?? finalY;
-
-              // StackBar3D height is tricky, let's estimate
-              const targetRect = {
-                x: barX,
-                y: finalY, // finalY is the top of the bar segment?
-                width: barWidth,
-                height: Math.abs(yVal), // Approximate
-              };
-
-              this._tooltip!.show(mx, my, content, params, targetRect);
+              this._tooltip!.show(mx, my, content, params, front.attr('shape'));
             };
 
             const handleMouseOut = () => {

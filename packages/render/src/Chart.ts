@@ -27,7 +27,13 @@ import type {
 } from './types';
 import { ThemeManager } from './theme/ThemeManager';
 import { toRgbaWithOpacity } from './util/color';
-import { Z_AXIS } from './constants';
+import {
+  TOOLTIP_DEFAULT_BORDER_RADIUS,
+  TOOLTIP_DEFAULT_BORDER_WIDTH,
+  TOOLTIP_DEFAULT_PADDING,
+  TOOLTIP_MARKER_BORDER_RADIUS,
+  Z_AXIS,
+} from './constants';
 import type { ChartOption, ChartEvent, AxisOption, EventCallback } from './types';
 import {
   createLinearScale,
@@ -128,6 +134,13 @@ export default class Chart {
     this.resize();
     const theme = this.getThemeConfig();
     const tooltipOpt = this._option?.tooltip || {};
+    const tooltipSize =
+      tooltipOpt.size === 'small' ||
+        tooltipOpt.size === 'medium' ||
+        tooltipOpt.size === 'medium-small'
+        ? tooltipOpt.size
+        : 'medium-small';
+    const baseFontSize = tooltipSize === 'small' ? 12 : 14;
     this._tooltip = new Tooltip({
       ...tooltipOpt,
       show: tooltipOpt?.show !== false,
@@ -140,9 +153,12 @@ export default class Chart {
         ...(tooltipOpt.textStyle || {}),
         color: tooltipOpt.textStyle?.color ?? theme.tooltipTextColor,
         fontFamily: tooltipOpt.textStyle?.fontFamily ?? theme.fontFamily,
-        fontSize: tooltipOpt.textStyle?.fontSize ?? theme.fontSize,
+        fontSize: tooltipOpt.textStyle?.fontSize ?? baseFontSize,
       },
-      borderColor: tooltipOpt.borderColor ?? theme.borderColor,
+      padding: tooltipOpt.padding ?? TOOLTIP_DEFAULT_PADDING,
+      borderWidth: tooltipOpt.borderWidth ?? TOOLTIP_DEFAULT_BORDER_WIDTH,
+      borderRadius: tooltipOpt.borderRadius ?? TOOLTIP_DEFAULT_BORDER_RADIUS,
+      borderColor: tooltipOpt.borderColor ?? theme.tooltipBorderColor,
     });
     this._tooltip.setContainer(this.getDom());
     this.setOption(this._option);
@@ -1386,7 +1402,7 @@ export default class Chart {
   }
 
   protected _getTooltipMarker(color: string): string {
-    return `<span style="display:inline-block;margin-right:8px;border-radius:2px;width:12px;height:12px;background-color:${color};"></span>`;
+    return `<span style="display:inline-block;margin-right:8px;border-radius:${TOOLTIP_MARKER_BORDER_RADIUS}px;width:12px;height:12px;background-color:${color};"></span>`;
   }
 
   protected _generateTooltipContent(params: any): string {
@@ -1408,37 +1424,64 @@ export default class Chart {
     const paramsList = Array.isArray(params) ? params : [params];
     if (paramsList.length === 0) return '';
 
+    const theme = this.getThemeConfig();
+    const tooltipSize = this._option.tooltip?.size === 'small' ? 'small' : 'medium-small';
+    const fontSize = tooltipSize === 'small' ? 12 : 14;
+    const palette = {
+      series: theme.tooltipSeriesNameColor,
+      name: theme.tooltipSubitemNameColor,
+      value: theme.tooltipValueColor,
+    };
+
     let html = '';
 
     // 1. Generate Header Title
     let headerTitle = '';
     const firstParam = paramsList[0];
-    if (firstParam.seriesType === 'pie') {
+    const useSeriesHeader =
+      firstParam.seriesType === 'pie' ||
+      (paramsList.length === 1 && typeof firstParam.seriesName === 'string' && firstParam.seriesName);
+    if (useSeriesHeader) {
       headerTitle = firstParam.seriesName;
     } else {
       headerTitle = firstParam.name;
     }
 
     if (headerTitle) {
-      html += `<div style="margin-bottom:8px;font-weight:bold;color:#fff;">${headerTitle}</div>`;
+      html += `<div style="margin-bottom:8px;color:${palette.series};font-size:${fontSize}px;font-weight:700;font-style:normal;">${headerTitle}</div>`;
     }
 
     // 2. Generate Items
     paramsList.forEach((param) => {
-      let rowLabel = '';
+      let labelText = '';
+      let labelKind: 'series' | 'name' = 'name';
+
       if (param.seriesType === 'pie') {
-        rowLabel = param.name;
+        labelText = param.name;
+        labelKind = 'name';
+      } else if (paramsList.length === 1) {
+        labelText = param.name || '';
+        labelKind = labelText ? 'name' : 'series';
       } else {
-        rowLabel = param.seriesName || param.name;
+        labelText = param.seriesName || param.name || '';
+        labelKind = param.seriesName ? 'series' : 'name';
       }
 
-      html += this._generateSingleItemHtml(param, rowLabel);
+      html += this._generateSingleItemHtml(param, labelText, labelKind, {
+        fontSize,
+        palette,
+      });
     });
 
     return html;
   }
 
-  private _generateSingleItemHtml(param: any, titleOverride?: string): string {
+  private _generateSingleItemHtml(
+    param: any,
+    labelText: string,
+    labelKind: 'series' | 'name',
+    visual: { fontSize: number; palette: { series: string; name: string; value: string } },
+  ): string {
     const color = param.color;
     const value = param.value;
 
@@ -1457,36 +1500,36 @@ export default class Chart {
     const percent =
       param.percent !== undefined
         ? ` (${(typeof param.percent === 'number'
-            ? param.percent
-            : Number(param.percent)
-          ).toFixed(2)}%)`
+          ? param.percent
+          : Number(param.percent)
+        ).toFixed(2)}%)`
         : '';
     const marker = param.marker || (color ? this._getTooltipMarker(color) : '');
 
-    // Determine title
-    const title =
-      titleOverride !== undefined
-        ? titleOverride
-        : param.componentType === 'series'
-          ? param.seriesName || param.name
-          : param.name || param.seriesName;
+    const { fontSize, palette } = visual;
+    const labelStyle =
+      labelKind === 'series'
+        ? `color:${palette.series};font-size:${fontSize}px;font-weight:700;font-style:normal;`
+        : `color:${palette.name};font-size:${fontSize}px;font-weight:400;font-style:normal;`;
+    const subitemNameStyle = `color:${palette.name};font-size:${fontSize}px;font-weight:400;font-style:normal;`;
+    const valueStyle = `color:${palette.value};font-size:${fontSize}px;font-weight:400;font-style:normal;`;
 
     // Default styles
     const defaultStyles = {
       // Containers
-      row: 'display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#fff;line-height:20px;min-width:120px;',
+      row: 'display:flex;align-items:center;justify-content:space-between;line-height:20px;min-width:120px;',
       blockContainer:
-        'font-size:12px;color:#fff;line-height:20px;min-width:120px;margin-bottom:8px;',
+        'line-height:20px;min-width:120px;margin-bottom:8px;',
       labelContainer: 'display:flex;align-items:center;',
 
       // Elements
       label: 'margin-right:16px;',
-      value: 'font-weight:bold;white-space:nowrap;',
+      value: 'white-space:nowrap;',
 
       // Rich specific
       richRow: 'display:flex;justify-content:space-between;margin-top:2px;',
-      richLabel: 'color:#ccc;margin-right:16px;',
-      richValue: 'font-weight:bold;',
+      richLabel: 'margin-right:16px;',
+      richValue: '',
     };
 
     // Merge with user config
@@ -1509,8 +1552,8 @@ export default class Chart {
           .map(
             (item: { label: string; value: string }) => `
           <div style="${styles.richRow}">
-            <span style="${styles.richLabel}">${item.label}</span>
-            <span style="${styles.richValue}">${item.value}</span>
+            <span style="${styles.richLabel}${subitemNameStyle}">${item.label}</span>
+            <span style="${styles.richValue}${valueStyle}">${item.value}</span>
           </div>
         `,
           )
@@ -1521,7 +1564,7 @@ export default class Chart {
         <div style="${styles.blockContainer}">
           <div style="${styles.labelContainer}margin-bottom:4px;">
             ${marker}
-            <span style="font-weight:bold;">${title}</span>
+            <span style="${labelStyle}">${labelText}</span>
           </div>
           <div style="padding-left: 14px;">
             ${detailHtml}
@@ -1536,9 +1579,9 @@ export default class Chart {
         <div style="${styles.blockContainer}">
           <div style="${styles.labelContainer}">
             ${marker}
-            <span>${title}</span>
+            <span style="${labelStyle}">${labelText}</span>
           </div>
-          <div style="padding-left: 14px;font-weight:bold;">
+          <div style="padding-left: 14px;${valueStyle}">
             ${displayValue}${percent}
           </div>
         </div>
@@ -1550,9 +1593,9 @@ export default class Chart {
       <div style="${styles.row}">
         <div style="${styles.labelContainer}">
           ${marker}
-          <span style="${styles.label}">${title}</span>
+          <span style="${styles.label}${labelStyle}">${labelText}</span>
         </div>
-        <span style="${styles.value}">${displayValue}${percent}</span>
+        <span style="${styles.value}${valueStyle}">${displayValue}${percent}</span>
       </div>
     `;
   }

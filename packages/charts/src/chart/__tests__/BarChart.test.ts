@@ -484,4 +484,79 @@ describe('BarChart', () => {
     (chart as any)._onLegendHover('S2', true);
     expect(s2Bar.style.opacity).toBeCloseTo(1);
   });
+
+  it('should show axis tooltip with current series item only', () => {
+    const chart = new BarChart(container);
+    const tooltip = {
+      show: vi.fn(),
+      hide: vi.fn(),
+      isVisible: vi.fn(() => false),
+    };
+    (chart as any)._tooltip = tooltip;
+
+    chart.setOption({
+      animation: false,
+      tooltip: { show: true, trigger: 'axis' },
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
+      series: [
+        { name: 'S1', type: 'bar', data: [10, 20] },
+        { name: 'S2', type: 'bar', data: [5, 15] },
+      ],
+    });
+
+    const bar0 = (chart as any)._activeBars.get('0-0');
+    expect(bar0).toBeDefined();
+
+    bar0.trigger('mousemove', { offsetX: 10, offsetY: 20 });
+
+    expect(tooltip.show).toHaveBeenCalled();
+    const [x, y, content, params] = tooltip.show.mock.calls[0] as any;
+    expect(x).toBe(22);
+    expect(y).toBe(4);
+    expect(String(content)).toContain('A');
+    expect(String(content)).toContain('S1');
+    expect(String(content)).toContain('10.00');
+    expect(String(content)).not.toContain('S2');
+    expect(String(content)).not.toContain('5.00');
+    expect(Array.isArray(params)).toBe(false);
+    expect(params.seriesName).toBe('S1');
+    expect(params.value).toBe(10);
+  });
+
+  it('should show correct tooltip value for horizontal bar value arrays', () => {
+    const chart = new BarChart(container);
+    const tooltip = {
+      show: vi.fn(),
+      hide: vi.fn(),
+      isVisible: vi.fn(() => false),
+    };
+    (chart as any)._tooltip = tooltip;
+
+    chart.setOption({
+      animation: false,
+      tooltip: { show: true, trigger: 'item' },
+      xAxis: { type: 'value' },
+      yAxis: { type: 'category', data: ['Mon'] },
+      series: [
+        {
+          name: 'S1',
+          type: 'bar',
+          data: [{ name: 'Mon', value: [200] }],
+        },
+      ],
+    });
+
+    const bar0 = (chart as any)._activeBars.get('0-0');
+    expect(bar0).toBeDefined();
+
+    bar0.trigger('mousemove', { offsetX: 10, offsetY: 20 });
+
+    expect(tooltip.show).toHaveBeenCalled();
+    const call = tooltip.show.mock.calls[0] as any[];
+    expect(call[0]).toBe(10);
+    expect(call[1]).toBe(20);
+    expect(String(call[2])).toContain('200.00');
+    expect(call[3]?.value).toBe(200);
+  });
 });

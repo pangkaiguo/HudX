@@ -818,7 +818,7 @@ describe('PieChart', () => {
     const tooltip = {
       show: vi.fn(),
       hide: vi.fn(),
-      isVisible: vi.fn(() => false)
+      isVisible: vi.fn(() => false),
     };
     (chart as any)._tooltip = tooltip;
 
@@ -840,16 +840,61 @@ describe('PieChart', () => {
     const sectors = Array.from((chart as any)._activeSectors.values()) as any[];
     const sector = sectors.find((s: any) => s.name === 'Search Engine');
 
-    // Simulate hover on sector
-    // sector.trigger('mousemove', { offsetX: 0, offsetY: 0 });
+    expect(sector).toBeDefined();
 
-    // expect(tooltip.show).toHaveBeenCalled();
-    // const content = tooltip.show.mock.calls[0][2];
-    // expect(content).toContain('Search Engine');
-    // expect(content).toContain('1048');
-    // Verify percentage formatting (should be 2 decimal places)
-    // 1048 / 3147 ≈ 33.3015... -> 33.30
-    // expect(content).toContain('(33.30%)'); 
+    sector.trigger('mouseover', { offsetX: 10, offsetY: 20 });
+
+    expect(tooltip.show).toHaveBeenCalled();
+    const [mx, my, content, params, targetRect] = tooltip.show.mock.calls[0] as any;
+    expect(mx).toBe(10);
+    expect(my).toBe(20);
+    expect(String(content)).toContain('Search Engine');
+    expect(String(content)).toContain('1,048.00');
+    expect(String(content)).toContain('(33.30%)');
+    expect(params).toBeDefined();
+    expect(targetRect).toEqual(sector.getBoundingRect());
+  });
+
+  it('should cancel pending tooltip RAF on mouseout', () => {
+    const chart = new PieChart(container);
+    const tooltip = {
+      show: vi.fn(),
+      hide: vi.fn(),
+      isVisible: vi.fn(() => false),
+    };
+    (chart as any)._tooltip = tooltip;
+
+    const rafSpy = vi
+      .spyOn(globalThis as any, 'requestAnimationFrame')
+      .mockImplementation(() => 123);
+    const cafSpy = vi
+      .spyOn(globalThis as any, 'cancelAnimationFrame')
+      .mockImplementation(() => { });
+
+    chart.setOption({
+      series: [
+        {
+          type: 'pie',
+          data: [
+            { value: 1048, name: 'Search Engine' },
+            { value: 735, name: 'Direct' },
+          ],
+        },
+      ],
+    });
+
+    const sectors = Array.from((chart as any)._activeSectors.values()) as any[];
+    const sector = sectors.find((s: any) => s.name === 'Search Engine');
+    expect(sector).toBeDefined();
+
+    sector.trigger('mousemove', { offsetX: 10, offsetY: 20 });
+    sector.trigger('mouseout');
+
+    expect(rafSpy).toHaveBeenCalled();
+    expect(cafSpy).toHaveBeenCalledWith(123);
+
+    rafSpy.mockRestore();
+    cafSpy.mockRestore();
   });
 
   describe('Option Merge', () => {

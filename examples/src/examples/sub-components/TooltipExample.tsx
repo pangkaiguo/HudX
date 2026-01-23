@@ -83,6 +83,7 @@ const TooltipExample = ({
     tooltip: {
       show: true,
       trigger: 'axis',
+      size: 'small',
       confine: true, // Confine within chart container
       backgroundColor: '#fff',
       borderColor: '#4096ff',

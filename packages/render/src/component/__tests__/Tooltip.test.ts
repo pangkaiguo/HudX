@@ -18,7 +18,7 @@ describe('Tooltip', () => {
       bottom: 500,
       x: 0,
       y: 0,
-      toJSON: () => {},
+      toJSON: () => { },
     });
   });
 
@@ -38,6 +38,10 @@ describe('Tooltip', () => {
     expect(el.style.position).toBe('absolute');
     expect(el.style.display).toBe('none');
     expect(el.style.backgroundColor).toBe(ThemeManager.getTheme().tooltipBackgroundColor);
+    expect(el.style.borderColor).toBe(ThemeManager.getTheme().tooltipBorderColor);
+    expect(el.style.borderWidth).toBe('1px');
+    expect(el.style.borderRadius).toBe('4px');
+    expect(el.style.boxShadow).toBe(ThemeManager.getTheme().tooltipBoxShadow);
   });
 
   it('should apply custom styling options', () => {

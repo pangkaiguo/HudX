@@ -408,6 +408,8 @@ describe('Chart (Core)', () => {
       expect(html).toContain('Item A');
       expect(html).toContain('123');
       expect(html).toContain('display:flex');
+      expect(html).not.toContain('color:#fff');
+      expect(html).not.toContain('color:#ccc');
     });
 
     it('should generate list HTML for axis trigger (array params)', () => {
@@ -498,7 +500,7 @@ describe('Chart (Core)', () => {
       const html = chart.testGenerateTooltipContent(params);
 
       expect(html).toContain('display:flex;align-items:center;');
-      expect(html).toContain('padding-left: 14px;font-weight:bold;');
+      expect(html).toContain('padding-left: 14px;color:');
       expect(html).toContain('123');
     });
 
@@ -558,6 +560,44 @@ describe('Chart (Core)', () => {
       expect(html).toContain('font-size: 20px; color: red;');
       expect(html).toContain('display: block;');
       expect(html).not.toContain('font-weight:bold;white-space:nowrap;');
+    });
+
+    it('should use marker with 2px border radius by default', () => {
+      const chart = new TestChart(document.createElement('div'));
+      const params = {
+        componentType: 'series',
+        seriesType: 'bar',
+        name: 'Item A',
+        value: 999,
+        color: '#ff0000',
+        marker: '',
+      };
+
+      const html = chart.testGenerateTooltipContent(params);
+      expect(html).toContain('border-radius:2px;');
+    });
+
+    it('should use theme-driven tooltip colors in light and dark', () => {
+      const chart = new TestChart(document.createElement('div'));
+
+      const lightParams = {
+        componentType: 'series',
+        seriesType: 'pie',
+        seriesName: 'Series A',
+        name: 'Slice A',
+        value: 10,
+        color: '#ff0000',
+        marker: '',
+      };
+      const lightHtml = chart.testGenerateTooltipContent(lightParams);
+      expect(lightHtml).toContain('color:#333D47');
+      expect(lightHtml).toContain('color:#5B636B');
+
+      chart.setTheme('dark');
+      const darkHtml = chart.testGenerateTooltipContent(lightParams);
+      expect(darkHtml).toContain('color:#ffffff');
+      expect(darkHtml).toContain('color:#F7F7F8');
+      expect(darkHtml).toContain('color:#C6C6C6');
     });
   });
 });

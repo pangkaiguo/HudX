@@ -40,6 +40,11 @@ export interface ThemeToken {
   colorAxisLabel?: string;
   colorTooltipBackground?: string;
   colorTooltipText?: string;
+  colorTooltipBorder?: string;
+  boxShadowTooltip?: string;
+  colorTooltipSeriesName?: string;
+  colorTooltipSubitemName?: string;
+  colorTooltipValue?: string;
   colorLegendText?: string;
   colorTextOnSeries?: string;
   colorPrimary?: string;
@@ -61,18 +66,39 @@ export interface ThemeToken {
 export interface ThemeConfig {
   backgroundColor: string;
   textColor: string;
+  textColorSecondary?: string;
+  textColorTertiary?: string;
   borderColor: string;
+  borderSecondaryColor?: string;
   gridColor: string;
   axisLineColor: string;
   axisLabelColor: string;
   splitLineColor?: string;
   tooltipBackgroundColor: string;
   tooltipTextColor: string;
+  tooltipBorderColor: string;
+  tooltipBoxShadow: string;
+  tooltipSeriesNameColor: string;
+  tooltipSubitemNameColor: string;
+  tooltipValueColor: string;
   legendTextColor: string;
+  textColorOnSeries?: string;
+  primaryColor?: string;
+  primaryTextColor?: string;
   shadowColor: string;
   maskColor: string;
   decalColor: string;
   seriesColors: string[];
+  color?: string[];
+  heatmapColors?: string[];
+  fillPageColor?: string;
+  fillContainerColor?: string;
+  fillContainerAltColor?: string;
+  fillHoverColor?: string;
+  codeBackgroundColor?: string;
+  codeGutterBackgroundColor?: string;
+  codeTextColor?: string;
+  codeGutterTextColor?: string;
   fontFamily: string;
   fontSize: number;
   token: ThemeToken;
@@ -245,6 +271,8 @@ export interface TooltipOption {
   show?: boolean;
   /** Trigger type */
   trigger?: 'item' | 'axis' | 'none';
+  /** Visual size preset */
+  size?: 'medium-small' | 'small' | 'medium';
   /** Axis pointer configuration */
   axisPointer?: {
     type?: 'line' | 'shadow' | 'none';
@@ -267,6 +295,8 @@ export interface TooltipOption {
   borderColor?: string;
   /** Border width */
   borderWidth?: number;
+  /** Border radius */
+  borderRadius?: number;
   /** Padding */
   padding?: number | number[];
   /** Text style */

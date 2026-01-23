@@ -700,6 +700,8 @@ export default class PieChart extends Chart {
         ? String(item.name)
         : `item-${index + 1}`;
 
+    let rafId: number | null = null;
+
     const onMouseOver = (evt: any) => {
       if (this._restoreTimeout) {
         clearTimeout(this._restoreTimeout);
@@ -724,7 +726,7 @@ export default class PieChart extends Chart {
         const content = this._generateTooltipContent(params);
         const mx = evt?.offsetX ?? cx;
         const my = evt?.offsetY ?? cy;
-        this._tooltip.show(mx, my, content, params);
+        this._tooltip.show(mx, my, content, params, sector.getBoundingRect());
       }
 
       const seriesType = seriesItem.type || 'pie';
@@ -742,6 +744,10 @@ export default class PieChart extends Chart {
     };
 
     const onMouseOut = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       if (this._hoveredSectorName === itemName) {
         this._hoveredSectorName = null;
       }
@@ -772,7 +778,6 @@ export default class PieChart extends Chart {
 
     EventHelper.bindHoverEvents(sector, onMouseOver, onMouseOut);
 
-    let rafId: number | null = null;
     sector.on('mousemove', (evt: any) => {
       // Throttle tooltip updates to prevent flickering and performance issues
       if (rafId) {
@@ -818,7 +823,7 @@ export default class PieChart extends Chart {
               this._applyEmphasisAnimation(sector, emphasis, true);
             }
           }
-          this._tooltip.show(mx, my, content, params);
+          this._tooltip.show(mx, my, content, params, sector.getBoundingRect());
         } else if (needsEmphasis) {
           if (this._hoveredSectorName !== itemName) {
             if (this._restoreTimeout) {
@@ -832,6 +837,7 @@ export default class PieChart extends Chart {
         }
       });
     });
+
 
     return { onMouseOver, onMouseOut };
   }
@@ -897,7 +903,8 @@ export default class PieChart extends Chart {
         seriesItem.label?.color ||
         (isOutside
           ? this.getThemeConfig().textColor
-          : (((this.getThemeConfig().token as any).colorTextOnSeries as string) ||
+          : (this.getThemeConfig().textColorOnSeries ||
+            this.getThemeConfig().token.colorTextOnSeries ||
             this.getThemeConfig().tooltipTextColor)),
       itemColor: color,
       seriesItem,

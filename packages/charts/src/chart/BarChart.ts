@@ -797,7 +797,7 @@ export default class BarChart extends Chart {
                 fill:
                   labelOpt.color ||
                   (isInside
-                    ? theme.token?.colorTextOnSeries || '#fff'
+                    ? theme.textColorOnSeries || theme.token.colorTextOnSeries || '#fff'
                     : theme.axisLabelColor || theme.textColor),
                 fontSize: labelOpt.fontSize ?? theme.fontSize,
                 fontFamily: theme.fontFamily,
@@ -886,34 +886,56 @@ export default class BarChart extends Chart {
               if (label) label.attr('style', { opacity: 0.8 });
             };
 
-            EventHelper.bindHoverEvents(
-              rect,
-              (evt: any) => {
-                applyHoverEmphasis();
+            const resolveTooltipValue = (dataItem: any): number | undefined => {
+              if (typeof dataItem === 'number') return dataItem;
+              if (Array.isArray(dataItem)) {
+                if (isHorizontal) {
+                  const v = dataItem[0];
+                  return typeof v === 'number' ? v : undefined;
+                }
+                const v = dataItem.length > 1 ? dataItem[1] : dataItem[0];
+                return typeof v === 'number' ? v : undefined;
+              }
+              if (typeof dataItem === 'object' && dataItem !== null) {
+                const raw = 'value' in dataItem ? (dataItem as any).value : undefined;
+                if (typeof raw === 'number') return raw;
+                if (Array.isArray(raw)) {
+                  if (isHorizontal) {
+                    const v = raw[0];
+                    return typeof v === 'number' ? v : undefined;
+                  }
+                  const v = raw.length > 1 ? raw[1] : raw[0];
+                  return typeof v === 'number' ? v : undefined;
+                }
+              }
+              return undefined;
+            };
 
-                const itemName =
-                  typeof item === 'object' &&
-                    item !== null &&
-                    !Array.isArray(item) &&
-                    'name' in item &&
-                    typeof item === 'object' &&
-                    item !== null &&
-                    !Array.isArray(item) &&
-                    'name' in item &&
-                    typeof item.name === 'string'
-                    ? item.name
-                    : isHorizontal
-                      ? yDomain[index]
-                      : xAxis?.data?.[index] || '';
-                const itemValue = this._getDataValue(item);
+            const showTooltipAt = (evt: any) => {
+              if (!this._tooltip) return;
+              const mx = evt?.offsetX ?? barX + barWidth / 2;
+              const my = evt?.offsetY ?? barY + barHeight / 2;
 
+              const isAxisTrigger = option.tooltip?.trigger === 'axis';
+              const hasCategoryAxis = isHorizontal || xAxis?.type === 'category';
+
+              if (isAxisTrigger && hasCategoryAxis) {
+                const axisName = isHorizontal
+                  ? yDomain[index]
+                  : (xAxis?.data?.[index] ?? xDomain[index] ?? '');
+                const itemValue = resolveTooltipValue(item);
+                if (itemValue === undefined) {
+                  this._tooltip.hide();
+                  if (axisPointerLine) axisPointerLine.attr('invisible', true);
+                  return;
+                }
                 const params = {
                   type: 'showTip',
                   componentType: 'series',
                   seriesType: 'bar',
                   seriesIndex,
                   seriesName: seriesName,
-                  name: itemName,
+                  name: axisName,
                   dataIndex: index,
                   data: item,
                   value: itemValue,
@@ -924,36 +946,85 @@ export default class BarChart extends Chart {
                       : undefined,
                 };
                 const content = this._generateTooltipContent(params);
+                this._tooltip.show(mx + 12, my - 16, content, params);
 
-                const mx = evt?.offsetX ?? barX + barWidth / 2;
-                const my = evt?.offsetY ?? barY + barHeight / 2;
-                this._tooltip!.show(
-                  mx,
-                  my,
-                  content,
-                  params,
-                  rect.attr('shape'),
-                );
-
-                // Update Axis Pointer
                 if (axisPointerLine) {
                   if (isHorizontal) {
+                    const cy = yScale(yDomain[index]);
                     axisPointerLine.attr('shape', {
                       x1: plotX,
-                      y1: barY + barHeight / 2,
+                      y1: cy,
                       x2: plotX + plotWidth,
-                      y2: barY + barHeight / 2,
+                      y2: cy,
                     });
                   } else {
+                    const cx = xScale(xDomain[index]);
                     axisPointerLine.attr('shape', {
-                      x1: barX + barWidth / 2,
+                      x1: cx,
                       y1: plotY,
-                      x2: barX + barWidth / 2,
+                      x2: cx,
                       y2: plotY + plotHeight,
                     });
                   }
                   axisPointerLine.attr('invisible', false);
                 }
+                return;
+              }
+
+              const itemName =
+                typeof item === 'object' &&
+                  item !== null &&
+                  !Array.isArray(item) &&
+                  'name' in item &&
+                  typeof item.name === 'string'
+                  ? item.name
+                  : isHorizontal
+                    ? yDomain[index]
+                    : xAxis?.data?.[index] || '';
+              const itemValue = resolveTooltipValue(item);
+
+              const params = {
+                type: 'showTip',
+                componentType: 'series',
+                seriesType: 'bar',
+                seriesIndex,
+                seriesName: seriesName,
+                name: itemName,
+                dataIndex: index,
+                data: item,
+                value: itemValue,
+                color: typeof barColor === 'string' ? barColor : undefined,
+                marker:
+                  typeof barColor === 'string' ? this._getTooltipMarker(barColor) : undefined,
+              };
+              const content = this._generateTooltipContent(params);
+              this._tooltip.show(mx, my, content, params, rect.attr('shape'));
+
+              if (axisPointerLine) {
+                if (isHorizontal) {
+                  axisPointerLine.attr('shape', {
+                    x1: plotX,
+                    y1: barY + barHeight / 2,
+                    x2: plotX + plotWidth,
+                    y2: barY + barHeight / 2,
+                  });
+                } else {
+                  axisPointerLine.attr('shape', {
+                    x1: barX + barWidth / 2,
+                    y1: plotY,
+                    x2: barX + barWidth / 2,
+                    y2: plotY + plotHeight,
+                  });
+                }
+                axisPointerLine.attr('invisible', false);
+              }
+            };
+
+            EventHelper.bindHoverEvents(
+              rect,
+              (evt: any) => {
+                applyHoverEmphasis();
+                showTooltipAt(evt);
               },
               () => {
                 const emphasis = seriesItem.emphasis || {};
@@ -978,64 +1049,11 @@ export default class BarChart extends Chart {
             );
 
             rect.on('mousemove', (evt: any) => {
-              const itemName =
-                typeof item === 'object' &&
-                  item !== null &&
-                  !Array.isArray(item) &&
-                  'name' in item &&
-                  typeof item.name === 'string'
-                  ? item.name
-                  : isHorizontal
-                    ? yDomain[index]
-                    : xAxis?.data?.[index] || '';
-              const itemValue = this._getDataValue(item);
-
-              const params = {
-                type: 'showTip',
-                componentType: 'series',
-                seriesType: 'bar',
-                seriesIndex,
-                seriesName: seriesName,
-                name: itemName,
-                dataIndex: index,
-                data: item,
-                value: itemValue,
-                color: typeof barColor === 'string' ? barColor : undefined,
-                marker:
-                  typeof barColor === 'string'
-                    ? this._getTooltipMarker(barColor)
-                    : undefined,
-              };
-              const content = this._generateTooltipContent(params);
-
-              const mx = evt?.offsetX ?? barX + barWidth / 2;
-              const my = evt?.offsetY ?? barY + barHeight / 2;
-
               if (this._tooltip) {
                 if (!this._tooltip.isVisible()) {
                   applyHoverEmphasis();
                 }
-                this._tooltip.show(mx, my, content, params, rect.attr('shape'));
-
-                // Update Axis Pointer
-                if (axisPointerLine) {
-                  if (isHorizontal) {
-                    axisPointerLine.attr('shape', {
-                      x1: plotX,
-                      y1: barY + barHeight / 2,
-                      x2: plotX + plotWidth,
-                      y2: barY + barHeight / 2,
-                    });
-                  } else {
-                    axisPointerLine.attr('shape', {
-                      x1: barX + barWidth / 2,
-                      y1: plotY,
-                      x2: barX + barWidth / 2,
-                      y2: plotY + plotHeight,
-                    });
-                  }
-                  axisPointerLine.attr('invisible', false);
-                }
+                showTooltipAt(evt);
               }
             });
           }

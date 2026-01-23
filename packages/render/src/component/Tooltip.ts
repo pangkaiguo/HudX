@@ -6,8 +6,9 @@ import { ThemeManager } from '../theme/ThemeManager';
 import type { ChartEvent, BoundingRect } from '../types';
 import {
   TOOLTIP_DEFAULT_BORDER_RADIUS,
-  DEFAULT_TOOLTIP_LINE_HEIGHT,
-  DEFAULT_TOOLTIP_PADDING,
+  TOOLTIP_DEFAULT_BORDER_WIDTH,
+  TOOLTIP_DEFAULT_LINE_HEIGHT,
+  TOOLTIP_DEFAULT_PADDING,
   TOOLTIP_DEFAULT_PADDING_PX,
   TOOLTIP_DOM_Z_INDEX,
   TOOLTIP_TRANSITION_BEZIER,
@@ -20,6 +21,7 @@ export interface TooltipOption {
   backgroundColor?: string;
   borderColor?: string;
   borderWidth?: number;
+  borderRadius?: number;
   padding?: number | number[];
   textStyle?: {
     color?: string;
@@ -68,14 +70,14 @@ export default class Tooltip {
     this._option = {
       show: true,
       backgroundColor: theme.tooltipBackgroundColor,
-      borderColor: theme.borderColor,
-      borderWidth: 0,
-      padding: DEFAULT_TOOLTIP_PADDING,
+      borderColor: theme.tooltipBorderColor,
+      borderWidth: TOOLTIP_DEFAULT_BORDER_WIDTH,
+      padding: TOOLTIP_DEFAULT_PADDING,
       textStyle: {
         color: theme.tooltipTextColor,
         fontSize: theme.fontSize,
         fontFamily: theme.fontFamily,
-        lineHeight: DEFAULT_TOOLTIP_LINE_HEIGHT,
+        lineHeight: TOOLTIP_DEFAULT_LINE_HEIGHT,
       },
       transitionDuration: 0.4,
       confine: true,
@@ -97,7 +99,7 @@ export default class Tooltip {
     s.borderStyle = 'solid';
     s.whiteSpace = 'nowrap';
     s.zIndex = String(TOOLTIP_DOM_Z_INDEX);
-    s.boxShadow = `${ThemeManager.getTheme().shadowColor} 1px 2px 10px`;
+    s.boxShadow = ThemeManager.getTheme().tooltipBoxShadow;
     s.boxSizing = 'border-box';
     s.pointerEvents = this._option.enterable ? 'auto' : 'none';
 
@@ -112,8 +114,9 @@ export default class Tooltip {
     const s = this._el.style;
 
     s.backgroundColor = String(opt.backgroundColor ?? theme.tooltipBackgroundColor);
-    s.borderColor = String(opt.borderColor ?? theme.borderColor);
-    s.borderWidth = (opt.borderWidth || 0) + 'px';
+    s.borderColor = String(opt.borderColor ?? theme.tooltipBorderColor);
+    s.borderWidth = (opt.borderWidth ?? TOOLTIP_DEFAULT_BORDER_WIDTH) + 'px';
+    s.boxShadow = theme.tooltipBoxShadow;
 
     const padding = opt.padding;
     if (Array.isArray(padding)) {
@@ -138,7 +141,7 @@ export default class Tooltip {
       });
     }
 
-    s.borderRadius = `${TOOLTIP_DEFAULT_BORDER_RADIUS}px`;
+    s.borderRadius = `${opt.borderRadius ?? TOOLTIP_DEFAULT_BORDER_RADIUS}px`;
 
     if (opt.extraCssText) {
       this._el.style.cssText += opt.extraCssText;

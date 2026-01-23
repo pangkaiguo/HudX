@@ -129,9 +129,7 @@ export default class HeatmapChart extends Chart {
 
   private _getHeatmapColor(intensity: number): string {
     const theme = this.getThemeConfig();
-    const palette =
-      (((theme.token as any).heatmapColors as string[]) || theme.seriesColors) ??
-      [];
+    const palette = theme.heatmapColors || theme.token.heatmapColors || theme.seriesColors;
     const colors = palette.length >= 4 ? palette : theme.seriesColors;
     if (intensity < 0.25) return colors[0] || theme.seriesColors[0]!;
     if (intensity < 0.5) return colors[1] || theme.seriesColors[1]!;

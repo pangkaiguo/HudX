@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
+import { ThemeManager } from 'hudx-render';
 import type { ChartOption } from 'hudx-render';
 import PieChart from '../chart/PieChart';
 import BarChart from '../chart/BarChart';
@@ -171,6 +172,62 @@ describe('Chart Integration', () => {
       // So if not configured, it shouldn't exist.
 
       expect(pointerLine).toBeUndefined();
+    });
+  });
+
+  describe('Tooltip Theme', () => {
+    it('should use theme tooltip colors consistently across chart types', () => {
+      const prev = ThemeManager.getCurrentTheme();
+      ThemeManager.setCurrentTheme('light');
+      const theme = ThemeManager.getTheme('light');
+
+      const domBar = document.createElement('div');
+      const chartBar = new BarChart(domBar);
+      chartBar.setOption({
+        tooltip: { show: true, trigger: 'axis' },
+        xAxis: { type: 'category', data: ['A'] },
+        yAxis: { type: 'value' },
+        series: [{ type: 'bar', data: [10] }],
+        animation: false,
+      });
+      expect((chartBar as any)._tooltip._option.backgroundColor).toBe(
+        theme.tooltipBackgroundColor,
+      );
+      expect((chartBar as any)._tooltip._option.textStyle?.color).toBe(
+        theme.tooltipTextColor,
+      );
+
+      const domLine = document.createElement('div');
+      const chartLine = new LineChart(domLine);
+      chartLine.setOption({
+        tooltip: { show: true, trigger: 'axis' },
+        xAxis: { type: 'category', data: ['A'] },
+        yAxis: { type: 'value' },
+        series: [{ type: 'line', data: [10] }],
+        animation: false,
+      });
+      expect((chartLine as any)._tooltip._option.backgroundColor).toBe(
+        theme.tooltipBackgroundColor,
+      );
+      expect((chartLine as any)._tooltip._option.textStyle?.color).toBe(
+        theme.tooltipTextColor,
+      );
+
+      const domPie = document.createElement('div');
+      const chartPie = new PieChart(domPie);
+      chartPie.setOption({
+        tooltip: { show: true, trigger: 'item' },
+        series: [{ type: 'pie', data: [{ value: 10, name: 'A' }] }],
+        animation: false,
+      });
+      expect((chartPie as any)._tooltip._option.backgroundColor).toBe(
+        theme.tooltipBackgroundColor,
+      );
+      expect((chartPie as any)._tooltip._option.textStyle?.color).toBe(
+        theme.tooltipTextColor,
+      );
+
+      ThemeManager.setCurrentTheme(prev);
     });
   });
 
