@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Renderer, Circle, Text, Locale, ThemeManager, Theme } from 'hudx-render';
-import type { RenderMode } from 'hudx-render';
+import {
+  Renderer,
+  Circle,
+  Text,
+  Locale,
+  ThemeManager,
+  Theme,
+  type RenderMode,
+} from 'hudx-render';
 import { t } from '../i18n';
 import { EXAMPLES_RENDERER_CANVAS } from '../constants';
 

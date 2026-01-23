@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll, afterAll } from 'vitest';
 import { createDecalPattern } from '../pattern';
 import { DecalObject } from '../../types';
 
@@ -49,14 +49,20 @@ const mockCanvas = {
   toDataURL: vi.fn(),
 } as unknown as HTMLCanvasElement;
 
-vi.stubGlobal('document', {
-  createElement: (tag: string) => {
-    if (tag === 'canvas') return mockCanvas;
-    return {};
-  },
-});
-
 describe('createDecalPattern', () => {
+  beforeAll(() => {
+    vi.stubGlobal('document', {
+      createElement: (tag: string) => {
+        if (tag === 'canvas') return mockCanvas;
+        return {};
+      },
+    });
+  });
+
+  afterAll(() => {
+    vi.unstubAllGlobals();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockCanvas.width = 0;

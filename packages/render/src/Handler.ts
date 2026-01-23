@@ -95,13 +95,20 @@ export default class Handler {
     let clientX: number;
     let clientY: number;
 
-    if (e instanceof MouseEvent) {
-      clientX = e.clientX;
-      clientY = e.clientY;
-    } else {
-      const touch = e.touches[0] || e.changedTouches[0];
+    const anyEvent = e as any;
+    const isTouchEvent =
+      Array.isArray(anyEvent?.touches) || Array.isArray(anyEvent?.changedTouches);
+
+    if (isTouchEvent) {
+      const touch = anyEvent?.touches?.[0] ?? anyEvent?.changedTouches?.[0];
+      if (!touch) {
+        return { x: 0, y: 0 };
+      }
       clientX = touch.clientX;
       clientY = touch.clientY;
+    } else {
+      clientX = anyEvent?.clientX ?? 0;
+      clientY = anyEvent?.clientY ?? 0;
     }
 
     return {

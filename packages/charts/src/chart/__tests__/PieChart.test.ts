@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import PieChart from '../PieChart';
-import type { ChartOption } from 'hudx-render';
-import { ThemeManager } from 'hudx-render';
+import { ThemeManager, type ChartOption } from 'hudx-render';
 
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),

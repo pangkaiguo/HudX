@@ -6,8 +6,7 @@ import React, {
   useMemo,
   memo,
 } from 'react';
-import { HChart } from 'hudx-charts';
-import type { ChartOption, HChartRef } from 'hudx-charts';
+import { HChart, type ChartOption, type HChartRef } from 'hudx-charts';
 import { Locale, Theme, ThemeManager, toRgbaWithOpacity } from 'hudx-render';
 import { CodeBox } from './components/CodeBox';
 import { examples, Example } from './data/examples';

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { HChart } from 'hudx-charts';
-import type { ChartOption } from 'hudx-charts';
+import { HChart, type ChartOption } from 'hudx-charts';
 import { Locale, ThemeManager, Theme } from 'hudx-render';
 import { CodeEditor } from './CodeEditor';
 import { getLocaleLabel, t } from '../i18n';

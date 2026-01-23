@@ -1,11 +1,9 @@
-import { Chart } from 'hudx-render';
-import type { RenderMode } from 'hudx-render';
 import {
+  Chart,
+  type RenderMode,
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
-} from 'hudx-render';
-import {
   Rect,
   Line,
   Text,
@@ -16,8 +14,8 @@ import {
   SeriesOption,
   ChartData,
   AxisOption,
+  EventHelper,
 } from 'hudx-render';
-import { EventHelper } from 'hudx-render';
 import {
   findSeriesIndexByDisplayName,
   getSeriesDisplayName,

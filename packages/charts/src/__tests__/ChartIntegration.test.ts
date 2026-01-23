@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
-import { ThemeManager } from 'hudx-render';
-import type { ChartOption } from 'hudx-render';
+import { ThemeManager, type ChartOption } from 'hudx-render';
 import PieChart from '../chart/PieChart';
 import BarChart from '../chart/BarChart';
 import LineChart from '../chart/LineChart';

@@ -1,7 +1,10 @@
-import { Chart, Animator } from 'hudx-render';
-import type { SeriesOption, ChartData, EmphasisOption, RenderMode } from 'hudx-render';
-import { resolveAnimationDelay } from './chartUtils';
 import {
+  Chart,
+  Animator,
+  type SeriesOption,
+  type ChartData,
+  type EmphasisOption,
+  type RenderMode,
   Sector,
   Rect,
   Text,
@@ -11,21 +14,7 @@ import {
   Z_LABEL,
   EventHelper,
 } from 'hudx-render';
-
-interface PieSector extends Sector {
-  __baseR?: number;
-  __initialStyle?: Record<string, any>;
-  __seriesItem?: SeriesOption;
-  __label?: Text;
-  __labelLine?: Polyline;
-  __targetShape?: {
-    startAngle: number;
-    endAngle: number;
-    r: number;
-    r0: number;
-  };
-  __hoverOpacityOverride?: number;
-}
+import { resolveAnimationDelay } from './chartUtils';
 
 /**
  * PieChart - Pie chart implementation
@@ -36,18 +25,55 @@ interface PieSector extends Sector {
  * Converts data values to angles (radians).
  * - Accumulates angles to determine start/end angles for each sector.
  * - Handles "Rose Type" (Nightingale Chart) by mapping values to radius instead of (or in addition to) angle.
- * - Implements sector interaction (scale on hover) and label positioning.
+ * - Implements sector interaction (hover highlight / emphasis) and label positioning.
  */
-// TODO: Define a proper interface for the extended Sector to avoid 'any' casting throughout the file.
-// Currently relying on monkey-patching properties like __initialStyle, __label, etc.
+interface PieSector extends Sector {
+  __label?: Text;
+  __labelLine?: Polyline;
+}
+
+type PieLabelLayoutItem = {
+  text: string;
+  angle: number;
+  sector: PieSector;
+  isOutside: boolean;
+  item: any;
+  color: string;
+  itemColor: string;
+  seriesItem: any;
+  handlers: any;
+  isVisible: boolean;
+  opacity: number;
+  fadeIn: boolean;
+};
+
+type PieOutsideLabelLayoutItem = PieLabelLayoutItem & {
+  anchor: { x: number; y: number };
+  normalizedAngle: number;
+  isRight: boolean;
+  x: number;
+  y: number;
+};
+
+type SectorState = {
+  baseR?: number;
+  initialStyle?: Record<string, any>;
+  seriesItem?: SeriesOption;
+};
+
+type ElementState = {
+  initialStyle: Record<string, any>;
+  hoverOpacityOverride?: number;
+};
 
 export default class PieChart extends Chart {
   private _activeSectors: Map<string, PieSector> = new Map();
   private _centerLabel: Text | null = null;
   private _restoreTimeout: any = null;
-  private _prevRoseType: boolean | string = false;
   private _hoverAnimator: Animator = new Animator();
   private _hoveredSectorName: string | null = null;
+  private _sectorState: WeakMap<PieSector, SectorState> = new WeakMap();
+  private _elementState: WeakMap<Text | Polyline, ElementState> = new WeakMap();
 
   setRenderMode(renderMode: RenderMode): void {
     if (this.getRenderMode() === renderMode) {
@@ -83,11 +109,6 @@ export default class PieChart extends Chart {
       const { startAngle, endAngle } = this._computeGlobalAngles(seriesItem);
       const totalAngle = endAngle - startAngle;
       const maxValue = this._getMaxValueForRoseType(seriesItem, data);
-
-      // Check if we switched to Rose Type
-      const currentRoseType = seriesItem.roseType;
-      // const isSwitchingToRose = !!currentRoseType && !this._prevRoseType;
-      this._prevRoseType = currentRoseType || false;
 
       // Always try to reuse old sectors for smooth transition
       const sectorsToUse = oldSectors;
@@ -134,6 +155,57 @@ export default class PieChart extends Chart {
     this._mountTitle();
 
     return oldSectors;
+  }
+
+  private _getSectorState(sector: PieSector): SectorState | undefined {
+    return this._sectorState.get(sector);
+  }
+
+  private _ensureSectorState(sector: PieSector): SectorState {
+    const existing = this._sectorState.get(sector);
+    if (existing) return existing;
+    const state: SectorState = {
+      baseR: (sector.shape as any)?.r,
+      initialStyle: { ...sector.style },
+    };
+    this._sectorState.set(sector, state);
+    return state;
+  }
+
+  private _ensureElementState(
+    element: Text | Polyline,
+    initialStyle?: Record<string, any>,
+  ): ElementState {
+    const existing = this._elementState.get(element);
+    if (existing) {
+      if (initialStyle && !existing.initialStyle) {
+        existing.initialStyle = { ...initialStyle };
+      }
+      return existing;
+    }
+    const state = {
+      initialStyle: initialStyle ? { ...initialStyle } : { ...element.style },
+    };
+    this._elementState.set(element, state);
+    return state;
+  }
+
+  private _getElementInitialOpacity(element: Text | Polyline): number {
+    return this._elementState.get(element)?.initialStyle?.opacity ?? 1;
+  }
+
+  private _setElementHoverOpacityOverride(
+    element: Text | Polyline,
+    opacity: number,
+  ): void {
+    const state = this._ensureElementState(element);
+    state.hoverOpacityOverride = opacity;
+  }
+
+  private _getElementHoverOpacityOverride(
+    element: Text | Polyline,
+  ): number | undefined {
+    return this._elementState.get(element)?.hoverOpacityOverride;
   }
 
   private _getValidSeriesAndData() {
@@ -204,14 +276,6 @@ export default class PieChart extends Chart {
     this._mountLegend(items);
   }
 
-  // --- Helper to get icon shape from Legend style ---
-  private _getIconShape(type: string | undefined): string {
-    if (type === 'rect') return 'border-radius:2px;';
-    if (type === 'circle') return 'border-radius:50%;';
-    if (type === 'line') return 'height:2px;margin-top:4px;';
-    return 'border-radius:50%;';
-  }
-
   protected _getTooltipMarker(color: string): string {
     const legendIcon = this._option.legend?.icon || 'circle';
     let borderRadius = '50%'; // Default circle
@@ -274,7 +338,7 @@ export default class PieChart extends Chart {
     r0: number;
     maxValue: number;
     oldSectors: Map<string, PieSector>;
-  }): any[] {
+  }): PieLabelLayoutItem[] {
     const {
       data,
       seriesItem,
@@ -288,7 +352,7 @@ export default class PieChart extends Chart {
       maxValue,
       oldSectors,
     } = params;
-    const labelLayoutList: any[] = [];
+    const labelLayoutList: PieLabelLayoutItem[] = [];
 
     // Pre-calculate angles to handle minAngle
     const count = data.length;
@@ -336,13 +400,20 @@ export default class PieChart extends Chart {
 
       if (restAngle < 0) {
         const scale = totalAngle / (needsFix.length * minAngleRad + angleSum);
+        angles.forEach((_, i) => {
+          if (needsFix.includes(i)) {
+            angles[i] = minAngleRad * scale;
+          } else {
+            angles[i] *= scale;
+          }
+        });
       } else {
         needsFix.forEach(i => {
           angles[i] = minAngleRad;
         });
         if (angleSum > 0) {
           const scale = restAngle / angleSum;
-          angles.forEach((a, i) => {
+          angles.forEach((_, i) => {
             if (!needsFix.includes(i)) {
               angles[i] *= scale;
             }
@@ -418,15 +489,8 @@ export default class PieChart extends Chart {
         r0,
         currentAngle: initialStart,
         angle: initialEnd - initialStart,
-        clockwise,
         anticlockwise: realAngle < 0,
       });
-      sector.__targetShape = {
-        startAngle: targetStart,
-        endAngle: targetEnd,
-        r: itemR,
-        r0,
-      };
 
       // Override radius for initial state if animating
       if (oldSector) {
@@ -527,7 +591,6 @@ export default class PieChart extends Chart {
         percent,
         cx,
         cy,
-        r,
         r0,
         total,
       );
@@ -598,7 +661,6 @@ export default class PieChart extends Chart {
     r0: number;
     currentAngle: number;
     angle: number;
-    clockwise?: boolean;
     anticlockwise?: boolean;
   }): PieSector {
     const {
@@ -612,7 +674,6 @@ export default class PieChart extends Chart {
       r0,
       currentAngle,
       angle,
-      clockwise,
       anticlockwise,
     } = params;
 
@@ -671,10 +732,11 @@ export default class PieChart extends Chart {
       cursor: this._tooltip || seriesItem.emphasis ? 'pointer' : 'default',
     }) as PieSector;
 
-    // TODO: Replace these monkey-patched properties with a proper storage or extended class
-    sector.__baseR = itemR;
-    sector.__initialStyle = { ...sector.style };
-    sector.__seriesItem = seriesItem;
+    this._sectorState.set(sector, {
+      baseR: itemR,
+      initialStyle: { ...sector.style },
+      seriesItem,
+    });
 
     return sector;
   }
@@ -688,7 +750,6 @@ export default class PieChart extends Chart {
     percent: number,
     cx: number,
     cy: number,
-    r: number,
     r0: number,
     total: number,
   ) {
@@ -864,7 +925,7 @@ export default class PieChart extends Chart {
     sector: PieSector;
     handlers: any;
     color: string;
-  }) {
+  }): PieLabelLayoutItem | null {
     const {
       seriesItem,
       item,
@@ -1158,14 +1219,14 @@ export default class PieChart extends Chart {
   // --- Layout & Rendering of Labels ---
 
   private _layoutLabels(
-    labels: any[],
+    labels: PieLabelLayoutItem[],
     cx: number,
     cy: number,
     r: number,
     r0: number,
   ): void {
-    const leftLabels: any[] = [];
-    const rightLabels: any[] = [];
+    const leftLabels: PieOutsideLabelLayoutItem[] = [];
+    const rightLabels: PieOutsideLabelLayoutItem[] = [];
 
     labels.forEach((label) => {
       const angle = label.angle;
@@ -1179,13 +1240,16 @@ export default class PieChart extends Chart {
       const anchorX = cx + Math.cos(angle) * anchorR;
       const anchorY = cy + Math.sin(angle) * anchorR;
 
-      label.anchor = { x: anchorX, y: anchorY };
-      label.normalizedAngle = normalizedAngle;
-      label.isRight = isRight;
-
       if (label.isOutside) {
-        if (isRight) rightLabels.push(label);
-        else leftLabels.push(label);
+        const outsideLabel: PieOutsideLabelLayoutItem = Object.assign(label, {
+          anchor: { x: anchorX, y: anchorY },
+          normalizedAngle,
+          isRight,
+          x: 0,
+          y: 0,
+        });
+        if (isRight) rightLabels.push(outsideLabel);
+        else leftLabels.push(outsideLabel);
       } else {
         this._renderSingleLabel(label, cx, cy, r, r0);
       }
@@ -1200,7 +1264,7 @@ export default class PieChart extends Chart {
   }
 
   private _adjustLabelPositions(
-    labels: any[],
+    labels: PieOutsideLabelLayoutItem[],
     cx: number,
     cy: number,
     r: number,
@@ -1271,11 +1335,11 @@ export default class PieChart extends Chart {
         invisible: !label.isVisible && !label.fadeIn, // Keep visible if fading in
       });
       this._root.add(text);
-      (label.sector as PieSector).__label = text;
-      (text as any).__initialStyle = {
+      label.sector.__label = text;
+      this._ensureElementState(text, {
         ...text.style,
         opacity: label.fadeIn ? 1 : text.style.opacity,
-      };
+      });
 
       if (label.fadeIn) {
         // Animate fade in
@@ -1284,7 +1348,7 @@ export default class PieChart extends Chart {
             duration: seriesItem.animationDuration || 500,
             delay: 100, // Small delay to let sector expand a bit
             onUpdate: () => {
-              const override = (text as any).__hoverOpacityOverride;
+              const override = this._getElementHoverOpacityOverride(text);
               if (override !== undefined) {
                 text.style.opacity = override;
               }
@@ -1325,11 +1389,11 @@ export default class PieChart extends Chart {
           invisible: !label.isVisible && !label.fadeIn,
         });
         this._root.add(line);
-        (label.sector as PieSector).__labelLine = line;
-        (line as unknown as { __initialStyle: any }).__initialStyle = {
+        label.sector.__labelLine = line;
+        this._ensureElementState(line, {
           ...line.style,
           opacity: label.fadeIn ? 1 : line.style.opacity,
-        };
+        });
 
         if (label.fadeIn) {
           this._animator
@@ -1337,7 +1401,7 @@ export default class PieChart extends Chart {
               duration: seriesItem.animationDuration || 500,
               delay: 100,
               onUpdate: () => {
-                const override = (line as any).__hoverOpacityOverride;
+                const override = this._getElementHoverOpacityOverride(line);
                 if (override !== undefined) {
                   line.style.opacity = override;
                 }
@@ -1360,7 +1424,7 @@ export default class PieChart extends Chart {
   }
 
   private _renderSingleLabel(
-    label: any,
+    label: PieLabelLayoutItem,
     cx: number,
     cy: number,
     r: number,
@@ -1403,8 +1467,8 @@ export default class PieChart extends Chart {
       invisible: !isVisible,
     });
     this._root.add(text);
-    (label.sector as PieSector).__label = text;
-    (text as any).__initialStyle = { ...text.style };
+    label.sector.__label = text;
+    this._ensureElementState(text, { ...text.style });
 
     if (label.handlers) {
       EventHelper.bindHoverEvents(
@@ -1550,7 +1614,7 @@ export default class PieChart extends Chart {
     if (series.length === 0) return;
     const seriesItem = series[0];
     const emphasis = seriesItem.emphasis;
-    const [r0, r] = this._getRadius(seriesItem);
+    const [r0] = this._getRadius(seriesItem);
     const sector = this._activeSectors.get(name);
 
     if (!sector) return;
@@ -1642,7 +1706,7 @@ export default class PieChart extends Chart {
     sector: PieSector,
     emphasis: EmphasisOption | undefined,
   ) {
-    const seriesItem = sector.__seriesItem;
+    const seriesItem = this._getSectorState(sector)?.seriesItem;
     const showOnHover = seriesItem?.label?.showOnHover;
     const focus = emphasis?.focus || 'none';
 
@@ -1654,11 +1718,11 @@ export default class PieChart extends Chart {
           s.markRedraw();
         }
 
-        const seriesType = s.__seriesItem?.type || 'pie';
+        const seriesType = this._getSectorState(s)?.seriesItem?.type || 'pie';
         const isDoughnut =
           seriesType === 'doughnut' || seriesType === 'half-doughnut';
         if (isDoughnut) {
-          const baseR = s.__baseR;
+          const baseR = this._getSectorState(s)?.baseR;
           if (baseR !== undefined && s.shape && typeof s.shape === 'object') {
             (s.shape as any).r = baseR;
             s.markRedraw();
@@ -1718,12 +1782,12 @@ export default class PieChart extends Chart {
     this._applyEmphasisStyle(sector, emphasisStyle);
   }
 
-  private _applyLeaveEmphasis(sector: Sector): void {
+  private _applyLeaveEmphasis(sector: PieSector): void {
     // Restore ALL sectors
     this._activeSectors.forEach((s) => {
-      const initOpacity = (s as any).__initialStyle?.opacity ?? 1;
+      const initOpacity = this._getSectorState(s)?.initialStyle?.opacity ?? 1;
       s.style.opacity = initOpacity;
-      const baseR = (s as any).__baseR;
+      const baseR = this._getSectorState(s)?.baseR;
       if (baseR !== undefined && s.shape && typeof s.shape === 'object') {
         (s.shape as any).r = baseR;
       }
@@ -1753,7 +1817,7 @@ export default class PieChart extends Chart {
     const labelLine = sector.__labelLine;
 
     if (label) {
-      const initLabelOpacity = (label as any).__initialStyle?.opacity ?? 1;
+      const initLabelOpacity = this._getElementInitialOpacity(label);
       let targetOpacity = initLabelOpacity;
 
       if (!isCurrent) {
@@ -1765,12 +1829,12 @@ export default class PieChart extends Chart {
       }
       label.style.opacity = targetOpacity;
       label.invisible = targetOpacity === 0;
-      (label as any).__hoverOpacityOverride = targetOpacity;
+      this._setElementHoverOpacityOverride(label, targetOpacity);
       label.markRedraw();
     }
 
     if (labelLine) {
-      const initLineOpacity = (labelLine as unknown as { __initialStyle: any }).__initialStyle?.opacity ?? 1;
+      const initLineOpacity = this._getElementInitialOpacity(labelLine);
       let targetOpacity = initLineOpacity;
 
       if (!isCurrent) {
@@ -1782,7 +1846,7 @@ export default class PieChart extends Chart {
       }
       labelLine.style.opacity = targetOpacity;
       labelLine.invisible = targetOpacity === 0;
-      (labelLine as any).__hoverOpacityOverride = targetOpacity;
+      this._setElementHoverOpacityOverride(labelLine, targetOpacity);
       labelLine.markRedraw();
     }
     this._renderer.refresh();
@@ -1793,18 +1857,17 @@ export default class PieChart extends Chart {
     const labelLine = sector.__labelLine;
 
     if (label) {
-      const initLabelOpacity = (label as any).__initialStyle?.opacity ?? 1;
+      const initLabelOpacity = this._getElementInitialOpacity(label);
       label.style.opacity = initLabelOpacity;
       label.invisible = initLabelOpacity === 0;
-      (label as any).__hoverOpacityOverride = initLabelOpacity;
+      this._setElementHoverOpacityOverride(label, initLabelOpacity);
       label.markRedraw();
     }
 
     if (labelLine) {
-      const initLineOpacity = (labelLine as unknown as { __initialStyle: any }).__initialStyle?.opacity ?? 1;
-      let targetOpacity = initLineOpacity;
+      const initLineOpacity = this._getElementInitialOpacity(labelLine);
       labelLine.invisible = initLineOpacity === 0;
-      (labelLine as any).__hoverOpacityOverride = initLineOpacity;
+      this._setElementHoverOpacityOverride(labelLine, initLineOpacity);
       labelLine.markRedraw();
     }
     this._renderer.refresh();
@@ -1824,21 +1887,21 @@ export default class PieChart extends Chart {
     // Fallback logic: if showOnHover is undefined, try to retrieve it from sector
     let finalShowOnHover = showOnHover;
     if (finalShowOnHover === undefined) {
-      finalShowOnHover = sector.__seriesItem?.label?.showOnHover;
+      finalShowOnHover = this._getSectorState(sector)?.seriesItem?.label?.showOnHover;
     }
 
     if (empLabel.show !== undefined) {
       label.invisible = !empLabel.show;
       label.style.opacity = empLabel.show ? 1 : 0;
-      (label as any).__hoverOpacityOverride = label.style.opacity;
+      this._setElementHoverOpacityOverride(label, label.style.opacity as number);
     } else if (finalShowOnHover) {
       label.invisible = false;
       label.style.opacity = 1;
-      (label as any).__hoverOpacityOverride = 1;
+      this._setElementHoverOpacityOverride(label, 1);
     } else {
       if (!label.invisible && (label.style.opacity as number) < 1) {
         label.style.opacity = 1;
-        (label as any).__hoverOpacityOverride = 1;
+        this._setElementHoverOpacityOverride(label, 1);
       }
     }
 
@@ -1857,7 +1920,7 @@ export default class PieChart extends Chart {
       if (labelLine.invisible || (labelLine.style.opacity as number) < 1) {
         labelLine.invisible = false;
         labelLine.style.opacity = 1;
-        (labelLine as any).__hoverOpacityOverride = 1;
+        this._setElementHoverOpacityOverride(labelLine, 1);
       }
     }
 
@@ -1866,11 +1929,11 @@ export default class PieChart extends Chart {
     this._renderer.refresh();
   }
 
-  private _applyEmphasisStyle(sector: Sector, emphasisStyle: any) {
+  private _applyEmphasisStyle(sector: PieSector, emphasisStyle: any) {
     const style = sector.style as any;
-    // Save initial style if not present (though should be done at creation)
-    if (!(sector as any).__initialStyle) {
-      (sector as any).__initialStyle = { ...style };
+    const state = this._ensureSectorState(sector);
+    if (!state.initialStyle) {
+      state.initialStyle = { ...style };
     }
 
     const targetStyle: Record<string, unknown> = {};
@@ -1898,8 +1961,8 @@ export default class PieChart extends Chart {
     this._renderer.refresh();
   }
 
-  private _restoreSectorStyle(sector: Sector) {
-    const init = (sector as any).__initialStyle;
+  private _restoreSectorStyle(sector: PieSector) {
+    const init = this._getSectorState(sector)?.initialStyle;
     if (!init) return;
 
     const style = sector.style as any;
@@ -1930,11 +1993,11 @@ export default class PieChart extends Chart {
     const scaleSize = isEnter && emphasis ? emphasis.scaleSize || 1.1 : 1;
     const duration = isEnter ? 160 : 220;
 
-    const seriesType = sector.__seriesItem?.type || 'pie';
+    const seriesType = this._getSectorState(sector)?.seriesItem?.type || 'pie';
     const isDoughnut =
       seriesType === 'doughnut' || seriesType === 'half-doughnut';
     if (isDoughnut) {
-      const baseR = sector.__baseR;
+      const baseR = this._getSectorState(sector)?.baseR;
       if (baseR !== undefined && sector.shape && typeof sector.shape === 'object') {
         if (sector.transform) {
           sector.transform.scaleX = 1;

@@ -1,8 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { HChart } from 'hudx-charts';
-import type { ChartOption, HChartRef } from 'hudx-charts';
-import { Locale, ThemeManager, Theme } from 'hudx-render';
-import type { RenderMode } from 'hudx-render';
+import { HChart, type ChartOption, type HChartRef } from 'hudx-charts';
+import { Locale, ThemeManager, Theme, type RenderMode } from 'hudx-render';
 import { t } from '../../i18n';
 
 export const DoughnutExample = ({

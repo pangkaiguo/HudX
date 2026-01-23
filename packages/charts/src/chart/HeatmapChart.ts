@@ -2,8 +2,7 @@
  * HeatmapChart - Heatmap chart implementation
  */
 
-import { Chart } from 'hudx-render';
-import { Rect } from 'hudx-render';
+import { Chart, Rect } from 'hudx-render';
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {

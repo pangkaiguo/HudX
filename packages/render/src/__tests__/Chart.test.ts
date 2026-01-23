@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeAll } from 'vitest';
 import Chart from '../Chart';
 import type { ChartOption } from '../types';
+import Title from '../component/Title';
 
 // Mock Canvas
 beforeAll(() => {
@@ -68,6 +69,9 @@ beforeAll(() => {
 class TestChart extends Chart {
   public testGenerateTooltipContent(params: any): string {
     return this._generateTooltipContent(params);
+  }
+  public testGetDataValue(item: any): number | undefined {
+    return this._getDataValue(item);
   }
   public testMountLegend(items: any[]): void {
     this._mountLegend(items);
@@ -226,6 +230,44 @@ describe('Chart (Core)', () => {
       chart.stopAnimation();
       expect(stopSpy).toHaveBeenCalled();
     });
+
+    it('should cancel scheduled render on pauseAnimation', () => {
+      let rafCb: any = null;
+      const rafSpy = vi.fn((cb: any) => {
+        rafCb = cb;
+        return 123 as any;
+      });
+      const cafSpy = vi.fn();
+      vi.stubGlobal('requestAnimationFrame', rafSpy as any);
+      vi.stubGlobal('cancelAnimationFrame', cafSpy as any);
+
+      class ScheduleChart extends Chart {
+        protected _render(): void { }
+      }
+      const chart = new ScheduleChart(document.createElement('div'));
+      (chart as any)._scheduleRender();
+      expect(rafSpy).toHaveBeenCalledTimes(1);
+
+      chart.pauseAnimation();
+      expect(cafSpy).toHaveBeenCalledWith(123);
+      expect((chart as any)._animationId).toBeNull();
+
+      rafCb?.();
+    });
+
+    it('should schedule render on resumeAnimation when mounted', () => {
+      const rafSpy = vi.fn(() => 1 as any);
+      vi.stubGlobal('requestAnimationFrame', rafSpy as any);
+
+      class ScheduleChart extends Chart {
+        protected _render(): void { }
+      }
+      const chart = new ScheduleChart(document.createElement('div'));
+      (chart as any)._animationId = null;
+
+      chart.resumeAnimation();
+      expect(rafSpy).toHaveBeenCalled();
+    });
   });
 
   describe('Theme and Locale', () => {
@@ -256,7 +298,7 @@ describe('Chart (Core)', () => {
       expect(handler).toHaveBeenCalledTimes(2);
       expect(handler.mock.calls[1][0].show).toBe(false);
     });
- 
+
     it('should localize loading text based on locale', () => {
       const chart = new TestChart(document.createElement('div'));
       const handler = vi.fn();
@@ -370,6 +412,136 @@ describe('Chart (Core)', () => {
       expect(t.x).toBeCloseTo(40, 2);
       expect(t.y).toBeCloseTo(60, 2);
     });
+
+    it('should map legend.data to items and merge per-item config', () => {
+      const dom = document.createElement('div');
+      Object.defineProperty(dom, 'clientWidth', { value: 400 });
+      Object.defineProperty(dom, 'clientHeight', { value: 300 });
+      const chart = new TestChart(dom);
+
+      chart.setOption({
+        legend: {
+          show: true,
+          data: [
+            { name: 'A', icon: 'circle', textStyle: { color: '#f00' } },
+            { name: 'C', icon: 'line', textStyle: { fontWeight: 'bold' } },
+          ],
+          icon: 'rect',
+        },
+      } satisfies ChartOption);
+
+      chart.testMountLegend([
+        { name: 'A', color: 'red', icon: 'rect' },
+        { name: 'B', color: 'blue', icon: 'rect' },
+      ]);
+
+      const legend = (chart as any)._legend;
+      const items = (legend as any)._items as any[];
+      expect(items.map((i) => i.name)).toEqual(['A', 'C']);
+      expect(items[0].color).toBe('red');
+      expect(items[0].icon).toBe('circle');
+      expect(items[0].textStyle).toEqual({ color: '#f00' });
+      expect(items[1].icon).toBe('line');
+      expect(items[1].textStyle).toEqual({ fontWeight: 'bold' });
+    });
+
+    it('should route legend interactions to chart callbacks', () => {
+      const dom = document.createElement('div');
+      Object.defineProperty(dom, 'clientWidth', { value: 400 });
+      Object.defineProperty(dom, 'clientHeight', { value: 300 });
+      const chart = new TestChart(dom);
+      const silentHideSpy = vi.spyOn(chart, 'beginSilentHide');
+      const animateShowSpy = vi.spyOn(chart, 'beginAnimateShow');
+      const endAnimateSpy = vi.spyOn(chart, 'endAnimateControl');
+      const renderSpy = vi.spyOn(chart as any, '_render');
+      const hoverSpy = vi.spyOn(chart as any, '_onLegendHover');
+
+      chart.setOption({
+        legend: {
+          show: true,
+          selectedMode: 'multiple',
+        },
+      } satisfies ChartOption);
+
+      chart.testMountLegend([
+        { name: 'A', color: 'red', icon: 'rect' },
+        { name: 'B', color: 'blue', icon: 'rect' },
+      ]);
+
+      const legend = (chart as any)._legend;
+      const interactRects = legend
+        .children()
+        .filter((c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer')
+        .sort((a: any, b: any) => a.shape.x - b.shape.x);
+
+      const [aRect] = interactRects;
+      (aRect as any).trigger('click');
+      expect(silentHideSpy).toHaveBeenCalled();
+      expect(renderSpy).toHaveBeenCalled();
+      expect(endAnimateSpy).toHaveBeenCalled();
+
+      (aRect as any).trigger('click');
+      expect(animateShowSpy).toHaveBeenCalledWith('A');
+
+      (aRect as any).trigger('mouseover');
+      expect(hoverSpy).toHaveBeenCalledWith('A', true);
+
+      (aRect as any).trigger('mouseout');
+      expect(hoverSpy).toHaveBeenCalledWith('A', false);
+    });
+
+    it('should update selection even if chart legend is unset', () => {
+      const dom = document.createElement('div');
+      Object.defineProperty(dom, 'clientWidth', { value: 400 });
+      Object.defineProperty(dom, 'clientHeight', { value: 300 });
+      const chart = new TestChart(dom);
+
+      chart.setOption({
+        legend: {
+          show: true,
+          selectedMode: 'multiple',
+        },
+      } satisfies ChartOption);
+
+      chart.testMountLegend([{ name: 'A', color: 'red', icon: 'rect' }]);
+
+      const legend = (chart as any)._legend;
+      (chart as any)._legend = null;
+
+      (legend as any)._option.onSelect('A', true);
+      expect((chart as any)._legendSelected.has('A')).toBe(true);
+    });
+
+    it('should animate show in single selectedMode when one item remains', () => {
+      const dom = document.createElement('div');
+      Object.defineProperty(dom, 'clientWidth', { value: 400 });
+      Object.defineProperty(dom, 'clientHeight', { value: 300 });
+      const chart = new TestChart(dom);
+      const animateShowSpy = vi.spyOn(chart, 'beginAnimateShow');
+
+      chart.setOption({
+        legend: {
+          show: true,
+          selectedMode: 'single',
+        },
+      } satisfies ChartOption);
+
+      chart.testMountLegend([
+        { name: 'A', color: 'red', icon: 'rect' },
+        { name: 'B', color: 'blue', icon: 'rect' },
+      ]);
+
+      const legend = (chart as any)._legend;
+      const interactRects = legend
+        .children()
+        .filter((c: any) => c?.constructor?.name === 'Rect' && c.cursor === 'pointer')
+        .sort((a: any, b: any) => a.shape.x - b.shape.x);
+
+      const [aRect] = interactRects;
+      (aRect as any).trigger('click');
+
+      expect(animateShowSpy).toHaveBeenCalledWith('A');
+    });
   });
 
   describe('Legend Hover Interaction', () => {
@@ -478,6 +650,53 @@ describe('Chart (Core)', () => {
 
       const html = chart.testGenerateTooltipContent(params);
       expect(html).toBe('Item A: 123');
+    });
+
+    it('should format array values and percent values', () => {
+      const chart = new TestChart(document.createElement('div'));
+      const params = {
+        componentType: 'series',
+        seriesType: 'scatter',
+        name: 'Point',
+        value: [1, 2],
+        percent: '12.3',
+        color: '#ff0000',
+        marker: '',
+      };
+
+      const html = chart.testGenerateTooltipContent(params);
+      expect(html).toContain('1, 2');
+      expect(html).toContain('(12.30%)');
+    });
+
+    it('should render "-" for null/undefined values', () => {
+      const chart = new TestChart(document.createElement('div'));
+      const params = {
+        componentType: 'series',
+        seriesType: 'bar',
+        name: 'Item A',
+        value: null,
+        color: '#ff0000',
+        marker: '',
+      };
+
+      const html = chart.testGenerateTooltipContent(params);
+      expect(html).toContain('>-</span>');
+    });
+
+    it('should render string values as-is', () => {
+      const chart = new TestChart(document.createElement('div'));
+      const params = {
+        componentType: 'series',
+        seriesType: 'bar',
+        name: 'Item A',
+        value: 'N/A',
+        color: '#ff0000',
+        marker: '',
+      };
+
+      const html = chart.testGenerateTooltipContent(params);
+      expect(html).toContain('N/A');
     });
 
     it('should support vertical layout (Basic View)', () => {
@@ -598,6 +817,127 @@ describe('Chart (Core)', () => {
       expect(darkHtml).toContain('color:#ffffff');
       expect(darkHtml).toContain('color:#F7F7F8');
       expect(darkHtml).toContain('color:#C6C6C6');
+    });
+  });
+
+  describe('Title', () => {
+    it('should mount Title via base render', () => {
+      class TitleChart extends Chart {
+        protected _render(): void {
+          super._render();
+        }
+      }
+
+      const dom = document.createElement('div');
+      Object.defineProperty(dom, 'clientWidth', { value: 200 });
+      Object.defineProperty(dom, 'clientHeight', { value: 100 });
+      const chart = new TitleChart(dom, { title: { text: 'Hello' } } as any);
+
+      const root = (chart as any)._root;
+      const title = root.children().find((c: any) => c instanceof Title);
+      expect(title).toBeDefined();
+    });
+
+    it('should skip mounting when title.show is false', () => {
+      class TitleChart extends Chart {
+        protected _render(): void {
+          super._render();
+        }
+      }
+
+      const dom = document.createElement('div');
+      const chart = new TitleChart(dom, { title: { show: false, text: 'Hello' } } as any);
+      const root = (chart as any)._root;
+      const title = root.children().find((c: any) => c instanceof Title);
+      expect(title).toBeUndefined();
+    });
+  });
+
+  describe('Text Wrapping', () => {
+    it('should return original text when overflow is none', () => {
+      const chart = new TestChart(document.createElement('div'));
+      const result = (chart as any)._wrapText('abcdef', 20, 10, 'sans', 'none');
+      expect(result).toBe('abcdef');
+    });
+
+    it('should truncate when overflow is truncate', () => {
+      const chart = new TestChart(document.createElement('div'));
+      const result = (chart as any)._wrapText(
+        'abcdefghij',
+        50,
+        10,
+        'sans',
+        'truncate',
+      );
+      expect(result).toBe('ab...');
+    });
+
+    it('should break into lines when overflow is break', () => {
+      const chart = new TestChart(document.createElement('div'));
+      const result = (chart as any)._wrapText('abcd', 30, 10, 'sans', 'break');
+      expect(result).toBe('abc\nd');
+    });
+  });
+
+  describe('Data Value Extraction', () => {
+    it('should extract numeric values from supported data shapes', () => {
+      const chart = new TestChart(document.createElement('div'));
+      expect(chart.testGetDataValue(10)).toBe(10);
+      expect(chart.testGetDataValue([1, 2])).toBe(2);
+      expect(chart.testGetDataValue({ value: 9 })).toBe(9);
+      expect(chart.testGetDataValue({ value: [3, 4] })).toBe(4);
+      expect(chart.testGetDataValue({})).toBeUndefined();
+      expect(chart.testGetDataValue(null)).toBeUndefined();
+      expect(chart.testGetDataValue({ value: 'bad' })).toBeUndefined();
+    });
+  });
+
+  describe('Render Scheduling', () => {
+    it('should schedule only once before frame executes', () => {
+      class ScheduleChart extends Chart {
+        renderCount = 0;
+        protected _render(): void {
+          this.renderCount++;
+        }
+      }
+
+      let rafCb: any = null;
+      const rafSpy = vi.fn((cb: any) => {
+        rafCb = cb;
+        return 1 as any;
+      });
+      vi.stubGlobal('requestAnimationFrame', rafSpy as any);
+
+      const chart = new ScheduleChart(document.createElement('div'));
+      chart.renderCount = 0;
+
+      (chart as any)._scheduleRender();
+      (chart as any)._scheduleRender();
+      expect(rafSpy).toHaveBeenCalledTimes(1);
+
+      rafCb();
+      expect(chart.renderCount).toBe(1);
+    });
+  });
+
+  describe('Responsive Fallback', () => {
+    it('should use window resize listener when ResizeObserver is unavailable', () => {
+      const originalRO = (globalThis as any).ResizeObserver;
+      (globalThis as any).ResizeObserver = undefined;
+
+      const addSpy = vi.spyOn(window, 'addEventListener');
+      const removeSpy = vi.spyOn(window, 'removeEventListener');
+
+      const chart = new TestChart(document.createElement('div'));
+      chart.makeResponsive();
+      expect(addSpy).toHaveBeenCalledWith('resize', expect.any(Function));
+
+      chart.stopResponsive();
+      expect(removeSpy).toHaveBeenCalledWith('resize', expect.any(Function));
+
+      addSpy.mockRestore();
+      removeSpy.mockRestore();
+      (globalThis as any).ResizeObserver = originalRO;
     });
   });
 });

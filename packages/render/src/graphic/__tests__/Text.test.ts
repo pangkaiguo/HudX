@@ -124,6 +124,20 @@ describe('Text', () => {
     expect(bbox.height).toBe(20);
   });
 
+  it('should handle padding array and expose padding helpers', () => {
+    const text = new Text({
+      shape: { x: 0, y: 0, text: 'A' },
+      style: { fontSize: 10, padding: [1, 2, 3, 4] },
+    });
+
+    expect(text.getPaddingLeft([1, 2, 3, 4])).toBe(4);
+    expect(text.getPaddingTop([1, 2, 3, 4])).toBe(1);
+
+    const bbox = text.getBoundingRect();
+    expect(bbox.width).toBe(10 + 2 + 4);
+    expect(bbox.height).toBe(10 + 1 + 3);
+  });
+
   it('should check containment', () => {
     const text = new Text({
       shape: { x: 0, y: 0, text: 'Hello' },
@@ -204,6 +218,82 @@ describe('Text', () => {
 
     expect(ctx.fill).toHaveBeenCalled();
     expect(ctx.stroke).toHaveBeenCalled();
+    expect(ctx.arcTo).toHaveBeenCalled();
+  });
+
+  it('should render fragment background/border and align right', () => {
+    const text = new Text({
+      shape: { x: 100, y: 0, text: 'X{a|Y}' },
+      style: {
+        fontSize: 10,
+        textAlign: 'right',
+        rich: {
+          a: {
+            color: 'red',
+            backgroundColor: 'yellow',
+            borderColor: 'black',
+            borderWidth: 1,
+            padding: 2,
+          },
+        },
+      },
+    });
+
+    const ctx = document.createElement('canvas').getContext('2d')!;
+    text.render(ctx);
+
+    expect(ctx.fillRect).toHaveBeenCalled();
+    expect(ctx.strokeRect).toHaveBeenCalled();
+    expect(ctx.fillText).toHaveBeenCalledWith(
+      'X',
+      expect.any(Number),
+      expect.any(Number),
+    );
+    expect(ctx.fillText).toHaveBeenCalledWith(
+      'Y',
+      expect.any(Number),
+      expect.any(Number),
+    );
+  });
+
+  it('should reuse caches until marked dirty', () => {
+    const text = new Text({
+      shape: { x: 0, y: 0, text: 'Hello' },
+      style: { fontSize: 10 },
+    });
+
+    const frags1 = text.getTextFragments();
+    expect(frags1?.length).toBe(1);
+    text.clearDirty();
+
+    const lines1 = text.getTextLines();
+    expect(lines1?.length).toBe(1);
+
+    const frags2 = text.getTextFragments();
+    const lines2 = text.getTextLines();
+    expect(frags2).toBe(frags1);
+    expect(lines2).toBe(lines1);
+
+    text.attr('style', { fill: 'red' });
+    const frags3 = text.getTextFragments();
+    expect(frags3).not.toBe(frags1);
+    text.clearDirty();
+
+    const lines3 = text.getTextLines();
+    expect(lines3).not.toBe(lines1);
+
+    const frags4 = text.getTextFragments();
+    const lines4 = text.getTextLines();
+    expect(frags4).toBe(frags3);
+    expect(lines4).toBe(lines3);
+  });
+
+  it('should adjust radius in roundRect when too large', () => {
+    const text = new Text({
+      shape: { x: 0, y: 0, text: 'A' },
+    });
+    const ctx = document.createElement('canvas').getContext('2d')!;
+    (text as any)._roundRect(ctx, 0, 0, 1, 1, 10);
     expect(ctx.arcTo).toHaveBeenCalled();
   });
 

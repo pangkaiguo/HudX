@@ -4,13 +4,12 @@ import {
   type ChartData,
   type AxisOption,
   type ChartEvent,
-} from 'hudx-render';
-import {
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
+  Circle,
+  Z_SERIES,
 } from 'hudx-render';
-import { Circle, Z_SERIES } from 'hudx-render';
 import {
   findSeriesIndexByDisplayName,
   getSeriesDisplayName,

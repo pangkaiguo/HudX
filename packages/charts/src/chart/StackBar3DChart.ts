@@ -1,12 +1,10 @@
-import { Chart } from 'hudx-render';
-import type { RenderMode } from 'hudx-render';
 import { getSeriesDisplayName } from './chartUtils';
 import {
+  Chart,
+  type RenderMode,
   createLinearScale,
   createOrdinalScale,
   niceDomain,
-} from 'hudx-render';
-import {
   Rect,
   Polygon,
   Group,

@@ -8,8 +8,8 @@ import {
   ThemeManager,
   Locale,
   Theme,
+  type RenderMode,
 } from 'hudx-render';
-import type { RenderMode } from 'hudx-render';
 import { t } from '../i18n';
 import { EXAMPLES_COLORS, EXAMPLES_RENDERER_CANVAS } from '../constants';
 

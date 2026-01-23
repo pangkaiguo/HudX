@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
-import { HChart } from 'hudx-charts';
-import type { ChartOption, HChartRef } from 'hudx-charts';
+import { HChart, type ChartOption, type HChartRef } from 'hudx-charts';
 import type { Locale, Theme } from 'hudx-render';
 
 import { t } from '../../i18n';

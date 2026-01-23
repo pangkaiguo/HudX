@@ -1,5 +1,6 @@
 import {
   Chart,
+  type RenderMode,
   createLinearScale,
   createOrdinalScale,
   calculateDomain,
@@ -12,7 +13,6 @@ import {
   Z_SERIES,
   EventHelper,
 } from 'hudx-render';
-import type { RenderMode } from 'hudx-render';
 import { getSeriesDisplayName, resolveAnimationDelay } from './chartUtils';
 
 export default class Bar3DChart extends Chart {

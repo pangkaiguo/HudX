@@ -24,7 +24,17 @@ export default class Animator {
     endValue: number,
     options: AnimatorOption = {},
   ): Animation {
-    const animation = new Animation(
+    const originalOnComplete = options.onComplete;
+    let animation: Animation;
+    const wrappedOnComplete = () => {
+      const index = this._animations.indexOf(animation);
+      if (index >= 0) {
+        this._animations.splice(index, 1);
+      }
+      originalOnComplete?.();
+    };
+
+    animation = new Animation(
       target,
       property,
       endValue,
@@ -32,23 +42,11 @@ export default class Animator {
       options.delay,
       options.easing,
       options.onUpdate,
-      options.onComplete,
+      wrappedOnComplete,
     );
 
     this._animations.push(animation);
     animation.start();
-
-    // Remove animation when complete
-    const originalOnComplete = options.onComplete;
-    options.onComplete = () => {
-      const index = this._animations.indexOf(animation);
-      if (index >= 0) {
-        this._animations.splice(index, 1);
-      }
-      if (originalOnComplete) {
-        originalOnComplete();
-      }
-    };
 
     return animation;
   }
