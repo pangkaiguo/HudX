@@ -73,7 +73,14 @@ export default class Renderer {
     if (this._followGlobalTheme) {
       this._unsubscribeThemeChange = ThemeManager.onThemeChange((nextTheme) => {
         if (!this._followGlobalTheme || this._disposed) return;
-        this.setTheme(nextTheme);
+        if (this._theme === nextTheme) {
+          this._applyTheme();
+          this._painter.markDirty();
+          return;
+        }
+        this._theme = nextTheme;
+        this._applyTheme();
+        this._painter.markDirty();
       });
     }
 

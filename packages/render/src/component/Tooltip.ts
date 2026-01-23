@@ -3,7 +3,7 @@
  */
 
 import { ThemeManager } from '../theme/ThemeManager';
-import type { ChartEvent, BoundingRect } from '../types';
+import type { ChartEvent, BoundingRect, Theme, TextStyle } from '../types';
 import {
   TOOLTIP_DEFAULT_BORDER_RADIUS,
   TOOLTIP_DEFAULT_BORDER_WIDTH,
@@ -17,18 +17,15 @@ import {
 export interface TooltipOption {
   show?: boolean;
   trigger?: 'item' | 'axis' | 'none';
+  size?: 'medium' | 'medium-small' | 'small';
+  theme?: Theme;
   formatter?: string | ((params: ChartEvent | ChartEvent[]) => string);
   backgroundColor?: string;
   borderColor?: string;
   borderWidth?: number;
   borderRadius?: number;
   padding?: number | number[];
-  textStyle?: {
-    color?: string;
-    fontSize?: number;
-    fontFamily?: string;
-    [key: string]: unknown;
-  };
+  textStyle?: TextStyle;
   extraCssText?: string;
   className?: string;
   appendToBody?: boolean;
@@ -64,32 +61,83 @@ export default class Tooltip {
   private _showTimer: any = null;
   private _lastWidth: number = 0;
   private _lastHeight: number = 0;
+  private _offThemeChange: (() => void) | null = null;
+  private _useThemeBackground: boolean = false;
+  private _useThemeBorderColor: boolean = false;
+  private _useThemeTextColor: boolean = false;
+  private _useThemeFontFamily: boolean = false;
 
   constructor(option: TooltipOption = {}) {
-    const theme = ThemeManager.getTheme();
+    const theme = ThemeManager.getTheme(option.theme ?? ThemeManager.getCurrentTheme());
+    const size =
+      option.size === 'small' || option.size === 'medium' || option.size === 'medium-small'
+        ? option.size
+        : 'medium-small';
+    const baseFontSize = size === 'small' ? 12 : 14;
+    const baseLineHeight = size === 'small' ? 16 : 20;
+    const textStyle: TextStyle = { ...(option.textStyle || {}) };
+    this._useThemeTextColor = textStyle.color === undefined;
+    this._useThemeFontFamily = textStyle.fontFamily === undefined;
+    if (textStyle.color === undefined) textStyle.color = theme.tooltipTextColor;
+    if (textStyle.fontFamily === undefined) textStyle.fontFamily = theme.fontFamily;
+    if (textStyle.fontSize === undefined) textStyle.fontSize = baseFontSize;
+    if (textStyle.lineHeight === undefined) textStyle.lineHeight = baseLineHeight;
+    this._useThemeBackground = option.backgroundColor === undefined;
+    this._useThemeBorderColor = option.borderColor === undefined;
     this._option = {
-      show: true,
-      backgroundColor: theme.tooltipBackgroundColor,
-      borderColor: theme.tooltipBorderColor,
-      borderWidth: TOOLTIP_DEFAULT_BORDER_WIDTH,
-      padding: TOOLTIP_DEFAULT_PADDING,
-      textStyle: {
-        color: theme.tooltipTextColor,
-        fontSize: theme.fontSize,
-        fontFamily: theme.fontFamily,
-        lineHeight: TOOLTIP_DEFAULT_LINE_HEIGHT,
-      },
-      transitionDuration: 0.4,
-      confine: true,
-      showContent: true,
-      triggerOn: 'mousemove|click',
-      enterable: false,
-      renderMode: 'html',
-      ...option,
+      show: option.show ?? true,
+      trigger: option.trigger,
+      formatter: option.formatter,
+      transitionDuration: option.transitionDuration ?? 0.4,
+      confine: option.confine ?? true,
+      showContent: option.showContent ?? true,
+      alwaysShowContent: option.alwaysShowContent,
+      triggerOn: option.triggerOn ?? 'mousemove|click',
+      showDelay: option.showDelay,
+      hideDelay: option.hideDelay,
+      enterable: option.enterable ?? false,
+      renderMode: option.renderMode ?? 'html',
+      order: option.order,
+      position: option.position,
+      appendToBody: option.appendToBody,
+      extraCssText: option.extraCssText,
+      className: option.className,
+      size,
+      theme: option.theme,
+      backgroundColor: option.backgroundColor ?? theme.tooltipBackgroundColor,
+      borderColor: option.borderColor ?? theme.tooltipBorderColor,
+      borderWidth: option.borderWidth ?? TOOLTIP_DEFAULT_BORDER_WIDTH,
+      borderRadius: option.borderRadius ?? TOOLTIP_DEFAULT_BORDER_RADIUS,
+      padding: option.padding ?? TOOLTIP_DEFAULT_PADDING,
+      textStyle,
     };
 
     this._el = document.createElement('div');
     this._initStyle();
+    this._offThemeChange = ThemeManager.onThemeChange(() => {
+      if (this._option.theme === undefined) {
+        const nextTheme = ThemeManager.getTheme();
+        this._applyThemeDefaults(nextTheme);
+        this.updateStyle();
+      }
+    });
+  }
+
+  private _applyThemeDefaults(theme: ReturnType<typeof ThemeManager.getTheme>): void {
+    if (this._useThemeBackground) {
+      this._option.backgroundColor = theme.tooltipBackgroundColor;
+    }
+    if (this._useThemeBorderColor) {
+      this._option.borderColor = theme.tooltipBorderColor;
+    }
+    if (this._option.textStyle) {
+      if (this._useThemeTextColor) {
+        this._option.textStyle.color = theme.tooltipTextColor;
+      }
+      if (this._useThemeFontFamily) {
+        this._option.textStyle.fontFamily = theme.fontFamily;
+      }
+    }
   }
 
   private _initStyle(): void {
@@ -110,8 +158,15 @@ export default class Tooltip {
 
   updateStyle(): void {
     const opt = this._option;
-    const theme = ThemeManager.getTheme();
+    const theme = ThemeManager.getTheme(opt.theme ?? ThemeManager.getCurrentTheme());
+    this._applyThemeDefaults(theme);
     const s = this._el.style;
+    const size =
+      opt.size === 'small' || opt.size === 'medium' || opt.size === 'medium-small'
+        ? opt.size
+        : 'medium-small';
+    const baseFontSize = size === 'small' ? 12 : 14;
+    const baseLineHeight = size === 'small' ? 16 : 20;
 
     s.backgroundColor = String(opt.backgroundColor ?? theme.tooltipBackgroundColor);
     s.borderColor = String(opt.borderColor ?? theme.tooltipBorderColor);
@@ -126,19 +181,23 @@ export default class Tooltip {
     }
 
     s.color = String(opt.textStyle?.color ?? theme.tooltipTextColor);
-    s.fontSize = String(opt.textStyle?.fontSize ?? theme.fontSize) + 'px';
+    s.fontSize = String(opt.textStyle?.fontSize ?? baseFontSize) + 'px';
     s.fontFamily = String(opt.textStyle?.fontFamily ?? theme.fontFamily);
 
     if (opt.textStyle) {
-      Object.keys(opt.textStyle).forEach((key) => {
+      const ts = opt.textStyle as any;
+      Object.keys(ts).forEach((key) => {
         if (key !== 'color' && key !== 'fontSize' && key !== 'fontFamily') {
-          let val = opt.textStyle![key];
+          let val = ts[key];
           if (key === 'lineHeight' && typeof val === 'number') {
             val = val + 'px';
           }
           (s as any)[key] = val;
         }
       });
+    }
+    if (opt.textStyle?.lineHeight === undefined) {
+      s.lineHeight = baseLineHeight + 'px';
     }
 
     s.borderRadius = `${opt.borderRadius ?? TOOLTIP_DEFAULT_BORDER_RADIUS}px`;
@@ -155,7 +214,31 @@ export default class Tooltip {
   }
 
   setOption(option: TooltipOption): void {
-    this._option = { ...this._option, ...option };
+    const hasOwn = (k: keyof TooltipOption) =>
+      Object.prototype.hasOwnProperty.call(option, k);
+
+    if (hasOwn('backgroundColor')) {
+      this._useThemeBackground = option.backgroundColor === undefined;
+    }
+    if (hasOwn('borderColor')) {
+      this._useThemeBorderColor = option.borderColor === undefined;
+    }
+    if (hasOwn('textStyle') && option.textStyle) {
+      const incoming = option.textStyle;
+      if (Object.prototype.hasOwnProperty.call(incoming, 'color')) {
+        this._useThemeTextColor = incoming.color === undefined;
+      }
+      if (Object.prototype.hasOwnProperty.call(incoming, 'fontFamily')) {
+        this._useThemeFontFamily = incoming.fontFamily === undefined;
+      }
+      this._option = {
+        ...this._option,
+        ...option,
+        textStyle: { ...(this._option.textStyle || {}), ...incoming },
+      };
+    } else {
+      this._option = { ...this._option, ...option };
+    }
     this.updateStyle();
   }
 
@@ -418,6 +501,8 @@ export default class Tooltip {
   }
 
   dispose(): void {
+    this._offThemeChange?.();
+    this._offThemeChange = null;
     if (this._el.parentNode) {
       this._el.parentNode.removeChild(this._el);
     }

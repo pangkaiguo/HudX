@@ -731,15 +731,27 @@ export default class PieChart extends Chart {
 
       const seriesType = seriesItem.type || 'pie';
       if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
-        this._showDynamicCenterLabel(
-          seriesItem,
-          item,
-          value,
-          percent,
-          cx,
-          cy,
-          emphasis,
-        );
+        if (this._centerLabel) {
+          this._root.remove(this._centerLabel);
+          this._centerLabel = null;
+        }
+
+        const useSectorCenterLabel =
+          seriesItem.label?.position === 'center' &&
+          (seriesItem.emphasis?.label?.show === true ||
+            seriesItem.label?.showOnHover === true);
+
+        if (!useSectorCenterLabel) {
+          this._showDynamicCenterLabel(
+            seriesItem,
+            item,
+            value,
+            percent,
+            cx,
+            cy,
+            emphasis,
+          );
+        }
       }
     };
 
@@ -874,9 +886,10 @@ export default class PieChart extends Chart {
     if (!shouldCreate) return null;
 
     const labelAngle = currentAngle + angle / 2;
+    const labelPosition = seriesItem.label?.position;
+    const isCenter = labelPosition === 'center';
     const isOutside =
-      seriesItem.label?.position === 'outside' ||
-      seriesItem.label?.position === undefined;
+      labelPosition === 'outside' || labelPosition === undefined;
 
     let labelText: string;
     const formatter = seriesItem.label?.formatter;
@@ -901,7 +914,7 @@ export default class PieChart extends Chart {
       item,
       color:
         seriesItem.label?.color ||
-        (isOutside
+        (isOutside || isCenter
           ? this.getThemeConfig().textColor
           : (this.getThemeConfig().textColorOnSeries ||
             this.getThemeConfig().token.colorTextOnSeries ||
@@ -1559,20 +1572,32 @@ export default class PieChart extends Chart {
 
       const seriesType = seriesItem.type || 'pie';
       if (['doughnut', 'half-doughnut'].includes(seriesType) && r0 > 0) {
+        if (this._centerLabel) {
+          this._root.remove(this._centerLabel);
+          this._centerLabel = null;
+        }
+
         const item = (sector as any).data;
         const total = this._calculateTotal(seriesItem.data || []);
         const value = this._getDataValue(item) || 0;
         const percent = total > 0 ? value / total : 0;
 
-        this._showDynamicCenterLabel(
-          seriesItem,
-          item,
-          value,
-          percent,
-          cx,
-          cy,
-          emphasis,
-        );
+        const useSectorCenterLabel =
+          seriesItem.label?.position === 'center' &&
+          (seriesItem.emphasis?.label?.show === true ||
+            seriesItem.label?.showOnHover === true);
+
+        if (!useSectorCenterLabel) {
+          this._showDynamicCenterLabel(
+            seriesItem,
+            item,
+            value,
+            percent,
+            cx,
+            cy,
+            emphasis,
+          );
+        }
       }
     } else {
       if (this._hoveredSectorName === name) {

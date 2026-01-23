@@ -45,12 +45,6 @@ export const SmoothLineExample = ({
     tooltip: {
       show: true,
       trigger: 'axis',
-      backgroundColor: '#fff',
-      borderColor: '#ccc',
-      borderWidth: 1,
-      textStyle: {
-        color: '#333',
-      },
       formatter: (params: any) => {
         const items = Array.isArray(params) ? params : [params];
         if (items.length === 0) return '';

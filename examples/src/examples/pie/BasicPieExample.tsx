@@ -22,12 +22,6 @@ export const BasicPieExample = ({
     tooltip: {
       show: true,
       trigger: 'item',
-      backgroundColor: '#fff',
-      borderColor: '#ccc',
-      borderWidth: 1,
-      textStyle: {
-        color: '#333',
-      },
       // Use HTML table structure for better alignment
       formatter: (params: any) => {
         return `

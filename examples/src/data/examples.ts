@@ -474,10 +474,6 @@ option = {
   tooltip: {
     show: true,
     trigger: 'item',
-    backgroundColor: '#fff',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    textStyle: { color: '#333' },
     formatter: function (params) {
       return (
         '<div style="display:flex;align-items:center;">' +

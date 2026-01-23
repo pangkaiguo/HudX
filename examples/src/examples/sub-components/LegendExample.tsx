@@ -32,9 +32,6 @@ const LegendExample = ({
       orient: 'vertical',
       right: 10,
       top: 10,
-      backgroundColor: '#f9f9f9',
-      borderColor: '#eee',
-      borderWidth: 1,
       padding: 10,
     },
   };
@@ -83,7 +80,7 @@ const LegendExample = ({
         {t(locale, 'examples.legend.pageDesc.prefix', 'Matching')} <code>LegendOption</code>{' '}
         {t(locale, 'examples.legend.pageDesc.suffix', 'interface.')}
       </p>
-      
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         <div style={{ border: '1px solid #eee', padding: 10 }}>
           <h3>{t(locale, 'examples.legend.section.orient', 'Orientation & Position')}</h3>
@@ -92,7 +89,7 @@ const LegendExample = ({
           </p>
           <HChart option={orientOption} height={300} theme={theme} locale={locale} />
         </div>
-        
+
         <div style={{ border: '1px solid #eee', padding: 10 }}>
           <h3>{t(locale, 'examples.legend.section.style', 'Item Styling')}</h3>
           <p style={{ fontSize: 12 }}>

@@ -966,7 +966,13 @@ export default class SVGPainter implements IPainter {
       return;
     }
 
-    this._animationFrameId = requestAnimationFrame(() => {
+    const raf =
+      typeof (globalThis as any).requestAnimationFrame === 'function'
+        ? ((globalThis as any).requestAnimationFrame as (cb: FrameRequestCallback) => number)
+        : (cb: FrameRequestCallback) =>
+          (globalThis.setTimeout(() => cb(Date.now()), 16) as unknown as number);
+
+    this._animationFrameId = raf(() => {
       this._animationFrameId = undefined;
       this.paint();
     });
@@ -1010,7 +1016,11 @@ export default class SVGPainter implements IPainter {
    */
   dispose(): void {
     if (this._animationFrameId !== undefined) {
-      cancelAnimationFrame(this._animationFrameId);
+      const caf =
+        typeof (globalThis as any).cancelAnimationFrame === 'function'
+          ? ((globalThis as any).cancelAnimationFrame as (id: number) => void)
+          : (id: number) => globalThis.clearTimeout(id);
+      caf(this._animationFrameId);
       this._animationFrameId = undefined;
     }
     if (this._svg.parentNode) {

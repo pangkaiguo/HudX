@@ -5,8 +5,10 @@ import { ThemeManager } from '../../theme/ThemeManager';
 describe('Tooltip', () => {
   let container: HTMLElement;
   let tooltip: Tooltip;
+  let prevTheme: any;
 
   beforeEach(() => {
+    prevTheme = ThemeManager.getCurrentTheme();
     container = document.createElement('div');
     document.body.appendChild(container);
     container.getBoundingClientRect = () => ({
@@ -29,6 +31,7 @@ describe('Tooltip', () => {
     if (container.parentNode) {
       container.parentNode.removeChild(container);
     }
+    ThemeManager.setCurrentTheme(prevTheme);
   });
 
   it('should initialize with default options', () => {
@@ -42,6 +45,19 @@ describe('Tooltip', () => {
     expect(el.style.borderWidth).toBe('1px');
     expect(el.style.borderRadius).toBe('4px');
     expect(el.style.boxShadow).toBe(ThemeManager.getTheme().tooltipBoxShadow);
+  });
+
+  it('should apply size-based fontSize and lineHeight', () => {
+    tooltip = new Tooltip({ size: 'small' });
+    let el = (tooltip as any)._el as HTMLElement;
+    expect(el.style.fontSize).toBe('12px');
+    expect(el.style.lineHeight).toBe('16px');
+
+    tooltip.dispose();
+    tooltip = new Tooltip({ size: 'medium-small' });
+    el = (tooltip as any)._el as HTMLElement;
+    expect(el.style.fontSize).toBe('14px');
+    expect(el.style.lineHeight).toBe('20px');
   });
 
   it('should apply custom styling options', () => {
@@ -82,6 +98,39 @@ describe('Tooltip', () => {
     });
 
     expect(el.style.backgroundColor).toBe('#000000');
+  });
+
+  it('should sync theme-derived styles on theme switch', () => {
+    ThemeManager.setCurrentTheme('light');
+    tooltip = new Tooltip();
+    const el = (tooltip as any)._el as HTMLElement;
+
+    expect(el.style.backgroundColor).toBe(ThemeManager.getTheme('light').tooltipBackgroundColor);
+    expect(el.style.borderColor).toBe(ThemeManager.getTheme('light').tooltipBorderColor);
+    expect(el.style.color).toBe(ThemeManager.getTheme('light').tooltipTextColor);
+    expect(el.style.boxShadow).toBe(ThemeManager.getTheme('light').tooltipBoxShadow);
+
+    ThemeManager.setCurrentTheme('dark');
+    expect(el.style.backgroundColor).toBe(ThemeManager.getTheme('dark').tooltipBackgroundColor);
+    expect(el.style.borderColor).toBe(ThemeManager.getTheme('dark').tooltipBorderColor);
+    expect(el.style.color).toBe(ThemeManager.getTheme('dark').tooltipTextColor);
+    expect(el.style.boxShadow).toBe(ThemeManager.getTheme('dark').tooltipBoxShadow);
+
+    tooltip.dispose();
+    tooltip = new Tooltip({ backgroundColor: '#ff0000' });
+    const el2 = (tooltip as any)._el as HTMLElement;
+    expect(el2.style.backgroundColor).toBe('#ff0000');
+
+    ThemeManager.setCurrentTheme('light');
+    expect(el2.style.backgroundColor).toBe('#ff0000');
+    expect(el2.style.borderColor).toBe(ThemeManager.getTheme('light').tooltipBorderColor);
+
+    tooltip.dispose();
+    tooltip = new Tooltip({ theme: 'light' });
+    const el3 = (tooltip as any)._el as HTMLElement;
+    ThemeManager.setCurrentTheme('dark');
+    expect(el3.style.backgroundColor).toBe(ThemeManager.getTheme('light').tooltipBackgroundColor);
+    expect(el3.style.borderColor).toBe(ThemeManager.getTheme('light').tooltipBorderColor);
   });
 
   it('should handle showContent option', () => {

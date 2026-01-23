@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import PieChart from '../PieChart';
 import type { ChartOption } from 'hudx-render';
+import { ThemeManager } from 'hudx-render';
 
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),
@@ -219,6 +220,42 @@ describe('PieChart', () => {
     expect(label.style.textBaseline).toBe('middle');
   });
 
+  it('center-position label color should follow theme textColor', () => {
+    vi.useFakeTimers();
+    const prev = ThemeManager.getCurrentTheme();
+    ThemeManager.setCurrentTheme('light');
+
+    const chart = new PieChart(container);
+    chart.setOption({
+      animation: false,
+      series: [
+        {
+          type: 'doughnut',
+          radius: ['50%', '70%'],
+          data: [{ value: 100, name: 'A' }],
+          label: {
+            show: true,
+            position: 'center',
+          },
+        },
+      ],
+    });
+
+    const sector = Array.from((chart as any)._activeSectors.values())[0] as any;
+    expect(sector.__label.style.fill).toBe(ThemeManager.getTheme('light').textColor);
+
+    ThemeManager.setCurrentTheme('dark');
+    vi.advanceTimersByTime(50);
+
+    const sectorAfter = Array.from((chart as any)._activeSectors.values())[0] as any;
+    expect(sectorAfter.__label.style.fill).toBe(
+      ThemeManager.getTheme('dark').textColor,
+    );
+
+    ThemeManager.setCurrentTheme(prev);
+    vi.useRealTimers();
+  });
+
   it('should support itemStyle properties', () => {
     const chart = new PieChart(container);
     chart.setOption({
@@ -425,6 +462,88 @@ describe('PieChart', () => {
     expect(sectorA.shape.r0).toBeCloseTo(baseR0);
     expect(sectorA.shape.r).toBeCloseTo(baseR);
 
+    vi.useRealTimers();
+  });
+
+  it('doughnut centerLabel should hide on hover when sector center label is shown', () => {
+    vi.useFakeTimers();
+    const chart = new PieChart(container);
+    chart.setOption({
+      animation: false,
+      series: [
+        {
+          type: 'doughnut',
+          radius: ['50%', '70%'],
+          data: [{ value: 10, name: 'A' }],
+          label: { show: false, position: 'center' },
+          emphasis: { label: { show: true, fontSize: 20, fontWeight: 'bold' } },
+          labelLine: { show: false },
+          centerLabel: { show: true, formatter: 'Total' },
+        },
+      ],
+    });
+
+    const staticCenterLabel = (chart as any)._centerLabel;
+    expect(staticCenterLabel).toBeDefined();
+
+    const sectors = Array.from((chart as any)._activeSectors.values());
+    const sectorA = sectors.find((s: any) => s.name === 'A') as any;
+    expect(sectorA).toBeDefined();
+    const sectorLabel = sectorA.__label;
+    expect(sectorLabel).toBeDefined();
+    expect(sectorLabel.style.opacity).toBe(0);
+
+    (chart as any)._onLegendHover('A', true);
+    vi.advanceTimersByTime(350);
+
+    expect((chart as any)._centerLabel).toBeNull();
+    expect(sectorLabel.invisible).toBe(false);
+    expect(sectorLabel.style.opacity).toBe(1);
+
+    (chart as any)._onLegendHover('A', false);
+    vi.advanceTimersByTime(500);
+
+    expect((chart as any)._centerLabel).toBeDefined();
+    expect(sectorLabel.style.opacity).toBe(0);
+
+    vi.useRealTimers();
+  });
+
+  it('centerLabel text color should update on global theme switch', () => {
+    vi.useFakeTimers();
+    const prev = ThemeManager.getCurrentTheme();
+    ThemeManager.setCurrentTheme('light');
+
+    const chart = new PieChart(container);
+    chart.setOption({
+      animation: false,
+      series: [
+        {
+          type: 'doughnut',
+          radius: ['50%', '70%'],
+          data: [
+            { value: 10, name: 'A' },
+            { value: 20, name: 'B' },
+          ],
+          centerLabel: { show: true, formatter: 'Total' },
+        },
+      ],
+    });
+
+    expect((chart as any)._centerLabel).toBeDefined();
+    expect((chart as any)._centerLabel.style.fill).toBe(
+      ThemeManager.getTheme('light').textColor,
+    );
+
+    ThemeManager.setCurrentTheme('dark');
+    vi.advanceTimersByTime(50);
+
+    expect((chart as any)._centerLabel).toBeDefined();
+    expect((chart as any)._centerLabel.style.fill).toBe(
+      ThemeManager.getTheme('dark').textColor,
+    );
+
+    ThemeManager.setCurrentTheme(prev);
     vi.useRealTimers();
   });
 

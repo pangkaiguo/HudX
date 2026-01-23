@@ -17,7 +17,12 @@ import Rect from '../graphic/Rect';
 import Text from '../graphic/Text';
 import Circle from '../graphic/Circle';
 import Line from '../graphic/Line';
-import { COLOR_TRANSPARENT, TOOLTIP_DEFAULT_BORDER_RADIUS, Z_LEGEND } from '../constants';
+import {
+  COLOR_TRANSPARENT,
+  TOOLTIP_DEFAULT_BORDER_RADIUS,
+  TOOLTIP_DEFAULT_BORDER_WIDTH,
+  Z_LEGEND,
+} from '../constants';
 import { createDecalPattern } from '../util/pattern';
 import type { DecalObject, TextStyle } from '../types';
 import { ThemeManager } from '../theme/ThemeManager';
@@ -87,15 +92,16 @@ export default class Legend extends Group {
       y: undefined,
       right: undefined,
       bottom: undefined,
-      backgroundColor: theme.backgroundColor,
-      borderColor: theme.borderColor,
-      borderWidth: 1,
+      backgroundColor: theme.tooltipBackgroundColor,
+      borderColor: theme.tooltipBorderColor,
+      borderWidth: TOOLTIP_DEFAULT_BORDER_WIDTH,
       borderRadius: TOOLTIP_DEFAULT_BORDER_RADIUS,
       textColor: theme.legendTextColor,
       inactiveColor: theme.borderColor,
       padding: 8,
       itemPadding: 8,
       fontSize: theme.fontSize,
+      fontWeight: 'normal',
       itemGap: 0,
       itemWidth: 100,
       iconGap: 8,
@@ -648,11 +654,15 @@ export default class Legend extends Group {
     const opt = this._option;
     const theme = ThemeManager.getTheme();
     const s = this._htmlEl.style;
-    s.backgroundColor = String(opt.backgroundColor ?? theme.backgroundColor);
+    s.backgroundColor = String(opt.backgroundColor ?? theme.tooltipBackgroundColor);
     s.padding = (opt.padding || 8) + 'px';
     s.fontSize = (opt.fontSize || 12) + 'px';
     s.color = String(opt.textColor ?? theme.legendTextColor);
     s.borderRadius = `${opt.borderRadius ?? TOOLTIP_DEFAULT_BORDER_RADIUS}px`;
+    s.border = `${opt.borderWidth ?? TOOLTIP_DEFAULT_BORDER_WIDTH}px solid ${String(
+      opt.borderColor ?? theme.tooltipBorderColor,
+    )}`;
+    s.fontWeight = String(opt.fontWeight ?? 'normal');
     s.pointerEvents = 'auto';
     s.display = 'block';
 

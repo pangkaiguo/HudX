@@ -63,6 +63,8 @@ export default class Chart {
   protected _animateOnlyFor?: Set<string>;
   protected _resizeObserver?: ResizeObserver;
   protected _windowResizeHandler?: () => void;
+  protected _followGlobalTheme: boolean = true;
+  protected _unsubscribeThemeChange?: () => void;
 
   constructor(
     dom: HTMLElement,
@@ -71,10 +73,11 @@ export default class Chart {
     theme?: Theme,
     locale: Locale = 'en',
   ) {
+    this._followGlobalTheme = theme === undefined;
     this._renderer = Renderer.init(
       dom,
       renderMode,
-      theme ?? ThemeManager.getCurrentTheme(),
+      theme,
       locale,
     );
     this._option = option;
@@ -108,7 +111,10 @@ export default class Chart {
   }
 
   setTheme(theme: Theme): void {
+    this._followGlobalTheme = false;
+    this._unbindThemeChange();
     this._renderer.setTheme(theme);
+    this._tooltip?.setOption({ theme });
     this._render();
   }
 
@@ -132,7 +138,6 @@ export default class Chart {
   protected _init(): void {
     this._isMounted = true;
     this.resize();
-    const theme = this.getThemeConfig();
     const tooltipOpt = this._option?.tooltip || {};
     const tooltipSize =
       tooltipOpt.size === 'small' ||
@@ -140,36 +145,34 @@ export default class Chart {
         tooltipOpt.size === 'medium-small'
         ? tooltipOpt.size
         : 'medium-small';
-    const baseFontSize = tooltipSize === 'small' ? 12 : 14;
     this._tooltip = new Tooltip({
       ...tooltipOpt,
+      theme: this._followGlobalTheme ? undefined : this.getTheme(),
+      size: tooltipSize,
       show: tooltipOpt?.show !== false,
       formatter:
         typeof tooltipOpt?.formatter === 'function'
           ? tooltipOpt.formatter
           : undefined,
-      backgroundColor: tooltipOpt.backgroundColor ?? theme.tooltipBackgroundColor,
-      textStyle: {
-        ...(tooltipOpt.textStyle || {}),
-        color: tooltipOpt.textStyle?.color ?? theme.tooltipTextColor,
-        fontFamily: tooltipOpt.textStyle?.fontFamily ?? theme.fontFamily,
-        fontSize: tooltipOpt.textStyle?.fontSize ?? baseFontSize,
-      },
+      backgroundColor: tooltipOpt.backgroundColor,
+      textStyle: tooltipOpt.textStyle,
       padding: tooltipOpt.padding ?? TOOLTIP_DEFAULT_PADDING,
       borderWidth: tooltipOpt.borderWidth ?? TOOLTIP_DEFAULT_BORDER_WIDTH,
       borderRadius: tooltipOpt.borderRadius ?? TOOLTIP_DEFAULT_BORDER_RADIUS,
-      borderColor: tooltipOpt.borderColor ?? theme.tooltipBorderColor,
+      borderColor: tooltipOpt.borderColor,
     });
     this._tooltip.setContainer(this.getDom());
     this.setOption(this._option);
     if (typeof ResizeObserver !== 'undefined') {
       this.makeResponsive();
     }
+    this._bindThemeChange();
   }
 
   mount(): this {
     if (!this._isMounted) {
       this._isMounted = true;
+      this._bindThemeChange();
       this.resize();
       this._render();
     }
@@ -179,6 +182,7 @@ export default class Chart {
   unmount(): this {
     if (this._isMounted) {
       this._isMounted = false;
+      this._unbindThemeChange();
       this._root.removeAll();
     }
     return this;
@@ -1023,6 +1027,8 @@ export default class Chart {
   }
 
   dispose(): void {
+    this._followGlobalTheme = false;
+    this._unbindThemeChange();
     if (this._legend) {
       this._legend.dispose();
     }
@@ -1034,6 +1040,21 @@ export default class Chart {
     this.unmount();
     this._renderer.dispose();
     this._animator.stopAll();
+  }
+
+  private _bindThemeChange(): void {
+    if (!this._followGlobalTheme || this._unsubscribeThemeChange) return;
+    this._unsubscribeThemeChange = ThemeManager.onThemeChange(() => {
+      if (!this._followGlobalTheme || !this._isMounted || this.isDisposed()) {
+        return;
+      }
+      this._scheduleRender();
+    });
+  }
+
+  private _unbindThemeChange(): void {
+    this._unsubscribeThemeChange?.();
+    this._unsubscribeThemeChange = undefined;
   }
 
   clear(): this {
@@ -1234,6 +1255,14 @@ export default class Chart {
     if (option.legend?.show === false) return;
     const theme = this.getThemeConfig();
     const legendTextStyle = option.legend?.textStyle || {};
+    const tooltipOpt = this._option?.tooltip || {};
+    const tooltipSize =
+      tooltipOpt.size === 'small' ||
+        tooltipOpt.size === 'medium' ||
+        tooltipOpt.size === 'medium-small'
+        ? tooltipOpt.size
+        : 'medium-small';
+    const tooltipBaseFontSize = tooltipSize === 'small' ? 12 : 14;
 
     if (this._legend) {
       this._legend.dispose();
@@ -1259,8 +1288,8 @@ export default class Chart {
       itemGap: option.legend?.itemGap,
       itemWidth: option.legend?.itemWidth,
       inactiveColor: option.legend?.inactiveColor ?? theme.borderColor,
-      borderColor: option.legend?.borderColor ?? theme.borderColor,
-      borderWidth: option.legend?.borderWidth,
+      borderColor: option.legend?.borderColor ?? theme.tooltipBorderColor,
+      borderWidth: option.legend?.borderWidth ?? TOOLTIP_DEFAULT_BORDER_WIDTH,
       borderRadius: Array.isArray(option.legend?.borderRadius)
         ? option.legend?.borderRadius?.[0]
         : option.legend?.borderRadius,
@@ -1271,10 +1300,13 @@ export default class Chart {
       itemMaxWidth: option.legend?.itemMaxWidth,
       align: option.legend?.align,
       textColor: legendTextStyle.color ?? theme.legendTextColor,
-      fontSize: legendTextStyle.fontSize ?? option.legend?.fontSize ?? theme.fontSize,
+      fontSize:
+        legendTextStyle.fontSize ??
+        option.legend?.fontSize ??
+        tooltipBaseFontSize,
       fontFamily: legendTextStyle.fontFamily ?? theme.fontFamily,
-      fontWeight: legendTextStyle.fontWeight,
-      backgroundColor: option.legend?.backgroundColor ?? theme.backgroundColor,
+      fontWeight: legendTextStyle.fontWeight ?? option.legend?.fontWeight ?? 'normal',
+      backgroundColor: option.legend?.backgroundColor ?? theme.tooltipBackgroundColor,
       onSelect: (name: string, selected: boolean) => {
         if (this._legend) {
           const currentSelected = this._legend.getSelected();

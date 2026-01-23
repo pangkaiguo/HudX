@@ -5,6 +5,7 @@ import Circle from '../../graphic/Circle';
 import Rect from '../../graphic/Rect';
 import Text from '../../graphic/Text';
 import { ThemeManager } from '../../theme/ThemeManager';
+import { TOOLTIP_DEFAULT_BORDER_RADIUS, TOOLTIP_DEFAULT_BORDER_WIDTH } from '../../constants';
 
 describe('Legend', () => {
   beforeAll(() => {
@@ -43,8 +44,20 @@ describe('Legend', () => {
     );
   });
 
+  it('should use tooltip-aligned container styles by default', () => {
+    const legend = new Legend();
+    const theme = ThemeManager.getTheme();
+    const opt = (legend as any)._option;
+
+    expect(opt.backgroundColor).toBe(theme.tooltipBackgroundColor);
+    expect(opt.borderColor).toBe(theme.tooltipBorderColor);
+    expect(opt.borderWidth).toBe(TOOLTIP_DEFAULT_BORDER_WIDTH);
+    expect(opt.borderRadius).toBe(TOOLTIP_DEFAULT_BORDER_RADIUS);
+    expect(opt.fontWeight).toBe('normal');
+  });
+
   it('should render correct icons', () => {
-    const bgFill = ThemeManager.getTheme().backgroundColor;
+    const bgFill = ThemeManager.getTheme().tooltipBackgroundColor;
     const legend = new Legend();
     legend.setItems([
       { name: 'A', color: 'red', icon: 'circle' },
@@ -78,7 +91,7 @@ describe('Legend', () => {
   });
 
   it('should render decal pattern', () => {
-    const bgFill = ThemeManager.getTheme().backgroundColor;
+    const bgFill = ThemeManager.getTheme().tooltipBackgroundColor;
     const legend = new Legend();
     legend.setItems([
       {
