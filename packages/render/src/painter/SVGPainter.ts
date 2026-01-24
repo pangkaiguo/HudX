@@ -42,6 +42,7 @@ export default class SVGPainter implements IPainter {
     this._svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this._svg.style.width = '100%';
     this._svg.style.height = '100%';
+    this._svg.style.overflow = 'visible';
 
     // Create defs for gradients, patterns, etc.
     this._defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
@@ -836,6 +837,8 @@ export default class SVGPainter implements IPainter {
     filter.setAttribute('id', id);
     filter.setAttribute('x', '-50%');
     filter.setAttribute('y', '-50%');
+    filter.setAttribute('width', '200%');
+    filter.setAttribute('height', '200%');
     filter.setAttribute('primitiveUnits', 'userSpaceOnUse');
 
     const stdDeviation = Math.max(0, blur / 2);
@@ -1247,13 +1250,13 @@ export default class SVGPainter implements IPainter {
     const raf =
       typeof (globalThis as any).requestAnimationFrame === 'function'
         ? ((globalThis as any).requestAnimationFrame as (
-            cb: FrameRequestCallback,
-          ) => number)
+          cb: FrameRequestCallback,
+        ) => number)
         : (cb: FrameRequestCallback) =>
-            globalThis.setTimeout(
-              () => cb(Date.now()),
-              16,
-            ) as unknown as number;
+          globalThis.setTimeout(
+            () => cb(Date.now()),
+            16,
+          ) as unknown as number;
 
     this._animationFrameId = raf(() => {
       this._animationFrameId = undefined;

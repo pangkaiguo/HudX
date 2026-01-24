@@ -61,6 +61,7 @@ describe('SVGPainter', () => {
     expect(painter.getRootGroup()).toBeDefined();
     expect(painter.getWidth()).toBe(800);
     expect(painter.getHeight()).toBe(600);
+    expect(painter.getSVG().style.overflow).toBe('visible');
   });
 
   it('should resize svg', () => {
@@ -379,6 +380,8 @@ describe('SVGPainter', () => {
     const svg = painter.getSVG();
     const filters = svg.querySelectorAll('defs filter');
     expect(filters.length).toBe(1);
+    expect(filters[0].getAttribute('width')).toBe('200%');
+    expect(filters[0].getAttribute('height')).toBe('200%');
 
     const circles = painter.getRootGroup().querySelectorAll('circle');
     expect(circles.length).toBe(2);
