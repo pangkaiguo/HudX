@@ -1626,8 +1626,34 @@ export interface BarSeriesOption extends BaseSeriesOption {
  * }]
  * ```
  */
+export interface CenterLabelOption {
+  /**
+   * Whether to show the center label.
+   */
+  show?: boolean;
+  /**
+   * Label type.
+   * - 'text': Static text (default).
+   * - 'percentage': Show percentage of the first data item.
+   */
+  type?: 'text' | 'percentage';
+  /**
+   * Label formatter.
+   * Supports string template (e.g., '{b}: {c}') or callback function.
+   */
+  formatter?: string | ((params: any) => string);
+  /**
+   * Text style.
+   */
+  style?: TextStyle;
+  /**
+   * Rich text style.
+   */
+  rich?: { [key: string]: TextStyle };
+}
+
 export interface PieSeriesOption extends BaseSeriesOption {
-  type: 'pie';
+  type: 'pie' | 'doughnut' | 'half-doughnut';
   /**
    * Radius of the pie chart.
    * - number: Pixel value.
@@ -1641,6 +1667,11 @@ export interface PieSeriesOption extends BaseSeriesOption {
    * @default ['50%', '50%']
    */
   center?: (number | string)[];
+  /**
+   * Center label configuration.
+   * Only valid for doughnut charts.
+   */
+  centerLabel?: CenterLabelOption;
   /**
    * Whether to display as Nightingale rose chart.
    * - 'radius': Fan angle is same, radius varies.

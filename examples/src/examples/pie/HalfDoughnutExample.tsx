@@ -63,8 +63,21 @@ export const HalfDoughnutExample = ({
           },
           label: {
             show: true,
-            fontSize: 16,
-            fontWeight: 'bold',
+            formatter: '{title|{b}}\n{value|{c}}',
+            textBaseline: 'bottom',
+            rich: {
+              title: {
+                fontSize: 16,
+                color: '#666',
+                lineHeight: 20,
+              },
+              value: {
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: '#333',
+                lineHeight: 30,
+              },
+            },
           },
         },
         data: [
@@ -74,6 +87,26 @@ export const HalfDoughnutExample = ({
           { value: 484, name: 'Union Ads' },
           { value: 300, name: 'Video Ads' },
         ],
+        centerLabel: {
+          show: true,
+          formatter: '{title|Amount (HKD)}\n{value|999,999}',
+          style: {
+            textBaseline: 'bottom',
+          },
+          rich: {
+            title: {
+              fontSize: 14,
+              color: '#666',
+              lineHeight: 20,
+            },
+            value: {
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#333',
+              lineHeight: 30,
+            },
+          },
+        },
         label: {
           show: false,
           position: 'center',
