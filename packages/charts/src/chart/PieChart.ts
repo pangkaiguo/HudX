@@ -13,6 +13,7 @@ import {
   Z_SERIES,
   Z_LABEL,
   EventHelper,
+  EVENT_TYPE_SHOW_TIP,
 } from 'hudx-render';
 import { resolveAnimationDelay } from './chartUtils';
 
@@ -772,9 +773,9 @@ export default class PieChart extends Chart {
     const emphasis = seriesItem.emphasis;
     const itemName =
       typeof item === 'object' &&
-      item !== null &&
-      !Array.isArray(item) &&
-      item.name
+        item !== null &&
+        !Array.isArray(item) &&
+        item.name
         ? String(item.name)
         : `item-${index + 1}`;
 
@@ -994,8 +995,8 @@ export default class PieChart extends Chart {
         (isOutside || isCenter
           ? this.getThemeConfig().textColor
           : this.getThemeConfig().textColorOnSeries ||
-            this.getThemeConfig().token.colorTextOnSeries ||
-            this.getThemeConfig().tooltipTextColor),
+          this.getThemeConfig().token.colorTextOnSeries ||
+          this.getThemeConfig().tooltipTextColor),
       itemColor: color,
       seriesItem,
       handlers,
@@ -1032,7 +1033,7 @@ export default class PieChart extends Chart {
       itemName = item.name;
     }
     return {
-      type: 'showTip',
+      type: EVENT_TYPE_SHOW_TIP,
       componentType: 'series',
       seriesType: 'pie',
       seriesIndex: 0,

@@ -2,7 +2,7 @@
  * HeatmapChart - Heatmap chart implementation
  */
 
-import { Chart, Rect } from 'hudx-render';
+import { Chart, Rect, EVENT_TYPE_SHOW_TIP } from 'hudx-render';
 
 export default class HeatmapChart extends Chart {
   protected _render(): void {
@@ -64,7 +64,7 @@ export default class HeatmapChart extends Chart {
                   (Array.isArray(row) ? row.length : 0)) ||
                 0;
               const params = {
-                type: 'showTip',
+                type: EVENT_TYPE_SHOW_TIP,
                 componentType: 'series',
                 seriesType: 'heatmap',
                 seriesName: s.name,

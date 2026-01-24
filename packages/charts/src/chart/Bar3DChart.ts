@@ -12,6 +12,7 @@ import {
   createDecalPattern,
   Z_SERIES,
   EventHelper,
+  EVENT_TYPE_SHOW_TIP,
 } from 'hudx-render';
 import { getSeriesDisplayName, resolveAnimationDelay } from './chartUtils';
 
@@ -295,7 +296,7 @@ export default class Bar3DChart extends Chart {
                     ? item.name
                     : xAxis?.data?.[index] || '';
                 const params = {
-                  type: 'showTip',
+                  type: EVENT_TYPE_SHOW_TIP,
                   componentType: 'series',
                   seriesType: 'bar3D',
                   seriesIndex,

@@ -15,6 +15,7 @@ import {
   ChartData,
   AxisOption,
   EventHelper,
+  EVENT_TYPE_SHOW_TIP,
 } from 'hudx-render';
 import {
   findSeriesIndexByDisplayName,
@@ -435,9 +436,9 @@ export default class BarChart extends Chart {
             yVal = yDomain[index];
             const raw =
               typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item) &&
-              'value' in item
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
                 ? item.value
                 : item;
             xVal = Array.isArray(raw) ? raw[0] : raw;
@@ -445,18 +446,18 @@ export default class BarChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item) &&
-              'value' in item
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
                 ? item.value
                 : item;
             yVal = Array.isArray(raw) ? (raw[1] ?? raw[0]) : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item) &&
-              'value' in item
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
                 ? item.value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -822,8 +823,8 @@ export default class BarChart extends Chart {
                   labelOpt.color ||
                   (isInside
                     ? theme.textColorOnSeries ||
-                      theme.token.colorTextOnSeries ||
-                      '#fff'
+                    theme.token.colorTextOnSeries ||
+                    '#fff'
                     : theme.axisLabelColor || theme.textColor),
                 fontSize: labelOpt.fontSize ?? theme.fontSize,
                 fontFamily: theme.fontFamily,
@@ -963,7 +964,7 @@ export default class BarChart extends Chart {
                   return;
                 }
                 const params = {
-                  type: 'showTip',
+                  type: EVENT_TYPE_SHOW_TIP,
                   componentType: 'series',
                   seriesType: 'bar',
                   seriesIndex,
@@ -1006,10 +1007,10 @@ export default class BarChart extends Chart {
 
               const itemName =
                 typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'name' in item &&
-                typeof item.name === 'string'
+                  item !== null &&
+                  !Array.isArray(item) &&
+                  'name' in item &&
+                  typeof item.name === 'string'
                   ? item.name
                   : isHorizontal
                     ? yDomain[index]
@@ -1017,7 +1018,7 @@ export default class BarChart extends Chart {
               const itemValue = resolveTooltipValue(item);
 
               const params = {
-                type: 'showTip',
+                type: EVENT_TYPE_SHOW_TIP,
                 componentType: 'series',
                 seriesType: 'bar',
                 seriesIndex,

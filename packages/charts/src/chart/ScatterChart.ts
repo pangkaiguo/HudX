@@ -9,6 +9,7 @@ import {
   calculateDomain,
   Circle,
   Z_SERIES,
+  EVENT_TYPE_SHOW_TIP,
 } from 'hudx-render';
 import {
   findSeriesIndexByDisplayName,
@@ -252,8 +253,8 @@ export default class ScatterChart extends Chart {
                 typeof item === 'object' && item !== null && 'name' in item
                   ? item.name
                   : '';
-              const params = {
-                type: 'showTip',
+              const params: ChartEvent = {
+                type: EVENT_TYPE_SHOW_TIP,
                 componentType: 'series',
                 seriesType: 'scatter',
                 seriesIndex,

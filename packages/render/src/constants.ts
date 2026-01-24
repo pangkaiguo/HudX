@@ -23,6 +23,8 @@ export const TOOLTIP_DEFAULT_PADDING_PX = 8;
 export const TOOLTIP_DEFAULT_BORDER_RADIUS = 4;
 export const TOOLTIP_MARKER_BORDER_RADIUS = 2;
 
+export const EVENT_TYPE_SHOW_TIP = 'showTip';
+
 export const DECAL_AUTO_FG_ALPHA = 0.35;
 export const DECAL_AUTO_FG_LUMINANCE_THRESHOLD = 0.35;
 export const DECAL_DEFAULT_DASH_SEGMENT = 5;

@@ -13,6 +13,7 @@ import {
   createDecalPattern,
   EventHelper,
   Z_SERIES,
+  EVENT_TYPE_SHOW_TIP,
 } from 'hudx-render';
 
 export default class StackBar3DChart extends Chart {
@@ -378,7 +379,7 @@ export default class StackBar3DChart extends Chart {
               const itemName =
                 typeof item === 'object' && item.name ? item.name : xKey || '';
               const params = {
-                type: 'showTip',
+                type: EVENT_TYPE_SHOW_TIP,
                 componentType: 'series',
                 seriesType: 'stackBar3D',
                 seriesIndex,
