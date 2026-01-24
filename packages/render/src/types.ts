@@ -804,8 +804,34 @@ export interface UnknownSeriesOption extends BaseSeriesOption {
   type?: string;
 }
 
+export interface GradientColorStop {
+  offset: number;
+  color: string;
+}
+
+export interface LinearGradientColor {
+  type: 'linear';
+  x?: number;
+  y?: number;
+  x2?: number;
+  y2?: number;
+  colorStops: GradientColorStop[];
+  global?: boolean;
+}
+
+export interface RadialGradientColor {
+  type: 'radial';
+  x?: number;
+  y?: number;
+  r?: number;
+  colorStops: GradientColorStop[];
+  global?: boolean;
+}
+
+export type GradientColor = LinearGradientColor | RadialGradientColor;
+
 export interface AreaStyleOption {
-  color?: string | any; // Gradient support
+  color?: string | GradientColor;
   origin?: 'auto' | 'start' | 'end';
   shadowBlur?: number;
   shadowColor?: string;

@@ -14,7 +14,7 @@ import ChartElement from '../ChartElement';
 import Text from '../graphic/Text';
 import Group from '../Group';
 import IPainter from './IPainter';
-import type { DataURLOpts } from '../types';
+import type { DataURLOpts, BoundingRect } from '../types';
 import type { CanvasPatternWithMeta, DecalPatternMeta } from '../util/pattern';
 import { ThemeManager } from '../theme/ThemeManager';
 import { parseColor } from '../util/color';
@@ -32,6 +32,7 @@ export default class SVGPainter implements IPainter {
   private _elementMap: Map<ChartElement, SVGElement> = new Map();
   private _shadowFilterCache: Map<string, string> = new Map();
   private _shadowFilterIdCounter: number = 0;
+  private _gradientIdCounter: number = 0;
 
   constructor(dom: HTMLElement, storage: Storage) {
     this._dom = dom;
@@ -129,6 +130,7 @@ export default class SVGPainter implements IPainter {
     this._elementMap.clear();
     this._shadowFilterCache.clear();
     this._shadowFilterIdCounter = 0;
+    this._gradientIdCounter = 0;
 
     // Get all elements sorted by zlevel and z
     const elements = this._storage.getElementsList();
@@ -211,6 +213,12 @@ export default class SVGPainter implements IPainter {
         } else if (this._isCanvasPatternWithMeta(style.fill)) {
           const patternId = this._createSVGPattern(style.fill);
           group.setAttribute('fill', `url(#${patternId})`);
+        } else if (this._isGradient(style.fill)) {
+          const gradientId = this._createSVGGradient(
+            style.fill,
+            element.getBoundingRect(),
+          );
+          group.setAttribute('fill', `url(#${gradientId})`);
         } else {
           group.setAttribute('fill', 'none');
         }
@@ -224,6 +232,12 @@ export default class SVGPainter implements IPainter {
         } else if (this._isCanvasPatternWithMeta(style.stroke)) {
           const patternId = this._createSVGPattern(style.stroke);
           group.setAttribute('stroke', `url(#${patternId})`);
+        } else if (this._isGradient(style.stroke)) {
+          const gradientId = this._createSVGGradient(
+            style.stroke,
+            element.getBoundingRect(),
+          );
+          group.setAttribute('stroke', `url(#${gradientId})`);
         }
       }
 
@@ -1116,6 +1130,110 @@ export default class SVGPainter implements IPainter {
   ): value is CanvasPatternWithMeta {
     if (typeof value !== 'object' || value === null) return false;
     return '_canvas' in value;
+  }
+
+  private _isGradient(value: unknown): value is {
+    type: string;
+    colorStops: Array<{ offset: number; color: string }>;
+    x?: number;
+    y?: number;
+    x2?: number;
+    y2?: number;
+    r?: number;
+    global?: boolean;
+  } {
+    if (typeof value !== 'object' || value === null) return false;
+    return 'type' in value && 'colorStops' in value;
+  }
+
+  private _createSVGGradient(
+    gradient: {
+      type: string;
+      colorStops: Array<{ offset: number; color: string }>;
+      x?: number;
+      y?: number;
+      x2?: number;
+      y2?: number;
+      r?: number;
+      global?: boolean;
+    },
+    rect?: BoundingRect,
+  ): string {
+    const gradientId = `gradient_${this._gradientIdCounter++}`;
+    const isLinear = gradient.type === 'linear';
+    const gradientEl = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      isLinear ? 'linearGradient' : 'radialGradient',
+    );
+    gradientEl.setAttribute('id', gradientId);
+
+    const useGlobal = gradient.global === true && rect;
+    if (useGlobal) {
+      gradientEl.setAttribute('gradientUnits', 'userSpaceOnUse');
+    }
+
+    if (isLinear) {
+      const x1 = gradient.x ?? 0;
+      const y1 = gradient.y ?? 0;
+      const x2 = gradient.x2 ?? 1;
+      const y2 = gradient.y2 ?? 1;
+      if (useGlobal && rect) {
+        gradientEl.setAttribute('x1', String(rect.x + rect.width * x1));
+        gradientEl.setAttribute('y1', String(rect.y + rect.height * y1));
+        gradientEl.setAttribute('x2', String(rect.x + rect.width * x2));
+        gradientEl.setAttribute('y2', String(rect.y + rect.height * y2));
+      } else {
+        gradientEl.setAttribute('x1', String(x1));
+        gradientEl.setAttribute('y1', String(y1));
+        gradientEl.setAttribute('x2', String(x2));
+        gradientEl.setAttribute('y2', String(y2));
+      }
+    } else {
+      const cx = gradient.x ?? 0.5;
+      const cy = gradient.y ?? 0.5;
+      const r = gradient.r ?? 0.5;
+      if (useGlobal && rect) {
+        gradientEl.setAttribute('cx', String(rect.x + rect.width * cx));
+        gradientEl.setAttribute('cy', String(rect.y + rect.height * cy));
+        gradientEl.setAttribute(
+          'r',
+          String(Math.max(rect.width, rect.height) * r),
+        );
+      } else {
+        gradientEl.setAttribute('cx', String(cx));
+        gradientEl.setAttribute('cy', String(cy));
+        gradientEl.setAttribute('r', String(r));
+      }
+    }
+
+    gradient.colorStops.forEach((stop) => {
+      const stopEl = document.createElementNS(
+        'http://www.w3.org/2000/svg',
+        'stop',
+      );
+      const offset =
+        typeof stop.offset === 'number' && stop.offset <= 1
+          ? `${stop.offset * 100}%`
+          : String(stop.offset);
+      stopEl.setAttribute('offset', offset);
+
+      const rgba = parseColor(stop.color);
+      if (rgba) {
+        stopEl.setAttribute(
+          'stop-color',
+          `rgb(${rgba[0]}, ${rgba[1]}, ${rgba[2]})`,
+        );
+        if (rgba[3] !== 1) {
+          stopEl.setAttribute('stop-opacity', String(rgba[3]));
+        }
+      } else {
+        stopEl.setAttribute('stop-color', stop.color);
+      }
+      gradientEl.appendChild(stopEl);
+    });
+
+    this._defs.appendChild(gradientEl);
+    return gradientId;
   }
 
   /**

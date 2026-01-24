@@ -67,13 +67,24 @@ type ElementState = {
 };
 
 export default class PieChart extends Chart {
-  private _activeSectors: Map<string, PieSector> = new Map();
-  private _centerLabel: Text | null = null;
-  private _restoreTimeout: any = null;
-  private _hoverAnimator: Animator = new Animator();
-  private _hoveredSectorName: string | null = null;
-  private _sectorState: WeakMap<PieSector, SectorState> = new WeakMap();
-  private _elementState: WeakMap<Text | Polyline, ElementState> = new WeakMap();
+  private _activeSectors!: Map<string, PieSector>;
+  private _centerLabel!: Text | null;
+  private _restoreTimeout: any;
+  private _hoverAnimator!: Animator;
+  private _hoveredSectorName!: string | null;
+  private _sectorState!: WeakMap<PieSector, SectorState>;
+  private _elementState!: WeakMap<Text | Polyline, ElementState>;
+
+  protected _init(): void {
+    this._activeSectors = new Map();
+    this._centerLabel = null;
+    this._restoreTimeout = null;
+    this._hoverAnimator = new Animator();
+    this._hoveredSectorName = null;
+    this._sectorState = new WeakMap();
+    this._elementState = new WeakMap();
+    super._init();
+  }
 
   setRenderMode(renderMode: RenderMode): void {
     if (this.getRenderMode() === renderMode) {

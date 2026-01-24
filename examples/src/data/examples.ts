@@ -418,9 +418,9 @@ option = {
     splitLine: { show: true, lineStyle: { color: '#eee' } }
   },
   series: [
-    { name: 'Series A', type: 'line', data: valuesA, itemStyle: { color: '#5470c6' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } },
-    { name: 'Series B', type: 'line', data: valuesB, itemStyle: { color: '#91cc75' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } },
-    { name: 'Series C', type: 'line', data: valuesC, itemStyle: { color: '#fac858' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3 } }
+    { name: 'Series A', type: 'line', data: valuesA, itemStyle: { color: '#5470c6' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3, color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(84, 112, 198, 0.6)' }, { offset: 1, color: 'rgba(84, 112, 198, 0)' }] } } },
+    { name: 'Series B', type: 'line', data: valuesB, itemStyle: { color: '#91cc75' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3, color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(145, 204, 117, 0.6)' }, { offset: 1, color: 'rgba(145, 204, 117, 0)' }] } } },
+    { name: 'Series C', type: 'line', data: valuesC, itemStyle: { color: '#fac858' }, lineStyle: { width: 1 }, showSymbol: false, smooth: true, areaStyle: { opacity: 0.3, color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(250, 200, 88, 0.6)' }, { offset: 1, color: 'rgba(250, 200, 88, 0)' }] } } }
   ],
   animation: true,
   animationDuration: 1000,

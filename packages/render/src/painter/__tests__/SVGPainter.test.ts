@@ -278,6 +278,46 @@ describe('SVGPainter', () => {
     expect(`${d0} ${d1}`).toContain('M');
   });
 
+  it('should create linear gradient with rgba colors correctly', () => {
+    const root = new Group();
+    const rect = new Rect({
+      shape: { x: 0, y: 0, width: 100, height: 100 },
+      style: {
+        fill: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 1,
+          y2: 1,
+          colorStops: [
+            { offset: 0, color: 'rgba(255, 0, 0, 0.5)' },
+            { offset: 1, color: '#0000ff' },
+          ],
+        },
+      },
+    });
+    root.add(rect);
+    storage.addRoot(root);
+
+    painter.paint();
+
+    const defs = painter.getSVG().querySelector('defs');
+    const gradients = defs?.querySelectorAll('linearGradient');
+    expect(gradients?.length).toBe(1);
+
+    const gradient = gradients![0];
+    const stops = gradient.querySelectorAll('stop');
+    expect(stops.length).toBe(2);
+
+    // Check first stop (rgba)
+    expect(stops[0].getAttribute('stop-color')).toBe('rgb(255, 0, 0)');
+    expect(stops[0].getAttribute('stop-opacity')).toBe('0.5');
+
+    // Check second stop (hex)
+    expect(stops[1].getAttribute('stop-color')).toBe('rgb(0, 0, 255)');
+    expect(stops[1].getAttribute('stop-opacity')).toBeNull();
+  });
+
   it('should render quadratic and cubic bezier paths', () => {
     const quad = new ChartElement({
       shape: { x1: 0, y1: 0, x2: 10, y2: 10, cpx1: 5, cpy1: 0 },
@@ -456,6 +496,39 @@ describe('SVGPainter', () => {
         (g.getAttribute('stroke') || '').startsWith('url(#pattern_'),
       ),
     ).toBe(true);
+  });
+
+  it('should create svg gradients for gradient fills', () => {
+    const rect = new Rect({
+      shape: { x: 10, y: 20, width: 30, height: 40 },
+      style: {
+        fill: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            { offset: 0, color: '#000000' },
+            { offset: 1, color: '#ffffff' },
+          ],
+        },
+      },
+    });
+
+    const root = new Group();
+    root.add(rect);
+    storage.addRoot(root);
+
+    painter.paint();
+
+    const svg = painter.getSVG();
+    const gradient = svg.querySelector('defs linearGradient');
+    expect(gradient).toBeTruthy();
+    const stops = gradient?.querySelectorAll('stop') || [];
+    expect(stops.length).toBe(2);
+    const hasFill = svg.querySelector('g[fill^="url(#gradient_"]');
+    expect(hasFill).toBeTruthy();
   });
 
   it('should return svg-based data url for non-svg types and include background style', () => {

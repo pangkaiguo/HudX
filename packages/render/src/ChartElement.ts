@@ -259,10 +259,10 @@ class ChartElement extends Eventful {
     if (!style) return;
 
     if (style.fill) {
-      ctx.fillStyle = style.fill;
+      ctx.fillStyle = this._resolveCanvasStyle(style.fill, ctx);
     }
     if (style.stroke) {
-      ctx.strokeStyle = style.stroke;
+      ctx.strokeStyle = this._resolveCanvasStyle(style.stroke, ctx);
     }
     if (style.lineWidth !== undefined) {
       ctx.lineWidth = style.lineWidth;
@@ -288,6 +288,82 @@ class ChartElement extends Eventful {
     if (style.shadowOffsetY !== undefined) {
       ctx.shadowOffsetY = style.shadowOffsetY;
     }
+  }
+
+  private _resolveCanvasStyle(value: any, ctx: CanvasRenderingContext2D): any {
+    if (!value) return value;
+    if (typeof value === 'string') return value;
+    const CanvasGradientCtor = (globalThis as any).CanvasGradient;
+    if (
+      typeof CanvasGradientCtor === 'function' &&
+      value instanceof CanvasGradientCtor
+    ) {
+      return value;
+    }
+    const CanvasPatternCtor = (globalThis as any).CanvasPattern;
+    if (
+      typeof CanvasPatternCtor === 'function' &&
+      value instanceof CanvasPatternCtor
+    ) {
+      return value;
+    }
+    if (
+      typeof value === 'object' &&
+      'type' in value &&
+      'colorStops' in value &&
+      Array.isArray(value.colorStops)
+    ) {
+      const fallback =
+        value.colorStops.find(
+          (s: any) => s && typeof s.color === 'string' && s.color.length > 0,
+        )?.color ?? '#000000';
+      const rect = this.getBoundingRect();
+      if (!rect || rect.width === 0 || rect.height === 0) {
+        return fallback;
+      }
+      if (
+        value.type === 'linear' &&
+        typeof ctx.createLinearGradient === 'function'
+      ) {
+        const x = value.x ?? 0;
+        const y = value.y ?? 0;
+        const x2 = value.x2 ?? 1;
+        const y2 = value.y2 ?? 1;
+        try {
+          const gradient = ctx.createLinearGradient(
+            rect.x + rect.width * x,
+            rect.y + rect.height * y,
+            rect.x + rect.width * x2,
+            rect.y + rect.height * y2,
+          );
+          value.colorStops.forEach((stop: any) => {
+            gradient.addColorStop(stop.offset, stop.color);
+          });
+          return gradient;
+        } catch {
+          return fallback;
+        }
+      }
+      if (
+        value.type === 'radial' &&
+        typeof ctx.createRadialGradient === 'function'
+      ) {
+        const cx = rect.x + rect.width * (value.x ?? 0.5);
+        const cy = rect.y + rect.height * (value.y ?? 0.5);
+        const r = Math.max(rect.width, rect.height) * (value.r ?? 0.5);
+        try {
+          const gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+          value.colorStops.forEach((stop: any) => {
+            gradient.addColorStop(stop.offset, stop.color);
+          });
+          return gradient;
+        } catch {
+          return fallback;
+        }
+      }
+      return fallback;
+    }
+    return value;
   }
 
   getClipPath(): ChartElement | undefined {

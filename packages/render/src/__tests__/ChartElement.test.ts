@@ -176,6 +176,84 @@ describe('ChartElement', () => {
     expect(ctx.shadowOffsetY).toBe(5);
   });
 
+  it('should resolve gradient fill for canvas', () => {
+    class GradientElement extends TestElement {
+      getBoundingRect() {
+        return { x: 10, y: 20, width: 100, height: 50 };
+      }
+    }
+
+    const prevCanvasGradient = (globalThis as any).CanvasGradient;
+    const prevCanvasPattern = (globalThis as any).CanvasPattern;
+    (globalThis as any).CanvasGradient = class CanvasGradientMock {};
+    (globalThis as any).CanvasPattern = class CanvasPatternMock {};
+
+    const gradient = {
+      type: 'linear',
+      x: 0,
+      y: 0,
+      x2: 1,
+      y2: 1,
+      colorStops: [
+        { offset: 0, color: '#000000' },
+        { offset: 1, color: '#ffffff' },
+      ],
+    };
+
+    const el = new GradientElement({
+      style: { fill: gradient },
+    });
+
+    const gradientObj = { addColorStop: vi.fn() };
+    const ctx = {
+      createLinearGradient: vi.fn(() => gradientObj),
+      setLineDash: vi.fn(),
+    } as unknown as CanvasRenderingContext2D;
+
+    (el as any).applyStyle(ctx);
+
+    expect(ctx.createLinearGradient).toHaveBeenCalledWith(10, 20, 110, 70);
+    expect(gradientObj.addColorStop).toHaveBeenCalledTimes(2);
+    expect(ctx.fillStyle).toBe(gradientObj);
+
+    (globalThis as any).CanvasGradient = prevCanvasGradient;
+    (globalThis as any).CanvasPattern = prevCanvasPattern;
+  });
+
+  it('should fallback to solid color when gradient cannot be resolved for canvas', () => {
+    class GradientElement extends TestElement {
+      getBoundingRect() {
+        return { x: 0, y: 0, width: 0, height: 0 };
+      }
+    }
+
+    const gradient = {
+      type: 'linear',
+      x: 0,
+      y: 0,
+      x2: 1,
+      y2: 1,
+      colorStops: [
+        { offset: 0, color: 'rgba(84, 112, 198, 0.6)' },
+        { offset: 1, color: 'rgba(84, 112, 198, 0)' },
+      ],
+    };
+
+    const el = new GradientElement({
+      style: { fill: gradient },
+    });
+
+    const ctx = {
+      createLinearGradient: vi.fn(() => ({ addColorStop: vi.fn() })),
+      setLineDash: vi.fn(),
+    } as unknown as CanvasRenderingContext2D;
+
+    (el as any).applyStyle(ctx);
+
+    expect(ctx.createLinearGradient).not.toHaveBeenCalled();
+    expect(ctx.fillStyle).toBe('rgba(84, 112, 198, 0.6)');
+  });
+
   it('should apply transform to context', () => {
     const el = new TestElement({
       transform: {

@@ -98,6 +98,33 @@ describe('LineChart', () => {
     expect(chart).toBeDefined();
   });
 
+  it('should set area opacity correctly when animation is disabled', () => {
+    const chart = new LineChart(container);
+    const option: ChartOption = {
+      xAxis: { data: ['A', 'B', 'C'] },
+      yAxis: {},
+      series: [
+        {
+          type: 'line',
+          data: [10, 20, 30],
+          areaStyle: { opacity: 0.8, color: '#ff0000' },
+        },
+      ],
+      animation: false,
+    };
+    chart.setOption(option);
+
+    const root = (chart as any)._root;
+    const children = root.children();
+    // Find area path (it should have fill and opacity)
+    const area = children.find(
+      (c: any) => c.style && c.style.fill && c.style.opacity !== undefined,
+    );
+
+    expect(area).toBeDefined();
+    expect(area.style.opacity).toBe(0.8);
+  });
+
   it('should support smooth, areaStyle and symbol', () => {
     const chart = new LineChart(container);
     const option: ChartOption = {
@@ -126,6 +153,64 @@ describe('LineChart', () => {
     expect(seriesItem.area.constructor.name).toBe('Path');
     expect(seriesItem.symbols.length).toBe(2);
     expect(seriesItem.symbols[0].constructor.name).toBe('Rect');
+  });
+
+  it('should apply default gradient fill when areaStyle color is missing', () => {
+    const chart = new LineChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'line',
+          data: [10, 20],
+          itemStyle: { color: '#ff0000' },
+          areaStyle: { opacity: 0.4 },
+        },
+      ],
+    });
+
+    const activeLines = (chart as any)._activeLines;
+    const seriesItem = activeLines.get(0);
+    const fill = seriesItem.area.style.fill;
+
+    expect(fill.type).toBe('linear');
+    expect(fill.colorStops.length).toBe(2);
+    expect(fill.colorStops[0].color).toBe('#ff0000');
+    expect(fill.colorStops[1].color).toBe('rgba(255, 0, 0, 0)');
+  });
+
+  it('should keep custom gradient in areaStyle color', () => {
+    const chart = new LineChart(container);
+    const gradient = {
+      type: 'linear',
+      x: 0,
+      y: 0,
+      x2: 0,
+      y2: 1,
+      colorStops: [
+        { offset: 0, color: '#123456' },
+        { offset: 1, color: '#654321' },
+      ],
+    };
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'line',
+          data: [10, 20],
+          areaStyle: { opacity: 0.4, color: gradient },
+        },
+      ],
+    });
+
+    const activeLines = (chart as any)._activeLines;
+    const seriesItem = activeLines.get(0);
+
+    expect(seriesItem.area.style.fill).toBe(gradient);
   });
 
   it('should support symbolSize as function', () => {

@@ -1,6 +1,12 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { HChart, type ChartOption, type HChartRef } from 'hudx-charts';
-import { Locale, ThemeManager, Theme, type RenderMode } from 'hudx-render';
+import {
+  Locale,
+  ThemeManager,
+  Theme,
+  type RenderMode,
+  toRgbaWithOpacity,
+} from 'hudx-render';
 import { t } from '../../i18n';
 
 export const AreaLineChartExample = ({
@@ -129,7 +135,32 @@ export const AreaLineChartExample = ({
         lineStyle: { width: 1 },
         showSymbol: false,
         smooth: isSmooth,
-        areaStyle: { opacity: 0.3 },
+        areaStyle: {
+          opacity: 1,
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              {
+                offset: 0,
+                color: toRgbaWithOpacity(
+                  themeObj.seriesColors?.[0] || '#5470c6',
+                  1,
+                ),
+              },
+              {
+                offset: 1,
+                color: toRgbaWithOpacity(
+                  themeObj.seriesColors?.[0] || '#5470c6',
+                  0,
+                ),
+              },
+            ],
+          },
+        },
       },
       {
         name: 'Series B',
@@ -139,7 +170,32 @@ export const AreaLineChartExample = ({
         lineStyle: { width: 1 },
         showSymbol: false,
         smooth: isSmooth,
-        areaStyle: { opacity: 0.3 },
+        areaStyle: {
+          opacity: 0.3,
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              {
+                offset: 0,
+                color: toRgbaWithOpacity(
+                  themeObj.seriesColors?.[1] || '#91cc75',
+                  0.6,
+                ),
+              },
+              {
+                offset: 1,
+                color: toRgbaWithOpacity(
+                  themeObj.seriesColors?.[1] || '#91cc75',
+                  0,
+                ),
+              },
+            ],
+          },
+        },
       },
       {
         name: 'Series C',
@@ -149,7 +205,32 @@ export const AreaLineChartExample = ({
         lineStyle: { width: 1 },
         showSymbol: false,
         smooth: isSmooth,
-        areaStyle: { opacity: 0.3 },
+        areaStyle: {
+          opacity: 0.3,
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              {
+                offset: 0,
+                color: toRgbaWithOpacity(
+                  themeObj.seriesColors?.[2] || '#fac858',
+                  0.6,
+                ),
+              },
+              {
+                offset: 1,
+                color: toRgbaWithOpacity(
+                  themeObj.seriesColors?.[2] || '#fac858',
+                  0,
+                ),
+              },
+            ],
+          },
+        },
       },
     ],
     animation: true,

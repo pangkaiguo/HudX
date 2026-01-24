@@ -428,8 +428,25 @@ export default class LineChart extends Chart {
 
         // Render Area
         if (seriesItem.areaStyle) {
-          const areaColor = seriesItem.areaStyle.color || lineColor;
-          const opacity = seriesItem.areaStyle.opacity || 0.5;
+          const areaOpacity =
+            seriesItem.areaStyle.opacity !== undefined
+              ? seriesItem.areaStyle.opacity
+              : 0.5;
+          let areaColor = seriesItem.areaStyle.color;
+          if (!areaColor) {
+            areaColor = {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [
+                { offset: 0, color: lineColor },
+                { offset: 1, color: toRgbaWithOpacity(lineColor, 0) },
+              ],
+            };
+          }
+          const opacity = areaOpacity;
 
           // Calculate baseline for area
           // Default to the bottom of the chart (min value of domain)
@@ -527,42 +544,51 @@ export default class LineChart extends Chart {
 
           if (line instanceof Polyline) {
             const shape = line.attr('shape');
-            this._animator.animate({ t: 0 }, 't', 1, {
-              duration,
-              easing,
-              onUpdate: (target: any, percent: number) => {
-                const visiblePoints = Math.ceil(points.length * percent);
-                shape.points = points.slice(0, visiblePoints);
-                line.markRedraw();
-              },
-            });
+            this._animator
+              .animate({ t: 0 }, 't', 1, {
+                duration,
+                easing,
+                onUpdate: (_target: any, percent: number) => {
+                  const visiblePoints = Math.ceil(points.length * percent);
+                  shape.points = points.slice(0, visiblePoints);
+                  line.markRedraw();
+                  this._renderer.refresh();
+                },
+              })
+              .start();
           } else {
             // Path animation (Clip or Dash) - simplified to Opacity for now
             line.attr('style', { opacity: 0 });
-            this._animator.animate({ opacity: 0 }, 'opacity', 1, {
-              duration,
-              easing,
-              onUpdate: (target: any, percent: number) => {
-                line.attr('style', { opacity: target.opacity });
-                line.markRedraw();
-              },
-            });
+            this._animator
+              .animate({ opacity: 0 }, 'opacity', 1, {
+                duration,
+                easing,
+                onUpdate: (target: any, _percent: number) => {
+                  line.attr('style', { opacity: target.opacity });
+                  line.markRedraw();
+                  this._renderer.refresh();
+                },
+              })
+              .start();
           }
 
           if (area) {
-            this._animator.animate(
-              { opacity: 0 },
-              'opacity',
-              seriesItem.areaStyle?.opacity || 0.5,
-              {
-                duration,
-                easing,
-                onUpdate: (target: any, percent: number) => {
-                  area!.attr('style', { opacity: target.opacity });
-                  area!.markRedraw();
+            this._animator
+              .animate(
+                { opacity: 0 },
+                'opacity',
+                seriesItem.areaStyle?.opacity || 0.5,
+                {
+                  duration,
+                  easing,
+                  onUpdate: (target: any, _percent: number) => {
+                    area!.attr('style', { opacity: target.opacity });
+                    area!.markRedraw();
+                    this._renderer.refresh();
+                  },
                 },
-              },
-            );
+              )
+              .start();
           }
         } else {
           if (line instanceof Polyline) {
@@ -693,26 +719,28 @@ export default class LineChart extends Chart {
               const lineDuration = this._getAnimationDuration();
               const delay = (pointIndex / points.length) * lineDuration;
 
-              this._animator.animate({ t: 0 }, 't', 1, {
-                duration: 300,
-                delay,
-                easing: 'cubicOut',
-                onUpdate: (_target: any, percent: number) => {
-                  const currentSize = finalSize * percent;
-                  if (symbolType === 'circle') {
-                    symbol.attr('shape', { r: currentSize });
-                  } else if (symbol instanceof Rect) {
-                    const half = currentSize / 2;
-                    symbol.attr('shape', {
-                      x: point.x - half,
-                      y: point.y - half,
-                      width: currentSize,
-                      height: currentSize,
-                    });
-                  }
-                  symbol.markRedraw();
-                },
-              });
+              this._animator
+                .animate({ t: 0 }, 't', 1, {
+                  duration: 300,
+                  delay,
+                  easing: 'cubicOut',
+                  onUpdate: (_target: any, percent: number) => {
+                    const currentSize = finalSize * percent;
+                    if (symbolType === 'circle') {
+                      symbol.attr('shape', { r: currentSize });
+                    } else if (symbol instanceof Rect) {
+                      const half = currentSize / 2;
+                      symbol.attr('shape', {
+                        x: point.x - half,
+                        y: point.y - half,
+                        width: currentSize,
+                        height: currentSize,
+                      });
+                    }
+                    symbol.markRedraw();
+                  },
+                })
+                .start();
             }
           });
         }
