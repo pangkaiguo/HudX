@@ -273,31 +273,25 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               {t(locale, 'examples.render.canvas')}
             </button>
           </div>
-          <div
+          <select
+            value={locale}
+            onChange={(e) => onLocaleChange(e.target.value as Locale)}
             style={{
-              display: 'flex',
-              border: `1px solid ${borderColor}`,
+              padding: '4px 8px',
               borderRadius: 4,
-              overflow: 'hidden',
+              border: `1px solid ${borderColor}`,
+              backgroundColor: toolbarBg,
+              color: textColor,
+              fontSize: 12,
+              outline: 'none',
             }}
           >
             {EXAMPLES_LOCALES.map((l) => (
-              <button
-                key={l}
-                onClick={() => onLocaleChange(l)}
-                style={{
-                  padding: '4px 12px',
-                  background: locale === l ? primary : 'transparent',
-                  color: locale === l ? primaryText : textColor,
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: 12,
-                }}
-              >
+              <option key={l} value={l}>
                 {getLocaleLabel(l)}
-              </button>
+              </option>
             ))}
-          </div>
+          </select>
         </div>
       </div>
 

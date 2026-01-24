@@ -22,7 +22,6 @@ export const EXAMPLES_LOCALES = [
   'en',
   'zh-CN',
   'zh-HK',
-  'zh-TW',
 ] as const satisfies readonly Locale[];
 
 export const EXAMPLES_CATEGORIES = [
