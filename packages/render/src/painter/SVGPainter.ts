@@ -938,20 +938,29 @@ export default class SVGPainter implements IPainter {
     );
     pattern.setAttribute('id', id);
     pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-    pattern.setAttribute('width', String(meta?.tileWidth ?? tileWidth));
-    pattern.setAttribute('height', String(meta?.tileHeight ?? tileHeight));
+    pattern.setAttribute('patternContentUnits', 'userSpaceOnUse');
+    const patternWidth = meta?.tileWidth ?? tileWidth;
+    const patternHeight = meta?.tileHeight ?? tileHeight;
+    pattern.setAttribute('width', String(patternWidth));
+    pattern.setAttribute('height', String(patternHeight));
 
     const transforms: string[] = [];
+    const centerX = patternWidth / 2;
+    const centerY = patternHeight / 2;
     if (meta) {
       if (meta.rotation) {
-        transforms.push(`rotate(${(meta.rotation * 180) / Math.PI})`);
+        transforms.push(
+          `rotate(${(meta.rotation * 180) / Math.PI} ${centerX} ${centerY})`,
+        );
       }
     } else {
       if (dpr !== 1) {
         transforms.push(`scale(${1 / dpr})`);
       }
       if (rotation) {
-        transforms.push(`rotate(${(rotation * 180) / Math.PI})`);
+        transforms.push(
+          `rotate(${(rotation * 180) / Math.PI} ${centerX} ${centerY})`,
+        );
       }
     }
     if (transforms.length) {
@@ -1250,13 +1259,13 @@ export default class SVGPainter implements IPainter {
     const raf =
       typeof (globalThis as any).requestAnimationFrame === 'function'
         ? ((globalThis as any).requestAnimationFrame as (
-          cb: FrameRequestCallback,
-        ) => number)
+            cb: FrameRequestCallback,
+          ) => number)
         : (cb: FrameRequestCallback) =>
-          globalThis.setTimeout(
-            () => cb(Date.now()),
-            16,
-          ) as unknown as number;
+            globalThis.setTimeout(
+              () => cb(Date.now()),
+              16,
+            ) as unknown as number;
 
     this._animationFrameId = raf(() => {
       this._animationFrameId = undefined;

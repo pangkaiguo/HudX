@@ -142,16 +142,59 @@ export default class BarChart extends Chart {
         : option.yAxis;
       const isHorizontal = yAxis?.type === 'category';
 
-      let data: ChartData[] = [];
-      series.forEach((s) => {
-        if (s.type === 'bar' && s.show !== false) {
-          data = data.concat(s.data || []);
+      const legendData = option.legend?.data;
+      const legendNameSet = new Set<string>();
+      if (Array.isArray(legendData)) {
+        legendData.forEach((item) => {
+          const name =
+            typeof item === 'string'
+              ? item
+              : typeof item === 'object' && item
+                ? item.name
+                : undefined;
+          if (name) legendNameSet.add(name);
+        });
+      }
+      const hasLegendData = legendNameSet.size > 0;
+      const legendSelectedMap =
+        option.legend?.selected && typeof option.legend.selected === 'object'
+          ? (option.legend.selected as Record<string, boolean>)
+          : null;
+      const isSeriesVisibleByLegend = (seriesName: string) => {
+        if (!this._legend) return true;
+        if (hasLegendData && !legendNameSet.has(seriesName)) return true;
+        if (this._hasInitLegend) return this._legendSelected.has(seriesName);
+        if (legendSelectedMap) {
+          const entry = legendSelectedMap[seriesName];
+          if (entry === undefined) return true;
+          return entry !== false;
         }
+        return true;
+      };
+
+      let data: ChartData[] = [];
+      series.forEach((s, i) => {
+        if (s.type !== 'bar' || s.show === false) return;
+        const seriesName = getSeriesDisplayName(
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
+          s,
+          i,
+        );
+        if (!isSeriesVisibleByLegend(seriesName)) return;
+        data = data.concat(s.data || []);
       });
 
       if (data.length === 0) return;
 
-      const hasStack = series.some((s) => s.type === 'bar' && s.stack);
+      const hasStack = series.some((s, i) => {
+        if (s.type !== 'bar' || s.show === false || !s.stack) return false;
+        const seriesName = getSeriesDisplayName(
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
+          s,
+          i,
+        );
+        return isSeriesVisibleByLegend(seriesName);
+      });
       let finalData = data;
 
       if (hasStack) {
@@ -160,9 +203,15 @@ export default class BarChart extends Chart {
           Record<string, { pos: number; neg: number }>
         > = {};
 
-        series.forEach((s) => {
+        series.forEach((s, i) => {
           if (s.type !== 'bar' || s.show === false) return;
-          const stackId = s.stack || `__no_stack_${s.name || Math.random()}`;
+          const seriesName = getSeriesDisplayName(
+            (key: string, defaultValue?: string) => this.t(key, defaultValue),
+            s,
+            i,
+          );
+          if (!isSeriesVisibleByLegend(seriesName)) return;
+          const stackId = s.stack || `__no_stack_${seriesName}`;
           const sData = s.data || [];
           sData.forEach((val: ChartData, idx: number) => {
             const value =
@@ -226,9 +275,15 @@ export default class BarChart extends Chart {
           ? createOrdinalScale(yDomain, yRange)
           : createLinearScale(yDomain, yRange);
 
-      const barSeries = series.filter(
-        (s) => s.type === 'bar' && s.show !== false,
-      );
+      const barSeries = series.filter((s, i) => {
+        if (s.type !== 'bar' || s.show === false) return false;
+        const seriesName = getSeriesDisplayName(
+          (key: string, defaultValue?: string) => this.t(key, defaultValue),
+          s,
+          i,
+        );
+        return isSeriesVisibleByLegend(seriesName);
+      });
       const seriesCount = barSeries.length || 1;
       let categoryCount: number;
       if (isHorizontal) {
@@ -244,6 +299,7 @@ export default class BarChart extends Chart {
       }
 
       const stacks: Record<string, SeriesOption[]> = {};
+      const stackOrder: string[] = [];
       series.forEach((s, i) => {
         if (s.type !== 'bar' || s.show === false) return;
         const seriesName = getSeriesDisplayName(
@@ -251,10 +307,12 @@ export default class BarChart extends Chart {
           s,
           i,
         );
+        if (!isSeriesVisibleByLegend(seriesName)) return;
         const stackId = s.stack || `__no_stack_${seriesName}`;
 
         if (!stacks[stackId]) {
           stacks[stackId] = [];
+          stackOrder.push(stackId);
         }
         stacks[stackId].push(s);
       });
@@ -419,11 +477,11 @@ export default class BarChart extends Chart {
           seriesItem,
           seriesIndex,
         );
-        if (this._legend && !this._legendSelected.has(seriesName)) return;
+        if (!isSeriesVisibleByLegend(seriesName)) return;
 
         const seriesData = seriesItem.data || [];
         const stackId = seriesItem.stack || `__no_stack_${seriesName}`;
-        const stackGroupIndex = Object.keys(stacks).indexOf(stackId);
+        const stackGroupIndex = stackOrder.indexOf(stackId);
 
         const barColor =
           seriesItem.itemStyle?.color ||
@@ -436,9 +494,9 @@ export default class BarChart extends Chart {
             yVal = yDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
             xVal = Array.isArray(raw) ? raw[0] : raw;
@@ -446,18 +504,18 @@ export default class BarChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
             yVal = Array.isArray(raw) ? (raw[1] ?? raw[0]) : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -823,8 +881,8 @@ export default class BarChart extends Chart {
                   labelOpt.color ||
                   (isInside
                     ? theme.textColorOnSeries ||
-                    theme.token.colorTextOnSeries ||
-                    '#fff'
+                      theme.token.colorTextOnSeries ||
+                      '#fff'
                     : theme.axisLabelColor || theme.textColor),
                 fontSize: labelOpt.fontSize ?? theme.fontSize,
                 fontFamily: theme.fontFamily,
@@ -957,30 +1015,49 @@ export default class BarChart extends Chart {
                 const axisName = isHorizontal
                   ? yDomain[index]
                   : (xAxis?.data?.[index] ?? xDomain[index] ?? '');
-                const itemValue = resolveTooltipValue(item);
-                if (itemValue === undefined) {
+                const paramsList: any[] = [];
+                series.forEach((seriesItem, sIdx) => {
+                  if (seriesItem.type !== 'bar' || seriesItem.show === false)
+                    return;
+                  const sName = getSeriesDisplayName(
+                    (key: string, defaultValue?: string) =>
+                      this.t(key, defaultValue),
+                    seriesItem,
+                    sIdx,
+                  );
+                  if (!isSeriesVisibleByLegend(sName)) return;
+                  const sData = seriesItem.data || [];
+                  const sItem = sData[index];
+                  const sValue = resolveTooltipValue(sItem);
+                  if (sValue === undefined) return;
+                  const sColor =
+                    seriesItem.itemStyle?.color ||
+                    seriesItem.color ||
+                    this._getSeriesColor(sIdx);
+                  paramsList.push({
+                    type: EVENT_TYPE_SHOW_TIP,
+                    componentType: 'series',
+                    seriesType: 'bar',
+                    seriesIndex: sIdx,
+                    seriesName: sName,
+                    name: axisName,
+                    dataIndex: index,
+                    data: sItem,
+                    value: sValue,
+                    color: typeof sColor === 'string' ? sColor : undefined,
+                    marker:
+                      typeof sColor === 'string'
+                        ? this._getTooltipMarker(sColor)
+                        : undefined,
+                  });
+                });
+                if (paramsList.length === 0) {
                   this._tooltip.hide();
                   if (axisPointerLine) axisPointerLine.attr('invisible', true);
                   return;
                 }
-                const params = {
-                  type: EVENT_TYPE_SHOW_TIP,
-                  componentType: 'series',
-                  seriesType: 'bar',
-                  seriesIndex,
-                  seriesName: seriesName,
-                  name: axisName,
-                  dataIndex: index,
-                  data: item,
-                  value: itemValue,
-                  color: typeof barColor === 'string' ? barColor : undefined,
-                  marker:
-                    typeof barColor === 'string'
-                      ? this._getTooltipMarker(barColor)
-                      : undefined,
-                };
-                const content = this._generateTooltipContent(params);
-                this._tooltip.show(mx + 12, my - 16, content, params);
+                const content = this._generateTooltipContent(paramsList);
+                this._tooltip.show(mx + 12, my - 16, content, paramsList);
 
                 if (axisPointerLine) {
                   if (isHorizontal) {
@@ -1007,10 +1084,10 @@ export default class BarChart extends Chart {
 
               const itemName =
                 typeof item === 'object' &&
-                  item !== null &&
-                  !Array.isArray(item) &&
-                  'name' in item &&
-                  typeof item.name === 'string'
+                item !== null &&
+                !Array.isArray(item) &&
+                'name' in item &&
+                typeof item.name === 'string'
                   ? item.name
                   : isHorizontal
                     ? yDomain[index]

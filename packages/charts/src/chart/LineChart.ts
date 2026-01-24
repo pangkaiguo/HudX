@@ -394,18 +394,18 @@ export default class LineChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? (item as any).value
                 : item;
             yVal = Array.isArray(raw) ? (raw[1] ?? raw[0]) : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? (item as any).value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -664,10 +664,10 @@ export default class LineChart extends Chart {
 
                 const itemName =
                   typeof item === 'object' &&
-                    item !== null &&
-                    !Array.isArray(item) &&
-                    'name' in item &&
-                    typeof (item as any).name === 'string'
+                  item !== null &&
+                  !Array.isArray(item) &&
+                  'name' in item &&
+                  typeof (item as any).name === 'string'
                     ? (item as any).name
                     : xAxis?.data?.[pointIndex] || '';
                 const itemValue = this._getDataValue(item);

@@ -629,15 +629,15 @@ export interface TooltipOption {
    * - Function returning [x, y]
    */
   position?:
-  | string
-  | number[]
-  | ((
-    point: number[],
-    params: any,
-    dom: HTMLElement,
-    rect: any,
-    size: any,
-  ) => number[]);
+    | string
+    | number[]
+    | ((
+        point: number[],
+        params: any,
+        dom: HTMLElement,
+        rect: any,
+        size: any,
+      ) => number[]);
   /**
    * Whether to show the tooltip content.
    */
@@ -1505,15 +1505,15 @@ export interface LineSeriesOption extends BaseSeriesOption {
    * - 'path://...'
    */
   symbol?:
-  | string
-  | 'none'
-  | 'circle'
-  | 'rect'
-  | 'roundRect'
-  | 'triangle'
-  | 'diamond'
-  | 'pin'
-  | 'arrow';
+    | string
+    | 'none'
+    | 'circle'
+    | 'rect'
+    | 'roundRect'
+    | 'triangle'
+    | 'diamond'
+    | 'pin'
+    | 'arrow';
   /**
    * Symbol size.
    * - number: Single size.
@@ -1521,9 +1521,9 @@ export interface LineSeriesOption extends BaseSeriesOption {
    * - Function: (value, params) => number | number[]
    */
   symbolSize?:
-  | number
-  | number[]
-  | ((value: any, params: any) => number | number[]);
+    | number
+    | number[]
+    | ((value: any, params: any) => number | number[]);
   /**
    * Symbol rotation in degrees.
    */
@@ -1907,21 +1907,21 @@ export interface LabelOption {
   showOnHover?: boolean;
   /** Label position */
   position?:
-  | 'top'
-  | 'left'
-  | 'right'
-  | 'bottom'
-  | 'inside'
-  | 'insideLeft'
-  | 'insideRight'
-  | 'insideTop'
-  | 'insideBottom'
-  | 'insideTopLeft'
-  | 'insideBottomLeft'
-  | 'insideTopRight'
-  | 'insideBottomRight'
-  | 'outside'
-  | 'center';
+    | 'top'
+    | 'left'
+    | 'right'
+    | 'bottom'
+    | 'inside'
+    | 'insideLeft'
+    | 'insideRight'
+    | 'insideTop'
+    | 'insideBottom'
+    | 'insideTopLeft'
+    | 'insideBottomLeft'
+    | 'insideTopRight'
+    | 'insideBottomRight'
+    | 'outside'
+    | 'center';
   /** Text color */
   color?: string;
   /** Font size */
@@ -1970,16 +1970,16 @@ export type ChartData =
   | number
   | number[]
   | {
-    /** Data name */
-    name?: string;
-    /** Data value */
-    value: any;
-    /** Item style */
-    itemStyle?: ItemStyleOption;
-    /** Label */
-    label?: LabelOption;
-    [key: string]: any;
-  };
+      /** Data name */
+      name?: string;
+      /** Data value */
+      value: any;
+      /** Item style */
+      itemStyle?: ItemStyleOption;
+      /** Label */
+      label?: LabelOption;
+      [key: string]: any;
+    };
 
 /**
  * Chart event payload (similar to ECharts event params) used by `HChartProps.onEvents`.

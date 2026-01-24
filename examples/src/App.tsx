@@ -40,6 +40,9 @@ const StackHorizontalBarExample = lazy(
 const DivergingHorizontalBarExample = lazy(
   () => import('./examples/bar/DivergingHorizontalBarExample'),
 );
+const WaterfallBarExample = lazy(
+  () => import('./examples/bar/WaterfallBarExample'),
+);
 const DivergingVerticalBarExample = lazy(
   () => import('./examples/bar/DivergingVerticalBarExample'),
 );
@@ -115,6 +118,7 @@ const chartExamples: ClassicSection[] = [
     categoryKey: 'bar',
     items: [
       { id: 'basic-bar', component: BasicBarExample },
+      { id: 'waterfall-bar', component: WaterfallBarExample },
       {
         id: 'diverging-horizontal-bar',
         component: DivergingHorizontalBarExample,

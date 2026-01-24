@@ -491,7 +491,7 @@ describe('BarChart', () => {
     expect(s2Bar.style.opacity).toBeCloseTo(1);
   });
 
-  it('should show axis tooltip with current series item only', () => {
+  it('should show axis tooltip with all series items', () => {
     const chart = new BarChart(container);
     const tooltip = {
       show: vi.fn(),
@@ -523,11 +523,13 @@ describe('BarChart', () => {
     expect(String(content)).toContain('A');
     expect(String(content)).toContain('S1');
     expect(String(content)).toContain('10.00');
-    expect(String(content)).not.toContain('S2');
-    expect(String(content)).not.toContain('5.00');
-    expect(Array.isArray(params)).toBe(false);
-    expect(params.seriesName).toBe('S1');
-    expect(params.value).toBe(10);
+    expect(String(content)).toContain('S2');
+    expect(String(content)).toContain('5.00');
+    expect(Array.isArray(params)).toBe(true);
+    expect(params[0].seriesName).toBe('S1');
+    expect(params[0].value).toBe(10);
+    expect(params[1].seriesName).toBe('S2');
+    expect(params[1].value).toBe(5);
   });
 
   it('should show correct tooltip value for horizontal bar value arrays', () => {

@@ -327,13 +327,24 @@ export default class Tooltip {
     }
   }
 
-  private _updateContent(content: string | HTMLElement): void {
+  private _updateContent(content: any): void {
     if (typeof content === 'string') {
       this._el.innerHTML = content;
-    } else {
+      return;
+    }
+
+    if (content instanceof HTMLElement) {
       this._el.innerHTML = '';
       this._el.appendChild(content);
+      return;
     }
+
+    if (Array.isArray(content)) {
+      this._el.innerHTML = content.map((item) => String(item)).join('<br/>');
+      return;
+    }
+
+    this._el.innerHTML = String(content ?? '');
   }
 
   private _updatePosition(

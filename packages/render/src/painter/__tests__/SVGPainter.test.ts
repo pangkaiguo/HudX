@@ -472,7 +472,7 @@ describe('SVGPainter', () => {
       const tr = p.getAttribute('patternTransform') || '';
       const hasBg = p.querySelector('rect');
       const hasSymbol = p.querySelector('line, path, circle, rect, polygon');
-      return tr.includes('rotate(45)') && Boolean(hasBg) && Boolean(hasSymbol);
+      return tr.includes('rotate(45') && Boolean(hasBg) && Boolean(hasSymbol);
     });
     expect(hasMeta).toBe(true);
 
@@ -481,7 +481,7 @@ describe('SVGPainter', () => {
       const img = p.querySelector('image');
       return (
         tr.includes('scale(0.5)') &&
-        tr.includes('rotate(90)') &&
+        tr.includes('rotate(90') &&
         img?.getAttribute('href') === 'data:image/png;base64,pat'
       );
     });

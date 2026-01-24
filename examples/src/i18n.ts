@@ -73,6 +73,8 @@ const examplesEn: Dict = {
   'examples.advanced-doughnut.desc':
     'Demonstrating various center label configurations and nested layouts.',
   'examples.stack-bar.hint': 'Hover over bars to see values',
+  'examples.waterfall-bar.hint':
+    'Waterfall chart using stacked bars with a transparent series',
   'examples.area-line.updateData': 'Update Data (Random 30 points)',
   'examples.bar-3d.title': '3D Bar Chart',
   'examples.bar-3d.subtitle': 'Pseudo-3D effect using 2.5D projection',
@@ -130,6 +132,8 @@ const examplesEn: Dict = {
   'examples.list.stack-horizontal-bar.title': 'Stacked Horizontal Bar Chart',
   'examples.list.stack-horizontal-bar.subtitle':
     'Horizontal stacked bars with labels',
+  'examples.list.waterfall-bar.title': 'Waterfall Bar Chart',
+  'examples.list.waterfall-bar.subtitle': 'Accumulated Waterfall Chart',
   'examples.list.basic-pie.title': 'Pie Chart',
   'examples.list.basic-pie.subtitle':
     'Pie / roseType + tooltip formatter + optional decals',
@@ -329,6 +333,7 @@ const examplesZhCN: Dict = {
     '特性：平滑扇区动画、百分比显示、可交互图例、悬浮提示框',
   'examples.advanced-doughnut.desc': '展示不同的中心标签配置与嵌套布局。',
   'examples.stack-bar.hint': '悬浮柱子查看数值',
+  'examples.waterfall-bar.hint': '使用透明占位序列的堆叠瀑布图',
   'examples.area-line.updateData': '更新数据（随机 30 个点）',
   'examples.bar-3d.title': '3D 柱状图',
   'examples.bar-3d.subtitle': '使用 2.5D 投影模拟伪 3D 效果',
@@ -377,6 +382,8 @@ const examplesZhCN: Dict = {
   'examples.list.stack-bar.subtitle': '堆叠柱 + 轴指示器 + 标线',
   'examples.list.stack-horizontal-bar.title': '水平堆叠柱状图',
   'examples.list.stack-horizontal-bar.subtitle': '水平堆叠柱 + 标签',
+  'examples.list.waterfall-bar.title': '瀑布柱状图',
+  'examples.list.waterfall-bar.subtitle': '累计瀑布图',
   'examples.list.basic-pie.title': '饼图',
   'examples.list.basic-pie.subtitle': '饼图/玫瑰图 + 提示框格式化 + 可选贴花',
   'examples.list.advanced-pie.title': '高级饼图',
@@ -562,6 +569,7 @@ const examplesZhTW: Dict = {
     '特性：平滑扇區動畫、百分比顯示、可互動圖例、懸浮提示框',
   'examples.advanced-doughnut.desc': '展示不同的中心標籤配置與巢狀佈局。',
   'examples.stack-bar.hint': '懸浮柱子查看數值',
+  'examples.waterfall-bar.hint': '使用透明占位序列的堆疊瀑布圖',
   'examples.area-line.updateData': '更新資料（隨機 30 個點）',
   'examples.bar-3d.title': '3D 柱狀圖',
   'examples.bar-3d.subtitle': '使用 2.5D 投影模擬偽 3D 效果',
@@ -610,6 +618,8 @@ const examplesZhTW: Dict = {
   'examples.list.stack-bar.subtitle': '堆疊柱 + 軸指示器 + 標線',
   'examples.list.stack-horizontal-bar.title': '水平堆疊柱狀圖',
   'examples.list.stack-horizontal-bar.subtitle': '水平堆疊柱 + 標籤',
+  'examples.list.waterfall-bar.title': '瀑布柱狀圖',
+  'examples.list.waterfall-bar.subtitle': '累計瀑布圖',
   'examples.list.basic-pie.title': '餅圖',
   'examples.list.basic-pie.subtitle': '餅圖/玫瑰圖 + 提示框格式化 + 可選貼花',
   'examples.list.advanced-pie.title': '進階餅圖',
