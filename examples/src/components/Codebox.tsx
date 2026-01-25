@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { HChart, type ChartOption } from 'hudx-charts';
 import { Locale, ThemeManager, Theme, type RenderMode } from 'hudx-render';
 import { CodeEditor } from './CodeEditor';
@@ -15,6 +15,261 @@ interface CodeBoxProps {
   onLocaleChange: (locale: Locale) => void;
 }
 
+const buildTsCode = (jsCode: string) => {
+  return `import type { ChartOption } from 'hudx';
+
+const ${jsCode.replace('option =', 'option: ChartOption =')}`;
+};
+
+const useCodeExport = ({
+  code,
+  activeTab,
+  renderMode,
+  chartContainerRef,
+  backgroundColor,
+}: {
+  code: string;
+  activeTab: 'JS' | 'TS';
+  renderMode: RenderMode;
+  chartContainerRef: React.RefObject<HTMLDivElement>;
+  backgroundColor: string;
+}) => {
+  const handleDownload = useCallback(() => {
+    const isTs = activeTab === 'TS';
+    const content = isTs ? buildTsCode(code) : code;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = isTs ? 'chart-option.ts' : 'chart-option.js';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [activeTab, code]);
+
+  const handleScreenshot = useCallback(
+    (type: 'png' | 'jpeg' | 'svg') => {
+      if (!chartContainerRef.current) return;
+
+      const canvas = chartContainerRef.current.querySelector('canvas');
+      const svg = chartContainerRef.current.querySelector('svg');
+
+      let url = '';
+
+      if (renderMode === 'canvas' && canvas) {
+        if (type === 'svg') {
+          alert('Cannot download SVG from Canvas mode');
+          return;
+        }
+        url = canvas.toDataURL(`image/${type}`);
+      } else if (renderMode === 'svg' && svg) {
+        if (type !== 'svg') {
+          const serializer = new XMLSerializer();
+          const source = serializer.serializeToString(svg);
+          const svgBlob = new Blob([source], {
+            type: 'image/svg+xml;charset=utf-8',
+          });
+          const url = URL.createObjectURL(svgBlob);
+
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = svg.clientWidth;
+            canvas.height = svg.clientHeight;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+              ctx.fillStyle = backgroundColor;
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, 0, 0);
+
+              const a = document.createElement('a');
+              a.href = canvas.toDataURL(`image/${type}`);
+              a.download = `chart.${type}`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }
+            URL.revokeObjectURL(url);
+          };
+          img.src = url;
+          return;
+        } else {
+          const serializer = new XMLSerializer();
+          const source = serializer.serializeToString(svg);
+          const blob = new Blob([source], {
+            type: 'image/svg+xml;charset=utf-8',
+          });
+          url = URL.createObjectURL(blob);
+        }
+      }
+
+      if (url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `chart.${type}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        if (type === 'svg') URL.revokeObjectURL(url);
+      }
+    },
+    [backgroundColor, chartContainerRef, renderMode],
+  );
+
+  return { handleDownload, handleScreenshot };
+};
+
+const useCodeEvaluation = ({
+  code,
+  activeTab,
+}: {
+  code: string;
+  activeTab: 'JS' | 'TS';
+}) => {
+  const [option, setOption] = useState<ChartOption>({});
+  const [error, setError] = useState<string | null>(null);
+  const [errorLine, setErrorLine] = useState<number | null>(null);
+  const [errorColumn, setErrorColumn] = useState<number | null>(null);
+
+  const evaluateCodeValue = useCallback((codeValue: string) => {
+    const sourceUrl = 'hudx-codebox-input.js';
+    try {
+      const func = new Function(
+        `let option;\n${codeValue}\nreturn option;\n//# sourceURL=${sourceUrl}`,
+      );
+      const result = func();
+      if (result && typeof result === 'object') {
+        return {
+          option: result as ChartOption,
+          error: null,
+          errorLine: null,
+          errorColumn: null,
+        };
+      }
+      return {
+        option: null,
+        error: 'Code did not return an "option" object or assign to "option".',
+        errorLine: null,
+        errorColumn: null,
+      };
+    } catch (err: any) {
+      const stack = String(err?.stack || '');
+      const stackLine =
+        stack.split('\n').find((line: string) => line.includes(sourceUrl)) ||
+        '';
+      const match = stackLine.match(/:(\d+):(\d+)/);
+      const rawLine = match ? Number(match[1]) : err?.lineNumber;
+      const line = Number.isFinite(rawLine) ? rawLine - 1 : null;
+      const rawColumn = match ? Number(match[2]) : err?.columnNumber;
+      const column = line && Number.isFinite(rawColumn) ? rawColumn : null;
+      console.error(err);
+      return {
+        option: null,
+        error: err.message,
+        errorLine: line && line > 0 ? line : null,
+        errorColumn: column,
+      };
+    }
+  }, []);
+
+  const evaluateCode = useCallback(() => {
+    return evaluateCodeValue(code);
+  }, [code, evaluateCodeValue]);
+
+  const runCode = useCallback(
+    (overrideCode?: string) => {
+      const result = overrideCode
+        ? evaluateCodeValue(overrideCode)
+        : evaluateCodeValue(code);
+      if (result.option) {
+        setOption(result.option);
+        setError(null);
+        setErrorLine(null);
+        setErrorColumn(null);
+        return;
+      }
+      setError(result.error);
+      setErrorLine(result.errorLine);
+      setErrorColumn(result.errorColumn);
+    },
+    [code, evaluateCodeValue],
+  );
+
+  const validateCode = useCallback(() => {
+    const result = evaluateCodeValue(code);
+    if (result.option) {
+      setError(null);
+      setErrorLine(null);
+      setErrorColumn(null);
+      return;
+    }
+    setError(result.error);
+    setErrorLine(result.errorLine);
+    setErrorColumn(result.errorColumn);
+  }, [code, evaluateCodeValue]);
+
+  useEffect(() => {
+    runCode();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (activeTab === 'TS') return;
+    const timer = setTimeout(() => {
+      validateCode();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [activeTab, code, validateCode]);
+
+  return {
+    option,
+    setOption,
+    error,
+    errorLine,
+    errorColumn,
+    runCode,
+  };
+};
+
+const useDragResize = (initialPercent: number) => {
+  const mainContainerRef = useRef<HTMLDivElement>(null);
+  const [editorWidth, setEditorWidth] = useState(initialPercent);
+
+  const handleDragStart = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      const container = mainContainerRef.current;
+      if (!container) return;
+      event.preventDefault();
+      const rect = container.getBoundingClientRect();
+      const minWidth = 200;
+      const maxWidth = Math.max(rect.width - 200, minWidth);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+
+      const onMove = (moveEvent: MouseEvent) => {
+        const next = Math.min(
+          Math.max(moveEvent.clientX - rect.left, minWidth),
+          maxWidth,
+        );
+        setEditorWidth((next / rect.width) * 100);
+      };
+
+      const onUp = () => {
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onUp);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      };
+
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+    },
+    [],
+  );
+
+  return { mainContainerRef, editorWidth, handleDragStart, setEditorWidth };
+};
+
 export const CodeBox: React.FC<CodeBoxProps> = ({
   initialCode,
   onBack,
@@ -30,129 +285,13 @@ export const CodeBox: React.FC<CodeBoxProps> = ({
     ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
   const primaryText = ui.colorPrimaryText || themeObj.tooltipTextColor;
   const [code, setCode] = useState(initialCode);
-  const [option, setOption] = useState<ChartOption>({});
-  const [error, setError] = useState<string | null>(null);
   const [renderMode, setRenderMode] = useState<RenderMode>('svg');
   const [activeTab, setActiveTab] = useState<'JS' | 'TS'>('JS');
   const chartContainerRef = React.useRef<HTMLDivElement>(null);
-
-  const getTsCode = (jsCode: string) => {
-    return `import type { ChartOption } from 'hudx';
-
-const ${jsCode.replace('option =', 'option: ChartOption =')}`;
-  };
-
-  const handleDownload = () => {
-    const isTs = activeTab === 'TS';
-    const content = isTs ? getTsCode(code) : code;
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = isTs ? 'chart-option.ts' : 'chart-option.js';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-  const handleScreenshot = (type: 'png' | 'jpeg' | 'svg') => {
-    if (!chartContainerRef.current) return;
-
-    const canvas = chartContainerRef.current.querySelector('canvas');
-    const svg = chartContainerRef.current.querySelector('svg');
-
-    let url = '';
-
-    if (renderMode === 'canvas' && canvas) {
-      if (type === 'svg') {
-        alert('Cannot download SVG from Canvas mode');
-        return;
-      }
-      url = canvas.toDataURL(`image/${type}`);
-    } else if (renderMode === 'svg' && svg) {
-      if (type !== 'svg') {
-        // Convert SVG to Canvas for PNG/JPEG export
-        const serializer = new XMLSerializer();
-        const source = serializer.serializeToString(svg);
-        const svgBlob = new Blob([source], {
-          type: 'image/svg+xml;charset=utf-8',
-        });
-        const url = URL.createObjectURL(svgBlob);
-
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = svg.clientWidth;
-          canvas.height = svg.clientHeight;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.fillStyle = String(
-              ui.colorFillPage || themeObj.backgroundColor,
-            );
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-
-            const a = document.createElement('a');
-            a.href = canvas.toDataURL(`image/${type}`);
-            a.download = `chart.${type}`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          }
-          URL.revokeObjectURL(url);
-        };
-        img.src = url;
-        return;
-      } else {
-        const serializer = new XMLSerializer();
-        const source = serializer.serializeToString(svg);
-        const blob = new Blob([source], {
-          type: 'image/svg+xml;charset=utf-8',
-        });
-        url = URL.createObjectURL(blob);
-      }
-    }
-
-    if (url) {
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `chart.${type}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      if (type === 'svg') URL.revokeObjectURL(url);
-    }
-  };
-
-  const runCode = useCallback(() => {
-    try {
-      // Safe-ish eval: we wrap in a function and expect 'option' to be assigned
-      // eslint-disable-next-line no-new-func
-      const func = new Function(`
-        let option;
-        ${code}
-        return option;
-      `);
-      const result = func();
-      if (result) {
-        setOption(result);
-        setError(null);
-      } else {
-        setError(
-          'Code did not return an "option" object or assign to "option".',
-        );
-      }
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message);
-    }
-  }, [code]);
-
-  // Run once on mount
-  useEffect(() => {
-    runCode();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { option, setOption, error, errorLine, errorColumn, runCode } =
+    useCodeEvaluation({ code, activeTab });
+  const { mainContainerRef, editorWidth, handleDragStart, setEditorWidth } =
+    useDragResize(40);
 
   const bgColor = ui.colorFillPage || themeObj.backgroundColor;
   const textColor = themeObj.textColor;
@@ -162,6 +301,13 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
     ui.colorCodeGutterBackground ||
     ui.colorFillContainerAlt ||
     themeObj.gridColor;
+  const { handleDownload, handleScreenshot } = useCodeExport({
+    code,
+    activeTab,
+    renderMode,
+    chartContainerRef,
+    backgroundColor: bgColor,
+  });
 
   return (
     <div
@@ -296,14 +442,17 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
       </div>
 
       {/* Main Content */}
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+      <div
+        ref={mainContainerRef}
+        style={{ display: 'flex', flex: 1, overflow: 'hidden' }}
+      >
         {/* Left Pane: Editor */}
         <div
           style={{
-            width: '40%',
+            width: `${editorWidth}%`,
             display: 'flex',
             flexDirection: 'column',
-            borderRight: `1px solid ${borderColor}`,
+            minHeight: 0,
           }}
         >
           <div
@@ -346,7 +495,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
             </button>
             <div style={{ flex: 1 }} />
             <button
-              onClick={runCode}
+              onClick={() => runCode()}
               style={{
                 padding: '4px 15px',
                 background: primary,
@@ -364,8 +513,7 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
             <button
               onClick={() => {
                 setCode(initialCode);
-                setOption({});
-                setTimeout(() => runCode(), 0);
+                runCode(initialCode);
               }}
               style={{
                 marginLeft: 10,
@@ -383,24 +531,31 @@ const ${jsCode.replace('option =', 'option: ChartOption =')}`;
               Reset
             </button>
           </div>
-          <CodeEditor
-            code={activeTab === 'TS' ? getTsCode(code) : code}
-            onChange={activeTab === 'TS' ? () => {} : setCode}
-            theme={theme === 'dark' ? 'dark' : 'light'}
-          />
-          {error && (
-            <div
-              style={{
-                padding: 10,
-                color: 'red',
-                fontSize: 12,
-                borderTop: `1px solid ${borderColor}`,
-              }}
-            >
-              {error}
-            </div>
-          )}
+          <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+            <CodeEditor
+              code={activeTab === 'TS' ? buildTsCode(code) : code}
+              onChange={activeTab === 'TS' ? () => { } : setCode}
+              theme={theme === 'dark' ? 'dark' : 'light'}
+              language={activeTab === 'TS' ? 'ts' : 'js'}
+              showVimMode={true}
+              errorLine={errorLine}
+              errorColumn={errorColumn}
+              errorMessage={error}
+              readOnly={activeTab === 'TS'}
+            />
+          </div>
         </div>
+
+        <div
+          onMouseDown={handleDragStart}
+          style={{
+            width: 6,
+            cursor: 'col-resize',
+            backgroundColor: toolbarAltBg,
+            borderLeft: `1px solid ${borderColor}`,
+            borderRight: `1px solid ${borderColor}`,
+          }}
+        />
 
         {/* Right Pane: Preview */}
         <div
