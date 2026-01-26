@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["../packages/charts/src/index.ts", "../packages/render/src/index.ts"],
+  "out": "src/docs/api",
+  "plugin": ["typedoc-plugin-markdown"],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "hideBreadcrumbs": true,
+  "readme": "none",
+  "name": "HudX API"
+}

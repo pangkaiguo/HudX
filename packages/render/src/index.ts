@@ -12,17 +12,17 @@ export { default as CanvasPainter } from './painter/CanvasPainter';
 export { default as SVGPainter } from './painter/SVGPainter';
 
 // Shape exports
-export { default as Circle } from './graphic/Circle';
-export { default as Rect } from './graphic/Rect';
-export { default as Line } from './graphic/Line';
-export { default as Path } from './graphic/Path';
-export { default as Text } from './graphic/Text';
-export { default as Polygon } from './graphic/Polygon';
-export { default as Polyline } from './graphic/Polyline';
-export { default as Arc } from './graphic/Arc';
-export { default as BezierCurve } from './graphic/BezierCurve';
-export { default as Sector } from './graphic/Sector';
-export { default as Image } from './graphic/Image';
+export { default as Circle, type CircleShape } from './graphic/Circle';
+export { default as Rect, type RectShape } from './graphic/Rect';
+export { default as Line, type LineShape } from './graphic/Line';
+export { default as Path, type PathShape } from './graphic/Path';
+export { default as Text, type TextShape } from './graphic/Text';
+export { default as Polygon, type PolygonShape } from './graphic/Polygon';
+export { default as Polyline, type PolylineShape } from './graphic/Polyline';
+export { default as Arc, type ArcShape } from './graphic/Arc';
+export { default as BezierCurve, type BezierCurveShape } from './graphic/BezierCurve';
+export { default as Sector, type SectorShape } from './graphic/Sector';
+export { default as Image, type ImageShape } from './graphic/Image';
 
 // Animation
 export { Animation, Easing } from './animation/Animation';
