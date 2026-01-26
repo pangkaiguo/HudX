@@ -1114,4 +1114,83 @@ describe('PieChart', () => {
     expect(sB.style.opacity).toBe(1);
     vi.useRealTimers();
   });
+
+  it('should apply emphasis styles correctly', () => {
+    vi.useFakeTimers();
+    const chart = new PieChart(container);
+    chart.setOption({
+      series: [
+        {
+          type: 'pie',
+          data: [{ value: 100, name: 'A' }],
+          label: { show: true, position: 'outside' },
+          labelLine: { show: true },
+          emphasis: {
+            label: { color: 'blue', fontSize: 20 },
+            itemStyle: {
+              color: 'red',
+              borderColor: 'green',
+              borderWidth: 5,
+              shadowBlur: 10,
+              shadowColor: 'black',
+              shadowOffsetX: 2,
+              shadowOffsetY: 2
+            }
+          }
+        }
+      ]
+    });
+
+    const sectors = Array.from((chart as any)._activeSectors.values()) as any[];
+    const sectorA = sectors[0];
+    const label = sectorA.__label;
+    const labelLine = sectorA.__labelLine;
+
+    // Trigger hover
+    sectorA.trigger('mouseover');
+    vi.advanceTimersByTime(300);
+
+    expect(label.style.fill).toBe('blue');
+    expect(label.style.fontSize).toBe(20);
+    expect(labelLine.style.stroke).toBe('blue');
+
+    expect(sectorA.style.fill).toBe('red');
+    expect(sectorA.style.stroke).toBe('green');
+    expect(sectorA.style.lineWidth).toBe(5);
+    expect(sectorA.style.shadowBlur).toBe(10);
+    expect(sectorA.style.shadowColor).toBe('black');
+    expect(sectorA.style.shadowOffsetX).toBe(2);
+    expect(sectorA.style.shadowOffsetY).toBe(2);
+
+    vi.useRealTimers();
+  });
+
+  it('should clear restore timeout on re-hover', () => {
+    vi.useFakeTimers();
+    const chart = new PieChart(container);
+    chart.setOption({
+      legend: { show: true },
+      series: [{ 
+        type: 'pie', 
+        data: [{ name: 'A', value: 10 }, { name: 'B', value: 20 }] 
+      }]
+    });
+    
+    // Hover A
+    (chart as any)._onLegendHover('A', true);
+    expect((chart as any)._hoveredSectorName).toBe('A');
+    
+    // Unhover A
+    (chart as any)._onLegendHover('A', false);
+    // Timeout should be set
+    expect((chart as any)._restoreTimeout).toBeDefined();
+    
+    // Hover A again immediately
+    (chart as any)._onLegendHover('A', true);
+    // Timeout should be cleared
+    expect((chart as any)._restoreTimeout).toBeNull();
+    
+    vi.useRealTimers();
+  });
 });
+

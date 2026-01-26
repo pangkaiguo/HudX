@@ -178,10 +178,10 @@ export default class LineChart extends Chart {
       const xScale =
         xAxis?.type === 'category'
           ? createOrdinalScale(
-              xDomain,
-              xRange,
-              typeof xAxis.boundaryGap === 'boolean' ? xAxis.boundaryGap : true,
-            )
+            xDomain,
+            xRange,
+            typeof xAxis.boundaryGap === 'boolean' ? xAxis.boundaryGap : true,
+          )
           : createLinearScale(xDomain, xRange);
 
       const yScale = createLinearScale(yDomain, yRange);
@@ -398,18 +398,18 @@ export default class LineChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item) &&
-              'value' in item
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
                 ? (item as any).value
                 : item;
             yVal = Array.isArray(raw) ? (raw[1] ?? raw[0]) : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-              item !== null &&
-              !Array.isArray(item) &&
-              'value' in item
+                item !== null &&
+                !Array.isArray(item) &&
+                'value' in item
                 ? (item as any).value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -536,11 +536,6 @@ export default class LineChart extends Chart {
 
         if (!this._activeLines.has(seriesIndex)) {
           this._activeLines.set(seriesIndex, { line, symbols: [], area });
-        } else {
-          const item = this._activeLines.get(seriesIndex)!;
-          item.line = line;
-          item.area = area;
-          item.symbols = [];
         }
 
         if (this._shouldAnimateFor(seriesName)) {
@@ -668,10 +663,10 @@ export default class LineChart extends Chart {
 
                 const itemName =
                   typeof item === 'object' &&
-                  item !== null &&
-                  !Array.isArray(item) &&
-                  'name' in item &&
-                  typeof (item as any).name === 'string'
+                    item !== null &&
+                    !Array.isArray(item) &&
+                    'name' in item &&
+                    typeof (item as any).name === 'string'
                     ? (item as any).name
                     : xAxis?.data?.[pointIndex] || '';
                 const itemValue = this._getDataValue(item);

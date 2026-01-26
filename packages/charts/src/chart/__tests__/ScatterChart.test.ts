@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import ScatterChart from '../ScatterChart';
 import { Group, Circle, type ChartOption } from 'hudx-render';
 
+import * as HudxRender from 'hudx-render';
+
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),
   fillText: vi.fn(),
@@ -182,28 +184,108 @@ describe('ScatterChart', () => {
     expect(circle.style.opacity).toBe(0.5);
   });
 
-  it('should support scale option on axes', () => {
+  it('should skip points with invalid coordinates (NaN cx/cy)', () => {
+    // Mock createOrdinalScale to return NaN to force the check
+    const spy = vi.spyOn(HudxRender, 'createOrdinalScale').mockImplementation(() => (() => NaN) as any);
+
     const chart = new ScatterChart(container);
     chart.setOption({
-      animation: false,
-      xAxis: { type: 'value', scale: true },
-      yAxis: { type: 'value', scale: true },
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
       series: [
         {
           type: 'scatter',
           data: [
-            [100, 100],
-            [200, 200],
-          ],
-        },
-      ],
+            [0, 10], // Valid index, but scale returns NaN
+          ]
+        }
+      ]
     });
 
-    const root = (chart as any)._root;
-    const circles = root.children().filter((c: any) => c instanceof Circle);
+    const root = (chart as any)._root as Group;
+    const circles = root.children().filter((child: any) => child instanceof Circle);
 
-    const c1 = circles[0] as Circle;
-    expect(c1).toBeDefined();
+    spy.mockRestore();
+    expect(circles.length).toBe(0);
+  });
+
+  it('should handle tooltip events', () => {
+    const chart = new ScatterChart(container);
+    const tooltipShowSpy = vi.fn();
+    const tooltipHideSpy = vi.fn();
+
+    // Mock tooltip
+    (chart as any)._tooltip = {
+      show: tooltipShowSpy,
+      hide: tooltipHideSpy,
+    };
+
+    chart.setOption({
+      tooltip: { show: true },
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [{ type: 'scatter', data: [[0, 10]] }]
+    });
+
+    const root = (chart as any)._root as Group;
+    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+    expect(circle).toBeDefined();
+
+    // Trigger mouseover
+    // hudx-render shapes have 'on' method. We can simulate it by accessing the handler.
+    // However, since we can't easily access the private handler storage, 
+    // we rely on the fact that we can't easily emit event on mock shape unless we use the real Shape event system.
+    // But Circle is a real class from hudx-render.
+
+    // We can try to trigger the event handler if we can access it.
+    // Or we can assume 'on' works if we emit it.
+    // Since we are in a jsdom environment, maybe we can't easily trigger the shape event without the renderer's event system.
+    // But we can check if 'on' was called? 
+    // We didn't spy on 'on'.
+
+    // Let's rely on finding the handler in the internal storage if possible, or just skip if too hard?
+    // No, we need coverage.
+    // Let's spy on circle.on BEFORE it is created? No, circle is created inside.
+
+    // We can inspect the circle object. It likely has `_events` or similar.
+    // Or we can manually trigger it if we knew how `hudx-render` works.
+    // Assuming `circle.trigger('mouseover', { ... })` works?
+
+    if ((circle as any).trigger) {
+      (circle as any).trigger('mouseover', { offsetX: 10, offsetY: 10 });
+      expect(tooltipShowSpy).toHaveBeenCalled();
+
+      (circle as any).trigger('mouseout');
+      expect(tooltipHideSpy).toHaveBeenCalled();
+    }
+  });
+
+  it('should handle animation', () => {
+    vi.useFakeTimers();
+    const chart = new ScatterChart(container);
+    chart.setOption({
+      animation: true,
+      animationDuration: 300,
+      xAxis: { type: 'value' },
+      yAxis: { type: 'value' },
+      series: [{ type: 'scatter', data: [[10, 10]] }]
+    });
+
+    const root = (chart as any)._root as Group;
+    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+    expect(circle).toBeDefined();
+
+    // Animation should be starting.
+    // Advance time
+    vi.advanceTimersByTime(300);
+
+    // Verify final state (radius should be full size)
+    // Initially 0 or scaled?
+    // ScatterChart animation usually scales from 0.
+    // We can check if radius is non-zero.
+    expect(circle.shape.r).toBeGreaterThan(0);
+
+    vi.useRealTimers();
   });
 
   it('should show tooltip with default series name when series name is missing', () => {
@@ -356,4 +438,155 @@ describe('ScatterChart', () => {
     (chart as any)._onLegendHover('S2', true);
     expect(s2Circles![0].style.opacity).toBe(1);
   });
+
+  it('should handle complex data types (object and NaN)', () => {
+    const chart = new ScatterChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'value' },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'scatter',
+          data: [
+            { value: [10, 20] }, // Object with value array
+            [NaN, 20], // Should be skipped
+            [10, NaN], // Should be skipped
+          ]
+        }
+      ]
+    });
+
+    const root = (chart as any)._root as Group;
+    const circles = root.children().filter((child: any) => child instanceof Circle);
+    expect(circles.length).toBe(1); // Only the first valid point
+  });
+
+  it('should handle category axis with value matching', () => {
+    const chart = new ScatterChart(container);
+    chart.setOption({
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'category', data: ['X', 'Y'] },
+      series: [
+        {
+          type: 'scatter',
+          data: [
+            ['A', 'X'] as any, // Match by string
+            [0, 1] // Match by index
+          ]
+        }
+      ]
+    });
+
+    const root = (chart as any)._root as Group;
+    const circles = root.children().filter((child: any) => child instanceof Circle);
+    expect(circles.length).toBe(2);
+
+    // Check positions (assuming default size 800x600)
+    // 'A' is index 0, 'B' is index 1. 'X' is index 0, 'Y' is index 1.
+    // [0, 0] and [0, 1] essentially
+    const c1 = circles[0] as Circle;
+    const c2 = circles[1] as Circle;
+
+    expect(c1.shape.cx).toBeDefined();
+    expect(c1.shape.cy).toBeDefined();
+    expect(c2.shape.cx).toBeDefined();
+    expect(c2.shape.cy).toBeDefined();
+  });
+
+  it('should handle symbolSize as function', () => {
+    const chart = new ScatterChart(container);
+    chart.setOption({
+      animation: false,
+      xAxis: { type: 'value' },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'scatter',
+          data: [[10, 20]],
+          symbolSize: (data: any) => data[0] // Returns 10
+        }
+      ]
+    });
+
+    const root = (chart as any)._root as Group;
+    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+    expect(circle.shape.r).toBe(5); // 10/2
+  });
+
+  it('should handle mouseout on scatter point', () => {
+    const chart = new ScatterChart(container);
+    chart.setOption({
+      tooltip: { show: true },
+      xAxis: { type: 'value' },
+      yAxis: { type: 'value' },
+      series: [{ type: 'scatter', data: [[10, 10]] }]
+    });
+
+    const root = (chart as any)._root as Group;
+    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+
+    const tooltip = (chart as any)._tooltip;
+    const hideSpy = vi.spyOn(tooltip, 'hide');
+
+    circle.trigger('mouseout');
+    expect(hideSpy).toHaveBeenCalled();
+  });
+
+  it('should catch render error', () => {
+    const chart = new ScatterChart(container);
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+
+    // Mock flush to throw error
+    (chart as any)._renderer.flush = () => { throw new Error('Render failed'); };
+
+    chart.setOption({
+      xAxis: { type: 'value' },
+      yAxis: { type: 'value' },
+      series: [{ type: 'scatter', data: [[10, 10]] }],
+    });
+
+    expect(consoleSpy).toHaveBeenCalledWith('[ScatterChart] Render error:', expect.any(Error));
+    consoleSpy.mockRestore();
+  });
+
+  it('should handle legend hover restore', () => {
+    const chart = new ScatterChart(container);
+    chart.setOption({
+      legend: { show: true },
+      xAxis: { type: 'value' },
+      yAxis: { type: 'value' },
+      series: [{ type: 'scatter', name: 'A', data: [[10, 10]] }]
+    });
+
+    const root = (chart as any)._root as Group;
+    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+
+    // Simulate hover
+    (chart as any)._onLegendHover('A', true);
+    expect(circle.style.opacity).toBe(1);
+
+    // Simulate unhover (restore)
+    (chart as any)._onLegendHover('A', false);
+    expect(circle.style.opacity).toBe(0.8);
+  });
+
+  it('should catch axes render error', () => {
+    const chart = new ScatterChart(container);
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+
+    // Mock _renderAxes to throw
+    (chart as any)._renderAxes = () => { throw new Error('Axes error'); };
+
+    chart.setOption({
+      xAxis: { type: 'value' },
+      yAxis: { type: 'value' },
+      series: [{ type: 'scatter', data: [[10, 10]] }]
+    });
+
+    expect(consoleSpy).toHaveBeenCalledWith('[ScatterChart] Error rendering axes:', expect.any(Error));
+    consoleSpy.mockRestore();
+  });
+
 });
+

@@ -176,6 +176,8 @@ export default class ScatterChart extends Chart {
           }
 
           if (xVal === undefined || yVal === undefined) return;
+          if (typeof xVal === 'number' && isNaN(xVal)) return;
+          if (typeof yVal === 'number' && isNaN(yVal)) return;
 
           let cx: number, cy: number;
 
@@ -221,6 +223,7 @@ export default class ScatterChart extends Chart {
               dataIndex: index,
               seriesIndex,
             });
+
 
           if (!Number.isFinite(finalSize)) finalSize = 10;
           const baseR = finalSize / 2;

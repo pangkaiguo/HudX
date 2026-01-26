@@ -7,6 +7,8 @@ import {
   createScaleMatrix,
   createRotateMatrix,
   invertMatrix,
+  cloneMatrix,
+  copyMatrix,
   translate,
   scale,
   rotate,
@@ -114,5 +116,47 @@ describe('matrix', () => {
 
     const p = applyMatrix(m, 5, 5);
     expect(p).toEqual([20, 30]);
+  });
+
+  it('should create rotation matrix', () => {
+    const angle = Math.PI / 2; // 90 degrees
+    const m = createRotateMatrix(angle);
+    // cos(90) = 0, sin(90) = 1
+    // a: 0, b: 1, c: -1, d: 0
+    expect(m.a).toBeCloseTo(0);
+    expect(m.b).toBeCloseTo(1);
+    expect(m.c).toBeCloseTo(-1);
+    expect(m.d).toBeCloseTo(0);
+
+    const p = applyMatrix(m, 10, 0);
+    // x=10, y=0.
+    // x' = 0*10 + (-1)*0 + 0 = 0
+    // y' = 1*10 + 0*0 + 0 = 10
+    expect(p[0]).toBeCloseTo(0);
+    expect(p[1]).toBeCloseTo(10);
+  });
+
+  it('should rotate matrix', () => {
+    let m = createIdentityMatrix();
+    m = rotate(m, Math.PI / 2);
+    // m * R
+    const p = applyMatrix(m, 10, 0);
+    expect(p[0]).toBeCloseTo(0);
+    expect(p[1]).toBeCloseTo(10);
+  });
+
+  it('should clone matrix', () => {
+    const m1 = createTranslateMatrix(10, 20);
+    const m2 = cloneMatrix(m1);
+    expect(m2).toEqual(m1);
+    expect(m2).not.toBe(m1);
+  });
+
+  it('should copy matrix', () => {
+    const m1 = createTranslateMatrix(10, 20);
+    const m2 = createIdentityMatrix();
+    const m3 = copyMatrix(m2, m1);
+    expect(m3).toEqual(m1);
+    expect(m3).toBe(m2); // Should modify target in place and return it
   });
 });

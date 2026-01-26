@@ -567,4 +567,141 @@ describe('BarChart', () => {
     expect(String(call[2])).toContain('200.00');
     expect(call[3]?.value).toBe(200);
   });
+
+  it('should handle setRenderMode', () => {
+    const chart = new BarChart(container);
+    // @ts-ignore
+    chart.setRenderMode('svg');
+    // @ts-ignore
+    expect(chart.getRenderMode()).toBe('svg');
+    // @ts-ignore
+    chart.setRenderMode('svg'); // Same mode, should return early
+    // @ts-ignore
+    expect(chart.getRenderMode()).toBe('svg');
+  });
+
+  it('should handle exit animation for bars and labels', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      animation: true,
+      xAxis: { type: 'category', data: ['A', 'B'] },
+      yAxis: { type: 'value' },
+      series: [
+        {
+          type: 'bar',
+          data: [10, 20],
+          label: { show: true },
+        },
+      ],
+    });
+
+    // Initial state: 2 bars, 2 labels
+    let bars = (chart as any)._activeBars;
+    let labels = (chart as any)._activeLabels;
+    expect(bars.size).toBe(2);
+    expect(labels.size).toBe(2);
+
+    // Update with fewer items
+    chart.setOption({
+      series: [
+        {
+          type: 'bar',
+          data: [10], // Only one item
+          label: { show: true },
+        },
+      ],
+    });
+
+    // Check coverage of horizontal exit path
+    chart.setOption({
+      xAxis: { type: 'value' },
+      yAxis: { type: 'category', data: ['A', 'B'] },
+      series: [
+        {
+          type: 'bar',
+          data: [10, 20],
+          label: { show: true },
+        },
+      ],
+    });
+    // Update with fewer items
+    chart.setOption({
+      series: [
+        {
+          type: 'bar',
+          data: [10], // Only one item
+          label: { show: true },
+        },
+      ],
+    });
+  });
+
+  it('should handle mouseout with axisPointer', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      tooltip: { show: true, trigger: 'axis', axisPointer: { type: 'line' } },
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [{ type: 'bar', data: [10] }],
+    });
+
+    const bar = (chart as any)._activeBars.get('0-0');
+    expect(bar).toBeDefined();
+
+    const tooltip = (chart as any)._tooltip;
+    const showSpy = vi.spyOn(tooltip, 'show');
+    const hideSpy = vi.spyOn(tooltip, 'hide');
+
+    // Trigger mouseover
+    bar.trigger('mousemove', { offsetX: 10, offsetY: 10 });
+    expect(showSpy).toHaveBeenCalled();
+
+    // Trigger mouseout
+    bar.trigger('mouseout');
+    expect(hideSpy).toHaveBeenCalled();
+  });
+
+  it('should handle emphasis focus none', () => {
+    const chart = new BarChart(container);
+    chart.setOption({
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [{
+        type: 'bar',
+        data: [10],
+        label: { show: true },
+        emphasis: { focus: 'none' }
+      }]
+    });
+
+    const bar = (chart as any)._activeBars.get('0-0');
+    const label = (chart as any)._activeLabels.get('0-0');
+
+    // Trigger hover
+    bar.trigger('mousemove');
+
+    // Trigger mouseout
+    bar.trigger('mouseout');
+
+    expect(bar.style.opacity).toBeDefined();
+    expect(label.style.opacity).toBeDefined();
+  });
+
+  it('should catch render error', () => {
+
+    const chart = new BarChart(container);
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+
+    // Mock flush to throw error
+    (chart as any)._renderer.flush = () => { throw new Error('Render failed'); };
+
+    chart.setOption({
+      xAxis: { type: 'category', data: ['A'] },
+      yAxis: { type: 'value' },
+      series: [{ type: 'bar', data: [10] }],
+    });
+
+    expect(consoleSpy).toHaveBeenCalledWith('[BarChart] Render error:', expect.any(Error));
+    consoleSpy.mockRestore();
+  });
 });

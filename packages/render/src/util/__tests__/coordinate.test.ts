@@ -4,6 +4,9 @@ import {
   createOrdinalScale,
   calculateDomain,
   niceDomain,
+  calculateNiceTicks,
+  formatAxisLabel,
+  dataToCoordinate,
 } from '../coordinate';
 import type { AxisOption } from '../../types';
 
@@ -140,6 +143,202 @@ describe('coordinate', () => {
     it('should calculate nice domain', () => {
       expect(niceDomain(0, 42, 5)).toEqual([0, 50]);
       expect(niceDomain(12, 88, 5)).toEqual([0, 100]); // range=76, step~15.2 -> 20. floor(12/20)*20=0, ceil(88/20)*20=100
+    });
+
+    it('should handle min === max', () => {
+      expect(niceDomain(10, 10)).toEqual([0, 12]);
+      expect(niceDomain(0, 0)).toEqual([0, 10]);
+      expect(niceDomain(-10, -10)).toEqual([-12, 0]);
+    });
+  });
+
+  describe('calculateNiceTicks', () => {
+    it('should calculate nice ticks', () => {
+      const ticks = calculateNiceTicks(0, 42, 5);
+      expect(ticks).toEqual([0, 10, 20, 30, 40, 50]);
+    });
+  });
+
+  describe('formatAxisLabel', () => {
+    it('should format numbers', () => {
+      expect(formatAxisLabel(100)).toBe('100');
+      expect(formatAxisLabel(1234)).toBe('1K');
+      expect(formatAxisLabel(1500, 1)).toBe('1.5K');
+      expect(formatAxisLabel(1000000)).toBe('1M');
+      expect(formatAxisLabel(1500000, 1)).toBe('1.5M');
+      expect(formatAxisLabel(1000000000)).toBe('1B');
+    });
+  });
+
+  describe('dataToCoordinate', () => {
+    it('should convert number data', () => {
+      const xScale = createLinearScale([0, 10], [0, 100]);
+      const yScale = createLinearScale([0, 10], [0, 100]);
+      // For single number, x is index?
+      // Wait, dataToCoordinate impl:
+      // name = 0 (default), value = data
+      // x = xScale(0), y = yScale(data)
+      const coord = dataToCoordinate(5, xScale, yScale);
+      expect(coord).toEqual({ x: 0, y: 50 });
+    });
+
+    it('should convert array data', () => {
+      const xScale = createLinearScale([0, 10], [0, 100]);
+      const yScale = createLinearScale([0, 10], [0, 100]);
+      // data = [5, 5] -> value = 5?
+      // impl: value = data[0] -> 5. name=0.
+      // x = xScale(0), y = yScale(5)
+      const coord = dataToCoordinate([5, 10], xScale, yScale);
+      expect(coord).toEqual({ x: 0, y: 50 });
+    });
+
+    it('should convert object data', () => {
+      const xScale = createLinearScale([0, 10], [0, 100]);
+      const yScale = createLinearScale([0, 10], [0, 100]);
+      const data = { name: 2, value: 5 } as any;
+      const coord = dataToCoordinate(data, xScale, yScale);
+      expect(coord).toEqual({ x: 20, y: 50 });
+    });
+
+    it('should convert object data with array value', () => {
+      const xScale = createLinearScale([0, 10], [0, 100]);
+      const yScale = createLinearScale([0, 10], [0, 100]);
+      const data = { name: 2, value: [5, 10] } as any;
+      const coord = dataToCoordinate(data, xScale, yScale);
+      expect(coord).toEqual({ x: 20, y: 50 });
+    });
+  });
+
+  describe('createLinearScale extra', () => {
+    it('should handle infinite domain', () => {
+      const scale = createLinearScale([Infinity, Infinity], [0, 100]);
+      // Should fallback to base 0 -> [-1, 1]
+      // domain [-1, 1] -> range [0, 100]
+      // 0 -> 50
+      expect(scale(0)).toBe(50);
+    });
+
+    it('should handle equal domain', () => {
+      const scale = createLinearScale([10, 10], [0, 100]);
+      // fallback to [9, 11] -> [0, 100]
+      // 10 -> 50
+      expect(scale(10)).toBe(50);
+    });
+
+    it('should allow updating domain and range', () => {
+      const scale = createLinearScale([0, 10], [0, 100]);
+      const newScale = scale.domain([0, 20]);
+      expect(newScale(10)).toBe(50);
+
+      const newScale2 = scale.range([0, 200]);
+      expect(newScale2(10)).toBe(200);
+    });
+
+    it('should handle infinite result', () => {
+      // Force an infinite result if possible, or just check the branch
+      // The implementation checks !isFinite(v)
+      // This happens if k is Infinity? (d1=d0 handled)
+      // or if input value is Infinity
+      const scale = createLinearScale([0, 10], [0, 100]);
+      expect(scale(Infinity)).toBe(0); // Returns r0
+    });
+  });
+
+  describe('createOrdinalScale extra', () => {
+    it('should allow updating domain and range', () => {
+      const scale = createOrdinalScale(['A'], [0, 100]);
+      const newScale = scale.domain(['A', 'B']);
+      expect(newScale('B')).toBe(75);
+
+      const newScale2 = scale.range([0, 200]);
+      expect(newScale2('A')).toBe(100);
+    });
+
+    it('should handle value not in domain', () => {
+      const scale = createOrdinalScale(['A'], [0, 100]);
+      expect(scale('B')).toBe(0); // Returns range[0]
+    });
+
+    it('should invert with single item and no boundary gap', () => {
+      const scale = createOrdinalScale(['A'], [0, 100], false);
+      expect(scale.invert!(50)).toBe('A');
+    });
+  });
+
+  describe('calculateDomain extra', () => {
+    it('should handle array data for value axis', () => {
+      const axis: AxisOption = { type: 'value' };
+      const data = [[10, 20], [30, 40]];
+      // isXAxis=false -> index 1
+      const domain = calculateDomain(axis, data, false);
+      expect(domain).toEqual([0, 40]); // niceDomain(20, 40) -> [0, 40] because scale defaults to false
+      // niceDomain(20, 40, 5) -> range 20, step 4. [20, 40] -> [20, 40] if scale=true
+      // wait, calculateDomain default isXAxis=true if not passed?
+    });
+
+    it('should handle object data with name as number', () => {
+      const axis: AxisOption = { type: 'value' };
+      const data = [{ name: 10, value: 100 }, { name: 20, value: 200 }];
+      // isXAxis=true. name is used. 10, 20.
+      const domain = calculateDomain(axis, data, true);
+      expect(domain).toEqual([0, 20]); // niceDomain(10, 20) -> [0, 20] because scale defaults to false
+    });
+
+    it('should handle object data with array value', () => {
+      const axis: AxisOption = { type: 'value' };
+      const data = [{ name: 'A', value: [10, 20] }, { name: 'B', value: [30, 40] }];
+      // isXAxis=true -> index 0 -> 10, 30
+      const domain = calculateDomain(axis, data, true);
+      expect(domain).toEqual([0, 30]);
+
+      // isXAxis=false -> index 1 -> 20, 40
+    });
+
+    it('should handle dataMin/dataMax', () => {
+      const axis: AxisOption = { type: 'value', min: 'dataMin', max: 'dataMax' };
+      const data = [10, 50];
+      const domain = calculateDomain(axis, data, false);
+      // scale=false default -> min=0. max=50. padding=(50-0)*0.1=5.
+      // min-padding = -5. max+padding = 55.
+      expect(domain).toEqual([-5, 55]);
+      // The code:
+      // axis.min !== undefined && axis.min !== 'dataMin' ? axis.min : min - padding
+    });
+
+    it('should return default [0, 100] for empty data in value axis', () => {
+      const axis: AxisOption = { type: 'value' };
+      const domain = calculateDomain(axis, [], false);
+      expect(domain).toEqual([0, 100]);
+    });
+
+    it('should handle unknown axis type', () => {
+      const axis: AxisOption = { type: 'time' as any };
+      const domain = calculateDomain(axis, [], false);
+      expect(domain).toEqual([0, 100]);
+    });
+
+    it('should extract categories from primitive data', () => {
+      const axis: AxisOption = { type: 'category' };
+      const data = ['A', 'B', 'C'];
+      const domain = calculateDomain(axis, data, true);
+      expect(domain).toEqual(['A', 'B', 'C']);
+    });
+
+    it('should handle object data with string name and number value for X value axis', () => {
+      const axis: AxisOption = { type: 'value' };
+      const data = [{ name: 'A', value: 10 }, { name: 'B', value: 20 }];
+      const domain = calculateDomain(axis, data, true);
+      // name is string, falls back to value check. value is number -> 10, 20.
+      // min=10, max=20. scale=false -> min=0.
+      expect(domain).toEqual([0, 20]);
+    });
+
+    it('should handle object data with array value for Y value axis', () => {
+      const axis: AxisOption = { type: 'value' };
+      const data = [{ name: 'A', value: [10, 20] }, { name: 'B', value: [30, 40] }];
+      // isXAxis=false -> index 1 -> 20, 40
+      const domain = calculateDomain(axis, data, false);
+      expect(domain).toEqual([0, 40]);
     });
   });
 });
