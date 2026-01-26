@@ -47,13 +47,13 @@ describe('Legend', () => {
     );
   });
 
-  it('should use tooltip-aligned container styles by default', () => {
+  it('should use transparent container styles by default', () => {
     const legend = new Legend();
     const theme = ThemeManager.getTheme();
     const opt = (legend as any)._option;
 
-    expect(opt.backgroundColor).toBe(theme.tooltipBackgroundColor);
-    expect(opt.borderColor).toBe(theme.tooltipBorderColor);
+    expect(opt.backgroundColor).toBe('transparent');
+    expect(opt.borderColor).toBe('transparent');
     expect(opt.borderWidth).toBe(TOOLTIP_DEFAULT_BORDER_WIDTH);
     expect(opt.borderRadius).toBe(TOOLTIP_DEFAULT_BORDER_RADIUS);
     expect(opt.fontWeight).toBe('normal');
@@ -236,7 +236,10 @@ describe('Legend', () => {
 
     const children = legend.children();
     const rects = children.filter(
-      (c) => c instanceof Rect && c.style.fill === 'transparent',
+      (c) =>
+        c instanceof Rect &&
+        c.style.fill === 'transparent' &&
+        c.attr('cursor') === 'pointer',
     );
 
     expect(rects.length).toBe(2);

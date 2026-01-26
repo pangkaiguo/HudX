@@ -177,7 +177,11 @@ export default class LineChart extends Chart {
 
       const xScale =
         xAxis?.type === 'category'
-          ? createOrdinalScale(xDomain, xRange)
+          ? createOrdinalScale(
+              xDomain,
+              xRange,
+              typeof xAxis.boundaryGap === 'boolean' ? xAxis.boundaryGap : true,
+            )
           : createLinearScale(xDomain, xRange);
 
       const yScale = createLinearScale(yDomain, yRange);

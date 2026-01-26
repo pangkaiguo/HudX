@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * ChartElement - Base class for all graphical elements (inspired by ZRender)
  */
@@ -172,7 +171,7 @@ class ChartElement extends Eventful {
     );
   }
 
-  render(ctx: CanvasRenderingContext2D): void {
+  render(_ctx: CanvasRenderingContext2D): void {
     // To be implemented by subclasses
   }
 

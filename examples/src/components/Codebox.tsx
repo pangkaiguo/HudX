@@ -534,7 +534,7 @@ export const CodeBox: React.FC<CodeBoxProps> = ({
           <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
             <CodeEditor
               code={activeTab === 'TS' ? buildTsCode(code) : code}
-              onChange={activeTab === 'TS' ? () => { } : setCode}
+              onChange={activeTab === 'TS' ? () => {} : setCode}
               theme={theme === 'dark' ? 'dark' : 'light'}
               language={activeTab === 'TS' ? 'ts' : 'js'}
               showVimMode={true}

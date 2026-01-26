@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-// @ts-ignore
 import LineChart from 'hudx-charts/chart/LineChart';
 import type { ChartOption } from 'hudx-charts';
 import type { Locale } from 'hudx-render';

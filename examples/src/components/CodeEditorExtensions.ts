@@ -1,14 +1,5 @@
-import {
-  StateField,
-  StateEffect,
-  RangeSet,
-} from '@codemirror/state';
-import {
-  gutter,
-  GutterMarker,
-  Decoration,
-  EditorView,
-} from '@codemirror/view';
+import { StateField, StateEffect, RangeSet } from '@codemirror/state';
+import { gutter, GutterMarker, Decoration, EditorView } from '@codemirror/view';
 import { syntaxTree } from '@codemirror/language';
 import { linter, type Diagnostic } from '@codemirror/lint';
 

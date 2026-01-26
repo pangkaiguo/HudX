@@ -166,7 +166,6 @@ describe('Animation', () => {
     });
     it('should fallback to linear for invalid easing string', () => {
       const target = { x: 0 };
-      // @ts-ignore - intentional invalid value
       const anim = new Animation(target, 'x', 100, 100, 0, 'invalid-easing');
       expect((anim as any)._easing).toBe(Easing.linear);
     });

@@ -652,7 +652,23 @@ export default class SVGPainter implements IPainter {
               text.setAttribute('font-size', String(fontSize));
               text.setAttribute('font-family', fontFamily);
               text.setAttribute('font-weight', String(fontWeight));
-              text.setAttribute('fill', color);
+
+              if (typeof color === 'string') {
+                text.setAttribute('fill', color);
+              } else if (this._isCanvasPatternWithMeta(color)) {
+                const patternId = this._createSVGPattern(color);
+                text.setAttribute('fill', `url(#${patternId})`);
+              } else if (this._isGradient(color)) {
+                const fy = centerY - fragHeight / 2;
+                const rect = {
+                  x: currentX,
+                  y: fy,
+                  width: fragWidth,
+                  height: fragHeight,
+                };
+                const gradientId = this._createSVGGradient(color, rect);
+                text.setAttribute('fill', `url(#${gradientId})`);
+              }
 
               group.appendChild(text);
 

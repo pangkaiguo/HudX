@@ -2026,3 +2026,28 @@ export interface Coordinate {
   /** Y coordinate */
   y: number;
 }
+
+export interface Style {
+  fill?: string | CanvasGradient | CanvasPattern;
+  stroke?: string | CanvasGradient | CanvasPattern;
+  lineWidth?: number;
+  lineDash?: number[];
+  lineDashOffset?: number;
+  opacity?: number;
+  shadowBlur?: number;
+  shadowColor?: string;
+  shadowOffsetX?: number;
+  shadowOffsetY?: number;
+  [key: string]: any;
+}
+
+export interface Transform {
+  x?: number;
+  y?: number;
+  originX?: number;
+  originY?: number;
+  rotation?: number;
+  scaleX?: number;
+  scaleY?: number;
+  [key: string]: any;
+}

@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-// @ts-ignore
 import PieChart from 'hudx-charts/chart/PieChart';
 import type { ChartOption } from 'hudx-charts';
 import type { Locale } from 'hudx-render';

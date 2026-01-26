@@ -1,9 +1,5 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import {
-  EditorState,
-  Compartment,
-  type Extension,
-} from '@codemirror/state';
+import { EditorState, Compartment, type Extension } from '@codemirror/state';
 import {
   EditorView,
   keymap,
@@ -60,8 +56,6 @@ const resolveEditorColors = (themeObj: any) => {
       ui.colorCodeGutterText || ui.colorTextTertiary || themeObj.axisLabelColor,
   };
 };
-
-
 
 const createEditorTheme = (
   theme: 'light' | 'dark',

@@ -42,11 +42,40 @@ describe('coordinate', () => {
       expect(scale('C')).toBe(250);
     });
 
+    it('should map category with boundaryGap: false', () => {
+      const scale = createOrdinalScale(['A', 'B', 'C'], [0, 300], false);
+      // step = 300 / 2 = 150
+      // A -> 0
+      // B -> 150
+      // C -> 300
+      expect(scale('A')).toBe(0);
+      expect(scale('B')).toBe(150);
+      expect(scale('C')).toBe(300);
+    });
+
+    it('should handle single item with boundaryGap: false', () => {
+      const scale = createOrdinalScale(['A'], [0, 100], false);
+      // center
+      expect(scale('A')).toBe(50);
+    });
+
     it('should invert value', () => {
       const scale = createOrdinalScale(['A', 'B', 'C'], [0, 300]);
       expect(scale.invert!(50)).toBe('A');
       expect(scale.invert!(150)).toBe('B');
       expect(scale.invert!(250)).toBe('C');
+    });
+
+    it('should invert value with boundaryGap: false', () => {
+      const scale = createOrdinalScale(['A', 'B', 'C'], [0, 300], false);
+      // A: 0, B: 150, C: 300
+      // split points at 75, 225
+      expect(scale.invert!(0)).toBe('A');
+      expect(scale.invert!(74)).toBe('A');
+      expect(scale.invert!(76)).toBe('B');
+      expect(scale.invert!(150)).toBe('B');
+      expect(scale.invert!(226)).toBe('C');
+      expect(scale.invert!(300)).toBe('C');
     });
   });
 

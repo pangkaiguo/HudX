@@ -83,6 +83,7 @@ export const createLinearScale = (domain: number[], range: number[]): Scale => {
 export const createOrdinalScale = (
   domain: ScaleValue[],
   range: number[],
+  boundaryGap: boolean = true,
 ): Scale => {
   const domainMap = new Map<ScaleValue, number>();
   domain.forEach((d, i) => {
@@ -95,16 +96,33 @@ export const createOrdinalScale = (
       return range[0];
     }
     const total = Math.max(1, domain.length);
-    const step = (range[range.length - 1] - range[0]) / total;
-    // Return band center position
-    return range[0] + (index + 0.5) * step;
+
+    if (boundaryGap) {
+      const step = (range[range.length - 1] - range[0]) / total;
+      // Return band center position
+      return range[0] + (index + 0.5) * step;
+    } else {
+      if (total <= 1) {
+        return (range[0] + range[range.length - 1]) / 2;
+      }
+      const step = (range[range.length - 1] - range[0]) / (total - 1);
+      return range[0] + index * step;
+    }
   }) as Scale;
 
   scale.invert = (value: number): ScaleValue => {
     const total = Math.max(1, domain.length);
-    const step = (range[range.length - 1] - range[0]) / total;
-    const index = Math.floor((value - range[0]) / step);
-    return domain[Math.max(0, Math.min(index, domain.length - 1))];
+    if (boundaryGap) {
+      const step = (range[range.length - 1] - range[0]) / total;
+      const index = Math.floor((value - range[0]) / step);
+      return domain[Math.max(0, Math.min(index, domain.length - 1))];
+    } else {
+      if (total <= 1) return domain[0];
+      const step = (range[range.length - 1] - range[0]) / (total - 1);
+      // Find closest index
+      const index = Math.round((value - range[0]) / step);
+      return domain[Math.max(0, Math.min(index, domain.length - 1))];
+    }
   };
 
   scale.getPixel = scale;
@@ -112,14 +130,14 @@ export const createOrdinalScale = (
 
   scale.domain = (newDomain?: ScaleValue[]): any => {
     if (newDomain) {
-      return createOrdinalScale(newDomain, range);
+      return createOrdinalScale(newDomain, range, boundaryGap);
     }
     return domain;
   };
 
   scale.range = (newRange?: number[]): any => {
     if (newRange) {
-      return createOrdinalScale(domain, newRange);
+      return createOrdinalScale(domain, newRange, boundaryGap);
     }
     return range;
   };

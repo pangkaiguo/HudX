@@ -1320,8 +1320,8 @@ export default class Chart {
       itemGap: option.legend?.itemGap,
       itemWidth: option.legend?.itemWidth,
       inactiveColor: option.legend?.inactiveColor ?? theme.borderColor,
-      borderColor: option.legend?.borderColor ?? theme.tooltipBorderColor,
-      borderWidth: option.legend?.borderWidth ?? TOOLTIP_DEFAULT_BORDER_WIDTH,
+      borderColor: option.legend?.borderColor ?? 'transparent',
+      borderWidth: option.legend?.borderWidth ?? 0,
       borderRadius: Array.isArray(option.legend?.borderRadius)
         ? option.legend?.borderRadius?.[0]
         : option.legend?.borderRadius,
@@ -1339,8 +1339,7 @@ export default class Chart {
       fontFamily: legendTextStyle.fontFamily ?? theme.fontFamily,
       fontWeight:
         legendTextStyle.fontWeight ?? option.legend?.fontWeight ?? 'normal',
-      backgroundColor:
-        option.legend?.backgroundColor ?? theme.tooltipBackgroundColor,
+      backgroundColor: option.legend?.backgroundColor ?? 'transparent',
       onSelect: (name: string, selected: boolean) => {
         if (this._legend) {
           const currentSelected = this._legend.getSelected();

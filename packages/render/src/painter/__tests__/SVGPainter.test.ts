@@ -7,6 +7,7 @@ import ChartElement from '../../ChartElement';
 import Rect from '../../graphic/Rect';
 import Polygon from '../../graphic/Polygon';
 import Sector from '../../graphic/Sector';
+declare const Buffer: any;
 
 describe('SVGPainter', () => {
   let container: HTMLElement;

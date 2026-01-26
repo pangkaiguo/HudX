@@ -100,6 +100,7 @@ export const AreaLineChartExample = ({
     },
     xAxis: {
       type: 'category',
+      boundaryGap: false,
       data: chartData.category,
       show: true,
       splitLine: {
