@@ -28,6 +28,12 @@ export const BasicLineExample = ({
     tooltip: {
       show: true,
       trigger: 'axis',
+      axisPointer: {
+        lineStyle: {
+          color: themeObj.colorAxisPointer,
+          type: 'dashed',
+        },
+      },
       formatter: (params: any) => {
         const items = Array.isArray(params) ? params : [params];
         if (items.length === 0) return '';

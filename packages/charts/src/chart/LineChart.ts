@@ -221,7 +221,9 @@ export default class LineChart extends Chart {
               option.tooltip?.axisPointer?.lineStyle?.color ||
               this.getThemeConfig().axisPointerColor,
             lineWidth: 1,
-            lineDash: [4, 4],
+            lineDash: option.tooltip?.axisPointer?.lineStyle?.type === 'dashed'
+              ? [4, 4]
+              : undefined,
           },
           z: Z_AXIS + 1,
           invisible: true,
