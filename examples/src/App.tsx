@@ -118,15 +118,15 @@ const chartExamples: ClassicSection[] = [
     categoryKey: 'bar',
     items: [
       { id: 'basic-bar', component: BasicBarExample },
-      { id: 'waterfall-bar', component: WaterfallBarExample },
+      { id: 'group-bar', component: GroupBarChartExample },
       {
         id: 'diverging-horizontal-bar',
         component: DivergingHorizontalBarExample,
       },
       { id: 'diverging-vertical-bar', component: DivergingVerticalBarExample },
+      { id: 'waterfall-bar', component: WaterfallBarExample },
       { id: 'stack-bar', component: StackBarExample },
       { id: 'stack-horizontal-bar', component: StackHorizontalBarExample },
-      { id: 'group-bar', component: GroupBarChartExample },
     ],
   },
   {
@@ -177,12 +177,12 @@ const featureExamples: Array<{
   id: string;
   component: React.ComponentType<any>;
 }> = [
-  { id: 'shape', component: ShapeExample },
-  { id: 'themes', component: ThemeExample },
-  { id: 'interaction', component: InteractionExample },
-  { id: 'animation', component: AnimationExample },
-  { id: 'performance', component: PerformanceExample },
-];
+    { id: 'shape', component: ShapeExample },
+    { id: 'themes', component: ThemeExample },
+    { id: 'interaction', component: InteractionExample },
+    { id: 'animation', component: AnimationExample },
+    { id: 'performance', component: PerformanceExample },
+  ];
 
 const allExamples: ClassicExample[] = [
   ...chartExamples.flatMap((c) => c.items),
@@ -500,9 +500,9 @@ const SettingsPopover = ({
 
       const left = rect
         ? Math.min(
-            Math.max(gap, rect.right - width),
-            window.innerWidth - width - gap,
-          )
+          Math.max(gap, rect.right - width),
+          window.innerWidth - width - gap,
+        )
         : gap;
       const top = rect ? rect.bottom + gap : gap;
       const maxHeight = Math.max(120, window.innerHeight - top - gap);

@@ -124,6 +124,38 @@ export const examples: Example[] = [
 };`,
   },
   {
+    id: 'diverging-vertical-bar',
+    category: 'bar',
+    title: 'Diverging Vertical Bar',
+    subtitle: 'Vertical grouped bars with positive/negative values',
+    code: `option = {
+  tooltip: { show: true, trigger: 'axis', axisPointer: { type: 'shadow' } },
+  aria: {
+    enabled: true,
+    decal: {
+      show: false,
+      decals: [
+        { symbol: 'diagonal', color: 'rgba(0, 0, 0, 0.2)' },
+        { symbol: 'dots', color: 'rgba(0, 0, 0, 0.2)' },
+        { symbol: 'diagonal-reverse', color: 'rgba(0, 0, 0, 0.2)' },
+        { symbol: 'checkerboard', color: 'rgba(0, 0, 0, 0.2)' },
+        { symbol: 'crosshatch', color: 'rgba(0, 0, 0, 0.2)' }
+      ]
+    }
+  },
+  legend: { show: true, orient: 'vertical', right: 10, top: 10 },
+  grid: { left: '15%', right: '4%', bottom: '10%', top: 40, containLabel: true },
+  xAxis: { type: 'category', data: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], axisTick: { show: false }, axisLine: { show: false }, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
+  yAxis: { type: 'value', splitLine: { show: false, lineStyle: { color: '#eee' } } },
+  series: [
+    { name: 'Profit', type: 'bar', data: [200,170,240,244,200,220,210], label: { show: true, position: 'inside', formatter: '{c}', color: '#fff' } },
+    { name: 'Expenses', type: 'bar', data: [-120,-132,-101,-134,-190,-230,-210], label: { show: true, position: 'outside', formatter: '{c}' } },
+    { name: 'Income', type: 'bar', data: [320,302,341,374,390,450,420], label: { show: true, position: 'inside', formatter: '{c}', color: '#222' } }
+  ],
+  animation: true
+};`,
+  },
+  {
     id: 'waterfall-bar',
     category: 'bar',
     title: 'Waterfall Bar Chart',
@@ -201,38 +233,6 @@ export const examples: Example[] = [
       data: [0, 0, 0, 108, 154, 0, 0, 0, 119, 361, 203]
     }
   ]
-};`,
-  },
-  {
-    id: 'diverging-vertical-bar',
-    category: 'bar',
-    title: 'Diverging Vertical Bar',
-    subtitle: 'Vertical grouped bars with positive/negative values',
-    code: `option = {
-  tooltip: { show: true, trigger: 'axis', axisPointer: { type: 'shadow' } },
-  aria: {
-    enabled: true,
-    decal: {
-      show: false,
-      decals: [
-        { symbol: 'diagonal', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'dots', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'diagonal-reverse', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'checkerboard', color: 'rgba(0, 0, 0, 0.2)' },
-        { symbol: 'crosshatch', color: 'rgba(0, 0, 0, 0.2)' }
-      ]
-    }
-  },
-  legend: { show: true, orient: 'vertical', right: 10, top: 10 },
-  grid: { left: '15%', right: '4%', bottom: '10%', top: 40, containLabel: true },
-  xAxis: { type: 'category', data: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], axisTick: { show: false }, axisLine: { show: false }, splitLine: { show: false, lineStyle: { color: '#eee', type: 'dashed' } } },
-  yAxis: { type: 'value', splitLine: { show: false, lineStyle: { color: '#eee' } } },
-  series: [
-    { name: 'Profit', type: 'bar', data: [200,170,240,244,200,220,210], label: { show: true, position: 'inside', formatter: '{c}', color: '#fff' } },
-    { name: 'Expenses', type: 'bar', data: [-120,-132,-101,-134,-190,-230,-210], label: { show: true, position: 'outside', formatter: '{c}' } },
-    { name: 'Income', type: 'bar', data: [320,302,341,374,390,450,420], label: { show: true, position: 'inside', formatter: '{c}', color: '#222' } }
-  ],
-  animation: true
 };`,
   },
   {

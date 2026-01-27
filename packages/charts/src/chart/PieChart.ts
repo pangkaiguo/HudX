@@ -773,9 +773,9 @@ export default class PieChart extends Chart {
     const emphasis = seriesItem.emphasis;
     const itemName =
       typeof item === 'object' &&
-      item !== null &&
-      !Array.isArray(item) &&
-      item.name
+        item !== null &&
+        !Array.isArray(item) &&
+        item.name
         ? String(item.name)
         : `item-${index + 1}`;
 
@@ -995,8 +995,8 @@ export default class PieChart extends Chart {
         (isOutside || isCenter
           ? this.getThemeConfig().textColor
           : this.getThemeConfig().textColorOnSeries ||
-            this.getThemeConfig().token.colorTextOnSeries ||
-            this.getThemeConfig().tooltipTextColor),
+          this.getThemeConfig().token.colorTextOnSeries ||
+          this.getThemeConfig().tooltipTextColor),
       itemColor: color,
       seriesItem,
       handlers,
@@ -1756,7 +1756,7 @@ export default class PieChart extends Chart {
     this._activeSectors.forEach((s) => {
       if (s !== sector) {
         if (focus === 'self') {
-          s.style.opacity = 0.2;
+          s.style.opacity = 0.4;
           s.markRedraw();
         }
 
@@ -1864,7 +1864,7 @@ export default class PieChart extends Chart {
 
       if (!isCurrent) {
         if (focus === 'self') {
-          targetOpacity = showOnHover ? 0 : 0.2;
+          targetOpacity = showOnHover ? 0 : 0.4;
         } else if (showOnHover) {
           targetOpacity = 0;
         }
@@ -1881,7 +1881,7 @@ export default class PieChart extends Chart {
 
       if (!isCurrent) {
         if (focus === 'self') {
-          targetOpacity = showOnHover ? 0 : 0.2;
+          targetOpacity = showOnHover ? 0 : 0.4;
         } else if (showOnHover) {
           targetOpacity = 0;
         }

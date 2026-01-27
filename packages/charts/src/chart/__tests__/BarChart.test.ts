@@ -385,7 +385,7 @@ describe('BarChart', () => {
     expect(activeLabels.size).toBe(9);
   });
 
-  it('should highlight hovered bar series and dim others to 0.2 (sync with legend hover)', () => {
+  it('should highlight hovered bar series and dim others to 0.4 (sync with legend hover)', () => {
     const chart = new BarChart(container);
     chart.setOption({
       animation: false,
@@ -422,11 +422,11 @@ describe('BarChart', () => {
 
     s1Bar0.trigger('mouseover', { offsetX: 0, offsetY: 0 });
     activeBars.forEach((bar, key) => {
-      const expected = key.startsWith('0-') ? 1 : 0.2;
+      const expected = key.startsWith('0-') ? 1 : 0.4;
       expect(bar.style.opacity).toBeCloseTo(expected);
     });
     activeLabels.forEach((label, key) => {
-      const expected = key.startsWith('0-') ? 1 : 0.2;
+      const expected = key.startsWith('0-') ? 1 : 0.4;
       expect(label.style.opacity).toBeCloseTo(expected);
     });
 
@@ -440,11 +440,11 @@ describe('BarChart', () => {
 
     (chart as any)._onLegendHover('S2', true);
     activeBars.forEach((bar, key) => {
-      const expected = key.startsWith('1-') ? 1 : 0.2;
+      const expected = key.startsWith('1-') ? 1 : 0.4;
       expect(bar.style.opacity).toBeCloseTo(expected);
     });
     activeLabels.forEach((label, key) => {
-      const expected = key.startsWith('1-') ? 1 : 0.2;
+      const expected = key.startsWith('1-') ? 1 : 0.4;
       expect(label.style.opacity).toBeCloseTo(expected);
     });
 

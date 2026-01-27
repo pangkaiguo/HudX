@@ -74,7 +74,7 @@ export default class BarChart extends Chart {
         if (sIdx === seriesIndex) {
           bar.attr('style', { opacity: 1 });
         } else {
-          bar.attr('style', { opacity: 0.2 });
+          bar.attr('style', { opacity: 0.4 });
         }
       } else {
         bar.attr('style', { opacity: this._baseBarOpacity.get(key) ?? 1 });
@@ -84,7 +84,7 @@ export default class BarChart extends Chart {
     this._activeLabels.forEach((label, key) => {
       const [sIdx] = key.split('-').map(Number);
       if (hovered) {
-        label.attr('style', { opacity: sIdx === seriesIndex ? 1 : 0.2 });
+        label.attr('style', { opacity: sIdx === seriesIndex ? 1 : 0.4 });
       } else {
         label.attr('style', { opacity: this._baseLabelOpacity.get(key) ?? 1 });
       }
@@ -944,7 +944,7 @@ export default class BarChart extends Chart {
                   if (sIdx === seriesIndex) {
                     bar.attr('style', { opacity: 1 });
                   } else {
-                    bar.attr('style', { opacity: 0.2 });
+                    bar.attr('style', { opacity: 0.4 });
                   }
                 });
                 this._activeLabels.forEach((label, key) => {
@@ -952,7 +952,7 @@ export default class BarChart extends Chart {
                   if (sIdx === seriesIndex) {
                     label.attr('style', { opacity: 1 });
                   } else {
-                    label.attr('style', { opacity: 0.2 });
+                    label.attr('style', { opacity: 0.4 });
                   }
                 });
                 return;
@@ -960,10 +960,10 @@ export default class BarChart extends Chart {
 
               if (focus === 'self') {
                 this._activeBars.forEach((bar, key) => {
-                  bar.attr('style', { opacity: key === barKey ? 1 : 0.2 });
+                  bar.attr('style', { opacity: key === barKey ? 1 : 0.4 });
                 });
                 this._activeLabels.forEach((label, key) => {
-                  label.attr('style', { opacity: key === barKey ? 1 : 0.2 });
+                  label.attr('style', { opacity: key === barKey ? 1 : 0.4 });
                 });
                 return;
               }

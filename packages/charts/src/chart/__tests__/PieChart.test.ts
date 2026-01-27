@@ -38,11 +38,11 @@ beforeAll(() => {
   vi.stubGlobal(
     'Path2D',
     class Path2D {
-      constructor(d?: string | Path2D) {}
-      addPath(path: Path2D, transform?: DOMMatrix2DInit) {}
-      closePath() {}
-      moveTo(x: number, y: number) {}
-      lineTo(x: number, y: number) {}
+      constructor(d?: string | Path2D) { }
+      addPath(path: Path2D, transform?: DOMMatrix2DInit) { }
+      closePath() { }
+      moveTo(x: number, y: number) { }
+      lineTo(x: number, y: number) { }
       bezierCurveTo(
         cp1x: number,
         cp1y: number,
@@ -50,8 +50,8 @@ beforeAll(() => {
         cp2y: number,
         x: number,
         y: number,
-      ) {}
-      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) {}
+      ) { }
+      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) { }
       arc(
         x: number,
         y: number,
@@ -59,8 +59,8 @@ beforeAll(() => {
         startAngle: number,
         endAngle: number,
         counterclockwise?: boolean,
-      ) {}
-      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {}
+      ) { }
+      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) { }
       ellipse(
         x: number,
         y: number,
@@ -70,8 +70,8 @@ beforeAll(() => {
         startAngle: number,
         endAngle: number,
         counterclockwise?: boolean,
-      ) {}
-      rect(x: number, y: number, w: number, h: number) {}
+      ) { }
+      rect(x: number, y: number, w: number, h: number) { }
     },
   );
 });
@@ -357,10 +357,10 @@ describe('PieChart', () => {
 
     // Check 'Search Engine' (target) opacity -> should be 1
     expect(searchEngineSector.style.opacity).toBe(1);
-    // Check 'Direct' (other) opacity -> should be 0.2
-    expect(directSector.style.opacity).toBeCloseTo(0.2);
-    expect(directSector.__label.style.opacity).toBeCloseTo(0.2);
-    expect(directSector.__labelLine.style.opacity).toBeCloseTo(0.2);
+    // Check 'Direct' (other) opacity -> should be 0.4
+    expect(directSector.style.opacity).toBeCloseTo(0.4);
+    expect(directSector.__label.style.opacity).toBeCloseTo(0.4);
+    expect(directSector.__labelLine.style.opacity).toBeCloseTo(0.4);
 
     // Mouse out
     (chart as any)._onLegendHover('Search Engine', false);
@@ -414,7 +414,7 @@ describe('PieChart', () => {
     // Verify Sector A is highlighted (shadowBlur from emphasis)
     expect(sectorA.style.shadowBlur).toBe(10);
     // Verify Sector B is dimmed (focus: self)
-    expect(sectorB.style.opacity).toBe(0.2);
+    expect(sectorB.style.opacity).toBe(0.4);
 
     // Trigger mouseout on label A
     labelA.trigger('mouseout');
@@ -592,7 +592,7 @@ describe('PieChart', () => {
     vi.advanceTimersByTime(250);
 
     expect(sectorA.shape.r).toBeCloseTo(baseRA);
-    expect(sectorA.style.opacity).toBeCloseTo(0.2);
+    expect(sectorA.style.opacity).toBeCloseTo(0.4);
     expect(sectorB.shape.r).toBeGreaterThan(baseRB);
 
     vi.useRealTimers();
@@ -1003,7 +1003,7 @@ describe('PieChart', () => {
       .mockImplementation(() => 123);
     const cafSpy = vi
       .spyOn(globalThis as any, 'cancelAnimationFrame')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     chart.setOption({
       series: [
@@ -1170,26 +1170,26 @@ describe('PieChart', () => {
     const chart = new PieChart(container);
     chart.setOption({
       legend: { show: true },
-      series: [{ 
-        type: 'pie', 
-        data: [{ name: 'A', value: 10 }, { name: 'B', value: 20 }] 
+      series: [{
+        type: 'pie',
+        data: [{ name: 'A', value: 10 }, { name: 'B', value: 20 }]
       }]
     });
-    
+
     // Hover A
     (chart as any)._onLegendHover('A', true);
     expect((chart as any)._hoveredSectorName).toBe('A');
-    
+
     // Unhover A
     (chart as any)._onLegendHover('A', false);
     // Timeout should be set
     expect((chart as any)._restoreTimeout).toBeDefined();
-    
+
     // Hover A again immediately
     (chart as any)._onLegendHover('A', true);
     // Timeout should be cleared
     expect((chart as any)._restoreTimeout).toBeNull();
-    
+
     vi.useRealTimers();
   });
 });
