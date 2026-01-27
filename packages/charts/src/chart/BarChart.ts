@@ -412,7 +412,7 @@ export default class BarChart extends Chart {
           style: {
             stroke:
               option.tooltip?.axisPointer?.lineStyle?.color ||
-              toRgbaWithOpacity(this.getThemeConfig().shadowColor, 0.5),
+              this.getThemeConfig().axisPointerColor,
             lineWidth: option.tooltip?.axisPointer?.lineStyle?.width || 1,
             lineDash:
               option.tooltip?.axisPointer?.lineStyle?.type === 'solid'

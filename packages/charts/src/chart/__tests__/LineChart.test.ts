@@ -1,7 +1,7 @@
 import * as HudxRender from 'hudx-render';
+import { Rect, Line, Z_AXIS, type ChartOption } from 'hudx-render';
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import LineChart from '../LineChart';
-import type { ChartOption } from 'hudx-render';
 
 const mockContext = {
   measureText: (text: string) => ({ width: text.length * 10 }),
@@ -606,8 +606,6 @@ describe('LineChart', () => {
     const activeLines = (chart as any)._activeLines;
     const symbol = activeLines.get(0).symbols[0];
 
-    // Initial state check might be tricky as animation starts with 0 size
-    // But we can check after some time
     vi.advanceTimersByTime(150);
     expect(symbol.shape.width).toBeGreaterThan(0);
     expect(symbol.shape.width).toBeLessThan(10);
@@ -654,14 +652,8 @@ describe('LineChart', () => {
 
     const activeLines = (chart as any)._activeLines;
     const line = activeLines.get(0).line;
-
-    // Initial state (before animation completes)
     expect(line.style.opacity).toBe(0);
-
-    // Fast-forward animation
     vi.advanceTimersByTime(150);
-
-    // Check final state
     expect(line.style.opacity).toBe(1);
     vi.useRealTimers();
   });
@@ -718,7 +710,6 @@ describe('LineChart', () => {
     });
 
     const root = (chart as any)._root;
-    // Find the interaction rect
     const interact = root.children().find(
       (c: any) =>
         c?.constructor?.name === 'Rect' &&
@@ -729,6 +720,52 @@ describe('LineChart', () => {
 
     interact.trigger('mouseout');
     expect(tooltipHideSpy).toHaveBeenCalled();
+  });
+
+  it('should manage axis pointer visibility on mouse interaction', () => {
+    const chart = new LineChart(container);
+    const option: ChartOption = {
+      tooltip: { show: true, trigger: 'axis' },
+      grid: { left: 50, top: 50, width: 700, height: 500 },
+      xAxis: { type: 'category', data: ['A', 'B', 'C'] },
+      yAxis: { type: 'value' },
+      series: [{ type: 'line', data: [10, 20, 30] }],
+      animation: false,
+    };
+    chart.setOption(option);
+
+    const root = (chart as any)._root;
+    const children = root.children();
+
+    const axisPointerLine = children.find(
+      (c: any) => c instanceof Line && c.z === Z_AXIS + 1
+    );
+    expect(axisPointerLine).toBeDefined();
+    expect(axisPointerLine.invisible).toBe(true);
+
+    const interact = children.find(
+      (c: any) => c instanceof Rect && c.style.fill === 'transparent' && !c.silent
+    );
+    expect(interact).toBeDefined();
+
+    interact.trigger('mousemove', { offsetX: 400, offsetY: 300 });
+
+    expect(axisPointerLine.invisible).toBe(false);
+
+    const shape = axisPointerLine.attr('shape');
+    expect(shape.x1).toBeCloseTo(405, 0);
+    expect(shape.x2).toBeCloseTo(405, 0);
+    expect(shape.y1).toBe(50);
+    expect(shape.y2).toBe(540); // plotY + plotHeight (adjusted internally)
+
+    interact.trigger('mousemove', { offsetX: 10, offsetY: 10 });
+    expect(axisPointerLine.invisible).toBe(true);
+
+    interact.trigger('mousemove', { offsetX: 400, offsetY: 300 });
+    expect(axisPointerLine.invisible).toBe(false);
+
+    interact.trigger('mouseout');
+    expect(axisPointerLine.invisible).toBe(true);
   });
 
   it('should handle value axis with object data', () => {
@@ -752,13 +789,10 @@ describe('LineChart', () => {
     const activeLines = (chart as any)._activeLines;
     expect(activeLines.size).toBe(1);
     const seriesItem = activeLines.get(0);
-    // Check if points are correctly generated
-    // 3 points should be generated
     expect(seriesItem.line.shape.points.length).toBe(3);
   });
 
   it('should handle single value array data and tooltip visibility', () => {
-    // Mock createOrdinalScale to control invert behavior
     const scaleSpy = vi.spyOn(HudxRender, 'createOrdinalScale').mockImplementation(() => {
       const s: any = (val: any) => 0;
       s.domain = () => ['A', 'B'];

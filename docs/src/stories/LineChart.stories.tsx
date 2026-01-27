@@ -35,6 +35,7 @@ export const Basic: Story = {
     height: 400,
     option: {
       title: { text: 'Basic Line Chart' },
+      tooltip: { show: true, trigger: 'axis' },
       xAxis: {
         type: 'category',
         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],

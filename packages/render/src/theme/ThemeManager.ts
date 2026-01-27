@@ -196,6 +196,10 @@ export class ThemeManager {
         resolvedToken.colorAxisLine,
         String(baseToken.colorAxisLine),
       ),
+      axisPointerColor: toStringOr(
+        resolvedToken.colorAxisPointer,
+        String(baseToken.colorAxisPointer),
+      ),
       axisLabelColor: toStringOr(
         resolvedToken.colorAxisLabel,
         String(baseToken.colorAxisLabel),

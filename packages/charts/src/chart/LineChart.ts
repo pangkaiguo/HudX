@@ -70,7 +70,7 @@ export default class LineChart extends Chart {
           item.symbols.forEach((s) => s.attr('style', { opacity: 1 }));
           if (item.area)
             item.area.attr('style', {
-              opacity: this._option.series?.[idx].areaStyle?.opacity || 0.5,
+              opacity: this._option.series?.[idx].areaStyle?.opacity || 0.9,
             });
         } else {
           // Dim
@@ -87,7 +87,7 @@ export default class LineChart extends Chart {
         item.symbols.forEach((s) => s.attr('style', { opacity: 1 }));
         if (item.area)
           item.area.attr('style', {
-            opacity: this._option.series?.[idx].areaStyle?.opacity || 0.5,
+            opacity: this._option.series?.[idx].areaStyle?.opacity || 0.9,
           });
       }
     });
@@ -217,7 +217,9 @@ export default class LineChart extends Chart {
         const axisPointerLine = new Line({
           shape: { x1: 0, y1: plotY, x2: 0, y2: plotY + plotHeight },
           style: {
-            stroke: toRgbaWithOpacity(this.getThemeConfig().shadowColor, 0.5),
+            stroke:
+              option.tooltip?.axisPointer?.lineStyle?.color ||
+              this.getThemeConfig().axisPointerColor,
             lineWidth: 1,
             lineDash: [4, 4],
           },
@@ -436,7 +438,7 @@ export default class LineChart extends Chart {
           const areaOpacity =
             seriesItem.areaStyle.opacity !== undefined
               ? seriesItem.areaStyle.opacity
-              : 0.5;
+              : 0.9;
           let areaColor = seriesItem.areaStyle.color;
           if (!areaColor) {
             areaColor = {
@@ -577,7 +579,7 @@ export default class LineChart extends Chart {
               .animate(
                 { opacity: 0 },
                 'opacity',
-                seriesItem.areaStyle?.opacity || 0.5,
+                seriesItem.areaStyle?.opacity || 0.9,
                 {
                   duration,
                   easing,
@@ -596,7 +598,7 @@ export default class LineChart extends Chart {
           }
           if (area) {
             area.attr('style', {
-              opacity: seriesItem.areaStyle?.opacity || 0.5,
+              opacity: seriesItem.areaStyle?.opacity || 0.9,
             });
           }
         }
@@ -604,7 +606,7 @@ export default class LineChart extends Chart {
         if (seriesItem.showSymbol !== false) {
           const itemStyle = seriesItem.itemStyle || {};
           const pointColor = itemStyle.color || lineColor;
-          const pointSize = seriesItem.symbolSize || itemStyle.borderWidth || 2; // Use symbolSize if available
+          const pointSize = seriesItem.symbolSize || itemStyle.borderWidth || 3; // Use symbolSize if available
           const symbolType = seriesItem.symbol || 'circle';
 
           let pointFill: string | CanvasPattern = pointColor;
