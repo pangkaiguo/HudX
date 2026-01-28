@@ -4,7 +4,7 @@
 
 # Interface: LineStyleOption
 
-Defined in: [render/src/types.ts:1399](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1399)
+Defined in: [render/src/types.ts:1403](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1403)
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: [render/src/types.ts:1399](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **color**: `string`
 
-Defined in: [render/src/types.ts:1401](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1401)
+Defined in: [render/src/types.ts:1405](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1405)
 
 Line color
 
@@ -26,7 +26,7 @@ Line color
 
 > `optional` **opacity**: `number`
 
-Defined in: [render/src/types.ts:1407](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1407)
+Defined in: [render/src/types.ts:1411](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1411)
 
 Opacity
 
@@ -36,7 +36,7 @@ Opacity
 
 > `optional` **type**: `"solid"` \| `"dashed"` \| `"dotted"`
 
-Defined in: [render/src/types.ts:1405](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1405)
+Defined in: [render/src/types.ts:1409](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1409)
 
 Line type
 
@@ -46,6 +46,6 @@ Line type
 
 > `optional` **width**: `number`
 
-Defined in: [render/src/types.ts:1403](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1403)
+Defined in: [render/src/types.ts:1407](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1407)
 
 Line width

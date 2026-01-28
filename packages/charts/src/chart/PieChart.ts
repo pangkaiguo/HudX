@@ -773,9 +773,9 @@ export default class PieChart extends Chart {
     const emphasis = seriesItem.emphasis;
     const itemName =
       typeof item === 'object' &&
-        item !== null &&
-        !Array.isArray(item) &&
-        item.name
+      item !== null &&
+      !Array.isArray(item) &&
+      item.name
         ? String(item.name)
         : `item-${index + 1}`;
 
@@ -995,8 +995,8 @@ export default class PieChart extends Chart {
         (isOutside || isCenter
           ? this.getThemeConfig().textColor
           : this.getThemeConfig().textColorOnSeries ||
-          this.getThemeConfig().token.colorTextOnSeries ||
-          this.getThemeConfig().tooltipTextColor),
+            this.getThemeConfig().token.colorTextOnSeries ||
+            this.getThemeConfig().tooltipTextColor),
       itemColor: color,
       seriesItem,
       handlers,

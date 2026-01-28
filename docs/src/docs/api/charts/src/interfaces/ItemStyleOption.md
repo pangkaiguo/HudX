@@ -4,7 +4,7 @@
 
 # Interface: ItemStyleOption
 
-Defined in: render/dist/types.d.ts:1678
+Defined in: render/dist/types.d.ts:1825
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:1678
 
 > `optional` **borderColor**: `string`
 
-Defined in: render/dist/types.d.ts:1682
+Defined in: render/dist/types.d.ts:1829
 
 Border color
 
@@ -26,7 +26,7 @@ Border color
 
 > `optional` **borderRadius**: `number` \| `number`[]
 
-Defined in: render/dist/types.d.ts:1690
+Defined in: render/dist/types.d.ts:1837
 
 Border radius
 
@@ -36,7 +36,7 @@ Border radius
 
 > `optional` **borderType**: `"solid"` \| `"dashed"` \| `"dotted"`
 
-Defined in: render/dist/types.d.ts:1686
+Defined in: render/dist/types.d.ts:1833
 
 Border type
 
@@ -46,7 +46,7 @@ Border type
 
 > `optional` **borderWidth**: `number`
 
-Defined in: render/dist/types.d.ts:1684
+Defined in: render/dist/types.d.ts:1831
 
 Border width
 
@@ -56,7 +56,7 @@ Border width
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:1680
+Defined in: render/dist/types.d.ts:1827
 
 Fill color
 
@@ -66,6 +66,6 @@ Fill color
 
 > `optional` **opacity**: `number`
 
-Defined in: render/dist/types.d.ts:1688
+Defined in: render/dist/types.d.ts:1835
 
 Opacity

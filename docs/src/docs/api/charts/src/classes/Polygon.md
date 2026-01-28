@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `PolygonShape`
+> **shape**: [`PolygonShape`](../interfaces/PolygonShape.md)
 
 Defined in: render/dist/graphic/Polygon.d.ts:10
 

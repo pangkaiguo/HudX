@@ -4,7 +4,7 @@
 
 # Interface: PieSeriesOption
 
-Defined in: render/dist/types.d.ts:1458
+Defined in: render/dist/types.d.ts:1605
 
 ## Extends
 
@@ -20,7 +20,7 @@ Defined in: render/dist/types.d.ts:1458
 
 > `optional` **avoidLabelOverlap**: `boolean`
 
-Defined in: render/dist/types.d.ts:1487
+Defined in: render/dist/types.d.ts:1634
 
 Whether to enable automatic label layout to avoid overlap.
 
@@ -30,7 +30,7 @@ Whether to enable automatic label layout to avoid overlap.
 
 > `optional` **center**: (`string` \| `number`)[]
 
-Defined in: render/dist/types.d.ts:1472
+Defined in: render/dist/types.d.ts:1619
 
 Center position of the pie chart.
 [x, y] - can be pixels or percentages.
@@ -47,7 +47,7 @@ Center position of the pie chart.
 
 > `optional` **centerLabel**: [`CenterLabelOption`](CenterLabelOption.md)
 
-Defined in: render/dist/types.d.ts:1477
+Defined in: render/dist/types.d.ts:1624
 
 Center label configuration.
 Only valid for doughnut charts.
@@ -58,7 +58,7 @@ Only valid for doughnut charts.
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:1264
+Defined in: render/dist/types.d.ts:1411
 
 Series color.
 If not set, it will pick from the global palette.
@@ -73,7 +73,7 @@ If not set, it will pick from the global palette.
 
 > `optional` **cursor**: `string`
 
-Defined in: render/dist/types.d.ts:1277
+Defined in: render/dist/types.d.ts:1424
 
 Cursor style when hovering over the series.
 
@@ -93,7 +93,7 @@ Cursor style when hovering over the series.
 
 > `optional` **data**: [`ChartData`](../type-aliases/ChartData.md)[]
 
-Defined in: render/dist/types.d.ts:1298
+Defined in: render/dist/types.d.ts:1445
 
 Series data.
 Can be an array of numbers, or objects with `value` property.
@@ -108,7 +108,7 @@ Can be an array of numbers, or objects with `value` property.
 
 > `optional` **emphasis**: [`EmphasisOption`](EmphasisOption.md)
 
-Defined in: render/dist/types.d.ts:1293
+Defined in: render/dist/types.d.ts:1440
 
 Emphasis state configuration (hover state).
 
@@ -122,7 +122,7 @@ Emphasis state configuration (hover state).
 
 > `optional` **endAngle**: `number`
 
-Defined in: render/dist/types.d.ts:1501
+Defined in: render/dist/types.d.ts:1648
 
 End angle of the pie chart.
 Only used if you want a partial pie.
@@ -133,7 +133,7 @@ Only used if you want a partial pie.
 
 > `optional` **id**: `string`
 
-Defined in: render/dist/types.d.ts:1254
+Defined in: render/dist/types.d.ts:1401
 
 Component ID.
 Unique identifier for the series component.
@@ -148,7 +148,7 @@ Unique identifier for the series component.
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1285
+Defined in: render/dist/types.d.ts:1432
 
 Item style configuration (normal state).
 
@@ -162,7 +162,7 @@ Item style configuration (normal state).
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: render/dist/types.d.ts:1289
+Defined in: render/dist/types.d.ts:1436
 
 Label configuration (normal state).
 
@@ -176,7 +176,7 @@ Label configuration (normal state).
 
 > `optional` **labelLine**: [`LabelLineOption`](LabelLineOption.md)
 
-Defined in: render/dist/types.d.ts:1510
+Defined in: render/dist/types.d.ts:1657
 
 Configuration for the label guide line.
 
@@ -186,7 +186,7 @@ Configuration for the label guide line.
 
 > `optional` **minAngle**: `number`
 
-Defined in: render/dist/types.d.ts:1506
+Defined in: render/dist/types.d.ts:1653
 
 Minimum angle of a sector.
 Useful to ensure small values are visible.
@@ -197,7 +197,7 @@ Useful to ensure small values are visible.
 
 > `optional` **name**: `string`
 
-Defined in: render/dist/types.d.ts:1259
+Defined in: render/dist/types.d.ts:1406
 
 Series name.
 Used in legend and tooltip.
@@ -212,7 +212,7 @@ Used in legend and tooltip.
 
 > `optional` **radius**: `string` \| `number` \| (`string` \| `number`)[]
 
-Defined in: render/dist/types.d.ts:1466
+Defined in: render/dist/types.d.ts:1613
 
 Radius of the pie chart.
 - number: Pixel value.
@@ -225,7 +225,7 @@ Radius of the pie chart.
 
 > `optional` **roseType**: `boolean` \| `"radius"` \| `"area"`
 
-Defined in: render/dist/types.d.ts:1483
+Defined in: render/dist/types.d.ts:1630
 
 Whether to display as Nightingale rose chart.
 - 'radius': Fan angle is same, radius varies.
@@ -237,7 +237,7 @@ Whether to display as Nightingale rose chart.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1281
+Defined in: render/dist/types.d.ts:1428
 
 Whether to show the series.
 
@@ -251,7 +251,7 @@ Whether to show the series.
 
 > `optional` **startAngle**: `number`
 
-Defined in: render/dist/types.d.ts:1496
+Defined in: render/dist/types.d.ts:1643
 
 Start angle of the pie chart (in degrees).
 
@@ -267,7 +267,7 @@ Start angle of the pie chart (in degrees).
 
 > `optional` **stillShowZeroSum**: `boolean`
 
-Defined in: render/dist/types.d.ts:1491
+Defined in: render/dist/types.d.ts:1638
 
 Whether to still show a sector if all data values are zero.
 
@@ -277,7 +277,7 @@ Whether to still show a sector if all data values are zero.
 
 > **type**: `"pie"` \| `"doughnut"` \| `"half-doughnut"`
 
-Defined in: render/dist/types.d.ts:1459
+Defined in: render/dist/types.d.ts:1606
 
 Series type (explicitly set it to get more accurate IntelliSense).
 e.g., 'line', 'bar', 'pie'.
@@ -292,7 +292,7 @@ e.g., 'line', 'bar', 'pie'.
 
 > `optional` **z**: `number`
 
-Defined in: render/dist/types.d.ts:1268
+Defined in: render/dist/types.d.ts:1415
 
 Z-index of the series.
 
@@ -306,7 +306,7 @@ Z-index of the series.
 
 > `optional` **zlevel**: `number`
 
-Defined in: render/dist/types.d.ts:1272
+Defined in: render/dist/types.d.ts:1419
 
 Z-level of the series.
 

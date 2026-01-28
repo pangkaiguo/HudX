@@ -4,7 +4,7 @@
 
 # Interface: ThemeConfig
 
-Defined in: [render/src/types.ts:202](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L202)
+Defined in: [render/src/types.ts:202](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L202)
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: [render/src/types.ts:202](https://github.com/pangkaiguo/HudX/blob/53
 
 > **axisLabelColor**: `string`
 
-Defined in: [render/src/types.ts:238](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L238)
+Defined in: [render/src/types.ts:242](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L242)
 
 Color of the axis labels.
 
@@ -26,9 +26,19 @@ Color of the axis labels.
 
 > **axisLineColor**: `string`
 
-Defined in: [render/src/types.ts:234](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L234)
+Defined in: [render/src/types.ts:234](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L234)
 
 Color of the axis lines.
+
+***
+
+### axisPointerColor
+
+> **axisPointerColor**: `string`
+
+Defined in: [render/src/types.ts:238](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L238)
+
+Color of the axis pointer lines.
 
 ***
 
@@ -36,7 +46,7 @@ Color of the axis lines.
 
 > **backgroundColor**: `string`
 
-Defined in: [render/src/types.ts:206](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L206)
+Defined in: [render/src/types.ts:206](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L206)
 
 Background color of the chart container.
 
@@ -46,7 +56,7 @@ Background color of the chart container.
 
 > **borderColor**: `string`
 
-Defined in: [render/src/types.ts:222](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L222)
+Defined in: [render/src/types.ts:222](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L222)
 
 Border color for chart elements.
 
@@ -56,7 +66,7 @@ Border color for chart elements.
 
 > `optional` **borderSecondaryColor**: `string`
 
-Defined in: [render/src/types.ts:226](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L226)
+Defined in: [render/src/types.ts:226](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L226)
 
 Secondary border color.
 
@@ -66,7 +76,7 @@ Secondary border color.
 
 > `optional` **codeBackgroundColor**: `string`
 
-Defined in: [render/src/types.ts:330](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L330)
+Defined in: [render/src/types.ts:334](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L334)
 
 Code block background color.
 
@@ -76,7 +86,7 @@ Code block background color.
 
 > `optional` **codeGutterBackgroundColor**: `string`
 
-Defined in: [render/src/types.ts:334](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L334)
+Defined in: [render/src/types.ts:338](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L338)
 
 Code block gutter background color.
 
@@ -86,7 +96,7 @@ Code block gutter background color.
 
 > `optional` **codeGutterTextColor**: `string`
 
-Defined in: [render/src/types.ts:342](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L342)
+Defined in: [render/src/types.ts:346](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L346)
 
 Code block gutter text color.
 
@@ -96,7 +106,7 @@ Code block gutter text color.
 
 > `optional` **codeTextColor**: `string`
 
-Defined in: [render/src/types.ts:338](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L338)
+Defined in: [render/src/types.ts:342](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L342)
 
 Code block text color.
 
@@ -106,7 +116,7 @@ Code block text color.
 
 > `optional` **color**: `string`[]
 
-Defined in: [render/src/types.ts:306](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L306)
+Defined in: [render/src/types.ts:310](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L310)
 
 Color palette (alias for seriesColors).
 
@@ -116,7 +126,7 @@ Color palette (alias for seriesColors).
 
 > **decalColor**: `string`
 
-Defined in: [render/src/types.ts:298](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L298)
+Defined in: [render/src/types.ts:302](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L302)
 
 Base decal color.
 
@@ -126,7 +136,7 @@ Base decal color.
 
 > `optional` **fillContainerAltColor**: `string`
 
-Defined in: [render/src/types.ts:322](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L322)
+Defined in: [render/src/types.ts:326](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L326)
 
 Alternate container fill color.
 
@@ -136,7 +146,7 @@ Alternate container fill color.
 
 > `optional` **fillContainerColor**: `string`
 
-Defined in: [render/src/types.ts:318](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L318)
+Defined in: [render/src/types.ts:322](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L322)
 
 Container fill color.
 
@@ -146,7 +156,7 @@ Container fill color.
 
 > `optional` **fillHoverColor**: `string`
 
-Defined in: [render/src/types.ts:326](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L326)
+Defined in: [render/src/types.ts:330](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L330)
 
 Hover fill color.
 
@@ -156,7 +166,7 @@ Hover fill color.
 
 > `optional` **fillPageColor**: `string`
 
-Defined in: [render/src/types.ts:314](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L314)
+Defined in: [render/src/types.ts:318](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L318)
 
 Page fill color.
 
@@ -166,7 +176,7 @@ Page fill color.
 
 > **fontFamily**: `string`
 
-Defined in: [render/src/types.ts:346](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L346)
+Defined in: [render/src/types.ts:350](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L350)
 
 Font family.
 
@@ -176,7 +186,7 @@ Font family.
 
 > **fontSize**: `number`
 
-Defined in: [render/src/types.ts:350](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L350)
+Defined in: [render/src/types.ts:354](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L354)
 
 Font size.
 
@@ -186,7 +196,7 @@ Font size.
 
 > **gridColor**: `string`
 
-Defined in: [render/src/types.ts:230](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L230)
+Defined in: [render/src/types.ts:230](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L230)
 
 Color of the grid lines.
 
@@ -196,7 +206,7 @@ Color of the grid lines.
 
 > `optional` **heatmapColors**: `string`[]
 
-Defined in: [render/src/types.ts:310](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L310)
+Defined in: [render/src/types.ts:314](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L314)
 
 Heatmap color gradient.
 
@@ -206,7 +216,7 @@ Heatmap color gradient.
 
 > **legendTextColor**: `string`
 
-Defined in: [render/src/types.ts:274](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L274)
+Defined in: [render/src/types.ts:278](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L278)
 
 Text color of the legend.
 
@@ -216,7 +226,7 @@ Text color of the legend.
 
 > **maskColor**: `string`
 
-Defined in: [render/src/types.ts:294](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L294)
+Defined in: [render/src/types.ts:298](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L298)
 
 Mask color (e.g. for loading state).
 
@@ -226,7 +236,7 @@ Mask color (e.g. for loading state).
 
 > `optional` **primaryColor**: `string`
 
-Defined in: [render/src/types.ts:282](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L282)
+Defined in: [render/src/types.ts:286](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L286)
 
 Primary brand color.
 
@@ -236,7 +246,7 @@ Primary brand color.
 
 > `optional` **primaryTextColor**: `string`
 
-Defined in: [render/src/types.ts:286](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L286)
+Defined in: [render/src/types.ts:290](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L290)
 
 Text color on primary background.
 
@@ -246,7 +256,7 @@ Text color on primary background.
 
 > **seriesColors**: `string`[]
 
-Defined in: [render/src/types.ts:302](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L302)
+Defined in: [render/src/types.ts:306](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L306)
 
 Series color palette.
 
@@ -256,7 +266,7 @@ Series color palette.
 
 > **shadowColor**: `string`
 
-Defined in: [render/src/types.ts:290](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L290)
+Defined in: [render/src/types.ts:294](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L294)
 
 Base shadow color.
 
@@ -266,7 +276,7 @@ Base shadow color.
 
 > `optional` **splitLineColor**: `string`
 
-Defined in: [render/src/types.ts:242](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L242)
+Defined in: [render/src/types.ts:246](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L246)
 
 Color of the split lines (if different from grid lines).
 
@@ -276,7 +286,7 @@ Color of the split lines (if different from grid lines).
 
 > **textColor**: `string`
 
-Defined in: [render/src/types.ts:210](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L210)
+Defined in: [render/src/types.ts:210](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L210)
 
 Primary text color.
 
@@ -286,7 +296,7 @@ Primary text color.
 
 > `optional` **textColorOnSeries**: `string`
 
-Defined in: [render/src/types.ts:278](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L278)
+Defined in: [render/src/types.ts:282](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L282)
 
 Text color for labels on the series.
 
@@ -296,7 +306,7 @@ Text color for labels on the series.
 
 > `optional` **textColorSecondary**: `string`
 
-Defined in: [render/src/types.ts:214](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L214)
+Defined in: [render/src/types.ts:214](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L214)
 
 Secondary text color.
 
@@ -306,7 +316,7 @@ Secondary text color.
 
 > `optional` **textColorTertiary**: `string`
 
-Defined in: [render/src/types.ts:218](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L218)
+Defined in: [render/src/types.ts:218](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L218)
 
 Tertiary text color.
 
@@ -316,7 +326,7 @@ Tertiary text color.
 
 > **token**: [`ThemeToken`](ThemeToken.md)
 
-Defined in: [render/src/types.ts:354](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L354)
+Defined in: [render/src/types.ts:358](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L358)
 
 The raw theme token object.
 
@@ -326,7 +336,7 @@ The raw theme token object.
 
 > **tooltipBackgroundColor**: `string`
 
-Defined in: [render/src/types.ts:246](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L246)
+Defined in: [render/src/types.ts:250](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L250)
 
 Background color of the tooltip.
 
@@ -336,7 +346,7 @@ Background color of the tooltip.
 
 > **tooltipBorderColor**: `string`
 
-Defined in: [render/src/types.ts:254](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L254)
+Defined in: [render/src/types.ts:258](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L258)
 
 Border color of the tooltip.
 
@@ -346,7 +356,7 @@ Border color of the tooltip.
 
 > **tooltipBoxShadow**: `string`
 
-Defined in: [render/src/types.ts:258](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L258)
+Defined in: [render/src/types.ts:262](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L262)
 
 Box shadow of the tooltip.
 
@@ -356,7 +366,7 @@ Box shadow of the tooltip.
 
 > **tooltipSeriesNameColor**: `string`
 
-Defined in: [render/src/types.ts:262](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L262)
+Defined in: [render/src/types.ts:266](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L266)
 
 Color of the series name in the tooltip.
 
@@ -366,7 +376,7 @@ Color of the series name in the tooltip.
 
 > **tooltipSubitemNameColor**: `string`
 
-Defined in: [render/src/types.ts:266](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L266)
+Defined in: [render/src/types.ts:270](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L270)
 
 Color of the sub-item name in the tooltip.
 
@@ -376,7 +386,7 @@ Color of the sub-item name in the tooltip.
 
 > **tooltipTextColor**: `string`
 
-Defined in: [render/src/types.ts:250](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L250)
+Defined in: [render/src/types.ts:254](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L254)
 
 Text color of the tooltip.
 
@@ -386,6 +396,6 @@ Text color of the tooltip.
 
 > **tooltipValueColor**: `string`
 
-Defined in: [render/src/types.ts:270](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L270)
+Defined in: [render/src/types.ts:274](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L274)
 
 Color of the value in the tooltip.

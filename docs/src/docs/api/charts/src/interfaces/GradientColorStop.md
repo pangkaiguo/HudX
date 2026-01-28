@@ -4,7 +4,7 @@
 
 # Interface: GradientColorStop
 
-Defined in: render/dist/types.d.ts:1611
+Defined in: render/dist/types.d.ts:1758
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:1611
 
 > **color**: `string`
 
-Defined in: render/dist/types.d.ts:1615
+Defined in: render/dist/types.d.ts:1762
 
 Color at offset
 
@@ -22,6 +22,6 @@ Color at offset
 
 > **offset**: `number`
 
-Defined in: render/dist/types.d.ts:1613
+Defined in: render/dist/types.d.ts:1760
 
 Offset (0..1)

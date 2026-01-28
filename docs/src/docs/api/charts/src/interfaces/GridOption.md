@@ -4,7 +4,7 @@
 
 # Interface: GridOption
 
-Defined in: render/dist/types.d.ts:884
+Defined in: render/dist/types.d.ts:1031
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:884
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:932
+Defined in: render/dist/types.d.ts:1079
 
 Background color of the grid area.
 
@@ -26,7 +26,7 @@ Background color of the grid area.
 
 > `optional` **borderColor**: `string`
 
-Defined in: render/dist/types.d.ts:936
+Defined in: render/dist/types.d.ts:1083
 
 Border color of the grid area.
 
@@ -36,7 +36,7 @@ Border color of the grid area.
 
 > `optional` **borderWidth**: `number`
 
-Defined in: render/dist/types.d.ts:940
+Defined in: render/dist/types.d.ts:1087
 
 Border width of the grid area.
 
@@ -46,7 +46,7 @@ Border width of the grid area.
 
 > `optional` **bottom**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:912
+Defined in: render/dist/types.d.ts:1059
 
 Distance from bottom side of container.
 
@@ -56,7 +56,7 @@ Distance from bottom side of container.
 
 > `optional` **containLabel**: `boolean`
 
-Defined in: render/dist/types.d.ts:928
+Defined in: render/dist/types.d.ts:1075
 
 Whether the grid region contains the axis tick labels.
 - true: Labels are considered part of the grid area, preventing overflow.
@@ -68,7 +68,7 @@ Whether the grid region contains the axis tick labels.
 
 > `optional` **height**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:922
+Defined in: render/dist/types.d.ts:1069
 
 Height of the grid.
 Can be a pixel number or percentage string.
@@ -79,7 +79,7 @@ Can be a pixel number or percentage string.
 
 > `optional` **left**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:900
+Defined in: render/dist/types.d.ts:1047
 
 Distance from left side of container.
 
@@ -89,7 +89,7 @@ Distance from left side of container.
 
 > `optional` **right**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:908
+Defined in: render/dist/types.d.ts:1055
 
 Distance from right side of container.
 
@@ -99,7 +99,7 @@ Distance from right side of container.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:888
+Defined in: render/dist/types.d.ts:1035
 
 Whether to show the grid.
 
@@ -109,7 +109,7 @@ Whether to show the grid.
 
 > `optional` **tooltip**: [`TooltipOption`](TooltipOption.md)
 
-Defined in: render/dist/types.d.ts:944
+Defined in: render/dist/types.d.ts:1091
 
 Tooltip settings for the grid component.
 
@@ -119,7 +119,7 @@ Tooltip settings for the grid component.
 
 > `optional` **top**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:904
+Defined in: render/dist/types.d.ts:1051
 
 Distance from top side of container.
 
@@ -129,7 +129,7 @@ Distance from top side of container.
 
 > `optional` **width**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:917
+Defined in: render/dist/types.d.ts:1064
 
 Width of the grid.
 Can be a pixel number or percentage string.
@@ -140,7 +140,7 @@ Can be a pixel number or percentage string.
 
 > `optional` **z**: `number`
 
-Defined in: render/dist/types.d.ts:892
+Defined in: render/dist/types.d.ts:1039
 
 Z-index of the grid component.
 
@@ -150,6 +150,6 @@ Z-index of the grid component.
 
 > `optional` **zlevel**: `number`
 
-Defined in: render/dist/types.d.ts:896
+Defined in: render/dist/types.d.ts:1043
 
 Z-level of the grid component.

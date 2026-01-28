@@ -4,7 +4,7 @@
 
 # Interface: IPainter
 
-Defined in: [render/src/painter/IPainter.ts:8](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L8)
+Defined in: [render/src/painter/IPainter.ts:8](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L8)
 
 ## Methods
 
@@ -12,7 +12,7 @@ Defined in: [render/src/painter/IPainter.ts:8](https://github.com/pangkaiguo/Hud
 
 > **dispose**(): `void`
 
-Defined in: [render/src/painter/IPainter.ts:14](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L14)
+Defined in: [render/src/painter/IPainter.ts:14](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L14)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [render/src/painter/IPainter.ts:14](https://github.com/pangkaiguo/Hu
 
 > `optional` **getCanvas**(): `HTMLCanvasElement`
 
-Defined in: [render/src/painter/IPainter.ts:16](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L16)
+Defined in: [render/src/painter/IPainter.ts:16](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L16)
 
 #### Returns
 
@@ -36,7 +36,7 @@ Defined in: [render/src/painter/IPainter.ts:16](https://github.com/pangkaiguo/Hu
 
 > **getDataURL**(`opts?`): `string`
 
-Defined in: [render/src/painter/IPainter.ts:15](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L15)
+Defined in: [render/src/painter/IPainter.ts:15](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L15)
 
 #### Parameters
 
@@ -54,7 +54,7 @@ Defined in: [render/src/painter/IPainter.ts:15](https://github.com/pangkaiguo/Hu
 
 > **getHeight**(): `number`
 
-Defined in: [render/src/painter/IPainter.ts:11](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L11)
+Defined in: [render/src/painter/IPainter.ts:11](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L11)
 
 #### Returns
 
@@ -66,7 +66,7 @@ Defined in: [render/src/painter/IPainter.ts:11](https://github.com/pangkaiguo/Hu
 
 > `optional` **getRootGroup**(): `SVGGElement`
 
-Defined in: [render/src/painter/IPainter.ts:18](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L18)
+Defined in: [render/src/painter/IPainter.ts:18](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L18)
 
 #### Returns
 
@@ -78,7 +78,7 @@ Defined in: [render/src/painter/IPainter.ts:18](https://github.com/pangkaiguo/Hu
 
 > `optional` **getSVG**(): `SVGSVGElement`
 
-Defined in: [render/src/painter/IPainter.ts:17](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L17)
+Defined in: [render/src/painter/IPainter.ts:17](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L17)
 
 #### Returns
 
@@ -90,7 +90,7 @@ Defined in: [render/src/painter/IPainter.ts:17](https://github.com/pangkaiguo/Hu
 
 > **getWidth**(): `number`
 
-Defined in: [render/src/painter/IPainter.ts:10](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L10)
+Defined in: [render/src/painter/IPainter.ts:10](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L10)
 
 #### Returns
 
@@ -102,7 +102,7 @@ Defined in: [render/src/painter/IPainter.ts:10](https://github.com/pangkaiguo/Hu
 
 > **markDirty**(): `void`
 
-Defined in: [render/src/painter/IPainter.ts:12](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L12)
+Defined in: [render/src/painter/IPainter.ts:12](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L12)
 
 #### Returns
 
@@ -114,7 +114,7 @@ Defined in: [render/src/painter/IPainter.ts:12](https://github.com/pangkaiguo/Hu
 
 > **paint**(): `void`
 
-Defined in: [render/src/painter/IPainter.ts:13](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L13)
+Defined in: [render/src/painter/IPainter.ts:13](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L13)
 
 #### Returns
 
@@ -126,7 +126,7 @@ Defined in: [render/src/painter/IPainter.ts:13](https://github.com/pangkaiguo/Hu
 
 > **resize**(`width?`, `height?`): `void`
 
-Defined in: [render/src/painter/IPainter.ts:9](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/IPainter.ts#L9)
+Defined in: [render/src/painter/IPainter.ts:9](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/IPainter.ts#L9)
 
 #### Parameters
 

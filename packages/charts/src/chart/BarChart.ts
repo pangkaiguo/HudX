@@ -414,9 +414,10 @@ export default class BarChart extends Chart {
               option.tooltip?.axisPointer?.lineStyle?.color ||
               this.getThemeConfig().axisPointerColor,
             lineWidth: option.tooltip?.axisPointer?.lineStyle?.width || 1,
-            lineDash: option.tooltip?.axisPointer?.lineStyle?.type === 'dashed'
-              ? [4, 4]
-              : undefined,
+            lineDash:
+              option.tooltip?.axisPointer?.lineStyle?.type === 'dashed'
+                ? [4, 4]
+                : undefined,
           },
           z: Z_AXIS + 1,
           invisible: true,
@@ -491,9 +492,9 @@ export default class BarChart extends Chart {
             yVal = yDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
             xVal = Array.isArray(raw) ? raw[0] : raw;
@@ -501,18 +502,18 @@ export default class BarChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
             yVal = Array.isArray(raw) ? (raw[1] ?? raw[0]) : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? item.value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -878,8 +879,8 @@ export default class BarChart extends Chart {
                   labelOpt.color ||
                   (isInside
                     ? theme.textColorOnSeries ||
-                    theme.token.colorTextOnSeries ||
-                    '#fff'
+                      theme.token.colorTextOnSeries ||
+                      '#fff'
                     : theme.axisLabelColor || theme.textColor),
                 fontSize: labelOpt.fontSize ?? theme.fontSize,
                 fontFamily: theme.fontFamily,
@@ -1081,10 +1082,10 @@ export default class BarChart extends Chart {
 
               const itemName =
                 typeof item === 'object' &&
-                  item !== null &&
-                  !Array.isArray(item) &&
-                  'name' in item &&
-                  typeof item.name === 'string'
+                item !== null &&
+                !Array.isArray(item) &&
+                'name' in item &&
+                typeof item.name === 'string'
                   ? item.name
                   : isHorizontal
                     ? yDomain[index]

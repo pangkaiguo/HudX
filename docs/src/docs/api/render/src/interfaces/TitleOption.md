@@ -4,7 +4,7 @@
 
 # Interface: TitleOption
 
-Defined in: [render/src/types.ts:486](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L486)
+Defined in: [render/src/types.ts:490](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L490)
 
 Title option (similar to ECharts `title`).
 
@@ -30,7 +30,7 @@ const option: ChartOption = {
 
 > `optional` **left**: `string` \| `number`
 
-Defined in: [render/src/types.ts:503](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L503)
+Defined in: [render/src/types.ts:507](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L507)
 
 Horizontal position of the title.
 - 'left', 'center', 'right'
@@ -43,7 +43,7 @@ Horizontal position of the title.
 
 > `optional` **subtext**: `string`
 
-Defined in: [render/src/types.ts:496](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L496)
+Defined in: [render/src/types.ts:500](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L500)
 
 Subtitle text.
 Displayed below the main title.
@@ -54,7 +54,7 @@ Displayed below the main title.
 
 > `optional` **subtextStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: [render/src/types.ts:518](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L518)
+Defined in: [render/src/types.ts:522](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L522)
 
 Style of the subtitle text.
 
@@ -64,7 +64,7 @@ Style of the subtitle text.
 
 > `optional` **text**: `string`
 
-Defined in: [render/src/types.ts:491](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L491)
+Defined in: [render/src/types.ts:495](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L495)
 
 Main title text.
 Supports `\n` for newlines.
@@ -75,7 +75,7 @@ Supports `\n` for newlines.
 
 > `optional` **textStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: [render/src/types.ts:514](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L514)
+Defined in: [render/src/types.ts:518](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L518)
 
 Style of the main title text.
 
@@ -85,7 +85,7 @@ Style of the main title text.
 
 > `optional` **top**: `string` \| `number`
 
-Defined in: [render/src/types.ts:510](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L510)
+Defined in: [render/src/types.ts:514](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L514)
 
 Vertical position of the title.
 - 'top', 'middle', 'bottom'

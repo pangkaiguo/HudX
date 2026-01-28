@@ -1,6 +1,6 @@
 # 主题和多语言支持
 
-HudX 支持 Light 和 Dark 两种主题，以及多语言国际化。
+HudX 支持 Light 和 Dark 两种主题，以及多语言国际化。ThemeManager 会基于 ThemeToken 与默认 Token 生成完整的 ThemeConfig。
 
 ## 主题系统
 
@@ -11,51 +11,101 @@ HudX 支持 Light 和 Dark 两种主题，以及多语言国际化。
 
 ### 主题配置
 
-每个主题包含以下配置项：
+每个主题包含以下配置项（ThemeConfig 为运行时解析后的完整配置）：
 
 ```typescript
 interface ThemeConfig {
-  backgroundColor: string; // 背景色
-  textColor: string; // 文本颜色
-  borderColor: string; // 边框颜色
-  gridColor: string; // 网格颜色
-  axisLineColor: string; // 坐标轴线颜色
-  axisLabelColor: string; // 坐标轴标签颜色
-  seriesColors: string[]; // 系列颜色数组
-  tooltipBackgroundColor: string; // 提示框背景色
-  tooltipTextColor: string; // 提示框文本颜色
-  legendTextColor: string; // 图例文本颜色
-  fontFamily?: string; // 字体
-  fontSize?: number; // 字号
-  token?: ThemeToken; // 主题 Token (原始值)
+  backgroundColor: string;
+  textColor: string;
+  textColorSecondary?: string;
+  textColorTertiary?: string;
+  borderColor: string;
+  borderSecondaryColor?: string;
+  gridColor: string;
+  axisLineColor: string;
+  axisPointerColor: string;
+  axisLabelColor: string;
+  splitLineColor?: string;
+  tooltipBackgroundColor: string;
+  tooltipTextColor: string;
+  tooltipBorderColor: string;
+  tooltipBoxShadow: string;
+  tooltipSeriesNameColor: string;
+  tooltipSubitemNameColor: string;
+  tooltipValueColor: string;
+  legendTextColor: string;
+  textColorOnSeries?: string;
+  primaryColor?: string;
+  primaryTextColor?: string;
+  shadowColor: string;
+  maskColor: string;
+  decalColor: string;
+  seriesColors: string[];
+  color?: string[];
+  heatmapColors?: string[];
+  fillPageColor?: string;
+  fillContainerColor?: string;
+  fillContainerAltColor?: string;
+  fillHoverColor?: string;
+  codeBackgroundColor?: string;
+  codeGutterBackgroundColor?: string;
+  codeTextColor?: string;
+  codeGutterTextColor?: string;
+  fontFamily: string;
+  fontSize: number;
+  token: ThemeToken;
+  [key: string]: any;
 }
 ```
 
 ### 主题 Token 系统
 
-HudX v1.0 引入了 Token 系统，以支持更细粒度和更易维护的主题定制。
+HudX 使用 Token 系统，以支持更细粒度和更易维护的主题定制。ThemeManager 会将 Token 与默认 light/dark Token 合并、规范化主题名，并自动补齐缺失值（颜色数组、字体等）。
 
 ```typescript
 interface ThemeToken {
   colorText?: string;
+  colorTextSecondary?: string;
+  colorTextTertiary?: string;
   colorBackground?: string;
+  colorFillPage?: string;
+  colorFillContainer?: string;
+  colorFillContainerAlt?: string;
+  colorFillHover?: string;
   colorBorder?: string;
+  colorBorderSecondary?: string;
   colorGrid?: string;
   colorAxisLine?: string;
   colorAxisLabel?: string;
   colorTooltipBackground?: string;
   colorTooltipText?: string;
+  colorTooltipBorder?: string;
+  boxShadowTooltip?: string;
+  colorTooltipSeriesName?: string;
+  colorTooltipSubitemName?: string;
+  colorTooltipValue?: string;
   colorLegendText?: string;
+  colorTextOnSeries?: string;
+  colorPrimary?: string;
+  colorPrimaryText?: string;
+  colorShadow?: string;
+  colorMask?: string;
+  colorDecal?: string;
+  colorCodeBackground?: string;
+  colorCodeGutterBackground?: string;
+  colorCodeText?: string;
+  colorCodeGutterText?: string;
   fontFamily?: string;
   fontSize?: number;
   seriesColors?: string[];
-  [key: string]: string | number | string[] | number[] | undefined;
+  heatmapColors?: string[];
+  [key: string]: unknown;
 }
 ```
 
 #### 使用 Token
 
-你可以通过 `ThemeManager` 注册或更新 Token，系统会自动将其映射到主题配置中。
+你可以通过 `ThemeManager` 注册或更新 Token，系统会自动解析为完整的主题配置。
 
 ```typescript
 import { ThemeManager } from "hudx-render";
@@ -64,20 +114,23 @@ import { ThemeManager } from "hudx-render";
 ThemeManager.registerToken("light", {
   colorText: "#000000", // 更深的黑色
   colorBackground: "#f0f0f0", // 浅灰色背景
+  colorBorderSecondary: "#d6d8da",
+  colorTooltipBorder: "#e6e8e9",
+  colorCodeBackground: "#f5f5f5",
   seriesColors: ["#ff0000", "#00ff00", "#0000ff"], // 自定义色板
 });
 
-// 2. 在代码中访问
+// 2. 获取解析后的主题配置
 const theme = ThemeManager.getTheme("light");
-const colors = theme.seriesColors; // 包含更新后的颜色
-const bgColor = theme.backgroundColor; // 包含更新后的背景色
+const colors = theme.seriesColors;
+const bgColor = theme.backgroundColor;
 ```
 
 当你需要将图表颜色与设计系统的 Token 对齐时，这非常有用。
 
 #### 全局主题模式
 
-ThemeManager 可以作为全局风格驱动管理器使用：你可以设置当前主题（light/dark），并让未显式指定 theme 的渲染实例自动使用当前主题。
+ThemeManager 可以作为全局风格驱动管理器使用：你可以设置当前主题，并让未显式指定 theme 的渲染实例自动使用当前主题。
 
 ```typescript
 import { ThemeManager, Renderer } from "hudx-render";
@@ -143,6 +196,7 @@ ThemeManager.registerTheme("custom", {
   borderColor: "#cccccc",
   gridColor: "#e6e6e6",
   axisLineColor: "#333333",
+  axisPointerColor: "#666666",
   axisLabelColor: "#666666",
   seriesColors: ["#ff0000", "#00ff00", "#0000ff"],
   tooltipBackgroundColor: "rgba(50, 50, 50, 0.9)",
@@ -153,6 +207,18 @@ ThemeManager.registerTheme("custom", {
 // 使用自定义主题
 const renderer = Renderer.init("#container", "canvas", "custom");
 ```
+
+### ThemeManager
+
+- `getTheme(theme: Theme): ThemeConfig` - 获取指定主题配置
+- `getTheme(): ThemeConfig` - 获取当前主题配置
+- `getCurrentTheme(): Theme` - 获取当前主题
+- `setCurrentTheme(theme: Theme): void` - 设置当前主题
+- `onThemeChange(listener): () => void` - 监听主题切换
+- `registerTheme(theme: Theme, config: ThemeConfig): void` - 注册自定义主题
+- `registerToken(theme: string, token: ThemeToken): void` - 注册或更新主题 Token
+- `registerHudBaseTokens(tokens: Record<string, ThemeToken>): void` - 批量注册 Token
+- `getThemes(): Theme[]` - 获取所有已注册主题
 
 ## 多语言支持
 

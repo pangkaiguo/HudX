@@ -4,7 +4,7 @@
 
 # Interface: DataURLOpts
 
-Defined in: render/dist/types.d.ts:207
+Defined in: render/dist/types.d.ts:354
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:207
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:213
+Defined in: render/dist/types.d.ts:360
 
 Background color
 
@@ -22,7 +22,7 @@ Background color
 
 > `optional` **pixelRatio**: `number`
 
-Defined in: render/dist/types.d.ts:211
+Defined in: render/dist/types.d.ts:358
 
 Resolution ratio, defaults to window.devicePixelRatio
 
@@ -32,7 +32,7 @@ Resolution ratio, defaults to window.devicePixelRatio
 
 > `optional` **quality**: `number`
 
-Defined in: render/dist/types.d.ts:215
+Defined in: render/dist/types.d.ts:362
 
 Image quality (0..1) for jpeg
 
@@ -42,6 +42,6 @@ Image quality (0..1) for jpeg
 
 > `optional` **type**: `"svg"` \| `"png"` \| `"jpeg"`
 
-Defined in: render/dist/types.d.ts:209
+Defined in: render/dist/types.d.ts:356
 
 Export image type

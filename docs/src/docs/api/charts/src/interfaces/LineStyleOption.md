@@ -4,7 +4,7 @@
 
 # Interface: LineStyleOption
 
-Defined in: render/dist/types.d.ts:1226
+Defined in: render/dist/types.d.ts:1373
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:1226
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:1228
+Defined in: render/dist/types.d.ts:1375
 
 Line color
 
@@ -26,7 +26,7 @@ Line color
 
 > `optional` **opacity**: `number`
 
-Defined in: render/dist/types.d.ts:1234
+Defined in: render/dist/types.d.ts:1381
 
 Opacity
 
@@ -36,7 +36,7 @@ Opacity
 
 > `optional` **type**: `"solid"` \| `"dashed"` \| `"dotted"`
 
-Defined in: render/dist/types.d.ts:1232
+Defined in: render/dist/types.d.ts:1379
 
 Line type
 
@@ -46,6 +46,6 @@ Line type
 
 > `optional` **width**: `number`
 
-Defined in: render/dist/types.d.ts:1230
+Defined in: render/dist/types.d.ts:1377
 
 Line width

@@ -268,7 +268,10 @@ describe('coordinate', () => {
   describe('calculateDomain extra', () => {
     it('should handle array data for value axis', () => {
       const axis: AxisOption = { type: 'value' };
-      const data = [[10, 20], [30, 40]];
+      const data = [
+        [10, 20],
+        [30, 40],
+      ];
       // isXAxis=false -> index 1
       const domain = calculateDomain(axis, data, false);
       expect(domain).toEqual([0, 40]); // niceDomain(20, 40) -> [0, 40] because scale defaults to false
@@ -278,7 +281,10 @@ describe('coordinate', () => {
 
     it('should handle object data with name as number', () => {
       const axis: AxisOption = { type: 'value' };
-      const data = [{ name: 10, value: 100 }, { name: 20, value: 200 }];
+      const data = [
+        { name: 10, value: 100 },
+        { name: 20, value: 200 },
+      ];
       // isXAxis=true. name is used. 10, 20.
       const domain = calculateDomain(axis, data, true);
       expect(domain).toEqual([0, 20]); // niceDomain(10, 20) -> [0, 20] because scale defaults to false
@@ -286,7 +292,10 @@ describe('coordinate', () => {
 
     it('should handle object data with array value', () => {
       const axis: AxisOption = { type: 'value' };
-      const data = [{ name: 'A', value: [10, 20] }, { name: 'B', value: [30, 40] }];
+      const data = [
+        { name: 'A', value: [10, 20] },
+        { name: 'B', value: [30, 40] },
+      ];
       // isXAxis=true -> index 0 -> 10, 30
       const domain = calculateDomain(axis, data, true);
       expect(domain).toEqual([0, 30]);
@@ -295,7 +304,11 @@ describe('coordinate', () => {
     });
 
     it('should handle dataMin/dataMax', () => {
-      const axis: AxisOption = { type: 'value', min: 'dataMin', max: 'dataMax' };
+      const axis: AxisOption = {
+        type: 'value',
+        min: 'dataMin',
+        max: 'dataMax',
+      };
       const data = [10, 50];
       const domain = calculateDomain(axis, data, false);
       // scale=false default -> min=0. max=50. padding=(50-0)*0.1=5.
@@ -326,7 +339,10 @@ describe('coordinate', () => {
 
     it('should handle object data with string name and number value for X value axis', () => {
       const axis: AxisOption = { type: 'value' };
-      const data = [{ name: 'A', value: 10 }, { name: 'B', value: 20 }];
+      const data = [
+        { name: 'A', value: 10 },
+        { name: 'B', value: 20 },
+      ];
       const domain = calculateDomain(axis, data, true);
       // name is string, falls back to value check. value is number -> 10, 20.
       // min=10, max=20. scale=false -> min=0.
@@ -335,7 +351,10 @@ describe('coordinate', () => {
 
     it('should handle object data with array value for Y value axis', () => {
       const axis: AxisOption = { type: 'value' };
-      const data = [{ name: 'A', value: [10, 20] }, { name: 'B', value: [30, 40] }];
+      const data = [
+        { name: 'A', value: [10, 20] },
+        { name: 'B', value: [30, 40] },
+      ];
       // isXAxis=false -> index 1 -> 20, 40
       const domain = calculateDomain(axis, data, false);
       expect(domain).toEqual([0, 40]);

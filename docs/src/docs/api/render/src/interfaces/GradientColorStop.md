@@ -4,7 +4,7 @@
 
 # Interface: GradientColorStop
 
-Defined in: [render/src/types.ts:1814](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1814)
+Defined in: [render/src/types.ts:1818](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1818)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:1814](https://github.com/pangkaiguo/HudX/blob/5
 
 > **color**: `string`
 
-Defined in: [render/src/types.ts:1818](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1818)
+Defined in: [render/src/types.ts:1822](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1822)
 
 Color at offset
 
@@ -22,6 +22,6 @@ Color at offset
 
 > **offset**: `number`
 
-Defined in: [render/src/types.ts:1816](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1816)
+Defined in: [render/src/types.ts:1820](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1820)
 
 Offset (0..1)

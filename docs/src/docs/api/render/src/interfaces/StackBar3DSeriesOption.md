@@ -4,7 +4,7 @@
 
 # Interface: StackBar3DSeriesOption
 
-Defined in: [render/src/types.ts:1785](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1785)
+Defined in: [render/src/types.ts:1789](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1789)
 
 3D stacked bar series (`StackBar3DChart`).
 
@@ -22,7 +22,7 @@ Defined in: [render/src/types.ts:1785](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **barCategoryGap**: `string` \| `number`
 
-Defined in: [render/src/types.ts:1802](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1802)
+Defined in: [render/src/types.ts:1806](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1806)
 
 Bar category gap.
 
@@ -32,7 +32,7 @@ Bar category gap.
 
 > `optional` **barGap**: `string` \| `number`
 
-Defined in: [render/src/types.ts:1798](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1798)
+Defined in: [render/src/types.ts:1802](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1802)
 
 Bar gap.
 
@@ -42,7 +42,7 @@ Bar gap.
 
 > `optional` **barWidth**: `string` \| `number`
 
-Defined in: [render/src/types.ts:1794](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1794)
+Defined in: [render/src/types.ts:1798](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1798)
 
 Bar width.
 
@@ -52,7 +52,7 @@ Bar width.
 
 > `optional` **color**: `string`
 
-Defined in: [render/src/types.ts:1447](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1447)
+Defined in: [render/src/types.ts:1451](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1451)
 
 Series color.
 If not set, it will pick from the global palette.
@@ -67,7 +67,7 @@ If not set, it will pick from the global palette.
 
 > `optional` **cursor**: `string`
 
-Defined in: [render/src/types.ts:1460](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1460)
+Defined in: [render/src/types.ts:1464](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1464)
 
 Cursor style when hovering over the series.
 
@@ -87,7 +87,7 @@ Cursor style when hovering over the series.
 
 > `optional` **data**: [`ChartData`](../type-aliases/ChartData.md)[]
 
-Defined in: [render/src/types.ts:1481](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1481)
+Defined in: [render/src/types.ts:1485](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1485)
 
 Series data.
 Can be an array of numbers, or objects with `value` property.
@@ -102,7 +102,7 @@ Can be an array of numbers, or objects with `value` property.
 
 > `optional` **emphasis**: [`EmphasisOption`](EmphasisOption.md)
 
-Defined in: [render/src/types.ts:1476](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1476)
+Defined in: [render/src/types.ts:1480](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1480)
 
 Emphasis state configuration (hover state).
 
@@ -116,7 +116,7 @@ Emphasis state configuration (hover state).
 
 > `optional` **id**: `string`
 
-Defined in: [render/src/types.ts:1437](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1437)
+Defined in: [render/src/types.ts:1441](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1441)
 
 Component ID.
 Unique identifier for the series component.
@@ -131,7 +131,7 @@ Unique identifier for the series component.
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: [render/src/types.ts:1468](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1468)
+Defined in: [render/src/types.ts:1472](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1472)
 
 Item style configuration (normal state).
 
@@ -145,7 +145,7 @@ Item style configuration (normal state).
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: [render/src/types.ts:1472](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1472)
+Defined in: [render/src/types.ts:1476](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1476)
 
 Label configuration (normal state).
 
@@ -159,7 +159,7 @@ Label configuration (normal state).
 
 > `optional` **name**: `string`
 
-Defined in: [render/src/types.ts:1442](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1442)
+Defined in: [render/src/types.ts:1446](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1446)
 
 Series name.
 Used in legend and tooltip.
@@ -174,7 +174,7 @@ Used in legend and tooltip.
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:1464](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1464)
+Defined in: [render/src/types.ts:1468](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1468)
 
 Whether to show the series.
 
@@ -188,7 +188,7 @@ Whether to show the series.
 
 > `optional` **stack**: `string`
 
-Defined in: [render/src/types.ts:1790](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1790)
+Defined in: [render/src/types.ts:1794](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1794)
 
 Stack name.
 
@@ -198,7 +198,7 @@ Stack name.
 
 > **type**: `"stackBar3D"`
 
-Defined in: [render/src/types.ts:1786](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1786)
+Defined in: [render/src/types.ts:1790](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1790)
 
 Series type (explicitly set it to get more accurate IntelliSense).
 e.g., 'line', 'bar', 'pie'.
@@ -213,7 +213,7 @@ e.g., 'line', 'bar', 'pie'.
 
 > `optional` **z**: `number`
 
-Defined in: [render/src/types.ts:1451](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1451)
+Defined in: [render/src/types.ts:1455](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1455)
 
 Z-index of the series.
 
@@ -227,7 +227,7 @@ Z-index of the series.
 
 > `optional` **zlevel**: `number`
 
-Defined in: [render/src/types.ts:1455](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1455)
+Defined in: [render/src/types.ts:1459](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1459)
 
 Z-level of the series.
 

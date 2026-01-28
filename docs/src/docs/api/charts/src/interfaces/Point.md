@@ -4,7 +4,7 @@
 
 # Interface: Point
 
-Defined in: render/dist/types.d.ts:223
+Defined in: render/dist/types.d.ts:370
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:223
 
 > **x**: `number`
 
-Defined in: render/dist/types.d.ts:225
+Defined in: render/dist/types.d.ts:372
 
 X coordinate
 
@@ -22,6 +22,6 @@ X coordinate
 
 > **y**: `number`
 
-Defined in: render/dist/types.d.ts:227
+Defined in: render/dist/types.d.ts:374
 
 Y coordinate

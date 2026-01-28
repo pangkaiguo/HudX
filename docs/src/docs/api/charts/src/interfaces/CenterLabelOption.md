@@ -4,7 +4,7 @@
 
 # Interface: CenterLabelOption
 
-Defined in: render/dist/types.d.ts:1431
+Defined in: render/dist/types.d.ts:1578
 
 Pie series.
 
@@ -24,7 +24,7 @@ series: [{
 
 > `optional` **formatter**: `string` \| (`params`) => `string`
 
-Defined in: render/dist/types.d.ts:1446
+Defined in: render/dist/types.d.ts:1593
 
 Label formatter.
 Supports string template (e.g., '{b}: {c}') or callback function.
@@ -35,7 +35,7 @@ Supports string template (e.g., '{b}: {c}') or callback function.
 
 > `optional` **rich**: `object`
 
-Defined in: render/dist/types.d.ts:1454
+Defined in: render/dist/types.d.ts:1601
 
 Rich text style.
 
@@ -49,7 +49,7 @@ Rich text style.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1435
+Defined in: render/dist/types.d.ts:1582
 
 Whether to show the center label.
 
@@ -59,7 +59,7 @@ Whether to show the center label.
 
 > `optional` **style**: [`TextStyle`](TextStyle.md)
 
-Defined in: render/dist/types.d.ts:1450
+Defined in: render/dist/types.d.ts:1597
 
 Text style.
 
@@ -69,7 +69,7 @@ Text style.
 
 > `optional` **type**: `"text"` \| `"percentage"`
 
-Defined in: render/dist/types.d.ts:1441
+Defined in: render/dist/types.d.ts:1588
 
 Label type.
 - 'text': Static text (default).

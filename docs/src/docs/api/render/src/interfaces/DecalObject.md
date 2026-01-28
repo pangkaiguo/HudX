@@ -4,7 +4,7 @@
 
 # Interface: DecalObject
 
-Defined in: [render/src/types.ts:11](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L11)
+Defined in: [render/src/types.ts:11](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L11)
 
 Chart type definitions
 
@@ -14,7 +14,7 @@ Chart type definitions
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: [render/src/types.ts:21](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L21)
+Defined in: [render/src/types.ts:21](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L21)
 
 Background color of the pattern
 
@@ -24,7 +24,7 @@ Background color of the pattern
 
 > `optional` **color**: `string`
 
-Defined in: [render/src/types.ts:19](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L19)
+Defined in: [render/src/types.ts:19](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L19)
 
 Foreground color of the pattern
 
@@ -34,7 +34,7 @@ Foreground color of the pattern
 
 > `optional` **dashArrayX**: `number` \| `number`[]
 
-Defined in: [render/src/types.ts:23](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L23)
+Defined in: [render/src/types.ts:23](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L23)
 
 Dash array for X axis lines
 
@@ -44,7 +44,7 @@ Dash array for X axis lines
 
 > `optional` **dashArrayY**: `number` \| `number`[]
 
-Defined in: [render/src/types.ts:25](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L25)
+Defined in: [render/src/types.ts:25](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L25)
 
 Dash array for Y axis lines
 
@@ -54,7 +54,7 @@ Dash array for Y axis lines
 
 > `optional` **maxTileHeight**: `number`
 
-Defined in: [render/src/types.ts:29](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L29)
+Defined in: [render/src/types.ts:29](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L29)
 
 Maximum tile height
 
@@ -64,7 +64,7 @@ Maximum tile height
 
 > `optional` **maxTileWidth**: `number`
 
-Defined in: [render/src/types.ts:27](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L27)
+Defined in: [render/src/types.ts:27](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L27)
 
 Maximum tile width
 
@@ -74,7 +74,7 @@ Maximum tile width
 
 > `optional` **rotation**: `number`
 
-Defined in: [render/src/types.ts:17](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L17)
+Defined in: [render/src/types.ts:17](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L17)
 
 Rotation of the pattern in radians
 
@@ -84,7 +84,7 @@ Rotation of the pattern in radians
 
 > `optional` **symbol**: `string` \| (...`args`) => `void`
 
-Defined in: [render/src/types.ts:13](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L13)
+Defined in: [render/src/types.ts:13](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L13)
 
 Decal symbol pattern
 
@@ -94,6 +94,6 @@ Decal symbol pattern
 
 > `optional` **symbolSize**: `number`
 
-Defined in: [render/src/types.ts:15](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L15)
+Defined in: [render/src/types.ts:15](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L15)
 
 Size of the symbol

@@ -8,6 +8,7 @@ pnpm-lock.yaml
 dist/
 packages/*/dist/
 *.tsbuildinfo
+storybook-static/
 
 # IDE
 .vscode/

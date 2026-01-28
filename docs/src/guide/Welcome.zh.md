@@ -28,4 +28,3 @@ HudX 是一个基于 `hudx-render` 和 `hudx-charts` 构建的高性能、轻量
 
 - [API 参考](?path=/docs/guide-api-reference--docs)
 - [性能优化](?path=/docs/guide-performance--docs)
-- [GitHub 仓库](https://github.com/your-repo/hudx)

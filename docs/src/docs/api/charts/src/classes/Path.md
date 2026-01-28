@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `PathShape`
+> **shape**: [`PathShape`](../interfaces/PathShape.md)
 
 Defined in: render/dist/graphic/Path.d.ts:11
 

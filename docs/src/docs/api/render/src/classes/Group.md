@@ -4,7 +4,7 @@
 
 # Class: Group
 
-Defined in: [render/src/Group.ts:8](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L8)
+Defined in: [render/src/Group.ts:8](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L8)
 
 ## Extends
 
@@ -21,7 +21,7 @@ Defined in: [render/src/Group.ts:8](https://github.com/pangkaiguo/HudX/blob/5318
 
 > **new Group**(`opts`): `Group`
 
-Defined in: [render/src/Group.ts:11](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L11)
+Defined in: [render/src/Group.ts:11](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L11)
 
 #### Parameters
 
@@ -43,7 +43,7 @@ Defined in: [render/src/Group.ts:11](https://github.com/pangkaiguo/HudX/blob/531
 
 > `optional` **\_\_parent**: [`ChartElement`](ChartElement.md)
 
-Defined in: [render/src/ChartElement.ts:49](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L49)
+Defined in: [render/src/ChartElement.ts:49](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L49)
 
 Parent container
 
@@ -57,7 +57,7 @@ Parent container
 
 > **cursor**: `string` = `'default'`
 
-Defined in: [render/src/ChartElement.ts:35](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L35)
+Defined in: [render/src/ChartElement.ts:35](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L35)
 
 Mouse cursor style
 
@@ -71,7 +71,7 @@ Mouse cursor style
 
 > `optional` **data**: `any`
 
-Defined in: [render/src/ChartElement.ts:25](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L25)
+Defined in: [render/src/ChartElement.ts:25](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L25)
 
 User data
 
@@ -85,7 +85,7 @@ User data
 
 > **draggable**: `boolean` = `false`
 
-Defined in: [render/src/ChartElement.ts:37](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L37)
+Defined in: [render/src/ChartElement.ts:37](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L37)
 
 Whether the element is draggable
 
@@ -99,7 +99,7 @@ Whether the element is draggable
 
 > **id**: `string`
 
-Defined in: [render/src/ChartElement.ts:21](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L21)
+Defined in: [render/src/ChartElement.ts:21](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L21)
 
 Unique ID
 
@@ -113,7 +113,7 @@ Unique ID
 
 > **invisible**: `boolean` = `false`
 
-Defined in: [render/src/ChartElement.ts:33](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L33)
+Defined in: [render/src/ChartElement.ts:33](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L33)
 
 Whether the element is invisible
 
@@ -127,7 +127,7 @@ Whether the element is invisible
 
 > `optional` **name**: `string`
 
-Defined in: [render/src/ChartElement.ts:23](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L23)
+Defined in: [render/src/ChartElement.ts:23](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L23)
 
 Element name
 
@@ -141,7 +141,7 @@ Element name
 
 > **progressive**: `boolean` = `false`
 
-Defined in: [render/src/ChartElement.ts:39](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L39)
+Defined in: [render/src/ChartElement.ts:39](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L39)
 
 Whether to render progressively
 
@@ -155,7 +155,7 @@ Whether to render progressively
 
 > **shape**: `unknown` = `{}`
 
-Defined in: [render/src/ChartElement.ts:44](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L44)
+Defined in: [render/src/ChartElement.ts:44](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L44)
 
 Shape properties
 
@@ -169,7 +169,7 @@ Shape properties
 
 > **silent**: `boolean` = `false`
 
-Defined in: [render/src/ChartElement.ts:31](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L31)
+Defined in: [render/src/ChartElement.ts:31](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L31)
 
 Whether to ignore mouse events
 
@@ -183,7 +183,7 @@ Whether to ignore mouse events
 
 > **style**: [`Style`](../interfaces/Style.md) = `{}`
 
-Defined in: [render/src/ChartElement.ts:42](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L42)
+Defined in: [render/src/ChartElement.ts:42](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L42)
 
 Element style
 
@@ -197,7 +197,7 @@ Element style
 
 > **transform**: [`Transform`](../interfaces/Transform.md) = `{}`
 
-Defined in: [render/src/ChartElement.ts:46](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L46)
+Defined in: [render/src/ChartElement.ts:46](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L46)
 
 Transform properties
 
@@ -211,7 +211,7 @@ Transform properties
 
 > **z**: `number` = `0`
 
-Defined in: [render/src/ChartElement.ts:29](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L29)
+Defined in: [render/src/ChartElement.ts:29](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L29)
 
 Element stacking order within same layer
 
@@ -225,7 +225,7 @@ Element stacking order within same layer
 
 > **zlevel**: `number` = `0`
 
-Defined in: [render/src/ChartElement.ts:27](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L27)
+Defined in: [render/src/ChartElement.ts:27](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L27)
 
 Layer index (z-index equivalent)
 
@@ -239,7 +239,7 @@ Layer index (z-index equivalent)
 
 > **add**(`child`): `this`
 
-Defined in: [render/src/Group.ts:18](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L18)
+Defined in: [render/src/Group.ts:18](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L18)
 
 Add child element
 
@@ -259,7 +259,7 @@ Add child element
 
 > **attr**(`key`, `value?`): `any`
 
-Defined in: [render/src/ChartElement.ts:81](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L81)
+Defined in: [render/src/ChartElement.ts:81](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L81)
 
 #### Parameters
 
@@ -285,7 +285,7 @@ Defined in: [render/src/ChartElement.ts:81](https://github.com/pangkaiguo/HudX/b
 
 > **childAt**(`index`): [`ChartElement`](ChartElement.md) \| `undefined`
 
-Defined in: [render/src/Group.ts:63](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L63)
+Defined in: [render/src/Group.ts:63](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L63)
 
 Get child at index
 
@@ -305,7 +305,7 @@ Get child at index
 
 > **childOfName**(`name`): [`ChartElement`](ChartElement.md) \| `undefined`
 
-Defined in: [render/src/Group.ts:70](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L70)
+Defined in: [render/src/Group.ts:70](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L70)
 
 Get child by ID
 
@@ -325,7 +325,7 @@ Get child by ID
 
 > **children**(): [`ChartElement`](ChartElement.md)[]
 
-Defined in: [render/src/Group.ts:77](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L77)
+Defined in: [render/src/Group.ts:77](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L77)
 
 Get all children
 
@@ -339,7 +339,7 @@ Get all children
 
 > **childrenCount**(): `number`
 
-Defined in: [render/src/Group.ts:84](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L84)
+Defined in: [render/src/Group.ts:84](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L84)
 
 Get children count
 
@@ -353,7 +353,7 @@ Get children count
 
 > **clearDirty**(): `void`
 
-Defined in: [render/src/ChartElement.ts:149](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L149)
+Defined in: [render/src/ChartElement.ts:149](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L149)
 
 #### Returns
 
@@ -369,7 +369,7 @@ Defined in: [render/src/ChartElement.ts:149](https://github.com/pangkaiguo/HudX/
 
 > **contain**(`x`, `y`): `boolean`
 
-Defined in: [render/src/Group.ts:146](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L146)
+Defined in: [render/src/Group.ts:146](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L146)
 
 Check if point is inside group
 
@@ -397,7 +397,7 @@ Check if point is inside group
 
 > **getBoundingRect**(): [`BoundingRect`](../interfaces/BoundingRect.md)
 
-Defined in: [render/src/Group.ts:117](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L117)
+Defined in: [render/src/Group.ts:117](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L117)
 
 Get bounding rect (union of all children)
 
@@ -415,7 +415,7 @@ Get bounding rect (union of all children)
 
 > **getClipPath**(): [`ChartElement`](ChartElement.md) \| `undefined`
 
-Defined in: [render/src/ChartElement.ts:368](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L368)
+Defined in: [render/src/ChartElement.ts:368](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L368)
 
 #### Returns
 
@@ -431,7 +431,7 @@ Defined in: [render/src/ChartElement.ts:368](https://github.com/pangkaiguo/HudX/
 
 > **getGlobalTransform**(): [`Matrix`](../interfaces/Matrix.md)
 
-Defined in: [render/src/ChartElement.ts:205](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L205)
+Defined in: [render/src/ChartElement.ts:205](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L205)
 
 Get global transform matrix
 
@@ -449,7 +449,7 @@ Get global transform matrix
 
 > **getLocalTransform**(): [`Matrix`](../interfaces/Matrix.md)
 
-Defined in: [render/src/ChartElement.ts:181](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L181)
+Defined in: [render/src/ChartElement.ts:181](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L181)
 
 Get local transform matrix
 
@@ -467,7 +467,7 @@ Get local transform matrix
 
 > **isDirty**(): `boolean`
 
-Defined in: [render/src/ChartElement.ts:145](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L145)
+Defined in: [render/src/ChartElement.ts:145](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L145)
 
 #### Returns
 
@@ -483,7 +483,7 @@ Defined in: [render/src/ChartElement.ts:145](https://github.com/pangkaiguo/HudX/
 
 > **isSilent**(`event?`): `boolean`
 
-Defined in: [render/src/mixin/Eventful.ts:72](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/mixin/Eventful.ts#L72)
+Defined in: [render/src/mixin/Eventful.ts:72](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/mixin/Eventful.ts#L72)
 
 Check if event has listeners
 
@@ -507,7 +507,7 @@ Check if event has listeners
 
 > **markRedraw**(): `void`
 
-Defined in: [render/src/ChartElement.ts:135](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L135)
+Defined in: [render/src/ChartElement.ts:135](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L135)
 
 #### Returns
 
@@ -523,7 +523,7 @@ Defined in: [render/src/ChartElement.ts:135](https://github.com/pangkaiguo/HudX/
 
 > **off**(`event?`, `handler?`): `this`
 
-Defined in: [render/src/mixin/Eventful.ts:24](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/mixin/Eventful.ts#L24)
+Defined in: [render/src/mixin/Eventful.ts:24](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/mixin/Eventful.ts#L24)
 
 Remove event listener
 
@@ -551,7 +551,7 @@ Remove event listener
 
 > **on**(`event`, `handler`): `this`
 
-Defined in: [render/src/mixin/Eventful.ts:13](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/mixin/Eventful.ts#L13)
+Defined in: [render/src/mixin/Eventful.ts:13](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/mixin/Eventful.ts#L13)
 
 Add event listener
 
@@ -579,7 +579,7 @@ Add event listener
 
 > **remove**(`child`): `this`
 
-Defined in: [render/src/Group.ts:38](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L38)
+Defined in: [render/src/Group.ts:38](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L38)
 
 Remove child element
 
@@ -599,7 +599,7 @@ Remove child element
 
 > **removeAll**(): `this`
 
-Defined in: [render/src/Group.ts:51](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L51)
+Defined in: [render/src/Group.ts:51](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L51)
 
 Remove all children
 
@@ -613,7 +613,7 @@ Remove all children
 
 > **render**(`ctx`): `void`
 
-Defined in: [render/src/Group.ts:160](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L160)
+Defined in: [render/src/Group.ts:160](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L160)
 
 Render group and children
 
@@ -637,7 +637,7 @@ Render group and children
 
 > **setClipPath**(`clipPath?`): `this`
 
-Defined in: [render/src/ChartElement.ts:372](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L372)
+Defined in: [render/src/ChartElement.ts:372](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L372)
 
 #### Parameters
 
@@ -659,7 +659,7 @@ Defined in: [render/src/ChartElement.ts:372](https://github.com/pangkaiguo/HudX/
 
 > **transformPointToLocal**(`x`, `y`): \[`number`, `number`\] \| `null`
 
-Defined in: [render/src/ChartElement.ts:219](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/ChartElement.ts#L219)
+Defined in: [render/src/ChartElement.ts:219](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/ChartElement.ts#L219)
 
 Transform global point to local coordinate space
 
@@ -687,7 +687,7 @@ Transform global point to local coordinate space
 
 > **traverse**(`callback`, `includeSelf`): `void`
 
-Defined in: [render/src/Group.ts:91](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Group.ts#L91)
+Defined in: [render/src/Group.ts:91](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Group.ts#L91)
 
 Traverse children
 
@@ -711,7 +711,7 @@ Traverse children
 
 > **trigger**(`event`, `eventData?`): `this`
 
-Defined in: [render/src/mixin/Eventful.ts:52](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/mixin/Eventful.ts#L52)
+Defined in: [render/src/mixin/Eventful.ts:52](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/mixin/Eventful.ts#L52)
 
 Trigger event
 

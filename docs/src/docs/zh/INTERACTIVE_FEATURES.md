@@ -1,6 +1,8 @@
-# HudX 交互功能
+# HudX 交互特性
 
-## 概述
+> **在线体验**：请在示例应用 (`pnpm dev:examples`) 中探索“交互”功能演示，直观体验这些特性。
+
+## 概览
 
 HudX Charts 提供了一套丰富的交互功能，包括动画、提示框（Tooltip）、图例（Legend）和高级事件处理，旨在对标 ECharts 的能力。
 

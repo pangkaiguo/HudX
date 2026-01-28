@@ -4,7 +4,7 @@
 
 # Interface: BoundingRect
 
-Defined in: [render/src/types.ts:388](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L388)
+Defined in: [render/src/types.ts:392](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L392)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:388](https://github.com/pangkaiguo/HudX/blob/53
 
 > **height**: `number`
 
-Defined in: [render/src/types.ts:396](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L396)
+Defined in: [render/src/types.ts:400](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L400)
 
 Height of the rectangle
 
@@ -22,7 +22,7 @@ Height of the rectangle
 
 > **width**: `number`
 
-Defined in: [render/src/types.ts:394](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L394)
+Defined in: [render/src/types.ts:398](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L398)
 
 Width of the rectangle
 
@@ -32,7 +32,7 @@ Width of the rectangle
 
 > **x**: `number`
 
-Defined in: [render/src/types.ts:390](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L390)
+Defined in: [render/src/types.ts:394](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L394)
 
 X coordinate of top-left corner
 
@@ -42,6 +42,6 @@ X coordinate of top-left corner
 
 > **y**: `number`
 
-Defined in: [render/src/types.ts:392](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L392)
+Defined in: [render/src/types.ts:396](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L396)
 
 Y coordinate of top-left corner

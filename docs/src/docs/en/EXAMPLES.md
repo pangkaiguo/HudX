@@ -1,5 +1,7 @@
 # HudX Usage Examples
 
+> **Note**: For a complete interactive experience, please run the example app (`pnpm dev:examples`). The new dashboard features a searchable list of examples, feature demos (Animation, Interaction), and instant code previews.
+
 ## Basic Examples
 
 ### 1. Line Chart

@@ -4,7 +4,7 @@
 
 # Interface: EmphasisOption
 
-Defined in: render/dist/types.d.ts:1708
+Defined in: render/dist/types.d.ts:1855
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:1708
 
 > `optional` **blurScope**: `"series"` \| `"coordinateSystem"` \| `"global"`
 
-Defined in: render/dist/types.d.ts:1720
+Defined in: render/dist/types.d.ts:1867
 
 Blur scope
 
@@ -26,7 +26,7 @@ Blur scope
 
 > `optional` **focus**: `"none"` \| `"series"` \| `"self"`
 
-Defined in: render/dist/types.d.ts:1718
+Defined in: render/dist/types.d.ts:1865
 
 Focus scope
 
@@ -36,7 +36,7 @@ Focus scope
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1710
+Defined in: render/dist/types.d.ts:1857
 
 Item style in emphasis state
 
@@ -46,7 +46,7 @@ Item style in emphasis state
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: render/dist/types.d.ts:1712
+Defined in: render/dist/types.d.ts:1859
 
 Label in emphasis state
 
@@ -56,7 +56,7 @@ Label in emphasis state
 
 > `optional` **scale**: `boolean`
 
-Defined in: render/dist/types.d.ts:1714
+Defined in: render/dist/types.d.ts:1861
 
 Whether to scale
 
@@ -66,6 +66,6 @@ Whether to scale
 
 > `optional` **scaleSize**: `number`
 
-Defined in: render/dist/types.d.ts:1716
+Defined in: render/dist/types.d.ts:1863
 
 Scale size

@@ -4,7 +4,7 @@
 
 # Interface: BarSeriesOption
 
-Defined in: [render/src/types.ts:1575](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1575)
+Defined in: [render/src/types.ts:1579](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1579)
 
 Bar series.
 
@@ -28,7 +28,7 @@ series: [{ type: 'bar', name: 'Sales', data: [120, 200, 150], barGap: '30%' }]
 
 > `optional` **backgroundStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: [render/src/types.ts:1614](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1614)
+Defined in: [render/src/types.ts:1618](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1618)
 
 Style of the background.
 
@@ -38,7 +38,7 @@ Style of the background.
 
 > `optional` **barCategoryGap**: `string` \| `number`
 
-Defined in: [render/src/types.ts:1606](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1606)
+Defined in: [render/src/types.ts:1610](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1610)
 
 Gap between bar categories.
 Defaults to '20%'.
@@ -49,7 +49,7 @@ Defaults to '20%'.
 
 > `optional` **barGap**: `string` \| `number`
 
-Defined in: [render/src/types.ts:1601](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1601)
+Defined in: [render/src/types.ts:1605](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1605)
 
 Gap between bars of different series in the same category.
 Defaults to '30%'.
@@ -60,7 +60,7 @@ Defaults to '30%'.
 
 > `optional` **barMaxWidth**: `string` \| `number`
 
-Defined in: [render/src/types.ts:1591](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1591)
+Defined in: [render/src/types.ts:1595](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1595)
 
 Maximum bar width.
 Useful when bar width is auto-calculated.
@@ -71,7 +71,7 @@ Useful when bar width is auto-calculated.
 
 > `optional` **barMinHeight**: `number`
 
-Defined in: [render/src/types.ts:1596](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1596)
+Defined in: [render/src/types.ts:1600](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1600)
 
 Minimum bar height.
 Useful to make small values visible.
@@ -82,7 +82,7 @@ Useful to make small values visible.
 
 > `optional` **barWidth**: `string` \| `number`
 
-Defined in: [render/src/types.ts:1586](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1586)
+Defined in: [render/src/types.ts:1590](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1590)
 
 Bar width.
 Can be absolute pixel value or percentage relative to bandwidth.
@@ -93,7 +93,7 @@ Can be absolute pixel value or percentage relative to bandwidth.
 
 > `optional` **color**: `string`
 
-Defined in: [render/src/types.ts:1447](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1447)
+Defined in: [render/src/types.ts:1451](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1451)
 
 Series color.
 If not set, it will pick from the global palette.
@@ -108,7 +108,7 @@ If not set, it will pick from the global palette.
 
 > `optional` **cursor**: `string`
 
-Defined in: [render/src/types.ts:1460](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1460)
+Defined in: [render/src/types.ts:1464](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1464)
 
 Cursor style when hovering over the series.
 
@@ -128,7 +128,7 @@ Cursor style when hovering over the series.
 
 > `optional` **data**: [`ChartData`](../type-aliases/ChartData.md)[]
 
-Defined in: [render/src/types.ts:1481](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1481)
+Defined in: [render/src/types.ts:1485](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1485)
 
 Series data.
 Can be an array of numbers, or objects with `value` property.
@@ -143,7 +143,7 @@ Can be an array of numbers, or objects with `value` property.
 
 > `optional` **emphasis**: [`EmphasisOption`](EmphasisOption.md)
 
-Defined in: [render/src/types.ts:1476](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1476)
+Defined in: [render/src/types.ts:1480](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1480)
 
 Emphasis state configuration (hover state).
 
@@ -157,7 +157,7 @@ Emphasis state configuration (hover state).
 
 > `optional` **id**: `string`
 
-Defined in: [render/src/types.ts:1437](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1437)
+Defined in: [render/src/types.ts:1441](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1441)
 
 Component ID.
 Unique identifier for the series component.
@@ -172,7 +172,7 @@ Unique identifier for the series component.
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: [render/src/types.ts:1468](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1468)
+Defined in: [render/src/types.ts:1472](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1472)
 
 Item style configuration (normal state).
 
@@ -186,7 +186,7 @@ Item style configuration (normal state).
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: [render/src/types.ts:1472](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1472)
+Defined in: [render/src/types.ts:1476](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1476)
 
 Label configuration (normal state).
 
@@ -200,7 +200,7 @@ Label configuration (normal state).
 
 > `optional` **name**: `string`
 
-Defined in: [render/src/types.ts:1442](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1442)
+Defined in: [render/src/types.ts:1446](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1446)
 
 Series name.
 Used in legend and tooltip.
@@ -215,7 +215,7 @@ Used in legend and tooltip.
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:1464](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1464)
+Defined in: [render/src/types.ts:1468](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1468)
 
 Whether to show the series.
 
@@ -229,7 +229,7 @@ Whether to show the series.
 
 > `optional` **showBackground**: `boolean`
 
-Defined in: [render/src/types.ts:1610](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1610)
+Defined in: [render/src/types.ts:1614](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1614)
 
 Whether to show background behind bars.
 
@@ -239,7 +239,7 @@ Whether to show background behind bars.
 
 > `optional` **stack**: `string`
 
-Defined in: [render/src/types.ts:1581](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1581)
+Defined in: [render/src/types.ts:1585](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1585)
 
 Stack name.
 Series with the same stack name will be stacked on top of each other.
@@ -250,7 +250,7 @@ Series with the same stack name will be stacked on top of each other.
 
 > **type**: `"bar"`
 
-Defined in: [render/src/types.ts:1576](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1576)
+Defined in: [render/src/types.ts:1580](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1580)
 
 Series type (explicitly set it to get more accurate IntelliSense).
 e.g., 'line', 'bar', 'pie'.
@@ -265,7 +265,7 @@ e.g., 'line', 'bar', 'pie'.
 
 > `optional` **z**: `number`
 
-Defined in: [render/src/types.ts:1451](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1451)
+Defined in: [render/src/types.ts:1455](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1455)
 
 Z-index of the series.
 
@@ -279,7 +279,7 @@ Z-index of the series.
 
 > `optional` **zlevel**: `number`
 
-Defined in: [render/src/types.ts:1455](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1455)
+Defined in: [render/src/types.ts:1459](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1459)
 
 Z-level of the series.
 

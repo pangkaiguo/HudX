@@ -4,7 +4,7 @@
 
 # Interface: DecalOption
 
-Defined in: [render/src/types.ts:465](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L465)
+Defined in: [render/src/types.ts:469](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L469)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:465](https://github.com/pangkaiguo/HudX/blob/53
 
 > `optional` **decals**: [`DecalObject`](DecalObject.md)[]
 
-Defined in: [render/src/types.ts:469](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L469)
+Defined in: [render/src/types.ts:473](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L473)
 
 List of decal patterns to cycle through
 
@@ -22,6 +22,6 @@ List of decal patterns to cycle through
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:467](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L467)
+Defined in: [render/src/types.ts:471](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L471)
 
 Show decal patterns

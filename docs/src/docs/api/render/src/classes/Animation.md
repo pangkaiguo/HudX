@@ -4,7 +4,7 @@
 
 # Class: Animation
 
-Defined in: [render/src/animation/Animation.ts:93](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/animation/Animation.ts#L93)
+Defined in: [render/src/animation/Animation.ts:93](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/animation/Animation.ts#L93)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [render/src/animation/Animation.ts:93](https://github.com/pangkaiguo
 
 > **new Animation**(`target`, `property`, `endValue`, `duration`, `delay`, `easing`, `onUpdate?`, `onComplete?`): `Animation`
 
-Defined in: [render/src/animation/Animation.ts:112](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/animation/Animation.ts#L112)
+Defined in: [render/src/animation/Animation.ts:112](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/animation/Animation.ts#L112)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [render/src/animation/Animation.ts:112](https://github.com/pangkaigu
 
 > **pause**(): `this`
 
-Defined in: [render/src/animation/Animation.ts:158](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/animation/Animation.ts#L158)
+Defined in: [render/src/animation/Animation.ts:158](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/animation/Animation.ts#L158)
 
 #### Returns
 
@@ -70,7 +70,7 @@ Defined in: [render/src/animation/Animation.ts:158](https://github.com/pangkaigu
 
 > **resume**(): `this`
 
-Defined in: [render/src/animation/Animation.ts:166](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/animation/Animation.ts#L166)
+Defined in: [render/src/animation/Animation.ts:166](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/animation/Animation.ts#L166)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Defined in: [render/src/animation/Animation.ts:166](https://github.com/pangkaigu
 
 > **start**(): `this`
 
-Defined in: [render/src/animation/Animation.ts:137](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/animation/Animation.ts#L137)
+Defined in: [render/src/animation/Animation.ts:137](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/animation/Animation.ts#L137)
 
 #### Returns
 
@@ -94,7 +94,7 @@ Defined in: [render/src/animation/Animation.ts:137](https://github.com/pangkaigu
 
 > **stop**(): `this`
 
-Defined in: [render/src/animation/Animation.ts:150](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/animation/Animation.ts#L150)
+Defined in: [render/src/animation/Animation.ts:150](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/animation/Animation.ts#L150)
 
 #### Returns
 

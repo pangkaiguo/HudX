@@ -4,7 +4,7 @@
 
 # Interface: BarSeriesOption
 
-Defined in: render/dist/types.d.ts:1378
+Defined in: render/dist/types.d.ts:1525
 
 Bar series.
 
@@ -28,7 +28,7 @@ series: [{ type: 'bar', name: 'Sales', data: [120, 200, 150], barGap: '30%' }]
 
 > `optional` **backgroundStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1417
+Defined in: render/dist/types.d.ts:1564
 
 Style of the background.
 
@@ -38,7 +38,7 @@ Style of the background.
 
 > `optional` **barCategoryGap**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:1409
+Defined in: render/dist/types.d.ts:1556
 
 Gap between bar categories.
 Defaults to '20%'.
@@ -49,7 +49,7 @@ Defaults to '20%'.
 
 > `optional` **barGap**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:1404
+Defined in: render/dist/types.d.ts:1551
 
 Gap between bars of different series in the same category.
 Defaults to '30%'.
@@ -60,7 +60,7 @@ Defaults to '30%'.
 
 > `optional` **barMaxWidth**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:1394
+Defined in: render/dist/types.d.ts:1541
 
 Maximum bar width.
 Useful when bar width is auto-calculated.
@@ -71,7 +71,7 @@ Useful when bar width is auto-calculated.
 
 > `optional` **barMinHeight**: `number`
 
-Defined in: render/dist/types.d.ts:1399
+Defined in: render/dist/types.d.ts:1546
 
 Minimum bar height.
 Useful to make small values visible.
@@ -82,7 +82,7 @@ Useful to make small values visible.
 
 > `optional` **barWidth**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:1389
+Defined in: render/dist/types.d.ts:1536
 
 Bar width.
 Can be absolute pixel value or percentage relative to bandwidth.
@@ -93,7 +93,7 @@ Can be absolute pixel value or percentage relative to bandwidth.
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:1264
+Defined in: render/dist/types.d.ts:1411
 
 Series color.
 If not set, it will pick from the global palette.
@@ -108,7 +108,7 @@ If not set, it will pick from the global palette.
 
 > `optional` **cursor**: `string`
 
-Defined in: render/dist/types.d.ts:1277
+Defined in: render/dist/types.d.ts:1424
 
 Cursor style when hovering over the series.
 
@@ -128,7 +128,7 @@ Cursor style when hovering over the series.
 
 > `optional` **data**: [`ChartData`](../type-aliases/ChartData.md)[]
 
-Defined in: render/dist/types.d.ts:1298
+Defined in: render/dist/types.d.ts:1445
 
 Series data.
 Can be an array of numbers, or objects with `value` property.
@@ -143,7 +143,7 @@ Can be an array of numbers, or objects with `value` property.
 
 > `optional` **emphasis**: [`EmphasisOption`](EmphasisOption.md)
 
-Defined in: render/dist/types.d.ts:1293
+Defined in: render/dist/types.d.ts:1440
 
 Emphasis state configuration (hover state).
 
@@ -157,7 +157,7 @@ Emphasis state configuration (hover state).
 
 > `optional` **id**: `string`
 
-Defined in: render/dist/types.d.ts:1254
+Defined in: render/dist/types.d.ts:1401
 
 Component ID.
 Unique identifier for the series component.
@@ -172,7 +172,7 @@ Unique identifier for the series component.
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1285
+Defined in: render/dist/types.d.ts:1432
 
 Item style configuration (normal state).
 
@@ -186,7 +186,7 @@ Item style configuration (normal state).
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: render/dist/types.d.ts:1289
+Defined in: render/dist/types.d.ts:1436
 
 Label configuration (normal state).
 
@@ -200,7 +200,7 @@ Label configuration (normal state).
 
 > `optional` **name**: `string`
 
-Defined in: render/dist/types.d.ts:1259
+Defined in: render/dist/types.d.ts:1406
 
 Series name.
 Used in legend and tooltip.
@@ -215,7 +215,7 @@ Used in legend and tooltip.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1281
+Defined in: render/dist/types.d.ts:1428
 
 Whether to show the series.
 
@@ -229,7 +229,7 @@ Whether to show the series.
 
 > `optional` **showBackground**: `boolean`
 
-Defined in: render/dist/types.d.ts:1413
+Defined in: render/dist/types.d.ts:1560
 
 Whether to show background behind bars.
 
@@ -239,7 +239,7 @@ Whether to show background behind bars.
 
 > `optional` **stack**: `string`
 
-Defined in: render/dist/types.d.ts:1384
+Defined in: render/dist/types.d.ts:1531
 
 Stack name.
 Series with the same stack name will be stacked on top of each other.
@@ -250,7 +250,7 @@ Series with the same stack name will be stacked on top of each other.
 
 > **type**: `"bar"`
 
-Defined in: render/dist/types.d.ts:1379
+Defined in: render/dist/types.d.ts:1526
 
 Series type (explicitly set it to get more accurate IntelliSense).
 e.g., 'line', 'bar', 'pie'.
@@ -265,7 +265,7 @@ e.g., 'line', 'bar', 'pie'.
 
 > `optional` **z**: `number`
 
-Defined in: render/dist/types.d.ts:1268
+Defined in: render/dist/types.d.ts:1415
 
 Z-index of the series.
 
@@ -279,7 +279,7 @@ Z-index of the series.
 
 > `optional` **zlevel**: `number`
 
-Defined in: render/dist/types.d.ts:1272
+Defined in: render/dist/types.d.ts:1419
 
 Z-level of the series.
 

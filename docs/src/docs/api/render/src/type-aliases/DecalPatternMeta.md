@@ -6,7 +6,7 @@
 
 > **DecalPatternMeta** = `object`
 
-Defined in: [render/src/util/pattern.ts:23](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L23)
+Defined in: [render/src/util/pattern.ts:23](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L23)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [render/src/util/pattern.ts:23](https://github.com/pangkaiguo/HudX/b
 
 > **baseColor**: `string`
 
-Defined in: [render/src/util/pattern.ts:24](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L24)
+Defined in: [render/src/util/pattern.ts:24](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L24)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [render/src/util/pattern.ts:24](https://github.com/pangkaiguo/HudX/b
 
 > **centersX**: `number`[]
 
-Defined in: [render/src/util/pattern.ts:32](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L32)
+Defined in: [render/src/util/pattern.ts:32](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L32)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [render/src/util/pattern.ts:32](https://github.com/pangkaiguo/HudX/b
 
 > **centersY**: `number`[]
 
-Defined in: [render/src/util/pattern.ts:33](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L33)
+Defined in: [render/src/util/pattern.ts:33](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L33)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [render/src/util/pattern.ts:33](https://github.com/pangkaiguo/HudX/b
 
 > **dashX**: `number`[]
 
-Defined in: [render/src/util/pattern.ts:30](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L30)
+Defined in: [render/src/util/pattern.ts:30](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L30)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [render/src/util/pattern.ts:30](https://github.com/pangkaiguo/HudX/b
 
 > **dashY**: `number`[]
 
-Defined in: [render/src/util/pattern.ts:31](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L31)
+Defined in: [render/src/util/pattern.ts:31](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L31)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [render/src/util/pattern.ts:31](https://github.com/pangkaiguo/HudX/b
 
 > **fgColor**: `string`
 
-Defined in: [render/src/util/pattern.ts:25](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L25)
+Defined in: [render/src/util/pattern.ts:25](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L25)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [render/src/util/pattern.ts:25](https://github.com/pangkaiguo/HudX/b
 
 > **lineWidth**: `number`
 
-Defined in: [render/src/util/pattern.ts:29](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L29)
+Defined in: [render/src/util/pattern.ts:29](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L29)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [render/src/util/pattern.ts:29](https://github.com/pangkaiguo/HudX/b
 
 > **rotation**: `number`
 
-Defined in: [render/src/util/pattern.ts:36](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L36)
+Defined in: [render/src/util/pattern.ts:36](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L36)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [render/src/util/pattern.ts:36](https://github.com/pangkaiguo/HudX/b
 
 > **symbol**: `string`
 
-Defined in: [render/src/util/pattern.ts:26](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L26)
+Defined in: [render/src/util/pattern.ts:26](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L26)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [render/src/util/pattern.ts:26](https://github.com/pangkaiguo/HudX/b
 
 > **symbolSize**: `number`
 
-Defined in: [render/src/util/pattern.ts:28](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L28)
+Defined in: [render/src/util/pattern.ts:28](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L28)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [render/src/util/pattern.ts:28](https://github.com/pangkaiguo/HudX/b
 
 > **tileHeight**: `number`
 
-Defined in: [render/src/util/pattern.ts:35](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L35)
+Defined in: [render/src/util/pattern.ts:35](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L35)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [render/src/util/pattern.ts:35](https://github.com/pangkaiguo/HudX/b
 
 > **tileWidth**: `number`
 
-Defined in: [render/src/util/pattern.ts:34](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L34)
+Defined in: [render/src/util/pattern.ts:34](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L34)
 
 ***
 
@@ -110,4 +110,4 @@ Defined in: [render/src/util/pattern.ts:34](https://github.com/pangkaiguo/HudX/b
 
 > **unitSize**: `number`
 
-Defined in: [render/src/util/pattern.ts:27](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/pattern.ts#L27)
+Defined in: [render/src/util/pattern.ts:27](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/pattern.ts#L27)

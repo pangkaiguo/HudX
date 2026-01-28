@@ -4,7 +4,7 @@
 
 # Interface: AxisLabelOption
 
-Defined in: render/dist/types.d.ts:1163
+Defined in: render/dist/types.d.ts:1310
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:1163
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:1171
+Defined in: render/dist/types.d.ts:1318
 
 Text color of the label.
 
@@ -26,7 +26,7 @@ Text color of the label.
 
 > `optional` **fontSize**: `number`
 
-Defined in: render/dist/types.d.ts:1175
+Defined in: render/dist/types.d.ts:1322
 
 Font size of the label.
 
@@ -36,7 +36,7 @@ Font size of the label.
 
 > `optional` **formatter**: `string` \| (`value`, `index`) => `string`
 
-Defined in: render/dist/types.d.ts:1209
+Defined in: render/dist/types.d.ts:1356
 
 Label formatter.
 
@@ -50,7 +50,7 @@ When `formatter` is a function it receives:
 
 > `optional` **interval**: `number` \| `"auto"` \| (`index`, `value`) => `boolean`
 
-Defined in: render/dist/types.d.ts:1201
+Defined in: render/dist/types.d.ts:1348
 
 Display interval of the labels.
 - number: Show every Nth label.
@@ -63,7 +63,7 @@ Display interval of the labels.
 
 > `optional` **lineHeight**: `number`
 
-Defined in: render/dist/types.d.ts:1194
+Defined in: render/dist/types.d.ts:1341
 
 Line height of the label.
 
@@ -73,7 +73,7 @@ Line height of the label.
 
 > `optional` **overflow**: `"none"` \| `"truncate"` \| `"break"` \| `"breakAll"`
 
-Defined in: render/dist/types.d.ts:1190
+Defined in: render/dist/types.d.ts:1337
 
 Overflow behavior when width is set.
 - 'truncate': Truncate with ellipsis.
@@ -86,7 +86,7 @@ Overflow behavior when width is set.
 
 > `optional` **rotate**: `number`
 
-Defined in: render/dist/types.d.ts:1179
+Defined in: render/dist/types.d.ts:1326
 
 Rotation angle of the label (in degrees).
 
@@ -96,7 +96,7 @@ Rotation angle of the label (in degrees).
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1167
+Defined in: render/dist/types.d.ts:1314
 
 Whether to show axis labels.
 
@@ -106,6 +106,6 @@ Whether to show axis labels.
 
 > `optional` **width**: `number`
 
-Defined in: render/dist/types.d.ts:1183
+Defined in: render/dist/types.d.ts:1330
 
 Width constraint for the label.

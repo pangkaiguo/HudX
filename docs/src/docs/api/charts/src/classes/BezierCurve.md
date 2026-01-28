@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `BezierCurveShape`
+> **shape**: [`BezierCurveShape`](../interfaces/BezierCurveShape.md)
 
 Defined in: render/dist/graphic/BezierCurve.d.ts:17
 

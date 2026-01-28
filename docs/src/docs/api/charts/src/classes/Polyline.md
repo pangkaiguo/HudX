@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `PolylineShape`
+> **shape**: [`PolylineShape`](../interfaces/PolylineShape.md)
 
 Defined in: render/dist/graphic/Polyline.d.ts:10
 

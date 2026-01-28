@@ -4,7 +4,7 @@
 
 # Interface: AxisLineOption
 
-Defined in: render/dist/types.d.ts:1212
+Defined in: render/dist/types.d.ts:1359
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:1212
 
 > `optional` **lineStyle**: [`LineStyleOption`](LineStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1216
+Defined in: render/dist/types.d.ts:1363
 
 Line style
 
@@ -22,6 +22,6 @@ Line style
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1214
+Defined in: render/dist/types.d.ts:1361
 
 Show axis line

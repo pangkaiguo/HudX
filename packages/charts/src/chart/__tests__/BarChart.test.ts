@@ -666,12 +666,14 @@ describe('BarChart', () => {
     chart.setOption({
       xAxis: { type: 'category', data: ['A'] },
       yAxis: { type: 'value' },
-      series: [{
-        type: 'bar',
-        data: [10],
-        label: { show: true },
-        emphasis: { focus: 'none' }
-      }]
+      series: [
+        {
+          type: 'bar',
+          data: [10],
+          label: { show: true },
+          emphasis: { focus: 'none' },
+        },
+      ],
     });
 
     const bar = (chart as any)._activeBars.get('0-0');
@@ -688,12 +690,13 @@ describe('BarChart', () => {
   });
 
   it('should catch render error', () => {
-
     const chart = new BarChart(container);
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     // Mock flush to throw error
-    (chart as any)._renderer.flush = () => { throw new Error('Render failed'); };
+    (chart as any)._renderer.flush = () => {
+      throw new Error('Render failed');
+    };
 
     chart.setOption({
       xAxis: { type: 'category', data: ['A'] },
@@ -701,7 +704,10 @@ describe('BarChart', () => {
       series: [{ type: 'bar', data: [10] }],
     });
 
-    expect(consoleSpy).toHaveBeenCalledWith('[BarChart] Render error:', expect.any(Error));
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '[BarChart] Render error:',
+      expect.any(Error),
+    );
     consoleSpy.mockRestore();
   });
 });

@@ -269,7 +269,6 @@ export const WaterfallBarExample = ({
           {t(locale, 'examples.control.showGrid', 'Show Grid')}
         </label>
 
-
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span>
             {t(locale, 'examples.control.barWidth', 'Bar Width')}: {barWidth}

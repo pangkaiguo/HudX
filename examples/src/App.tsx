@@ -177,12 +177,12 @@ const featureExamples: Array<{
   id: string;
   component: React.ComponentType<any>;
 }> = [
-    { id: 'shape', component: ShapeExample },
-    { id: 'themes', component: ThemeExample },
-    { id: 'interaction', component: InteractionExample },
-    { id: 'animation', component: AnimationExample },
-    { id: 'performance', component: PerformanceExample },
-  ];
+  { id: 'shape', component: ShapeExample },
+  { id: 'themes', component: ThemeExample },
+  { id: 'interaction', component: InteractionExample },
+  { id: 'animation', component: AnimationExample },
+  { id: 'performance', component: PerformanceExample },
+];
 
 const allExamples: ClassicExample[] = [
   ...chartExamples.flatMap((c) => c.items),
@@ -500,9 +500,9 @@ const SettingsPopover = ({
 
       const left = rect
         ? Math.min(
-          Math.max(gap, rect.right - width),
-          window.innerWidth - width - gap,
-        )
+            Math.max(gap, rect.right - width),
+            window.innerWidth - width - gap,
+          )
         : gap;
       const top = rect ? rect.bottom + gap : gap;
       const maxHeight = Math.max(120, window.innerHeight - top - gap);
@@ -798,8 +798,10 @@ const Dashboard = ({
             >
               <h2
                 style={{
-                  padding: '20px 0', marginBottom: '20px',
-                  fontSize: 24, borderBottom: `1px solid ${themeObj.borderColor}`
+                  padding: '20px 0',
+                  marginBottom: '20px',
+                  fontSize: 24,
+                  borderBottom: `1px solid ${themeObj.borderColor}`,
                 }}
               >
                 {categoryLabel}
@@ -807,8 +809,7 @@ const Dashboard = ({
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns:
-                    'repeat(auto-fill, minmax(300px, 1fr))',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                   gap: 20,
                 }}
               >
@@ -829,7 +830,12 @@ const Dashboard = ({
         return (
           <div key={categoryKey} id={categoryKey} style={{ marginBottom: 40 }}>
             <h2
-              style={{ padding: '20px 0', marginBottom: '20px', fontSize: 24, borderBottom: `1px solid ${themeObj.borderColor}` }}
+              style={{
+                padding: '20px 0',
+                marginBottom: '20px',
+                fontSize: 24,
+                borderBottom: `1px solid ${themeObj.borderColor}`,
+              }}
             >
               {categoryLabel}
             </h2>
@@ -1370,13 +1376,17 @@ const App = () => {
     );
 
   // URL routing for standalone example
-  const [exampleIdFromUrl, setExampleIdFromUrl] = useState<string | null>(() => {
-    return new URLSearchParams(window.location.search).get('example');
-  });
+  const [exampleIdFromUrl, setExampleIdFromUrl] = useState<string | null>(
+    () => {
+      return new URLSearchParams(window.location.search).get('example');
+    },
+  );
 
   useEffect(() => {
     const onPopState = () => {
-      setExampleIdFromUrl(new URLSearchParams(window.location.search).get('example'));
+      setExampleIdFromUrl(
+        new URLSearchParams(window.location.search).get('example'),
+      );
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -1491,9 +1501,7 @@ const App = () => {
           <div style={{ display: 'flex', gap: 10 }}>
             <button
               onClick={() =>
-                setThemeAndSync(
-                  (theme === 'light' ? 'dark' : 'light') as Theme,
-                )
+                setThemeAndSync((theme === 'light' ? 'dark' : 'light') as Theme)
               }
               style={{
                 cursor: 'pointer',

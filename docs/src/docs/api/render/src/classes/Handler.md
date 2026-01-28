@@ -4,7 +4,7 @@
 
 # Class: Handler
 
-Defined in: [render/src/Handler.ts:11](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Handler.ts#L11)
+Defined in: [render/src/Handler.ts:11](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Handler.ts#L11)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [render/src/Handler.ts:11](https://github.com/pangkaiguo/HudX/blob/5
 
 > **new Handler**(`painter`, `storage`): `Handler`
 
-Defined in: [render/src/Handler.ts:19](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Handler.ts#L19)
+Defined in: [render/src/Handler.ts:19](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Handler.ts#L19)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [render/src/Handler.ts:19](https://github.com/pangkaiguo/HudX/blob/5
 
 > **dispose**(): `void`
 
-Defined in: [render/src/Handler.ts:381](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Handler.ts#L381)
+Defined in: [render/src/Handler.ts:381](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Handler.ts#L381)
 
 Dispose handler
 

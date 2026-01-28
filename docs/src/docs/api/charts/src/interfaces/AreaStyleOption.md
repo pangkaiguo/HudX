@@ -4,7 +4,7 @@
 
 # Interface: AreaStyleOption
 
-Defined in: render/dist/types.d.ts:1646
+Defined in: render/dist/types.d.ts:1793
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:1646
 
 > `optional` **color**: `string` \| [`GradientColor`](../type-aliases/GradientColor.md)
 
-Defined in: render/dist/types.d.ts:1648
+Defined in: render/dist/types.d.ts:1795
 
 Fill color
 
@@ -22,7 +22,7 @@ Fill color
 
 > `optional` **opacity**: `number`
 
-Defined in: render/dist/types.d.ts:1660
+Defined in: render/dist/types.d.ts:1807
 
 Opacity
 
@@ -32,7 +32,7 @@ Opacity
 
 > `optional` **origin**: `"start"` \| `"end"` \| `"auto"`
 
-Defined in: render/dist/types.d.ts:1650
+Defined in: render/dist/types.d.ts:1797
 
 Origin position
 
@@ -42,7 +42,7 @@ Origin position
 
 > `optional` **shadowBlur**: `number`
 
-Defined in: render/dist/types.d.ts:1652
+Defined in: render/dist/types.d.ts:1799
 
 Shadow blur size
 
@@ -52,7 +52,7 @@ Shadow blur size
 
 > `optional` **shadowColor**: `string`
 
-Defined in: render/dist/types.d.ts:1654
+Defined in: render/dist/types.d.ts:1801
 
 Shadow color
 
@@ -62,7 +62,7 @@ Shadow color
 
 > `optional` **shadowOffsetX**: `number`
 
-Defined in: render/dist/types.d.ts:1656
+Defined in: render/dist/types.d.ts:1803
 
 Shadow X offset
 
@@ -72,6 +72,6 @@ Shadow X offset
 
 > `optional` **shadowOffsetY**: `number`
 
-Defined in: render/dist/types.d.ts:1658
+Defined in: render/dist/types.d.ts:1805
 
 Shadow Y offset

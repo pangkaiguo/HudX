@@ -186,7 +186,9 @@ describe('ScatterChart', () => {
 
   it('should skip points with invalid coordinates (NaN cx/cy)', () => {
     // Mock createOrdinalScale to return NaN to force the check
-    const spy = vi.spyOn(HudxRender, 'createOrdinalScale').mockImplementation(() => (() => NaN) as any);
+    const spy = vi
+      .spyOn(HudxRender, 'createOrdinalScale')
+      .mockImplementation(() => (() => NaN) as any);
 
     const chart = new ScatterChart(container);
     chart.setOption({
@@ -197,13 +199,15 @@ describe('ScatterChart', () => {
           type: 'scatter',
           data: [
             [0, 10], // Valid index, but scale returns NaN
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     });
 
     const root = (chart as any)._root as Group;
-    const circles = root.children().filter((child: any) => child instanceof Circle);
+    const circles = root
+      .children()
+      .filter((child: any) => child instanceof Circle);
 
     spy.mockRestore();
     expect(circles.length).toBe(0);
@@ -224,23 +228,25 @@ describe('ScatterChart', () => {
       tooltip: { show: true },
       xAxis: { type: 'category', data: ['A'] },
       yAxis: { type: 'value' },
-      series: [{ type: 'scatter', data: [[0, 10]] }]
+      series: [{ type: 'scatter', data: [[0, 10]] }],
     });
 
     const root = (chart as any)._root as Group;
-    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+    const circle = root
+      .children()
+      .find((child: any) => child instanceof Circle) as Circle;
     expect(circle).toBeDefined();
 
     // Trigger mouseover
     // hudx-render shapes have 'on' method. We can simulate it by accessing the handler.
-    // However, since we can't easily access the private handler storage, 
+    // However, since we can't easily access the private handler storage,
     // we rely on the fact that we can't easily emit event on mock shape unless we use the real Shape event system.
     // But Circle is a real class from hudx-render.
 
     // We can try to trigger the event handler if we can access it.
     // Or we can assume 'on' works if we emit it.
     // Since we are in a jsdom environment, maybe we can't easily trigger the shape event without the renderer's event system.
-    // But we can check if 'on' was called? 
+    // But we can check if 'on' was called?
     // We didn't spy on 'on'.
 
     // Let's rely on finding the handler in the internal storage if possible, or just skip if too hard?
@@ -268,11 +274,13 @@ describe('ScatterChart', () => {
       animationDuration: 300,
       xAxis: { type: 'value' },
       yAxis: { type: 'value' },
-      series: [{ type: 'scatter', data: [[10, 10]] }]
+      series: [{ type: 'scatter', data: [[10, 10]] }],
     });
 
     const root = (chart as any)._root as Group;
-    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+    const circle = root
+      .children()
+      .find((child: any) => child instanceof Circle) as Circle;
     expect(circle).toBeDefined();
 
     // Animation should be starting.
@@ -452,13 +460,15 @@ describe('ScatterChart', () => {
             { value: [10, 20] }, // Object with value array
             [NaN, 20], // Should be skipped
             [10, NaN], // Should be skipped
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     });
 
     const root = (chart as any)._root as Group;
-    const circles = root.children().filter((child: any) => child instanceof Circle);
+    const circles = root
+      .children()
+      .filter((child: any) => child instanceof Circle);
     expect(circles.length).toBe(1); // Only the first valid point
   });
 
@@ -472,14 +482,16 @@ describe('ScatterChart', () => {
           type: 'scatter',
           data: [
             ['A', 'X'] as any, // Match by string
-            [0, 1] // Match by index
-          ]
-        }
-      ]
+            [0, 1], // Match by index
+          ],
+        },
+      ],
     });
 
     const root = (chart as any)._root as Group;
-    const circles = root.children().filter((child: any) => child instanceof Circle);
+    const circles = root
+      .children()
+      .filter((child: any) => child instanceof Circle);
     expect(circles.length).toBe(2);
 
     // Check positions (assuming default size 800x600)
@@ -504,13 +516,15 @@ describe('ScatterChart', () => {
         {
           type: 'scatter',
           data: [[10, 20]],
-          symbolSize: (data: any) => data[0] // Returns 10
-        }
-      ]
+          symbolSize: (data: any) => data[0], // Returns 10
+        },
+      ],
     });
 
     const root = (chart as any)._root as Group;
-    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+    const circle = root
+      .children()
+      .find((child: any) => child instanceof Circle) as Circle;
     expect(circle.shape.r).toBe(5); // 10/2
   });
 
@@ -520,11 +534,13 @@ describe('ScatterChart', () => {
       tooltip: { show: true },
       xAxis: { type: 'value' },
       yAxis: { type: 'value' },
-      series: [{ type: 'scatter', data: [[10, 10]] }]
+      series: [{ type: 'scatter', data: [[10, 10]] }],
     });
 
     const root = (chart as any)._root as Group;
-    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+    const circle = root
+      .children()
+      .find((child: any) => child instanceof Circle) as Circle;
 
     const tooltip = (chart as any)._tooltip;
     const hideSpy = vi.spyOn(tooltip, 'hide');
@@ -535,10 +551,12 @@ describe('ScatterChart', () => {
 
   it('should catch render error', () => {
     const chart = new ScatterChart(container);
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     // Mock flush to throw error
-    (chart as any)._renderer.flush = () => { throw new Error('Render failed'); };
+    (chart as any)._renderer.flush = () => {
+      throw new Error('Render failed');
+    };
 
     chart.setOption({
       xAxis: { type: 'value' },
@@ -546,7 +564,10 @@ describe('ScatterChart', () => {
       series: [{ type: 'scatter', data: [[10, 10]] }],
     });
 
-    expect(consoleSpy).toHaveBeenCalledWith('[ScatterChart] Render error:', expect.any(Error));
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '[ScatterChart] Render error:',
+      expect.any(Error),
+    );
     consoleSpy.mockRestore();
   });
 
@@ -556,11 +577,13 @@ describe('ScatterChart', () => {
       legend: { show: true },
       xAxis: { type: 'value' },
       yAxis: { type: 'value' },
-      series: [{ type: 'scatter', name: 'A', data: [[10, 10]] }]
+      series: [{ type: 'scatter', name: 'A', data: [[10, 10]] }],
     });
 
     const root = (chart as any)._root as Group;
-    const circle = root.children().find((child: any) => child instanceof Circle) as Circle;
+    const circle = root
+      .children()
+      .find((child: any) => child instanceof Circle) as Circle;
 
     // Simulate hover
     (chart as any)._onLegendHover('A', true);
@@ -573,20 +596,23 @@ describe('ScatterChart', () => {
 
   it('should catch axes render error', () => {
     const chart = new ScatterChart(container);
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     // Mock _renderAxes to throw
-    (chart as any)._renderAxes = () => { throw new Error('Axes error'); };
+    (chart as any)._renderAxes = () => {
+      throw new Error('Axes error');
+    };
 
     chart.setOption({
       xAxis: { type: 'value' },
       yAxis: { type: 'value' },
-      series: [{ type: 'scatter', data: [[10, 10]] }]
+      series: [{ type: 'scatter', data: [[10, 10]] }],
     });
 
-    expect(consoleSpy).toHaveBeenCalledWith('[ScatterChart] Error rendering axes:', expect.any(Error));
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '[ScatterChart] Error rendering axes:',
+      expect.any(Error),
+    );
     consoleSpy.mockRestore();
   });
-
 });
-

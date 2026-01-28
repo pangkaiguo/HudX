@@ -4,7 +4,7 @@
 
 # Interface: AxisTickOption
 
-Defined in: render/dist/types.d.ts:1119
+Defined in: render/dist/types.d.ts:1266
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:1119
 
 > `optional` **alignWithLabel**: `boolean`
 
-Defined in: render/dist/types.d.ts:1128
+Defined in: render/dist/types.d.ts:1275
 
 Align tick with label.
 Useful for category axes where the tick should be between categories.
@@ -23,7 +23,7 @@ Useful for category axes where the tick should be between categories.
 
 > `optional` **inside**: `boolean`
 
-Defined in: render/dist/types.d.ts:1138
+Defined in: render/dist/types.d.ts:1285
 
 Place tick inside the axis line.
 
@@ -33,7 +33,7 @@ Place tick inside the axis line.
 
 > `optional` **interval**: `number` \| `Function`
 
-Defined in: render/dist/types.d.ts:1134
+Defined in: render/dist/types.d.ts:1281
 
 Tick interval.
 - number: Show every Nth tick.
@@ -45,7 +45,7 @@ Tick interval.
 
 > `optional` **length**: `number`
 
-Defined in: render/dist/types.d.ts:1142
+Defined in: render/dist/types.d.ts:1289
 
 Length of the tick line.
 
@@ -55,7 +55,7 @@ Length of the tick line.
 
 > `optional` **lineStyle**: [`LineStyleOption`](LineStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1146
+Defined in: render/dist/types.d.ts:1293
 
 Style of the tick line.
 
@@ -65,6 +65,6 @@ Style of the tick line.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1123
+Defined in: render/dist/types.d.ts:1270
 
 Whether to show axis ticks.

@@ -4,7 +4,7 @@
 
 # Interface: AreaStyleOption
 
-Defined in: [render/src/types.ts:1853](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1853)
+Defined in: [render/src/types.ts:1857](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1857)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:1853](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **color**: `string` \| [`GradientColor`](../type-aliases/GradientColor.md)
 
-Defined in: [render/src/types.ts:1855](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1855)
+Defined in: [render/src/types.ts:1859](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1859)
 
 Fill color
 
@@ -22,7 +22,7 @@ Fill color
 
 > `optional` **opacity**: `number`
 
-Defined in: [render/src/types.ts:1867](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1867)
+Defined in: [render/src/types.ts:1871](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1871)
 
 Opacity
 
@@ -32,7 +32,7 @@ Opacity
 
 > `optional` **origin**: `"start"` \| `"end"` \| `"auto"`
 
-Defined in: [render/src/types.ts:1857](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1857)
+Defined in: [render/src/types.ts:1861](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1861)
 
 Origin position
 
@@ -42,7 +42,7 @@ Origin position
 
 > `optional` **shadowBlur**: `number`
 
-Defined in: [render/src/types.ts:1859](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1859)
+Defined in: [render/src/types.ts:1863](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1863)
 
 Shadow blur size
 
@@ -52,7 +52,7 @@ Shadow blur size
 
 > `optional` **shadowColor**: `string`
 
-Defined in: [render/src/types.ts:1861](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1861)
+Defined in: [render/src/types.ts:1865](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1865)
 
 Shadow color
 
@@ -62,7 +62,7 @@ Shadow color
 
 > `optional` **shadowOffsetX**: `number`
 
-Defined in: [render/src/types.ts:1863](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1863)
+Defined in: [render/src/types.ts:1867](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1867)
 
 Shadow X offset
 
@@ -72,6 +72,6 @@ Shadow X offset
 
 > `optional` **shadowOffsetY**: `number`
 
-Defined in: [render/src/types.ts:1865](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1865)
+Defined in: [render/src/types.ts:1869](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1869)
 
 Shadow Y offset

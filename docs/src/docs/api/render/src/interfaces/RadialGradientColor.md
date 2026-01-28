@@ -4,7 +4,7 @@
 
 # Interface: RadialGradientColor
 
-Defined in: [render/src/types.ts:1837](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1837)
+Defined in: [render/src/types.ts:1841](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1841)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:1837](https://github.com/pangkaiguo/HudX/blob/5
 
 > **colorStops**: [`GradientColorStop`](GradientColorStop.md)[]
 
-Defined in: [render/src/types.ts:1846](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1846)
+Defined in: [render/src/types.ts:1850](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1850)
 
 Color stops
 
@@ -22,7 +22,7 @@ Color stops
 
 > `optional` **global**: `boolean`
 
-Defined in: [render/src/types.ts:1848](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1848)
+Defined in: [render/src/types.ts:1852](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1852)
 
 Whether coordinates are global
 
@@ -32,7 +32,7 @@ Whether coordinates are global
 
 > `optional` **r**: `number`
 
-Defined in: [render/src/types.ts:1844](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1844)
+Defined in: [render/src/types.ts:1848](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1848)
 
 Radius
 
@@ -42,7 +42,7 @@ Radius
 
 > **type**: `"radial"`
 
-Defined in: [render/src/types.ts:1838](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1838)
+Defined in: [render/src/types.ts:1842](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1842)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [render/src/types.ts:1838](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **x**: `number`
 
-Defined in: [render/src/types.ts:1840](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1840)
+Defined in: [render/src/types.ts:1844](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1844)
 
 Center X
 
@@ -60,6 +60,6 @@ Center X
 
 > `optional` **y**: `number`
 
-Defined in: [render/src/types.ts:1842](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1842)
+Defined in: [render/src/types.ts:1846](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1846)
 
 Center Y

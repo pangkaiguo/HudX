@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `ImageShape`
+> **shape**: [`ImageShape`](../interfaces/ImageShape.md)
 
 Defined in: render/dist/graphic/Image.d.ts:18
 

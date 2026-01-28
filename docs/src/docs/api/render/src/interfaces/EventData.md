@@ -4,7 +4,7 @@
 
 # Interface: EventData
 
-Defined in: [render/src/types.ts:373](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L373)
+Defined in: [render/src/types.ts:377](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L377)
 
 ## Indexable
 
@@ -16,6 +16,6 @@ Defined in: [render/src/types.ts:373](https://github.com/pangkaiguo/HudX/blob/53
 
 > `optional` **type**: `string`
 
-Defined in: [render/src/types.ts:375](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L375)
+Defined in: [render/src/types.ts:379](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L379)
 
 Event type string

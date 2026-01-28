@@ -4,7 +4,7 @@
 
 # Interface: AxisLineOption
 
-Defined in: [render/src/types.ts:1383](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1383)
+Defined in: [render/src/types.ts:1387](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1387)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:1383](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **lineStyle**: [`LineStyleOption`](LineStyleOption.md)
 
-Defined in: [render/src/types.ts:1387](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1387)
+Defined in: [render/src/types.ts:1391](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1391)
 
 Line style
 
@@ -22,6 +22,6 @@ Line style
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:1385](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1385)
+Defined in: [render/src/types.ts:1389](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1389)
 
 Show axis line

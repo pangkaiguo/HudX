@@ -1,6 +1,6 @@
 # Theme and Internationalization Support
 
-HudX supports Light and Dark themes, as well as internationalization in multiple languages.
+HudX supports Light and Dark themes, as well as internationalization in multiple languages. The ThemeManager builds a full ThemeConfig from ThemeToken values and default tokens.
 
 ## Theme System
 
@@ -11,51 +11,101 @@ HudX supports Light and Dark themes, as well as internationalization in multiple
 
 ### Theme Configuration
 
-Each theme includes the following configuration items:
+Each theme includes the following configuration items (ThemeConfig is the resolved, runtime config):
 
 ```typescript
 interface ThemeConfig {
-  backgroundColor: string; // Background color
-  textColor: string; // Text color
-  borderColor: string; // Border color
-  gridColor: string; // Grid color
-  axisLineColor: string; // Axis line color
-  axisLabelColor: string; // Axis label color
-  seriesColors: string[]; // Series color array
-  tooltipBackgroundColor: string; // Tooltip background color
-  tooltipTextColor: string; // Tooltip text color
-  legendTextColor: string; // Legend text color
-  fontFamily?: string; // Font family
-  fontSize?: number; // Font size
-  token?: ThemeToken; // Theme token (raw values)
+  backgroundColor: string;
+  textColor: string;
+  textColorSecondary?: string;
+  textColorTertiary?: string;
+  borderColor: string;
+  borderSecondaryColor?: string;
+  gridColor: string;
+  axisLineColor: string;
+  axisPointerColor: string;
+  axisLabelColor: string;
+  splitLineColor?: string;
+  tooltipBackgroundColor: string;
+  tooltipTextColor: string;
+  tooltipBorderColor: string;
+  tooltipBoxShadow: string;
+  tooltipSeriesNameColor: string;
+  tooltipSubitemNameColor: string;
+  tooltipValueColor: string;
+  legendTextColor: string;
+  textColorOnSeries?: string;
+  primaryColor?: string;
+  primaryTextColor?: string;
+  shadowColor: string;
+  maskColor: string;
+  decalColor: string;
+  seriesColors: string[];
+  color?: string[];
+  heatmapColors?: string[];
+  fillPageColor?: string;
+  fillContainerColor?: string;
+  fillContainerAltColor?: string;
+  fillHoverColor?: string;
+  codeBackgroundColor?: string;
+  codeGutterBackgroundColor?: string;
+  codeTextColor?: string;
+  codeGutterTextColor?: string;
+  fontFamily: string;
+  fontSize: number;
+  token: ThemeToken;
+  [key: string]: any;
 }
 ```
 
 ### Theme Token System
 
-HudX v1.0 introduces a Token system for more granular and maintainable theme customization.
+HudX uses a token system for more granular and maintainable theme customization. ThemeManager merges your token with the default light/dark base token, normalizes the theme key, and fills missing values (palette arrays, font family, font size).
 
 ```typescript
 interface ThemeToken {
   colorText?: string;
+  colorTextSecondary?: string;
+  colorTextTertiary?: string;
   colorBackground?: string;
+  colorFillPage?: string;
+  colorFillContainer?: string;
+  colorFillContainerAlt?: string;
+  colorFillHover?: string;
   colorBorder?: string;
+  colorBorderSecondary?: string;
   colorGrid?: string;
   colorAxisLine?: string;
   colorAxisLabel?: string;
   colorTooltipBackground?: string;
   colorTooltipText?: string;
+  colorTooltipBorder?: string;
+  boxShadowTooltip?: string;
+  colorTooltipSeriesName?: string;
+  colorTooltipSubitemName?: string;
+  colorTooltipValue?: string;
   colorLegendText?: string;
+  colorTextOnSeries?: string;
+  colorPrimary?: string;
+  colorPrimaryText?: string;
+  colorShadow?: string;
+  colorMask?: string;
+  colorDecal?: string;
+  colorCodeBackground?: string;
+  colorCodeGutterBackground?: string;
+  colorCodeText?: string;
+  colorCodeGutterText?: string;
   fontFamily?: string;
   fontSize?: number;
   seriesColors?: string[];
-  [key: string]: string | number | string[] | number[] | undefined;
+  heatmapColors?: string[];
+  [key: string]: unknown;
 }
 ```
 
 #### Using Tokens
 
-You can access theme tokens via `ThemeManager` or directly from the theme configuration.
+You can register tokens via `ThemeManager` and access the resolved config from `getTheme`.
 
 ```typescript
 import { ThemeManager } from "hudx-render";
@@ -64,20 +114,23 @@ import { ThemeManager } from "hudx-render";
 ThemeManager.registerToken("light", {
   colorText: "#000000", // Darker text
   colorBackground: "#f0f0f0", // Light gray background
+  colorBorderSecondary: "#d6d8da",
+  colorTooltipBorder: "#e6e8e9",
+  colorCodeBackground: "#f5f5f5",
   seriesColors: ["#ff0000", "#00ff00", "#0000ff"], // Custom palette
 });
 
-// 2. Access Tokens in Code
+// 2. Access Resolved Theme Config
 const theme = ThemeManager.getTheme("light");
-const colors = theme.seriesColors; // Contains updated colors
-const bgColor = theme.backgroundColor; // Contains updated background
+const colors = theme.seriesColors;
+const bgColor = theme.backgroundColor;
 ```
 
 This is particularly useful when you want to align chart colors with your design system's tokens.
 
 #### Global Theme Mode
 
-ThemeManager can act as a global style driver: set the current theme (light/dark) once, and let render instances use it when `theme` is not explicitly provided.
+ThemeManager can act as a global style driver: set the current theme once, and let render instances use it when `theme` is not explicitly provided.
 
 ```typescript
 import { ThemeManager, Renderer } from "hudx-render";
@@ -143,6 +196,7 @@ ThemeManager.registerTheme("custom", {
   borderColor: "#cccccc",
   gridColor: "#e6e6e6",
   axisLineColor: "#333333",
+  axisPointerColor: "#666666",
   axisLabelColor: "#666666",
   seriesColors: ["#ff0000", "#00ff00", "#0000ff"],
   tooltipBackgroundColor: "rgba(50, 50, 50, 0.9)",
@@ -163,6 +217,7 @@ const renderer = Renderer.init("#container", "canvas", "custom");
 - `onThemeChange(listener): () => void` - Subscribe to theme change
 - `registerTheme(theme: Theme, config: ThemeConfig): void` - Register custom theme
 - `registerToken(theme: string, token: ThemeToken): void` - Register or update theme tokens
+- `registerHudBaseTokens(tokens: Record<string, ThemeToken>): void` - Register token sets in batch
 - `getThemes(): Theme[]` - Get all registered themes
 
 ## Internationalization (i18n)

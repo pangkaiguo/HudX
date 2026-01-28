@@ -4,7 +4,7 @@
 
 # Interface: TooltipOption
 
-Defined in: render/dist/types.d.ts:376
+Defined in: render/dist/types.d.ts:523
 
 Tooltip option (similar to ECharts `tooltip`).
 
@@ -36,7 +36,7 @@ const option: ChartOption = {
 
 > `optional` **alwaysShowContent**: `boolean`
 
-Defined in: render/dist/types.d.ts:473
+Defined in: render/dist/types.d.ts:620
 
 Whether to always show the tooltip content.
 
@@ -46,7 +46,7 @@ Whether to always show the tooltip content.
 
 > `optional` **appendToBody**: `boolean`
 
-Defined in: render/dist/types.d.ts:449
+Defined in: render/dist/types.d.ts:596
 
 Whether to append the tooltip DOM to document.body.
 Useful when the chart container has overflow:hidden.
@@ -57,7 +57,7 @@ Useful when the chart container has overflow:hidden.
 
 > `optional` **axisPointer**: `object`
 
-Defined in: render/dist/types.d.ts:395
+Defined in: render/dist/types.d.ts:542
 
 Configuration for the axis pointer (the indicator shown when hovering).
 
@@ -79,7 +79,7 @@ Configuration for the axis pointer (the indicator shown when hovering).
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:414
+Defined in: render/dist/types.d.ts:561
 
 Background color of the tooltip container.
 
@@ -89,7 +89,7 @@ Background color of the tooltip container.
 
 > `optional` **borderColor**: `string`
 
-Defined in: render/dist/types.d.ts:418
+Defined in: render/dist/types.d.ts:565
 
 Border color of the tooltip container.
 
@@ -99,7 +99,7 @@ Border color of the tooltip container.
 
 > `optional` **borderRadius**: `number`
 
-Defined in: render/dist/types.d.ts:426
+Defined in: render/dist/types.d.ts:573
 
 Border radius of the tooltip container.
 
@@ -109,7 +109,7 @@ Border radius of the tooltip container.
 
 > `optional` **borderWidth**: `number`
 
-Defined in: render/dist/types.d.ts:422
+Defined in: render/dist/types.d.ts:569
 
 Border width of the tooltip container.
 
@@ -119,7 +119,7 @@ Border width of the tooltip container.
 
 > `optional` **className**: `string`
 
-Defined in: render/dist/types.d.ts:444
+Defined in: render/dist/types.d.ts:591
 
 Custom CSS class name for the tooltip container.
 
@@ -129,7 +129,7 @@ Custom CSS class name for the tooltip container.
 
 > `optional` **confine**: `boolean`
 
-Defined in: render/dist/types.d.ts:453
+Defined in: render/dist/types.d.ts:600
 
 Whether to confine the tooltip within the chart container.
 
@@ -139,7 +139,7 @@ Whether to confine the tooltip within the chart container.
 
 > `optional` **enterable**: `boolean`
 
-Defined in: render/dist/types.d.ts:493
+Defined in: render/dist/types.d.ts:640
 
 Whether the mouse can enter the tooltip container.
 
@@ -149,7 +149,7 @@ Whether the mouse can enter the tooltip container.
 
 > `optional` **extraCssText**: `string`
 
-Defined in: render/dist/types.d.ts:440
+Defined in: render/dist/types.d.ts:587
 
 Extra CSS text to append to the tooltip's DOM element.
 (Only works when renderMode is 'html')
@@ -160,7 +160,7 @@ Extra CSS text to append to the tooltip's DOM element.
 
 > `optional` **formatter**: `string` \| (`params`) => `string`
 
-Defined in: render/dist/types.d.ts:410
+Defined in: render/dist/types.d.ts:557
 
 Content formatter.
 Can be a string template or a callback function.
@@ -177,7 +177,7 @@ The `params` object typically contains:
 
 > `optional` **hideDelay**: `number`
 
-Defined in: render/dist/types.d.ts:489
+Defined in: render/dist/types.d.ts:636
 
 Delay before hiding the tooltip (ms).
 
@@ -187,7 +187,7 @@ Delay before hiding the tooltip (ms).
 
 > `optional` **htmlStyles**: `object`
 
-Defined in: render/dist/types.d.ts:512
+Defined in: render/dist/types.d.ts:659
 
 Custom CSS styles for generated HTML elements.
 Allows fine-grained control over internal tooltip structure.
@@ -246,7 +246,7 @@ Style for the value text
 
 > `optional` **layout**: `"horizontal"` \| `"vertical"` \| `"rich"`
 
-Defined in: render/dist/types.d.ts:507
+Defined in: render/dist/types.d.ts:654
 
 Layout mode for tooltip content.
 
@@ -256,7 +256,7 @@ Layout mode for tooltip content.
 
 > `optional` **order**: `"seriesAsc"` \| `"seriesDesc"` \| `"valueAsc"` \| `"valueDesc"`
 
-Defined in: render/dist/types.d.ts:503
+Defined in: render/dist/types.d.ts:650
 
 Sorting order of tooltip items.
 
@@ -266,7 +266,7 @@ Sorting order of tooltip items.
 
 > `optional` **padding**: `number` \| `number`[]
 
-Defined in: render/dist/types.d.ts:431
+Defined in: render/dist/types.d.ts:578
 
 Padding of the tooltip container.
 [top, right, bottom, left]
@@ -277,7 +277,7 @@ Padding of the tooltip container.
 
 > `optional` **position**: `string` \| `number`[] \| (`point`, `params`, `dom`, `rect`, `size`) => `number`[]
 
-Defined in: render/dist/types.d.ts:465
+Defined in: render/dist/types.d.ts:612
 
 Tooltip position configuration.
 - 'top', 'left', 'right', 'bottom', 'inside'
@@ -290,7 +290,7 @@ Tooltip position configuration.
 
 > `optional` **renderMode**: `"html"` \| `"richText"`
 
-Defined in: render/dist/types.d.ts:499
+Defined in: render/dist/types.d.ts:646
 
 Render mode for the tooltip.
 - 'html': Render as HTML DOM (default).
@@ -302,7 +302,7 @@ Render mode for the tooltip.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:380
+Defined in: render/dist/types.d.ts:527
 
 Whether to show the tooltip.
 
@@ -312,7 +312,7 @@ Whether to show the tooltip.
 
 > `optional` **showContent**: `boolean`
 
-Defined in: render/dist/types.d.ts:469
+Defined in: render/dist/types.d.ts:616
 
 Whether to show the tooltip content.
 
@@ -322,7 +322,7 @@ Whether to show the tooltip content.
 
 > `optional` **showDelay**: `number`
 
-Defined in: render/dist/types.d.ts:485
+Defined in: render/dist/types.d.ts:632
 
 Delay before showing the tooltip (ms).
 
@@ -332,7 +332,7 @@ Delay before showing the tooltip (ms).
 
 > `optional` **size**: `"small"` \| `"medium"` \| `"medium-small"`
 
-Defined in: render/dist/types.d.ts:391
+Defined in: render/dist/types.d.ts:538
 
 Preset visual size style.
 
@@ -342,7 +342,7 @@ Preset visual size style.
 
 > `optional` **textStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: render/dist/types.d.ts:435
+Defined in: render/dist/types.d.ts:582
 
 Text style for the tooltip content.
 
@@ -352,7 +352,7 @@ Text style for the tooltip content.
 
 > `optional` **transitionDuration**: `number`
 
-Defined in: render/dist/types.d.ts:458
+Defined in: render/dist/types.d.ts:605
 
 Transition duration for tooltip movement (in seconds).
 Note: This might be in seconds or ms depending on implementation, usually 0.4s.
@@ -363,7 +363,7 @@ Note: This might be in seconds or ms depending on implementation, usually 0.4s.
 
 > `optional` **trigger**: `"item"` \| `"axis"` \| `"none"`
 
-Defined in: render/dist/types.d.ts:387
+Defined in: render/dist/types.d.ts:534
 
 Trigger type.
 - 'item': Triggered by data items (scatter, pie).
@@ -376,7 +376,7 @@ Trigger type.
 
 > `optional` **triggerOn**: `"none"` \| `"mousemove"` \| `"click"` \| "mousemove\|click"
 
-Defined in: render/dist/types.d.ts:481
+Defined in: render/dist/types.d.ts:628
 
 Conditions to trigger the tooltip.
 - 'mousemove': Trigger on mouse move.

@@ -4,7 +4,7 @@
 
 # Interface: Transform
 
-Defined in: render/dist/types.d.ts:1810
+Defined in: render/dist/types.d.ts:1957
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:1810
 
 > `optional` **originX**: `number`
 
-Defined in: render/dist/types.d.ts:1813
+Defined in: render/dist/types.d.ts:1960
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: render/dist/types.d.ts:1813
 
 > `optional` **originY**: `number`
 
-Defined in: render/dist/types.d.ts:1814
+Defined in: render/dist/types.d.ts:1961
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: render/dist/types.d.ts:1814
 
 > `optional` **rotation**: `number`
 
-Defined in: render/dist/types.d.ts:1815
+Defined in: render/dist/types.d.ts:1962
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: render/dist/types.d.ts:1815
 
 > `optional` **scaleX**: `number`
 
-Defined in: render/dist/types.d.ts:1816
+Defined in: render/dist/types.d.ts:1963
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: render/dist/types.d.ts:1816
 
 > `optional` **scaleY**: `number`
 
-Defined in: render/dist/types.d.ts:1817
+Defined in: render/dist/types.d.ts:1964
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: render/dist/types.d.ts:1817
 
 > `optional` **x**: `number`
 
-Defined in: render/dist/types.d.ts:1811
+Defined in: render/dist/types.d.ts:1958
 
 ***
 
@@ -64,4 +64,4 @@ Defined in: render/dist/types.d.ts:1811
 
 > `optional` **y**: `number`
 
-Defined in: render/dist/types.d.ts:1812
+Defined in: render/dist/types.d.ts:1959

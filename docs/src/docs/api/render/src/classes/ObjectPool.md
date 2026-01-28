@@ -4,7 +4,7 @@
 
 # Class: ObjectPool\<T\>
 
-Defined in: [render/src/util/ObjectPool.ts:6](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/ObjectPool.ts#L6)
+Defined in: [render/src/util/ObjectPool.ts:6](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/ObjectPool.ts#L6)
 
 ObjectPool - Object pool for performance optimization
 Reuses objects to reduce garbage collection
@@ -21,7 +21,7 @@ Reuses objects to reduce garbage collection
 
 > **new ObjectPool**\<`T`\>(`createFn`, `resetFn?`, `maxSize?`): `ObjectPool`\<`T`\>
 
-Defined in: [render/src/util/ObjectPool.ts:12](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/ObjectPool.ts#L12)
+Defined in: [render/src/util/ObjectPool.ts:12](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/ObjectPool.ts#L12)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [render/src/util/ObjectPool.ts:12](https://github.com/pangkaiguo/Hud
 
 > **acquire**(): `T`
 
-Defined in: [render/src/util/ObjectPool.ts:25](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/ObjectPool.ts#L25)
+Defined in: [render/src/util/ObjectPool.ts:25](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/ObjectPool.ts#L25)
 
 Get object from pool
 
@@ -61,7 +61,7 @@ Get object from pool
 
 > **clear**(): `void`
 
-Defined in: [render/src/util/ObjectPool.ts:48](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/ObjectPool.ts#L48)
+Defined in: [render/src/util/ObjectPool.ts:48](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/ObjectPool.ts#L48)
 
 Clear pool
 
@@ -75,7 +75,7 @@ Clear pool
 
 > **release**(`obj`): `void`
 
-Defined in: [render/src/util/ObjectPool.ts:35](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/ObjectPool.ts#L35)
+Defined in: [render/src/util/ObjectPool.ts:35](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/ObjectPool.ts#L35)
 
 Return object to pool
 
@@ -95,7 +95,7 @@ Return object to pool
 
 > **size**(): `number`
 
-Defined in: [render/src/util/ObjectPool.ts:55](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/ObjectPool.ts#L55)
+Defined in: [render/src/util/ObjectPool.ts:55](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/ObjectPool.ts#L55)
 
 Get pool size
 

@@ -38,11 +38,11 @@ beforeAll(() => {
   vi.stubGlobal(
     'Path2D',
     class Path2D {
-      constructor(d?: string | Path2D) { }
-      addPath(path: Path2D, transform?: DOMMatrix2DInit) { }
-      closePath() { }
-      moveTo(x: number, y: number) { }
-      lineTo(x: number, y: number) { }
+      constructor(d?: string | Path2D) {}
+      addPath(path: Path2D, transform?: DOMMatrix2DInit) {}
+      closePath() {}
+      moveTo(x: number, y: number) {}
+      lineTo(x: number, y: number) {}
       bezierCurveTo(
         cp1x: number,
         cp1y: number,
@@ -50,8 +50,8 @@ beforeAll(() => {
         cp2y: number,
         x: number,
         y: number,
-      ) { }
-      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) { }
+      ) {}
+      quadraticCurveTo(cpx: number, cpy: number, x: number, y: number) {}
       arc(
         x: number,
         y: number,
@@ -59,8 +59,8 @@ beforeAll(() => {
         startAngle: number,
         endAngle: number,
         counterclockwise?: boolean,
-      ) { }
-      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) { }
+      ) {}
+      arcTo(x1: number, y1: number, x2: number, y2: number, radius: number) {}
       ellipse(
         x: number,
         y: number,
@@ -70,8 +70,8 @@ beforeAll(() => {
         startAngle: number,
         endAngle: number,
         counterclockwise?: boolean,
-      ) { }
-      rect(x: number, y: number, w: number, h: number) { }
+      ) {}
+      rect(x: number, y: number, w: number, h: number) {}
     },
   );
 });
@@ -1003,7 +1003,7 @@ describe('PieChart', () => {
       .mockImplementation(() => 123);
     const cafSpy = vi
       .spyOn(globalThis as any, 'cancelAnimationFrame')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     chart.setOption({
       series: [
@@ -1134,11 +1134,11 @@ describe('PieChart', () => {
               shadowBlur: 10,
               shadowColor: 'black',
               shadowOffsetX: 2,
-              shadowOffsetY: 2
-            }
-          }
-        }
-      ]
+              shadowOffsetY: 2,
+            },
+          },
+        },
+      ],
     });
 
     const sectors = Array.from((chart as any)._activeSectors.values()) as any[];
@@ -1170,10 +1170,15 @@ describe('PieChart', () => {
     const chart = new PieChart(container);
     chart.setOption({
       legend: { show: true },
-      series: [{
-        type: 'pie',
-        data: [{ name: 'A', value: 10 }, { name: 'B', value: 20 }]
-      }]
+      series: [
+        {
+          type: 'pie',
+          data: [
+            { name: 'A', value: 10 },
+            { name: 'B', value: 20 },
+          ],
+        },
+      ],
     });
 
     // Hover A
@@ -1193,4 +1198,3 @@ describe('PieChart', () => {
     vi.useRealTimers();
   });
 });
-

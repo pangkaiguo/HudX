@@ -28,4 +28,3 @@ Explore our library of components:
 
 - [API Reference](?path=/docs/guide-api-reference--docs)
 - [Performance Optimization](?path=/docs/guide-performance--docs)
-- [GitHub Repository](https://github.com/your-repo/hudx)

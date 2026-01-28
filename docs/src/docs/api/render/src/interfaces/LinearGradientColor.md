@@ -4,7 +4,7 @@
 
 # Interface: LinearGradientColor
 
-Defined in: [render/src/types.ts:1821](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1821)
+Defined in: [render/src/types.ts:1825](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1825)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:1821](https://github.com/pangkaiguo/HudX/blob/5
 
 > **colorStops**: [`GradientColorStop`](GradientColorStop.md)[]
 
-Defined in: [render/src/types.ts:1832](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1832)
+Defined in: [render/src/types.ts:1836](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1836)
 
 Color stops
 
@@ -22,7 +22,7 @@ Color stops
 
 > `optional` **global**: `boolean`
 
-Defined in: [render/src/types.ts:1834](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1834)
+Defined in: [render/src/types.ts:1838](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1838)
 
 Whether coordinates are global (pixel)
 
@@ -32,7 +32,7 @@ Whether coordinates are global (pixel)
 
 > **type**: `"linear"`
 
-Defined in: [render/src/types.ts:1822](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1822)
+Defined in: [render/src/types.ts:1826](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1826)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [render/src/types.ts:1822](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **x**: `number`
 
-Defined in: [render/src/types.ts:1824](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1824)
+Defined in: [render/src/types.ts:1828](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1828)
 
 Start X (0..1 or pixel)
 
@@ -50,7 +50,7 @@ Start X (0..1 or pixel)
 
 > `optional` **x2**: `number`
 
-Defined in: [render/src/types.ts:1828](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1828)
+Defined in: [render/src/types.ts:1832](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1832)
 
 End X (0..1 or pixel)
 
@@ -60,7 +60,7 @@ End X (0..1 or pixel)
 
 > `optional` **y**: `number`
 
-Defined in: [render/src/types.ts:1826](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1826)
+Defined in: [render/src/types.ts:1830](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1830)
 
 Start Y (0..1 or pixel)
 
@@ -70,6 +70,6 @@ Start Y (0..1 or pixel)
 
 > `optional` **y2**: `number`
 
-Defined in: [render/src/types.ts:1830](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1830)
+Defined in: [render/src/types.ts:1834](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1834)
 
 End Y (0..1 or pixel)

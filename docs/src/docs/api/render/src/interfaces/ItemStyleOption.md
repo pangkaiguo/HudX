@@ -4,7 +4,7 @@
 
 # Interface: ItemStyleOption
 
-Defined in: [render/src/types.ts:1887](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1887)
+Defined in: [render/src/types.ts:1891](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1891)
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: [render/src/types.ts:1887](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **borderColor**: `string`
 
-Defined in: [render/src/types.ts:1891](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1891)
+Defined in: [render/src/types.ts:1895](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1895)
 
 Border color
 
@@ -26,7 +26,7 @@ Border color
 
 > `optional` **borderRadius**: `number` \| `number`[]
 
-Defined in: [render/src/types.ts:1899](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1899)
+Defined in: [render/src/types.ts:1903](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1903)
 
 Border radius
 
@@ -36,7 +36,7 @@ Border radius
 
 > `optional` **borderType**: `"solid"` \| `"dashed"` \| `"dotted"`
 
-Defined in: [render/src/types.ts:1895](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1895)
+Defined in: [render/src/types.ts:1899](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1899)
 
 Border type
 
@@ -46,7 +46,7 @@ Border type
 
 > `optional` **borderWidth**: `number`
 
-Defined in: [render/src/types.ts:1893](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1893)
+Defined in: [render/src/types.ts:1897](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1897)
 
 Border width
 
@@ -56,7 +56,7 @@ Border width
 
 > `optional` **color**: `string`
 
-Defined in: [render/src/types.ts:1889](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1889)
+Defined in: [render/src/types.ts:1893](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1893)
 
 Fill color
 
@@ -66,6 +66,6 @@ Fill color
 
 > `optional` **opacity**: `number`
 
-Defined in: [render/src/types.ts:1897](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1897)
+Defined in: [render/src/types.ts:1901](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1901)
 
 Opacity

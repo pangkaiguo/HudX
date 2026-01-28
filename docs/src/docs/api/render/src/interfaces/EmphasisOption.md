@@ -4,7 +4,7 @@
 
 # Interface: EmphasisOption
 
-Defined in: [render/src/types.ts:1934](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1934)
+Defined in: [render/src/types.ts:1938](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1938)
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: [render/src/types.ts:1934](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **blurScope**: `"series"` \| `"coordinateSystem"` \| `"global"`
 
-Defined in: [render/src/types.ts:1946](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1946)
+Defined in: [render/src/types.ts:1950](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1950)
 
 Blur scope
 
@@ -26,7 +26,7 @@ Blur scope
 
 > `optional` **focus**: `"series"` \| `"none"` \| `"self"`
 
-Defined in: [render/src/types.ts:1944](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1944)
+Defined in: [render/src/types.ts:1948](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1948)
 
 Focus scope
 
@@ -36,7 +36,7 @@ Focus scope
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: [render/src/types.ts:1936](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1936)
+Defined in: [render/src/types.ts:1940](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1940)
 
 Item style in emphasis state
 
@@ -46,7 +46,7 @@ Item style in emphasis state
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: [render/src/types.ts:1938](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1938)
+Defined in: [render/src/types.ts:1942](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1942)
 
 Label in emphasis state
 
@@ -56,7 +56,7 @@ Label in emphasis state
 
 > `optional` **scale**: `boolean`
 
-Defined in: [render/src/types.ts:1940](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1940)
+Defined in: [render/src/types.ts:1944](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1944)
 
 Whether to scale
 
@@ -66,6 +66,6 @@ Whether to scale
 
 > `optional` **scaleSize**: `number`
 
-Defined in: [render/src/types.ts:1942](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1942)
+Defined in: [render/src/types.ts:1946](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1946)
 
 Scale size

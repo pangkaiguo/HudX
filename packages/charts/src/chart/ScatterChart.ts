@@ -224,7 +224,6 @@ export default class ScatterChart extends Chart {
               seriesIndex,
             });
 
-
           if (!Number.isFinite(finalSize)) finalSize = 10;
           const baseR = finalSize / 2;
 

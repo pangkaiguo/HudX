@@ -4,7 +4,7 @@
 
 # Class: CanvasPainter
 
-Defined in: [render/src/painter/CanvasPainter.ts:17](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L17)
+Defined in: [render/src/painter/CanvasPainter.ts:17](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L17)
 
 ## Implements
 
@@ -16,7 +16,7 @@ Defined in: [render/src/painter/CanvasPainter.ts:17](https://github.com/pangkaig
 
 > **new CanvasPainter**(`dom`, `storage`): `CanvasPainter`
 
-Defined in: [render/src/painter/CanvasPainter.ts:27](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L27)
+Defined in: [render/src/painter/CanvasPainter.ts:27](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L27)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [render/src/painter/CanvasPainter.ts:27](https://github.com/pangkaig
 
 > **dispose**(): `void`
 
-Defined in: [render/src/painter/CanvasPainter.ts:241](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L241)
+Defined in: [render/src/painter/CanvasPainter.ts:241](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L241)
 
 Dispose painter
 
@@ -56,7 +56,7 @@ Dispose painter
 
 > **getCanvas**(): `HTMLCanvasElement`
 
-Defined in: [render/src/painter/CanvasPainter.ts:77](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L77)
+Defined in: [render/src/painter/CanvasPainter.ts:77](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L77)
 
 Get canvas element
 
@@ -74,7 +74,7 @@ Get canvas element
 
 > **getContext**(): `CanvasRenderingContext2D`
 
-Defined in: [render/src/painter/CanvasPainter.ts:84](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L84)
+Defined in: [render/src/painter/CanvasPainter.ts:84](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L84)
 
 Get rendering context
 
@@ -88,7 +88,7 @@ Get rendering context
 
 > **getDataURL**(`opts`): `string`
 
-Defined in: [render/src/painter/CanvasPainter.ts:211](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L211)
+Defined in: [render/src/painter/CanvasPainter.ts:211](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L211)
 
 Get data URL
 
@@ -112,7 +112,7 @@ Get data URL
 
 > **getHeight**(): `number`
 
-Defined in: [render/src/painter/CanvasPainter.ts:98](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L98)
+Defined in: [render/src/painter/CanvasPainter.ts:98](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L98)
 
 Get height
 
@@ -130,7 +130,7 @@ Get height
 
 > **getWidth**(): `number`
 
-Defined in: [render/src/painter/CanvasPainter.ts:91](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L91)
+Defined in: [render/src/painter/CanvasPainter.ts:91](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L91)
 
 Get width
 
@@ -148,7 +148,7 @@ Get width
 
 > **markDirty**(): `void`
 
-Defined in: [render/src/painter/CanvasPainter.ts:105](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L105)
+Defined in: [render/src/painter/CanvasPainter.ts:105](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L105)
 
 Mark as dirty (needs repaint)
 
@@ -166,7 +166,7 @@ Mark as dirty (needs repaint)
 
 > **paint**(): `void`
 
-Defined in: [render/src/painter/CanvasPainter.ts:115](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L115)
+Defined in: [render/src/painter/CanvasPainter.ts:115](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L115)
 
 Paint all elements
 
@@ -184,7 +184,7 @@ Paint all elements
 
 > **resize**(`width?`, `height?`): `void`
 
-Defined in: [render/src/painter/CanvasPainter.ts:45](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/painter/CanvasPainter.ts#L45)
+Defined in: [render/src/painter/CanvasPainter.ts:45](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/painter/CanvasPainter.ts#L45)
 
 Resize canvas
 

@@ -4,7 +4,7 @@
 
 # Interface: DecalOption
 
-Defined in: render/dist/types.d.ts:301
+Defined in: render/dist/types.d.ts:448
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:301
 
 > `optional` **decals**: [`DecalObject`](DecalObject.md)[]
 
-Defined in: render/dist/types.d.ts:305
+Defined in: render/dist/types.d.ts:452
 
 List of decal patterns to cycle through
 
@@ -22,6 +22,6 @@ List of decal patterns to cycle through
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:303
+Defined in: render/dist/types.d.ts:450
 
 Show decal patterns

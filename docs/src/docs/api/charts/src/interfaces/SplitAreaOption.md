@@ -4,7 +4,7 @@
 
 # Interface: SplitAreaOption
 
-Defined in: render/dist/types.d.ts:1148
+Defined in: render/dist/types.d.ts:1295
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:1148
 
 > `optional` **areaStyle**: `object`
 
-Defined in: render/dist/types.d.ts:1154
+Defined in: render/dist/types.d.ts:1301
 
 Area style
 
@@ -46,7 +46,7 @@ Area style
 
 > `optional` **interval**: `number` \| `Function`
 
-Defined in: render/dist/types.d.ts:1152
+Defined in: render/dist/types.d.ts:1299
 
 Split area interval
 
@@ -56,6 +56,6 @@ Split area interval
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1150
+Defined in: render/dist/types.d.ts:1297
 
 Show split area

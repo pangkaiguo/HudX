@@ -4,7 +4,7 @@
 
 # Interface: AxisLabelOption
 
-Defined in: [render/src/types.ts:1333](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1333)
+Defined in: [render/src/types.ts:1337](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1337)
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: [render/src/types.ts:1333](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **color**: `string`
 
-Defined in: [render/src/types.ts:1341](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1341)
+Defined in: [render/src/types.ts:1345](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1345)
 
 Text color of the label.
 
@@ -26,7 +26,7 @@ Text color of the label.
 
 > `optional` **fontSize**: `number`
 
-Defined in: [render/src/types.ts:1345](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1345)
+Defined in: [render/src/types.ts:1349](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1349)
 
 Font size of the label.
 
@@ -36,7 +36,7 @@ Font size of the label.
 
 > `optional` **formatter**: `string` \| (`value`, `index`) => `string`
 
-Defined in: [render/src/types.ts:1379](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1379)
+Defined in: [render/src/types.ts:1383](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1383)
 
 Label formatter.
 
@@ -50,7 +50,7 @@ When `formatter` is a function it receives:
 
 > `optional` **interval**: `number` \| `"auto"` \| (`index`, `value`) => `boolean`
 
-Defined in: [render/src/types.ts:1371](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1371)
+Defined in: [render/src/types.ts:1375](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1375)
 
 Display interval of the labels.
 - number: Show every Nth label.
@@ -63,7 +63,7 @@ Display interval of the labels.
 
 > `optional` **lineHeight**: `number`
 
-Defined in: [render/src/types.ts:1364](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1364)
+Defined in: [render/src/types.ts:1368](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1368)
 
 Line height of the label.
 
@@ -73,7 +73,7 @@ Line height of the label.
 
 > `optional` **overflow**: `"none"` \| `"truncate"` \| `"break"` \| `"breakAll"`
 
-Defined in: [render/src/types.ts:1360](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1360)
+Defined in: [render/src/types.ts:1364](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1364)
 
 Overflow behavior when width is set.
 - 'truncate': Truncate with ellipsis.
@@ -86,7 +86,7 @@ Overflow behavior when width is set.
 
 > `optional` **rotate**: `number`
 
-Defined in: [render/src/types.ts:1349](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1349)
+Defined in: [render/src/types.ts:1353](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1353)
 
 Rotation angle of the label (in degrees).
 
@@ -96,7 +96,7 @@ Rotation angle of the label (in degrees).
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:1337](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1337)
+Defined in: [render/src/types.ts:1341](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1341)
 
 Whether to show axis labels.
 
@@ -106,6 +106,6 @@ Whether to show axis labels.
 
 > `optional` **width**: `number`
 
-Defined in: [render/src/types.ts:1353](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1353)
+Defined in: [render/src/types.ts:1357](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1357)
 
 Width constraint for the label.

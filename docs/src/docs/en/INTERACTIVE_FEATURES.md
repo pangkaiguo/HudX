@@ -1,5 +1,7 @@
 # HudX Interactive Features
 
+> **Try it out**: Explore the "Interaction" feature demos in the example app (`pnpm dev:examples`) to see these features in action.
+
 ## Overview
 
 HudX provides a rich set of interactive features including animations, tooltips, legends, and advanced event handling, designed to match ECharts' capabilities.

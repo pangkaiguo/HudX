@@ -4,7 +4,7 @@
 
 # Class: Renderer
 
-Defined in: [render/src/Renderer.ts:32](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L32)
+Defined in: [render/src/Renderer.ts:32](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L32)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [render/src/Renderer.ts:32](https://github.com/pangkaiguo/HudX/blob/
 
 > **new Renderer**(`dom`, `renderMode`, `theme?`, `locale?`): `Renderer`
 
-Defined in: [render/src/Renderer.ts:46](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L46)
+Defined in: [render/src/Renderer.ts:46](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L46)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [render/src/Renderer.ts:46](https://github.com/pangkaiguo/HudX/blob/
 
 > **add**(`element`): `this`
 
-Defined in: [render/src/Renderer.ts:157](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L157)
+Defined in: [render/src/Renderer.ts:157](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L157)
 
 Add element to root group
 
@@ -62,7 +62,7 @@ Add element to root group
 
 > **dispose**(): `void`
 
-Defined in: [render/src/Renderer.ts:391](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L391)
+Defined in: [render/src/Renderer.ts:391](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L391)
 
 Dispose Renderer instance
 
@@ -76,7 +76,7 @@ Dispose Renderer instance
 
 > **flush**(): `this`
 
-Defined in: [render/src/Renderer.ts:218](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L218)
+Defined in: [render/src/Renderer.ts:218](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L218)
 
 Flush pending paints immediately
 
@@ -90,7 +90,7 @@ Flush pending paints immediately
 
 > **getCanvas**(): `HTMLCanvasElement` \| `undefined`
 
-Defined in: [render/src/Renderer.ts:292](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L292)
+Defined in: [render/src/Renderer.ts:292](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L292)
 
 Get canvas element (Canvas mode only)
 
@@ -104,7 +104,7 @@ Get canvas element (Canvas mode only)
 
 > **getDataURL**(`opts`): `string`
 
-Defined in: [render/src/Renderer.ts:259](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L259)
+Defined in: [render/src/Renderer.ts:259](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L259)
 
 Get data URL
 
@@ -124,7 +124,7 @@ Get data URL
 
 > **getDom**(): `HTMLElement`
 
-Defined in: [render/src/Renderer.ts:285](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L285)
+Defined in: [render/src/Renderer.ts:285](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L285)
 
 Get container DOM element
 
@@ -138,7 +138,7 @@ Get container DOM element
 
 > **getElementById**(`id`): [`ChartElement`](ChartElement.md) \| `undefined`
 
-Defined in: [render/src/Renderer.ts:188](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L188)
+Defined in: [render/src/Renderer.ts:188](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L188)
 
 Get element by ID
 
@@ -158,7 +158,7 @@ Get element by ID
 
 > **getHeight**(): `number`
 
-Defined in: [render/src/Renderer.ts:278](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L278)
+Defined in: [render/src/Renderer.ts:278](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L278)
 
 Get height
 
@@ -172,7 +172,7 @@ Get height
 
 > **getLocale**(): `string`
 
-Defined in: [render/src/Renderer.ts:344](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L344)
+Defined in: [render/src/Renderer.ts:344](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L344)
 
 Get locale
 
@@ -186,7 +186,7 @@ Get locale
 
 > **getRenderMode**(): [`RenderMode`](../type-aliases/RenderMode.md)
 
-Defined in: [render/src/Renderer.ts:120](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L120)
+Defined in: [render/src/Renderer.ts:120](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L120)
 
 Get render mode
 
@@ -200,7 +200,7 @@ Get render mode
 
 > **getRoot**(): [`Group`](Group.md)
 
-Defined in: [render/src/Renderer.ts:195](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L195)
+Defined in: [render/src/Renderer.ts:195](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L195)
 
 Get root group
 
@@ -214,7 +214,7 @@ Get root group
 
 > **getSVG**(): `SVGSVGElement` \| `undefined`
 
-Defined in: [render/src/Renderer.ts:302](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L302)
+Defined in: [render/src/Renderer.ts:302](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L302)
 
 Get SVG element (SVG mode only)
 
@@ -228,7 +228,7 @@ Get SVG element (SVG mode only)
 
 > **getTheme**(): `string`
 
-Defined in: [render/src/Renderer.ts:312](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L312)
+Defined in: [render/src/Renderer.ts:312](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L312)
 
 Get theme
 
@@ -242,7 +242,7 @@ Get theme
 
 > **getThemeConfig**(): [`ThemeConfig`](../interfaces/ThemeConfig.md)
 
-Defined in: [render/src/Renderer.ts:337](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L337)
+Defined in: [render/src/Renderer.ts:337](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L337)
 
 Get theme configuration
 
@@ -256,7 +256,7 @@ Get theme configuration
 
 > **getWidth**(): `number`
 
-Defined in: [render/src/Renderer.ts:271](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L271)
+Defined in: [render/src/Renderer.ts:271](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L271)
 
 Get width
 
@@ -270,7 +270,7 @@ Get width
 
 > **isDisposed**(): `boolean`
 
-Defined in: [render/src/Renderer.ts:408](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L408)
+Defined in: [render/src/Renderer.ts:408](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L408)
 
 Check if Renderer instance is disposed
 
@@ -284,7 +284,7 @@ Check if Renderer instance is disposed
 
 > **off**(`event?`, `handler?`): `this`
 
-Defined in: [render/src/Renderer.ts:243](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L243)
+Defined in: [render/src/Renderer.ts:243](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L243)
 
 Remove event listener
 
@@ -308,7 +308,7 @@ Remove event listener
 
 > **on**(`event`, `handler`): `this`
 
-Defined in: [render/src/Renderer.ts:235](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L235)
+Defined in: [render/src/Renderer.ts:235](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L235)
 
 Add event listener
 
@@ -332,7 +332,7 @@ Add event listener
 
 > **refresh**(): `this`
 
-Defined in: [render/src/Renderer.ts:210](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L210)
+Defined in: [render/src/Renderer.ts:210](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L210)
 
 Refresh/repaint
 
@@ -346,7 +346,7 @@ Refresh/repaint
 
 > **remove**(`element`): `this`
 
-Defined in: [render/src/Renderer.ts:167](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L167)
+Defined in: [render/src/Renderer.ts:167](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L167)
 
 Remove element from root group
 
@@ -366,7 +366,7 @@ Remove element from root group
 
 > **removeAll**(): `this`
 
-Defined in: [render/src/Renderer.ts:177](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L177)
+Defined in: [render/src/Renderer.ts:177](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L177)
 
 Remove all elements
 
@@ -380,7 +380,7 @@ Remove all elements
 
 > **resize**(`width?`, `height?`): `this`
 
-Defined in: [render/src/Renderer.ts:202](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L202)
+Defined in: [render/src/Renderer.ts:202](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L202)
 
 Resize renderer
 
@@ -404,7 +404,7 @@ Resize renderer
 
 > **setBackgroundColor**(`color?`): `this`
 
-Defined in: [render/src/Renderer.ts:226](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L226)
+Defined in: [render/src/Renderer.ts:226](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L226)
 
 Set background color
 
@@ -424,7 +424,7 @@ Set background color
 
 > **setLocale**(`locale`): `this`
 
-Defined in: [render/src/Renderer.ts:351](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L351)
+Defined in: [render/src/Renderer.ts:351](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L351)
 
 Set locale
 
@@ -444,7 +444,7 @@ Set locale
 
 > **setRenderMode**(`renderMode`): `void`
 
-Defined in: [render/src/Renderer.ts:127](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L127)
+Defined in: [render/src/Renderer.ts:127](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L127)
 
 Switch render mode (requires reinitialization)
 
@@ -464,7 +464,7 @@ Switch render mode (requires reinitialization)
 
 > **setTheme**(`theme`): `this`
 
-Defined in: [render/src/Renderer.ts:319](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L319)
+Defined in: [render/src/Renderer.ts:319](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L319)
 
 Set theme
 
@@ -484,7 +484,7 @@ Set theme
 
 > **t**(`key`, `defaultValue?`): `string`
 
-Defined in: [render/src/Renderer.ts:363](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L363)
+Defined in: [render/src/Renderer.ts:363](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L363)
 
 Get translated text
 
@@ -508,7 +508,7 @@ Get translated text
 
 > **trigger**(`event`, `eventData?`): `this`
 
-Defined in: [render/src/Renderer.ts:251](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L251)
+Defined in: [render/src/Renderer.ts:251](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L251)
 
 Trigger event
 
@@ -532,7 +532,7 @@ Trigger event
 
 > `static` **init**(`dom`, `renderMode`, `theme?`, `locale?`): `Renderer`
 
-Defined in: [render/src/Renderer.ts:98](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Renderer.ts#L98)
+Defined in: [render/src/Renderer.ts:98](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Renderer.ts#L98)
 
 Initialize Renderer instance
 

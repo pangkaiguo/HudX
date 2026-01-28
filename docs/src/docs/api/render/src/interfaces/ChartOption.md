@@ -4,7 +4,7 @@
 
 # Interface: ChartOption
 
-Defined in: [render/src/types.ts:424](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L424)
+Defined in: [render/src/types.ts:428](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L428)
 
 HudX chart option (ECharts-style).
 
@@ -36,7 +36,7 @@ const option: ChartOption = {
 
 > `optional` **animation**: `boolean`
 
-Defined in: [render/src/types.ts:447](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L447)
+Defined in: [render/src/types.ts:451](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L451)
 
 Whether to enable animation
 
@@ -46,7 +46,7 @@ Whether to enable animation
 
 > `optional` **animationDuration**: `number`
 
-Defined in: [render/src/types.ts:449](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L449)
+Defined in: [render/src/types.ts:453](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L453)
 
 Animation duration in ms
 
@@ -56,7 +56,7 @@ Animation duration in ms
 
 > `optional` **animationEasing**: `string`
 
-Defined in: [render/src/types.ts:451](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L451)
+Defined in: [render/src/types.ts:455](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L455)
 
 Animation easing function
 
@@ -66,7 +66,7 @@ Animation easing function
 
 > `optional` **aria**: [`AriaOption`](AriaOption.md)
 
-Defined in: [render/src/types.ts:453](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L453)
+Defined in: [render/src/types.ts:457](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L457)
 
 Accessibility options
 
@@ -76,7 +76,7 @@ Accessibility options
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: [render/src/types.ts:445](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L445)
+Defined in: [render/src/types.ts:449](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L449)
 
 Background color
 
@@ -86,7 +86,7 @@ Background color
 
 > `optional` **grid**: [`GridOption`](GridOption.md)
 
-Defined in: [render/src/types.ts:432](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L432)
+Defined in: [render/src/types.ts:436](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L436)
 
 Grid configuration
 
@@ -96,7 +96,7 @@ Grid configuration
 
 > `optional` **legend**: [`LegendOption`](LegendOption.md)
 
-Defined in: [render/src/types.ts:430](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L430)
+Defined in: [render/src/types.ts:434](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L434)
 
 Legend configuration
 
@@ -106,7 +106,7 @@ Legend configuration
 
 > `optional` **series**: [`SeriesOption`](../type-aliases/SeriesOption.md)[]
 
-Defined in: [render/src/types.ts:443](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L443)
+Defined in: [render/src/types.ts:447](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L447)
 
 Series list.
 
@@ -119,7 +119,7 @@ field suggestions for that series.
 
 > `optional` **title**: [`TitleOption`](TitleOption.md)
 
-Defined in: [render/src/types.ts:426](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L426)
+Defined in: [render/src/types.ts:430](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L430)
 
 Title configuration
 
@@ -129,7 +129,7 @@ Title configuration
 
 > `optional` **tooltip**: [`TooltipOption`](TooltipOption.md)
 
-Defined in: [render/src/types.ts:428](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L428)
+Defined in: [render/src/types.ts:432](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L432)
 
 Tooltip configuration
 
@@ -139,7 +139,7 @@ Tooltip configuration
 
 > `optional` **xAxis**: [`AxisOption`](AxisOption.md) \| [`AxisOption`](AxisOption.md)[]
 
-Defined in: [render/src/types.ts:434](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L434)
+Defined in: [render/src/types.ts:438](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L438)
 
 X-axis configuration
 
@@ -149,6 +149,6 @@ X-axis configuration
 
 > `optional` **yAxis**: [`AxisOption`](AxisOption.md) \| [`AxisOption`](AxisOption.md)[]
 
-Defined in: [render/src/types.ts:436](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L436)
+Defined in: [render/src/types.ts:440](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L440)
 
 Y-axis configuration

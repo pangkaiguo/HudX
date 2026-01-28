@@ -4,7 +4,7 @@
 
 # Interface: EventData
 
-Defined in: render/dist/types.d.ts:217
+Defined in: render/dist/types.d.ts:364
 
 ## Indexable
 
@@ -16,6 +16,6 @@ Defined in: render/dist/types.d.ts:217
 
 > `optional` **type**: `string`
 
-Defined in: render/dist/types.d.ts:219
+Defined in: render/dist/types.d.ts:366
 
 Event type string

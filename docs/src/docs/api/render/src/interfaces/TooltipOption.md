@@ -4,7 +4,7 @@
 
 # Interface: TooltipOption
 
-Defined in: [render/src/types.ts:542](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L542)
+Defined in: [render/src/types.ts:546](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L546)
 
 Tooltip option (similar to ECharts `tooltip`).
 
@@ -36,7 +36,7 @@ const option: ChartOption = {
 
 > `optional` **alwaysShowContent**: `boolean`
 
-Defined in: [render/src/types.ts:648](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L648)
+Defined in: [render/src/types.ts:652](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L652)
 
 Whether to always show the tooltip content.
 
@@ -46,7 +46,7 @@ Whether to always show the tooltip content.
 
 > `optional` **appendToBody**: `boolean`
 
-Defined in: [render/src/types.ts:615](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L615)
+Defined in: [render/src/types.ts:619](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L619)
 
 Whether to append the tooltip DOM to document.body.
 Useful when the chart container has overflow:hidden.
@@ -57,7 +57,7 @@ Useful when the chart container has overflow:hidden.
 
 > `optional` **axisPointer**: `object`
 
-Defined in: [render/src/types.ts:561](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L561)
+Defined in: [render/src/types.ts:565](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L565)
 
 Configuration for the axis pointer (the indicator shown when hovering).
 
@@ -79,7 +79,7 @@ Configuration for the axis pointer (the indicator shown when hovering).
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: [render/src/types.ts:580](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L580)
+Defined in: [render/src/types.ts:584](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L584)
 
 Background color of the tooltip container.
 
@@ -89,7 +89,7 @@ Background color of the tooltip container.
 
 > `optional` **borderColor**: `string`
 
-Defined in: [render/src/types.ts:584](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L584)
+Defined in: [render/src/types.ts:588](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L588)
 
 Border color of the tooltip container.
 
@@ -99,7 +99,7 @@ Border color of the tooltip container.
 
 > `optional` **borderRadius**: `number`
 
-Defined in: [render/src/types.ts:592](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L592)
+Defined in: [render/src/types.ts:596](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L596)
 
 Border radius of the tooltip container.
 
@@ -109,7 +109,7 @@ Border radius of the tooltip container.
 
 > `optional` **borderWidth**: `number`
 
-Defined in: [render/src/types.ts:588](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L588)
+Defined in: [render/src/types.ts:592](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L592)
 
 Border width of the tooltip container.
 
@@ -119,7 +119,7 @@ Border width of the tooltip container.
 
 > `optional` **className**: `string`
 
-Defined in: [render/src/types.ts:610](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L610)
+Defined in: [render/src/types.ts:614](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L614)
 
 Custom CSS class name for the tooltip container.
 
@@ -129,7 +129,7 @@ Custom CSS class name for the tooltip container.
 
 > `optional` **confine**: `boolean`
 
-Defined in: [render/src/types.ts:619](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L619)
+Defined in: [render/src/types.ts:623](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L623)
 
 Whether to confine the tooltip within the chart container.
 
@@ -139,7 +139,7 @@ Whether to confine the tooltip within the chart container.
 
 > `optional` **enterable**: `boolean`
 
-Defined in: [render/src/types.ts:668](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L668)
+Defined in: [render/src/types.ts:672](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L672)
 
 Whether the mouse can enter the tooltip container.
 
@@ -149,7 +149,7 @@ Whether the mouse can enter the tooltip container.
 
 > `optional` **extraCssText**: `string`
 
-Defined in: [render/src/types.ts:606](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L606)
+Defined in: [render/src/types.ts:610](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L610)
 
 Extra CSS text to append to the tooltip's DOM element.
 (Only works when renderMode is 'html')
@@ -160,7 +160,7 @@ Extra CSS text to append to the tooltip's DOM element.
 
 > `optional` **formatter**: `string` \| (`params`) => `string`
 
-Defined in: [render/src/types.ts:576](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L576)
+Defined in: [render/src/types.ts:580](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L580)
 
 Content formatter.
 Can be a string template or a callback function.
@@ -177,7 +177,7 @@ The `params` object typically contains:
 
 > `optional` **hideDelay**: `number`
 
-Defined in: [render/src/types.ts:664](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L664)
+Defined in: [render/src/types.ts:668](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L668)
 
 Delay before hiding the tooltip (ms).
 
@@ -187,7 +187,7 @@ Delay before hiding the tooltip (ms).
 
 > `optional` **htmlStyles**: `object`
 
-Defined in: [render/src/types.ts:687](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L687)
+Defined in: [render/src/types.ts:691](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L691)
 
 Custom CSS styles for generated HTML elements.
 Allows fine-grained control over internal tooltip structure.
@@ -246,7 +246,7 @@ Style for the value text
 
 > `optional` **layout**: `"horizontal"` \| `"vertical"` \| `"rich"`
 
-Defined in: [render/src/types.ts:682](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L682)
+Defined in: [render/src/types.ts:686](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L686)
 
 Layout mode for tooltip content.
 
@@ -256,7 +256,7 @@ Layout mode for tooltip content.
 
 > `optional` **order**: `"seriesAsc"` \| `"seriesDesc"` \| `"valueAsc"` \| `"valueDesc"`
 
-Defined in: [render/src/types.ts:678](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L678)
+Defined in: [render/src/types.ts:682](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L682)
 
 Sorting order of tooltip items.
 
@@ -266,7 +266,7 @@ Sorting order of tooltip items.
 
 > `optional` **padding**: `number` \| `number`[]
 
-Defined in: [render/src/types.ts:597](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L597)
+Defined in: [render/src/types.ts:601](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L601)
 
 Padding of the tooltip container.
 [top, right, bottom, left]
@@ -277,7 +277,7 @@ Padding of the tooltip container.
 
 > `optional` **position**: `string` \| `number`[] \| (`point`, `params`, `dom`, `rect`, `size`) => `number`[]
 
-Defined in: [render/src/types.ts:631](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L631)
+Defined in: [render/src/types.ts:635](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L635)
 
 Tooltip position configuration.
 - 'top', 'left', 'right', 'bottom', 'inside'
@@ -290,7 +290,7 @@ Tooltip position configuration.
 
 > `optional` **renderMode**: `"html"` \| `"richText"`
 
-Defined in: [render/src/types.ts:674](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L674)
+Defined in: [render/src/types.ts:678](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L678)
 
 Render mode for the tooltip.
 - 'html': Render as HTML DOM (default).
@@ -302,7 +302,7 @@ Render mode for the tooltip.
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:546](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L546)
+Defined in: [render/src/types.ts:550](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L550)
 
 Whether to show the tooltip.
 
@@ -312,7 +312,7 @@ Whether to show the tooltip.
 
 > `optional` **showContent**: `boolean`
 
-Defined in: [render/src/types.ts:644](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L644)
+Defined in: [render/src/types.ts:648](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L648)
 
 Whether to show the tooltip content.
 
@@ -322,7 +322,7 @@ Whether to show the tooltip content.
 
 > `optional` **showDelay**: `number`
 
-Defined in: [render/src/types.ts:660](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L660)
+Defined in: [render/src/types.ts:664](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L664)
 
 Delay before showing the tooltip (ms).
 
@@ -332,7 +332,7 @@ Delay before showing the tooltip (ms).
 
 > `optional` **size**: `"medium-small"` \| `"small"` \| `"medium"`
 
-Defined in: [render/src/types.ts:557](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L557)
+Defined in: [render/src/types.ts:561](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L561)
 
 Preset visual size style.
 
@@ -342,7 +342,7 @@ Preset visual size style.
 
 > `optional` **textStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: [render/src/types.ts:601](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L601)
+Defined in: [render/src/types.ts:605](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L605)
 
 Text style for the tooltip content.
 
@@ -352,7 +352,7 @@ Text style for the tooltip content.
 
 > `optional` **transitionDuration**: `number`
 
-Defined in: [render/src/types.ts:624](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L624)
+Defined in: [render/src/types.ts:628](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L628)
 
 Transition duration for tooltip movement (in seconds).
 Note: This might be in seconds or ms depending on implementation, usually 0.4s.
@@ -363,7 +363,7 @@ Note: This might be in seconds or ms depending on implementation, usually 0.4s.
 
 > `optional` **trigger**: `"item"` \| `"axis"` \| `"none"`
 
-Defined in: [render/src/types.ts:553](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L553)
+Defined in: [render/src/types.ts:557](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L557)
 
 Trigger type.
 - 'item': Triggered by data items (scatter, pie).
@@ -376,7 +376,7 @@ Trigger type.
 
 > `optional` **triggerOn**: `"none"` \| `"mousemove"` \| `"click"` \| "mousemove\|click"
 
-Defined in: [render/src/types.ts:656](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L656)
+Defined in: [render/src/types.ts:660](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L660)
 
 Conditions to trigger the tooltip.
 - 'mousemove': Trigger on mouse move.

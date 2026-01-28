@@ -6,7 +6,7 @@
 
 > **ChartData** = `number` \| `number`[] \| \{\[`key`: `string`\]: `any`; `itemStyle?`: [`ItemStyleOption`](../interfaces/ItemStyleOption.md); `label?`: [`LabelOption`](../interfaces/LabelOption.md); `name?`: `string`; `value`: `any`; \}
 
-Defined in: render/dist/types.d.ts:1742
+Defined in: render/dist/types.d.ts:1889
 
 Common `series.data` shapes (similar to ECharts).
 

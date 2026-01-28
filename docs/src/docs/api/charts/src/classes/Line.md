@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `LineShape`
+> **shape**: [`LineShape`](../interfaces/LineShape.md)
 
 Defined in: render/dist/graphic/Line.d.ts:13
 

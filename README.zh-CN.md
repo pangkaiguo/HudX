@@ -16,6 +16,7 @@ HudX Charts 是一个基于 React 和 TypeScript 构建的高性能图表库。�
 - 🔧 **可扩展架构**: 易于添加新的图表类型和图形元素。
 - 🌓 **主题支持**: 亮色和暗色主题，支持自定义。
 - 🌍 **国际化**: 内置国际化支持。
+- 🧩 **功能演示**: 包含动画、交互、性能、图形和主题的独立演示示例。
 
 ## 为什么选择 HudX（对比 ECharts / AntV）
 
@@ -68,8 +69,8 @@ HudX/
 │   └── charts/        # 图表库
 │       ├── src/
 │       │   ├── chart/           # 图表实现（Bar, Line, Pie...）
-│       │   ├── react/           # React 组件
-│       │   └── util/            # 坐标系与比例尺工具
+│       │—— HChart.tsx           # React 组件
+│       ├── index.ts             # Entry
 ├── examples/          # 交互式示例 & Demo
 └── docs/              # 文档
 ```
@@ -100,6 +101,12 @@ pnpm test
 pnpm dev:examples
 # 访问 http://localhost:5173
 ```
+
+示例应用是一个单页仪表盘，包含以下特性：
+
+- **左侧侧边栏**：导航链接到图表分类和功能演示，支持锚点跳转。
+- **主要内容区**：滚动浏览所有示例，支持悬停预览缩放效果。
+- **详情视图**：点击任意示例可在新标签页中打开，包含代码编辑器和主题切换功能。
 
 ## 使用示例
 
@@ -174,9 +181,10 @@ anim.start();
 
 ## 文档
 
-- [实现细节](./docs/zh/IMPLEMENTATION.md)
-- [交互特性](./docs/zh/INTERACTIVE_FEATURES.md)
-- [性能优化](./docs/zh/PERFORMANCE_OPTIMIZATION.md)
+- [实现细节](./docs/src/docs/zh/IMPLEMENTATION.md)
+- [交互特性](./docs/src/docs/zh/INTERACTIVE_FEATURES.md)
+- [性能优化](./docs/src/docs/zh/PERFORMANCE_OPTIMIZATION.md)
+- [示例指南](./docs/src/docs/zh/EXAMPLES.md)
 
 ## 许可证
 

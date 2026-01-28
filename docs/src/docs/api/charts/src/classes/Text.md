@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `TextShape`
+> **shape**: [`TextShape`](../interfaces/TextShape.md)
 
 Defined in: render/dist/graphic/Text.d.ts:12
 

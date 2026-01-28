@@ -4,7 +4,7 @@
 
 # Interface: Style
 
-Defined in: render/dist/types.d.ts:1797
+Defined in: render/dist/types.d.ts:1944
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:1797
 
 > `optional` **fill**: `string` \| `CanvasPattern` \| `CanvasGradient`
 
-Defined in: render/dist/types.d.ts:1798
+Defined in: render/dist/types.d.ts:1945
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: render/dist/types.d.ts:1798
 
 > `optional` **lineDash**: `number`[]
 
-Defined in: render/dist/types.d.ts:1801
+Defined in: render/dist/types.d.ts:1948
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: render/dist/types.d.ts:1801
 
 > `optional` **lineDashOffset**: `number`
 
-Defined in: render/dist/types.d.ts:1802
+Defined in: render/dist/types.d.ts:1949
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: render/dist/types.d.ts:1802
 
 > `optional` **lineWidth**: `number`
 
-Defined in: render/dist/types.d.ts:1800
+Defined in: render/dist/types.d.ts:1947
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: render/dist/types.d.ts:1800
 
 > `optional` **opacity**: `number`
 
-Defined in: render/dist/types.d.ts:1803
+Defined in: render/dist/types.d.ts:1950
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: render/dist/types.d.ts:1803
 
 > `optional` **shadowBlur**: `number`
 
-Defined in: render/dist/types.d.ts:1804
+Defined in: render/dist/types.d.ts:1951
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: render/dist/types.d.ts:1804
 
 > `optional` **shadowColor**: `string`
 
-Defined in: render/dist/types.d.ts:1805
+Defined in: render/dist/types.d.ts:1952
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: render/dist/types.d.ts:1805
 
 > `optional` **shadowOffsetX**: `number`
 
-Defined in: render/dist/types.d.ts:1806
+Defined in: render/dist/types.d.ts:1953
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: render/dist/types.d.ts:1806
 
 > `optional` **shadowOffsetY**: `number`
 
-Defined in: render/dist/types.d.ts:1807
+Defined in: render/dist/types.d.ts:1954
 
 ***
 
@@ -88,4 +88,4 @@ Defined in: render/dist/types.d.ts:1807
 
 > `optional` **stroke**: `string` \| `CanvasPattern` \| `CanvasGradient`
 
-Defined in: render/dist/types.d.ts:1799
+Defined in: render/dist/types.d.ts:1946

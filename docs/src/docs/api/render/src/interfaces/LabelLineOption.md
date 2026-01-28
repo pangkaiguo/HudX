@@ -4,7 +4,7 @@
 
 # Interface: LabelLineOption
 
-Defined in: [render/src/types.ts:1870](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1870)
+Defined in: [render/src/types.ts:1874](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1874)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:1870](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **length**: `number`
 
-Defined in: [render/src/types.ts:1876](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1876)
+Defined in: [render/src/types.ts:1880](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1880)
 
 Length of the first segment
 
@@ -22,7 +22,7 @@ Length of the first segment
 
 > `optional` **length2**: `number`
 
-Defined in: [render/src/types.ts:1878](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1878)
+Defined in: [render/src/types.ts:1882](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1882)
 
 Length of the second segment
 
@@ -32,7 +32,7 @@ Length of the second segment
 
 > `optional` **lineStyle**: [`LineStyleOption`](LineStyleOption.md)
 
-Defined in: [render/src/types.ts:1884](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1884)
+Defined in: [render/src/types.ts:1888](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1888)
 
 Line style
 
@@ -42,7 +42,7 @@ Line style
 
 > `optional` **minTurnAngle**: `number`
 
-Defined in: [render/src/types.ts:1882](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1882)
+Defined in: [render/src/types.ts:1886](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1886)
 
 Minimum turn angle
 
@@ -52,7 +52,7 @@ Minimum turn angle
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:1872](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1872)
+Defined in: [render/src/types.ts:1876](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1876)
 
 Show label line
 
@@ -62,7 +62,7 @@ Show label line
 
 > `optional` **showAbove**: `boolean`
 
-Defined in: [render/src/types.ts:1874](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1874)
+Defined in: [render/src/types.ts:1878](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1878)
 
 Show above
 
@@ -72,6 +72,6 @@ Show above
 
 > `optional` **smooth**: `number` \| `boolean`
 
-Defined in: [render/src/types.ts:1880](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1880)
+Defined in: [render/src/types.ts:1884](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1884)
 
 Smoothness

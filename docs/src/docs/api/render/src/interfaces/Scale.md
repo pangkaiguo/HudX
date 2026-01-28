@@ -4,11 +4,11 @@
 
 # Interface: Scale()
 
-Defined in: [render/src/util/coordinate.ts:22](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L22)
+Defined in: [render/src/util/coordinate.ts:22](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L22)
 
 > **Scale**(`value`): `number`
 
-Defined in: [render/src/util/coordinate.ts:23](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L23)
+Defined in: [render/src/util/coordinate.ts:23](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L23)
 
 ## Parameters
 
@@ -28,7 +28,7 @@ Defined in: [render/src/util/coordinate.ts:23](https://github.com/pangkaiguo/Hud
 
 > **domain**(): [`ScaleValue`](../type-aliases/ScaleValue.md)[]
 
-Defined in: [render/src/util/coordinate.ts:25](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L25)
+Defined in: [render/src/util/coordinate.ts:25](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L25)
 
 ##### Returns
 
@@ -38,7 +38,7 @@ Defined in: [render/src/util/coordinate.ts:25](https://github.com/pangkaiguo/Hud
 
 > **domain**(`domain`): `Scale`
 
-Defined in: [render/src/util/coordinate.ts:27](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L27)
+Defined in: [render/src/util/coordinate.ts:27](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L27)
 
 ##### Parameters
 
@@ -56,7 +56,7 @@ Defined in: [render/src/util/coordinate.ts:27](https://github.com/pangkaiguo/Hud
 
 > `optional` **getPixel**(`value`): `number`
 
-Defined in: [render/src/util/coordinate.ts:30](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L30)
+Defined in: [render/src/util/coordinate.ts:30](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L30)
 
 Alias for getPixel (ECharts compatibility)
 
@@ -76,7 +76,7 @@ Alias for getPixel (ECharts compatibility)
 
 > `optional` **getValue**(`pixel`): [`ScaleValue`](../type-aliases/ScaleValue.md)
 
-Defined in: [render/src/util/coordinate.ts:32](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L32)
+Defined in: [render/src/util/coordinate.ts:32](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L32)
 
 Alias for invert (ECharts compatibility)
 
@@ -96,7 +96,7 @@ Alias for invert (ECharts compatibility)
 
 > `optional` **invert**(`value`): [`ScaleValue`](../type-aliases/ScaleValue.md)
 
-Defined in: [render/src/util/coordinate.ts:24](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L24)
+Defined in: [render/src/util/coordinate.ts:24](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L24)
 
 #### Parameters
 
@@ -116,7 +116,7 @@ Defined in: [render/src/util/coordinate.ts:24](https://github.com/pangkaiguo/Hud
 
 > **range**(): `number`[]
 
-Defined in: [render/src/util/coordinate.ts:26](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L26)
+Defined in: [render/src/util/coordinate.ts:26](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L26)
 
 ##### Returns
 
@@ -126,7 +126,7 @@ Defined in: [render/src/util/coordinate.ts:26](https://github.com/pangkaiguo/Hud
 
 > **range**(`range`): `Scale`
 
-Defined in: [render/src/util/coordinate.ts:28](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/coordinate.ts#L28)
+Defined in: [render/src/util/coordinate.ts:28](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/coordinate.ts#L28)
 
 ##### Parameters
 

@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `CircleShape`
+> **shape**: [`CircleShape`](../interfaces/CircleShape.md)
 
 Defined in: render/dist/graphic/Circle.d.ts:12
 

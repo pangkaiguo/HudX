@@ -4,7 +4,7 @@
 
 # Class: ThemeManager
 
-Defined in: [render/src/theme/ThemeManager.ts:103](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L103)
+Defined in: [render/src/theme/ThemeManager.ts:105](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L105)
 
 ## Constructors
 
@@ -22,7 +22,7 @@ Defined in: [render/src/theme/ThemeManager.ts:103](https://github.com/pangkaiguo
 
 > `static` **getCurrentTheme**(): `string`
 
-Defined in: [render/src/theme/ThemeManager.ts:337](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L337)
+Defined in: [render/src/theme/ThemeManager.ts:343](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L343)
 
 #### Returns
 
@@ -34,7 +34,7 @@ Defined in: [render/src/theme/ThemeManager.ts:337](https://github.com/pangkaiguo
 
 > `static` **getTheme**(`theme?`): [`ThemeConfig`](../interfaces/ThemeConfig.md)
 
-Defined in: [render/src/theme/ThemeManager.ts:327](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L327)
+Defined in: [render/src/theme/ThemeManager.ts:333](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L333)
 
 Get theme configuration
 
@@ -54,7 +54,7 @@ Get theme configuration
 
 > `static` **getThemes**(): `string`[]
 
-Defined in: [render/src/theme/ThemeManager.ts:368](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L368)
+Defined in: [render/src/theme/ThemeManager.ts:374](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L374)
 
 Get all registered themes
 
@@ -68,7 +68,7 @@ Get all registered themes
 
 > `static` **onThemeChange**(`listener`): () => `void`
 
-Defined in: [render/src/theme/ThemeManager.ts:351](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L351)
+Defined in: [render/src/theme/ThemeManager.ts:357](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L357)
 
 #### Parameters
 
@@ -90,7 +90,7 @@ Defined in: [render/src/theme/ThemeManager.ts:351](https://github.com/pangkaiguo
 
 > `static` **registerHudBaseTokens**(`tokens`): `void`
 
-Defined in: [render/src/theme/ThemeManager.ts:318](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L318)
+Defined in: [render/src/theme/ThemeManager.ts:324](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L324)
 
 #### Parameters
 
@@ -108,7 +108,7 @@ Defined in: [render/src/theme/ThemeManager.ts:318](https://github.com/pangkaiguo
 
 > `static` **registerTheme**(`theme`, `config`): `void`
 
-Defined in: [render/src/theme/ThemeManager.ts:361](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L361)
+Defined in: [render/src/theme/ThemeManager.ts:367](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L367)
 
 Register custom theme
 
@@ -132,7 +132,7 @@ Register custom theme
 
 > `static` **registerToken**(`theme`, `token`): `void`
 
-Defined in: [render/src/theme/ThemeManager.ts:120](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L120)
+Defined in: [render/src/theme/ThemeManager.ts:122](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L122)
 
 Register theme token
 
@@ -156,7 +156,7 @@ Register theme token
 
 > `static` **setCurrentTheme**(`theme`): `void`
 
-Defined in: [render/src/theme/ThemeManager.ts:341](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/theme/ThemeManager.ts#L341)
+Defined in: [render/src/theme/ThemeManager.ts:347](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/theme/ThemeManager.ts#L347)
 
 #### Parameters
 

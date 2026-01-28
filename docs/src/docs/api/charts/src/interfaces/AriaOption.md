@@ -4,7 +4,7 @@
 
 # Interface: AriaOption
 
-Defined in: render/dist/types.d.ts:294
+Defined in: render/dist/types.d.ts:441
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:294
 
 > `optional` **decal**: [`DecalOption`](DecalOption.md)
 
-Defined in: render/dist/types.d.ts:298
+Defined in: render/dist/types.d.ts:445
 
 Decal pattern configuration for color blindness
 
@@ -26,6 +26,6 @@ Decal pattern configuration for color blindness
 
 > `optional` **enabled**: `boolean`
 
-Defined in: render/dist/types.d.ts:296
+Defined in: render/dist/types.d.ts:443
 
 Enable accessibility features

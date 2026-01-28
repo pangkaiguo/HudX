@@ -4,7 +4,7 @@
 
 # Class: Chart
 
-Defined in: [render/src/Chart.ts:51](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L51)
+Defined in: [render/src/Chart.ts:51](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L51)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [render/src/Chart.ts:51](https://github.com/pangkaiguo/HudX/blob/531
 
 > **new Chart**(`dom`, `option`, `renderMode`, `theme?`, `locale?`): `Chart`
 
-Defined in: [render/src/Chart.ts:74](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L74)
+Defined in: [render/src/Chart.ts:74](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L74)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [render/src/Chart.ts:74](https://github.com/pangkaiguo/HudX/blob/531
 
 > **batchUpdate**(`callback`): `this`
 
-Defined in: [render/src/Chart.ts:1124](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1124)
+Defined in: [render/src/Chart.ts:1124](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1124)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [render/src/Chart.ts:1124](https://github.com/pangkaiguo/HudX/blob/5
 
 > **beginAnimateShow**(`name`): `void`
 
-Defined in: [render/src/Chart.ts:392](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L392)
+Defined in: [render/src/Chart.ts:392](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L392)
 
 #### Parameters
 
@@ -82,7 +82,7 @@ Defined in: [render/src/Chart.ts:392](https://github.com/pangkaiguo/HudX/blob/53
 
 > **beginSilentHide**(): `void`
 
-Defined in: [render/src/Chart.ts:388](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L388)
+Defined in: [render/src/Chart.ts:388](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L388)
 
 #### Returns
 
@@ -94,7 +94,7 @@ Defined in: [render/src/Chart.ts:388](https://github.com/pangkaiguo/HudX/blob/53
 
 > **clear**(): `this`
 
-Defined in: [render/src/Chart.ts:1086](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1086)
+Defined in: [render/src/Chart.ts:1086](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1086)
 
 #### Returns
 
@@ -106,7 +106,7 @@ Defined in: [render/src/Chart.ts:1086](https://github.com/pangkaiguo/HudX/blob/5
 
 > **clearAnimationSuppression**(): `void`
 
-Defined in: [render/src/Chart.ts:375](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L375)
+Defined in: [render/src/Chart.ts:375](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L375)
 
 #### Returns
 
@@ -118,7 +118,7 @@ Defined in: [render/src/Chart.ts:375](https://github.com/pangkaiguo/HudX/blob/53
 
 > **convertFromPixel**(`coord`): \[`number`, `number`\]
 
-Defined in: [render/src/Chart.ts:1136](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1136)
+Defined in: [render/src/Chart.ts:1136](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1136)
 
 #### Parameters
 
@@ -136,7 +136,7 @@ Defined in: [render/src/Chart.ts:1136](https://github.com/pangkaiguo/HudX/blob/5
 
 > **convertToPixel**(`coord`): \[`number`, `number`\]
 
-Defined in: [render/src/Chart.ts:1141](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1141)
+Defined in: [render/src/Chart.ts:1141](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1141)
 
 #### Parameters
 
@@ -154,7 +154,7 @@ Defined in: [render/src/Chart.ts:1141](https://github.com/pangkaiguo/HudX/blob/5
 
 > **dispose**(): `void`
 
-Defined in: [render/src/Chart.ts:1055](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1055)
+Defined in: [render/src/Chart.ts:1055](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1055)
 
 #### Returns
 
@@ -166,7 +166,7 @@ Defined in: [render/src/Chart.ts:1055](https://github.com/pangkaiguo/HudX/blob/5
 
 > **endAnimateControl**(): `void`
 
-Defined in: [render/src/Chart.ts:396](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L396)
+Defined in: [render/src/Chart.ts:396](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L396)
 
 #### Returns
 
@@ -178,7 +178,7 @@ Defined in: [render/src/Chart.ts:396](https://github.com/pangkaiguo/HudX/blob/53
 
 > **getAnimator**(): [`Animator`](Animator.md)
 
-Defined in: [render/src/Chart.ts:359](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L359)
+Defined in: [render/src/Chart.ts:359](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L359)
 
 #### Returns
 
@@ -190,7 +190,7 @@ Defined in: [render/src/Chart.ts:359](https://github.com/pangkaiguo/HudX/blob/53
 
 > **getBoundingRect**(): `DOMRect`
 
-Defined in: [render/src/Chart.ts:1170](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1170)
+Defined in: [render/src/Chart.ts:1170](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1170)
 
 #### Returns
 
@@ -202,7 +202,7 @@ Defined in: [render/src/Chart.ts:1170](https://github.com/pangkaiguo/HudX/blob/5
 
 > **getDataURL**(`opts`): `string`
 
-Defined in: [render/src/Chart.ts:326](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L326)
+Defined in: [render/src/Chart.ts:326](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L326)
 
 #### Parameters
 
@@ -220,7 +220,7 @@ Defined in: [render/src/Chart.ts:326](https://github.com/pangkaiguo/HudX/blob/53
 
 > **getDom**(): `HTMLElement`
 
-Defined in: [render/src/Chart.ts:1096](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1096)
+Defined in: [render/src/Chart.ts:1096](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1096)
 
 #### Returns
 
@@ -232,7 +232,7 @@ Defined in: [render/src/Chart.ts:1096](https://github.com/pangkaiguo/HudX/blob/5
 
 > **getHeight**(): `number`
 
-Defined in: [render/src/Chart.ts:334](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L334)
+Defined in: [render/src/Chart.ts:334](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L334)
 
 #### Returns
 
@@ -244,7 +244,7 @@ Defined in: [render/src/Chart.ts:334](https://github.com/pangkaiguo/HudX/blob/53
 
 > **getLocale**(): `string`
 
-Defined in: [render/src/Chart.ts:125](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L125)
+Defined in: [render/src/Chart.ts:125](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L125)
 
 #### Returns
 
@@ -256,7 +256,7 @@ Defined in: [render/src/Chart.ts:125](https://github.com/pangkaiguo/HudX/blob/53
 
 > **getOption**(): [`ChartOption`](../interfaces/ChartOption.md)
 
-Defined in: [render/src/Chart.ts:306](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L306)
+Defined in: [render/src/Chart.ts:306](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L306)
 
 #### Returns
 
@@ -268,7 +268,7 @@ Defined in: [render/src/Chart.ts:306](https://github.com/pangkaiguo/HudX/blob/53
 
 > **getRenderer**(): [`Renderer`](Renderer.md)
 
-Defined in: [render/src/Chart.ts:1100](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1100)
+Defined in: [render/src/Chart.ts:1100](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1100)
 
 #### Returns
 
@@ -280,7 +280,7 @@ Defined in: [render/src/Chart.ts:1100](https://github.com/pangkaiguo/HudX/blob/5
 
 > **getRenderMode**(): [`RenderMode`](../type-aliases/RenderMode.md)
 
-Defined in: [render/src/Chart.ts:91](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L91)
+Defined in: [render/src/Chart.ts:91](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L91)
 
 Get render mode
 
@@ -294,7 +294,7 @@ Get render mode
 
 > **getState**(): `object`
 
-Defined in: [render/src/Chart.ts:1104](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1104)
+Defined in: [render/src/Chart.ts:1104](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1104)
 
 #### Returns
 
@@ -334,7 +334,7 @@ Defined in: [render/src/Chart.ts:1104](https://github.com/pangkaiguo/HudX/blob/5
 
 > **getTheme**(): `string`
 
-Defined in: [render/src/Chart.ts:109](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L109)
+Defined in: [render/src/Chart.ts:109](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L109)
 
 #### Returns
 
@@ -346,7 +346,7 @@ Defined in: [render/src/Chart.ts:109](https://github.com/pangkaiguo/HudX/blob/53
 
 > **getThemeConfig**(): [`ThemeConfig`](../interfaces/ThemeConfig.md)
 
-Defined in: [render/src/Chart.ts:121](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L121)
+Defined in: [render/src/Chart.ts:121](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L121)
 
 #### Returns
 
@@ -358,7 +358,7 @@ Defined in: [render/src/Chart.ts:121](https://github.com/pangkaiguo/HudX/blob/53
 
 > **getWidth**(): `number`
 
-Defined in: [render/src/Chart.ts:330](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L330)
+Defined in: [render/src/Chart.ts:330](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L330)
 
 #### Returns
 
@@ -370,7 +370,7 @@ Defined in: [render/src/Chart.ts:330](https://github.com/pangkaiguo/HudX/blob/53
 
 > **hideLoading**(): `void`
 
-Defined in: [render/src/Chart.ts:1166](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1166)
+Defined in: [render/src/Chart.ts:1166](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1166)
 
 #### Returns
 
@@ -382,7 +382,7 @@ Defined in: [render/src/Chart.ts:1166](https://github.com/pangkaiguo/HudX/blob/5
 
 > **isDisposed**(): `boolean`
 
-Defined in: [render/src/Chart.ts:1092](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1092)
+Defined in: [render/src/Chart.ts:1092](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1092)
 
 #### Returns
 
@@ -394,7 +394,7 @@ Defined in: [render/src/Chart.ts:1092](https://github.com/pangkaiguo/HudX/blob/5
 
 > **isMounted**(): `boolean`
 
-Defined in: [render/src/Chart.ts:191](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L191)
+Defined in: [render/src/Chart.ts:191](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L191)
 
 #### Returns
 
@@ -406,7 +406,7 @@ Defined in: [render/src/Chart.ts:191](https://github.com/pangkaiguo/HudX/blob/53
 
 > **makeResponsive**(): `this`
 
-Defined in: [render/src/Chart.ts:1174](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1174)
+Defined in: [render/src/Chart.ts:1174](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1174)
 
 #### Returns
 
@@ -418,7 +418,7 @@ Defined in: [render/src/Chart.ts:1174](https://github.com/pangkaiguo/HudX/blob/5
 
 > **mount**(): `this`
 
-Defined in: [render/src/Chart.ts:172](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L172)
+Defined in: [render/src/Chart.ts:172](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L172)
 
 #### Returns
 
@@ -430,7 +430,7 @@ Defined in: [render/src/Chart.ts:172](https://github.com/pangkaiguo/HudX/blob/53
 
 > **off**(`event?`, `handler?`): `void`
 
-Defined in: [render/src/Chart.ts:1032](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1032)
+Defined in: [render/src/Chart.ts:1032](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1032)
 
 #### Parameters
 
@@ -452,7 +452,7 @@ Defined in: [render/src/Chart.ts:1032](https://github.com/pangkaiguo/HudX/blob/5
 
 > **on**(`event`, `handler`): `void`
 
-Defined in: [render/src/Chart.ts:1028](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1028)
+Defined in: [render/src/Chart.ts:1028](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1028)
 
 #### Parameters
 
@@ -474,7 +474,7 @@ Defined in: [render/src/Chart.ts:1028](https://github.com/pangkaiguo/HudX/blob/5
 
 > **once**(`event`, `handler`): `void`
 
-Defined in: [render/src/Chart.ts:1036](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1036)
+Defined in: [render/src/Chart.ts:1036](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1036)
 
 #### Parameters
 
@@ -496,7 +496,7 @@ Defined in: [render/src/Chart.ts:1036](https://github.com/pangkaiguo/HudX/blob/5
 
 > **pauseAnimation**(): `void`
 
-Defined in: [render/src/Chart.ts:338](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L338)
+Defined in: [render/src/Chart.ts:338](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L338)
 
 #### Returns
 
@@ -508,7 +508,7 @@ Defined in: [render/src/Chart.ts:338](https://github.com/pangkaiguo/HudX/blob/53
 
 > **resize**(`width?`, `height?`): `void`
 
-Defined in: [render/src/Chart.ts:310](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L310)
+Defined in: [render/src/Chart.ts:310](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L310)
 
 #### Parameters
 
@@ -530,7 +530,7 @@ Defined in: [render/src/Chart.ts:310](https://github.com/pangkaiguo/HudX/blob/53
 
 > **resumeAnimation**(): `void`
 
-Defined in: [render/src/Chart.ts:346](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L346)
+Defined in: [render/src/Chart.ts:346](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L346)
 
 #### Returns
 
@@ -542,7 +542,7 @@ Defined in: [render/src/Chart.ts:346](https://github.com/pangkaiguo/HudX/blob/53
 
 > **setLocale**(`locale`): `void`
 
-Defined in: [render/src/Chart.ts:129](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L129)
+Defined in: [render/src/Chart.ts:129](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L129)
 
 #### Parameters
 
@@ -560,7 +560,7 @@ Defined in: [render/src/Chart.ts:129](https://github.com/pangkaiguo/HudX/blob/53
 
 > **setOption**(`option`, `notMerge?`, `lazyUpdate?`): `this`
 
-Defined in: [render/src/Chart.ts:198](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L198)
+Defined in: [render/src/Chart.ts:198](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L198)
 
 Set chart option with advanced options
 
@@ -588,7 +588,7 @@ Set chart option with advanced options
 
 > **setRenderMode**(`renderMode`): `void`
 
-Defined in: [render/src/Chart.ts:98](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L98)
+Defined in: [render/src/Chart.ts:98](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L98)
 
 Set render mode
 
@@ -608,7 +608,7 @@ Set render mode
 
 > **setTheme**(`theme`): `void`
 
-Defined in: [render/src/Chart.ts:113](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L113)
+Defined in: [render/src/Chart.ts:113](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L113)
 
 #### Parameters
 
@@ -626,7 +626,7 @@ Defined in: [render/src/Chart.ts:113](https://github.com/pangkaiguo/HudX/blob/53
 
 > **showLoading**(`loadingOpts?`): `void`
 
-Defined in: [render/src/Chart.ts:1146](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1146)
+Defined in: [render/src/Chart.ts:1146](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1146)
 
 #### Parameters
 
@@ -662,7 +662,7 @@ Defined in: [render/src/Chart.ts:1146](https://github.com/pangkaiguo/HudX/blob/5
 
 > **stopAnimation**(): `void`
 
-Defined in: [render/src/Chart.ts:353](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L353)
+Defined in: [render/src/Chart.ts:353](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L353)
 
 #### Returns
 
@@ -674,7 +674,7 @@ Defined in: [render/src/Chart.ts:353](https://github.com/pangkaiguo/HudX/blob/53
 
 > **stopResponsive**(): `this`
 
-Defined in: [render/src/Chart.ts:1203](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1203)
+Defined in: [render/src/Chart.ts:1203](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1203)
 
 #### Returns
 
@@ -686,7 +686,7 @@ Defined in: [render/src/Chart.ts:1203](https://github.com/pangkaiguo/HudX/blob/5
 
 > **suppressNextAnimation**(): `void`
 
-Defined in: [render/src/Chart.ts:371](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L371)
+Defined in: [render/src/Chart.ts:371](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L371)
 
 #### Returns
 
@@ -698,7 +698,7 @@ Defined in: [render/src/Chart.ts:371](https://github.com/pangkaiguo/HudX/blob/53
 
 > **t**(`key`, `defaultValue?`): `string`
 
-Defined in: [render/src/Chart.ts:134](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L134)
+Defined in: [render/src/Chart.ts:134](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L134)
 
 #### Parameters
 
@@ -720,7 +720,7 @@ Defined in: [render/src/Chart.ts:134](https://github.com/pangkaiguo/HudX/blob/53
 
 > **trigger**(`eventName`, `data?`): `void`
 
-Defined in: [render/src/Chart.ts:1044](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L1044)
+Defined in: [render/src/Chart.ts:1044](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L1044)
 
 #### Parameters
 
@@ -742,7 +742,7 @@ Defined in: [render/src/Chart.ts:1044](https://github.com/pangkaiguo/HudX/blob/5
 
 > **unmount**(): `this`
 
-Defined in: [render/src/Chart.ts:182](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Chart.ts#L182)
+Defined in: [render/src/Chart.ts:182](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Chart.ts#L182)
 
 #### Returns
 

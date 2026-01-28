@@ -4,7 +4,7 @@
 
 # Interface: RadialGradientColor
 
-Defined in: render/dist/types.d.ts:1632
+Defined in: render/dist/types.d.ts:1779
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:1632
 
 > **colorStops**: [`GradientColorStop`](GradientColorStop.md)[]
 
-Defined in: render/dist/types.d.ts:1641
+Defined in: render/dist/types.d.ts:1788
 
 Color stops
 
@@ -22,7 +22,7 @@ Color stops
 
 > `optional` **global**: `boolean`
 
-Defined in: render/dist/types.d.ts:1643
+Defined in: render/dist/types.d.ts:1790
 
 Whether coordinates are global
 
@@ -32,7 +32,7 @@ Whether coordinates are global
 
 > `optional` **r**: `number`
 
-Defined in: render/dist/types.d.ts:1639
+Defined in: render/dist/types.d.ts:1786
 
 Radius
 
@@ -42,7 +42,7 @@ Radius
 
 > **type**: `"radial"`
 
-Defined in: render/dist/types.d.ts:1633
+Defined in: render/dist/types.d.ts:1780
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: render/dist/types.d.ts:1633
 
 > `optional` **x**: `number`
 
-Defined in: render/dist/types.d.ts:1635
+Defined in: render/dist/types.d.ts:1782
 
 Center X
 
@@ -60,6 +60,6 @@ Center X
 
 > `optional` **y**: `number`
 
-Defined in: render/dist/types.d.ts:1637
+Defined in: render/dist/types.d.ts:1784
 
 Center Y

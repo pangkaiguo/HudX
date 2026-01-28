@@ -4,7 +4,7 @@
 
 # Interface: LabelOption
 
-Defined in: render/dist/types.d.ts:1693
+Defined in: render/dist/types.d.ts:1840
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: render/dist/types.d.ts:1693
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:1701
+Defined in: render/dist/types.d.ts:1848
 
 Text color
 
@@ -26,7 +26,7 @@ Text color
 
 > `optional` **fontSize**: `number`
 
-Defined in: render/dist/types.d.ts:1703
+Defined in: render/dist/types.d.ts:1850
 
 Font size
 
@@ -36,7 +36,7 @@ Font size
 
 > `optional` **formatter**: `string` \| (`params`) => `string`
 
-Defined in: render/dist/types.d.ts:1705
+Defined in: render/dist/types.d.ts:1852
 
 Label formatter
 
@@ -46,7 +46,7 @@ Label formatter
 
 > `optional` **position**: `"top"` \| `"bottom"` \| `"left"` \| `"right"` \| `"center"` \| `"inside"` \| `"insideLeft"` \| `"insideRight"` \| `"insideTop"` \| `"insideBottom"` \| `"insideTopLeft"` \| `"insideBottomLeft"` \| `"insideTopRight"` \| `"insideBottomRight"` \| `"outside"`
 
-Defined in: render/dist/types.d.ts:1699
+Defined in: render/dist/types.d.ts:1846
 
 Label position
 
@@ -56,7 +56,7 @@ Label position
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1695
+Defined in: render/dist/types.d.ts:1842
 
 Show label
 
@@ -66,6 +66,6 @@ Show label
 
 > `optional` **showOnHover**: `boolean`
 
-Defined in: render/dist/types.d.ts:1697
+Defined in: render/dist/types.d.ts:1844
 
 Show label on hover

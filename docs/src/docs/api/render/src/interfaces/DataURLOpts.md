@@ -4,7 +4,7 @@
 
 # Interface: DataURLOpts
 
-Defined in: [render/src/types.ts:362](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L362)
+Defined in: [render/src/types.ts:366](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L366)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:362](https://github.com/pangkaiguo/HudX/blob/53
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: [render/src/types.ts:368](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L368)
+Defined in: [render/src/types.ts:372](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L372)
 
 Background color
 
@@ -22,7 +22,7 @@ Background color
 
 > `optional` **pixelRatio**: `number`
 
-Defined in: [render/src/types.ts:366](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L366)
+Defined in: [render/src/types.ts:370](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L370)
 
 Resolution ratio, defaults to window.devicePixelRatio
 
@@ -32,7 +32,7 @@ Resolution ratio, defaults to window.devicePixelRatio
 
 > `optional` **quality**: `number`
 
-Defined in: [render/src/types.ts:370](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L370)
+Defined in: [render/src/types.ts:374](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L374)
 
 Image quality (0..1) for jpeg
 
@@ -42,6 +42,6 @@ Image quality (0..1) for jpeg
 
 > `optional` **type**: `"svg"` \| `"png"` \| `"jpeg"`
 
-Defined in: [render/src/types.ts:364](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L364)
+Defined in: [render/src/types.ts:368](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L368)
 
 Export image type

@@ -4,7 +4,7 @@
 
 # Interface: TextStyle
 
-Defined in: render/dist/types.d.ts:538
+Defined in: render/dist/types.d.ts:685
 
 Text style (used by title/legend/axisLabel/label, etc.).
 
@@ -17,7 +17,7 @@ Note: supported fields may vary by component, but common fields such as
 
 > `optional` **align**: `"left"` \| `"right"` \| `"center"`
 
-Defined in: render/dist/types.d.ts:574
+Defined in: render/dist/types.d.ts:721
 
 Horizontal alignment.
 - 'left': Align left.
@@ -30,7 +30,7 @@ Horizontal alignment.
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:633
+Defined in: render/dist/types.d.ts:780
 
 Background color of the text block.
 
@@ -40,7 +40,7 @@ Background color of the text block.
 
 > `optional` **borderColor**: `string`
 
-Defined in: render/dist/types.d.ts:637
+Defined in: render/dist/types.d.ts:784
 
 Border color of the text block.
 
@@ -50,7 +50,7 @@ Border color of the text block.
 
 > `optional` **borderRadius**: `number`
 
-Defined in: render/dist/types.d.ts:645
+Defined in: render/dist/types.d.ts:792
 
 Border radius of the text block.
 
@@ -60,7 +60,7 @@ Border radius of the text block.
 
 > `optional` **borderWidth**: `number`
 
-Defined in: render/dist/types.d.ts:641
+Defined in: render/dist/types.d.ts:788
 
 Border width of the text block.
 
@@ -70,7 +70,7 @@ Border width of the text block.
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:542
+Defined in: render/dist/types.d.ts:689
 
 Text fill color.
 
@@ -80,7 +80,7 @@ Text fill color.
 
 > `optional` **ellipsis**: `string`
 
-Defined in: render/dist/types.d.ts:629
+Defined in: render/dist/types.d.ts:776
 
 String to use for ellipsis when overflow is 'truncate'.
 
@@ -96,7 +96,7 @@ String to use for ellipsis when overflow is 'truncate'.
 
 > `optional` **fontFamily**: `string`
 
-Defined in: render/dist/types.d.ts:563
+Defined in: render/dist/types.d.ts:710
 
 Font family.
 
@@ -112,7 +112,7 @@ Font family.
 
 > `optional` **fontSize**: `number`
 
-Defined in: render/dist/types.d.ts:567
+Defined in: render/dist/types.d.ts:714
 
 Font size in pixels.
 
@@ -122,7 +122,7 @@ Font size in pixels.
 
 > `optional` **fontStyle**: `"normal"` \| `"italic"` \| `"oblique"`
 
-Defined in: render/dist/types.d.ts:549
+Defined in: render/dist/types.d.ts:696
 
 Font style.
 - 'normal': Standard text.
@@ -135,7 +135,7 @@ Font style.
 
 > `optional` **fontWeight**: `number` \| `"bold"` \| `"normal"` \| `"bolder"` \| `"lighter"`
 
-Defined in: render/dist/types.d.ts:558
+Defined in: render/dist/types.d.ts:705
 
 Font weight.
 - 'normal': Standard weight (400).
@@ -150,7 +150,7 @@ Font weight.
 
 > `optional` **height**: `number`
 
-Defined in: render/dist/types.d.ts:593
+Defined in: render/dist/types.d.ts:740
 
 Height of the text block.
 
@@ -160,7 +160,7 @@ Height of the text block.
 
 > `optional` **lineHeight**: `number`
 
-Defined in: render/dist/types.d.ts:585
+Defined in: render/dist/types.d.ts:732
 
 Line height in pixels.
 
@@ -170,7 +170,7 @@ Line height in pixels.
 
 > `optional` **overflow**: `"truncate"` \| `"break"` \| `"breakAll"`
 
-Defined in: render/dist/types.d.ts:624
+Defined in: render/dist/types.d.ts:771
 
 Text overflow handling.
 - 'truncate': Truncate with ellipsis.
@@ -183,7 +183,7 @@ Text overflow handling.
 
 > `optional` **padding**: `number` \| `number`[]
 
-Defined in: render/dist/types.d.ts:650
+Defined in: render/dist/types.d.ts:797
 
 Padding of the text block.
 [top, right, bottom, left] or number.
@@ -194,7 +194,7 @@ Padding of the text block.
 
 > `optional` **textBorderColor**: `string`
 
-Defined in: render/dist/types.d.ts:597
+Defined in: render/dist/types.d.ts:744
 
 Color of the text border (stroke).
 
@@ -204,7 +204,7 @@ Color of the text border (stroke).
 
 > `optional` **textBorderWidth**: `number`
 
-Defined in: render/dist/types.d.ts:601
+Defined in: render/dist/types.d.ts:748
 
 Width of the text border (stroke).
 
@@ -214,7 +214,7 @@ Width of the text border (stroke).
 
 > `optional` **textShadowBlur**: `number`
 
-Defined in: render/dist/types.d.ts:609
+Defined in: render/dist/types.d.ts:756
 
 Blur radius of the text shadow.
 
@@ -224,7 +224,7 @@ Blur radius of the text shadow.
 
 > `optional` **textShadowColor**: `string`
 
-Defined in: render/dist/types.d.ts:605
+Defined in: render/dist/types.d.ts:752
 
 Color of the text shadow.
 
@@ -234,7 +234,7 @@ Color of the text shadow.
 
 > `optional` **textShadowOffsetX**: `number`
 
-Defined in: render/dist/types.d.ts:613
+Defined in: render/dist/types.d.ts:760
 
 X offset of the text shadow.
 
@@ -244,7 +244,7 @@ X offset of the text shadow.
 
 > `optional` **textShadowOffsetY**: `number`
 
-Defined in: render/dist/types.d.ts:617
+Defined in: render/dist/types.d.ts:764
 
 Y offset of the text shadow.
 
@@ -254,7 +254,7 @@ Y offset of the text shadow.
 
 > `optional` **verticalAlign**: `"top"` \| `"bottom"` \| `"middle"`
 
-Defined in: render/dist/types.d.ts:581
+Defined in: render/dist/types.d.ts:728
 
 Vertical alignment.
 - 'top': Align top.
@@ -267,6 +267,6 @@ Vertical alignment.
 
 > `optional` **width**: `number`
 
-Defined in: render/dist/types.d.ts:589
+Defined in: render/dist/types.d.ts:736
 
 Width of the text block.

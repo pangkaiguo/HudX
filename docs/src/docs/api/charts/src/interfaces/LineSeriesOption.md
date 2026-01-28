@@ -4,7 +4,7 @@
 
 # Interface: LineSeriesOption
 
-Defined in: render/dist/types.d.ts:1309
+Defined in: render/dist/types.d.ts:1456
 
 Line series.
 
@@ -28,7 +28,7 @@ series: [{ type: 'line', name: 'A', smooth: true, data: [120, 200, 150] }]
 
 > `optional` **areaStyle**: [`AreaStyleOption`](AreaStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1368
+Defined in: render/dist/types.d.ts:1515
 
 Area style configuration (for area charts).
 
@@ -38,7 +38,7 @@ Area style configuration (for area charts).
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:1264
+Defined in: render/dist/types.d.ts:1411
 
 Series color.
 If not set, it will pick from the global palette.
@@ -53,7 +53,7 @@ If not set, it will pick from the global palette.
 
 > `optional` **connectNulls**: `boolean`
 
-Defined in: render/dist/types.d.ts:1353
+Defined in: render/dist/types.d.ts:1500
 
 Whether to connect points across null values.
 
@@ -63,7 +63,7 @@ Whether to connect points across null values.
 
 > `optional` **cursor**: `string`
 
-Defined in: render/dist/types.d.ts:1277
+Defined in: render/dist/types.d.ts:1424
 
 Cursor style when hovering over the series.
 
@@ -83,7 +83,7 @@ Cursor style when hovering over the series.
 
 > `optional` **data**: [`ChartData`](../type-aliases/ChartData.md)[]
 
-Defined in: render/dist/types.d.ts:1298
+Defined in: render/dist/types.d.ts:1445
 
 Series data.
 Can be an array of numbers, or objects with `value` property.
@@ -98,7 +98,7 @@ Can be an array of numbers, or objects with `value` property.
 
 > `optional` **emphasis**: [`EmphasisOption`](EmphasisOption.md)
 
-Defined in: render/dist/types.d.ts:1293
+Defined in: render/dist/types.d.ts:1440
 
 Emphasis state configuration (hover state).
 
@@ -112,7 +112,7 @@ Emphasis state configuration (hover state).
 
 > `optional` **id**: `string`
 
-Defined in: render/dist/types.d.ts:1254
+Defined in: render/dist/types.d.ts:1401
 
 Component ID.
 Unique identifier for the series component.
@@ -127,7 +127,7 @@ Unique identifier for the series component.
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1285
+Defined in: render/dist/types.d.ts:1432
 
 Item style configuration (normal state).
 
@@ -141,7 +141,7 @@ Item style configuration (normal state).
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: render/dist/types.d.ts:1289
+Defined in: render/dist/types.d.ts:1436
 
 Label configuration (normal state).
 
@@ -155,7 +155,7 @@ Label configuration (normal state).
 
 > `optional` **lineStyle**: [`LineStyleOption`](LineStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1364
+Defined in: render/dist/types.d.ts:1511
 
 Line style configuration.
 
@@ -165,7 +165,7 @@ Line style configuration.
 
 > `optional` **name**: `string`
 
-Defined in: render/dist/types.d.ts:1259
+Defined in: render/dist/types.d.ts:1406
 
 Series name.
 Used in legend and tooltip.
@@ -180,7 +180,7 @@ Used in legend and tooltip.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1281
+Defined in: render/dist/types.d.ts:1428
 
 Whether to show the series.
 
@@ -194,7 +194,7 @@ Whether to show the series.
 
 > `optional` **showSymbol**: `boolean`
 
-Defined in: render/dist/types.d.ts:1349
+Defined in: render/dist/types.d.ts:1496
 
 Whether to show symbols on the line.
 - true: Always show.
@@ -206,7 +206,7 @@ Whether to show symbols on the line.
 
 > `optional` **smooth**: `number` \| `boolean`
 
-Defined in: render/dist/types.d.ts:1316
+Defined in: render/dist/types.d.ts:1463
 
 Whether to smooth the line.
 - boolean: true/false.
@@ -218,7 +218,7 @@ Whether to smooth the line.
 
 > `optional` **step**: `boolean` \| `"start"` \| `"middle"` \| `"end"`
 
-Defined in: render/dist/types.d.ts:1360
+Defined in: render/dist/types.d.ts:1507
 
 Step line type.
 - 'start': Step at the start.
@@ -231,7 +231,7 @@ Step line type.
 
 > `optional` **symbol**: `string`
 
-Defined in: render/dist/types.d.ts:1323
+Defined in: render/dist/types.d.ts:1470
 
 Symbol type.
 - 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'.
@@ -244,7 +244,7 @@ Symbol type.
 
 > `optional` **symbolKeepAspect**: `boolean`
 
-Defined in: render/dist/types.d.ts:1338
+Defined in: render/dist/types.d.ts:1485
 
 Whether to keep the aspect ratio of the symbol.
 
@@ -254,7 +254,7 @@ Whether to keep the aspect ratio of the symbol.
 
 > `optional` **symbolOffset**: \[`string` \| `number`, `string` \| `number`\]
 
-Defined in: render/dist/types.d.ts:1343
+Defined in: render/dist/types.d.ts:1490
 
 Symbol offset.
 [x, y] in pixels or percentages.
@@ -265,7 +265,7 @@ Symbol offset.
 
 > `optional` **symbolRotate**: `number`
 
-Defined in: render/dist/types.d.ts:1334
+Defined in: render/dist/types.d.ts:1481
 
 Symbol rotation in degrees.
 
@@ -275,7 +275,7 @@ Symbol rotation in degrees.
 
 > `optional` **symbolSize**: `number` \| `number`[] \| (`value`, `params`) => `number` \| `number`[]
 
-Defined in: render/dist/types.d.ts:1330
+Defined in: render/dist/types.d.ts:1477
 
 Symbol size.
 - number: Single size.
@@ -288,7 +288,7 @@ Symbol size.
 
 > **type**: `"line"`
 
-Defined in: render/dist/types.d.ts:1310
+Defined in: render/dist/types.d.ts:1457
 
 Series type (explicitly set it to get more accurate IntelliSense).
 e.g., 'line', 'bar', 'pie'.
@@ -303,7 +303,7 @@ e.g., 'line', 'bar', 'pie'.
 
 > `optional` **z**: `number`
 
-Defined in: render/dist/types.d.ts:1268
+Defined in: render/dist/types.d.ts:1415
 
 Z-index of the series.
 
@@ -317,7 +317,7 @@ Z-index of the series.
 
 > `optional` **zlevel**: `number`
 
-Defined in: render/dist/types.d.ts:1272
+Defined in: render/dist/types.d.ts:1419
 
 Z-level of the series.
 

@@ -4,7 +4,7 @@
 
 # Class: HeatmapChart
 
-Defined in: [charts/src/chart/HeatmapChart.ts:7](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/charts/src/chart/HeatmapChart.ts#L7)
+Defined in: [charts/src/chart/HeatmapChart.ts:7](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/charts/src/chart/HeatmapChart.ts#L7)
 
 ## Extends
 

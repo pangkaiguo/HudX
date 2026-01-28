@@ -4,7 +4,7 @@
 
 # Class: HalfDoughnutChart
 
-Defined in: [charts/src/chart/HalfDoughnutChart.ts:3](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/charts/src/chart/HalfDoughnutChart.ts#L3)
+Defined in: [charts/src/chart/HalfDoughnutChart.ts:3](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/charts/src/chart/HalfDoughnutChart.ts#L3)
 
 ## Extends
 
@@ -736,7 +736,7 @@ Set chart option with advanced options
 
 > **setRenderMode**(`renderMode`): `void`
 
-Defined in: [charts/src/chart/PieChart.ts:90](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/charts/src/chart/PieChart.ts#L90)
+Defined in: [charts/src/chart/PieChart.ts:90](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/charts/src/chart/PieChart.ts#L90)
 
 Set render mode
 

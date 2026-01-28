@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `ArcShape`
+> **shape**: [`ArcShape`](../interfaces/ArcShape.md)
 
 Defined in: render/dist/graphic/Arc.d.ts:15
 

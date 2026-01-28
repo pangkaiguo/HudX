@@ -4,7 +4,7 @@
 
 # Interface: LinearGradientColor
 
-Defined in: render/dist/types.d.ts:1617
+Defined in: render/dist/types.d.ts:1764
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:1617
 
 > **colorStops**: [`GradientColorStop`](GradientColorStop.md)[]
 
-Defined in: render/dist/types.d.ts:1628
+Defined in: render/dist/types.d.ts:1775
 
 Color stops
 
@@ -22,7 +22,7 @@ Color stops
 
 > `optional` **global**: `boolean`
 
-Defined in: render/dist/types.d.ts:1630
+Defined in: render/dist/types.d.ts:1777
 
 Whether coordinates are global (pixel)
 
@@ -32,7 +32,7 @@ Whether coordinates are global (pixel)
 
 > **type**: `"linear"`
 
-Defined in: render/dist/types.d.ts:1618
+Defined in: render/dist/types.d.ts:1765
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: render/dist/types.d.ts:1618
 
 > `optional` **x**: `number`
 
-Defined in: render/dist/types.d.ts:1620
+Defined in: render/dist/types.d.ts:1767
 
 Start X (0..1 or pixel)
 
@@ -50,7 +50,7 @@ Start X (0..1 or pixel)
 
 > `optional` **x2**: `number`
 
-Defined in: render/dist/types.d.ts:1624
+Defined in: render/dist/types.d.ts:1771
 
 End X (0..1 or pixel)
 
@@ -60,7 +60,7 @@ End X (0..1 or pixel)
 
 > `optional` **y**: `number`
 
-Defined in: render/dist/types.d.ts:1622
+Defined in: render/dist/types.d.ts:1769
 
 Start Y (0..1 or pixel)
 
@@ -70,6 +70,6 @@ Start Y (0..1 or pixel)
 
 > `optional` **y2**: `number`
 
-Defined in: render/dist/types.d.ts:1626
+Defined in: render/dist/types.d.ts:1773
 
 End Y (0..1 or pixel)

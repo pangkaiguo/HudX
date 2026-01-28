@@ -4,7 +4,7 @@
 
 # Interface: AxisOption
 
-Defined in: render/dist/types.d.ts:962
+Defined in: render/dist/types.d.ts:1109
 
 Axis option (similar to ECharts `xAxis` / `yAxis`).
 
@@ -31,7 +31,7 @@ const option: ChartOption = {
 
 > `optional` **axisLabel**: [`AxisLabelOption`](AxisLabelOption.md)
 
-Defined in: render/dist/types.d.ts:1029
+Defined in: render/dist/types.d.ts:1176
 
 Axis label configuration.
 
@@ -41,7 +41,7 @@ Axis label configuration.
 
 > `optional` **axisLine**: [`AxisLineOption`](AxisLineOption.md)
 
-Defined in: render/dist/types.d.ts:1033
+Defined in: render/dist/types.d.ts:1180
 
 Axis line configuration.
 
@@ -51,7 +51,7 @@ Axis line configuration.
 
 > `optional` **axisTick**: [`AxisTickOption`](AxisTickOption.md)
 
-Defined in: render/dist/types.d.ts:1037
+Defined in: render/dist/types.d.ts:1184
 
 Axis tick configuration.
 
@@ -61,7 +61,7 @@ Axis tick configuration.
 
 > `optional` **boundaryGap**: `boolean` \| \[`string` \| `number`, `string` \| `number`\]
 
-Defined in: render/dist/types.d.ts:1025
+Defined in: render/dist/types.d.ts:1172
 
 Boundary gap.
 - For category axis: boolean (true means data is centered in the band).
@@ -73,7 +73,7 @@ Boundary gap.
 
 > `optional` **data**: `any`[]
 
-Defined in: render/dist/types.d.ts:976
+Defined in: render/dist/types.d.ts:1123
 
 Axis data.
 Required for 'category' axis.
@@ -90,7 +90,7 @@ Required for 'category' axis.
 
 > `optional` **gridIndex**: `number`
 
-Defined in: render/dist/types.d.ts:985
+Defined in: render/dist/types.d.ts:1132
 
 Index of the grid component this axis belongs to.
 Useful when there are multiple grids.
@@ -101,7 +101,7 @@ Useful when there are multiple grids.
 
 > `optional` **interval**: `number`
 
-Defined in: render/dist/types.d.ts:1095
+Defined in: render/dist/types.d.ts:1242
 
 Compulsory interval between ticks.
 
@@ -111,7 +111,7 @@ Compulsory interval between ticks.
 
 > `optional` **inverse**: `boolean`
 
-Defined in: render/dist/types.d.ts:1019
+Defined in: render/dist/types.d.ts:1166
 
 Whether to inverse the axis direction.
 
@@ -121,7 +121,7 @@ Whether to inverse the axis direction.
 
 > `optional` **logBase**: `number`
 
-Defined in: render/dist/types.d.ts:1100
+Defined in: render/dist/types.d.ts:1247
 
 Base of logarithm (for type: 'log').
 
@@ -137,7 +137,7 @@ Base of logarithm (for type: 'log').
 
 > `optional` **max**: `number` \| `"dataMax"` \| (`value`) => `number`
 
-Defined in: render/dist/types.d.ts:1070
+Defined in: render/dist/types.d.ts:1217
 
 Maximum value of the axis.
 - number: Exact value.
@@ -150,7 +150,7 @@ Maximum value of the axis.
 
 > `optional` **maxInterval**: `number`
 
-Defined in: render/dist/types.d.ts:1091
+Defined in: render/dist/types.d.ts:1238
 
 Maximum interval between ticks.
 
@@ -160,7 +160,7 @@ Maximum interval between ticks.
 
 > `optional` **min**: `number` \| `"dataMin"` \| (`value`) => `number`
 
-Defined in: render/dist/types.d.ts:1060
+Defined in: render/dist/types.d.ts:1207
 
 Minimum value of the axis.
 - number: Exact value.
@@ -173,7 +173,7 @@ Minimum value of the axis.
 
 > `optional` **minInterval**: `number`
 
-Defined in: render/dist/types.d.ts:1087
+Defined in: render/dist/types.d.ts:1234
 
 Minimum interval between ticks.
 
@@ -183,7 +183,7 @@ Minimum interval between ticks.
 
 > `optional` **minorSplitLine**: [`SplitLineOption`](SplitLineOption.md)
 
-Defined in: render/dist/types.d.ts:1049
+Defined in: render/dist/types.d.ts:1196
 
 Minor split line configuration.
 
@@ -193,7 +193,7 @@ Minor split line configuration.
 
 > `optional` **minorTick**: [`AxisTickOption`](AxisTickOption.md)
 
-Defined in: render/dist/types.d.ts:1041
+Defined in: render/dist/types.d.ts:1188
 
 Minor tick configuration.
 
@@ -203,7 +203,7 @@ Minor tick configuration.
 
 > `optional` **name**: `string`
 
-Defined in: render/dist/types.d.ts:999
+Defined in: render/dist/types.d.ts:1146
 
 Name of the axis.
 
@@ -213,7 +213,7 @@ Name of the axis.
 
 > `optional` **nameGap**: `number`
 
-Defined in: render/dist/types.d.ts:1011
+Defined in: render/dist/types.d.ts:1158
 
 Gap between axis name and axis line.
 
@@ -223,7 +223,7 @@ Gap between axis name and axis line.
 
 > `optional` **nameLocation**: `"start"` \| `"middle"` \| `"center"` \| `"end"`
 
-Defined in: render/dist/types.d.ts:1003
+Defined in: render/dist/types.d.ts:1150
 
 Location of the axis name.
 
@@ -233,7 +233,7 @@ Location of the axis name.
 
 > `optional` **nameRotate**: `number`
 
-Defined in: render/dist/types.d.ts:1015
+Defined in: render/dist/types.d.ts:1162
 
 Rotation of the axis name (in degrees).
 
@@ -243,7 +243,7 @@ Rotation of the axis name (in degrees).
 
 > `optional` **nameTextStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: render/dist/types.d.ts:1007
+Defined in: render/dist/types.d.ts:1154
 
 Text style of the axis name.
 
@@ -253,7 +253,7 @@ Text style of the axis name.
 
 > `optional` **offset**: `number`
 
-Defined in: render/dist/types.d.ts:995
+Defined in: render/dist/types.d.ts:1142
 
 Offset from the default position.
 
@@ -263,7 +263,7 @@ Offset from the default position.
 
 > `optional` **position**: `"top"` \| `"bottom"` \| `"left"` \| `"right"`
 
-Defined in: render/dist/types.d.ts:991
+Defined in: render/dist/types.d.ts:1138
 
 Axis position.
 - 'top' or 'bottom' for x-axis.
@@ -275,7 +275,7 @@ Axis position.
 
 > `optional` **scale**: `boolean`
 
-Defined in: render/dist/types.d.ts:1078
+Defined in: render/dist/types.d.ts:1225
 
 Whether to scale the axis to available data.
 If true, the axis will not force the zero point to be included.
@@ -286,7 +286,7 @@ If true, the axis will not force the zero point to be included.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:980
+Defined in: render/dist/types.d.ts:1127
 
 Whether to show the axis.
 
@@ -296,7 +296,7 @@ Whether to show the axis.
 
 > `optional` **silent**: `boolean`
 
-Defined in: render/dist/types.d.ts:1104
+Defined in: render/dist/types.d.ts:1251
 
 Whether the axis is silent (ignores mouse events).
 
@@ -306,7 +306,7 @@ Whether the axis is silent (ignores mouse events).
 
 > `optional` **splitArea**: [`SplitAreaOption`](SplitAreaOption.md)
 
-Defined in: render/dist/types.d.ts:1053
+Defined in: render/dist/types.d.ts:1200
 
 Split area configuration (striped background).
 
@@ -316,7 +316,7 @@ Split area configuration (striped background).
 
 > `optional` **splitLine**: [`SplitLineOption`](SplitLineOption.md)
 
-Defined in: render/dist/types.d.ts:1045
+Defined in: render/dist/types.d.ts:1192
 
 Split line configuration (grid lines).
 
@@ -326,7 +326,7 @@ Split line configuration (grid lines).
 
 > `optional` **splitNumber**: `number`
 
-Defined in: render/dist/types.d.ts:1083
+Defined in: render/dist/types.d.ts:1230
 
 Number of segments to split the axis into.
 (Guideline only).
@@ -337,7 +337,7 @@ Number of segments to split the axis into.
 
 > `optional` **triggerEvent**: `boolean`
 
-Defined in: render/dist/types.d.ts:1108
+Defined in: render/dist/types.d.ts:1255
 
 Whether to trigger mouse events on axis labels/name.
 
@@ -347,7 +347,7 @@ Whether to trigger mouse events on axis labels/name.
 
 > `optional` **type**: `"value"` \| `"category"` \| `"time"` \| `"log"`
 
-Defined in: render/dist/types.d.ts:970
+Defined in: render/dist/types.d.ts:1117
 
 Axis type.
 - 'value': Numerical axis.
@@ -361,7 +361,7 @@ Axis type.
 
 > `optional` **z**: `number`
 
-Defined in: render/dist/types.d.ts:1112
+Defined in: render/dist/types.d.ts:1259
 
 Z-index of the axis.
 
@@ -371,6 +371,6 @@ Z-index of the axis.
 
 > `optional` **zlevel**: `number`
 
-Defined in: render/dist/types.d.ts:1116
+Defined in: render/dist/types.d.ts:1263
 
 Z-level of the axis.

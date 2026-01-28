@@ -4,7 +4,7 @@
 
 # Interface: ThemeConfig
 
-Defined in: render/dist/types.d.ts:138
+Defined in: render/dist/types.d.ts:192
 
 ## Indexable
 
@@ -12,27 +12,33 @@ Defined in: render/dist/types.d.ts:138
 
 ## Properties
 
-### axis
+### axisLabelColor
 
-> **axis**: `object`
+> **axisLabelColor**: `string`
 
-Defined in: render/dist/types.d.ts:157
+Defined in: render/dist/types.d.ts:232
 
-#### labelColor
+Color of the axis labels.
 
-> **labelColor**: `string`
+***
 
-#### lineColor
+### axisLineColor
 
-> **lineColor**: `string`
+> **axisLineColor**: `string`
 
-#### pointerLineColor
+Defined in: render/dist/types.d.ts:224
 
-> **pointerLineColor**: `string`
+Color of the axis lines.
 
-#### splitLineColor
+***
 
-> **splitLineColor**: `string`
+### axisPointerColor
+
+> **axisPointerColor**: `string`
+
+Defined in: render/dist/types.d.ts:228
+
+Color of the axis pointer lines.
 
 ***
 
@@ -40,175 +46,279 @@ Defined in: render/dist/types.d.ts:157
 
 > **backgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:139
+Defined in: render/dist/types.d.ts:196
+
+Background color of the chart container.
 
 ***
 
-### border
+### borderColor
 
-> **border**: `object`
+> **borderColor**: `string`
 
-Defined in: render/dist/types.d.ts:150
+Defined in: render/dist/types.d.ts:212
 
-#### color
-
-> **color**: `string`
-
-#### colorSecondary
-
-> **colorSecondary**: `string`
+Border color for chart elements.
 
 ***
 
-### code
+### borderSecondaryColor?
 
-> **code**: `object`
+> `optional` **borderSecondaryColor**: `string`
 
-Defined in: render/dist/types.d.ts:179
+Defined in: render/dist/types.d.ts:216
 
-#### backgroundColor
-
-> **backgroundColor**: `string`
-
-#### gutterBackgroundColor
-
-> **gutterBackgroundColor**: `string`
-
-#### gutterTextColor
-
-> **gutterTextColor**: `string`
-
-#### textColor
-
-> **textColor**: `string`
+Secondary border color.
 
 ***
 
-### color
+### codeBackgroundColor?
 
-> **color**: `string`[]
+> `optional` **codeBackgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:140
+Defined in: render/dist/types.d.ts:324
 
-***
-
-### fill
-
-> **fill**: `object`
-
-Defined in: render/dist/types.d.ts:189
-
-#### container
-
-> **container**: `string`
-
-#### containerAlt
-
-> **containerAlt**: `string`
-
-#### decal
-
-> **decal**: `string`
-
-#### hover
-
-> **hover**: `string`
-
-#### mask
-
-> **mask**: `string`
-
-#### page
-
-> **page**: `string`
-
-#### shadow
-
-> **shadow**: `string`
+Code block background color.
 
 ***
 
-### grid
+### codeGutterBackgroundColor?
 
-> **grid**: `object`
+> `optional` **codeGutterBackgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:154
+Defined in: render/dist/types.d.ts:328
 
-#### color
-
-> **color**: `string`
+Code block gutter background color.
 
 ***
 
-### heatmapColors
+### codeGutterTextColor?
 
-> **heatmapColors**: `string`[]
+> `optional` **codeGutterTextColor**: `string`
 
-Defined in: render/dist/types.d.ts:141
+Defined in: render/dist/types.d.ts:336
 
-***
-
-### legend
-
-> **legend**: `object`
-
-Defined in: render/dist/types.d.ts:174
-
-#### textStyle
-
-> **textStyle**: `object`
-
-##### textStyle.color
-
-> **color**: `string`
+Code block gutter text color.
 
 ***
 
-### primary
+### codeTextColor?
 
-> **primary**: `object`
+> `optional` **codeTextColor**: `string`
 
-Defined in: render/dist/types.d.ts:185
+Defined in: render/dist/types.d.ts:332
 
-#### color
-
-> **color**: `string`
-
-#### textColor
-
-> **textColor**: `string`
+Code block text color.
 
 ***
 
-### text
+### color?
 
-> **text**: `object`
+> `optional` **color**: `string`[]
 
-Defined in: render/dist/types.d.ts:142
+Defined in: render/dist/types.d.ts:300
 
-#### color
+Color palette (alias for seriesColors).
 
-> **color**: `string`
+***
 
-#### colorOnSeries
+### decalColor
 
-> **colorOnSeries**: `string`
+> **decalColor**: `string`
 
-#### colorSecondary
+Defined in: render/dist/types.d.ts:292
 
-> **colorSecondary**: `string`
+Base decal color.
 
-#### colorTertiary
+***
 
-> **colorTertiary**: `string`
+### fillContainerAltColor?
 
-#### fontFamily
+> `optional` **fillContainerAltColor**: `string`
+
+Defined in: render/dist/types.d.ts:316
+
+Alternate container fill color.
+
+***
+
+### fillContainerColor?
+
+> `optional` **fillContainerColor**: `string`
+
+Defined in: render/dist/types.d.ts:312
+
+Container fill color.
+
+***
+
+### fillHoverColor?
+
+> `optional` **fillHoverColor**: `string`
+
+Defined in: render/dist/types.d.ts:320
+
+Hover fill color.
+
+***
+
+### fillPageColor?
+
+> `optional` **fillPageColor**: `string`
+
+Defined in: render/dist/types.d.ts:308
+
+Page fill color.
+
+***
+
+### fontFamily
 
 > **fontFamily**: `string`
 
-#### fontSize
+Defined in: render/dist/types.d.ts:340
+
+Font family.
+
+***
+
+### fontSize
 
 > **fontSize**: `number`
+
+Defined in: render/dist/types.d.ts:344
+
+Font size.
+
+***
+
+### gridColor
+
+> **gridColor**: `string`
+
+Defined in: render/dist/types.d.ts:220
+
+Color of the grid lines.
+
+***
+
+### heatmapColors?
+
+> `optional` **heatmapColors**: `string`[]
+
+Defined in: render/dist/types.d.ts:304
+
+Heatmap color gradient.
+
+***
+
+### legendTextColor
+
+> **legendTextColor**: `string`
+
+Defined in: render/dist/types.d.ts:268
+
+Text color of the legend.
+
+***
+
+### maskColor
+
+> **maskColor**: `string`
+
+Defined in: render/dist/types.d.ts:288
+
+Mask color (e.g. for loading state).
+
+***
+
+### primaryColor?
+
+> `optional` **primaryColor**: `string`
+
+Defined in: render/dist/types.d.ts:276
+
+Primary brand color.
+
+***
+
+### primaryTextColor?
+
+> `optional` **primaryTextColor**: `string`
+
+Defined in: render/dist/types.d.ts:280
+
+Text color on primary background.
+
+***
+
+### seriesColors
+
+> **seriesColors**: `string`[]
+
+Defined in: render/dist/types.d.ts:296
+
+Series color palette.
+
+***
+
+### shadowColor
+
+> **shadowColor**: `string`
+
+Defined in: render/dist/types.d.ts:284
+
+Base shadow color.
+
+***
+
+### splitLineColor?
+
+> `optional` **splitLineColor**: `string`
+
+Defined in: render/dist/types.d.ts:236
+
+Color of the split lines (if different from grid lines).
+
+***
+
+### textColor
+
+> **textColor**: `string`
+
+Defined in: render/dist/types.d.ts:200
+
+Primary text color.
+
+***
+
+### textColorOnSeries?
+
+> `optional` **textColorOnSeries**: `string`
+
+Defined in: render/dist/types.d.ts:272
+
+Text color for labels on the series.
+
+***
+
+### textColorSecondary?
+
+> `optional` **textColorSecondary**: `string`
+
+Defined in: render/dist/types.d.ts:204
+
+Secondary text color.
+
+***
+
+### textColorTertiary?
+
+> `optional` **textColorTertiary**: `string`
+
+Defined in: render/dist/types.d.ts:208
+
+Tertiary text color.
 
 ***
 
@@ -216,46 +326,76 @@ Defined in: render/dist/types.d.ts:142
 
 > **token**: [`ThemeToken`](ThemeToken.md)
 
-Defined in: render/dist/types.d.ts:201
+Defined in: render/dist/types.d.ts:348
 
 The raw theme token object.
 
 ***
 
-### tooltip
+### tooltipBackgroundColor
 
-> **tooltip**: `object`
+> **tooltipBackgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:163
+Defined in: render/dist/types.d.ts:240
 
-#### backgroundColor
+Background color of the tooltip.
 
-> **backgroundColor**: `string`
+***
 
-#### borderColor
+### tooltipBorderColor
 
-> **borderColor**: `string`
+> **tooltipBorderColor**: `string`
 
-#### boxShadow
+Defined in: render/dist/types.d.ts:248
 
-> **boxShadow**: `string`
+Border color of the tooltip.
 
-#### seriesNameColor
+***
 
-> **seriesNameColor**: `string`
+### tooltipBoxShadow
 
-#### subitemNameColor
+> **tooltipBoxShadow**: `string`
 
-> **subitemNameColor**: `string`
+Defined in: render/dist/types.d.ts:252
 
-#### textStyle
+Box shadow of the tooltip.
 
-> **textStyle**: `object`
+***
 
-##### textStyle.color
+### tooltipSeriesNameColor
 
-> **color**: `string`
+> **tooltipSeriesNameColor**: `string`
 
-#### valueColor
+Defined in: render/dist/types.d.ts:256
 
-> **valueColor**: `string`
+Color of the series name in the tooltip.
+
+***
+
+### tooltipSubitemNameColor
+
+> **tooltipSubitemNameColor**: `string`
+
+Defined in: render/dist/types.d.ts:260
+
+Color of the sub-item name in the tooltip.
+
+***
+
+### tooltipTextColor
+
+> **tooltipTextColor**: `string`
+
+Defined in: render/dist/types.d.ts:244
+
+Text color of the tooltip.
+
+***
+
+### tooltipValueColor
+
+> **tooltipValueColor**: `string`
+
+Defined in: render/dist/types.d.ts:264
+
+Color of the value in the tooltip.

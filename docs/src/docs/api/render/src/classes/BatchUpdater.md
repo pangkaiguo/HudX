@@ -4,7 +4,7 @@
 
 # Class: BatchUpdater
 
-Defined in: [render/src/util/BatchUpdater.ts:8](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/BatchUpdater.ts#L8)
+Defined in: [render/src/util/BatchUpdater.ts:8](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/BatchUpdater.ts#L8)
 
 ## Constructors
 
@@ -22,7 +22,7 @@ Defined in: [render/src/util/BatchUpdater.ts:8](https://github.com/pangkaiguo/Hu
 
 > **cancel**(`callback`): `void`
 
-Defined in: [render/src/util/BatchUpdater.ts:24](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/BatchUpdater.ts#L24)
+Defined in: [render/src/util/BatchUpdater.ts:24](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/BatchUpdater.ts#L24)
 
 Cancel a scheduled update
 
@@ -42,7 +42,7 @@ Cancel a scheduled update
 
 > **dispose**(): `void`
 
-Defined in: [render/src/util/BatchUpdater.ts:74](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/BatchUpdater.ts#L74)
+Defined in: [render/src/util/BatchUpdater.ts:74](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/BatchUpdater.ts#L74)
 
 Dispose batch updater
 
@@ -56,7 +56,7 @@ Dispose batch updater
 
 > **flush**(): `void`
 
-Defined in: [render/src/util/BatchUpdater.ts:62](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/BatchUpdater.ts#L62)
+Defined in: [render/src/util/BatchUpdater.ts:62](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/BatchUpdater.ts#L62)
 
 Force flush all pending updates immediately
 
@@ -70,7 +70,7 @@ Force flush all pending updates immediately
 
 > **schedule**(`callback`): `void`
 
-Defined in: [render/src/util/BatchUpdater.ts:16](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/util/BatchUpdater.ts#L16)
+Defined in: [render/src/util/BatchUpdater.ts:16](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/util/BatchUpdater.ts#L16)
 
 Schedule an update
 

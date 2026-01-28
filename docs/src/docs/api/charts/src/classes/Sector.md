@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `SectorShape`
+> **shape**: [`SectorShape`](../interfaces/SectorShape.md)
 
 Defined in: render/dist/graphic/Sector.d.ts:16
 

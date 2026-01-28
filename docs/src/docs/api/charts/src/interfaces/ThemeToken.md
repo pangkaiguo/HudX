@@ -12,159 +12,363 @@ Defined in: render/dist/types.d.ts:27
 
 ## Properties
 
-### axis?
+### boxShadowTooltip?
 
-> `optional` **axis**: `object`
+> `optional` **boxShadowTooltip**: `string`
 
-Defined in: render/dist/types.d.ts:76
+Defined in: render/dist/types.d.ts:109
 
-Axis configuration.
-
-#### labelColor?
-
-> `optional` **labelColor**: `string`
-
-Axis label color
-
-#### lineColor?
-
-> `optional` **lineColor**: `string`
-
-Axis line color
-
-#### pointerLineColor?
-
-> `optional` **pointerLineColor**: `string`
-
-Axis pointer color
-
-#### splitLineColor?
-
-> `optional` **splitLineColor**: `string`
-
-Split line color
+Tooltip box shadow.
+CSS box-shadow value for the tooltip.
 
 ***
 
-### backgroundColor?
+### colorAxisLabel?
 
-> `optional` **backgroundColor**: `string`
+> `optional` **colorAxisLabel**: `string`
 
-Defined in: render/dist/types.d.ts:31
+Defined in: render/dist/types.d.ts:92
+
+Axis label color.
+Used for text labels on axes.
+
+***
+
+### colorAxisLine?
+
+> `optional` **colorAxisLine**: `string`
+
+Defined in: render/dist/types.d.ts:87
+
+Axis line color.
+Used for the main axis lines (x-axis, y-axis).
+
+***
+
+### colorBackground?
+
+> `optional` **colorBackground**: `string`
+
+Defined in: render/dist/types.d.ts:47
 
 Base background color.
+Typically used for the chart container background.
 
 ***
 
-### border?
+### colorBorder?
 
-> `optional` **border**: `object`
+> `optional` **colorBorder**: `string`
 
-Defined in: render/dist/types.d.ts:60
+Defined in: render/dist/types.d.ts:72
 
-Border configuration.
-
-#### color?
-
-> `optional` **color**: `string`
-
-Primary border color
-
-#### colorSecondary?
-
-> `optional` **colorSecondary**: `string`
-
-Secondary border color
+Primary border color.
+Used for major structural borders.
 
 ***
 
-### code?
+### colorBorderSecondary?
 
-> `optional` **code**: `object`
+> `optional` **colorBorderSecondary**: `string`
 
-Defined in: render/dist/types.d.ts:111
+Defined in: render/dist/types.d.ts:77
 
-Code block configuration.
-
-#### backgroundColor?
-
-> `optional` **backgroundColor**: `string`
-
-#### gutterBackgroundColor?
-
-> `optional` **gutterBackgroundColor**: `string`
-
-#### gutterTextColor?
-
-> `optional` **gutterTextColor**: `string`
-
-#### textColor?
-
-> `optional` **textColor**: `string`
+Secondary border color.
+Used for subtle dividers or minor borders.
 
 ***
 
-### color?
+### colorCodeBackground?
 
-> `optional` **color**: `string`[]
+> `optional` **colorCodeBackground**: `string`
 
-Defined in: render/dist/types.d.ts:35
+Defined in: render/dist/types.d.ts:157
 
-Color palette for series.
-
-***
-
-### fill?
-
-> `optional` **fill**: `object`
-
-Defined in: render/dist/types.d.ts:127
-
-Fill configuration.
-
-#### container?
-
-> `optional` **container**: `string`
-
-#### containerAlt?
-
-> `optional` **containerAlt**: `string`
-
-#### decal?
-
-> `optional` **decal**: `string`
-
-#### hover?
-
-> `optional` **hover**: `string`
-
-#### mask?
-
-> `optional` **mask**: `string`
-
-#### page?
-
-> `optional` **page**: `string`
-
-#### shadow?
-
-> `optional` **shadow**: `string`
+Code block background color.
 
 ***
 
-### grid?
+### colorCodeGutterBackground?
 
-> `optional` **grid**: `object`
+> `optional` **colorCodeGutterBackground**: `string`
 
-Defined in: render/dist/types.d.ts:69
+Defined in: render/dist/types.d.ts:161
 
-Grid configuration.
+Code block gutter background color.
 
-#### color?
+***
 
-> `optional` **color**: `string`
+### colorCodeGutterText?
 
-Grid line color
+> `optional` **colorCodeGutterText**: `string`
+
+Defined in: render/dist/types.d.ts:169
+
+Code block gutter text color.
+
+***
+
+### colorCodeText?
+
+> `optional` **colorCodeText**: `string`
+
+Defined in: render/dist/types.d.ts:165
+
+Code block text color.
+
+***
+
+### colorDecal?
+
+> `optional` **colorDecal**: `string`
+
+Defined in: render/dist/types.d.ts:153
+
+Decal color.
+Base color for pattern fills (accessibility).
+
+***
+
+### colorFillContainer?
+
+> `optional` **colorFillContainer**: `string`
+
+Defined in: render/dist/types.d.ts:57
+
+Container fill color.
+Used for internal containers or panels within the chart.
+
+***
+
+### colorFillContainerAlt?
+
+> `optional` **colorFillContainerAlt**: `string`
+
+Defined in: render/dist/types.d.ts:62
+
+Alternate container fill color.
+Used for alternating rows or sections.
+
+***
+
+### colorFillHover?
+
+> `optional` **colorFillHover**: `string`
+
+Defined in: render/dist/types.d.ts:67
+
+Hover fill color.
+Used for hover states on interactive elements.
+
+***
+
+### colorFillPage?
+
+> `optional` **colorFillPage**: `string`
+
+Defined in: render/dist/types.d.ts:52
+
+Page fill color.
+Used for the overall page background behind the chart.
+
+***
+
+### colorGrid?
+
+> `optional` **colorGrid**: `string`
+
+Defined in: render/dist/types.d.ts:82
+
+Grid line color.
+Used for axis grid lines.
+
+***
+
+### colorLegendText?
+
+> `optional` **colorLegendText**: `string`
+
+Defined in: render/dist/types.d.ts:125
+
+Legend text color.
+
+***
+
+### colorMask?
+
+> `optional` **colorMask**: `string`
+
+Defined in: render/dist/types.d.ts:148
+
+Mask color.
+Used for overlay masks (e.g., during loading or disabled states).
+
+***
+
+### colorPrimary?
+
+> `optional` **colorPrimary**: `string`
+
+Defined in: render/dist/types.d.ts:134
+
+Primary brand color.
+Used for active states, primary buttons, or key highlights.
+
+***
+
+### colorPrimaryText?
+
+> `optional` **colorPrimaryText**: `string`
+
+Defined in: render/dist/types.d.ts:138
+
+Text color on top of primary color backgrounds.
+
+***
+
+### colorShadow?
+
+> `optional` **colorShadow**: `string`
+
+Defined in: render/dist/types.d.ts:143
+
+Shadow color.
+Base color for shadows (e.g., drop shadows).
+
+***
+
+### colorText?
+
+> `optional` **colorText**: `string`
+
+Defined in: render/dist/types.d.ts:32
+
+Primary text color.
+Used for main content, body text, and primary labels.
+
+***
+
+### colorTextOnSeries?
+
+> `optional` **colorTextOnSeries**: `string`
+
+Defined in: render/dist/types.d.ts:129
+
+Text color for labels placed directly on series elements.
+
+***
+
+### colorTextSecondary?
+
+> `optional` **colorTextSecondary**: `string`
+
+Defined in: render/dist/types.d.ts:37
+
+Secondary text color.
+Used for secondary labels, descriptions, and less emphasized text.
+
+***
+
+### colorTextTertiary?
+
+> `optional` **colorTextTertiary**: `string`
+
+Defined in: render/dist/types.d.ts:42
+
+Tertiary text color.
+Used for disabled text, placeholders, or subtle hints.
+
+***
+
+### colorTooltipBackground?
+
+> `optional` **colorTooltipBackground**: `string`
+
+Defined in: render/dist/types.d.ts:96
+
+Tooltip background color.
+
+***
+
+### colorTooltipBorder?
+
+> `optional` **colorTooltipBorder**: `string`
+
+Defined in: render/dist/types.d.ts:104
+
+Tooltip border color.
+
+***
+
+### colorTooltipSeriesName?
+
+> `optional` **colorTooltipSeriesName**: `string`
+
+Defined in: render/dist/types.d.ts:113
+
+Color for the series name in tooltips.
+
+***
+
+### colorTooltipSubitemName?
+
+> `optional` **colorTooltipSubitemName**: `string`
+
+Defined in: render/dist/types.d.ts:117
+
+Color for sub-item names in tooltips.
+
+***
+
+### colorTooltipText?
+
+> `optional` **colorTooltipText**: `string`
+
+Defined in: render/dist/types.d.ts:100
+
+Tooltip text color.
+
+***
+
+### colorTooltipValue?
+
+> `optional` **colorTooltipValue**: `string`
+
+Defined in: render/dist/types.d.ts:121
+
+Color for values in tooltips.
+
+***
+
+### fontFamily?
+
+> `optional` **fontFamily**: `string`
+
+Defined in: render/dist/types.d.ts:174
+
+Font family for the entire chart.
+
+#### Example
+
+```ts
+'Arial, sans-serif'
+```
+
+***
+
+### fontSize?
+
+> `optional` **fontSize**: `number`
+
+Defined in: render/dist/types.d.ts:179
+
+Base font size in pixels.
+
+#### Default
+
+```ts
+12
+```
 
 ***
 
@@ -172,130 +376,18 @@ Grid line color
 
 > `optional` **heatmapColors**: `string`[]
 
-Defined in: render/dist/types.d.ts:39
+Defined in: render/dist/types.d.ts:189
 
-Heatmap color gradient.
-
-***
-
-### legend?
-
-> `optional` **legend**: `object`
-
-Defined in: render/dist/types.d.ts:103
-
-Legend configuration.
-
-#### textStyle?
-
-> `optional` **textStyle**: `object`
-
-##### textStyle.color?
-
-> `optional` **color**: `string`
+Color gradient for heatmaps.
+Usually ordered from low value to high value.
 
 ***
 
-### primary?
+### seriesColors?
 
-> `optional` **primary**: `object`
+> `optional` **seriesColors**: `string`[]
 
-Defined in: render/dist/types.d.ts:120
+Defined in: render/dist/types.d.ts:184
 
-Primary color configuration.
-
-#### color?
-
-> `optional` **color**: `string`
-
-#### textColor?
-
-> `optional` **textColor**: `string`
-
-***
-
-### text?
-
-> `optional` **text**: `object`
-
-Defined in: render/dist/types.d.ts:43
-
-Text configuration.
-
-#### color?
-
-> `optional` **color**: `string`
-
-Primary text color
-
-#### colorOnSeries?
-
-> `optional` **colorOnSeries**: `string`
-
-Text color on series
-
-#### colorSecondary?
-
-> `optional` **colorSecondary**: `string`
-
-Secondary text color
-
-#### colorTertiary?
-
-> `optional` **colorTertiary**: `string`
-
-Tertiary text color
-
-#### fontFamily?
-
-> `optional` **fontFamily**: `string`
-
-Font family
-
-#### fontSize?
-
-> `optional` **fontSize**: `number`
-
-Font size
-
-***
-
-### tooltip?
-
-> `optional` **tooltip**: `object`
-
-Defined in: render/dist/types.d.ts:89
-
-Tooltip configuration.
-
-#### backgroundColor?
-
-> `optional` **backgroundColor**: `string`
-
-#### borderColor?
-
-> `optional` **borderColor**: `string`
-
-#### boxShadow?
-
-> `optional` **boxShadow**: `string`
-
-#### seriesNameColor?
-
-> `optional` **seriesNameColor**: `string`
-
-#### subitemNameColor?
-
-> `optional` **subitemNameColor**: `string`
-
-#### textStyle?
-
-> `optional` **textStyle**: `object`
-
-##### textStyle.color?
-
-> `optional` **color**: `string`
-
-#### valueColor?
-
-> `optional` **valueColor**: `string`
+Default color palette for series.
+The chart will cycle through these colors for each series.

@@ -4,7 +4,7 @@
 
 # Interface: LegendOption
 
-Defined in: render/dist/types.d.ts:663
+Defined in: render/dist/types.d.ts:810
 
 Legend option (similar to ECharts `legend`).
 
@@ -27,7 +27,7 @@ const option: ChartOption = {
 
 > `optional` **align**: `"left"` \| `"right"` \| `"center"`
 
-Defined in: render/dist/types.d.ts:743
+Defined in: render/dist/types.d.ts:890
 
 Text alignment within the legend item.
 
@@ -37,7 +37,7 @@ Text alignment within the legend item.
 
 > `optional` **animation**: `boolean`
 
-Defined in: render/dist/types.d.ts:877
+Defined in: render/dist/types.d.ts:1024
 
 Whether to enable animation when switching pages.
 
@@ -47,7 +47,7 @@ Whether to enable animation when switching pages.
 
 > `optional` **animationDurationUpdate**: `number`
 
-Defined in: render/dist/types.d.ts:881
+Defined in: render/dist/types.d.ts:1028
 
 Animation duration for legend updates.
 
@@ -57,7 +57,7 @@ Animation duration for legend updates.
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:802
+Defined in: render/dist/types.d.ts:949
 
 Background color of the legend component.
 
@@ -67,7 +67,7 @@ Background color of the legend component.
 
 > `optional` **borderColor**: `string`
 
-Defined in: render/dist/types.d.ts:806
+Defined in: render/dist/types.d.ts:953
 
 Border color of the legend component.
 
@@ -77,7 +77,7 @@ Border color of the legend component.
 
 > `optional` **borderRadius**: `number` \| `number`[]
 
-Defined in: render/dist/types.d.ts:814
+Defined in: render/dist/types.d.ts:961
 
 Border radius of the legend component.
 
@@ -87,7 +87,7 @@ Border radius of the legend component.
 
 > `optional` **borderWidth**: `number`
 
-Defined in: render/dist/types.d.ts:810
+Defined in: render/dist/types.d.ts:957
 
 Border width of the legend component.
 
@@ -97,7 +97,7 @@ Border width of the legend component.
 
 > `optional` **bottom**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:706
+Defined in: render/dist/types.d.ts:853
 
 Distance from bottom side of container.
 
@@ -107,7 +107,7 @@ Distance from bottom side of container.
 
 > `optional` **data**: `string`[] \| `object`[]
 
-Defined in: render/dist/types.d.ts:686
+Defined in: render/dist/types.d.ts:833
 
 Legend data.
 - `string[]`: simple list of series names.
@@ -122,7 +122,7 @@ Legend data.
 
 > `optional` **formatter**: `string` \| (`name`, `item`) => `string` \| `string`[]
 
-Defined in: render/dist/types.d.ts:730
+Defined in: render/dist/types.d.ts:877
 
 Custom formatter for legend labels.
 
@@ -132,7 +132,7 @@ Custom formatter for legend labels.
 
 > `optional` **height**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:714
+Defined in: render/dist/types.d.ts:861
 
 Height of the legend component.
 
@@ -142,7 +142,7 @@ Height of the legend component.
 
 > `optional` **icon**: `string`
 
-Defined in: render/dist/types.d.ts:798
+Defined in: render/dist/types.d.ts:945
 
 Icon type for legend items.
 - 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
@@ -155,7 +155,7 @@ Icon type for legend items.
 
 > `optional` **inactiveColor**: `string`
 
-Defined in: render/dist/types.d.ts:776
+Defined in: render/dist/types.d.ts:923
 
 Color of legend items when they are unselected (inactive).
 
@@ -165,7 +165,7 @@ Color of legend items when they are unselected (inactive).
 
 > `optional` **itemGap**: `number`
 
-Defined in: render/dist/types.d.ts:752
+Defined in: render/dist/types.d.ts:899
 
 Gap between each legend item.
 
@@ -175,7 +175,7 @@ Gap between each legend item.
 
 > `optional` **itemHeight**: `number`
 
-Defined in: render/dist/types.d.ts:760
+Defined in: render/dist/types.d.ts:907
 
 Height of the legend symbol (icon).
 
@@ -185,7 +185,7 @@ Height of the legend symbol (icon).
 
 > `optional` **itemMaxWidth**: `number`
 
-Defined in: render/dist/types.d.ts:739
+Defined in: render/dist/types.d.ts:886
 
 Maximum width of a legend item.
 Text exceeding this width will be truncated.
@@ -196,7 +196,7 @@ Text exceeding this width will be truncated.
 
 > `optional` **itemWidth**: `number`
 
-Defined in: render/dist/types.d.ts:756
+Defined in: render/dist/types.d.ts:903
 
 Width of the legend symbol (icon).
 
@@ -206,7 +206,7 @@ Width of the legend symbol (icon).
 
 > `optional` **left**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:694
+Defined in: render/dist/types.d.ts:841
 
 Distance from left side of container.
 
@@ -216,7 +216,7 @@ Distance from left side of container.
 
 > `optional` **orient**: `"horizontal"` \| `"vertical"`
 
-Defined in: render/dist/types.d.ts:720
+Defined in: render/dist/types.d.ts:867
 
 Layout orientation.
 - 'horizontal': Items are arranged horizontally.
@@ -228,7 +228,7 @@ Layout orientation.
 
 > `optional` **padding**: `number` \| `number`[]
 
-Defined in: render/dist/types.d.ts:748
+Defined in: render/dist/types.d.ts:895
 
 Padding around the legend component.
 [top, right, bottom, left]
@@ -239,7 +239,7 @@ Padding around the legend component.
 
 > `optional` **pageButtonGap**: `number`
 
-Defined in: render/dist/types.d.ts:842
+Defined in: render/dist/types.d.ts:989
 
 Gap between page buttons.
 
@@ -249,7 +249,7 @@ Gap between page buttons.
 
 > `optional` **pageButtonItemGap**: `number`
 
-Defined in: render/dist/types.d.ts:838
+Defined in: render/dist/types.d.ts:985
 
 Gap between page buttons and legend items.
 
@@ -259,7 +259,7 @@ Gap between page buttons and legend items.
 
 > `optional` **pageButtonPosition**: `"start"` \| `"end"`
 
-Defined in: render/dist/types.d.ts:846
+Defined in: render/dist/types.d.ts:993
 
 Position of page buttons.
 
@@ -269,7 +269,7 @@ Position of page buttons.
 
 > `optional` **pageFormatter**: `string` \| `Function`
 
-Defined in: render/dist/types.d.ts:850
+Defined in: render/dist/types.d.ts:997
 
 Formatter for page info text (e.g. "1/2").
 
@@ -279,7 +279,7 @@ Formatter for page info text (e.g. "1/2").
 
 > `optional` **pageIconColor**: `string`
 
-Defined in: render/dist/types.d.ts:861
+Defined in: render/dist/types.d.ts:1008
 
 Color of page buttons.
 
@@ -289,7 +289,7 @@ Color of page buttons.
 
 > `optional` **pageIconInactiveColor**: `string`
 
-Defined in: render/dist/types.d.ts:865
+Defined in: render/dist/types.d.ts:1012
 
 Color of inactive page buttons.
 
@@ -299,7 +299,7 @@ Color of inactive page buttons.
 
 > `optional` **pageIcons**: `object`
 
-Defined in: render/dist/types.d.ts:854
+Defined in: render/dist/types.d.ts:1001
 
 Icons for page buttons.
 
@@ -317,7 +317,7 @@ Icons for page buttons.
 
 > `optional` **pageIconSize**: `number` \| `number`[]
 
-Defined in: render/dist/types.d.ts:869
+Defined in: render/dist/types.d.ts:1016
 
 Size of page buttons.
 
@@ -327,7 +327,7 @@ Size of page buttons.
 
 > `optional` **pageTextStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: render/dist/types.d.ts:873
+Defined in: render/dist/types.d.ts:1020
 
 Text style for page info.
 
@@ -337,7 +337,7 @@ Text style for page info.
 
 > `optional` **renderMode**: `"canvas"` \| `"html"`
 
-Defined in: render/dist/types.d.ts:726
+Defined in: render/dist/types.d.ts:873
 
 Render mode for the legend.
 - 'canvas': Drawn on the canvas (default).
@@ -349,7 +349,7 @@ Render mode for the legend.
 
 > `optional` **right**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:702
+Defined in: render/dist/types.d.ts:849
 
 Distance from right side of container.
 
@@ -359,7 +359,7 @@ Distance from right side of container.
 
 > `optional` **scrollDataIndex**: `number`
 
-Defined in: render/dist/types.d.ts:834
+Defined in: render/dist/types.d.ts:981
 
 Initial scroll index (for scrollable legends).
 
@@ -369,7 +369,7 @@ Initial scroll index (for scrollable legends).
 
 > `optional` **selected**: `object`
 
-Defined in: render/dist/types.d.ts:781
+Defined in: render/dist/types.d.ts:928
 
 Initial selected state of legend items.
 Map of series name to boolean.
@@ -384,7 +384,7 @@ Map of series name to boolean.
 
 > `optional` **selectedMode**: `boolean` \| `"multiple"` \| `"single"`
 
-Defined in: render/dist/types.d.ts:772
+Defined in: render/dist/types.d.ts:919
 
 Selection mode.
 - true: Multiple selection.
@@ -398,7 +398,7 @@ Selection mode.
 
 > `optional` **shadowBlur**: `number`
 
-Defined in: render/dist/types.d.ts:818
+Defined in: render/dist/types.d.ts:965
 
 Shadow blur size.
 
@@ -408,7 +408,7 @@ Shadow blur size.
 
 > `optional` **shadowColor**: `string`
 
-Defined in: render/dist/types.d.ts:822
+Defined in: render/dist/types.d.ts:969
 
 Shadow color.
 
@@ -418,7 +418,7 @@ Shadow color.
 
 > `optional` **shadowOffsetX**: `number`
 
-Defined in: render/dist/types.d.ts:826
+Defined in: render/dist/types.d.ts:973
 
 Shadow X offset.
 
@@ -428,7 +428,7 @@ Shadow X offset.
 
 > `optional` **shadowOffsetY**: `number`
 
-Defined in: render/dist/types.d.ts:830
+Defined in: render/dist/types.d.ts:977
 
 Shadow Y offset.
 
@@ -438,7 +438,7 @@ Shadow Y offset.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:667
+Defined in: render/dist/types.d.ts:814
 
 Whether to show the legend.
 
@@ -448,7 +448,7 @@ Whether to show the legend.
 
 > `optional` **symbolKeepAspect**: `boolean`
 
-Defined in: render/dist/types.d.ts:764
+Defined in: render/dist/types.d.ts:911
 
 Whether to keep the aspect ratio of the legend symbol.
 
@@ -458,7 +458,7 @@ Whether to keep the aspect ratio of the legend symbol.
 
 > `optional` **tableHead**: `string`[]
 
-Defined in: render/dist/types.d.ts:734
+Defined in: render/dist/types.d.ts:881
 
 Table header labels for HTML render mode.
 
@@ -468,7 +468,7 @@ Table header labels for HTML render mode.
 
 > `optional` **textStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: render/dist/types.d.ts:787
+Defined in: render/dist/types.d.ts:934
 
 Text style for legend labels.
 
@@ -478,7 +478,7 @@ Text style for legend labels.
 
 > `optional` **tooltip**: [`TooltipOption`](TooltipOption.md)
 
-Defined in: render/dist/types.d.ts:791
+Defined in: render/dist/types.d.ts:938
 
 Tooltip configuration for hovering over legend items.
 
@@ -488,7 +488,7 @@ Tooltip configuration for hovering over legend items.
 
 > `optional` **top**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:698
+Defined in: render/dist/types.d.ts:845
 
 Distance from top side of container.
 
@@ -498,7 +498,7 @@ Distance from top side of container.
 
 > `optional` **width**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:710
+Defined in: render/dist/types.d.ts:857
 
 Width of the legend component.
 
@@ -508,7 +508,7 @@ Width of the legend component.
 
 > `optional` **z**: `number`
 
-Defined in: render/dist/types.d.ts:672
+Defined in: render/dist/types.d.ts:819
 
 Z-index of the legend component (2nd level).
 Controls vertical stacking order relative to other components.
@@ -519,7 +519,7 @@ Controls vertical stacking order relative to other components.
 
 > `optional` **zlevel**: `number`
 
-Defined in: render/dist/types.d.ts:677
+Defined in: render/dist/types.d.ts:824
 
 Canvas layer z-level (1st level).
 Elements with different zlevel are placed in different canvas instances.

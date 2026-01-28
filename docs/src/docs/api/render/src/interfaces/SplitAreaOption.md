@@ -4,7 +4,7 @@
 
 # Interface: SplitAreaOption
 
-Defined in: [render/src/types.ts:1317](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1317)
+Defined in: [render/src/types.ts:1321](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1321)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:1317](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **areaStyle**: `object`
 
-Defined in: [render/src/types.ts:1323](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1323)
+Defined in: [render/src/types.ts:1327](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1327)
 
 Area style
 
@@ -46,7 +46,7 @@ Area style
 
 > `optional` **interval**: `number` \| `Function`
 
-Defined in: [render/src/types.ts:1321](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1321)
+Defined in: [render/src/types.ts:1325](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1325)
 
 Split area interval
 
@@ -56,6 +56,6 @@ Split area interval
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:1319](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1319)
+Defined in: [render/src/types.ts:1323](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1323)
 
 Show split area

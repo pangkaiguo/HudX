@@ -4,7 +4,7 @@
 
 # Interface: LineSeriesOption
 
-Defined in: [render/src/types.ts:1493](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1493)
+Defined in: [render/src/types.ts:1497](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1497)
 
 Line series.
 
@@ -28,7 +28,7 @@ series: [{ type: 'line', name: 'A', smooth: true, data: [120, 200, 150] }]
 
 > `optional` **areaStyle**: [`AreaStyleOption`](AreaStyleOption.md)
 
-Defined in: [render/src/types.ts:1564](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1564)
+Defined in: [render/src/types.ts:1568](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1568)
 
 Area style configuration (for area charts).
 
@@ -38,7 +38,7 @@ Area style configuration (for area charts).
 
 > `optional` **color**: `string`
 
-Defined in: [render/src/types.ts:1447](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1447)
+Defined in: [render/src/types.ts:1451](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1451)
 
 Series color.
 If not set, it will pick from the global palette.
@@ -53,7 +53,7 @@ If not set, it will pick from the global palette.
 
 > `optional` **connectNulls**: `boolean`
 
-Defined in: [render/src/types.ts:1549](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1549)
+Defined in: [render/src/types.ts:1553](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1553)
 
 Whether to connect points across null values.
 
@@ -63,7 +63,7 @@ Whether to connect points across null values.
 
 > `optional` **cursor**: `string`
 
-Defined in: [render/src/types.ts:1460](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1460)
+Defined in: [render/src/types.ts:1464](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1464)
 
 Cursor style when hovering over the series.
 
@@ -83,7 +83,7 @@ Cursor style when hovering over the series.
 
 > `optional` **data**: [`ChartData`](../type-aliases/ChartData.md)[]
 
-Defined in: [render/src/types.ts:1481](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1481)
+Defined in: [render/src/types.ts:1485](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1485)
 
 Series data.
 Can be an array of numbers, or objects with `value` property.
@@ -98,7 +98,7 @@ Can be an array of numbers, or objects with `value` property.
 
 > `optional` **emphasis**: [`EmphasisOption`](EmphasisOption.md)
 
-Defined in: [render/src/types.ts:1476](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1476)
+Defined in: [render/src/types.ts:1480](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1480)
 
 Emphasis state configuration (hover state).
 
@@ -112,7 +112,7 @@ Emphasis state configuration (hover state).
 
 > `optional` **id**: `string`
 
-Defined in: [render/src/types.ts:1437](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1437)
+Defined in: [render/src/types.ts:1441](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1441)
 
 Component ID.
 Unique identifier for the series component.
@@ -127,7 +127,7 @@ Unique identifier for the series component.
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: [render/src/types.ts:1468](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1468)
+Defined in: [render/src/types.ts:1472](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1472)
 
 Item style configuration (normal state).
 
@@ -141,7 +141,7 @@ Item style configuration (normal state).
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: [render/src/types.ts:1472](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1472)
+Defined in: [render/src/types.ts:1476](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1476)
 
 Label configuration (normal state).
 
@@ -155,7 +155,7 @@ Label configuration (normal state).
 
 > `optional` **lineStyle**: [`LineStyleOption`](LineStyleOption.md)
 
-Defined in: [render/src/types.ts:1560](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1560)
+Defined in: [render/src/types.ts:1564](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1564)
 
 Line style configuration.
 
@@ -165,7 +165,7 @@ Line style configuration.
 
 > `optional` **name**: `string`
 
-Defined in: [render/src/types.ts:1442](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1442)
+Defined in: [render/src/types.ts:1446](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1446)
 
 Series name.
 Used in legend and tooltip.
@@ -180,7 +180,7 @@ Used in legend and tooltip.
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:1464](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1464)
+Defined in: [render/src/types.ts:1468](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1468)
 
 Whether to show the series.
 
@@ -194,7 +194,7 @@ Whether to show the series.
 
 > `optional` **showSymbol**: `boolean`
 
-Defined in: [render/src/types.ts:1545](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1545)
+Defined in: [render/src/types.ts:1549](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1549)
 
 Whether to show symbols on the line.
 - true: Always show.
@@ -206,7 +206,7 @@ Whether to show symbols on the line.
 
 > `optional` **smooth**: `number` \| `boolean`
 
-Defined in: [render/src/types.ts:1500](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1500)
+Defined in: [render/src/types.ts:1504](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1504)
 
 Whether to smooth the line.
 - boolean: true/false.
@@ -218,7 +218,7 @@ Whether to smooth the line.
 
 > `optional` **step**: `boolean` \| `"middle"` \| `"start"` \| `"end"`
 
-Defined in: [render/src/types.ts:1556](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1556)
+Defined in: [render/src/types.ts:1560](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1560)
 
 Step line type.
 - 'start': Step at the start.
@@ -231,7 +231,7 @@ Step line type.
 
 > `optional` **symbol**: `string`
 
-Defined in: [render/src/types.ts:1507](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1507)
+Defined in: [render/src/types.ts:1511](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1511)
 
 Symbol type.
 - 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'.
@@ -244,7 +244,7 @@ Symbol type.
 
 > `optional` **symbolKeepAspect**: `boolean`
 
-Defined in: [render/src/types.ts:1534](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1534)
+Defined in: [render/src/types.ts:1538](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1538)
 
 Whether to keep the aspect ratio of the symbol.
 
@@ -254,7 +254,7 @@ Whether to keep the aspect ratio of the symbol.
 
 > `optional` **symbolOffset**: \[`string` \| `number`, `string` \| `number`\]
 
-Defined in: [render/src/types.ts:1539](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1539)
+Defined in: [render/src/types.ts:1543](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1543)
 
 Symbol offset.
 [x, y] in pixels or percentages.
@@ -265,7 +265,7 @@ Symbol offset.
 
 > `optional` **symbolRotate**: `number`
 
-Defined in: [render/src/types.ts:1530](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1530)
+Defined in: [render/src/types.ts:1534](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1534)
 
 Symbol rotation in degrees.
 
@@ -275,7 +275,7 @@ Symbol rotation in degrees.
 
 > `optional` **symbolSize**: `number` \| `number`[] \| (`value`, `params`) => `number` \| `number`[]
 
-Defined in: [render/src/types.ts:1523](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1523)
+Defined in: [render/src/types.ts:1527](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1527)
 
 Symbol size.
 - number: Single size.
@@ -288,7 +288,7 @@ Symbol size.
 
 > **type**: `"line"`
 
-Defined in: [render/src/types.ts:1494](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1494)
+Defined in: [render/src/types.ts:1498](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1498)
 
 Series type (explicitly set it to get more accurate IntelliSense).
 e.g., 'line', 'bar', 'pie'.
@@ -303,7 +303,7 @@ e.g., 'line', 'bar', 'pie'.
 
 > `optional` **z**: `number`
 
-Defined in: [render/src/types.ts:1451](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1451)
+Defined in: [render/src/types.ts:1455](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1455)
 
 Z-index of the series.
 
@@ -317,7 +317,7 @@ Z-index of the series.
 
 > `optional` **zlevel**: `number`
 
-Defined in: [render/src/types.ts:1455](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1455)
+Defined in: [render/src/types.ts:1459](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1459)
 
 Z-level of the series.
 

@@ -148,7 +148,7 @@ Whether to render progressively
 
 ### shape
 
-> **shape**: `RectShape`
+> **shape**: [`RectShape`](../interfaces/RectShape.md)
 
 Defined in: render/dist/graphic/Rect.d.ts:14
 

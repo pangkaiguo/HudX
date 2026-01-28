@@ -4,7 +4,7 @@
 
 # Interface: LabelLineOption
 
-Defined in: render/dist/types.d.ts:1662
+Defined in: render/dist/types.d.ts:1809
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:1662
 
 > `optional` **length**: `number`
 
-Defined in: render/dist/types.d.ts:1668
+Defined in: render/dist/types.d.ts:1815
 
 Length of the first segment
 
@@ -22,7 +22,7 @@ Length of the first segment
 
 > `optional` **length2**: `number`
 
-Defined in: render/dist/types.d.ts:1670
+Defined in: render/dist/types.d.ts:1817
 
 Length of the second segment
 
@@ -32,7 +32,7 @@ Length of the second segment
 
 > `optional` **lineStyle**: [`LineStyleOption`](LineStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1676
+Defined in: render/dist/types.d.ts:1823
 
 Line style
 
@@ -42,7 +42,7 @@ Line style
 
 > `optional` **minTurnAngle**: `number`
 
-Defined in: render/dist/types.d.ts:1674
+Defined in: render/dist/types.d.ts:1821
 
 Minimum turn angle
 
@@ -52,7 +52,7 @@ Minimum turn angle
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1664
+Defined in: render/dist/types.d.ts:1811
 
 Show label line
 
@@ -62,7 +62,7 @@ Show label line
 
 > `optional` **showAbove**: `boolean`
 
-Defined in: render/dist/types.d.ts:1666
+Defined in: render/dist/types.d.ts:1813
 
 Show above
 
@@ -72,6 +72,6 @@ Show above
 
 > `optional` **smooth**: `number` \| `boolean`
 
-Defined in: render/dist/types.d.ts:1672
+Defined in: render/dist/types.d.ts:1819
 
 Smoothness

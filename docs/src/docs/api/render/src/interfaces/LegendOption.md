@@ -4,7 +4,7 @@
 
 # Interface: LegendOption
 
-Defined in: [render/src/types.ts:840](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L840)
+Defined in: [render/src/types.ts:844](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L844)
 
 Legend option (similar to ECharts `legend`).
 
@@ -27,7 +27,7 @@ const option: ChartOption = {
 
 > `optional` **align**: `"left"` \| `"center"` \| `"right"`
 
-Defined in: [render/src/types.ts:916](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L916)
+Defined in: [render/src/types.ts:920](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L920)
 
 Text alignment within the legend item.
 
@@ -37,7 +37,7 @@ Text alignment within the legend item.
 
 > `optional` **animation**: `boolean`
 
-Defined in: [render/src/types.ts:1048](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1048)
+Defined in: [render/src/types.ts:1052](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1052)
 
 Whether to enable animation when switching pages.
 
@@ -47,7 +47,7 @@ Whether to enable animation when switching pages.
 
 > `optional` **animationDurationUpdate**: `number`
 
-Defined in: [render/src/types.ts:1052](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1052)
+Defined in: [render/src/types.ts:1056](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1056)
 
 Animation duration for legend updates.
 
@@ -57,7 +57,7 @@ Animation duration for legend updates.
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: [render/src/types.ts:973](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L973)
+Defined in: [render/src/types.ts:977](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L977)
 
 Background color of the legend component.
 
@@ -67,7 +67,7 @@ Background color of the legend component.
 
 > `optional` **borderColor**: `string`
 
-Defined in: [render/src/types.ts:977](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L977)
+Defined in: [render/src/types.ts:981](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L981)
 
 Border color of the legend component.
 
@@ -77,7 +77,7 @@ Border color of the legend component.
 
 > `optional` **borderRadius**: `number` \| `number`[]
 
-Defined in: [render/src/types.ts:985](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L985)
+Defined in: [render/src/types.ts:989](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L989)
 
 Border radius of the legend component.
 
@@ -87,7 +87,7 @@ Border radius of the legend component.
 
 > `optional` **borderWidth**: `number`
 
-Defined in: [render/src/types.ts:981](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L981)
+Defined in: [render/src/types.ts:985](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L985)
 
 Border width of the legend component.
 
@@ -97,7 +97,7 @@ Border width of the legend component.
 
 > `optional` **bottom**: `string` \| `number`
 
-Defined in: [render/src/types.ts:879](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L879)
+Defined in: [render/src/types.ts:883](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L883)
 
 Distance from bottom side of container.
 
@@ -107,7 +107,7 @@ Distance from bottom side of container.
 
 > `optional` **data**: `string`[] \| `object`[]
 
-Defined in: [render/src/types.ts:863](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L863)
+Defined in: [render/src/types.ts:867](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L867)
 
 Legend data.
 - `string[]`: simple list of series names.
@@ -122,7 +122,7 @@ Legend data.
 
 > `optional` **formatter**: `string` \| (`name`, `item`) => `string` \| `string`[]
 
-Defined in: [render/src/types.ts:903](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L903)
+Defined in: [render/src/types.ts:907](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L907)
 
 Custom formatter for legend labels.
 
@@ -132,7 +132,7 @@ Custom formatter for legend labels.
 
 > `optional` **height**: `string` \| `number`
 
-Defined in: [render/src/types.ts:887](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L887)
+Defined in: [render/src/types.ts:891](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L891)
 
 Height of the legend component.
 
@@ -142,7 +142,7 @@ Height of the legend component.
 
 > `optional` **icon**: `string`
 
-Defined in: [render/src/types.ts:969](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L969)
+Defined in: [render/src/types.ts:973](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L973)
 
 Icon type for legend items.
 - 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow', 'none'
@@ -155,7 +155,7 @@ Icon type for legend items.
 
 > `optional` **inactiveColor**: `string`
 
-Defined in: [render/src/types.ts:949](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L949)
+Defined in: [render/src/types.ts:953](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L953)
 
 Color of legend items when they are unselected (inactive).
 
@@ -165,7 +165,7 @@ Color of legend items when they are unselected (inactive).
 
 > `optional` **itemGap**: `number`
 
-Defined in: [render/src/types.ts:925](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L925)
+Defined in: [render/src/types.ts:929](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L929)
 
 Gap between each legend item.
 
@@ -175,7 +175,7 @@ Gap between each legend item.
 
 > `optional` **itemHeight**: `number`
 
-Defined in: [render/src/types.ts:933](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L933)
+Defined in: [render/src/types.ts:937](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L937)
 
 Height of the legend symbol (icon).
 
@@ -185,7 +185,7 @@ Height of the legend symbol (icon).
 
 > `optional` **itemMaxWidth**: `number`
 
-Defined in: [render/src/types.ts:912](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L912)
+Defined in: [render/src/types.ts:916](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L916)
 
 Maximum width of a legend item.
 Text exceeding this width will be truncated.
@@ -196,7 +196,7 @@ Text exceeding this width will be truncated.
 
 > `optional` **itemWidth**: `number`
 
-Defined in: [render/src/types.ts:929](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L929)
+Defined in: [render/src/types.ts:933](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L933)
 
 Width of the legend symbol (icon).
 
@@ -206,7 +206,7 @@ Width of the legend symbol (icon).
 
 > `optional` **left**: `string` \| `number`
 
-Defined in: [render/src/types.ts:867](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L867)
+Defined in: [render/src/types.ts:871](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L871)
 
 Distance from left side of container.
 
@@ -216,7 +216,7 @@ Distance from left side of container.
 
 > `optional` **orient**: `"horizontal"` \| `"vertical"`
 
-Defined in: [render/src/types.ts:893](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L893)
+Defined in: [render/src/types.ts:897](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L897)
 
 Layout orientation.
 - 'horizontal': Items are arranged horizontally.
@@ -228,7 +228,7 @@ Layout orientation.
 
 > `optional` **padding**: `number` \| `number`[]
 
-Defined in: [render/src/types.ts:921](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L921)
+Defined in: [render/src/types.ts:925](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L925)
 
 Padding around the legend component.
 [top, right, bottom, left]
@@ -239,7 +239,7 @@ Padding around the legend component.
 
 > `optional` **pageButtonGap**: `number`
 
-Defined in: [render/src/types.ts:1013](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1013)
+Defined in: [render/src/types.ts:1017](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1017)
 
 Gap between page buttons.
 
@@ -249,7 +249,7 @@ Gap between page buttons.
 
 > `optional` **pageButtonItemGap**: `number`
 
-Defined in: [render/src/types.ts:1009](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1009)
+Defined in: [render/src/types.ts:1013](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1013)
 
 Gap between page buttons and legend items.
 
@@ -259,7 +259,7 @@ Gap between page buttons and legend items.
 
 > `optional` **pageButtonPosition**: `"start"` \| `"end"`
 
-Defined in: [render/src/types.ts:1017](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1017)
+Defined in: [render/src/types.ts:1021](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1021)
 
 Position of page buttons.
 
@@ -269,7 +269,7 @@ Position of page buttons.
 
 > `optional` **pageFormatter**: `string` \| `Function`
 
-Defined in: [render/src/types.ts:1021](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1021)
+Defined in: [render/src/types.ts:1025](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1025)
 
 Formatter for page info text (e.g. "1/2").
 
@@ -279,7 +279,7 @@ Formatter for page info text (e.g. "1/2").
 
 > `optional` **pageIconColor**: `string`
 
-Defined in: [render/src/types.ts:1032](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1032)
+Defined in: [render/src/types.ts:1036](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1036)
 
 Color of page buttons.
 
@@ -289,7 +289,7 @@ Color of page buttons.
 
 > `optional` **pageIconInactiveColor**: `string`
 
-Defined in: [render/src/types.ts:1036](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1036)
+Defined in: [render/src/types.ts:1040](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1040)
 
 Color of inactive page buttons.
 
@@ -299,7 +299,7 @@ Color of inactive page buttons.
 
 > `optional` **pageIcons**: `object`
 
-Defined in: [render/src/types.ts:1025](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1025)
+Defined in: [render/src/types.ts:1029](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1029)
 
 Icons for page buttons.
 
@@ -317,7 +317,7 @@ Icons for page buttons.
 
 > `optional` **pageIconSize**: `number` \| `number`[]
 
-Defined in: [render/src/types.ts:1040](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1040)
+Defined in: [render/src/types.ts:1044](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1044)
 
 Size of page buttons.
 
@@ -327,7 +327,7 @@ Size of page buttons.
 
 > `optional` **pageTextStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: [render/src/types.ts:1044](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1044)
+Defined in: [render/src/types.ts:1048](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1048)
 
 Text style for page info.
 
@@ -337,7 +337,7 @@ Text style for page info.
 
 > `optional` **renderMode**: `"canvas"` \| `"html"`
 
-Defined in: [render/src/types.ts:899](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L899)
+Defined in: [render/src/types.ts:903](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L903)
 
 Render mode for the legend.
 - 'canvas': Drawn on the canvas (default).
@@ -349,7 +349,7 @@ Render mode for the legend.
 
 > `optional` **right**: `string` \| `number`
 
-Defined in: [render/src/types.ts:875](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L875)
+Defined in: [render/src/types.ts:879](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L879)
 
 Distance from right side of container.
 
@@ -359,7 +359,7 @@ Distance from right side of container.
 
 > `optional` **scrollDataIndex**: `number`
 
-Defined in: [render/src/types.ts:1005](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1005)
+Defined in: [render/src/types.ts:1009](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1009)
 
 Initial scroll index (for scrollable legends).
 
@@ -369,7 +369,7 @@ Initial scroll index (for scrollable legends).
 
 > `optional` **selected**: `object`
 
-Defined in: [render/src/types.ts:954](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L954)
+Defined in: [render/src/types.ts:958](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L958)
 
 Initial selected state of legend items.
 Map of series name to boolean.
@@ -384,7 +384,7 @@ Map of series name to boolean.
 
 > `optional` **selectedMode**: `boolean` \| `"single"` \| `"multiple"`
 
-Defined in: [render/src/types.ts:945](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L945)
+Defined in: [render/src/types.ts:949](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L949)
 
 Selection mode.
 - true: Multiple selection.
@@ -398,7 +398,7 @@ Selection mode.
 
 > `optional` **shadowBlur**: `number`
 
-Defined in: [render/src/types.ts:989](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L989)
+Defined in: [render/src/types.ts:993](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L993)
 
 Shadow blur size.
 
@@ -408,7 +408,7 @@ Shadow blur size.
 
 > `optional` **shadowColor**: `string`
 
-Defined in: [render/src/types.ts:993](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L993)
+Defined in: [render/src/types.ts:997](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L997)
 
 Shadow color.
 
@@ -418,7 +418,7 @@ Shadow color.
 
 > `optional` **shadowOffsetX**: `number`
 
-Defined in: [render/src/types.ts:997](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L997)
+Defined in: [render/src/types.ts:1001](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1001)
 
 Shadow X offset.
 
@@ -428,7 +428,7 @@ Shadow X offset.
 
 > `optional` **shadowOffsetY**: `number`
 
-Defined in: [render/src/types.ts:1001](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1001)
+Defined in: [render/src/types.ts:1005](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1005)
 
 Shadow Y offset.
 
@@ -438,7 +438,7 @@ Shadow Y offset.
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:844](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L844)
+Defined in: [render/src/types.ts:848](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L848)
 
 Whether to show the legend.
 
@@ -448,7 +448,7 @@ Whether to show the legend.
 
 > `optional` **symbolKeepAspect**: `boolean`
 
-Defined in: [render/src/types.ts:937](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L937)
+Defined in: [render/src/types.ts:941](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L941)
 
 Whether to keep the aspect ratio of the legend symbol.
 
@@ -458,7 +458,7 @@ Whether to keep the aspect ratio of the legend symbol.
 
 > `optional` **tableHead**: `string`[]
 
-Defined in: [render/src/types.ts:907](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L907)
+Defined in: [render/src/types.ts:911](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L911)
 
 Table header labels for HTML render mode.
 
@@ -468,7 +468,7 @@ Table header labels for HTML render mode.
 
 > `optional` **textStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: [render/src/types.ts:958](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L958)
+Defined in: [render/src/types.ts:962](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L962)
 
 Text style for legend labels.
 
@@ -478,7 +478,7 @@ Text style for legend labels.
 
 > `optional` **tooltip**: [`TooltipOption`](TooltipOption.md)
 
-Defined in: [render/src/types.ts:962](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L962)
+Defined in: [render/src/types.ts:966](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L966)
 
 Tooltip configuration for hovering over legend items.
 
@@ -488,7 +488,7 @@ Tooltip configuration for hovering over legend items.
 
 > `optional` **top**: `string` \| `number`
 
-Defined in: [render/src/types.ts:871](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L871)
+Defined in: [render/src/types.ts:875](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L875)
 
 Distance from top side of container.
 
@@ -498,7 +498,7 @@ Distance from top side of container.
 
 > `optional` **width**: `string` \| `number`
 
-Defined in: [render/src/types.ts:883](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L883)
+Defined in: [render/src/types.ts:887](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L887)
 
 Width of the legend component.
 
@@ -508,7 +508,7 @@ Width of the legend component.
 
 > `optional` **z**: `number`
 
-Defined in: [render/src/types.ts:849](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L849)
+Defined in: [render/src/types.ts:853](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L853)
 
 Z-index of the legend component (2nd level).
 Controls vertical stacking order relative to other components.
@@ -519,7 +519,7 @@ Controls vertical stacking order relative to other components.
 
 > `optional` **zlevel**: `number`
 
-Defined in: [render/src/types.ts:854](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L854)
+Defined in: [render/src/types.ts:858](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L858)
 
 Canvas layer z-level (1st level).
 Elements with different zlevel are placed in different canvas instances.

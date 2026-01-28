@@ -4,7 +4,7 @@
 
 # Class: LocaleManager
 
-Defined in: [render/src/i18n/LocaleManager.ts:7](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/i18n/LocaleManager.ts#L7)
+Defined in: [render/src/i18n/LocaleManager.ts:7](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/i18n/LocaleManager.ts#L7)
 
 ## Constructors
 
@@ -22,7 +22,7 @@ Defined in: [render/src/i18n/LocaleManager.ts:7](https://github.com/pangkaiguo/H
 
 > `static` **getLocale**(`locale`): [`LocaleConfig`](../interfaces/LocaleConfig.md)
 
-Defined in: [render/src/i18n/LocaleManager.ts:121](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/i18n/LocaleManager.ts#L121)
+Defined in: [render/src/i18n/LocaleManager.ts:121](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/i18n/LocaleManager.ts#L121)
 
 Get locale configuration
 
@@ -42,7 +42,7 @@ Get locale configuration
 
 > `static` **getLocales**(): `string`[]
 
-Defined in: [render/src/i18n/LocaleManager.ts:156](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/i18n/LocaleManager.ts#L156)
+Defined in: [render/src/i18n/LocaleManager.ts:156](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/i18n/LocaleManager.ts#L156)
 
 Get all registered locales
 
@@ -56,7 +56,7 @@ Get all registered locales
 
 > `static` **registerLocale**(`locale`, `config`): `void`
 
-Defined in: [render/src/i18n/LocaleManager.ts:149](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/i18n/LocaleManager.ts#L149)
+Defined in: [render/src/i18n/LocaleManager.ts:149](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/i18n/LocaleManager.ts#L149)
 
 Register custom locale
 
@@ -80,7 +80,7 @@ Register custom locale
 
 > `static` **t**(`locale`, `key`, `defaultValue?`): `string`
 
-Defined in: [render/src/i18n/LocaleManager.ts:141](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/i18n/LocaleManager.ts#L141)
+Defined in: [render/src/i18n/LocaleManager.ts:141](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/i18n/LocaleManager.ts#L141)
 
 Get translated text
 

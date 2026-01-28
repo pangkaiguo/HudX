@@ -4,7 +4,7 @@
 
 # Interface: TextStyle
 
-Defined in: [render/src/types.ts:714](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L714)
+Defined in: [render/src/types.ts:718](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L718)
 
 Text style (used by title/legend/axisLabel/label, etc.).
 
@@ -17,7 +17,7 @@ Note: supported fields may vary by component, but common fields such as
 
 > `optional` **align**: `"left"` \| `"center"` \| `"right"`
 
-Defined in: [render/src/types.ts:750](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L750)
+Defined in: [render/src/types.ts:754](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L754)
 
 Horizontal alignment.
 - 'left': Align left.
@@ -30,7 +30,7 @@ Horizontal alignment.
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: [render/src/types.ts:809](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L809)
+Defined in: [render/src/types.ts:813](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L813)
 
 Background color of the text block.
 
@@ -40,7 +40,7 @@ Background color of the text block.
 
 > `optional` **borderColor**: `string`
 
-Defined in: [render/src/types.ts:813](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L813)
+Defined in: [render/src/types.ts:817](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L817)
 
 Border color of the text block.
 
@@ -50,7 +50,7 @@ Border color of the text block.
 
 > `optional` **borderRadius**: `number`
 
-Defined in: [render/src/types.ts:821](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L821)
+Defined in: [render/src/types.ts:825](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L825)
 
 Border radius of the text block.
 
@@ -60,7 +60,7 @@ Border radius of the text block.
 
 > `optional` **borderWidth**: `number`
 
-Defined in: [render/src/types.ts:817](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L817)
+Defined in: [render/src/types.ts:821](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L821)
 
 Border width of the text block.
 
@@ -70,7 +70,7 @@ Border width of the text block.
 
 > `optional` **color**: `string`
 
-Defined in: [render/src/types.ts:718](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L718)
+Defined in: [render/src/types.ts:722](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L722)
 
 Text fill color.
 
@@ -80,7 +80,7 @@ Text fill color.
 
 > `optional` **ellipsis**: `string`
 
-Defined in: [render/src/types.ts:805](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L805)
+Defined in: [render/src/types.ts:809](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L809)
 
 String to use for ellipsis when overflow is 'truncate'.
 
@@ -96,7 +96,7 @@ String to use for ellipsis when overflow is 'truncate'.
 
 > `optional` **fontFamily**: `string`
 
-Defined in: [render/src/types.ts:739](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L739)
+Defined in: [render/src/types.ts:743](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L743)
 
 Font family.
 
@@ -112,7 +112,7 @@ Font family.
 
 > `optional` **fontSize**: `number`
 
-Defined in: [render/src/types.ts:743](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L743)
+Defined in: [render/src/types.ts:747](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L747)
 
 Font size in pixels.
 
@@ -122,7 +122,7 @@ Font size in pixels.
 
 > `optional` **fontStyle**: `"normal"` \| `"italic"` \| `"oblique"`
 
-Defined in: [render/src/types.ts:725](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L725)
+Defined in: [render/src/types.ts:729](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L729)
 
 Font style.
 - 'normal': Standard text.
@@ -135,7 +135,7 @@ Font style.
 
 > `optional` **fontWeight**: `number` \| `"normal"` \| `"bold"` \| `"bolder"` \| `"lighter"`
 
-Defined in: [render/src/types.ts:734](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L734)
+Defined in: [render/src/types.ts:738](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L738)
 
 Font weight.
 - 'normal': Standard weight (400).
@@ -150,7 +150,7 @@ Font weight.
 
 > `optional` **height**: `number`
 
-Defined in: [render/src/types.ts:769](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L769)
+Defined in: [render/src/types.ts:773](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L773)
 
 Height of the text block.
 
@@ -160,7 +160,7 @@ Height of the text block.
 
 > `optional` **lineHeight**: `number`
 
-Defined in: [render/src/types.ts:761](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L761)
+Defined in: [render/src/types.ts:765](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L765)
 
 Line height in pixels.
 
@@ -170,7 +170,7 @@ Line height in pixels.
 
 > `optional` **overflow**: `"truncate"` \| `"break"` \| `"breakAll"`
 
-Defined in: [render/src/types.ts:800](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L800)
+Defined in: [render/src/types.ts:804](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L804)
 
 Text overflow handling.
 - 'truncate': Truncate with ellipsis.
@@ -183,7 +183,7 @@ Text overflow handling.
 
 > `optional` **padding**: `number` \| `number`[]
 
-Defined in: [render/src/types.ts:826](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L826)
+Defined in: [render/src/types.ts:830](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L830)
 
 Padding of the text block.
 [top, right, bottom, left] or number.
@@ -194,7 +194,7 @@ Padding of the text block.
 
 > `optional` **textBorderColor**: `string`
 
-Defined in: [render/src/types.ts:773](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L773)
+Defined in: [render/src/types.ts:777](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L777)
 
 Color of the text border (stroke).
 
@@ -204,7 +204,7 @@ Color of the text border (stroke).
 
 > `optional` **textBorderWidth**: `number`
 
-Defined in: [render/src/types.ts:777](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L777)
+Defined in: [render/src/types.ts:781](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L781)
 
 Width of the text border (stroke).
 
@@ -214,7 +214,7 @@ Width of the text border (stroke).
 
 > `optional` **textShadowBlur**: `number`
 
-Defined in: [render/src/types.ts:785](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L785)
+Defined in: [render/src/types.ts:789](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L789)
 
 Blur radius of the text shadow.
 
@@ -224,7 +224,7 @@ Blur radius of the text shadow.
 
 > `optional` **textShadowColor**: `string`
 
-Defined in: [render/src/types.ts:781](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L781)
+Defined in: [render/src/types.ts:785](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L785)
 
 Color of the text shadow.
 
@@ -234,7 +234,7 @@ Color of the text shadow.
 
 > `optional` **textShadowOffsetX**: `number`
 
-Defined in: [render/src/types.ts:789](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L789)
+Defined in: [render/src/types.ts:793](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L793)
 
 X offset of the text shadow.
 
@@ -244,7 +244,7 @@ X offset of the text shadow.
 
 > `optional` **textShadowOffsetY**: `number`
 
-Defined in: [render/src/types.ts:793](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L793)
+Defined in: [render/src/types.ts:797](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L797)
 
 Y offset of the text shadow.
 
@@ -254,7 +254,7 @@ Y offset of the text shadow.
 
 > `optional` **verticalAlign**: `"top"` \| `"middle"` \| `"bottom"`
 
-Defined in: [render/src/types.ts:757](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L757)
+Defined in: [render/src/types.ts:761](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L761)
 
 Vertical alignment.
 - 'top': Align top.
@@ -267,6 +267,6 @@ Vertical alignment.
 
 > `optional` **width**: `number`
 
-Defined in: [render/src/types.ts:765](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L765)
+Defined in: [render/src/types.ts:769](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L769)
 
 Width of the text block.

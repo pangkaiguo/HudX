@@ -4,7 +4,7 @@
 
 # Interface: BaseSeriesOption
 
-Defined in: render/dist/types.d.ts:1244
+Defined in: render/dist/types.d.ts:1391
 
 ## Extended by
 
@@ -27,7 +27,7 @@ Defined in: render/dist/types.d.ts:1244
 
 > `optional` **color**: `string`
 
-Defined in: render/dist/types.d.ts:1264
+Defined in: render/dist/types.d.ts:1411
 
 Series color.
 If not set, it will pick from the global palette.
@@ -38,7 +38,7 @@ If not set, it will pick from the global palette.
 
 > `optional` **cursor**: `string`
 
-Defined in: render/dist/types.d.ts:1277
+Defined in: render/dist/types.d.ts:1424
 
 Cursor style when hovering over the series.
 
@@ -54,7 +54,7 @@ Cursor style when hovering over the series.
 
 > `optional` **data**: [`ChartData`](../type-aliases/ChartData.md)[]
 
-Defined in: render/dist/types.d.ts:1298
+Defined in: render/dist/types.d.ts:1445
 
 Series data.
 Can be an array of numbers, or objects with `value` property.
@@ -65,7 +65,7 @@ Can be an array of numbers, or objects with `value` property.
 
 > `optional` **emphasis**: [`EmphasisOption`](EmphasisOption.md)
 
-Defined in: render/dist/types.d.ts:1293
+Defined in: render/dist/types.d.ts:1440
 
 Emphasis state configuration (hover state).
 
@@ -75,7 +75,7 @@ Emphasis state configuration (hover state).
 
 > `optional` **id**: `string`
 
-Defined in: render/dist/types.d.ts:1254
+Defined in: render/dist/types.d.ts:1401
 
 Component ID.
 Unique identifier for the series component.
@@ -86,7 +86,7 @@ Unique identifier for the series component.
 
 > `optional` **itemStyle**: [`ItemStyleOption`](ItemStyleOption.md)
 
-Defined in: render/dist/types.d.ts:1285
+Defined in: render/dist/types.d.ts:1432
 
 Item style configuration (normal state).
 
@@ -96,7 +96,7 @@ Item style configuration (normal state).
 
 > `optional` **label**: [`LabelOption`](LabelOption.md)
 
-Defined in: render/dist/types.d.ts:1289
+Defined in: render/dist/types.d.ts:1436
 
 Label configuration (normal state).
 
@@ -106,7 +106,7 @@ Label configuration (normal state).
 
 > `optional` **name**: `string`
 
-Defined in: render/dist/types.d.ts:1259
+Defined in: render/dist/types.d.ts:1406
 
 Series name.
 Used in legend and tooltip.
@@ -117,7 +117,7 @@ Used in legend and tooltip.
 
 > `optional` **show**: `boolean`
 
-Defined in: render/dist/types.d.ts:1281
+Defined in: render/dist/types.d.ts:1428
 
 Whether to show the series.
 
@@ -127,7 +127,7 @@ Whether to show the series.
 
 > `optional` **type**: `string`
 
-Defined in: render/dist/types.d.ts:1249
+Defined in: render/dist/types.d.ts:1396
 
 Series type (explicitly set it to get more accurate IntelliSense).
 e.g., 'line', 'bar', 'pie'.
@@ -138,7 +138,7 @@ e.g., 'line', 'bar', 'pie'.
 
 > `optional` **z**: `number`
 
-Defined in: render/dist/types.d.ts:1268
+Defined in: render/dist/types.d.ts:1415
 
 Z-index of the series.
 
@@ -148,6 +148,6 @@ Z-index of the series.
 
 > `optional` **zlevel**: `number`
 
-Defined in: render/dist/types.d.ts:1272
+Defined in: render/dist/types.d.ts:1419
 
 Z-level of the series.

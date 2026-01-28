@@ -16,6 +16,7 @@ HudX Charts is a high-performance charting library built with React and TypeScri
 - 🔧 **Extensible Architecture**: Easy to add new chart types and graphic elements.
 - 🌓 **Theme Support**: Light and Dark themes with customization.
 - 🌍 **Internationalization**: Built-in i18n support.
+- 🧩 **Feature Demos**: Dedicated examples for Animation, Interaction, Performance, Shapes, and Theming.
 
 ## Why HudX (vs ECharts / AntV)
 
@@ -60,7 +61,7 @@ HudX/
 │   ├── render/          # Core rendering engine
 │   │   ├── src/
 │   │   │   ├── Renderer.ts      # Main entry
-│   │   │   ├── graphic/           # Graphic elements (Circle, Rect, Path, etc.)
+│   │   │   ├── graphic/         # Graphic elements (Circle, Rect, Path, etc.)
 │   │   │   ├── animation/       # Animation system
 │   │   │   ├── component/       # UI Components (Tooltip, Legend)
 │   │   │   ├── painter/         # Painters (Canvas, SVG)
@@ -68,8 +69,8 @@ HudX/
 │   └── charts/        # Chart library
 │       ├── src/
 │       │   ├── chart/           # Chart implementations (Bar, Line, Pie...)
-│       │   ├── react/           # React component
-│       │   └── util/            # Coordinate & Scale utils
+│       │—— HChart.tsx           # React component
+│       ├── index.ts             # Entry
 ├── examples/          # Interactive examples & Demo
 └── docs/              # Documentation
 ```
@@ -100,6 +101,12 @@ pnpm test
 pnpm dev:examples
 # Visit http://localhost:5173
 ```
+
+The example application is a single-page dashboard featuring:
+
+- **Left Sidebar**: Navigation with anchor links to chart categories and feature demos.
+- **Main Content**: Scrollable view of all examples with hover preview effects.
+- **Detailed View**: Click any example to open it in a new tab with code editor and theme toggle.
 
 ## Usage
 
@@ -174,9 +181,10 @@ anim.start();
 
 ## Documentation
 
-- [Implementation Details](./docs/en/IMPLEMENTATION.md)
-- [Interactive Features](./docs/en/INTERACTIVE_FEATURES.md)
-- [Performance Optimization](./docs/en/PERFORMANCE_OPTIMIZATION.md)
+- [Implementation Details](./docs/src/docs/en/IMPLEMENTATION.md)
+- [Interactive Features](./docs/src/docs/en/INTERACTIVE_FEATURES.md)
+- [Performance Optimization](./docs/src/docs/en/PERFORMANCE_OPTIMIZATION.md)
+- [Examples Guide](./docs/src/docs/en/EXAMPLES.md)
 
 ## License
 

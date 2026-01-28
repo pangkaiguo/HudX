@@ -4,7 +4,7 @@
 
 # Interface: SplitLineOption
 
-Defined in: [render/src/types.ts:1390](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1390)
+Defined in: [render/src/types.ts:1394](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1394)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [render/src/types.ts:1390](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **interval**: `number` \| `Function` \| `"auto"`
 
-Defined in: [render/src/types.ts:1394](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1394)
+Defined in: [render/src/types.ts:1398](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1398)
 
 Split line interval
 
@@ -22,7 +22,7 @@ Split line interval
 
 > `optional` **lineStyle**: [`LineStyleOption`](LineStyleOption.md)
 
-Defined in: [render/src/types.ts:1396](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1396)
+Defined in: [render/src/types.ts:1400](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1400)
 
 Line style
 
@@ -32,6 +32,6 @@ Line style
 
 > `optional` **show**: `boolean`
 
-Defined in: [render/src/types.ts:1392](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L1392)
+Defined in: [render/src/types.ts:1396](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L1396)
 
 Show split line

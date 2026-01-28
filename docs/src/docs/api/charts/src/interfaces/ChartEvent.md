@@ -4,7 +4,7 @@
 
 # Interface: ChartEvent
 
-Defined in: render/dist/types.d.ts:1760
+Defined in: render/dist/types.d.ts:1907
 
 Chart event payload (similar to ECharts event params) used by `HChartProps.onEvents`.
 
@@ -22,7 +22,7 @@ Different components/series may populate different fields, but it typically incl
 
 > `optional` **componentIndex**: `number`
 
-Defined in: render/dist/types.d.ts:1774
+Defined in: render/dist/types.d.ts:1921
 
 Component index
 
@@ -32,7 +32,7 @@ Component index
 
 > `optional` **componentType**: `string`
 
-Defined in: render/dist/types.d.ts:1772
+Defined in: render/dist/types.d.ts:1919
 
 Component type
 
@@ -42,7 +42,7 @@ Component type
 
 > `optional` **data**: `any`
 
-Defined in: render/dist/types.d.ts:1786
+Defined in: render/dist/types.d.ts:1933
 
 Data item
 
@@ -52,7 +52,7 @@ Data item
 
 > `optional` **dataIndex**: `number`
 
-Defined in: render/dist/types.d.ts:1784
+Defined in: render/dist/types.d.ts:1931
 
 Data index
 
@@ -62,7 +62,7 @@ Data index
 
 > `optional` **event**: `any`
 
-Defined in: render/dist/types.d.ts:1770
+Defined in: render/dist/types.d.ts:1917
 
 Original event object
 
@@ -72,7 +72,7 @@ Original event object
 
 > `optional` **name**: `string`
 
-Defined in: render/dist/types.d.ts:1782
+Defined in: render/dist/types.d.ts:1929
 
 Data name
 
@@ -82,7 +82,7 @@ Data name
 
 > `optional` **seriesIndex**: `number`
 
-Defined in: render/dist/types.d.ts:1778
+Defined in: render/dist/types.d.ts:1925
 
 Series index
 
@@ -92,7 +92,7 @@ Series index
 
 > `optional` **seriesName**: `string`
 
-Defined in: render/dist/types.d.ts:1780
+Defined in: render/dist/types.d.ts:1927
 
 Series name
 
@@ -102,7 +102,7 @@ Series name
 
 > `optional` **seriesType**: `string`
 
-Defined in: render/dist/types.d.ts:1776
+Defined in: render/dist/types.d.ts:1923
 
 Series type
 
@@ -112,7 +112,7 @@ Series type
 
 > **type**: `string`
 
-Defined in: render/dist/types.d.ts:1768
+Defined in: render/dist/types.d.ts:1915
 
 Event type.
 
@@ -126,6 +126,6 @@ Common values:
 
 > `optional` **value**: `any`
 
-Defined in: render/dist/types.d.ts:1788
+Defined in: render/dist/types.d.ts:1935
 
 Data value

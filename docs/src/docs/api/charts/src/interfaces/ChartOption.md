@@ -4,7 +4,7 @@
 
 # Interface: ChartOption
 
-Defined in: render/dist/types.d.ts:262
+Defined in: render/dist/types.d.ts:409
 
 HudX chart option (ECharts-style).
 
@@ -36,7 +36,7 @@ const option: ChartOption = {
 
 > `optional` **animation**: `boolean`
 
-Defined in: render/dist/types.d.ts:285
+Defined in: render/dist/types.d.ts:432
 
 Whether to enable animation
 
@@ -46,7 +46,7 @@ Whether to enable animation
 
 > `optional` **animationDuration**: `number`
 
-Defined in: render/dist/types.d.ts:287
+Defined in: render/dist/types.d.ts:434
 
 Animation duration in ms
 
@@ -56,7 +56,7 @@ Animation duration in ms
 
 > `optional` **animationEasing**: `string`
 
-Defined in: render/dist/types.d.ts:289
+Defined in: render/dist/types.d.ts:436
 
 Animation easing function
 
@@ -66,7 +66,7 @@ Animation easing function
 
 > `optional` **aria**: [`AriaOption`](AriaOption.md)
 
-Defined in: render/dist/types.d.ts:291
+Defined in: render/dist/types.d.ts:438
 
 Accessibility options
 
@@ -76,7 +76,7 @@ Accessibility options
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: render/dist/types.d.ts:283
+Defined in: render/dist/types.d.ts:430
 
 Background color
 
@@ -86,7 +86,7 @@ Background color
 
 > `optional` **grid**: [`GridOption`](GridOption.md)
 
-Defined in: render/dist/types.d.ts:270
+Defined in: render/dist/types.d.ts:417
 
 Grid configuration
 
@@ -96,7 +96,7 @@ Grid configuration
 
 > `optional` **legend**: [`LegendOption`](LegendOption.md)
 
-Defined in: render/dist/types.d.ts:268
+Defined in: render/dist/types.d.ts:415
 
 Legend configuration
 
@@ -106,7 +106,7 @@ Legend configuration
 
 > `optional` **series**: [`SeriesOption`](../type-aliases/SeriesOption.md)[]
 
-Defined in: render/dist/types.d.ts:281
+Defined in: render/dist/types.d.ts:428
 
 Series list.
 
@@ -119,7 +119,7 @@ field suggestions for that series.
 
 > `optional` **title**: [`TitleOption`](TitleOption.md)
 
-Defined in: render/dist/types.d.ts:264
+Defined in: render/dist/types.d.ts:411
 
 Title configuration
 
@@ -129,7 +129,7 @@ Title configuration
 
 > `optional` **tooltip**: [`TooltipOption`](TooltipOption.md)
 
-Defined in: render/dist/types.d.ts:266
+Defined in: render/dist/types.d.ts:413
 
 Tooltip configuration
 
@@ -139,7 +139,7 @@ Tooltip configuration
 
 > `optional` **xAxis**: [`AxisOption`](AxisOption.md) \| [`AxisOption`](AxisOption.md)[]
 
-Defined in: render/dist/types.d.ts:272
+Defined in: render/dist/types.d.ts:419
 
 X-axis configuration
 
@@ -149,6 +149,6 @@ X-axis configuration
 
 > `optional` **yAxis**: [`AxisOption`](AxisOption.md) \| [`AxisOption`](AxisOption.md)[]
 
-Defined in: render/dist/types.d.ts:274
+Defined in: render/dist/types.d.ts:421
 
 Y-axis configuration

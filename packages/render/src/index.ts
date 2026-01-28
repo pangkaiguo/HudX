@@ -20,7 +20,10 @@ export { default as Text, type TextShape } from './graphic/Text';
 export { default as Polygon, type PolygonShape } from './graphic/Polygon';
 export { default as Polyline, type PolylineShape } from './graphic/Polyline';
 export { default as Arc, type ArcShape } from './graphic/Arc';
-export { default as BezierCurve, type BezierCurveShape } from './graphic/BezierCurve';
+export {
+  default as BezierCurve,
+  type BezierCurveShape,
+} from './graphic/BezierCurve';
 export { default as Sector, type SectorShape } from './graphic/Sector';
 export { default as Image, type ImageShape } from './graphic/Image';
 

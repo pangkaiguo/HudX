@@ -6,7 +6,7 @@
 
 > **EventCallback** = (`event`) => `void`
 
-Defined in: render/dist/types.d.ts:222
+Defined in: render/dist/types.d.ts:369
 
 ## Parameters
 

@@ -4,7 +4,7 @@
 
 # Interface: Transform
 
-Defined in: [render/src/types.ts:2044](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2044)
+Defined in: [render/src/types.ts:2048](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2048)
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: [render/src/types.ts:2044](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **originX**: `number`
 
-Defined in: [render/src/types.ts:2047](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2047)
+Defined in: [render/src/types.ts:2051](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2051)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [render/src/types.ts:2047](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **originY**: `number`
 
-Defined in: [render/src/types.ts:2048](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2048)
+Defined in: [render/src/types.ts:2052](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2052)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [render/src/types.ts:2048](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **rotation**: `number`
 
-Defined in: [render/src/types.ts:2049](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2049)
+Defined in: [render/src/types.ts:2053](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2053)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [render/src/types.ts:2049](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **scaleX**: `number`
 
-Defined in: [render/src/types.ts:2050](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2050)
+Defined in: [render/src/types.ts:2054](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2054)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [render/src/types.ts:2050](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **scaleY**: `number`
 
-Defined in: [render/src/types.ts:2051](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2051)
+Defined in: [render/src/types.ts:2055](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2055)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [render/src/types.ts:2051](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **x**: `number`
 
-Defined in: [render/src/types.ts:2045](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2045)
+Defined in: [render/src/types.ts:2049](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2049)
 
 ***
 
@@ -64,4 +64,4 @@ Defined in: [render/src/types.ts:2045](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **y**: `number`
 
-Defined in: [render/src/types.ts:2046](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2046)
+Defined in: [render/src/types.ts:2050](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2050)

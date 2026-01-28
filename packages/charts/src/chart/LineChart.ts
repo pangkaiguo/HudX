@@ -178,10 +178,10 @@ export default class LineChart extends Chart {
       const xScale =
         xAxis?.type === 'category'
           ? createOrdinalScale(
-            xDomain,
-            xRange,
-            typeof xAxis.boundaryGap === 'boolean' ? xAxis.boundaryGap : true,
-          )
+              xDomain,
+              xRange,
+              typeof xAxis.boundaryGap === 'boolean' ? xAxis.boundaryGap : true,
+            )
           : createLinearScale(xDomain, xRange);
 
       const yScale = createLinearScale(yDomain, yRange);
@@ -221,9 +221,10 @@ export default class LineChart extends Chart {
               option.tooltip?.axisPointer?.lineStyle?.color ||
               this.getThemeConfig().axisPointerColor,
             lineWidth: 1,
-            lineDash: option.tooltip?.axisPointer?.lineStyle?.type === 'dashed'
-              ? [4, 4]
-              : undefined,
+            lineDash:
+              option.tooltip?.axisPointer?.lineStyle?.type === 'dashed'
+                ? [4, 4]
+                : undefined,
           },
           z: Z_AXIS + 1,
           invisible: true,
@@ -402,18 +403,18 @@ export default class LineChart extends Chart {
             xVal = xDomain[index];
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? (item as any).value
                 : item;
             yVal = Array.isArray(raw) ? (raw[1] ?? raw[0]) : raw;
           } else {
             const raw =
               typeof item === 'object' &&
-                item !== null &&
-                !Array.isArray(item) &&
-                'value' in item
+              item !== null &&
+              !Array.isArray(item) &&
+              'value' in item
                 ? (item as any).value
                 : item;
             if (!Array.isArray(raw)) return;
@@ -667,10 +668,10 @@ export default class LineChart extends Chart {
 
                 const itemName =
                   typeof item === 'object' &&
-                    item !== null &&
-                    !Array.isArray(item) &&
-                    'name' in item &&
-                    typeof (item as any).name === 'string'
+                  item !== null &&
+                  !Array.isArray(item) &&
+                  'name' in item &&
+                  typeof (item as any).name === 'string'
                     ? (item as any).name
                     : xAxis?.data?.[pointIndex] || '';
                 const itemValue = this._getDataValue(item);

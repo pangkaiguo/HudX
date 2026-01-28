@@ -4,7 +4,7 @@
 
 # Class: Storage
 
-Defined in: [render/src/Storage.ts:8](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L8)
+Defined in: [render/src/Storage.ts:8](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L8)
 
 ## Constructors
 
@@ -22,7 +22,7 @@ Defined in: [render/src/Storage.ts:8](https://github.com/pangkaiguo/HudX/blob/53
 
 > **addRoot**(`root`): `void`
 
-Defined in: [render/src/Storage.ts:15](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L15)
+Defined in: [render/src/Storage.ts:15](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L15)
 
 Add root group
 
@@ -42,7 +42,7 @@ Add root group
 
 > **clear**(): `void`
 
-Defined in: [render/src/Storage.ts:138](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L138)
+Defined in: [render/src/Storage.ts:138](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L138)
 
 Clear all elements
 
@@ -56,7 +56,7 @@ Clear all elements
 
 > **getDisplayList**(`includeInvisible`): [`ChartElement`](ChartElement.md)[]
 
-Defined in: [render/src/Storage.ts:102](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L102)
+Defined in: [render/src/Storage.ts:102](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L102)
 
 Get all elements in rendering order (flattened)
 
@@ -76,7 +76,7 @@ Get all elements in rendering order (flattened)
 
 > **getElementById**(`id`): [`ChartElement`](ChartElement.md) \| `undefined`
 
-Defined in: [render/src/Storage.ts:43](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L43)
+Defined in: [render/src/Storage.ts:43](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L43)
 
 Get element by ID
 
@@ -96,7 +96,7 @@ Get element by ID
 
 > **getElementsList**(): [`ChartElement`](ChartElement.md)[]
 
-Defined in: [render/src/Storage.ts:89](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L89)
+Defined in: [render/src/Storage.ts:89](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L89)
 
 Get all elements sorted by zlevel and z
 
@@ -110,7 +110,7 @@ Get all elements sorted by zlevel and z
 
 > **getRoots**(): [`Group`](Group.md)[]
 
-Defined in: [render/src/Storage.ts:36](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L36)
+Defined in: [render/src/Storage.ts:36](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L36)
 
 Get all roots
 
@@ -124,7 +124,7 @@ Get all roots
 
 > **iterate**\<`T`\>(`callback`, `includeRoot`): `void` \| `T`
 
-Defined in: [render/src/Storage.ts:66](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L66)
+Defined in: [render/src/Storage.ts:66](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L66)
 
 Iterate all elements
 
@@ -154,7 +154,7 @@ Iterate all elements
 
 > **removeElement**(`element`): `void`
 
-Defined in: [render/src/Storage.ts:59](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L59)
+Defined in: [render/src/Storage.ts:59](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L59)
 
 Remove element from storage
 Also removes all children if element is a Group
@@ -175,7 +175,7 @@ Also removes all children if element is a Group
 
 > **removeRoot**(`root`): `void`
 
-Defined in: [render/src/Storage.ts:25](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L25)
+Defined in: [render/src/Storage.ts:25](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L25)
 
 Remove root group
 
@@ -195,7 +195,7 @@ Remove root group
 
 > **updateElement**(`element`): `void`
 
-Defined in: [render/src/Storage.ts:51](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/Storage.ts#L51)
+Defined in: [render/src/Storage.ts:51](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/Storage.ts#L51)
 
 Update element in storage
 Also updates all children if element is a Group

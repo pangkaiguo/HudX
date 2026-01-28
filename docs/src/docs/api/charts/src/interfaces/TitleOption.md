@@ -4,7 +4,7 @@
 
 # Interface: TitleOption
 
-Defined in: render/dist/types.d.ts:321
+Defined in: render/dist/types.d.ts:468
 
 Title option (similar to ECharts `title`).
 
@@ -30,7 +30,7 @@ const option: ChartOption = {
 
 > `optional` **left**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:338
+Defined in: render/dist/types.d.ts:485
 
 Horizontal position of the title.
 - 'left', 'center', 'right'
@@ -43,7 +43,7 @@ Horizontal position of the title.
 
 > `optional` **subtext**: `string`
 
-Defined in: render/dist/types.d.ts:331
+Defined in: render/dist/types.d.ts:478
 
 Subtitle text.
 Displayed below the main title.
@@ -54,7 +54,7 @@ Displayed below the main title.
 
 > `optional` **subtextStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: render/dist/types.d.ts:353
+Defined in: render/dist/types.d.ts:500
 
 Style of the subtitle text.
 
@@ -64,7 +64,7 @@ Style of the subtitle text.
 
 > `optional` **text**: `string`
 
-Defined in: render/dist/types.d.ts:326
+Defined in: render/dist/types.d.ts:473
 
 Main title text.
 Supports `\n` for newlines.
@@ -75,7 +75,7 @@ Supports `\n` for newlines.
 
 > `optional` **textStyle**: [`TextStyle`](TextStyle.md)
 
-Defined in: render/dist/types.d.ts:349
+Defined in: render/dist/types.d.ts:496
 
 Style of the main title text.
 
@@ -85,7 +85,7 @@ Style of the main title text.
 
 > `optional` **top**: `string` \| `number`
 
-Defined in: render/dist/types.d.ts:345
+Defined in: render/dist/types.d.ts:492
 
 Vertical position of the title.
 - 'top', 'middle', 'bottom'

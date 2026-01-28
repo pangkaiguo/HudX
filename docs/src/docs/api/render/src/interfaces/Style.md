@@ -4,7 +4,7 @@
 
 # Interface: Style
 
-Defined in: [render/src/types.ts:2030](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2030)
+Defined in: [render/src/types.ts:2034](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2034)
 
 ## Indexable
 
@@ -16,7 +16,7 @@ Defined in: [render/src/types.ts:2030](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **fill**: `string` \| `CanvasGradient` \| `CanvasPattern`
 
-Defined in: [render/src/types.ts:2031](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2031)
+Defined in: [render/src/types.ts:2035](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2035)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [render/src/types.ts:2031](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **lineDash**: `number`[]
 
-Defined in: [render/src/types.ts:2034](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2034)
+Defined in: [render/src/types.ts:2038](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2038)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [render/src/types.ts:2034](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **lineDashOffset**: `number`
 
-Defined in: [render/src/types.ts:2035](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2035)
+Defined in: [render/src/types.ts:2039](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2039)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [render/src/types.ts:2035](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **lineWidth**: `number`
 
-Defined in: [render/src/types.ts:2033](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2033)
+Defined in: [render/src/types.ts:2037](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2037)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [render/src/types.ts:2033](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **opacity**: `number`
 
-Defined in: [render/src/types.ts:2036](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2036)
+Defined in: [render/src/types.ts:2040](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2040)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [render/src/types.ts:2036](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **shadowBlur**: `number`
 
-Defined in: [render/src/types.ts:2037](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2037)
+Defined in: [render/src/types.ts:2041](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2041)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [render/src/types.ts:2037](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **shadowColor**: `string`
 
-Defined in: [render/src/types.ts:2038](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2038)
+Defined in: [render/src/types.ts:2042](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2042)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [render/src/types.ts:2038](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **shadowOffsetX**: `number`
 
-Defined in: [render/src/types.ts:2039](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2039)
+Defined in: [render/src/types.ts:2043](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2043)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [render/src/types.ts:2039](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **shadowOffsetY**: `number`
 
-Defined in: [render/src/types.ts:2040](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2040)
+Defined in: [render/src/types.ts:2044](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2044)
 
 ***
 
@@ -88,4 +88,4 @@ Defined in: [render/src/types.ts:2040](https://github.com/pangkaiguo/HudX/blob/5
 
 > `optional` **stroke**: `string` \| `CanvasGradient` \| `CanvasPattern`
 
-Defined in: [render/src/types.ts:2032](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/types.ts#L2032)
+Defined in: [render/src/types.ts:2036](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/types.ts#L2036)

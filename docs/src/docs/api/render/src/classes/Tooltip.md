@@ -4,7 +4,7 @@
 
 # Class: Tooltip
 
-Defined in: [render/src/component/Tooltip.ts:55](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L55)
+Defined in: [render/src/component/Tooltip.ts:55](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L55)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [render/src/component/Tooltip.ts:55](https://github.com/pangkaiguo/H
 
 > **new Tooltip**(`option`): `Tooltip`
 
-Defined in: [render/src/component/Tooltip.ts:70](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L70)
+Defined in: [render/src/component/Tooltip.ts:70](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L70)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [render/src/component/Tooltip.ts:70](https://github.com/pangkaiguo/H
 
 > **dispose**(): `void`
 
-Defined in: [render/src/component/Tooltip.ts:528](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L528)
+Defined in: [render/src/component/Tooltip.ts:528](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L528)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [render/src/component/Tooltip.ts:528](https://github.com/pangkaiguo/
 
 > **hide**(): `void`
 
-Defined in: [render/src/component/Tooltip.ts:507](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L507)
+Defined in: [render/src/component/Tooltip.ts:507](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L507)
 
 #### Returns
 
@@ -54,7 +54,7 @@ Defined in: [render/src/component/Tooltip.ts:507](https://github.com/pangkaiguo/
 
 > **isVisible**(): `boolean`
 
-Defined in: [render/src/component/Tooltip.ts:524](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L524)
+Defined in: [render/src/component/Tooltip.ts:524](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L524)
 
 #### Returns
 
@@ -66,7 +66,7 @@ Defined in: [render/src/component/Tooltip.ts:524](https://github.com/pangkaiguo/
 
 > **setContainer**(`container`): `void`
 
-Defined in: [render/src/component/Tooltip.ts:259](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L259)
+Defined in: [render/src/component/Tooltip.ts:259](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L259)
 
 #### Parameters
 
@@ -84,7 +84,7 @@ Defined in: [render/src/component/Tooltip.ts:259](https://github.com/pangkaiguo/
 
 > **setOption**(`option`): `void`
 
-Defined in: [render/src/component/Tooltip.ts:230](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L230)
+Defined in: [render/src/component/Tooltip.ts:230](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L230)
 
 #### Parameters
 
@@ -102,7 +102,7 @@ Defined in: [render/src/component/Tooltip.ts:230](https://github.com/pangkaiguo/
 
 > **show**(`x`, `y`, `content`, `params?`, `targetRect?`): `void`
 
-Defined in: [render/src/component/Tooltip.ts:279](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L279)
+Defined in: [render/src/component/Tooltip.ts:279](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L279)
 
 #### Parameters
 
@@ -136,7 +136,7 @@ Defined in: [render/src/component/Tooltip.ts:279](https://github.com/pangkaiguo/
 
 > **updateStyle**(): `void`
 
-Defined in: [render/src/component/Tooltip.ts:167](https://github.com/pangkaiguo/HudX/blob/5318c1432ccbb01469da04d48c3f66df5dc53246/packages/render/src/component/Tooltip.ts#L167)
+Defined in: [render/src/component/Tooltip.ts:167](https://github.com/pangkaiguo/HudX/blob/2231bfb72b0675f521ece07b0c55e6a4ee11805d/packages/render/src/component/Tooltip.ts#L167)
 
 #### Returns
 

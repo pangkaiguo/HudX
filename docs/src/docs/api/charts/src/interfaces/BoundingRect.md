@@ -4,7 +4,7 @@
 
 # Interface: BoundingRect
 
-Defined in: render/dist/types.d.ts:229
+Defined in: render/dist/types.d.ts:376
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: render/dist/types.d.ts:229
 
 > **height**: `number`
 
-Defined in: render/dist/types.d.ts:237
+Defined in: render/dist/types.d.ts:384
 
 Height of the rectangle
 
@@ -22,7 +22,7 @@ Height of the rectangle
 
 > **width**: `number`
 
-Defined in: render/dist/types.d.ts:235
+Defined in: render/dist/types.d.ts:382
 
 Width of the rectangle
 
@@ -32,7 +32,7 @@ Width of the rectangle
 
 > **x**: `number`
 
-Defined in: render/dist/types.d.ts:231
+Defined in: render/dist/types.d.ts:378
 
 X coordinate of top-left corner
 
@@ -42,6 +42,6 @@ X coordinate of top-left corner
 
 > **y**: `number`
 
-Defined in: render/dist/types.d.ts:233
+Defined in: render/dist/types.d.ts:380
 
 Y coordinate of top-left corner
