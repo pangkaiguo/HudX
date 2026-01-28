@@ -103,6 +103,7 @@ const examplesEn: Dict = {
   'examples.category.scatter': 'Scatter',
   'examples.category.sub-components': 'Sub Components',
   'examples.category.bundle': 'Bundle',
+  'examples.category.features': 'Features',
   'examples.list.basic-line.title': 'Basic Line Chart',
   'examples.list.basic-line.subtitle':
     'Basic line with tooltip, legend and optional grid lines',
@@ -177,6 +178,7 @@ const examplesEn: Dict = {
   'examples.list.bundle-pie.subtitle':
     "import PieChart from 'hudx-charts/chart/PieChart'",
   'examples.feature.shape': 'Shape',
+  'examples.feature.theme': 'Theme',
   'examples.feature.themes': 'Theme',
   'examples.feature.interaction': 'Interaction',
   'examples.feature.animation': 'Animation',
@@ -362,6 +364,7 @@ const examplesZhCN: Dict = {
   'examples.category.scatter': '散点',
   'examples.category.sub-components': '子组件',
   'examples.category.bundle': '打包',
+  'examples.category.features': '功能演示',
   'examples.list.basic-line.title': '基础折线图',
   'examples.list.basic-line.subtitle': '基础折线 + 提示框/图例 + 可选网格线',
   'examples.list.stack-line.title': '堆叠折线图',
@@ -420,6 +423,7 @@ const examplesZhCN: Dict = {
   'examples.list.bundle-pie.subtitle':
     "import PieChart from 'hudx-charts/chart/PieChart'",
   'examples.feature.shape': '图形',
+  'examples.feature.theme': '主题',
   'examples.feature.themes': '主题',
   'examples.feature.interaction': '交互',
   'examples.feature.animation': '动画',

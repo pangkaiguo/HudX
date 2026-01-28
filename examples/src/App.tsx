@@ -233,7 +233,7 @@ const NavButton = ({
         color: isActive ? primaryText : themeObj.textColor,
         cursor: 'pointer',
         textAlign: 'left',
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: isActive ? 600 : 400,
         transition: 'all 0.2s',
         outline: 'none',
@@ -596,6 +596,7 @@ const ChartCard = ({
   );
   const chartRef = React.useRef<HChartRef>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [isHovered, setIsHovered] = useState(false);
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
   const cardBg = ui.colorFillContainer || themeObj.backgroundColor;
@@ -639,15 +640,21 @@ const ChartCard = ({
         backgroundColor: cardBg,
         display: 'flex',
         flexDirection: 'column',
+        boxShadow: isHovered
+          ? `0 4px 12px ${toRgbaWithOpacity(themeObj.shadowColor, 0.17)}`
+          : 'none',
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = `0 4px 12px ${toRgbaWithOpacity(themeObj.shadowColor, 0.17)}`;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = 'none';
-      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div style={{ height: 200, padding: 10, backgroundColor: previewBg }}>
+      <div
+        style={{
+          height: 200,
+          padding: 10,
+          backgroundColor: previewBg,
+          overflow: 'hidden',
+        }}
+      >
         {previewUrl ? (
           <img
             src={previewUrl}
@@ -657,6 +664,8 @@ const ChartCard = ({
               height: '100%',
               objectFit: 'contain',
               display: 'block',
+              transition: 'transform 0.3s ease',
+              transform: isHovered ? 'scale(1.2)' : 'scale(1)',
             }}
           />
         ) : (
@@ -694,66 +703,161 @@ const ChartCard = ({
   );
 };
 
+const FeatureCard = ({
+  example,
+  onClick,
+  theme,
+  locale,
+}: {
+  example: { id: string };
+  onClick: () => void;
+  theme: Theme;
+  locale: Locale;
+}) => {
+  const titleText = t(locale, `examples.feature.${example.id}`, example.id);
+  const themeObj = ThemeManager.getTheme(theme);
+  const ui = themeObj.token as any;
+  const cardBg = ui.colorFillContainer || themeObj.backgroundColor;
+  const previewBg = ui.colorFillContainerAlt || themeObj.gridColor;
+  const primary =
+    ui.colorPrimary || themeObj.seriesColors?.[0] || themeObj.textColor;
+
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        borderRadius: 8,
+        overflow: 'hidden',
+        cursor: 'pointer',
+        transition: 'box-shadow 0.2s',
+        backgroundColor: cardBg,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = `0 4px 12px ${toRgbaWithOpacity(themeObj.shadowColor, 0.17)}`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = 'none';
+      }}
+    >
+      <div
+        style={{
+          height: 140,
+          padding: 20,
+          backgroundColor: previewBg,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 40,
+          fontWeight: 'bold',
+          color: primary,
+          opacity: 0.8,
+        }}
+      >
+        {titleText.charAt(0).toUpperCase()}
+      </div>
+      <div style={{ padding: '12px 16px' }}>
+        <div style={{ fontWeight: 'bold', fontSize: 14 }}>{titleText}</div>
+      </div>
+    </div>
+  );
+};
+
 const Dashboard = ({
-  activeCategory,
   onSelectExample,
   theme,
   locale,
 }: {
-  activeCategory: string;
   onSelectExample: (id: string) => void;
   theme: Theme;
   locale: Locale;
 }) => {
   const themeObj = ThemeManager.getTheme(theme);
   const ui = themeObj.token as any;
-  const pageBg = ui.colorFillPage || themeObj.backgroundColor;
   const hintText = ui.colorTextTertiary || themeObj.axisLabelColor;
 
-  const categoryLabel = t(
-    locale,
-    `examples.category.${activeCategory}`,
-    activeCategory,
-  );
-  const filteredExamples = examples.filter(
-    (e) => e.category === activeCategory,
-  );
-
   return (
-    <div
-      style={{
-        backgroundColor: pageBg,
-        height: '100%',
-        overflowY: 'auto',
-      }}
-    >
-      <div style={{ padding: EXAMPLES_LAYOUT.mainPadding }}>
-        <h2 style={{ margin: '0 0 20px', fontSize: 24, fontWeight: 'normal' }}>
-          {categoryLabel}
-        </h2>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: 20,
-          }}
-        >
-          {filteredExamples.map((ex) => (
-            <ChartCard
-              key={ex.id}
-              example={ex}
-              onClick={() => onSelectExample(ex.id)}
-              theme={theme}
-              locale={locale}
-            />
-          ))}
-          {filteredExamples.length === 0 && (
-            <div style={{ color: hintText }}>
-              {t(locale, 'examples.emptyCategory')}
+    <div style={{ padding: EXAMPLES_LAYOUT.mainPadding }}>
+      {EXAMPLES_CATEGORIES.map((categoryKey) => {
+        const categoryLabel = t(
+          locale,
+          `examples.category.${categoryKey}`,
+          categoryKey,
+        );
+        const filteredExamples = examples.filter(
+          (e) => e.category === categoryKey,
+        );
+
+        if (categoryKey === 'features') {
+          return (
+            <div
+              key={categoryKey}
+              id={categoryKey}
+              style={{ marginBottom: 40 }}
+            >
+              <h2
+                style={{
+                  padding: '20px 0', marginBottom: '20px',
+                  fontSize: 24, borderBottom: `1px solid ${themeObj.borderColor}`
+                }}
+              >
+                {categoryLabel}
+              </h2>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns:
+                    'repeat(auto-fill, minmax(300px, 1fr))',
+                  gap: 20,
+                }}
+              >
+                {featureExamples.map((ex) => (
+                  <FeatureCard
+                    key={ex.id}
+                    example={ex}
+                    onClick={() => onSelectExample(ex.id)}
+                    theme={theme}
+                    locale={locale}
+                  />
+                ))}
+              </div>
             </div>
-          )}
-        </div>
-      </div>
+          );
+        }
+
+        return (
+          <div key={categoryKey} id={categoryKey} style={{ marginBottom: 40 }}>
+            <h2
+              style={{ padding: '20px 0', marginBottom: '20px', fontSize: 24, borderBottom: `1px solid ${themeObj.borderColor}` }}
+            >
+              {categoryLabel}
+            </h2>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                gap: 20,
+              }}
+            >
+              {filteredExamples.map((ex) => (
+                <ChartCard
+                  key={ex.id}
+                  example={ex}
+                  onClick={() => onSelectExample(ex.id)}
+                  theme={theme}
+                  locale={locale}
+                />
+              ))}
+              {filteredExamples.length === 0 && (
+                <div style={{ color: hintText }}>
+                  {t(locale, 'examples.emptyCategory')}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -1018,43 +1122,70 @@ const ModernApp = ({
     EXAMPLES_STORAGE_KEYS.modernActiveCategory,
     EXAMPLES_DEFAULTS.modernActiveCategory,
   );
-  const [activeExampleId, setActiveExampleId] = useLocalStorageState<
-    string | null
-  >(
-    EXAMPLES_STORAGE_KEYS.modernActiveExampleId,
-    EXAMPLES_DEFAULTS.modernActiveExampleId,
-  );
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [focusedCategory, setFocusedCategory] = useState<string | null>(null);
+  const mainRef = React.useRef<HTMLElement>(null);
 
+  // Scroll spy
   useEffect(() => {
-    if (!EXAMPLES_CATEGORIES.includes(activeCategory as any)) {
-      setActiveCategory(EXAMPLES_DEFAULTS.modernActiveCategory);
-    }
+    const main = mainRef.current;
+    if (!main) return;
+
+    const handleScroll = () => {
+      const sections = EXAMPLES_CATEGORIES.map((cat) => ({
+        id: cat,
+        el: document.getElementById(cat),
+      }));
+
+      // Find the first section that is visible or close to top
+      for (const section of sections) {
+        if (!section.el) continue;
+        const rect = section.el.getBoundingClientRect();
+        // 100px buffer
+        if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+          if (activeCategory !== section.id) {
+            setActiveCategory(section.id);
+            // Update URL without reload
+            const url = new URL(window.location.href);
+            url.searchParams.set('category', section.id);
+            window.history.replaceState({}, '', url.toString());
+          }
+          break;
+        }
+      }
+    };
+
+    main.addEventListener('scroll', handleScroll, { passive: true });
+    return () => main.removeEventListener('scroll', handleScroll);
   }, [activeCategory, setActiveCategory]);
 
-  const activeExample = useMemo(
-    () => examples.find((e) => e.id === activeExampleId),
-    [activeExampleId],
-  );
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('category');
+    if (cat && EXAMPLES_CATEGORIES.includes(cat as any)) {
+      if (cat !== activeCategory) {
+        setActiveCategory(cat);
+        // Initial scroll to category
+        requestAnimationFrame(() => {
+          const el = document.getElementById(cat);
+          if (el) el.scrollIntoView();
+        });
+      }
+    } else if (!EXAMPLES_CATEGORIES.includes(activeCategory as any)) {
+      setActiveCategory(EXAMPLES_DEFAULTS.modernActiveCategory);
+    }
+  }, []); // Only run once on mount
 
-  if (activeExampleId && activeExample) {
-    return (
-      <CodeBox
-        initialCode={activeExample.code}
-        title={t(
-          locale,
-          `examples.list.${activeExample.id}.title`,
-          activeExample.title,
-        )}
-        onBack={() => setActiveExampleId(null)}
-        theme={theme}
-        onThemeChange={setTheme}
-        locale={locale}
-        onLocaleChange={setLocale}
-      />
-    );
-  }
+  const handleCategoryChange = (cat: string) => {
+    setActiveCategory(cat);
+    const el = document.getElementById(cat);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.set('category', cat);
+    window.history.pushState({}, '', url.toString());
+  };
 
   return (
     <div
@@ -1154,16 +1285,6 @@ const ModernApp = ({
           </SettingsPopover>
         </div>
         <div style={{ flex: 1, overflowY: 'auto', padding: '12px 20px 20px' }}>
-          <h2
-            style={{
-              fontSize: 14,
-              fontWeight: 'bold',
-              margin: '0 0 10px',
-              color: textSecondary,
-            }}
-          >
-            {t(locale, 'examples.nav.categories')}
-          </h2>
           {EXAMPLES_CATEGORIES.map((categoryKey) => {
             const isActive = activeCategory === categoryKey;
             const isHovered = hoveredCategory === categoryKey;
@@ -1172,7 +1293,7 @@ const ModernApp = ({
             return (
               <button
                 key={categoryKey}
-                onClick={() => setActiveCategory(categoryKey)}
+                onClick={() => handleCategoryChange(categoryKey)}
                 aria-current={isActive ? 'page' : undefined}
                 style={{
                   display: 'block',
@@ -1189,7 +1310,7 @@ const ModernApp = ({
                   color: isActive ? primaryText : themeObj.textColor,
                   cursor: 'pointer',
                   textAlign: 'left',
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: isActive ? 600 : 400,
                   transition: 'all 0.2s',
                   outline: 'none',
@@ -1209,6 +1330,7 @@ const ModernApp = ({
         </div>
       </nav>
       <main
+        ref={mainRef}
         role='main'
         aria-label='Example content'
         style={{
@@ -1219,8 +1341,7 @@ const ModernApp = ({
         }}
       >
         <Dashboard
-          activeCategory={activeCategory}
-          onSelectExample={setActiveExampleId}
+          onSelectExample={(id) => window.open(`?example=${id}`, '_blank')}
           theme={theme}
           locale={locale}
         />
@@ -1248,6 +1369,19 @@ const App = () => {
       EXAMPLES_DEFAULTS.classicActiveExample,
     );
 
+  // URL routing for standalone example
+  const [exampleIdFromUrl, setExampleIdFromUrl] = useState<string | null>(() => {
+    return new URLSearchParams(window.location.search).get('example');
+  });
+
+  useEffect(() => {
+    const onPopState = () => {
+      setExampleIdFromUrl(new URLSearchParams(window.location.search).get('example'));
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
   ThemeManager.setCurrentTheme(theme);
   const setThemeAndSync = (nextTheme: Theme) => {
     ThemeManager.setCurrentTheme(nextTheme);
@@ -1263,6 +1397,123 @@ const App = () => {
       : 'Light';
   const setNormalizedTheme = (t: 'Light' | 'Dark') =>
     setThemeAndSync(t.toLowerCase() as Theme);
+
+  const standaloneExample = useMemo(
+    () => examples.find((e) => e.id === exampleIdFromUrl),
+    [exampleIdFromUrl],
+  );
+
+  const standaloneFeature = useMemo(
+    () => featureExamples.find((e) => e.id === exampleIdFromUrl),
+    [exampleIdFromUrl],
+  );
+
+  if (standaloneExample) {
+    return (
+      <CodeBox
+        initialCode={standaloneExample.code}
+        title={t(
+          locale,
+          `examples.list.${standaloneExample.id}.title`,
+          standaloneExample.title,
+        )}
+        onBack={() => {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('example');
+          window.history.pushState({}, '', url.toString());
+          setExampleIdFromUrl(null);
+        }}
+        theme={theme}
+        onThemeChange={setThemeAndSync}
+        locale={locale}
+        onLocaleChange={setLocale}
+      />
+    );
+  }
+
+  if (standaloneFeature) {
+    const Component = standaloneFeature.component;
+    const themeObj = ThemeManager.getTheme(theme);
+    const ui = themeObj.token as any;
+    const pageBg = ui.colorFillPage || themeObj.backgroundColor;
+    const navBg = ui.colorFillContainer || themeObj.backgroundColor;
+    const border = ui.colorBorderSecondary || themeObj.borderColor;
+
+    return (
+      <div
+        style={{
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: pageBg,
+          color: themeObj.textColor,
+        }}
+      >
+        <div
+          style={{
+            padding: '10px 20px',
+            borderBottom: `1px solid ${border}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: navBg,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <button
+              onClick={() => {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('example');
+                window.history.pushState({}, '', url.toString());
+                setExampleIdFromUrl(null);
+              }}
+              style={{
+                cursor: 'pointer',
+                background: 'none',
+                border: 'none',
+                fontSize: 14,
+                color: themeObj.textColor,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+              }}
+            >
+              ← {t(locale, 'examples.codebox.back', 'Back')}
+            </button>
+            <span style={{ fontWeight: 'bold' }}>
+              {t(
+                locale,
+                `examples.feature.${standaloneFeature.id}`,
+                standaloneFeature.id,
+              )}
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button
+              onClick={() =>
+                setThemeAndSync(
+                  (theme === 'light' ? 'dark' : 'light') as Theme,
+                )
+              }
+              style={{
+                cursor: 'pointer',
+                padding: '4px 12px',
+                borderRadius: 4,
+                border: `1px solid ${border}`,
+                background: 'transparent',
+                color: themeObj.textColor,
+              }}
+            >
+              {theme === 'light' ? 'Dark' : 'Light'}
+            </button>
+          </div>
+        </div>
+        <div style={{ flex: 1, overflow: 'auto', padding: 20 }}>
+          <Component theme={theme} locale={locale} />
+        </div>
+      </div>
+    );
+  }
 
   return mode === 'classic' ? (
     <OldApp

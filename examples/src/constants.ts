@@ -31,6 +31,7 @@ export const EXAMPLES_CATEGORIES = [
   'scatter',
   'sub-components',
   'bundle',
+  'features',
 ] as const;
 
 export const EXAMPLES_LAYOUT = {
